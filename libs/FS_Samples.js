@@ -67,8 +67,8 @@ class FS_Samples {
     }
 
 
-    generateSamplesDir(smp_obj, dir){
-        let path_name = path.join('L:\\',_.join(smp_obj.tags,"_"));
+    generateSamplesDir(smp_obj){
+        let path_name = path.join('???',_.join(smp_obj.tags,"_"));
         fs.mkdir(path,function(e){
             if(!e){
                 //new directory created

@@ -4,6 +4,7 @@
 	"ExtensionExcludedForSamples": [
 		".asd"
 	],
+	"RandomCount": "20",
 	"tags": {
 		"kick": "435,46,46464"
 	}

@@ -12,26 +12,45 @@ class CommandsManager {
             console.log("Set command: missing property name");
             return this._error_code;
         }
-
         if(!Config.checkProperty(cli_params[1])){
             console.log("Set command: unknown property name '"+cli_params[1]+"'");
             return this._error_code;
         }
-
         let _new_prop_val=cli_params[2];
         if(_.isNil(_new_prop_val)){
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-
-        //if(!(_.isNumber(_new_prop_val) || _.isString(_new_prop_val) || _.isNull(_new_prop_val))){ //TODO:better check and conversion
-        //    console.log('Set command: wrong new property value');
-        //    return this._error_code;
-        //}
-        //}
-
         Config.setProperty(cli_params[1],_.slice(cli_params,2));
         Config.save();
+    }
+
+
+    C_lookup(cli_params){
+        if(cli_params.length<2){
+            console.log("Lookup command: missing tags or option (-t)");
+            return this._error_code;
+        }
+        if(cli_params[1]=='-t'){
+            if(cli_params.length<3){
+                console.log("Lookup command: missing tag name after option -t");
+                return this._error_code;
+            }
+            let tagList = Config.getProperty('tags')[cli_params[2]];
+            if(_.isNil(tagList)){
+                console.log("Lookup command: unknown tag name after option -t");
+                return this._error_code;
+            }
+            return FS_Samples.searchSamplesByTags(_.split(tagList,','));
+        }
+        return FS_Samples.searchSamplesByTags(_.slice(cli_params,1));
+    }
+
+
+    C_lookup_save(cli_params){
+        let smp_obj = this.C_lookup(cli_params);
+        if(smp_obj === this._error_code) return this._error_code;
+        FS_Samples.generateSamplesDir(smp_obj);
     }
 };
 

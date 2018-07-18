@@ -23,23 +23,11 @@ else{
     cli_params=_.slice(process.argv,2);
 }
 
-let command = process.argv[2];
+let command = cli_params[0];
 if(command=='set'){
     Commands.C_set(cli_params);
+} else if(command=='lookup'){
+    Commands.C_lookup(cli_params);
 }
-
-
 
 console.log('Help');
-process.exit(0);
-
-if(process.argv.length<3){
-    //show menu
-    console.log('TODO: menu');
-
-}else{
-    //execute
-
-    cli_params = _.slice(process.argv,2);
-    FS_Samples.searchSamplesByTags(cli_params);
-}
