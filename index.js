@@ -10,13 +10,17 @@ global.Utils = require('./libs/Utils.js');
 global.Commands = require('./libs/CommandsManager.js');
 global.FS_Samples = require('./libs/FS_Samples.js');
 
+/* Help function */
+function printHelp(){
+    console.log("\nHelp");
+    console.log("\n\n");
+}
 
 
 /* Project logic & interface */
-
 let cli_params = [];
 if(process.argv.length<3){
-    console.log('Help');
+    printHelp();
     process.exit(0);
 }
 else{
@@ -24,10 +28,16 @@ else{
 }
 
 let command = cli_params[0];
+
 if(command=='set'){
     Commands.C_set(cli_params);
+
+} else if(command=='config'){
+    Config.print();
+
 } else if(command=='lookup'){
     Commands.C_lookup(cli_params);
-}
 
-console.log('Help');
+} else {
+    printHelp();
+}

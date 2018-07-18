@@ -55,6 +55,15 @@ class Config {
             console.log("Configuration saved successfully");
         });
     }
+
+    print(){
+        let json_string = JSON.stringify(_config, null, '   ');
+        let lines = json_string.split('\n');
+        lines.splice(0,1);
+        lines.pop();
+        json_string = lines.join('\n');
+        console.log(json_string);
+    }
 };
 
 module.exports = new Config();
