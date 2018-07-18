@@ -27,22 +27,31 @@ class Config {
     }
 
     setProperty(name, values){
+        if(_.isArray(_config[name])) _config[name] = values;
+        else if(_.isObject(_config[name])) this._setObjectProperty(name, values);
+        else _config[name] = values[0];
+        return _config[name];
+    }
+
+    _setObjectProperty(name, values){
+        console.log('_setObjectProperty');
+        if(values.length<2) return;
         let _ref = _config[name];
-        let i=1;
-        for(; i<values.length; i++){
-            if(!this.checkProperty(values[i-1])){
-                _ref[values[i-1]]={};
-            }
-            _ref=_ref[values[i-1]];
+        let i=0;
+        for(; i<values.length-1; i++){
+            if(!_.isObject(_ref[values[i]])) _ref[values[i]]={};
+            if(i<values.length-2) _ref = _ref[values[i]];
         }
-        _config[name] = values[i-1];
+        _ref[values[i-1]] = values[i];
+        //console.log(_config[values[0]],_config);
+        return _config[values[0]];
     }
 
     save(){
-        fs.writeFile('../config.json', JSON.stringify(_config, null, '\t'), function(err) {
-            if(err) {
-                return console.log(err);
-            }
+        let file_path = path.resolve('config.json');
+        let config_text = JSON.stringify(_config, null, '\t');
+        fs.writeFileSync(file_path, config_text, 'utf8', function(err) {
+            if(err) { console.log(err); return; }
             console.log("Configuration saved successfully");
         });
     }

@@ -23,7 +23,7 @@ else{
     cli_params=_.slice(process.argv,2);
 }
 
-command = process.argv[2];
+let command = process.argv[2];
 if(command=='set'){
     Commands.C_set(cli_params);
 }

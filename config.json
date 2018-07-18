@@ -1,9 +1,10 @@
 {
-    "SamplesDirectory": "L:\\MPL\\",
-
-    "ProjectsDirectory": "C:\\Ableton Projects\\techno_2018\\",
-
-    "ExtensionExcludedForSamples": [".asd"],
-
-    "dab":34
+	"SamplesDirectory": "L:\\MPL\\",
+	"ProjectsDirectory": "C:\\--\\--\\",
+	"ExtensionExcludedForSamples": [
+		".asd"
+	],
+	"tags": {
+		"kick": "435,46,46464"
+	}
 }

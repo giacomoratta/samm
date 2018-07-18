@@ -9,18 +9,18 @@ class CommandsManager {
 
     C_set(cli_params){
         if(_.isNil(cli_params[1])){
-            console.log('Set command: missing property name',cli_params[1]);
+            console.log("Set command: missing property name");
             return this._error_code;
         }
 
         if(!Config.checkProperty(cli_params[1])){
-            console.log('Set command: unknown property name',cli_params[1]);
+            console.log("Set command: unknown property name '"+cli_params[1]+"'");
             return this._error_code;
         }
 
-        let _new_prop_val=Config.getProperty(cli_params[1]);
+        let _new_prop_val=cli_params[2];
         if(_.isNil(_new_prop_val)){
-            console.log('Set command: missing property value for',cli_params[1]);
+            console.log("Set command: missing value for property");
             return this._error_code;
         }
 
