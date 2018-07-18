@@ -68,17 +68,32 @@ class FS_Samples {
 
 
     generateSamplesDir(smp_obj){
-        let path_name = path.join('???',_.join(smp_obj.tags,"_"));
-        fs.mkdir(path,function(e){
-            if(!e){
-                //new directory created
-            } else if(e && e.code === 'EEXIST'){
-                //do something with contents
-            } else {
-                //debug
-                console.log(e);
-            }
+        let p_array = [];
+        let dest_dir = path.join(Config.ProjectsDirectory, 'smpl', _.join(smp_obj.tags,'_').substring(0,20));
+        let readme_file = path.join(dest_dir,'summary.txt');
+
+        fs_extra.ensureDirSync(dest_dir);
+
+        arr.forEach(function(v,i,a){
+            let f_name = path.basename(v);
+            p_array.push(fs_extra.copy(v,path.join(dest_dir ,f_name)));
         });
+
+        return Promise.all(p_array)
+            .then(function(data){
+                console.log('success!');
+                if(readme){
+                    let text_to_file  = "\n"+_.join(arr,"\n");
+                    return fs.writeFile(readme_file, text_to_file, 'utf8').then(function(data){
+                        console.log("The file was saved!");
+                    }).catch(function(err){
+                        console.error(err);
+                    });;
+                }
+            })
+            .catch(function(err){
+                    console.error(err);
+            });
     }
 };
 
