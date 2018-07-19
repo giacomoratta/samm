@@ -59,16 +59,16 @@ class CommandsManager {
     C_save(cli_params){
         let smp_dirname = null;
         let smp_obj = FS_Samples.openSampleObjectToFile();
-        if(!_.isObject(smp_obj)){
-            console.log("Save command: latest lookup missing");
-            return this._error_code;
-        }
         if(cli_params[1]=='-n'){
             if(_.isNil(cli_params[2])){
                 console.log("Save command: directory name missing");
                 return this._error_code;
             }
             smp_dirname = cli_params[2];
+        }
+        if(!_.isObject(smp_obj)){
+            console.log("Save command: latest lookup missing");
+            return this._error_code;
         }
         return FS_Samples.generateSamplesDir(smp_obj,smp_dirname);
     }

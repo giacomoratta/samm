@@ -104,7 +104,7 @@ class FS_Samples {
 
     openSampleObjectToFile(){
         let lookup_file = path.resolve('./'+Config.filename.latest_lookup);
-        let file_to_text;
+        let file_to_text = "";
         try{
             file_to_text = fs.readFileSync(lookup_file);
         }catch(e){
