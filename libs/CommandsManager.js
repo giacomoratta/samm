@@ -28,7 +28,14 @@ class CommandsManager {
 
     C_scan(cli_params){
         let smp_obj = SamplesMgr.scanSamples();
-        SamplesMgr.saveSampleScanToFile(smp_obj);
+        if(!smp_obj){
+            console.log("Scan command: scansion failed");
+            return this._error_code;
+        }
+        if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
+            console.log("Scan command: file writing failed");
+            return this._error_code;
+        }
         return smp_obj;
     }
 
