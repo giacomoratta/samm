@@ -58,11 +58,9 @@ class FS_Samples {
         console.log("\n\n  Random Samples");
         let _checkDirectory = function(arr,f){
             f = f.substring(Config.getSamplesDirectory().length);
-
             let p_split = f.split(path.sep);
             for(let i=0; i<arr.length; i++){
                 for(let j=0; j<p_split.length; j++){
-                    console.log(f);
                     if(arr[i].indexOf(p_split[j])>=0) return true;
                 }
             }
