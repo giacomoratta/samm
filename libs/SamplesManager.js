@@ -12,7 +12,14 @@ class SamplesManager {
         }
         if(!_.isArray(tags)) return true;
         for (let i=0; i<tags.length; i++){
-            if(_.includes(path_string,tags[i])) return true; //case sensitive!
+            let flagAND=true;
+            let flagOR=false;
+            for(let j=0; j<tags[i].length; j++){
+                if(_.includes(path_string,tags[i])) flagOR=true; //case sensitive!
+                else flagAND=false;
+            }
+            if(flagOR && tags[i].length==1) return true;
+            if(flagAND && tags[i].length>1) return true;
         }
         return false;
     }
@@ -80,8 +87,13 @@ class SamplesManager {
 
     searchSamplesByTags(tags){
         let smp_obj = new Samples();
+        let splitted_tags=[];
         smp_obj.tags = tags;
-        smp_obj.tags.forEach(function(v, i, a){ a[i] = _.trim(_.toLower(a[i])); }); //normalize tags
+        smp_obj.tags.forEach(function(v, i, a){
+            a[i] = _.trim(_.toLower(a[i]));
+            if(a[i].indexOf('+')>=0) splitted_tags.push(_.split(a[i],'+'));
+            else splitted_tags.push([a[i]]);
+        }); //normalize tags
         console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
         for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
@@ -89,7 +101,7 @@ class SamplesManager {
             let path_string = ConfigMgr._sampleScan[i];
             let fsStat = fs.lstatSync(path_string);
 
-            if(this.checkSampleName(path_string,smp_obj.tags)){
+            if(this.checkSampleName(path_string,splitted_tags)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
                 //console.log("  ",path_string);
                 smp_obj.array.push(path_string);
