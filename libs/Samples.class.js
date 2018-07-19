@@ -5,11 +5,13 @@ class Samples {
         this.init();
     }
 
+
     init(){
         this.tags = [];
         this.array = [];
         this.random = [];
     }
+
 
     toTextAll(){
         let text_to_file = _.join(this.array,"\n");
@@ -17,11 +19,13 @@ class Samples {
         return text_to_file;
     }
 
+
     toText(){
         let text_to_file = _.join(this.random,"\n");
         text_to_file = _.join(this.tags,", ")+"\n\n"+text_to_file;
         return text_to_file;
     }
+
 
     fromText(text){
         this.init();
@@ -35,6 +39,26 @@ class Samples {
         }
         return true;
     }
+
+
+    toJsonString(){
+        let json_string = JSON.stringify(this.array, null, '  ');
+        return json_string;
+    }
+
+
+    fromJsonString(json_string){
+        this.init();
+        if(!_.isString(json_string)) return false;
+        try{
+            this.array = JSON.parse(json_string);
+        }catch(e){
+            console.log(e);
+            return false;
+        }
+        return true;
+    }
+
 
     setRandom(count){
         let _sameDirectoryMaxOccurs = function(arr,f,o_obj,max_o){

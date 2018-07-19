@@ -26,6 +26,13 @@ class CommandsManager {
     }
 
 
+    C_scan(cli_params){
+        let smp_obj = SamplesMgr.scanSamples();
+        SamplesMgr.saveSampleScanToFile(smp_obj);
+        return smp_obj;
+    }
+
+
     C_lookup(cli_params){
         if(cli_params.length<2){
             console.log("Lookup command: missing tags or option (-t)");
@@ -48,6 +55,13 @@ class CommandsManager {
         } else {
             tagList = _.slice(cli_params,1);
         }
+
+        let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
+        if(!smp_obj_scan){
+            console.log("Lookup command: no sample scan found");
+            return this._error_code;
+        }
+        ConfigMgr._sampleScan = smp_obj_scan.array;
 
         if(_.isNil(tagList)) return null;
         let smp_obj = SamplesMgr.searchSamplesByTags(_.slice(cli_params,1));

@@ -5,15 +5,76 @@ class SamplesManager {
     constructor(){
     }
 
-    checkSampleName(path_string, names){
+    checkSampleName(path_string, tags){
         path_string = _.toLower(path_string);
         if(_.indexOf(ConfigMgr.getExtensionExcludedForSamples(),path.extname(path_string))>=0){
             return false;
         }
-        for (let i=0; i<names.length; i++){
-            if(_.includes(path_string,names[i])) return true; //case sensitive!
+        if(!_.isArray(tags)) return true;
+        for (let i=0; i<tags.length; i++){
+            if(_.includes(path_string,tags[i])) return true; //case sensitive!
         }
         return false;
+    }
+
+
+    scanSamples(){
+        let smp_obj = new Samples();
+        this._scanSamples(smp_obj, ConfigMgr.getSamplesDirectory(), { maxRec:100000 });
+        if(smp_obj.array.length<=0) return null;
+        return smp_obj;
+    }
+
+
+    _scanSamples(smp_obj, dir_path, _options){
+        if(_options.maxRec<=0) return;
+        _options.maxRec
+
+        let items = fs.readdirSync(dir_path);
+        items = Utils.sortFilesArray(items);
+
+        for (let i=0; i<items.length; i++) {
+            //console.log(' >> ',items[i]);
+
+            let path_string = path.join(dir_path,items[i]);
+            let fsStat = fs.lstatSync(path_string);
+
+            if(fsStat.isDirectory()){
+                this._scanSamples(smp_obj, path_string, _options);
+
+            }else if(fsStat.isFile() && this.checkSampleName(path_string)){
+                // checkSampleName on path_string because we want to accept samples belonging directory with good name
+                console.log("  ",path_string);
+                smp_obj.array.push(path_string);
+            }
+        }
+    }
+
+
+    loadSampleScanFromFile(){
+        let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
+        let json_string = '';
+        try{
+            json_string = fs.readFileSync(samples_index);
+        }catch(e){
+            console.log(e);
+            return null;
+        }
+        let smp_obj = new Samples();
+        if(!smp_obj.fromJsonString(samples_index)) return null;
+        return smp_obj;
+    }
+
+
+    saveSampleScanToFile(smp_obj){
+        if(!smp_obj) return false;
+        let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
+        let json_string = smp_obj.toJsonString();
+        if(json_string) return null;
+        return fs.writeFile(samples_index, json_string, 'utf8',function(err){
+            if(err){ console.error(err); return; }
+            console.log("The file was saved!",samples_index);
+        });
     }
 
 
@@ -23,16 +84,26 @@ class SamplesManager {
         smp_obj.tags.forEach(function(v, i, a){ a[i] = _.trim(_.toLower(a[i])); }); //normalize tags
         console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
-        this._searchSamplesByTags(smp_obj, ConfigMgr.getSamplesDirectory());
+        for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
+            //console.log(' >> ',items[i]);
+            let path_string = ConfigMgr._sampleScan[i];
+            let fsStat = fs.lstatSync(path_string);
 
+            if(this.checkSampleName(path_string,smp_obj.tags)){
+                // checkSampleName on path_string because we want to accept samples belonging directory with good name
+                //console.log("  ",path_string);
+                smp_obj.array.push(path_string);
+            }
+        }
         if(smp_obj.array.length<=0) return null;
-        smp_obj.setRandom(20);
-
+        smp_obj.setRandom(ConfigMgr.getProperty('RandomCount'));
         return smp_obj;
     }
 
 
-    _searchSamplesByTags(smp_obj, dir_path, _maxRec){
+
+
+    _searchSamplesByTags(smp_obj, dir_path){
         let items = fs.readdirSync(dir_path).sort();
         for (let i=0; i<items.length; i++) {
             //console.log(' >> ',items[i]);

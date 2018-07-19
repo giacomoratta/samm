@@ -2,9 +2,14 @@ class ConfigManager {
 
     constructor(){
         this._config = require('../config.json');
+        this._sampleScan = null;
         this.filename = {
             config: 'config.json',
-            latest_lookup: 'latest_lookup.txt'
+            latest_lookup: 'latest_lookup.txt',
+            samples_index: 'samples_index.txt'
+        }
+        this._labels = {
+            'sample_dir':'smp'
         }
     }
 
