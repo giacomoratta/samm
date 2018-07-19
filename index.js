@@ -38,6 +38,9 @@ if(command=='set'){
 } else if(command=='lookup'){
     Commands.C_lookup(cli_params);
 
+} else if(command=='save'){
+    Commands.C_save(cli_params);
+
 } else {
     printHelp();
 }

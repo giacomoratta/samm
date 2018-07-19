@@ -3,7 +3,10 @@ const _config = require('../config.json');
 class Config {
 
     constructor(){
-
+        this.filename = {
+            config: 'config.json',
+            latest_lookup: 'latest_lookup.txt'
+        }
     }
 
     getSamplesDirectory(){
@@ -48,7 +51,7 @@ class Config {
     }
 
     save(){
-        let file_path = path.resolve('config.json');
+        let file_path = path.resolve(this.filename.config);
         let config_text = JSON.stringify(_config, null, '\t');
         fs.writeFileSync(file_path, config_text, 'utf8', function(err) {
             if(err) { console.log(err); return; }
