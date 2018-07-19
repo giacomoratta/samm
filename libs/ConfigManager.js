@@ -15,7 +15,7 @@ class Config {
     }
 
     getExtensionExcludedForSamples(){
-        return _config.SamplesDirectory;
+        return _config.ExtensionExcludedForSamples;
     }
 
     checkProperty(name){

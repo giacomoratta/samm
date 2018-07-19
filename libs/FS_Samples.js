@@ -6,8 +6,9 @@ class FS_Samples {
 
     checkSampleName(path_string, names){
         path_string = _.toLower(path_string);
-        if(_.indexOf(Config.getExtensionExcludedForSamples(),path.extname(path_string))>=0) return false;
-
+        if(_.indexOf(Config.getExtensionExcludedForSamples(),path.extname(path_string))>=0){
+            return false;
+        }
         for (let i=0; i<names.length; i++){
             if(_.includes(path_string,names[i])) return true; //case sensitive!
         }
@@ -55,14 +56,33 @@ class FS_Samples {
 
     _selectRandomSamples(f_array, count){
         console.log("\n\n  Random Samples");
+        let _checkDirectory = function(arr,f){
+            f = f.substring(Config.getSamplesDirectory().length);
+
+            let p_split = f.split(path.sep);
+            for(let i=0; i<arr.length; i++){
+                for(let j=0; j<p_split.length; j++){
+                    console.log(f);
+                    if(arr[i].indexOf(p_split[j])>=0) return true;
+                }
+            }
+            return false;
+        };
+
         let r_array = [];
         let size = f_array.length;
-        for(let i=0, rf, rn; i<count; i++){
+        let i=0, sec=size, rf, rn;
+        while(i<count && sec>0){
+            sec--;
             rn=_.random(0,size);
             rn=((rn*7)%size);
             rf=f_array[rn];
+
+            if(_checkDirectory(r_array,rf)) continue;
+
             r_array.push(rf);
             console.log("   - ",rf);
+            i++;
         }
         return Utils.sortFilesArray(r_array);
     }

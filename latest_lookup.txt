@@ -1,22 +1,20 @@
-blip,blop,knock
+bass
 
-L:\MPL\Ableton Live Packs\PMk Blip\Clips\100-Cellprint.alc
-L:\MPL\Ableton Live Packs\PMk Blip\Icon_
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\blast-2600-q.aif.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\kick-2600-n.aif.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Lead A5.wav
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Lead-Trem D4.wav.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Sawtooth G#3.wav.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Square C5.wav.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Square-Trem A5.wav
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\Square-Trem G5.wav.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\statik-2600-b.aif.asd
-L:\MPL\Ableton Live Packs\PMk Blip\Samples\statik-2600-p.aif.asd
-L:\MPL\Drums\TECHNO\Berlin\SM101 - Berlin Techno Drum Kits\kick\btd_kick_knockr.wav
-L:\MPL\Drums\TECHNO\Detroit\UNDRGRND - Detroit Electro\Kicks\US_DE_Kick_knocka.wav
-L:\MPL\Drums\TECHNO\Detroit\UNDRGRND - Detroit Electro\Percussion\US_DE_Percussion_Blip_deaded.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\knocks\wasd_kick_pro1_tight_m_t.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\knocks\wasd_kick_pro5_deep-knock_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\percussion\pops, snaps & rim shots\wasd_rim_sys100_blip-b_m_t2.wav
-L:\MPL\One Shots\Electric Vice NI_MS\Blip & Blop\Blip GinLarden.wav
-L:\MPL\One Shots\Transistor Punch NI_MS\Blip & Blop\Bleep Transistor 06.wav.asd
+L:\MPL\Ableton Live Packs\PMk Analog Automata\Clips\Kick\100-Badger The Bass Drum.alc
+L:\MPL\Ableton Live Packs\PMk Analog Bass Vol 1\Fat Albert.adg
+L:\MPL\Ableton Live Packs\PMk Analog Bass Vol 2 (Korg)\Upright MS.adg
+L:\MPL\Ableton Live Packs\PMk Analog Bass Volume 3\Juno\UpriteBass.adg
+L:\MPL\Ableton Live Packs\PMk Analog Bass Volume 4\Samples\Domino-C3-127-HQE5.aif
+L:\MPL\Ableton Live Packs\Pmk Archmachine_1_01_Live\Archmachine\Bass-Cello.adg
+L:\MPL\Ableton Live Packs\PMk Big Bertha\FingerBass.adg
+L:\MPL\Ableton Live Packs\PMk Blip\Multisample Programs\Plump Bass.adg
+L:\MPL\Ableton Live Packs\PMk DeeEx\Bass & Lead\Owowo.adg
+L:\MPL\Ableton Live Packs\PMk Eight Bit\Pure SID\Dirty DnBass.adv
+L:\MPL\Ableton Live Packs\PMk Foundation Analog Synths\Bass-Hottbottom.adg
+L:\MPL\Ableton Live Packs\PMk Foundation Guitar & Bass\EBass-Bertha Lite.adg
+L:\MPL\Ableton Live Packs\PMk Kordoni\Voice Modules\Bass-16.adv
+L:\MPL\Ableton Live Packs\PMk Melange\Transwave\Let Rick Bassoid.adg
+L:\MPL\Ableton Live Packs\PMk Modular Patterns\Modular Patterns\Basses & Subs\80-Multipog-Straight.alc
+L:\MPL\Ableton Live Packs\PMk PM-8910\Bass Krepis.adg
+L:\MPL\Ableton Live Packs\PMk String Machines\ARP Solina\Solina Contrabass.adg
+L:\MPL\Ableton Live Packs\PMk Vector (Korg)\Components\Waves\Electric\DeepBass1a.adv
