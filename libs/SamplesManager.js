@@ -1,13 +1,13 @@
 const Samples = require('Samples.class.js');
 
-class FS_Samples {
+class SamplesManager {
 
     constructor(){
     }
 
     checkSampleName(path_string, names){
         path_string = _.toLower(path_string);
-        if(_.indexOf(Config.getExtensionExcludedForSamples(),path.extname(path_string))>=0){
+        if(_.indexOf(ConfigMgr.getExtensionExcludedForSamples(),path.extname(path_string))>=0){
             return false;
         }
         for (let i=0; i<names.length; i++){
@@ -23,7 +23,7 @@ class FS_Samples {
         smp_obj.tags.forEach(function(v, i, a){ a[i] = _.trim(_.toLower(a[i])); }); //normalize tags
         console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
-        this._searchSamplesByTags(smp_obj, Config.getSamplesDirectory());
+        this._searchSamplesByTags(smp_obj, ConfigMgr.getSamplesDirectory());
 
         if(smp_obj.array.length<=0) return null;
         smp_obj.setRandom(20);
@@ -54,7 +54,7 @@ class FS_Samples {
 
     saveSampleObjectToFile(smp_obj){
         if(!smp_obj) return false;
-        let lookup_file = path.resolve('./'+Config.filename.latest_lookup);
+        let lookup_file = path.resolve('./'+ConfigMgr.filename.latest_lookup);
         let text_to_file = smp_obj.toText();
         return fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
             if(err){ console.error(err); return; }
@@ -64,7 +64,7 @@ class FS_Samples {
 
 
     openSampleObjectToFile(){
-        let lookup_file = path.resolve('./'+Config.filename.latest_lookup);
+        let lookup_file = path.resolve('./'+ConfigMgr.filename.latest_lookup);
         let file_to_text = "";
         try{
             file_to_text = fs.readFileSync(lookup_file);
@@ -80,7 +80,7 @@ class FS_Samples {
 
     generateSamplesDir(smp_obj){
         let p_array = [];
-        let dest_dir = path.join(Config.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
+        let dest_dir = path.join(ConfigMgr.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
         let readme_file = path.join(dest_dir,'summary.txt');
 
         fs_extra.ensureDirSync(dest_dir);
@@ -108,4 +108,4 @@ class FS_Samples {
     }
 };
 
-module.exports = new FS_Samples();
+module.exports = new SamplesManager();

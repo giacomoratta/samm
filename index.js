@@ -5,10 +5,10 @@ global.fs = require('fs');
 global.fs_extra = require('fs-extra');
 
 /* Project Libraries */
-global.Config = require('./libs/ConfigManager.js');
+global.ConfigMgr = require('./libs/ConfigManager.js');
 global.Utils = require('./libs/Utils.js');
-global.Commands = require('./libs/CommandsManager.js');
-global.FS_Samples = require('./libs/FS_Samples.js');
+global.CommandsMgr = require('./libs/CommandsManager.js');
+global.SamplesMgr = require('./libs/SamplesManager.js');
 
 /* Help function */
 function printHelp(){
@@ -30,16 +30,16 @@ else{
 let command = cli_params[0];
 
 if(command=='set'){
-    Commands.C_set(cli_params);
+    CommandsMgr.C_set(cli_params);
 
 } else if(command=='config'){
-    Config.print();
+    ConfigMgr.print();
 
 } else if(command=='lookup'){
-    Commands.C_lookup(cli_params);
+    CommandsMgr.C_lookup(cli_params);
 
 } else if(command=='save'){
-    Commands.C_save(cli_params);
+    CommandsMgr.C_save(cli_params);
 
 } else {
     printHelp();

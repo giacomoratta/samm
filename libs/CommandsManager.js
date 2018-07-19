@@ -12,7 +12,7 @@ class CommandsManager {
             console.log("Set command: missing property name");
             return this._error_code;
         }
-        if(!Config.checkProperty(cli_params[1])){
+        if(!ConfigMgr.checkProperty(cli_params[1])){
             console.log("Set command: unknown property name '"+cli_params[1]+"'");
             return this._error_code;
         }
@@ -21,8 +21,8 @@ class CommandsManager {
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        Config.setProperty(cli_params[1],_.slice(cli_params,2));
-        Config.save();
+        ConfigMgr.setProperty(cli_params[1],_.slice(cli_params,2));
+        ConfigMgr.save();
     }
 
 
@@ -38,7 +38,7 @@ class CommandsManager {
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let _tagList = Config.getProperty('tags')[cli_params[2]];
+            let _tagList = ConfigMgr.getProperty('tags')[cli_params[2]];
             if(_.isNil(_tagList)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;
@@ -50,15 +50,15 @@ class CommandsManager {
         }
 
         if(_.isNil(tagList)) return null;
-        let smp_obj = FS_Samples.searchSamplesByTags(_.slice(cli_params,1));
-        FS_Samples.saveSampleObjectToFile(smp_obj);
+        let smp_obj = SamplesMgr.searchSamplesByTags(_.slice(cli_params,1));
+        SamplesMgr.saveSampleObjectToFile(smp_obj);
         return smp_obj;
     }
 
 
     C_save(cli_params){
         let smp_dirname = null;
-        let smp_obj = FS_Samples.openSampleObjectToFile();
+        let smp_obj = SamplesMgr.openSampleObjectToFile();
         if(cli_params[1]=='-n'){
             if(_.isNil(cli_params[2])){
                 console.log("Save command: directory name missing");
@@ -70,7 +70,7 @@ class CommandsManager {
             console.log("Save command: latest lookup missing");
             return this._error_code;
         }
-        return FS_Samples.generateSamplesDir(smp_obj,smp_dirname);
+        return SamplesMgr.generateSamplesDir(smp_obj,smp_dirname);
     }
 };
 
