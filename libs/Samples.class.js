@@ -35,6 +35,41 @@ class Samples {
         }
         return true;
     }
+
+    setRandom(count){
+        let _sameDirectoryMaxOccurs = function(arr,f,o_obj,max_o){
+            let f_path = path.dirname(f);
+            for(let i=0; i<arr.length; i++){
+                let arrf_path = path.dirname(arr[i]);
+                if(f_path == arrf_path){
+                    if(!_.isObject(o_obj) || !_.isInteger(max_o)) return true;
+                    if(_.isNil(o_obj[f_path])) o_obj[f_path]=0;
+                    if(o_obj[f_path]>=max_o) return true;
+                    o_obj[f_path]++;
+                    return false;
+                }
+            }
+            return false;
+        };
+
+        if(!_.isInteger(count) || count<=1) count=10;
+        let r_array = [];
+        let size = this.array.length;
+        let i=0, sec=size, rf, rn;
+        let occur_obj = {};
+        let max_occur = 2;
+        while(i<count && sec>0){
+            sec--;
+            rn=_.random(0,size);
+            rn=((rn*7)%size);
+            rf=this.array[rn];
+            if(_sameDirectoryMaxOccurs(r_array,rf,occur_obj,max_occur)) continue;
+            r_array.push(rf);
+            console.log("   - ",rf);
+            i++;
+        }
+        return Utils.sortFilesArray(r_array);
+    }
 }
 
 module.exports = Samples;

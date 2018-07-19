@@ -26,7 +26,7 @@ class FS_Samples {
         this._searchSamplesByTags(smp_obj, Config.getSamplesDirectory());
 
         if(smp_obj.array.length<=0) return null;
-        smp_obj.random = this._selectRandomSamples(smp_obj.array,20);
+        smp_obj.setRandom(20);
 
         return smp_obj;
     }
@@ -49,42 +49,6 @@ class FS_Samples {
                 smp_obj.array.push(path_string);
             }
         }
-    }
-
-
-    _selectRandomSamples(f_array, count){
-        console.log("\n\n  Random Samples");
-        let _sameDirectoryMaxOccurs = function(arr,f,o_obj,max_o){
-            let f_path = path.dirname(f);
-            for(let i=0; i<arr.length; i++){
-                let arrf_path = path.dirname(arr[i]);
-                if(f_path == arrf_path){
-                    if(!_.isObject(o_obj) || !_.isInteger(max_o)) return true;
-                    if(_.isNil(o_obj[f_path])) o_obj[f_path]=0;
-                    if(o_obj[f_path]>=max_o) return true;
-                    o_obj[f_path]++;
-                    return false;
-                }
-            }
-            return false;
-        };
-
-        let r_array = [];
-        let size = f_array.length;
-        let i=0, sec=size, rf, rn;
-        let occur_obj = {};
-        let max_occur = 2;
-        while(i<count && sec>0){
-            sec--;
-            rn=_.random(0,size);
-            rn=((rn*7)%size);
-            rf=f_array[rn];
-            if(_sameDirectoryMaxOccurs(r_array,rf,occur_obj,max_occur)) continue;
-            r_array.push(rf);
-            console.log("   - ",rf);
-            i++;
-        }
-        return Utils.sortFilesArray(r_array);
     }
 
 
