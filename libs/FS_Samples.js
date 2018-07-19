@@ -23,10 +23,11 @@ class FS_Samples {
         this._searchSamplesByTags(tags, Config.getSamplesDirectory(), finalArray);
 
         if(finalArray.length<=0) return null;
-        this._selectRandomSamples(finalArray,20);
+        let randomArray = this._selectRandomSamples(finalArray,20);
 
         return {
             array:finalArray,
+            random:randomArray,
             tags:tags
         }
     }
@@ -63,7 +64,19 @@ class FS_Samples {
             r_array.push(rf);
             console.log("   - ",rf);
         }
-        return f_array.sort();
+        return Utils.sortFilesArray(r_array);
+    }
+
+
+    saveSampleObjectToFile(smp_obj){
+        if(!_.isObject(smp_obj)) return false;
+        let lookup_file = path.resolve('./latest_lookup.txt');
+        let text_to_file = _.join(smp_obj.random,"\n");
+        text_to_file = smp_obj.tags+"\n\n"+text_to_file;
+        return fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
+            if(err){ console.error(err); return; }
+            console.log("The file was saved!",lookup_file);
+        });
     }
 
 
@@ -88,7 +101,7 @@ class FS_Samples {
                         console.log("The file was saved!");
                     }).catch(function(err){
                         console.error(err);
-                    });;
+                    });
                 }
             })
             .catch(function(err){

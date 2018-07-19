@@ -12,5 +12,6 @@ class Utils {
             return 0;
         });
     }
+}
 
 module.exports = new Utils();

@@ -31,19 +31,28 @@ class CommandsManager {
             console.log("Lookup command: missing tags or option (-t)");
             return this._error_code;
         }
+
+        let tagList=null;
         if(cli_params[1]=='-t'){
             if(cli_params.length<3){
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let tagList = Config.getProperty('tags')[cli_params[2]];
-            if(_.isNil(tagList)){
+            let _tagList = Config.getProperty('tags')[cli_params[2]];
+            if(_.isNil(_tagList)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;
             }
-            return FS_Samples.searchSamplesByTags(_.split(tagList,','));
+            tagList = _.split(_tagList,',');
+
+        } else {
+            tagList = _.slice(cli_params,1);
         }
-        return FS_Samples.searchSamplesByTags(_.slice(cli_params,1));
+
+        if(_.isNil(tagList)) return null;
+        let smp_obj = FS_Samples.searchSamplesByTags(_.slice(cli_params,1));
+        FS_Samples.saveSampleObjectToFile(smp_obj);
+        return smp_obj;
     }
 
 
