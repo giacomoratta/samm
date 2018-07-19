@@ -78,12 +78,13 @@ class SamplesManager {
     }
 
 
-    generateSamplesDir(smp_obj){
+    generateSamplesDir(smp_obj, smp_dirname){
         let p_array = [];
         let dest_dir = path.join(ConfigMgr.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
         let readme_file = path.join(dest_dir,'summary.txt');
 
         fs_extra.ensureDirSync(dest_dir);
+        fs_extra.ensureDirSync(path.join(dest_dir,'_removed'));
 
         arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
