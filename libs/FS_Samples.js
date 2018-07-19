@@ -102,6 +102,27 @@ class FS_Samples {
     }
 
 
+    openSampleObjectToFile(){
+        let lookup_file = path.resolve('./'+Config.filename.latest_lookup);
+        let file_to_text;
+        try{
+            file_to_text = fs.readFileSync(lookup_file);
+        }catch(e){
+            console.log(e);
+            return null;
+        }
+        let file_rows = _.split(_.trim(file_to_text),"\n");
+        if(!_.isArray(file_rows) || file_rows.length<5) return null;
+
+        let smp_obj = { array:[], tags:'' };
+        smp_obj.tags = file_rows[0];
+        for(let i=2; i<file_rows.length; i++){
+            smp_obj.array.push(file_rows[i]);
+        }
+        return smp_obj;
+    }
+
+
     generateSamplesDir(smp_obj){
         let p_array = [];
         let dest_dir = path.join(Config.ProjectsDirectory, 'smpl', _.join(smp_obj.tags,'_').substring(0,20));
