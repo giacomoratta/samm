@@ -1,3 +1,4 @@
+const Samples = require('Samples.class.js');
 
 class FS_Samples {
 
@@ -17,24 +18,21 @@ class FS_Samples {
 
 
     searchSamplesByTags(tags){
-        tags.forEach(function(v, i, a){ a[i] = _.trim(_.toLower(a[i])); }); //normalize tags
-        console.log(" Looking for: '"+_.join(tags,"', '")+"'");
+        let smp_obj = new Samples();
+        smp_obj.tags = tags;
+        smp_obj.tags.forEach(function(v, i, a){ a[i] = _.trim(_.toLower(a[i])); }); //normalize tags
+        console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
-        let finalArray = [];
-        this._searchSamplesByTags(tags, Config.getSamplesDirectory(), finalArray);
+        this._searchSamplesByTags(smp_obj, Config.getSamplesDirectory());
 
-        if(finalArray.length<=0) return null;
-        let randomArray = this._selectRandomSamples(finalArray,20);
+        if(smp_obj.array.length<=0) return null;
+        smp_obj.random = this._selectRandomSamples(smp_obj.array,20);
 
-        return {
-            array:finalArray,
-            random:randomArray,
-            tags:tags
-        }
+        return smp_obj;
     }
 
 
-    _searchSamplesByTags(names, dir_path, f_array, _maxRec){
+    _searchSamplesByTags(smp_obj, dir_path, _maxRec){
         let items = fs.readdirSync(dir_path).sort();
         for (let i=0; i<items.length; i++) {
             //console.log(' >> ',items[i]);
@@ -43,12 +41,12 @@ class FS_Samples {
             let fsStat = fs.lstatSync(path_string);
 
             if(fsStat.isDirectory()){
-                this._searchSamplesByTags(names, path_string, f_array);
+                this._searchSamplesByTags(smp_obj, path_string, smp_obj.array);
 
-            }else if(fsStat.isFile() && this.checkSampleName(path_string,names)){
+            }else if(fsStat.isFile() && this.checkSampleName(path_string,smp_obj.tags)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
                 console.log("  ",path_string);
-                f_array.push(path_string);
+                smp_obj.array.push(path_string);
             }
         }
     }
@@ -91,10 +89,9 @@ class FS_Samples {
 
 
     saveSampleObjectToFile(smp_obj){
-        if(!_.isObject(smp_obj)) return false;
+        if(!smp_obj) return false;
         let lookup_file = path.resolve('./'+Config.filename.latest_lookup);
-        let text_to_file = _.join(smp_obj.random,"\n");
-        text_to_file = smp_obj.tags+"\n\n"+text_to_file;
+        let text_to_file = smp_obj.toText();
         return fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
             if(err){ console.error(err); return; }
             console.log("The file was saved!",lookup_file);
@@ -111,21 +108,15 @@ class FS_Samples {
             console.log(e);
             return null;
         }
-        let file_rows = _.split(_.trim(file_to_text),"\n");
-        if(!_.isArray(file_rows) || file_rows.length<5) return null;
-
-        let smp_obj = { array:[], tags:'' };
-        smp_obj.tags = file_rows[0];
-        for(let i=2; i<file_rows.length; i++){
-            smp_obj.array.push(file_rows[i]);
-        }
+        let smp_obj = new Samples();
+        if(!smp_obj.fromText(file_to_text)) return null;
         return smp_obj;
     }
 
 
     generateSamplesDir(smp_obj){
         let p_array = [];
-        let dest_dir = path.join(Config.ProjectsDirectory, 'smpl', _.join(smp_obj.tags,'_').substring(0,20));
+        let dest_dir = path.join(Config.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
         let readme_file = path.join(dest_dir,'summary.txt');
 
         fs_extra.ensureDirSync(dest_dir);
