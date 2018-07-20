@@ -32,6 +32,7 @@ class CommandsManager {
             console.log("Scan command: scansion failed");
             return this._error_code;
         }
+        console.log("Scan command: scansion completed ("+smp_obj.array.length+" samples found)");
         if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
             console.log("Scan command: file writing failed");
             return this._error_code;

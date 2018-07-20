@@ -41,6 +41,10 @@ if(command=='set'){
 } else if(command=='save'){
     CommandsMgr.C_save(cli_params);
 
+} else if(command=='scan'){
+    CommandsMgr.C_scan(cli_params);
+
 } else {
+    console.log(" Unrecognized command");
     printHelp();
 }

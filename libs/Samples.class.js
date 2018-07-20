@@ -42,7 +42,8 @@ class Samples {
 
 
     toJsonString(){
-        let json_string = JSON.stringify(this.array, null, '  ');
+        let obj_save = { array: this.array }
+        let json_string = JSON.stringify(obj_save);
         return json_string;
     }
 
@@ -50,8 +51,10 @@ class Samples {
     fromJsonString(json_string){
         this.init();
         if(!_.isString(json_string)) return false;
+        json_string = _.trim(json_string);
         try{
-            this.array = JSON.parse(json_string);
+            let json_obj = JSON.parse(json_string);
+            this.array = json_obj.array;
         }catch(e){
             console.log(e);
             return false;

@@ -1,4 +1,4 @@
-const Samples = require('Samples.class.js');
+const Samples = require('./Samples.class.js');
 
 class SamplesManager {
 
@@ -27,14 +27,17 @@ class SamplesManager {
 
     scanSamples(){
         let smp_obj = new Samples();
-        this._scanSamples(smp_obj, ConfigMgr.getSamplesDirectory(), { maxRec:100000 });
+        this._scanSamples(smp_obj, ConfigMgr.getSamplesDirectory(), { maxRec:1000000 }); //1.000.000
         if(smp_obj.array.length<=0) return null;
         return smp_obj;
     }
 
 
     _scanSamples(smp_obj, dir_path, _options){
-        if(_options.maxRec<=0) return;
+        if(_options.maxRec<=0){
+            console.log('scanSamples: max recursions reached');
+            return;
+        }
         _options.maxRec
 
         let items = fs.readdirSync(dir_path);
@@ -62,9 +65,9 @@ class SamplesManager {
         let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
         let json_string = '';
         try{
-            json_string = fs.readFileSync(samples_index);
+            json_string = fs.readFileSync(samples_index,'utf8');
         }catch(e){
-            console.log(e);
+            //console.log(e);
             return null;
         }
         let smp_obj = new Samples();
@@ -77,11 +80,14 @@ class SamplesManager {
         if(!smp_obj) return false;
         let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
         let json_string = smp_obj.toJsonString();
-        if(json_string) return null;
-        return fs.writeFile(samples_index, json_string, 'utf8',function(err){
-            if(err){ console.error(err); return; }
-            console.log("The file was saved!",samples_index);
-        });
+        if(!json_string) return null;
+        try{
+            fs.writeFileSync(samples_index, json_string, 'utf8');
+        }catch(e){
+            //console.log(e);
+            return false;
+        }
+        return true;
     }
 
 
@@ -139,7 +145,7 @@ class SamplesManager {
         if(!smp_obj) return false;
         let lookup_file = path.resolve('./'+ConfigMgr.filename.latest_lookup);
         let text_to_file = smp_obj.toText();
-        return fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
+        let x = fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
             if(err){ console.error(err); return; }
             console.log("The file was saved!",lookup_file);
         });
