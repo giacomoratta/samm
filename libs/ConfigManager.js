@@ -29,14 +29,21 @@ class ConfigManager {
         return !_.isUndefined(this._config[name]);
     }
 
-    getProperty(name){
+    get(name){
         return this._config[name];
     }
 
-    setProperty(name, values){
-        if(_.isArray(this._config[name])) this._config[name] = values;
-        else if(_.isObject(this._config[name])) this._setObjectProperty(name, values);
-        else this._config[name] = values[0];
+    set(name, values){
+        if(_.isArray(this._config[name])){
+            this._config[name] = values;
+        }
+        else if(_.isObject(this._config[name])){
+            this._setObjectProperty(name, values);
+        }
+        else if(typeof this._config[name] === typeof values[0]){
+            // preserve type
+            this._config[name] = values[0];
+        }
         return this._config[name];
     }
 

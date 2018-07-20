@@ -3,6 +3,7 @@ global._ =  require('lodash');
 global.path = require('path');
 global.fs = require('fs');
 global.fs_extra = require('fs-extra');
+global.d = console.log;
 
 /* Project Libraries */
 global.ConfigMgr = require('./libs/ConfigManager.js');

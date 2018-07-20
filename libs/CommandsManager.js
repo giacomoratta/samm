@@ -21,7 +21,7 @@ class CommandsManager {
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        ConfigMgr.setProperty(cli_params[1],_.slice(cli_params,2));
+        ConfigMgr.set(cli_params[1],_.slice(cli_params,2));
         ConfigMgr.save();
     }
 
@@ -53,7 +53,7 @@ class CommandsManager {
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let _tagList = ConfigMgr.getProperty('tags')[cli_params[2]];
+            let _tagList = ConfigMgr.get('tags')[cli_params[2]];
             if(_.isNil(_tagList)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;

@@ -1,20 +1,2 @@
-bass
+kick
 
-L:\MPL\Ableton Live Packs\PMk Analog Automata\Clips\Kick\100-Badger The Bass Drum.alc
-L:\MPL\Ableton Live Packs\PMk Analog Bass Vol 1\Fat Albert.adg
-L:\MPL\Ableton Live Packs\PMk Analog Bass Vol 2 (Korg)\Upright MS.adg
-L:\MPL\Ableton Live Packs\PMk Analog Bass Volume 3\Juno\UpriteBass.adg
-L:\MPL\Ableton Live Packs\PMk Analog Bass Volume 4\Samples\Domino-C3-127-HQE5.aif
-L:\MPL\Ableton Live Packs\Pmk Archmachine_1_01_Live\Archmachine\Bass-Cello.adg
-L:\MPL\Ableton Live Packs\PMk Big Bertha\FingerBass.adg
-L:\MPL\Ableton Live Packs\PMk Blip\Multisample Programs\Plump Bass.adg
-L:\MPL\Ableton Live Packs\PMk DeeEx\Bass & Lead\Owowo.adg
-L:\MPL\Ableton Live Packs\PMk Eight Bit\Pure SID\Dirty DnBass.adv
-L:\MPL\Ableton Live Packs\PMk Foundation Analog Synths\Bass-Hottbottom.adg
-L:\MPL\Ableton Live Packs\PMk Foundation Guitar & Bass\EBass-Bertha Lite.adg
-L:\MPL\Ableton Live Packs\PMk Kordoni\Voice Modules\Bass-16.adv
-L:\MPL\Ableton Live Packs\PMk Melange\Transwave\Let Rick Bassoid.adg
-L:\MPL\Ableton Live Packs\PMk Modular Patterns\Modular Patterns\Basses & Subs\80-Multipog-Straight.alc
-L:\MPL\Ableton Live Packs\PMk PM-8910\Bass Krepis.adg
-L:\MPL\Ableton Live Packs\PMk String Machines\ARP Solina\Solina Contrabass.adg
-L:\MPL\Ableton Live Packs\PMk Vector (Korg)\Components\Waves\Electric\DeepBass1a.adv

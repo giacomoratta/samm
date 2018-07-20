@@ -63,7 +63,7 @@ class Samples {
     }
 
 
-    setRandom(count){
+    setRandom(count,max_occur){
         let _sameDirectoryMaxOccurs = function(arr,f,o_obj,max_o){
             let f_path = path.dirname(f);
             for(let i=0; i<arr.length; i++){
@@ -84,7 +84,7 @@ class Samples {
         let size = this.array.length;
         let i=0, sec=size, rf, rn;
         let occur_obj = {};
-        let max_occur = 2;
+        if(_.isNil(max_occur)) max_occur=-1;
         while(i<count && sec>0){
             sec--;
             rn=_.random(0,size);

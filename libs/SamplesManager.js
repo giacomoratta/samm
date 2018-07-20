@@ -71,7 +71,7 @@ class SamplesManager {
             return null;
         }
         let smp_obj = new Samples();
-        if(!smp_obj.fromJsonString(samples_index)) return null;
+        if(!smp_obj.fromJsonString(json_string)) return null;
         return smp_obj;
     }
 
@@ -105,7 +105,6 @@ class SamplesManager {
         for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
             //console.log(' >> ',items[i]);
             let path_string = ConfigMgr._sampleScan[i];
-            let fsStat = fs.lstatSync(path_string);
 
             if(this.checkSampleName(path_string,splitted_tags)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
@@ -114,11 +113,10 @@ class SamplesManager {
             }
         }
         if(smp_obj.array.length<=0) return null;
-        smp_obj.setRandom(ConfigMgr.getProperty('RandomCount'));
+        console.log(" Random selection of "+ConfigMgr.get('RandomCount')+" samples","(max "+ConfigMgr.get('MaxOccurrencesSameDirectory')+" from the same directory)");
+        smp_obj.setRandom(ConfigMgr.get('RandomCount'), ConfigMgr.get('MaxOccurrencesSameDirectory'));
         return smp_obj;
     }
-
-
 
 
     _searchSamplesByTags(smp_obj, dir_path){

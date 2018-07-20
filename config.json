@@ -4,7 +4,8 @@
 	"ExtensionExcludedForSamples": [
 		".asd"
 	],
-	"RandomCount": "20",
+	"RandomCount": 20,
+	"MaxOccurrencesSameDirectory":2,
 	"tags": {
 		"kick": "435,46,46464"
 	}
