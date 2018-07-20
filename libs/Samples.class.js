@@ -64,18 +64,14 @@ class Samples {
 
 
     setRandom(count,max_occur){
-        let _sameDirectoryMaxOccurs = function(arr,f,o_obj,max_o){
-            let f_path = path.dirname(f);
-            for(let i=0; i<arr.length; i++){
-                let arrf_path = path.dirname(arr[i]);
-                if(f_path == arrf_path){
-                    if(!_.isObject(o_obj) || !_.isInteger(max_o)) return true;
-                    if(_.isNil(o_obj[f_path])) o_obj[f_path]=0;
-                    if(o_obj[f_path]>=max_o) return true;
-                    o_obj[f_path]++;
-                    return false;
-                }
-            }
+        let local_path = path;
+        if(this.array.length>0 && this.array[0].indexOf('\\')>0) local_path=path.win32;
+
+        let _sameDirectoryMaxOccurs = function(f,o_obj,max_o){
+            let f_path = local_path.win32.dirname(f);
+            if(!o_obj[f_path]) o_obj[f_path]=0;
+            else if(o_obj[f_path]>=max_o) return true;
+            o_obj[f_path]++;
             return false;
         };
 
@@ -87,12 +83,14 @@ class Samples {
         if(_.isNil(max_occur)) max_occur=-1;
         while(i<count && sec>0){
             sec--;
-            rn=_.random(0,size);
-            rn=((rn*7)%size);
+            rn=((_.random(0,size)*7)%size);
             rf=this.array[rn];
-            if(_sameDirectoryMaxOccurs(r_array,rf,occur_obj,max_occur)) continue;
+            if(_sameDirectoryMaxOccurs(rf,occur_obj,max_occur)){
+                //d(sec,i,count,'jump',rf);
+                continue;
+            }
             r_array.push(rf);
-            console.log("   - ",rf);
+            console.log("   - ",'...'+rf.substring(16));
             i++;
         }
         return Utils.sortFilesArray(r_array);

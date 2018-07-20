@@ -168,10 +168,12 @@ class SamplesManager {
     generateSamplesDir(smp_obj, smp_dirname){
         let p_array = [];
         let dest_dir = path.join(ConfigMgr.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
-        let readme_file = path.join(dest_dir,'summary.txt');
+        //let readme_file = path.join(dest_dir,'summary.txt');
+        // NO! fare directory extra ('_link') con vari file txt con percorso a partire da sampledir es. 'dir1--dir2--dir3--...'
 
         fs_extra.ensureDirSync(dest_dir);
         fs_extra.ensureDirSync(path.join(dest_dir,'_removed'));
+        fs_extra.ensureDirSync(path.join(dest_dir,'_links'));
 
         arr.forEach(function(v,i,a){
             let f_name = path.basename(v);

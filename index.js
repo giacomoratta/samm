@@ -14,7 +14,6 @@ global.SamplesMgr = require('./libs/SamplesManager.js');
 /* Help function */
 function printHelp(){
     console.log("\nHelp");
-    console.log("\n\n");
 }
 
 
@@ -49,3 +48,5 @@ if(command=='set'){
     console.log(" Unrecognized command");
     printHelp();
 }
+
+console.log("\n\n");

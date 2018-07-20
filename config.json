@@ -5,7 +5,7 @@
 		".asd"
 	],
 	"RandomCount": 20,
-	"MaxOccurrencesSameDirectory":2,
+	"MaxOccurrencesSameDirectory":1,
 	"tags": {
 		"kick": "435,46,46464"
 	}
