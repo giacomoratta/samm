@@ -1,2 +1,22 @@
-kick
+techno, kick, raw, analog, industr, berlin
 
+L:\MPL\Ableton Live Packs\PMk Analog Bass Volume 4\Samples\Locust-F#2-120-GBO6.aif
+L:\MPL\Ableton Live Packs\PMk Kickbank\Samples\modular-pitched-8.wav
+L:\MPL\Ableton Live Packs\PMk TrapKit\Samples\Kick-OR-22.wav
+L:\MPL\Drums\HOUSE_EDM\ProducerSpot-House\Kicks\House Kick 11.wav
+L:\MPL\Drums\REAL DRUM\Survival Drum Kit\1 Kicks\Survival - Kick  (89).wav
+L:\MPL\Drums\TECHNO\Transistor Punch NI_MS\Snare\Snare Aberlour 1.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\strikes\wasd_strike_pro5_crystal-harmony-1_s_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\cymbals\crash & splash\wasd_crash_jp8_smack-bubbles_s_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\cymbals\rides\wasd_ride_ms20_biting_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\almost real\wasd_kick_pro5_solid-2_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\percussion\blocks & cowbells\wasd_block_sh09_clave-noise-4_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\percussion\pops, snaps & rim shots\wasd_rim_jp8_harmonic-2_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\strikes\wasd_strike_jp8_hi-sword_s_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\swells\wasd_swell_mini_glassy_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\toms\fat & punchy toms\wasd_tom_ob8_simple-smooth-3_s_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\cymbals\open hats\wasd_op-hat_pro1_hard-metalic_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\snaps clicks & pulses\wasd_kick_sh09_tek-tik_m_t2.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\percussion\dissonant hits\wasd_d-hit_pro1_dip-rise_m_u.wav
+L:\MPL\Loops\UNDRGRND Analogue Modular Techno\Drum Loops\US_AMT_Drum_124_hijacker_stripped.wav
+L:\MPL\Loops\UNDRGRND Sounds\Techno - Purist\Drum Loops\US_PT_Drum_124_below_top.wav

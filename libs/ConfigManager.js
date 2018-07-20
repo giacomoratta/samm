@@ -9,7 +9,7 @@ class ConfigManager {
             samples_index: 'samples_index.txt'
         }
         this._labels = {
-            'sample_dir':'smp'
+            'sample_dir':'mpl'
         }
     }
 
@@ -32,11 +32,13 @@ class ConfigManager {
             // preserve type
             this._config[name] = values[0];
         }
+        else{
+            return null;
+        }
         return this._config[name];
     }
 
     _setObjectProperty(name, values){
-        console.log('_setObjectProperty');
         if(values.length<2) return;
         let _ref = this._config[name];
         let i=0;
@@ -52,10 +54,13 @@ class ConfigManager {
     save(){
         let file_path = path.resolve(this._filename.config);
         let config_text = JSON.stringify(this._config, null, '\t');
-        fs.writeFileSync(file_path, config_text, 'utf8', function(err) {
-            if(err) { console.log(err); return; }
-            console.log("Configuration saved successfully");
-        });
+        try{
+            fs.writeFileSync(file_path, config_text, 'utf8');
+        }catch(e){
+            console.log(e);
+            return false;
+        }
+        return true;
     }
 
     print(){

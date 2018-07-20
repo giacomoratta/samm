@@ -21,8 +21,16 @@ class CommandsManager {
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        ConfigMgr.set(cli_params[1],_.slice(cli_params,2));
-        ConfigMgr.save();
+        if(ConfigMgr.set(cli_params[1],_.slice(cli_params,2))===null){
+            console.log("Set command: configuration not changed");
+            return this._error_code;
+        }
+        if(ConfigMgr.save()!==true){
+            console.log("Set command: error during file writing");
+            return this._error_code;
+        }
+        console.log("Set command: configuration saved successfully");
+        return this._success_code;
     }
 
 
@@ -53,7 +61,7 @@ class CommandsManager {
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let _tagList = ConfigMgr.get('tags')[cli_params[2]];
+            let _tagList = ConfigMgr.get('Tags')[cli_params[2]];
             if(_.isNil(_tagList)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;
@@ -72,28 +80,41 @@ class CommandsManager {
         ConfigMgr._sampleScan = smp_obj_scan.array;
 
         if(_.isNil(tagList)) return null;
-        let smp_obj = SamplesMgr.searchSamplesByTags(_.slice(cli_params,1));
-        SamplesMgr.saveSampleObjectToFile(smp_obj);
+        let smp_obj = SamplesMgr.searchSamplesByTags(tagList);
+        SamplesMgr.saveLookupToFile(smp_obj);
         return smp_obj;
     }
 
 
     C_save(cli_params){
         let smp_dirname = null;
-        let smp_obj = SamplesMgr.openSampleObjectToFile();
-        if(cli_params[1]=='-n'){
+
+        if(!ConfigMgr.get('ProjectsDirectory')){
+            console.log("Save command: configuration parameter missing (ProjectsDirectory)");
+            return this._error_code;
+        }
+        if(!ConfigMgr.get('Project')){
+            console.log("Save command: configuration parameter missing (Project)");
+            return this._error_code;
+        }
+
+        if(cli_params[1]=='-d'){
             if(_.isNil(cli_params[2])){
                 console.log("Save command: directory name missing");
                 return this._error_code;
             }
             smp_dirname = cli_params[2];
         }
+
+        let smp_obj = SamplesMgr.openLookupFile();
         if(!_.isObject(smp_obj)){
             console.log("Save command: latest lookup missing");
             return this._error_code;
         }
+
         return SamplesMgr.generateSamplesDir(smp_obj,smp_dirname);
     }
+
 };
 
 module.exports = new CommandsManager();

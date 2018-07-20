@@ -139,7 +139,7 @@ class SamplesManager {
     }
 
 
-    saveSampleObjectToFile(smp_obj){
+    saveLookupToFile(smp_obj){
         if(!smp_obj) return false;
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
@@ -150,13 +150,13 @@ class SamplesManager {
     }
 
 
-    openSampleObjectToFile(){
+    openLookupFile(){
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let file_to_text = "";
         try{
-            file_to_text = fs.readFileSync(lookup_file);
+            file_to_text = fs.readFileSync(lookup_file, 'utf8');
         }catch(e){
-            console.log(e);
+            //console.log(e);
             return null;
         }
         let smp_obj = new Samples();
@@ -165,32 +165,43 @@ class SamplesManager {
     }
 
 
-    generateSamplesDir(smp_obj){
-        let local_path = path;
-        if(smp_obj.array.length>0 && smp_obj.array[0].indexOf('\\')>0) local_path=path.win32;
+    generateSamplesDir(smp_obj,smp_dirname){
+        let _path = path;
+        //if(smp_obj.array.length>0 && smp_obj.array[0].indexOf('\\')>0) _path=path.win32;
+
+        if(!_.isString(smp_dirname) || smp_dirname.length<2) smp_dirname=_.join(smp_obj.tags,'_');//.substring(0,20);
 
         let p_array = [];
-        let dest_dir = path.join(ConfigMgr.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
-        let _removed_dir = path.join(dest_dir,'_not_used');
-        let _links_dir = path.join(dest_dir,'_links');
+        let smpl_dir = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, smp_dirname);
+        let _removed_dir = path.join(smpl_dir,'_not_used');
+        let _links_dir = path.join(smpl_dir,'_links');
 
-        fs_extra.ensureDirSync(dest_dir);
+        fs_extra.ensureDirSync(smpl_dir);
         fs_extra.ensureDirSync(_removed_dir);
         fs_extra.ensureDirSync(_links_dir);
 
-        arr.forEach(function(v,i,a){
+        let smpl_arr = smp_obj.random;
+        if(!smpl_arr || smpl_arr.length<=0) smpl_arr = smp_obj.array;
+        if(!smpl_arr || smpl_arr.length<=0) return null;
+        smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
-            let link_file_name = _.replace(v.substring(ConfigMgr.get('SamplesDirectory')),local_path.sep,'--')+'.txt';
-            p_array.push(fs_extra.copy(v,path.join(dest_dir ,f_name)));
-            p_array.push(fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8'));
+            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'--')+'.txt';
+            p_array.push(fs_extra.copy(v,path.join(smpl_dir ,f_name)));
+            p_array.push(new Promise(function(res,rej){
+                fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
+                    d(link_file_name);
+                    if(err) return rej(err);
+                    return res(link_file_name);
+                })
+            }));
         });
 
         return Promise.all(p_array)
             .then(function(data){
-                console.log('success!');
+                //console.log('success!');
             })
             .catch(function(err){
-                    console.error(err);
+                console.error(err);
             });
     }
 };

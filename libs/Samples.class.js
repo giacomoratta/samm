@@ -90,10 +90,12 @@ class Samples {
                 continue;
             }
             r_array.push(rf);
-            console.log("   - ",'...'+rf.substring(16));
+            //console.log("   - ",'...'+rf.substring(16));
+            console.log("   - ",rf);
             i++;
         }
-        return Utils.sortFilesArray(r_array);
+        this.random = Utils.sortFilesArray(r_array);
+        return this.random;
     }
 }
 

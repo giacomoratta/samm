@@ -12,6 +12,10 @@ class Utils {
             return 0;
         });
     }
+
+    replaceAll(str, str1, str2, ignore){
+        return str.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
+    }
 }
 
 module.exports = new Utils();

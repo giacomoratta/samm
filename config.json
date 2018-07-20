@@ -1,12 +1,15 @@
 {
-	"SamplesDirectory": "L:\\MPL\\Ableton Live Packs\\",
-	"ProjectsDirectory": "C:\\--\\--\\",
+	"SamplesDirectory": "L:\\MPL\\",
+	"ProjectsDirectory": "C:\\Ableton Projects\\techno_e2018",
 	"ExtensionExcludedForSamples": [
-		".asd"
+		".asd",".DS_Store",".cfg",".txt",".exe"
 	],
 	"RandomCount": 20,
-	"MaxOccurrencesSameDirectory":1,
-	"tags": {
-		"kick": "435,46,46464"
+	"MaxOccurrencesSameDirectory": 1,
+	"Project": "t1 Project",
+	"Tags": {
+		"kick": "techno,kick,berlin",
+		"kick_raw": "techno,kick,raw,analog,industr,berlin",
+		"kick_sub": "techno,kick,berlin,deep,sub,"
 	}
 }
