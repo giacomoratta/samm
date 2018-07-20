@@ -3,7 +3,7 @@ class ConfigManager {
     constructor(){
         this._config = require('../config.json');
         this._sampleScan = null;
-        this.filename = {
+        this._filename = {
             config: 'config.json',
             latest_lookup: 'latest_lookup.txt',
             samples_index: 'samples_index.txt'
@@ -11,18 +11,6 @@ class ConfigManager {
         this._labels = {
             'sample_dir':'smp'
         }
-    }
-
-    getSamplesDirectory(){
-        return this._config.SamplesDirectory;
-    }
-
-    getProjectsDirectory(){
-        return this._config.SamplesDirectory;
-    }
-
-    getExtensionExcludedForSamples(){
-        return this._config.ExtensionExcludedForSamples;
     }
 
     checkProperty(name){
@@ -62,7 +50,7 @@ class ConfigManager {
     }
 
     save(){
-        let file_path = path.resolve(this.filename.config);
+        let file_path = path.resolve(this._filename.config);
         let config_text = JSON.stringify(this._config, null, '\t');
         fs.writeFileSync(file_path, config_text, 'utf8', function(err) {
             if(err) { console.log(err); return; }

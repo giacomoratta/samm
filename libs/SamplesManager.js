@@ -7,7 +7,7 @@ class SamplesManager {
 
     checkSampleName(path_string, tags){
         path_string = _.toLower(path_string);
-        if(_.indexOf(ConfigMgr.getExtensionExcludedForSamples(),path.extname(path_string))>=0){
+        if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(path_string))>=0){
             return false;
         }
         if(!_.isArray(tags)) return true;
@@ -27,7 +27,7 @@ class SamplesManager {
 
     scanSamples(){
         let smp_obj = new Samples();
-        this._scanSamples(smp_obj, ConfigMgr.getSamplesDirectory(), { maxRec:1000000 }); //1.000.000
+        this._scanSamples(smp_obj, ConfigMgr.get('SamplesDirectory'), { maxRec:1000000 }); //1.000.000
         if(smp_obj.array.length<=0) return null;
         return smp_obj;
     }
@@ -62,7 +62,7 @@ class SamplesManager {
 
 
     loadSampleScanFromFile(){
-        let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
+        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
         let json_string = '';
         try{
             json_string = fs.readFileSync(samples_index,'utf8');
@@ -78,7 +78,7 @@ class SamplesManager {
 
     saveSampleScanToFile(smp_obj){
         if(!smp_obj) return false;
-        let samples_index = path.resolve('./'+ConfigMgr.filename.samples_index);
+        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
         let json_string = smp_obj.toJsonString();
         if(!json_string) return null;
         try{
@@ -141,7 +141,7 @@ class SamplesManager {
 
     saveSampleObjectToFile(smp_obj){
         if(!smp_obj) return false;
-        let lookup_file = path.resolve('./'+ConfigMgr.filename.latest_lookup);
+        let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
         let x = fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
             if(err){ console.error(err); return; }
@@ -151,7 +151,7 @@ class SamplesManager {
 
 
     openSampleObjectToFile(){
-        let lookup_file = path.resolve('./'+ConfigMgr.filename.latest_lookup);
+        let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let file_to_text = "";
         try{
             file_to_text = fs.readFileSync(lookup_file);
@@ -165,32 +165,29 @@ class SamplesManager {
     }
 
 
-    generateSamplesDir(smp_obj, smp_dirname){
+    generateSamplesDir(smp_obj){
+        let local_path = path;
+        if(smp_obj.array.length>0 && smp_obj.array[0].indexOf('\\')>0) local_path=path.win32;
+
         let p_array = [];
         let dest_dir = path.join(ConfigMgr.ProjectsDirectory, 'smpl_'+_.join(smp_obj.tags,'_').substring(0,20));
-        //let readme_file = path.join(dest_dir,'summary.txt');
-        // NO! fare directory extra ('_link') con vari file txt con percorso a partire da sampledir es. 'dir1--dir2--dir3--...'
+        let _removed_dir = path.join(dest_dir,'_not_used');
+        let _links_dir = path.join(dest_dir,'_links');
 
         fs_extra.ensureDirSync(dest_dir);
-        fs_extra.ensureDirSync(path.join(dest_dir,'_removed'));
-        fs_extra.ensureDirSync(path.join(dest_dir,'_links'));
+        fs_extra.ensureDirSync(_removed_dir);
+        fs_extra.ensureDirSync(_links_dir);
 
         arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
+            let link_file_name = _.replace(v.substring(ConfigMgr.get('SamplesDirectory')),local_path.sep,'--')+'.txt';
             p_array.push(fs_extra.copy(v,path.join(dest_dir ,f_name)));
+            p_array.push(fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8'));
         });
 
         return Promise.all(p_array)
             .then(function(data){
                 console.log('success!');
-                if(readme){
-                    let text_to_file  = "\n"+_.join(arr,"\n");
-                    return fs.writeFile(readme_file, text_to_file, 'utf8').then(function(data){
-                        console.log("The file was saved!");
-                    }).catch(function(err){
-                        console.error(err);
-                    });
-                }
             })
             .catch(function(err){
                     console.error(err);
