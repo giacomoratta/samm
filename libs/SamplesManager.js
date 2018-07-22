@@ -185,7 +185,7 @@ class SamplesManager {
         if(!smpl_arr || smpl_arr.length<=0) return null;
         smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
-            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'--')+'.txt';
+            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'--');
             p_array.push(fs_extra.copy(v,path.join(smpl_dir ,f_name)));
             p_array.push(new Promise(function(res,rej){
                 fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
