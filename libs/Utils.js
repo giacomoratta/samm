@@ -16,6 +16,18 @@ class Utils {
     replaceAll(str, str1, str2, ignore){
         return str.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
     }
+
+    newFunction(){
+        try{
+            function F(args) { return Function.apply(this, args); }
+            F.prototype = Function.prototype;
+            return new F(arguments);
+        }catch(e){
+            //console.log(e);
+            return null;
+        }
+        return null;
+    }
 }
 
 module.exports = new Utils();

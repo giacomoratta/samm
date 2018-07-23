@@ -109,16 +109,9 @@ class SamplesManager {
             _obj.fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
         });
         _obj.fn_string+="return false;\n";
+        _obj.fn = Utils.newFunction('f',_obj.fn_string);
+        if(!_obj.fn) return null;
 
-        /* Check and return */
-        try{
-            _obj.fn = new Function('f',_obj.fn_string);
-        }catch(e){
-            _obj.fn = null;
-        }
-        console.log(_obj.array,_obj.fn);
-
-        if(_obj.fn) return null;
         delete _obj.fn_string;
         return _obj;
     }
