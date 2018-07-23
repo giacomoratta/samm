@@ -74,8 +74,7 @@ class CommandsManager {
             console.log("Lookup command: empty tag list");
             return this._error_code;
         }
-        SamplesMgr.processTagString(tagString);
-        return;
+
 
         let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
         if(!smp_obj_scan){

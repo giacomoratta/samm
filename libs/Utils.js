@@ -28,6 +28,10 @@ class Utils {
         }
         return null;
     }
+
+    onlyLettersNumbers(s){
+        return s.replace(/[^a-zA-Z0-9]/g,'');
+    }
 }
 
 module.exports = new Utils();

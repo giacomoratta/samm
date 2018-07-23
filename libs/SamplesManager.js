@@ -5,23 +5,12 @@ class SamplesManager {
     constructor(){
     }
 
-    checkSampleName(path_string, tags){
+    checkSampleName(path_string){
         path_string = _.toLower(path_string);
         if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(' '+path_string))>=0){ //space needed to read 'only-ext' files
             return false;
         }
-        if(!_.isArray(tags)) return true;
-        for (let i=0; i<tags.length; i++){
-            let flagAND=true;
-            let flagOR=false;
-            for(let j=0; j<tags[i].length; j++){
-                if(_.includes(path_string,tags[i])) flagOR=true; //case sensitive!
-                else flagAND=false;
-            }
-            if(flagOR && tags[i].length==1) return true;
-            if(flagAND && tags[i].length>1) return true;
-        }
-        return false;
+        return true;
     }
 
 
@@ -94,48 +83,43 @@ class SamplesManager {
     processTagString(ts){
         let _obj = {
             array:[],
-            fn:null,
-            fn_string:""
+            check_fn:null,
+            check_fn_string:""
         };
+        ts = Utils.onlyLettersNumbers(_.toLower(ts));
 
         /* Building new function */
         let tagOR = _.split(ts,',');
         tagOR.forEach(function(v,i,a){
             let tagAND=_.split(v,'+');
             tagAND.forEach(function(v,i,a){
-                a[i]=_.trim(a[i]); //TODO: remove not [a-z0-9] characters
+                a[i]=_.trim(a[i]);
                 _obj.array.push(a[i]);
             });
-            _obj.fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
+            _obj.check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
         });
-        _obj.fn_string+="return false;\n";
-        _obj.fn = Utils.newFunction('f',_obj.fn_string);
-        if(!_obj.fn) return null;
+        _obj.check_fn_string+="return false;\n";
+        _obj.check_fn = Utils.newFunction('f',_obj.check_fn_string);
+        if(!_obj.check_fn) return null;
 
-        delete _obj.fn_string;
+        delete _obj.check_fn_string;
         return _obj;
     }
 
 
-    searchSamplesByTags(tagString){s
+    searchSamplesByTags(tagString){
         let smp_obj = new Samples();
-        let splitted_tags=[];
-        smp_obj.tags = tagString; //TODO: split
-        smp_obj.tags.forEach(function(v, i, a){
-            a[i] = _.trim(_.toLower(a[i]));
-            if(a[i].indexOf('+')>=0) splitted_tags.push(_.split(a[i],'+'));
-            else splitted_tags.push([a[i]]);
-        }); //normalize tags
+        let ptags_obj = this.processTagString(tagString);
+        if(!ptags_obj) return null;
+
+        smp_obj.tags = ptags_obj.array;
         console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
         for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
-            //console.log(' >> ',items[i]);
-            let path_string = ConfigMgr._sampleScan[i];
-
-            if(this.checkSampleName(path_string,splitted_tags)){
+            if(ptags_obj.check_fn(ConfigMgr._sampleScan[i])){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
-                //console.log("  ",path_string);
-                smp_obj.array.push(path_string);
+                //console.log("  ",ConfigMgr._sampleScan[i]);
+                smp_obj.array.push(ConfigMgr._sampleScan[i]);
             }
         }
         if(smp_obj.array.length<=0) return null;
