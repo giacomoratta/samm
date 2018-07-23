@@ -88,7 +88,13 @@ class CommandsManager {
             return this._error_code;
         }
 
-        return SamplesMgr.saveLookupToFile(smp_obj).then(function(lf){
+        let _promise = SamplesMgr.saveLookupToFile(smp_obj);
+        if(!_promise){
+            console.log("Lookup command: invalid tags");
+            return this._error_code;
+        }
+
+        return _promise.then(function(lf){
             console.log("Lookup command: lookup file successfully created");
         }).catch(function(e){
             console.log("Lookup command: lookup file writing failed");

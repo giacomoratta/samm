@@ -1,22 +1,22 @@
-kick
+kick, techno
 
-L:\MPL\Ableton Live Packs\PMk Kickbank\Samples\analog-tonal-196.wav
-L:\MPL\Drums\HOUSE_EDM\Electric Vice NI_MS\Kick\Kick MudSlinger 1.wav
-L:\MPL\Drums\REAL DRUM\ProducerSpot-Tribal\Kicks\Tribal-Kick-69.wav
-L:\MPL\Drums\REAL DRUM\Survival Drum Kit\1 Kicks\Survival - Kick  (88).wav
-L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Drum Kits\Ableton Drum Rack\UNDRGRND Sounds - AMT - Drum Kits Project\Samples\Imported\US_AMT_Kick_707.wav
-L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Drum Kits\EXS24\UNDRGRND Sounds - AMT - Drum Kits\Samples\Drum Kit 2\US_AMT_Kick_dmx_resamp.wav
-L:\MPL\Drums\TECHNO\Static Friction NI_MS\Kick\Kick Fatal 2.wav
-L:\MPL\Drums\TECHNO\Transistor Punch NI_MS\Kick\Kick Antimax Sub.wav
-L:\MPL\Drums\TECHNO\UK\Kicks\ukt_kick_taurlayer.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\thumping kicks\wasd_kick_pro5_unison-mids-1_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\unusual kicks\wasd_kick_ms20_bass+noise_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\snaps clicks & pulses\wasd_kick_pro1_pulse-crush_m_u.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\almost real\wasd_kick_pro5_hiphop-heavy-1-b_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\deep kicks\wasd_kick_sys100_routenote_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\fat & punchy kicks\wasd_kick_sh09_stuffed-909-d_m_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\thumping kicks\wasd_kick_ob8_deep-tight_s_u.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\ultra heavy kicks\wasd_kick_sys100_classic-richness_s_v.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\unusual kicks\wasd_kick_sys100_tube-2_m_u.wav
-L:\MPL\Drums\ThatSound\TS BEN PHILLIPS FREE\KICKS\EVERYDAY\BIG\EVERYDAY-BIG-S2.wav
-L:\MPL\Drums\ThatSound\TS ORGANIC FREE\BANGS N HITS\KICKED BOX A.wav
+L:\MPL\Drums\TECHNO\Transistor Punch NI_MS\Kick\Kick Antimax 02.wav
+L:\MPL\Drums\TECHNO\UNDRGRND Hypnotic Techno\Drum Formats\Kontakt\Kicks Samples\US_HT_Kick_garry.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\classic kicks\wasd_kick_pro1_classic-1_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\deep kicks\wasd_kick_ms20_muffled-to-buzz_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\knocks\wasd_kick_pro5_fat-knock-1_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\snaps clicks & pulses\wasd_kick_mini_shattered_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\thumping kicks\wasd_kick_sys100_detune-1_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\unusual kicks\wasd_kick_pro5_heavy-allert_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\special processed drums\kicks\classic kicks\wasd_kick_sh09_basic-machine_s_v.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\special processed drums\kicks\thumping kicks\wasd_kick_sys100_overgain-3_m_t.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\special processed drums\kicks\ultra heavy kicks\wasd_kick_mini_overdriven-1-b_s_v.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\special processed drums\kicks\unusual kicks\wasd_kick_mini_tom-kick_s_v.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\classic kicks\wasd_kick_sys100_classic-1_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\deep kicks\wasd_kick_sys100_routenote_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\thumping kicks\wasd_kick_ms20_rubber-thump_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\unusual kicks\wasd_kick_pro5_rough-pulse-drop_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\fat & punchy kicks\wasd_kick_sh09_drum-machine-fat_s_v.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\snaps clicks & pulses\wasd_kick_jp8_click-very-deep_s_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\thumping kicks\wasd_kick_sys100_real-thump_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\unusual kicks\wasd_kick_sys100_tube-1_m_p.wav

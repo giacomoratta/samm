@@ -86,10 +86,14 @@ class SamplesManager {
             check_fn:null,
             check_fn_string:""
         };
-        ts = Utils.onlyLettersNumbers(_.toLower(ts));
+        ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');;
+
+        /* Split tags and shuffle */
+        let tagOR = _.split(ts,',');
+        if(!_.isArray(tagOR) || tagOR.length<=0) return null;
+        tagOR = _.shuffle(tagOR);
 
         /* Building new function */
-        let tagOR = _.split(ts,',');
         tagOR.forEach(function(v,i,a){
             let tagAND=_.split(v,'+');
             tagAND.forEach(function(v,i,a){
@@ -101,6 +105,7 @@ class SamplesManager {
         _obj.check_fn_string+="return false;\n";
         _obj.check_fn = Utils.newFunction('f',_obj.check_fn_string);
         if(!_obj.check_fn) return null;
+        //d(_obj.check_fn_string);return null;
 
         delete _obj.check_fn_string;
         return _obj;
@@ -116,8 +121,7 @@ class SamplesManager {
         console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
 
         for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
-            if(ptags_obj.check_fn(ConfigMgr._sampleScan[i])){
-                // checkSampleName on path_string because we want to accept samples belonging directory with good name
+            if(ptags_obj.check_fn(_.toLower(ConfigMgr._sampleScan[i]))){
                 //console.log("  ",ConfigMgr._sampleScan[i]);
                 smp_obj.array.push(ConfigMgr._sampleScan[i]);
             }
