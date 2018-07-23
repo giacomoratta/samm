@@ -133,9 +133,11 @@ class SamplesManager {
         if(!smp_obj) return false;
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
-        let x = fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
-            if(err){ console.error(err); return; }
-            console.log("The file was saved!",lookup_file);
+        return new Promise(function(res,rej){
+            fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
+                if(err){ rej(err); return; }
+                res(lookup_file);
+            });
         });
     }
 

@@ -75,7 +75,6 @@ class CommandsManager {
             return this._error_code;
         }
 
-
         let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
         if(!smp_obj_scan){
             console.log("Lookup command: no sample scan found");
@@ -84,8 +83,16 @@ class CommandsManager {
         ConfigMgr._sampleScan = smp_obj_scan.array;
 
         let smp_obj = SamplesMgr.searchSamplesByTags(tagString);
-        SamplesMgr.saveLookupToFile(smp_obj);
-        return smp_obj;
+        if(!smp_obj_scan){
+            console.log("Lookup command: sample search failed");
+            return this._error_code;
+        }
+
+        return SamplesMgr.saveLookupToFile(smp_obj).then(function(lf){
+            console.log("Lookup command: lookup file successfully created");
+        }).catch(function(e){
+            console.log("Lookup command: lookup file writing failed");
+        });
     }
 
 
