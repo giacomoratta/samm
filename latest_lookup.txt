@@ -1,22 +1,22 @@
-clap, close
+kick
 
-L:\MPL\Ableton Live Packs\PMk Clap Box\Clap Box Samples\Clapbox-Pitch14-m.wav
-L:\MPL\Ableton Live Packs\SM101 - Berlin Techno Drum Kits\patches\ableton drum rack\sm101 - midi elements - berltin techno drum kits\Samples\Imported\btd_kit03_04_clap.wav
-L:\MPL\Drums\HOUSE_EDM\Electric Vice NI_MS\HiHat\ClosedHH Amsterdamage 1.wav
-L:\MPL\Drums\HOUSE_EDM\MusicRadar_ElectroHouse\Claps\Clap18.wav
-L:\MPL\Drums\HOUSE_EDM\MusicRadar_ElectroHouse\ClosedHats\ClosedHat30.wav
-L:\MPL\Drums\HOUSE_EDM\MusicRadar_FloorFilling\Nu-Disco_Clap19.wav
-L:\MPL\Drums\REAL DRUM\Survival Drum Kit\3 Claps\Survival - Clap  (14).wav
-L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Drum Formats\Kontakt\Hats Closed Samples\US_AMT_Hat_Cl_sp12.wav
-L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Hats Closed\US_AMT_Hat_Cl_ddm110.wav
-L:\MPL\Drums\TECHNO\Static Friction NI_MS\HiHat\ClosedHH 888 2.wav
-L:\MPL\Drums\TECHNO\UNDRGRND Hypnotic Techno\Drum Kits\Battery 4\Drum Kit 5 Samples\US_HT_Clap_insecure.wav
-L:\MPL\Drums\TECHNO\UNDRGRND Purist Techno\Closed Hat\US_PT_HatClosed_chair.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\claps\wasd_clap_jp8_snap-1_s_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\cymbals\closed hats\wasd_cl-hat_pro1_bright-noise-1-b_s_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\special processed drums\cymbals\closed hats\wasd_cl-hat_jp8_snap-chord-2_s_v.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\cymbals\closed hats\wasd_cl-hat_jp8_detuned-1_s_u.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\claps\wasd_clap_sys100_smack-fragments-1_s_p.wav
-L:\MPL\Drums\TECHNO\WA_SynthDrums\cymbals\closed hats\wasd_cl-hat_sys100_ball-bearings_m_u.wav
-L:\MPL\Drums\Ultimate Production Toolbox V1\Claps\Max-Loudness Clap 2.wav
-L:\MPL\Loops\Scarlett_2gen_Loopmasters\KID_MASSIVE_DEEPER_HOUSE\KDE_SOUNDS_&_FX\KDE_DRUM_HITS\KDE_Clap_5.wav
+L:\MPL\Ableton Live Packs\PMk Kickbank\Samples\analog-tonal-196.wav
+L:\MPL\Drums\HOUSE_EDM\Electric Vice NI_MS\Kick\Kick MudSlinger 1.wav
+L:\MPL\Drums\REAL DRUM\ProducerSpot-Tribal\Kicks\Tribal-Kick-69.wav
+L:\MPL\Drums\REAL DRUM\Survival Drum Kit\1 Kicks\Survival - Kick  (88).wav
+L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Drum Kits\Ableton Drum Rack\UNDRGRND Sounds - AMT - Drum Kits Project\Samples\Imported\US_AMT_Kick_707.wav
+L:\MPL\Drums\TECHNO\Analogue\UNDRGRND Analogue Modular Techno\Drum Kits\EXS24\UNDRGRND Sounds - AMT - Drum Kits\Samples\Drum Kit 2\US_AMT_Kick_dmx_resamp.wav
+L:\MPL\Drums\TECHNO\Static Friction NI_MS\Kick\Kick Fatal 2.wav
+L:\MPL\Drums\TECHNO\Transistor Punch NI_MS\Kick\Kick Antimax Sub.wav
+L:\MPL\Drums\TECHNO\UK\Kicks\ukt_kick_taurlayer.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\thumping kicks\wasd_kick_pro5_unison-mids-1_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\processed drums\kicks\unusual kicks\wasd_kick_ms20_bass+noise_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\_single_packs\unprocessed drums\kicks\snaps clicks & pulses\wasd_kick_pro1_pulse-crush_m_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\almost real\wasd_kick_pro5_hiphop-heavy-1-b_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\deep kicks\wasd_kick_sys100_routenote_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\fat & punchy kicks\wasd_kick_sh09_stuffed-909-d_m_p.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\thumping kicks\wasd_kick_ob8_deep-tight_s_u.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\ultra heavy kicks\wasd_kick_sys100_classic-richness_s_v.wav
+L:\MPL\Drums\TECHNO\WA_SynthDrums\kicks\unusual kicks\wasd_kick_sys100_tube-2_m_u.wav
+L:\MPL\Drums\ThatSound\TS BEN PHILLIPS FREE\KICKS\EVERYDAY\BIG\EVERYDAY-BIG-S2.wav
+L:\MPL\Drums\ThatSound\TS ORGANIC FREE\BANGS N HITS\KICKED BOX A.wav

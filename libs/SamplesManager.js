@@ -7,7 +7,7 @@ class SamplesManager {
 
     checkSampleName(path_string, tags){
         path_string = _.toLower(path_string);
-        if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(path_string))>=0){
+        if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(' '+path_string))>=0){ //space needed to read 'only-ext' files
             return false;
         }
         if(!_.isArray(tags)) return true;
@@ -91,10 +91,43 @@ class SamplesManager {
     }
 
 
-    searchSamplesByTags(tags){
+    processTagString(ts){
+        let _obj = {
+            array:[],
+            fn:null,
+            fn_string:""
+        };
+
+        /* Building new function */
+        let tagOR = _.split(ts,',');
+        tagOR.forEach(function(v,i,a){
+            let tagAND=_.split(v,'+');
+            tagAND.forEach(function(v,i,a){
+                a[i]=_.trim(a[i]); //TODO: remove not [a-z0-9] characters
+                _obj.array.push(a[i]);
+            });
+            _obj.fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
+        });
+        _obj.fn_string+="return false;\n";
+
+        /* Check and return */
+        try{
+            _obj.fn = new Function('f',_obj.fn_string);
+        }catch(e){
+            _obj.fn = null;
+        }
+        console.log(_obj.array,_obj.fn);
+
+        if(_obj.fn) return null;
+        delete _obj.fn_string;
+        return _obj;
+    }
+
+
+    searchSamplesByTags(tagString){s
         let smp_obj = new Samples();
         let splitted_tags=[];
-        smp_obj.tags = tags;
+        smp_obj.tags = tagString; //TODO: split
         smp_obj.tags.forEach(function(v, i, a){
             a[i] = _.trim(_.toLower(a[i]));
             if(a[i].indexOf('+')>=0) splitted_tags.push(_.split(a[i],'+'));
@@ -116,26 +149,6 @@ class SamplesManager {
         console.log(" Random selection of "+ConfigMgr.get('RandomCount')+" samples","(max "+ConfigMgr.get('MaxOccurrencesSameDirectory')+" from the same directory)");
         smp_obj.setRandom(ConfigMgr.get('RandomCount'), ConfigMgr.get('MaxOccurrencesSameDirectory'));
         return smp_obj;
-    }
-
-
-    _searchSamplesByTags(smp_obj, dir_path){
-        let items = fs.readdirSync(dir_path).sort();
-        for (let i=0; i<items.length; i++) {
-            //console.log(' >> ',items[i]);
-
-            let path_string = path.join(dir_path,items[i]);
-            let fsStat = fs.lstatSync(path_string);
-
-            if(fsStat.isDirectory()){
-                this._searchSamplesByTags(smp_obj, path_string, smp_obj.array);
-
-            }else if(fsStat.isFile() && this.checkSampleName(path_string,smp_obj.tags)){
-                // checkSampleName on path_string because we want to accept samples belonging directory with good name
-                console.log("  ",path_string);
-                smp_obj.array.push(path_string);
-            }
-        }
     }
 
 

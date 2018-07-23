@@ -55,22 +55,27 @@ class CommandsManager {
             return this._error_code;
         }
 
-        let tagList=null;
+        let tagString=null;
         if(cli_params[1]=='-t'){
             if(cli_params.length<3){
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let _tagList = ConfigMgr.get('Tags')[cli_params[2]];
-            if(_.isNil(_tagList)){
+            let _tagString = ConfigMgr.get('Tags')[cli_params[2]];
+            if(_.isNil(_tagString)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;
             }
-            tagList = _.split(_tagList,',');
-
+            tagString = _tagString;
         } else {
-            tagList = _.slice(cli_params,1);
+            tagString = cli_params[1];
         }
+        if(!_.isString(tagString) || tagString.length<1){
+            console.log("Lookup command: empty tag list");
+            return this._error_code;
+        }
+        SamplesMgr.processTagString(tagString);
+        return;
 
         let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
         if(!smp_obj_scan){
@@ -79,8 +84,7 @@ class CommandsManager {
         }
         ConfigMgr._sampleScan = smp_obj_scan.array;
 
-        if(_.isNil(tagList)) return null;
-        let smp_obj = SamplesMgr.searchSamplesByTags(tagList);
+        let smp_obj = SamplesMgr.searchSamplesByTags(tagString);
         SamplesMgr.saveLookupToFile(smp_obj);
         return smp_obj;
     }

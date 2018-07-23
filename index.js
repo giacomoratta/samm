@@ -49,4 +49,4 @@ if(command=='set'){
     printHelp();
 }
 
-console.log("\n\n");
+console.log("\n");
