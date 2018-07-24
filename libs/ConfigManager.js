@@ -21,34 +21,48 @@ class ConfigManager {
         return this._config[name];
     }
 
-    set(name, values){
+    set(name, value){
         if(_.isArray(this._config[name])){
-            this._config[name] = values;
+            if(!_.isArray(value)) {
+                // no conversion
+                return null;
+            }
+            this._config[name] = value;
+            return value;
         }
-        else if(_.isObject(this._config[name])){
-            this._setObjectProperty(name, values);
+        if(_.isObject(this._config[name])){
+            if(!_.isObject(value)) {
+                // no conversion
+                return null;
+            }
+            this._config[name] = value;
+            return value;
         }
-        else if(typeof this._config[name] === typeof values[0]){
-            // preserve type
-            this._config[name] = values[0];
+        if(_.isInteger(this._config[name])){
+            if(!_.isInteger(value)) {
+                if(!_.isString(value)) return null;
+                value = Utils.strToInteger(value);
+                if(_.isNil(value)) return null;
+            }
+            this._config[name] = value;
+            return value;
         }
-        else{
-            return null;
+        if(_.isNumber(this._config[name])){
+            if(!_.isNumber(value)) {
+                if(!_.isString(value)) return null;
+                value = Utils.strToFloat(value);
+                if(_.isNil(value)) return null;
+            }
+            this._config[name] = value;
+            return value;
         }
-        return this._config[name];
-    }
-
-    _setObjectProperty(name, values){
-        if(values.length<2) return;
-        let _ref = this._config[name];
-        let i=0;
-        for(; i<values.length-1; i++){
-            if(!_.isObject(_ref[values[i]])) _ref[values[i]]={};
-            if(i<values.length-2) _ref = _ref[values[i]];
+        if(_.isString(this._config[name])){
+            value = Utils.strToString(value);
+            if(_.isNil(value)) return null;
+            this._config[name] = value;
+            return value;
         }
-        _ref[values[i-1]] = values[i];
-        //console.log(this._config[values[0]],this._config);
-        return this._config[values[0]];
+        return null;
     }
 
     save(){

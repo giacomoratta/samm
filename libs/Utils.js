@@ -41,6 +41,31 @@ class Utils {
             console.log(prefix+_.padStart((i+1)+')', padding)+" "+processFn(v));
         });
     }
+
+    strToInteger(s){
+        if(!_.isString(s)) return null;
+        s = _.trim(s);
+        if(s.length<=0) return null;
+        let n = parseInt(s);
+        if(_.isNil(n) || _.isNaN(n) || ""+n+""!=s) return null;
+        return n;
+    }
+
+    strToFloat(s){
+        if(!_.isString(s)) return null;
+        s = _.trim(s);
+        if(s.length<=0) return null;
+        let n = parseFloat(s);
+        if(_.isNil(n) || _.isNaN(n) || ""+n+""!=s) return null;
+        return n;
+    }
+
+    strToString(s){
+        if(!_.isString(s)) return null;
+        s = _.trim(s);
+        if(s.length<=0) return null;
+        return s;
+    }
 }
 
 module.exports = new Utils();
