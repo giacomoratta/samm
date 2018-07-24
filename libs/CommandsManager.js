@@ -87,6 +87,10 @@ class CommandsManager {
             console.log("Lookup command: sample search failed");
             return this._error_code;
         }
+        else if(smp_obj_scan.isEmpty()){
+            console.log("Lookup command: no samples found");
+            return this._error_code;
+        }
 
         let _promise = SamplesMgr.saveLookupToFile(smp_obj);
         if(!_promise){

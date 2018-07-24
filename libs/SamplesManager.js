@@ -82,6 +82,7 @@ class SamplesManager {
 
     processTagString(ts){
         let _obj = {
+            string:[],
             array:[],
             check_fn:null,
             check_fn_string:""
@@ -93,16 +94,21 @@ class SamplesManager {
         if(!_.isArray(tagOR) || tagOR.length<=0) return null;
         tagOR = _.shuffle(tagOR);
 
-        /* Building new function */
-        tagOR.forEach(function(v,i,a){
-            let tagAND=_.split(v,'+');
-            tagAND.forEach(function(v,i,a){
-                a[i]=_.trim(a[i]);
-                _obj.array.push(a[i]);
+        /* Writing new function */
+        tagOR.forEach(function(v1,i1,a1){
+            let tagAND=_.split(v1,'+');
+            _obj.array.push([]);
+            tagAND.forEach(function(v2,i2,a2){
+                a2[i2]=_.trim(a2[i2]);
+                _obj.array[i1].push(a2[i2]);
             });
             _obj.check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
+            _obj.string.push(_.join(tagAND,"+"));
         });
+        _obj.string = _.join(_obj.string,", ");
         _obj.check_fn_string+="return false;\n";
+
+        /* Building new function */
         _obj.check_fn = Utils.newFunction('f',_obj.check_fn_string);
         if(!_obj.check_fn) return null;
         //d(_obj.check_fn_string);return null;
@@ -117,10 +123,11 @@ class SamplesManager {
         let ptags_obj = this.processTagString(tagString);
         if(!ptags_obj) return null;
 
-        console.log(" Looking for: '"+_.join(ptags_obj.tags,"', '")+"'");
+        console.log(" Looking for: '"+ptags_obj.string+"'");
 
-        let attempts = 3;
+        let attempts = 5;
         let _MaxOccurrencesSameDirectory = ConfigMgr.get('MaxOccurrencesSameDirectory');
+        let _RandomCount = ConfigMgr.get('RandomCount');
 
         while(attempts>0){
             smp_obj.init();
@@ -132,18 +139,18 @@ class SamplesManager {
                     smp_obj.array.push(ConfigMgr._sampleScan[i]);
                 }
             }
-            if(smp_obj.array.length<=0) return null;
+            if(smp_obj.array.length<=0) return smp_obj;
 
-            smp_obj.setRandom(ConfigMgr.get('RandomCount'), _MaxOccurrencesSameDirectory);
-            if(smp_obj.random.length==ConfigMgr.get('RandomCount')) break;
+            smp_obj.setRandom(_RandomCount, _MaxOccurrencesSameDirectory);
+            if(smp_obj.random.length==_RandomCount) break;
             _MaxOccurrencesSameDirectory++;
             attempts--;
         }
-        if(smp_obj.random.length<=0) return null;
+        if(smp_obj.random.length<=0) return smp_obj;
 
-        console.log(" Random selection of "+ConfigMgr.get('RandomCount')+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
         Utils.printArrayOrderedList(smp_obj.random,'   ');
-
+        console.log("\n   Performed search: '"+ptags_obj.string+"'");
+        console.log("   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)\n");
         return smp_obj;
     }
 

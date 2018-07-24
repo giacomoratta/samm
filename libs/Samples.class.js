@@ -12,6 +12,10 @@ class Samples {
         this.random = [];
     }
 
+    isEmpty(){
+        return !(this.array.length>0 && this.random.length>0);
+    }
+
 
     toTextAll(){
         let text_to_file = _.join(this.array,"\n");
