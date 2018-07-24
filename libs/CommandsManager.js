@@ -83,13 +83,18 @@ class CommandsManager {
         ConfigMgr._sampleScan = smp_obj_scan.array;
 
         let smp_obj = SamplesMgr.searchSamplesByTags(tagString);
-        if(!smp_obj_scan){
+        if(!smp_obj){
             console.log("Lookup command: sample search failed");
             return this._error_code;
         }
-        else if(smp_obj_scan.isEmpty()){
+        else if(smp_obj.isEmpty()){
             console.log("Lookup command: no samples found");
             return this._error_code;
+        }
+
+        if(SamplesMgr.equalToOldLookup(smp_obj)){
+            console.log("   Result not changed from last lookup.\n");
+            return this._success_code;
         }
 
         let _promise = SamplesMgr.saveLookupToFile(smp_obj);

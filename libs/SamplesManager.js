@@ -150,8 +150,23 @@ class SamplesManager {
 
         Utils.printArrayOrderedList(smp_obj.random,'   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
         console.log("\n   Performed search: '"+ptags_obj.string+"'");
-        console.log("   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)\n");
+        console.log(  "   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
         return smp_obj;
+    }
+
+
+    equalToOldLookup(smp_obj){
+        let old_smp_obj = this.openLookupFile();
+        if(!old_smp_obj) return false;
+        if(smp_obj.random.length!=old_smp_obj.random.length) return false;
+        let eq=true;
+        for(let i=0; i<smp_obj.random.length; i++){
+            if(smp_obj[i]!=old_smp_obj[i]){
+                eq=false;
+                break;
+            }
+        }
+        return eq;
     }
 
 
@@ -179,6 +194,7 @@ class SamplesManager {
         }
         let smp_obj = new Samples();
         if(!smp_obj.fromText(file_to_text)) return null;
+        smp_obj.random = smp_obj.array;
         return smp_obj;
     }
 
