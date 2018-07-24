@@ -1,12 +1,12 @@
 {
 	"SamplesDirectory": "L:\\MPL\\",
 	"ProjectsDirectory": "C:\\Ableton Projects\\techno_e2018",
+	"Project": "t1 Project",
 	"ExtensionExcludedForSamples": [
 		".asd",".DS_Store",".cfg",".txt",".exe"
 	],
 	"RandomCount": 20,
 	"MaxOccurrencesSameDirectory": 1,
-	"Project": "t1 Project",
 	"Tags": {
 		"kick": "techno,kick,berlin",
 		"kick_raw": "techno,kick,raw,analog,industr,berlin",
