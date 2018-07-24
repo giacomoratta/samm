@@ -16,7 +16,6 @@ function printHelp(){
     console.log("\nHelp");
 }
 
-
 /* Project logic & interface */
 let cli_params = [];
 if(process.argv.length<3){

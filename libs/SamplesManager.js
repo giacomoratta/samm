@@ -148,7 +148,7 @@ class SamplesManager {
         }
         if(smp_obj.random.length<=0) return smp_obj;
 
-        Utils.printArrayOrderedList(smp_obj.random,'   ');
+        Utils.printArrayOrderedList(smp_obj.random,'   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
         console.log("\n   Performed search: '"+ptags_obj.string+"'");
         console.log("   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)\n");
         return smp_obj;

@@ -33,11 +33,12 @@ class Utils {
         return s.replace(/[^a-zA-Z0-9]/g,'');
     }
 
-    printArrayOrderedList(array,prefix){
+    printArrayOrderedList(array,prefix,processFn){
         let padding = (""+array.length+"").length+1;
+        if(!processFn) SamplesDirectory=function(n){ return n; };
         if(!prefix) prefix='';
         array.forEach(function(v,i,a){
-            console.log(prefix+_.padStart((i+1)+')', padding)+" "+v);
+            console.log(prefix+_.padStart((i+1)+')', padding)+" "+processFn(v));
         });
     }
 }
