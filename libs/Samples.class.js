@@ -91,7 +91,6 @@ class Samples {
             }
             r_array.push(rf);
             //console.log("   - ",'...'+rf.substring(16));
-            console.log("   - ",rf);
             i++;
         }
         this.random = Utils.sortFilesArray(r_array);

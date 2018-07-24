@@ -5,8 +5,8 @@ class ConfigManager {
         this._sampleScan = null;
         this._filename = {
             config: 'config.json',
-            latest_lookup: 'latest_lookup.txt',
-            samples_index: 'samples_index.txt'
+            latest_lookup: 'temp/latest_lookup',
+            samples_index: 'temp/samples_index'
         }
         this._labels = {
             'sample_dir':'mpl'

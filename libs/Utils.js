@@ -32,6 +32,14 @@ class Utils {
     onlyLettersNumbers(s){
         return s.replace(/[^a-zA-Z0-9]/g,'');
     }
+
+    printArrayOrderedList(array,prefix){
+        let padding = (""+array.length+"").length+1;
+        if(!prefix) prefix='';
+        array.forEach(function(v,i,a){
+            console.log(prefix+_.padStart((i+1)+')', padding)+" "+v);
+        });
+    }
 }
 
 module.exports = new Utils();

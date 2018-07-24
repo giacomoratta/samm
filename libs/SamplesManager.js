@@ -117,18 +117,33 @@ class SamplesManager {
         let ptags_obj = this.processTagString(tagString);
         if(!ptags_obj) return null;
 
-        smp_obj.tags = ptags_obj.array;
-        console.log(" Looking for: '"+_.join(smp_obj.tags,"', '")+"'");
+        console.log(" Looking for: '"+_.join(ptags_obj.tags,"', '")+"'");
 
-        for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
-            if(ptags_obj.check_fn(_.toLower(ConfigMgr._sampleScan[i]))){
-                //console.log("  ",ConfigMgr._sampleScan[i]);
-                smp_obj.array.push(ConfigMgr._sampleScan[i]);
+        let attempts = 3;
+        let _MaxOccurrencesSameDirectory = ConfigMgr.get('MaxOccurrencesSameDirectory');
+
+        while(attempts>0){
+            smp_obj.init();
+            smp_obj.tags = ptags_obj.array;
+
+            for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
+                if(ptags_obj.check_fn(_.toLower(ConfigMgr._sampleScan[i]))){
+                    //console.log("  ",ConfigMgr._sampleScan[i]);
+                    smp_obj.array.push(ConfigMgr._sampleScan[i]);
+                }
             }
+            if(smp_obj.array.length<=0) return null;
+
+            smp_obj.setRandom(ConfigMgr.get('RandomCount'), _MaxOccurrencesSameDirectory);
+            if(smp_obj.random.length==ConfigMgr.get('RandomCount')) break;
+            _MaxOccurrencesSameDirectory++;
+            attempts--;
         }
-        if(smp_obj.array.length<=0) return null;
-        console.log(" Random selection of "+ConfigMgr.get('RandomCount')+" samples","(max "+ConfigMgr.get('MaxOccurrencesSameDirectory')+" from the same directory)");
-        smp_obj.setRandom(ConfigMgr.get('RandomCount'), ConfigMgr.get('MaxOccurrencesSameDirectory'));
+        if(smp_obj.random.length<=0) return null;
+
+        console.log(" Random selection of "+ConfigMgr.get('RandomCount')+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
+        Utils.printArrayOrderedList(smp_obj.random,'   ');
+
         return smp_obj;
     }
 
