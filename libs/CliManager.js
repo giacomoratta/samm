@@ -1,5 +1,5 @@
 
-class CommandsManager {
+class CliManager {
 
     constructor(){
         this._error_code = -1;
@@ -143,4 +143,4 @@ class CommandsManager {
 
 };
 
-module.exports = new CommandsManager();
+module.exports = new CliManager();

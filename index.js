@@ -8,7 +8,7 @@ global.d = console.log;
 /* Project Libraries */
 global.ConfigMgr = require('./libs/ConfigManager.js');
 global.Utils = require('./libs/Utils.js');
-global.CommandsMgr = require('./libs/CommandsManager.js');
+global.CliMgr = require('./libs/CliManager.js');
 global.SamplesMgr = require('./libs/SamplesManager.js');
 
 /* Help function */
@@ -29,19 +29,19 @@ else{
 let command = cli_params[0];
 
 if(command=='set'){
-    CommandsMgr.C_set(cli_params);
+    CliMgr.C_set(cli_params);
 
 } else if(command=='config'){
     ConfigMgr.print();
 
 } else if(command=='lookup'){
-    CommandsMgr.C_lookup(cli_params);
+    CliMgr.C_lookup(cli_params);
 
 } else if(command=='save'){
-    CommandsMgr.C_save(cli_params);
+    CliMgr.C_save(cli_params);
 
 } else if(command=='scan'){
-    CommandsMgr.C_scan(cli_params);
+    CliMgr.C_scan(cli_params);
 
 } else {
     console.log(" Unrecognized command");
