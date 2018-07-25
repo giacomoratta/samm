@@ -26,21 +26,25 @@ else{
     cli_params=_.slice(process.argv,2);
 }
 
-let command = cli_params[0];
+CliParams = CliMgr.processParams(cli_params);
+if(!CliParams){
+    console.log("Impossible to read command line parameters");
+    printHelp();
+}
 
-if(command=='set'){
+if(CliParams.commandIs('set')){
     CliMgr.C_set(cli_params);
 
-} else if(command=='config'){
+} else if(CliParams.commandIs('config')){
     ConfigMgr.print();
 
-} else if(command=='lookup'){
+} else if(CliParams.commandIs('lookup')){
     CliMgr.C_lookup(cli_params);
 
-} else if(command=='save'){
+} else if(CliParams.commandIs('save')){
     CliMgr.C_save(cli_params);
 
-} else if(command=='scan'){
+} else if(CliParams.commandIs('scan')){
     CliMgr.C_scan(cli_params);
 
 } else {
