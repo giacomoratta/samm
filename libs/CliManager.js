@@ -105,7 +105,8 @@ class CliManager {
         }
 
         return _promise.then(function(lf){
-            console.log("Lookup command: lookup file successfully created");
+            //console.log("Lookup command: lookup file successfully created");
+            return lf;
         }).catch(function(e){
             console.log("Lookup command: lookup file writing failed");
         });
@@ -138,7 +139,9 @@ class CliManager {
             return this._error_code;
         }
 
-        return SamplesMgr.generateSamplesDir(smp_obj,smp_dirname);
+        return SamplesMgr.generateSamplesDir(smp_obj,{
+            dirname:smp_dirname
+        });
     }
 
 };

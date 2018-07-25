@@ -201,15 +201,20 @@ class SamplesManager {
 
     generateSamplesDir(smp_obj,smp_dirname){
         let _path = path;
-        //if(smp_obj.array.length>0 && smp_obj.array[0].indexOf('\\')>0) _path=path.win32;
+        if(!_.isObject(options)) options={};
+        if(options)
 
-        if(!_.isString(smp_dirname) || smp_dirname.length<2) smp_dirname=_.join(smp_obj.tags,'_');//.substring(0,20);
+        if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.tags,0,2),'_');//.substring(0,20);
+        options['smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
+        if(options['forcedir']!==true){
+            options['smppath'] = Utils.checkAndSetDirectoryName(options['smppath']);
+        }
+        if(!options['smppath']) return null;
 
         let p_array = [];
-        let smpl_dir = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, smp_dirname);
-        let _links_dir = path.join(smpl_dir,'_links');
+        let _links_dir = path.join(options['smppath'],'_links');
 
-        fs_extra.ensureDirSync(smpl_dir);
+        fs_extra.ensureDirSync(options['smppath']);
         fs_extra.ensureDirSync(_links_dir);
 
         let smpl_arr = smp_obj.random;
@@ -218,7 +223,7 @@ class SamplesManager {
         smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
             let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
-            p_array.push(fs_extra.copy(v,path.join(smpl_dir ,f_name)));
+            p_array.push(fs_extra.copy(v,path.join(options['smppath'] ,f_name)));
             p_array.push(new Promise(function(res,rej){
                 fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
                     d(link_file_name);
