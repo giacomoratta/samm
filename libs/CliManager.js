@@ -1,9 +1,20 @@
+const CliParams = require('./CliParams.class.js');
 
 class CliManager {
 
     constructor(){
         this._error_code = -1;
         this._success_code = 1;
+        this.cli_params = null;
+    }
+
+    processParams(cli_values){
+        this.cli_params = new CliParams(cli_values);
+        if(this.cli_params.isError()){
+            this.cli_params = null;
+            return null;
+        }
+        return this.cli_params;
     }
 
 
