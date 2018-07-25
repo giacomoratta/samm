@@ -21,15 +21,16 @@ class CommandsManager {
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        if(ConfigMgr.set(cli_params[1],_.slice(cli_params,2))===null){
+        if(ConfigMgr.setFromCliParams(cli_params[1],_.slice(cli_params,2))===null){
             console.log("Set command: configuration not changed");
             return this._error_code;
         }
         if(ConfigMgr.save()!==true){
             console.log("Set command: error during file writing");
-            return this._error_code;
+            return this._error_code;s
         }
         console.log("Set command: configuration saved successfully");
+        ConfigMgr.print();
         return this._success_code;
     }
 

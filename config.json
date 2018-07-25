@@ -3,9 +3,13 @@
 	"ProjectsDirectory": "C:\\Ableton Projects\\techno_e2018",
 	"Project": "t1 Project",
 	"ExtensionExcludedForSamples": [
-		".asd",".DS_Store",".cfg",".txt",".exe"
+		".asd",
+		".DS_Store",
+		".cfg",
+		".txt",
+		".exe"
 	],
-	"RandomCount": 20,
+	"RandomCount": 32,
 	"MaxOccurrencesSameDirectory": 1,
 	"Tags": {
 		"kick": "techno,kick,berlin",

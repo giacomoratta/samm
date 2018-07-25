@@ -207,11 +207,9 @@ class SamplesManager {
 
         let p_array = [];
         let smpl_dir = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, smp_dirname);
-        let _removed_dir = path.join(smpl_dir,'_not_used');
         let _links_dir = path.join(smpl_dir,'_links');
 
         fs_extra.ensureDirSync(smpl_dir);
-        fs_extra.ensureDirSync(_removed_dir);
         fs_extra.ensureDirSync(_links_dir);
 
         let smpl_arr = smp_obj.random;
@@ -219,7 +217,7 @@ class SamplesManager {
         if(!smpl_arr || smpl_arr.length<=0) return null;
         smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
-            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'--');
+            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
             p_array.push(fs_extra.copy(v,path.join(smpl_dir ,f_name)));
             p_array.push(new Promise(function(res,rej){
                 fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
