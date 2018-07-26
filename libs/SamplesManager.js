@@ -99,9 +99,12 @@ class SamplesManager {
             let tagAND=_.split(v1,'+');
             _obj.array.push([]);
             tagAND.forEach(function(v2,i2,a2){
+                v2=_.trim(v2);
+                if(v2.length<=0) return;
                 a2[i2]=_.trim(a2[i2]);
                 _obj.array[i1].push(a2[i2]);
             });
+            if(tagAND.length<=0) return;
             _obj.check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
             _obj.string.push(_.join(tagAND,"+"));
         });

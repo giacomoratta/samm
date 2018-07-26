@@ -10,6 +10,10 @@ class ConfigManager {
         this._labels = {
             'sample_dir':'mpl'
         };
+        this._cli_options = {
+            tag_label:'-t',
+            directory_name:'-d'
+        };
         this._config = require('../'+this._filename.config);
     }
 

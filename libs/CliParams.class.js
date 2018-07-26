@@ -48,7 +48,7 @@ class CliParams {
     }
 
     hasOption(o){
-        return (_.indexOf(this.options,'-'+o)>=0);
+        return (_.indexOf(this.options,o)>=0 || _.indexOf(this.options,'-'+o)>=0);
     }
 
     getOption(o){

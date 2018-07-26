@@ -9,12 +9,8 @@ class CliManager {
     }
 
     processParams(cli_values){
-        return new CliParams(cli_values);
-        // if(this.cli_params.isError()){
-        //     this.cli_params = null;
-        //     return null;
-        // }
-        // return this.cli_params;
+        this.cli_params = new CliParams(cli_values);
+        return this.cli_params;
     }
 
 
@@ -32,13 +28,13 @@ class CliManager {
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        if(ConfigMgr.setFromCliParams(this.cli_params.get(0),this.cli_params.getValues(2))===null){
+        if(ConfigMgr.setFromCliParams(this.cli_params.get(0),this.cli_params.getValues(1))===null){
             console.log("Set command: configuration not changed");
             return this._error_code;
         }
         if(ConfigMgr.save()!==true){
             console.log("Set command: error during file writing");
-            return this._error_code;s
+            return this._error_code;
         }
         console.log("Set command: configuration saved successfully");
         ConfigMgr.print();
@@ -61,26 +57,26 @@ class CliManager {
     }
 
 
-    C_lookup(cli_params){
-        if(cli_params.length<2){
+    C_lookup(){
+        if(!this.cli_params.hasValues()){
             console.log("Lookup command: missing tags or option (-t)");
             return this._error_code;
         }
 
         let tagString=null;
-        if(cli_params[1]=='-t'){
-            if(cli_params.length<3){
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.tag_label)){
+            if(!this.cli_params.hasValues()){
                 console.log("Lookup command: missing tag name after option -t");
                 return this._error_code;
             }
-            let _tagString = ConfigMgr.get('Tags')[cli_params[2]];
+            let _tagString = ConfigMgr.get('Tags')[this.cli_params.get(0)];
             if(_.isNil(_tagString)){
                 console.log("Lookup command: unknown tag name after option -t");
                 return this._error_code;
             }
             tagString = _tagString;
         } else {
-            tagString = cli_params[1];
+            tagString = this.cli_params.get(0);
         }
         if(!_.isString(tagString) || tagString.length<1){
             console.log("Lookup command: empty tag list");
@@ -124,7 +120,7 @@ class CliManager {
     }
 
 
-    C_save(cli_params){
+    C_save(){
         let smp_dirname = null;
 
         if(!ConfigMgr.get('ProjectsDirectory')){
@@ -136,12 +132,12 @@ class CliManager {
             return this._error_code;
         }
 
-        if(cli_params[1]=='-d'){
-            if(_.isNil(cli_params[2])){
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.directory_name)){
+            if(!this.cli_params.hasValues()){
                 console.log("Save command: directory name missing");
                 return this._error_code;
             }
-            smp_dirname = cli_params[2];
+            smp_dirname = this.cli_params.get(0);
         }
 
         let smp_obj = SamplesMgr.openLookupFile();
