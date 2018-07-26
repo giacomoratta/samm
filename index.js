@@ -26,7 +26,7 @@ else{
     cli_params=_.slice(process.argv,2);
 }
 
-CliParams = CliMgr.processParams(cli_params);
+let CliParams = CliMgr.processParams(cli_params);
 if(!CliParams){
     console.log("Impossible to read command line parameters");
     printHelp();

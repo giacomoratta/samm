@@ -1,4 +1,4 @@
-class Samples {
+class CliParams {
 
     constructor(values){
         this._error = true;
@@ -15,13 +15,14 @@ class Samples {
 
     init(values){
         if(!_.isArray(values) || values.length<=0) return false;
+        let _this=this;
         this.command = '';
         this.values = [];
         this.options = [];
         values.forEach(function(v){
             v = _.trim(v);
-            if(_.startsWith(v,'-')) this.options.push(v);
-            else this.values.push(v);
+            if(_.startsWith(v,'-')) _this.options.push(v);
+            else _this.values.push(v);
         });
         this.command = this.values[0];
         this.values = _.slice(this.values,1);
@@ -36,3 +37,5 @@ class Samples {
         return (_.indexOf(this.options,'-'+o)>=0);
     }
 }
+
+module.exports = CliParams;
