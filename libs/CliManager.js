@@ -9,30 +9,30 @@ class CliManager {
     }
 
     processParams(cli_values){
-        this.cli_params = new CliParams(cli_values);
-        if(this.cli_params.isError()){
-            this.cli_params = null;
-            return null;
-        }
-        return this.cli_params;
+        return new CliParams(cli_values);
+        // if(this.cli_params.isError()){
+        //     this.cli_params = null;
+        //     return null;
+        // }
+        // return this.cli_params;
     }
 
 
-    C_set(cli_params){
-        if(_.isNil(cli_params[1])){
+    C_set(){
+        if(!this.cli_params.hasValues()){
             console.log("Set command: missing property name");
             return this._error_code;
         }
-        if(!ConfigMgr.checkProperty(cli_params[1])){
-            console.log("Set command: unknown property name '"+cli_params[1]+"'");
+        if(!ConfigMgr.checkProperty(this.cli_params.get(0))){
+            console.log("Set command: unknown property name '"+this.cli_params.get(0)+"'");
             return this._error_code;
         }
-        let _new_prop_val=cli_params[2];
-        if(_.isNil(_new_prop_val)){
+        let _new_prop_val=this.cli_params.get(1);
+        if(!_new_prop_val){
             console.log("Set command: missing value for property");
             return this._error_code;
         }
-        if(ConfigMgr.setFromCliParams(cli_params[1],_.slice(cli_params,2))===null){
+        if(ConfigMgr.setFromCliParams(this.cli_params.get(0),this.cli_params.getValues(2))===null){
             console.log("Set command: configuration not changed");
             return this._error_code;
         }
@@ -46,7 +46,7 @@ class CliManager {
     }
 
 
-    C_scan(cli_params){
+    C_scan(){
         let smp_obj = SamplesMgr.scanSamples();
         if(!smp_obj){
             console.log("Scan command: scansion failed");

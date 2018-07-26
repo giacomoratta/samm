@@ -17,35 +17,27 @@ function printHelp(){
 }
 
 /* Project logic & interface */
-let cli_params = [];
-if(process.argv.length<3){
+let CliParams = CliMgr.processParams();
+if(CliParams.isError()){
+    console.log("Invalid process parameters");
     printHelp();
     process.exit(0);
 }
-else{
-    cli_params=_.slice(process.argv,2);
-}
-
-let CliParams = CliMgr.processParams(cli_params);
-if(!CliParams){
-    console.log("Impossible to read command line parameters");
-    printHelp();
-}
 
 if(CliParams.commandIs('set')){
-    CliMgr.C_set(cli_params);
+    CliMgr.C_set();
 
 } else if(CliParams.commandIs('config')){
     ConfigMgr.print();
 
 } else if(CliParams.commandIs('lookup')){
-    CliMgr.C_lookup(cli_params);
+    CliMgr.C_lookup();
 
 } else if(CliParams.commandIs('save')){
-    CliMgr.C_save(cli_params);
+    CliMgr.C_save();
 
 } else if(CliParams.commandIs('scan')){
-    CliMgr.C_scan(cli_params);
+    CliMgr.C_scan();
 
 } else {
     console.log(" Unrecognized command");
