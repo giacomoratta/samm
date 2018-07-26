@@ -11,16 +11,11 @@ global.Utils = require('./libs/Utils.js');
 global.CliMgr = require('./libs/CliManager.js');
 global.SamplesMgr = require('./libs/SamplesManager.js');
 
-/* Help function */
-function printHelp(){
-    console.log("\nHelp");
-}
-
 /* Project logic & interface */
 let CliParams = CliMgr.processParams();
 if(CliParams.isError()){
     console.log("Invalid process parameters");
-    printHelp();
+    ConfigMgr.printHelp();
     process.exit(0);
 }
 
@@ -41,7 +36,7 @@ if(CliParams.commandIs('set')){
 
 } else {
     console.log(" Unrecognized command");
-    printHelp();
+    ConfigMgr.printHelp();
 }
 
 console.log("\n");
