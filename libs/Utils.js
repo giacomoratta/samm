@@ -73,7 +73,7 @@ class Utils {
 
         let _safe=1000;
         let new_path_string='';
-        let prefix=0;
+        let prefix=1;
         while(_safe>prefix){
             prefix++;
             new_path_string = path_string+'_'+prefix;

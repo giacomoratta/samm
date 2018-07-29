@@ -37,7 +37,7 @@ class Samples {
         let file_rows = _.split(_.trim(text),"\n");
         if(!_.isArray(file_rows) || file_rows.length<5) return false;
 
-        this.tags = _.split(file_rows[0],', ');
+        this.tags = _.split(file_rows[0],',');
         for(let i=2; i<file_rows.length; i++){
             this.array.push(file_rows[i]);
         }

@@ -205,7 +205,6 @@ class SamplesManager {
     generateSamplesDir(smp_obj,options){
         let _path = path;
         if(!_.isObject(options)) options={};
-        if(options)
 
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.tags,0,2),'_');//.substring(0,20);
         options['smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
