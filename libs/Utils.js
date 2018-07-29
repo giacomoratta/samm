@@ -69,7 +69,7 @@ class Utils {
 
     checkAndSetDirectoryName(path_string){
         if(!_.isString(path_string)) return null;
-        if(!fs.pathExistsSync(path_string)) return path_string;
+        if(!fs.existsSync(path_string)) return path_string;
 
         let _safe=1000;
         let new_path_string='';
@@ -77,7 +77,7 @@ class Utils {
         while(_safe>prefix){
             prefix++;
             new_path_string = path_string+'_'+prefix;
-            if(!fs.pathExistsSync(new_path_string)) return new_path_string;
+            if(!fs.existsSync(new_path_string)) return new_path_string;
         }
         return null;
     }

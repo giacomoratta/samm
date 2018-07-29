@@ -202,7 +202,7 @@ class SamplesManager {
     }
 
 
-    generateSamplesDir(smp_obj,smp_dirname){
+    generateSamplesDir(smp_obj,options){
         let _path = path;
         if(!_.isObject(options)) options={};
         if(options)
