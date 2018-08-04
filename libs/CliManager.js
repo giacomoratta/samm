@@ -101,7 +101,7 @@ class CliManager {
         }
 
         if(SamplesMgr.equalToOldLookup(smp_obj)){
-            console.log("   Result not changed from last lookup.\n");
+            console.log("Lookup command: result not changed from last lookup.\n");
             return this._success_code;
         }
 

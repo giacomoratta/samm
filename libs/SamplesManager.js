@@ -164,7 +164,7 @@ class SamplesManager {
         if(smp_obj.random.length!=old_smp_obj.random.length) return false;
         let eq=true;
         for(let i=0; i<smp_obj.random.length; i++){
-            if(smp_obj[i]!=old_smp_obj[i]){
+            if(smp_obj.random[i]!=old_smp_obj.random[i]){
                 eq=false;
                 break;
             }

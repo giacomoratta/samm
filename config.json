@@ -1,7 +1,7 @@
 {
 	"SamplesDirectory": "L:\\MPL\\",
-	"ProjectsDirectory": "C:\\Ableton Projects\\techno_e2018",
-	"Project": "t1 Project",
+	"ProjectsDirectory": "C:\\Ableton Projects\\techno_e2018\\exp",
+	"Project": "te_3 Project",
 	"ExtensionExcludedForSamples": [
 		".asd",
 		".DS_Store",
@@ -14,6 +14,10 @@
 	"Tags": {
 		"kick": "techno,kick,berlin",
 		"kick_raw": "techno,kick,raw,analog,industr,berlin",
-		"kick_sub": "techno,kick,berlin,deep,sub,"
+		"kick_sub": "techno,kick,berlin,deep,sub,",
+		"dark": "dark,atmo,deep,ambi,field,textu,drone,white,noise",
+		"impact": "impact,boom,shot,crash,bomb,808,efx",
+		"hihat": "hihat,hi-hat,hh,top",
+		"abstract": "abstract,complex"
 	}
 }
