@@ -1,0 +1,20 @@
+{
+	"SamplesDirectory": "L:\\Samples\\",
+	"ProjectsDirectory": "C:\\Ableton Projects\\",
+	"Project": "p1 Project",
+	"ExtensionExcludedForSamples": [
+		".asd",
+		".DS_Store",
+		".cfg",
+		".txt",
+		".exe"
+	],
+	"RandomCount": 20,
+	"MaxOccurrencesSameDirectory": 1,
+	"Tags": {
+		"kick": "techno,kick,deep,sub",
+		"impact": "impact,boom,shot,crash,bomb,808,efx",
+		"hihat": "hihat,hi-hat,hh,top",
+		"abstract": "abstract,complex"
+	}
+}
