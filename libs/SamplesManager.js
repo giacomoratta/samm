@@ -204,19 +204,23 @@ class SamplesManager {
 
     generateSamplesDir(smp_obj,options){
         let _path = path;
-        if(!_.isObject(options)) options={};
+        if(!_.isObject(options)) options={
+            dirname:null,   //custom name
+            forcedir:false, //force overwrite
+            _smppath:null    //absolute path (private)
+        };
 
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.tags,0,2),'_');//.substring(0,20);
-        options['smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
+        options['_smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
-            options['smppath'] = Utils.checkAndSetDirectoryName(options['smppath']);
+            options['_smppath'] = Utils.checkAndSetDirectoryName(options['_smppath']);
         }
-        if(!options['smppath']) return null;
+        if(!options['_smppath']) return null;
 
         let p_array = [];
-        let _links_dir = path.join(options['smppath'],'_links');
+        let _links_dir = path.join(options['_smppath'],'_links');
 
-        fs_extra.ensureDirSync(options['smppath']);
+        fs_extra.ensureDirSync(options['_smppath']);
         fs_extra.ensureDirSync(_links_dir);
 
         let smpl_arr = smp_obj.random;
@@ -225,7 +229,7 @@ class SamplesManager {
         smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
             let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
-            p_array.push(fs_extra.copy(v,path.join(options['smppath'] ,f_name)));
+            p_array.push(fs_extra.copy(v,path.join(options['_smppath'] ,f_name)));
             p_array.push(new Promise(function(res,rej){
                 fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
                     d(link_file_name);

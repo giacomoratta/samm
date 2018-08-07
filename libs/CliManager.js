@@ -122,6 +122,11 @@ class CliManager {
 
     C_save(){
         let smp_dirname = null;
+        let C_save_options = {
+            dirname:null,   //custom name
+            forcedir:false, //force overwrite
+            smppath:null    //absolute path
+        };
 
         if(!ConfigMgr.get('ProjectsDirectory')){
             console.log("Save command: configuration parameter missing (ProjectsDirectory)");
@@ -137,7 +142,10 @@ class CliManager {
                 console.log("Save command: directory name missing");
                 return this._error_code;
             }
-            smp_dirname = this.cli_params.get(0);
+            C_save_options.dirname = this.cli_params.get(0);
+        }
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
+            C_save_options.forcedir = true;
         }
 
         let smp_obj = SamplesMgr.openLookupFile();
@@ -146,9 +154,7 @@ class CliManager {
             return this._error_code;
         }
 
-        return SamplesMgr.generateSamplesDir(smp_obj,{
-            dirname:smp_dirname
-        });
+        return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
     }
 
 };

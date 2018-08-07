@@ -12,7 +12,8 @@ class ConfigManager {
         };
         this._cli_options = {
             tag_label:'-t',
-            directory_name:'-d'
+            directory_name:'-d',
+            force_overwrite:'-f'
         };
         this._config = require('../'+this._filename.config);
     }
