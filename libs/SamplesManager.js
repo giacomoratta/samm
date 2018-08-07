@@ -5,7 +5,14 @@ class SamplesManager {
     constructor(){
     }
 
-    checkSampleName(path_string){
+
+    /**
+     * The first check on the sample path, according to rules configured in config.json.
+     * @param path_string
+     * @returns {boolean}
+     * @private
+     */
+    _checkSampleName(path_string){
         path_string = _.toLower(path_string);
         if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(' '+path_string))>=0){ //space needed to read 'only-ext' files
             return false;
@@ -14,14 +21,31 @@ class SamplesManager {
     }
 
 
+    /**
+     * Start scanning the whole samples directory (see Configuration).
+     * @returns { Samples | null }
+     */
     scanSamples(){
         let smp_obj = new Samples();
-        this._scanSamples(smp_obj, ConfigMgr.get('SamplesDirectory'), { maxRec:1000000 }); //1.000.000
+        this._scanSamples(ConfigMgr.get('SamplesDirectory'), {
+            maxRec:1000000, //1.000.000
+            callback:function(path_string){
+                console.log("  ",path_string);
+                smp_obj.array.push(path_string);
+            }
+        });
         if(smp_obj.array.length<=0) return null;
         return smp_obj;
     }
 
 
+    /**
+     * Performs a recursive scan.
+     * @param {Samples} smp_obj - object to fill
+     * @param {string} dir_path
+     * @param {object} _options
+     * @private
+     */
     _scanSamples(smp_obj, dir_path, _options){
         if(_options.maxRec<=0){
             console.log('scanSamples: max recursions reached');
@@ -39,17 +63,21 @@ class SamplesManager {
             let fsStat = fs.lstatSync(path_string);
 
             if(fsStat.isDirectory()){
-                this._scanSamples(smp_obj, path_string, _options);
+                this._scanSamples(path_string, _options);
 
-            }else if(fsStat.isFile() && this.checkSampleName(path_string)){
+            }else if(fsStat.isFile() && this._checkSampleName(path_string)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
-                console.log("  ",path_string);
-                smp_obj.array.push(path_string);
+                _options.callback(path_string);
             }
         }
     }
 
 
+
+    /**
+     * Load the index file and store it in a Samples object.
+     * @returns { Samples | null }
+     */
     loadSampleScanFromFile(){
         let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
         let json_string = '';
@@ -65,11 +93,16 @@ class SamplesManager {
     }
 
 
+    /**
+     * Create the index file for all samples.
+     * @param {Samples} smp_obj
+     * @returns {boolean}
+     */
     saveSampleScanToFile(smp_obj){
         if(!smp_obj) return false;
         let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
         let json_string = smp_obj.toJsonString();
-        if(!json_string) return null;
+        if(!json_string) return false;
         try{
             fs.writeFileSync(samples_index, json_string, 'utf8');
         }catch(e){
@@ -80,12 +113,19 @@ class SamplesManager {
     }
 
 
+
+    /**
+     * Check and process the tag query string.
+     * The tag string is formatted with ',' (OR) and '+' (AND).
+     * @param {string} ts
+     * @returns { object | null }
+     */
     processTagString(ts){
-        let _obj = {
-            string:[],
-            array:[],
-            check_fn:null,
-            check_fn_string:""
+        let proc_obj = {
+            string:[],  //array with strings e.g. ['a+b+c','d+e']
+            array:[],   //array with subarrays of separated tags
+            check_fn:null,  //function used to check the filename
+            _check_fn_string:"" //string with composed function which is evaluated
         };
         ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');;
 
@@ -97,30 +137,36 @@ class SamplesManager {
         /* Writing new function */
         tagOR.forEach(function(v1,i1,a1){
             let tagAND=_.split(v1,'+');
-            _obj.array.push([]);
+            proc_obj.array.push([]);
             tagAND.forEach(function(v2,i2,a2){
                 v2=_.trim(v2);
                 if(v2.length<=0) return;
                 a2[i2]=_.trim(a2[i2]);
-                _obj.array[i1].push(a2[i2]);
+                proc_obj.array[i1].push(a2[i2]);
             });
             if(tagAND.length<=0) return;
-            _obj.check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
-            _obj.string.push(_.join(tagAND,"+"));
+            proc_obj._check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
+            proc_obj.string.push(_.join(tagAND,"+"));
         });
-        _obj.string = _.join(_obj.string,", ");
-        _obj.check_fn_string+="return false;\n";
+        proc_obj.string = _.join(proc_obj.string,", ");
+        proc_obj._check_fn_string+="return false;\n";
 
         /* Building new function */
-        _obj.check_fn = Utils.newFunction('f',_obj.check_fn_string);
-        if(!_obj.check_fn) return null;
-        //d(_obj.check_fn_string);return null;
+        proc_obj.check_fn = Utils.newFunction('f',proc_obj._check_fn_string);
+        if(!proc_obj.check_fn) return null;
 
-        delete _obj.check_fn_string;
-        return _obj;
+        delete proc_obj._check_fn_string;
+        return proc_obj;
     }
 
 
+
+    /**
+     * Perform a search by tags.
+     * The tag string is formatted with ',' (OR) and '+' (AND).
+     * @param tagString
+     * @returns { Samples | null }
+     */
     searchSamplesByTags(tagString){
         let smp_obj = new Samples();
         let ptags_obj = this.processTagString(tagString);
@@ -158,7 +204,13 @@ class SamplesManager {
     }
 
 
-    equalToOldLookup(smp_obj){
+
+    /**
+     * Check if the current lookup is equal to the preious one.
+     * @param {Samples} smp_obj
+     * @returns {boolean}
+     */
+    isEqualToPreviousLookup(smp_obj){
         let old_smp_obj = this.openLookupFile();
         if(!old_smp_obj) return false;
         if(smp_obj.random.length!=old_smp_obj.random.length) return false;
@@ -173,8 +225,14 @@ class SamplesManager {
     }
 
 
+
+    /**
+     * Save the latest lookup on file.
+     * @param {Samples} smp_obj
+     * @returns { Promise{string} | null }
+     */
     saveLookupToFile(smp_obj){
-        if(!smp_obj) return false;
+        if(!smp_obj) return null;
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
         return new Promise(function(res,rej){
@@ -186,6 +244,11 @@ class SamplesManager {
     }
 
 
+
+    /**
+     * Open the file with latest lookup
+     * @returns { {Samples} | null }
+     */
     openLookupFile(){
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let file_to_text = "";
@@ -202,6 +265,15 @@ class SamplesManager {
     }
 
 
+
+    /**
+     * Generate the directory with samples.
+     * @param {Samples} smp_obj
+     * @param options
+     *        - dirname: custom name for the directory
+     *        - forcedir: force overwrite otherwise rename
+     * @returns { Promise{array} | null }
+     */
     generateSamplesDir(smp_obj,options){
         let _path = path;
         if(!_.isObject(options)) options={
@@ -232,8 +304,12 @@ class SamplesManager {
             p_array.push(fs_extra.copy(v,path.join(options['_smppath'] ,f_name)));
             p_array.push(new Promise(function(res,rej){
                 fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
-                    d(link_file_name);
-                    if(err) return rej(err);
+                    if(err){
+                        //return rej(err);
+                        console.log('   generateSamplesDir - error on file '+link_file_name);
+                        console.error(err);
+                        console.log("\n");
+                    }
                     return res(link_file_name);
                 });
             }));

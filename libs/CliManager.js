@@ -100,7 +100,7 @@ class CliManager {
             return this._error_code;
         }
 
-        if(SamplesMgr.equalToOldLookup(smp_obj)){
+        if(SamplesMgr.isEqualToPreviousLookup(smp_obj)){
             console.log("Lookup command: result not changed from last lookup.\n");
             return this._success_code;
         }
