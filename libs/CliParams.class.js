@@ -22,11 +22,19 @@ class CliParams {
         this._argv =  values;
         this.values = [];
         this.options = [];
+        this.options_kv = {};
         values.forEach(function(v){
             v = _.trim(v);
             if(_.startsWith(v,'-')){
-                // TODO: if with '=', split and push in this.options_values
-                _this.options.push(v);
+                let _split = v.split('=');
+                if(_split.length>1){
+                    _this.options.push(_split[0]);
+                    _this.options_kv[_split[0]]=null;
+                    _split = _.slice(_split,1);
+                    _this.options_kv[_split[0]] = _.join(_split);
+                }else{
+                    _this.options.push(v);
+                }
             }
             else _this.values.push(v);
         });
@@ -52,8 +60,8 @@ class CliParams {
     }
 
     getOption(o){
-        // TODO
-        return null;
+        if(_.isNil(this.options_kv[o])) return null;
+        return this.options_kv[o]
     }
 
     get(i){

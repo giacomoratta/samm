@@ -138,11 +138,11 @@ class CliManager {
         }
 
         if(this.cli_params.hasOption(ConfigMgr._cli_options.directory_name)){
-            if(!this.cli_params.hasValues()){
+            C_save_options.dirname = this.cli_params.getOption(ConfigMgr._cli_options.directory_name);
+            if(!C_save_options.dirname){
                 console.log("Save command: directory name missing");
                 return this._error_code;
             }
-            C_save_options.dirname = this.cli_params.get(0);
         }
         if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
             C_save_options.forcedir = true;
