@@ -46,20 +46,17 @@ class ConfigManager {
 
     set(name, value){
         if(_.isArray(this._config[name])){
-            if(!_.isArray(value)) {
-                // no conversion
+            if(!_.isArray(value)) { // no conversion
                 return null;
             }
-            this._config[name] = value;
-            return value;
+            return this._setFinalValue(name,value);
         }
         if(_.isObject(this._config[name])){
             if(!_.isObject(value)) {
                 // no conversion
                 return null;
             }
-            this._config[name] = value;
-            return value;
+            return this._setFinalValue(name,value);
         }
         if(_.isInteger(this._config[name])){
             if(!_.isInteger(value)) {
@@ -67,8 +64,7 @@ class ConfigManager {
                 value = Utils.strToInteger(value);
                 if(_.isNil(value)) return null;
             }
-            this._config[name] = value;
-            return value;
+            return this._setFinalValue(name,value);
         }
         if(_.isNumber(this._config[name])){
             if(!_.isNumber(value)) {
@@ -76,16 +72,24 @@ class ConfigManager {
                 value = Utils.strToFloat(value);
                 if(_.isNil(value)) return null;
             }
-            this._config[name] = value;
-            return value;
+            return this._setFinalValue(name,value);
         }
         if(_.isString(this._config[name])){
             value = Utils.strToString(value);
             if(_.isNil(value)) return null;
-            this._config[name] = value;
-            return value;
+            return this._setFinalValue(name,value);
         }
         return null;
+    }
+
+    _setFinalValue(n,v){
+        if(n=="Project"){
+            let ph = path.parse(v);
+            v = ph.base || ph.name;
+            this._config['ProjectsDirectory'] = ph.dir+path.sep;
+        }
+        this._config[n] = v;
+        return v;
     }
 
     save(){

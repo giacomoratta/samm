@@ -231,13 +231,14 @@ class SamplesManager {
                     d(link_file_name);
                     if(err) return rej(err);
                     return res(link_file_name);
-                })
+                });
             }));
         });
 
         return Promise.all(p_array)
             .then(function(data){
                 //console.log('success!');
+                return data;
             })
             .catch(function(err){
                 console.error(err);
