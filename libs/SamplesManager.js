@@ -72,7 +72,7 @@ class SamplesManager {
         try{
             fs.writeFileSync(samples_index, json_string, 'utf8');
         }catch(e){
-            //console.log(e);
+            console.log(e);
             return false;
         }
         return true;
