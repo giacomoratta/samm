@@ -1,13 +1,12 @@
-
 class Utils {
 
     constructor(){
-        this._mainPath = process.cwd()+path.sep;
+        this._abspath = process.cwd()+path.sep;
         this.File = require('./Utils.File');
     }
 
-    mainPath(){
-        return this._mainPath;
+    abspath(){
+        return this._abspath;
     }
 
     EXIT(message){

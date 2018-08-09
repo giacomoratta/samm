@@ -25,7 +25,7 @@ class ConfigManager {
         }
 
         // Create temp directory
-        fs_extra.ensureDirSync(Utils.mainPath()+this._filename.temp_dir);
+        fs_extra.ensureDirSync(Utils.abspath()+this._filename.temp_dir);
     }
 
     _openConfigJson(){
@@ -34,7 +34,7 @@ class ConfigManager {
             _config = require('../'+this._filename.config);
             return _config;
         }catch(e){
-            Utils.File.copyFileSync(Utils.mainPath()+this._filename.config_sample,Utils.mainPath()+this._filename.config,{overwrite:false});
+            Utils.File.copyFileSync(Utils.abspath()+this._filename.config_sample,Utils.mainPath()+this._filename.config,{overwrite:false});
         }
         try{
             _config = require('../'+this._filename.config);
