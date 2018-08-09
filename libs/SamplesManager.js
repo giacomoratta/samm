@@ -51,7 +51,6 @@ class SamplesManager {
             console.log('scanSamples: max recursions reached');
             return;
         }
-        _options.maxRec
 
         let items = fs.readdirSync(dir_path);
         items = Utils.sortFilesArray(items);
@@ -106,7 +105,7 @@ class SamplesManager {
         try{
             fs.writeFileSync(samples_index, json_string, 'utf8');
         }catch(e){
-            //console.log(e);
+            console.log(e);
             return false;
         }
         return true;

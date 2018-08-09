@@ -4,7 +4,7 @@ class ConfigManager {
         this._sampleScan = null;
         this._filename = {
             config: 'config.json',
-            latest_lookup: 'temp/latest_lookup',
+            latest_lookup: 'temp/latest_lookup', //TODO: ensure dir temp!!!
             samples_index: 'temp/samples_index'
         };
         this._labels = {
