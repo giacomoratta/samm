@@ -6,17 +6,16 @@ global.fs_extra = require('fs-extra');
 global.d = console.log;
 
 /* Project Libraries */
-global.ConfigMgr = require('./libs/ConfigManager.js');
 global.Utils = require('./libs/Utils.js');
+global.ConfigMgr = require('./libs/ConfigManager.js');
 global.CliMgr = require('./libs/CliManager.js');
 global.SamplesMgr = require('./libs/SamplesManager.js');
 
 /* Project logic & interface */
 let CliParams = CliMgr.processParams();
 if(CliParams.isError()){
-    console.log("Invalid process parameters");
     ConfigMgr.printHelp();
-    process.exit(0);
+    Utils.EXIT("Invalid parameters");
 }
 
 if(CliParams.commandIs('set')){
@@ -35,8 +34,8 @@ if(CliParams.commandIs('set')){
     CliMgr.C_scan();
 
 } else {
-    console.log(" Unrecognized command");
     ConfigMgr.printHelp();
+    Utils.EXIT(" Unrecognized command");
 }
 
 console.log("\n");

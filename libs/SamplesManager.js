@@ -288,38 +288,43 @@ class SamplesManager {
         }
         if(!options['_smppath']) return null;
 
+        let smpl_arr = smp_obj.random;
+        if(!smpl_arr || smpl_arr.length<=0) smpl_arr = smp_obj.array;
+        if(!smpl_arr || smpl_arr.length<=0) return null;
+
         let p_array = [];
         let _links_dir = path.join(options['_smppath'],'_links');
 
         fs_extra.ensureDirSync(options['_smppath']);
         fs_extra.ensureDirSync(_links_dir);
 
-        let smpl_arr = smp_obj.random;
-        if(!smpl_arr || smpl_arr.length<=0) smpl_arr = smp_obj.array;
-        if(!smpl_arr || smpl_arr.length<=0) return null;
+        console.log('   generateSamplesDir - start copying '+smpl_arr.length+' files...');
         smpl_arr.forEach(function(v,i,a){
             let f_name = path.basename(v);
             let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
-            p_array.push(fs_extra.copy(v,path.join(options['_smppath'] ,f_name)));
-            p_array.push(new Promise(function(res,rej){
-                fs.writeFile(path.join(_links_dir ,link_file_name), v, 'utf8',function(err){
-                    if(err){
-                        //return rej(err);
-                        console.log('   generateSamplesDir - error on file '+link_file_name);
-                        console.error(err);
-                        console.log("\n");
-                    }
-                    return res(link_file_name);
-                });
+
+            /* Copy File */
+            p_array.push(Utils.copyFile( v, path.join(options['_smppath'] ,f_name) ).then(function(data){
+                console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
+            }).catch(function(data){
+                console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
+                console.error(data.err);
+            }));
+
+            /* Create txt link file */
+            p_array.push(Utils.writeTextFile(path.join(_links_dir ,link_file_name), v /* text */).catch(function(data){
+                console.log('   generateSamplesDir - link file copy failed '+data.path_to);
+                console.error(data.err);
             }));
         });
 
         return Promise.all(p_array)
             .then(function(data){
-                //console.log('success!');
+                console.log('   generateSamplesDir - '+p_array.length+' files successfully copied!');
                 return data;
             })
             .catch(function(err){
+                console.log('   generateSamplesDir - error on final step');
                 console.error(err);
             });
     }

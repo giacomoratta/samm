@@ -45,12 +45,12 @@ class CliManager {
     C_scan(){
         let smp_obj = SamplesMgr.scanSamples();
         if(!smp_obj){
-            console.log("Scan command: scansion failed");
+            console.log("Scan command: job failed");
             return this._error_code;
         }
-        console.log("Scan command: scansion completed ("+smp_obj.array.length+" samples found)");
+        console.log("Scan command: job completed ("+smp_obj.array.length+" samples found)");
         if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
-            console.log("Scan command: file writing failed");
+            console.log("Scan command: cannot write the index file");
             return this._error_code;
         }
         return smp_obj;
@@ -137,12 +137,10 @@ class CliManager {
             return this._error_code;
         }
 
-        if(this.cli_params.hasOption(ConfigMgr._cli_options.directory_name)){
-            C_save_options.dirname = this.cli_params.getOption(ConfigMgr._cli_options.directory_name);
-            if(!C_save_options.dirname){
-                console.log("Save command: directory name missing");
-                return this._error_code;
-            }
+        C_save_options.dirname = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_name);
+        if(!C_save_options.dirname){
+            console.log("Save command: directory name missing");
+            return this._error_code;
         }
         if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
             C_save_options.forcedir = true;

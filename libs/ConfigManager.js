@@ -15,7 +15,11 @@ class ConfigManager {
             directory_name:'-d',
             force_overwrite:'-f'
         };
-        this._config = require('../'+this._filename.config);
+        try{
+            this._config = require('../fd'+this._filename.config);
+        }catch(e){
+
+        }
     }
 
     printHelp(){
@@ -23,17 +27,17 @@ class ConfigManager {
         console.log("\nHELP");
         console.log("----------------------------------------------------------------------------------------------------");
         console.log("\n  set: modifies a configuration parameter.");
-        console.log("       [e.g.#"+(i++)+"]  set Project project-name");
+        console.log("       [e.g.#"+(i++)+"]  set Project project-name (or path)");
         console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3");
         console.log("\n  config: shows the current configuration parameters.");
         console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
         console.log("\n  lookup: looks for the tags and selects random samples;");
         console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+" tag_label  / select the query from config.Tags[tag_label]");
+        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select the query from config.Tags[tag_label]");
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
-        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+" dir-name  / use this option to specify a custom directory name");
+        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / use this option to specify a custom directory name");
         console.log("\n\n");
     }
 
@@ -87,6 +91,12 @@ class ConfigManager {
         if(n=="Project"){
             let ph = path.parse(v);
             v = ph.base || ph.name;
+            let proj_dir = this._config['ProjectsDirectory'];
+            if(_.isString(ph.dir) && ph.dir.length>0) proj_dir=ph.dir+path.sep;
+            if(!Utils.directoryExists(proj_dir+v)){
+                console.log("   The project directory does not exist: "+proj_dir+v);
+                return;
+            }
             this._config['ProjectsDirectory'] = ph.dir+path.sep;
         }
         this._config[n] = v;

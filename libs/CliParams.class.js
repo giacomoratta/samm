@@ -59,9 +59,10 @@ class CliParams {
         return (_.indexOf(this.options,o)>=0 || _.indexOf(this.options,'-'+o)>=0);
     }
 
-    getOption(o){
-        if(_.isNil(this.options_kv[o])) return null;
-        return this.options_kv[o]
+    getOptionValue(o){
+        if(_.indexOf(this.options,o)>=0) return this.options_kv[o];
+        if(_.indexOf(this.options,'-'+o)>=0) return this.options_kv['-'+o];
+        return null;
     }
 
     get(i){
