@@ -1,7 +1,10 @@
 
 class Utils_Files {
 
-    constructor(){ }
+    constructor(){
+        this._console = console.log;
+        //this._console = function(){};
+    }
 
     checkAndSetDirectoryName(path_string){
         if(!_.isString(path_string)) return null;
@@ -24,29 +27,30 @@ class Utils_Files {
         return true;
     }
 
-    copyFileSync(path_from, path_to){
-        let options = {
+    copyFileSync(path_from, path_to, options){
+        options = _.merge({
             overwrite:true,
             errorOnExist:false
-        }
+        },options);
         let _ret_value = {
             err:null,
             path_from:path_from,
             path_to:path_to
         };
         try {
-            fs.copySync(path_from, path_to, options)
+            fs_extra.copySync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
+            this._console(_ret_value);
         }
         return _ret_value;
     }
 
-    copyFile(path_from, path_to){
-        let options = {
+    copyFile(path_from, path_to, options){
+        options = _.merge({
             overwrite:true,
             errorOnExist:false
-        }
+        },options);
         return new Promise(function(resolve,reject){
             let _ret_value = {
                 err:null,
@@ -56,6 +60,7 @@ class Utils_Files {
             fs_extra.copy(path_from, path_to, options, function(err){
                 if(err){
                     _ret_value.err = err;
+                    this._console(_ret_value);
                     return reject(_ret_value);
                 }
                 return resolve(_ret_value);

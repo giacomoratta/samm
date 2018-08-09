@@ -5,7 +5,8 @@ class ConfigManager {
         this._filename = {
             config: 'config.json',
             config_sample: 'config.sample.json',
-            latest_lookup: 'temp/latest_lookup', //TODO: ensure dir temp!!!
+            temp_dir: 'temp/',
+            latest_lookup: 'temp/latest_lookup',
             samples_index: 'temp/samples_index'
         };
         this._labels = {
@@ -17,19 +18,23 @@ class ConfigManager {
             force_overwrite:'-f'
         };
 
+        // Open config.json
         this._config = this._openConfigJson();
         if(!this._config){
             Utils.EXIT('Cannot create or read the configuration file '+this._filename.config);
         }
+
+        // Create temp directory
+        fs_extra.ensureDirSync(Utils.mainPath()+this._filename.temp_dir);
     }
 
     _openConfigJson(){
         let _config = null;
         try{
-            _config = require('../fd'+this._filename.config);
+            _config = require('../'+this._filename.config);
             return _config;
         }catch(e){
-            Utils.File.copyFileSync('../'+this._filename.config_sample,'../'+this._filename.config);
+            Utils.File.copyFileSync(Utils.mainPath()+this._filename.config_sample,Utils.mainPath()+this._filename.config,{overwrite:false});
         }
         try{
             _config = require('../'+this._filename.config);
