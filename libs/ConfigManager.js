@@ -4,6 +4,7 @@ class ConfigManager {
         this._sampleScan = null;
         this._filename = {
             config: 'config.json',
+            config_sample: 'config.sample.json',
             latest_lookup: 'temp/latest_lookup', //TODO: ensure dir temp!!!
             samples_index: 'temp/samples_index'
         };
@@ -15,11 +16,27 @@ class ConfigManager {
             directory_name:'-d',
             force_overwrite:'-f'
         };
-        try{
-            this._config = require('../fd'+this._filename.config);
-        }catch(e){
 
+        this._config = this._openConfigJson();
+        if(!this._config){
+            Utils.EXIT('Cannot create or read the configuration file '+this._filename.config);
         }
+    }
+
+    _openConfigJson(){
+        let _config = null;
+        try{
+            _config = require('../fd'+this._filename.config);
+            return _config;
+        }catch(e){
+            Utils.File.copyFileSync('../'+this._filename.config_sample,'../'+this._filename.config);
+        }
+        try{
+            _config = require('../'+this._filename.config);
+        }catch(e){
+            return null;
+        }
+        return _config;
     }
 
     printHelp(){

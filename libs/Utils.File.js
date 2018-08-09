@@ -24,9 +24,27 @@ class Utils_Files {
         return true;
     }
 
+    copyFileSync(path_from, path_to){
+        let options = {
+            overwrite:true,
+            errorOnExist:false
+        }
+        let _ret_value = {
+            err:null,
+            path_from:path_from,
+            path_to:path_to
+        };
+        try {
+            fs.copySync(path_from, path_to, options)
+        } catch (err) {
+            _ret_value.err = err;
+        }
+        return _ret_value;
+    }
+
     copyFile(path_from, path_to){
         let options = {
-            overwrite:false,
+            overwrite:true,
             errorOnExist:false
         }
         return new Promise(function(resolve,reject){
