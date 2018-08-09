@@ -93,7 +93,7 @@ class ConfigManager {
             v = ph.base || ph.name;
             let proj_dir = this._config['ProjectsDirectory'];
             if(_.isString(ph.dir) && ph.dir.length>0) proj_dir=ph.dir+path.sep;
-            if(!Utils.directoryExists(proj_dir+v)){
+            if(!Utils.File.directoryExists(proj_dir+v)){
                 console.log("   The project directory does not exist: "+proj_dir+v);
                 return;
             }

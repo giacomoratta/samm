@@ -304,7 +304,7 @@ class SamplesManager {
             let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
 
             /* Copy File */
-            p_array.push(Utils.copyFile( v, path.join(options['_smppath'] ,f_name) ).then(function(data){
+            p_array.push(Utils.File.copyFile( v, path.join(options['_smppath'] ,f_name) ).then(function(data){
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
@@ -312,7 +312,7 @@ class SamplesManager {
             }));
 
             /* Create txt link file */
-            p_array.push(Utils.writeTextFile(path.join(_links_dir ,link_file_name), v /* text */).catch(function(data){
+            p_array.push(Utils.File.writeTextFile(path.join(_links_dir ,link_file_name), v /* text */).catch(function(data){
                 console.log('   generateSamplesDir - link file copy failed '+data.path_to);
                 console.error(data.err);
             }));
