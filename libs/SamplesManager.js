@@ -72,6 +72,16 @@ class SamplesManager {
     }
 
 
+    /**
+     * Check the main index file
+     * @returns { boolean }
+     */
+    sampleScanFileExists(){
+        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
+        return Utils.File.fileExists(samples_index);
+    }
+
+
 
     /**
      * Load the index file and store it in a Samples object.

@@ -1,4 +1,6 @@
-# Configuration
+## Configuration
+# Try with wrong values (different types, etc.)
+node . config
 node . set RandomCount 28
 node . set Project "C:\\abc\\def\\project1"
 node . set Tag kick2 techno+kick,kick,berlin+kick
@@ -7,30 +9,19 @@ node . set ExtensionExcludedForSamples .bash
 node . set ExtensionExcludedForSamples !.exe
 node . set ExtensionExcludedForSamples !bash
 
+## Lookup
+node . lookup bass,loop+synth,deep+synth
+node . lookup -t=kick_raw
 
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
-node .
+## Save
+node . save
+node . save -n=my_dir
+node . save -n="my dir space"
+
+## Coverage
+node . coverage
+node . coverage -d="C:\\new\\samples\\dir"
+
+## Scan
+node . scan
+node . scan -f

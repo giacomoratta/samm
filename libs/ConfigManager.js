@@ -14,8 +14,9 @@ class ConfigManager {
         };
         this._cli_options = {
             tag_label:'-t',
-            directory_name:'-d',
-            force_overwrite:'-f'
+            directory_name:'-n',
+            directory_path:'-d',
+            force:'-f'
         };
 
         // Open config.json
@@ -54,15 +55,22 @@ class ConfigManager {
         console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3 ");
         console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext  / (or .ext)");
         console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext  / (or !.ext)");
+
         console.log("\n  config: shows the current configuration parameters.");
+
         console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
+        console.log("       in order to avoid resource wasting, if the index is already present the scan does not start;");
+        console.log("       use the option "+this._cli_options.force+" to force the rescan.");
+
         console.log("\n  lookup: looks for the tags and selects random samples;");
         console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
         console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select query from config.Tags[tag_label]");
+
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
         console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / save in a custom directory");
+
         console.log("\n----------------------------------------------------------------------------------------------------");
     }
 

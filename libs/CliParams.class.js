@@ -29,9 +29,7 @@ class CliParams {
                 let _split = v.split('=');
                 if(_split.length>1){
                     _this.options.push(_split[0]);
-                    _this.options_kv[_split[0]]=null;
-                    _split = _.slice(_split,1);
-                    _this.options_kv[_split[0]] = _.join(_split);
+                    _this.options_kv[_split[0]]=_.join(_.slice(_split,1));
                 }else{
                     _this.options.push(v);
                 }

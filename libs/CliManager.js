@@ -43,6 +43,13 @@ class CliManager {
 
 
     C_scan(){
+        if(!this.cli_params.hasOption(ConfigMgr._cli_options.force)){
+            if(SamplesMgr.sampleScanFileExists()){
+                console.log("Scan command: the index file already exists. Use -f to force a rescan.");
+                return this._error_code;
+            }
+        }
+
         let smp_obj = SamplesMgr.scanSamples();
         if(!smp_obj){
             console.log("Scan command: job failed");
@@ -142,7 +149,7 @@ class CliManager {
             console.log("Save command: directory name missing");
             return this._error_code;
         }
-        if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.force)){
             C_save_options.forcedir = true;
         }
 
@@ -173,7 +180,7 @@ class CliManager {
             console.log("Coverage command: directory name missing");
             return this._error_code;
         }
-        if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.force)){
             C_save_options.forcedir = true;
         }
 

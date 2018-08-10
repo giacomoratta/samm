@@ -21,6 +21,12 @@ class Utils_Files {
         return null;
     }
 
+    fileExists(path_string){
+        if(!_.isString(path_string)) return false;
+        if(!fs.existsSync(path_string)) return false;
+        return true;
+    }
+
     directoryExists(path_string){
         if(!_.isString(path_string)) return false;
         if(!fs.existsSync(path_string)) return false;

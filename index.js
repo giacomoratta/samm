@@ -22,6 +22,7 @@ if(CliParams.commandIs('set')){
     CliMgr.C_set();
 
 } else if(CliParams.commandIs('config')){
+    ConfigMgr.printHelp();
     ConfigMgr.print();
 
 } else if(CliParams.commandIs('lookup')){
