@@ -26,6 +26,14 @@ node . coverage
 node . coverage -d="C:\\new\\samples\\dir"
 node . coverage -q=abc+de,fgf,cbs+tr
 node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir"
+node . coverage -s=covered
+node . coverage -d="C:\\new\\samples\\dir" -s=covered
+node . coverage -q=abc+de,fgf,cbs+tr -s=covered
+node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir" -s=covered
+node . coverage -s=uncovered
+node . coverage -d="C:\\new\\samples\\dir" -s=uncovered
+node . coverage -q=abc+de,fgf,cbs+tr -s=uncovered
+node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir" -s=uncovered
 
 ## Scan
 node . scan

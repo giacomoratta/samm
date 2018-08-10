@@ -338,6 +338,40 @@ class SamplesManager {
                 console.error(err);
             });
     }
+
+
+
+    /**
+     * Check the coverage (or uncoverage) of all samples.
+     * @param options
+     *        - dirpath: custom absolute path for the directory
+     *        - tag_query: custom query string with tags
+     *        - get_uncovered: true to collect uncovered samples
+     *        - console_output: true to print result directly in the console
+     * @returns {Samples} smp_obj
+     */
+    checkSamplesCoverage(options){
+        options = _.merge({
+            dirPath:null,
+            tagQuery:null,
+            getUncovered:true,
+            consoleOutput:true
+        },options);
+
+        // process tags
+        // get only AND function
+        // check array...no? exit!
+
+        // if -d and exists ...walk and get array
+        // ..else open scan index file and get array
+        // array empty => exit!
+
+        // outcome_check = false/true (uncovered,covered)
+        // each { file_path }
+        //      array[tag]=new element /   print
+        //      if( filepath is outcome_check ) array[tag][and_string] = (add) filepath /   print with \t substr(filepath)
+        // end-each
+    }
 };
 
 module.exports = new SamplesManager();

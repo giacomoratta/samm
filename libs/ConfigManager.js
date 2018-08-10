@@ -16,6 +16,8 @@ class ConfigManager {
             tag_label:'-t',
             directory_name:'-n',
             directory_path:'-d',
+            tag_query:'-q',
+            selection:'-s',
             force:'-f'
         };
 
