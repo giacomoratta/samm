@@ -46,23 +46,24 @@ class ConfigManager {
 
     printHelp(){
         let i=1;
-        console.log("\nHELP");
+        console.log("\n----------------------------------------------------------------------------------------------------");
+        console.log("  HELP");
         console.log("----------------------------------------------------------------------------------------------------");
         console.log("\n  set: modifies a configuration parameter.");
-        console.log("       [e.g.#"+(i++)+"]  set Project project-name                      / (or path)");
+        console.log("       [e.g.#"+(i++)+"]  set Project project-name  / (or path)");
         console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3 ");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext           / (or .ext)");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext          / (or !.ext)");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext  / (or .ext)");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext  / (or !.ext)");
         console.log("\n  config: shows the current configuration parameters.");
         console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
         console.log("\n  lookup: looks for the tags and selects random samples;");
         console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label   / select query from config.Tags[tag_label]");
+        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select query from config.Tags[tag_label]");
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
         console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / save in a custom directory");
-        console.log("\n\n");
+        console.log("\n----------------------------------------------------------------------------------------------------");
     }
 
     checkProperty(name){

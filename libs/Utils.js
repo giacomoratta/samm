@@ -9,8 +9,10 @@ class Utils {
         return this._abspath;
     }
 
-    EXIT(message){
-        console.log("\n\n"+message+"\n\nProcess terminated.\n\n");
+    EXIT(message,data){
+        console.log("\n\n"+message);
+        if(data) console.log(data);
+        console.log("Process terminated.\n");
         process.exit(0);
     }
 
