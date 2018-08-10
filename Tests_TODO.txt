@@ -1,0 +1,36 @@
+# Configuration
+node . set RandomCount 28
+node . set Project "C:\\abc\\def\\project1"
+node . set Tag kick2 techno+kick,kick,berlin+kick
+node . set ExtensionExcludedForSamples exe
+node . set ExtensionExcludedForSamples .bash
+node . set ExtensionExcludedForSamples !.exe
+node . set ExtensionExcludedForSamples !bash
+
+
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .
+node .

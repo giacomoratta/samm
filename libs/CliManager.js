@@ -155,6 +155,37 @@ class CliManager {
         return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
     }
 
+
+    C_coverage(){
+        let smp_dirname = null;
+        let C_save_options = {
+            dirname:null,   //custom abs path
+            minimum_hit:3   //force overwrite
+        };
+
+        if(!ConfigMgr.get('Tags')){
+            console.log("Coverage command: no tags configured");
+            return this._error_code;
+        }
+
+        C_save_options.dirname = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_name);
+        if(!C_save_options.dirname){
+            console.log("Coverage command: directory name missing");
+            return this._error_code;
+        }
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.force_overwrite)){
+            C_save_options.forcedir = true;
+        }
+
+        let smp_obj = SamplesMgr.openLookupFile();
+        if(!_.isObject(smp_obj)){
+            console.log("Save command: latest lookup missing");
+            return this._error_code;
+        }
+
+        return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
+    }
+
 };
 
 module.exports = new CliManager();

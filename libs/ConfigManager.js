@@ -49,17 +49,19 @@ class ConfigManager {
         console.log("\nHELP");
         console.log("----------------------------------------------------------------------------------------------------");
         console.log("\n  set: modifies a configuration parameter.");
-        console.log("       [e.g.#"+(i++)+"]  set Project project-name (or path)");
-        console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3");
+        console.log("       [e.g.#"+(i++)+"]  set Project project-name                      / (or path)");
+        console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3 ");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext           / (or .ext)");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext          / (or !.ext)");
         console.log("\n  config: shows the current configuration parameters.");
         console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
         console.log("\n  lookup: looks for the tags and selects random samples;");
         console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select the query from config.Tags[tag_label]");
+        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label   / select query from config.Tags[tag_label]");
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
-        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / use this option to specify a custom directory name");
+        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / save in a custom directory");
         console.log("\n\n");
     }
 
@@ -71,45 +73,78 @@ class ConfigManager {
         return this._config[name];
     }
 
-    set(name, value){
-        if(_.isArray(this._config[name])){
-            if(!_.isArray(value)) { // no conversion
-                return null;
+    _set(old_v,new_v){
+        let _outcome_error = { error:true, type:null, value:null };
+        let _outcome_value = { error:false, type:null, value:new_v };
+
+        if(_.isArray(old_v)){
+            _outcome_value.type = _outcome_error.type = 'array';
+            if(!_.isArray(new_v)) { // no conversion
+                return _outcome_error;
             }
-            return this._setFinalValue(name,value);
+            _outcome_value.value = new_v;
+            return _outcome_value;
         }
-        if(_.isObject(this._config[name])){
-            if(!_.isObject(value)) {
+
+        if(_.isObject(old_v)){
+            _outcome_value.type = _outcome_error.type = 'object';
+            if(!_.isObject(new_v)) {
                 // no conversion
-                return null;
+                return _outcome_error;
             }
-            return this._setFinalValue(name,value);
+            _outcome_value.value = new_v;
+            return _outcome_value;
         }
-        if(_.isInteger(this._config[name])){
-            if(!_.isInteger(value)) {
-                if(!_.isString(value)) return null;
-                value = Utils.strToInteger(value);
-                if(_.isNil(value)) return null;
+
+        if(_.isInteger(old_v)){
+            _outcome_value.type = _outcome_error.type = 'integer';
+            if(!_.isInteger(new_v)) {
+                if(!_.isString(new_v)) return _outcome_error;
+                new_v = Utils.strToInteger(new_v);
+                if(_.isNil(new_v)) return _outcome_error;
             }
-            return this._setFinalValue(name,value);
+            _outcome_value.value = new_v;
+            return _outcome_value;
         }
-        if(_.isNumber(this._config[name])){
-            if(!_.isNumber(value)) {
-                if(!_.isString(value)) return null;
-                value = Utils.strToFloat(value);
-                if(_.isNil(value)) return null;
+
+        if(_.isNumber(old_v)){
+            _outcome_value.type = _outcome_error.type = 'number';
+            if(!_.isNumber(new_v)) {
+                if(!_.isString(new_v)) return _outcome_error;
+                new_v = Utils.strToFloat(new_v);
+                if(_.isNil(new_v)) return _outcome_error;
             }
-            return this._setFinalValue(name,value);
+            _outcome_value.value = new_v;
+            return _outcome_value;
         }
-        if(_.isString(this._config[name])){
-            value = Utils.strToString(value);
-            if(_.isNil(value)) return null;
-            return this._setFinalValue(name,value);
+
+        if(_.isString(old_v)){
+            _outcome_value.type = _outcome_error.type = 'string';
+            new_v = Utils.strToString(new_v);
+            if(_.isNil(new_v)) return _outcome_error;
+            _outcome_value.value = _.trim(new_v);
+            return _outcome_value;
         }
-        return null;
+
+        return _outcome_error;
     }
 
-    _setFinalValue(n,v){
+    set(name, value){
+        let _outcome = this._set(this._config[name],value);
+        if(_outcome.error==true){
+            if(_outcome.type){
+                console.log("   Config.set: current value and old value have different types.\n");
+                console.log("               old: ",this._config[name]);
+                console.log("               new: ",value);
+            }
+            return null;
+        }
+        return this._setFinalValue(name,value,_outcome);
+    }
+
+
+    _setFinalValue(n,v,_outcome){
+
         if(n=="Project"){
             let ph = path.parse(v);
             v = ph.base || ph.name;
@@ -120,6 +155,29 @@ class ConfigManager {
                 return;
             }
             this._config['ProjectsDirectory'] = ph.dir+path.sep;
+        }
+
+        if(_outcome.type=='array' && this._config[n].length>0){
+            let _ot = this._set(this._config[n][0],v);
+            if(_ot.error==true){
+                if(_ot.type){
+                    console.log("   Config.set [Array]: current value and old value have different types.");
+                    console.log("\n                       old: ",this._config[n][0]);
+                    console.log("\n                       new: ",v);
+                }
+                return null;
+            }
+
+            if(n=="ExtensionExcludedForSamples"){
+                if(v[0]=='!'){
+                    v=v.slice(1);
+                    _.remove(this._config[n],function(value){ return (value==v || value=='.'+v ); });
+                    return v;
+                }
+                if(v[0]!='.') v='.'+v;
+            }
+
+            if(this._config[n].indexOf(v)<0) this._config[n].push(v);
         }
         this._config[n] = v;
         return v;
