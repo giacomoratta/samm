@@ -67,6 +67,10 @@ class ConfigManager {
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
         console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select query from config.Tags[tag_label]");
 
+        console.log("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
+        console.log("       it collects some stats and print them at the end.");
+        console.log("       [e.g.#"+(i++)+"]  coverage -d=\"C:\\abs\\path\\\"  / coverage on external path (e.g. new samples)");
+
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
         console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / save in a custom directory");
