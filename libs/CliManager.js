@@ -164,33 +164,27 @@ class CliManager {
 
 
     C_coverage(){
-        let smp_dirname = null;
-        let C_save_options = {
-            dirname:null,   //custom abs path
-            minimum_hit:3   //force overwrite
-        };
+        // check -d abs path
+        // ..else check scan index file
+        // ..else exit!
 
-        if(!ConfigMgr.get('Tags')){
-            console.log("Coverage command: no tags configured");
-            return this._error_code;
-        }
+        // check -q=abc,sada+dsds
+        // ...else check config.tags
+        // ..else exit!
 
-        C_save_options.dirname = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_name);
-        if(!C_save_options.dirname){
-            console.log("Coverage command: directory name missing");
-            return this._error_code;
-        }
-        if(this.cli_params.hasOption(ConfigMgr._cli_options.force)){
-            C_save_options.forcedir = true;
-        }
+        // process tags
+        // get only AND function
+        // check array...no? exit!
 
-        let smp_obj = SamplesMgr.openLookupFile();
-        if(!_.isObject(smp_obj)){
-            console.log("Save command: latest lookup missing");
-            return this._error_code;
-        }
+        // if -d and exists ...walk and get array
+        // ..else open scan index file and get array
+        // array empty => exit!
 
-        return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
+        // outcome_check = false/true (uncovered,covered)
+        // each { file_path }
+        //      array[tag]=new element /   print
+        //      if( filepath is outcome_check ) array[tag][and_string] = (add) filepath /   print with \t substr(filepath)
+        // end-each
     }
 
 };

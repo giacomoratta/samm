@@ -18,18 +18,21 @@ if(CliParams.isError()){
     Utils.EXIT("Invalid parameters");
 }
 
-if(CliParams.commandIs('set')){
+if(CliParams.commandIs('lookup')){
+    CliMgr.C_lookup();
+
+} else if(CliParams.commandIs('save')){
+    CliMgr.C_save();
+
+} else if(CliParams.commandIs('set')){
     CliMgr.C_set();
 
 } else if(CliParams.commandIs('config')){
     ConfigMgr.printHelp();
     ConfigMgr.print();
 
-} else if(CliParams.commandIs('lookup')){
-    CliMgr.C_lookup();
-
-} else if(CliParams.commandIs('save')){
-    CliMgr.C_save();
+} else if(CliParams.commandIs('coverage')){
+    CliMgr.C_coverage();
 
 } else if(CliParams.commandIs('scan')){
     CliMgr.C_scan();

@@ -1,5 +1,8 @@
+# 1) duplicate scan file
+# 2) Try with wrong values (different types, etc.)
+
+
 ## Configuration
-# Try with wrong values (different types, etc.)
 node . config
 node . set RandomCount 28
 node . set Project "C:\\abc\\def\\project1"
@@ -21,6 +24,8 @@ node . save -n="my dir space"
 ## Coverage
 node . coverage
 node . coverage -d="C:\\new\\samples\\dir"
+node . coverage -q=abc+de,fgf,cbs+tr
+node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir"
 
 ## Scan
 node . scan
