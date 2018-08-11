@@ -129,14 +129,25 @@ class SamplesManager {
      * @param {string} ts
      * @returns { object | null }
      */
-    processTagString(ts){
+    processTagString(ts, splitFn){
         let proc_obj = {
-            string:[],  //array with strings e.g. ['a+b+c','d+e']
+            _string:[],  //temporary array with strings e.g. ['a+b+c','d+e']
+            string:"",  //final tag processed query
             array:[],   //array with subarrays of separated tags
             check_fn:null,  //function used to check the filename
-            _check_fn_string:"" //string with composed function which is evaluated
+            _check_fn_string:"" //temporary string with composed function which is evaluated
         };
-        ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');;
+        ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');
+
+        let _setSeparateAndFunctions = function(){};
+        if(_.isArray(splitFn)){
+            _setSeparateAndFunctions = function(string,fn_body){
+                splitFn.push({
+                    string:string,
+                    check_fn:Utils.newFunction('f',proc_obj._check_fn_string)
+                });
+            };
+        }
 
         /* Split tags and shuffle */
         let tagOR = _.split(ts,',');
@@ -145,8 +156,13 @@ class SamplesManager {
 
         /* Writing new function */
         tagOR.forEach(function(v1,i1,a1){
+            v1=_.trim(v1);
+            if(v1.length<=0) return;
+
+            let _this_string, _this_fn_IF;
             let tagAND=_.split(v1,'+');
             proc_obj.array.push([]);
+
             tagAND.forEach(function(v2,i2,a2){
                 v2=_.trim(v2);
                 if(v2.length<=0) return;
@@ -154,16 +170,24 @@ class SamplesManager {
                 proc_obj.array[i1].push(a2[i2]);
             });
             if(tagAND.length<=0) return;
-            proc_obj._check_fn_string+="if( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 ) return true;\n";
-            proc_obj.string.push(_.join(tagAND,"+"));
+
+            _this_fn_IF = "( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 )";
+            _this_string = _.join(tagAND,"+");
+
+            proc_obj._check_fn_string+="if "+_this_fn_IF+" return true;\n";
+            proc_obj._string.push(_this_string);
+
+            _setSeparateAndFunctions(_this_string, "return "+_this_fn_IF+"; ");
         });
-        proc_obj.string = _.join(proc_obj.string,", ");
+
+        proc_obj.string = _.join(proc_obj._string,", ");
         proc_obj._check_fn_string+="return false;\n";
 
         /* Building new function */
         proc_obj.check_fn = Utils.newFunction('f',proc_obj._check_fn_string);
         if(!proc_obj.check_fn) return null;
 
+        delete proc_obj._string;
         delete proc_obj._check_fn_string;
         return proc_obj;
     }
