@@ -23,11 +23,26 @@ class SamplesManager {
 
     /**
      * Start scanning the whole samples directory (see Configuration).
+     * @param {string} abspath
+     * @param {boolean} force
      * @returns { Samples | null }
      */
-    scanSamples(){
+    scanSamples(abspath, force){
         let smp_obj = new Samples();
-        this._scanSamples(smp_obj, ConfigMgr.get('SamplesDirectory'), {
+
+        if(!_.isString(abspath)){
+            abspath=ConfigMgr.get('SamplesDirectory');
+            if(this.sampleScanFileExists() && force!==true){
+                return this.loadSampleScanFromFile();
+            }
+        }
+
+        if(!Utils.File.directoryExists(abspath)){
+            console.log('   SamplesMgr.scan: directory does not exists! ('+abspath+')');
+            return null;
+        }
+
+        this._scanSamples(smp_obj, abspath, {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
                 console.log("  ",path_string);
@@ -368,10 +383,10 @@ class SamplesManager {
     /**
      * Check the coverage (or uncoverage) of all samples.
      * @param options
-     *        - dirpath: custom absolute path for the directory
-     *        - tag_query: custom query string with tags
-     *        - get_uncovered: true to collect uncovered samples
-     *        - console_output: true to print result directly in the console
+     *        - dirPath: custom absolute path for the directory
+     *        - tagQuery: custom query string with tags
+     *        - getUncovered: true to collect uncovered samples
+     *        - consoleOutput: true to print result directly in the console
      * @returns {Samples} smp_obj
      */
     checkSamplesCoverage(options){
@@ -382,14 +397,46 @@ class SamplesManager {
             consoleOutput:true
         },options);
 
-        // process tags
-        // get only AND function
-        // check array...no? exit!
+        let _d = function(m){ arguments[0]='   coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
-        // if -d and exists ...walk and get array
-        // ..else open scan index file and get array
-        // array empty => exit!
+        let _self = this;
+        let console_log = (options.consoleOutput===true?console.log:function(){});
 
+        /* Check tagQuery */
+        let _tagQueries = [];
+        if(_.isString(options.tagQuery)){
+            _d("tagQuery from string");
+            _tagQueries.push(options.tagQuery);
+        }else if(_.isArray(ConfigMgr.get('Tags'))) {
+            _d("tagQuery from config.Tags");
+            _tagQueries = ConfigMgr.get('Tags');
+        }
+        _d("tagQuery is",_tagQueries,"\n");
+        if(_tagQueries.length<=0) return null;
+
+        /* Process all tag queries */
+        let _ptags = [];
+        _tagQueries.forEach(function(v,i,a){
+            _self.processTagString(v,_ptags);
+        });
+        _d("Processed tags are",_ptags,"\n");
+        if(_ptags.length<=0) return null;
+
+        /* Check dirPath */
+        if(_.isString(options.dirPath)){
+            _d("dirPath from string; scanning the absolute path... \n\t\t>"+options.dirPath);
+        }else{
+            options.dirPath = null;
+            _d("dirPath from config; reading the scan index...");
+        }
+        let smp_obj = this.scanSamples(options.dirPath);
+        _d("Found "+smp_obj.array.length+" samples \n");
+        if(smp_obj.array.length<=0) return null;
+
+        return this._checkSamplesCoverage(options, _d);
+    }
+
+    _checkSamplesCoverage(smp_obj, options, _ptags, _d){
         // outcome_check = false/true (uncovered,covered)
         // each { file_path }
         //      array[tag]=new element /   print
