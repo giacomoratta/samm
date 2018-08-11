@@ -94,7 +94,7 @@ class ConfigManager {
 
         if(_.isArray(old_v)){
             _outcome_value.type = _outcome_error.type = 'array';
-            if(!_.isArray(new_v)) { // no conversion
+            if(!_.isArray(new_v) && !_.isString(new_v)) { // no conversion
                 return _outcome_error;
             }
             _outcome_value.value = new_v;
@@ -111,16 +111,16 @@ class ConfigManager {
             return _outcome_value;
         }
 
-        if(_.isInteger(old_v)){
-            _outcome_value.type = _outcome_error.type = 'integer';
-            if(!_.isInteger(new_v)) {
-                if(!_.isString(new_v)) return _outcome_error;
-                new_v = Utils.strToInteger(new_v);
-                if(_.isNil(new_v)) return _outcome_error;
-            }
-            _outcome_value.value = new_v;
-            return _outcome_value;
-        }
+        // if(_.isInteger(old_v)){
+        //     _outcome_value.type = _outcome_error.type = 'integer';
+        //     if(!_.isInteger(new_v)) {
+        //         if(!_.isString(new_v)) return _outcome_error;
+        //         new_v = Utils.strToInteger(new_v);
+        //         if(_.isNil(new_v)) return _outcome_error;
+        //     }
+        //     _outcome_value.value = new_v;
+        //     return _outcome_value;
+        // }
 
         if(_.isNumber(old_v)){
             _outcome_value.type = _outcome_error.type = 'number';
@@ -146,6 +146,7 @@ class ConfigManager {
 
     set(name, value){
         let _outcome = this._set(this._config[name],value);
+        d(_outcome);
         if(_outcome.error==true){
             if(_outcome.type){
                 console.log("   Config.set: current value and old value have different types.\n");
@@ -154,11 +155,12 @@ class ConfigManager {
             }
             return null;
         }
-        return this._setFinalValue(name,value,_outcome);
+        return this._setFinalValue(name,_outcome);
     }
 
 
-    _setFinalValue(n,v,_outcome){
+    _setFinalValue(n,_outcome){
+        let v = _outcome.value;
 
         if(n=="Project"){
             let ph = path.parse(v);
@@ -191,8 +193,8 @@ class ConfigManager {
                 }
                 if(v[0]!='.') v='.'+v;
             }
-
             if(this._config[n].indexOf(v)<0) this._config[n].push(v);
+            return this._config[n];
         }
         this._config[n] = v;
         return v;
