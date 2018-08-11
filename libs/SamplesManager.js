@@ -27,7 +27,7 @@ class SamplesManager {
      */
     scanSamples(){
         let smp_obj = new Samples();
-        this._scanSamples(ConfigMgr.get('SamplesDirectory'), {
+        this._scanSamples(smp_obj, ConfigMgr.get('SamplesDirectory'), {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
                 console.log("  ",path_string);
@@ -62,7 +62,7 @@ class SamplesManager {
             let fsStat = fs.lstatSync(path_string);
 
             if(fsStat.isDirectory()){
-                this._scanSamples(path_string, _options);
+                this._scanSamples(smp_obj, path_string, _options);
 
             }else if(fsStat.isFile() && this._checkSampleName(path_string)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
@@ -294,7 +294,7 @@ class SamplesManager {
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.tags,0,2),'_');//.substring(0,20);
         options['_smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
-            options['_smppath'] = Utils.checkAndSetDirectoryName(options['_smppath']);
+            options['_smppath'] = Utils.File.checkAndSetDirectoryName(options['_smppath']);
         }
         if(!options['_smppath']) return null;
 

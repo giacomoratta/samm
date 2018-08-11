@@ -143,7 +143,7 @@ class CliManager {
         }
 
         C_save_options.dirname = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_name);
-        if(!C_save_options.dirname){
+        if(this.cli_params.hasOption(ConfigMgr._cli_options.directory_name) && !C_save_options.dirname){
             console.log("Save command: directory name missing");
             return this._error_code;
         }

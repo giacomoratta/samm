@@ -39,7 +39,7 @@ if(CliParams.commandIs('lookup')){
 
 } else {
     ConfigMgr.printHelp();
-    Utils.EXIT(" Unrecognized command");
+    Utils.EXIT("Unrecognized command");
 }
 
 console.log("\n");
