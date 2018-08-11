@@ -65,26 +65,24 @@ class CliManager {
 
 
     C_lookup(){
-        if(!this.cli_params.hasValues()){
-            console.log("Lookup command: missing tags or option (-t)");
-            return this._error_code;
-        }
-
         let tagString=null;
+
         if(this.cli_params.hasOption(ConfigMgr._cli_options.tag_label)){
-            if(!this.cli_params.hasValues()){
-                console.log("Lookup command: missing tag name after option -t");
+            tagString= this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_label);
+            if(!tagString){
+                console.log("Lookup command: empty tag name after option "+ConfigMgr._cli_options.tag_label);
                 return this._error_code;
             }
-            let _tagString = ConfigMgr.get('Tags')[this.cli_params.get(0)];
-            if(_.isNil(_tagString)){
-                console.log("Lookup command: unknown tag name after option -t");
+            tagString = ConfigMgr.get('Tags')[tagString];
+            if(_.isNil(tagString)){
+                console.log("Lookup command: unknown tag name after option "+ConfigMgr._cli_options.tag_label);
                 return this._error_code;
             }
-            tagString = _tagString;
-        } else {
+
+        }else{
             tagString = this.cli_params.get(0);
         }
+
         if(!_.isString(tagString) || tagString.length<1){
             console.log("Lookup command: empty tag list");
             return this._error_code;

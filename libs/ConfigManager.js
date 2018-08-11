@@ -146,7 +146,6 @@ class ConfigManager {
 
     set(name, value){
         let _outcome = this._set(this._config[name],value);
-        d(_outcome);
         if(_outcome.error==true){
             if(_outcome.type){
                 console.log("   Config.set: current value and old value have different types.\n");
