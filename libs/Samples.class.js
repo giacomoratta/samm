@@ -9,11 +9,37 @@ class Samples {
     init(){
         this.tags = [];
         this.array = [];
-        this.random = [];
+        this.array_normalized = [];
+        this.random = []; //TODO:remove; after set random, array should be replaced with random
     }
 
     isEmpty(){
         return !(this.array.length>0 && this.random.length>0);
+    }
+
+    add(sample_path){
+        this.array.push(sample_path);
+        this.array_normalized.push(_.toLower(sample_path));
+    }
+
+    get(index){
+        return this.array[index];
+    }
+
+    copy(clone){
+        //clone=false (default) => shallow copy
+    }
+
+    compare(smp_obj){
+
+    }
+
+    compareSample(index,sample_path){
+
+    }
+
+    forEach(callback){
+        //callback(value,normalized,index)
     }
 
 

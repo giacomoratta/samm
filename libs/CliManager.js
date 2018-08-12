@@ -93,9 +93,8 @@ class CliManager {
             console.log("Lookup command: no sample scan found");
             return this._error_code;
         }
-        ConfigMgr._sampleScan = smp_obj_scan.array;
 
-        let smp_obj = SamplesMgr.searchSamplesByTags(tagString);
+        let smp_obj = SamplesMgr.searchSamplesByTags(smp_obj_scan, tagString);
         if(!smp_obj){
             console.log("Lookup command: sample search failed");
             return this._error_code;

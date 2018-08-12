@@ -48,6 +48,7 @@ class SamplesManager {
             callback:function(path_string){
                 console_log("  ",path_string);
                 smp_obj.array.push(path_string);
+                smp_obj.array_normalized.push(_.toLower(path_string));
             }
         });
         if(smp_obj.array.length<=0) return null;
@@ -217,7 +218,7 @@ class SamplesManager {
      * @param tagString
      * @returns { Samples | null }
      */
-    searchSamplesByTags(tagString){
+    searchSamplesByTags(smp_obj_scan, tagString){
         let smp_obj = new Samples();
         let ptags_obj = this.processTagString(tagString);
         if(!ptags_obj) return null;
@@ -232,10 +233,10 @@ class SamplesManager {
             smp_obj.init();
             smp_obj.tags = ptags_obj.array;
 
-            for(let i=0; i<ConfigMgr._sampleScan.length; i++) {
-                if(ptags_obj.check_fn(_.toLower(ConfigMgr._sampleScan[i]))){
+            for(let i=0; i<smp_obj_scan.array.length; i++) {
+                if(ptags_obj.check_fn(smp_obj_scan.array_normalized[i])){
                     //console.log("  ",ConfigMgr._sampleScan[i]);
-                    smp_obj.array.push(ConfigMgr._sampleScan[i]);
+                    smp_obj.add(smp_obj_scan.get(i));
                 }
             }
             if(smp_obj.array.length<=0) return smp_obj;
@@ -445,18 +446,21 @@ class SamplesManager {
     _checkSamplesCoverage(smp_obj, options, _ptags, _d){
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
+        options.dirPath = path.resolve(options.dirPath);
+        let smp_coverage = new Samples();
 
         _ptags.forEach(function(v1,i1,a1){
-            options.console_log("\n\tTagQuery#"+(i1+1)+" "+v1.string);
+            options.console_log("\n    Q#"+(i1+1)+" "+v1.string);
+            options.console_log("  "+_.repeat('-', 100));
 
-            smp_obj.array.forEach(function(v2,i2,a2){
-                v2 = _.toLower(v2); //TODO:avoid conversion
+            smp_obj.array_normalized.forEach(function(v2,i2,a2){
                 if(v1.check_fn(v2)!==options.getUncovered){
-                    options.console_log("\t  "+(v2));
-                    // TODO: print without dir prefix
+                    options.console_log("    "+(smp_obj.get(i2).substring(options.dirPath.length+1)));
+                    smp_coverage.add(smp_obj.get(i2));
                 }
             });
         });
+        return smp_coverage;
     }
 };
 
