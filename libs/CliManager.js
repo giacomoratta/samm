@@ -169,8 +169,8 @@ class CliManager {
             consoleOutput:true
         };
 
-        C_coverage_options.dirpath = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_path);
-        if(!C_coverage_options.dirpath){
+        C_coverage_options.dirPath = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_path);
+        if(!C_coverage_options.dirPath){
             if(!SamplesMgr.sampleScanFileExists()){
                 console.log("Coverage command: the index file does not exist.\n" +
                     "Perform a scan or specify an absolute path with "+ConfigMgr._cli_options.directory_path+" option.");
@@ -178,8 +178,8 @@ class CliManager {
             }
         }
 
-        C_coverage_options.tag_query = this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_query);
-        if(!C_coverage_options.tag_query){
+        C_coverage_options.tagQuery = this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_query);
+        if(!C_coverage_options.tagQuery){
             if(!ConfigMgr.get('Tags')){
                 console.log("Coverage command: no configured tags found.\n" +
                     "Add one or more tags or specify a custom query with "+ConfigMgr._cli_options.tag_query+" option.");
@@ -187,9 +187,9 @@ class CliManager {
             }
         }
 
-        C_coverage_options.get_uncovered = this.cli_params.getOptionValue(ConfigMgr._cli_options.selection);
-        if(C_coverage_options.get_uncovered=='covered') C_coverage_options.get_uncovered=false;
-        else C_coverage_options.get_uncovered=true;
+        C_coverage_options.getUncovered = this.cli_params.getOptionValue(ConfigMgr._cli_options.selection);
+        if(C_coverage_options.getUncovered=='covered') C_coverage_options.getUncovered=false;
+        else C_coverage_options.getUncovered=true;
 
         let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
         if(!_.isObject(smp_obj)){

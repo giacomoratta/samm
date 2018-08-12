@@ -23,29 +23,30 @@ class SamplesManager {
 
     /**
      * Start scanning the whole samples directory (see Configuration).
-     * @param {string} abspath
+     * @param {string} absPath
      * @param {boolean} force
      * @returns { Samples | null }
      */
-    scanSamples(abspath, force){
+    scanSamples(absPath, force, consoleOutput){
         let smp_obj = new Samples();
+        let console_log = (consoleOutput===true?console.log:function(){});
 
-        if(!_.isString(abspath)){
-            abspath=ConfigMgr.get('SamplesDirectory');
+        if(!_.isString(absPath)){
+            absPath=ConfigMgr.get('SamplesDirectory');
             if(this.sampleScanFileExists() && force!==true){
                 return this.loadSampleScanFromFile();
             }
         }
 
-        if(!Utils.File.directoryExists(abspath)){
-            console.log('   SamplesMgr.scan: directory does not exists! ('+abspath+')');
+        if(!Utils.File.directoryExists(absPath)){
+            console_log('   SamplesMgr.scan: directory does not exists! ('+absPath+')');
             return null;
         }
 
-        this._scanSamples(smp_obj, abspath, {
+        this._scanSamples(smp_obj, absPath, {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
-                console.log("  ",path_string);
+                console_log("  ",path_string);
                 smp_obj.array.push(path_string);
             }
         });
@@ -159,7 +160,7 @@ class SamplesManager {
             _setSeparateAndFunctions = function(string,fn_body){
                 splitFn.push({
                     string:string,
-                    check_fn:Utils.newFunction('f',proc_obj._check_fn_string)
+                    check_fn:Utils.newFunction('f',fn_body)
                 });
             };
         }
@@ -177,12 +178,13 @@ class SamplesManager {
             let _this_string, _this_fn_IF;
             let tagAND=_.split(v1,'+');
             proc_obj.array.push([]);
+            let po_index = proc_obj.array.length-1;
 
             tagAND.forEach(function(v2,i2,a2){
                 v2=_.trim(v2);
                 if(v2.length<=0) return;
                 a2[i2]=_.trim(a2[i2]);
-                proc_obj.array[i1].push(a2[i2]);
+                proc_obj.array[po_index].push(a2[i2]);
             });
             if(tagAND.length<=0) return;
 
@@ -397,34 +399,38 @@ class SamplesManager {
             consoleOutput:true
         },options);
 
-        let _d = function(m){ arguments[0]='   coverage: '+arguments[0]; console.log.apply(null,arguments); };
+        let _d = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         let _self = this;
-        let console_log = (options.consoleOutput===true?console.log:function(){});
+        options.console_log = (options.consoleOutput===true?console.log:function(){});
+
+        /* Check getUncovered */
+        if(!_.isBoolean(options.getUncovered)) options.getUncovered=true;
+        _d("uncovered ",options.getUncovered,"\n");
 
         /* Check tagQuery */
-        let _tagQueries = [];
+        let _tagQueries = {};
         if(_.isString(options.tagQuery)){
             _d("tagQuery from string");
-            _tagQueries.push(options.tagQuery);
-        }else if(_.isArray(ConfigMgr.get('Tags'))) {
+            _tagQueries['default']=options.tagQuery;
+        }else if(_.isObject(ConfigMgr.get('Tags'))) {
             _d("tagQuery from config.Tags");
             _tagQueries = ConfigMgr.get('Tags');
         }
-        _d("tagQuery is",_tagQueries,"\n");
+        _d("tagQueries are",_tagQueries,"\n");
         if(_tagQueries.length<=0) return null;
 
         /* Process all tag queries */
         let _ptags = [];
-        _tagQueries.forEach(function(v,i,a){
-            _self.processTagString(v,_ptags);
+        Object.keys(_tagQueries).forEach(function(v,i,a){
+            _self.processTagString(_tagQueries[v],_ptags);
         });
         _d("Processed tags are",_ptags,"\n");
         if(_ptags.length<=0) return null;
 
         /* Check dirPath */
         if(_.isString(options.dirPath)){
-            _d("dirPath from string; scanning the absolute path... \n\t\t>"+options.dirPath);
+            _d("dirPath from string; scanning the absolute path "+options.dirPath+" ...");
         }else{
             options.dirPath = null;
             _d("dirPath from config; reading the scan index...");
@@ -433,15 +439,24 @@ class SamplesManager {
         _d("Found "+smp_obj.array.length+" samples \n");
         if(smp_obj.array.length<=0) return null;
 
-        return this._checkSamplesCoverage(options, _d);
+        return this._checkSamplesCoverage(smp_obj, options, _ptags, _d);
     }
 
     _checkSamplesCoverage(smp_obj, options, _ptags, _d){
-        // outcome_check = false/true (uncovered,covered)
-        // each { file_path }
-        //      array[tag]=new element /   print
-        //      if( filepath is outcome_check ) array[tag][and_string] = (add) filepath /   print with \t substr(filepath)
-        // end-each
+        // _ptags = array of {string,check_fn} objects
+        _.sortBy(_ptags, [function(o) { return o.string; }]);
+
+        _ptags.forEach(function(v1,i1,a1){
+            options.console_log("\n\tTagQuery#"+(i1+1)+" "+v1.string);
+
+            smp_obj.array.forEach(function(v2,i2,a2){
+                v2 = _.toLower(v2); //TODO:avoid conversion
+                if(v1.check_fn(v2)!==options.getUncovered){
+                    options.console_log("\t  "+(v2));
+                    // TODO: print without dir prefix
+                }
+            });
+        });
     }
 };
 
