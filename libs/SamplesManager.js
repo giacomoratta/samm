@@ -329,10 +329,7 @@ class SamplesManager {
             options['_smppath'] = Utils.File.checkAndSetDirectoryName(options['_smppath']);
         }
         if(!options['_smppath']) return null;
-
-        let smpl_arr = smp_obj.random;
-        if(!smpl_arr || smpl_arr.length<=0) smpl_arr = smp_obj.array;
-        if(!smpl_arr || smpl_arr.length<=0) return null;
+        if(smp_obj.empty()) return null;
 
         let p_array = [];
         let _links_dir = path.join(options['_smppath'],'_links');
@@ -340,13 +337,13 @@ class SamplesManager {
         fs_extra.ensureDirSync(options['_smppath']);
         fs_extra.ensureDirSync(_links_dir);
 
-        console.log('   generateSamplesDir - start copying '+smpl_arr.length+' files...');
-        smpl_arr.forEach(function(v,i,a){
-            let f_name = path.basename(v);
-            let link_file_name = f_name+'___'+Utils.replaceAll(v.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
+        console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
+        smp_obj.forEach(function(item,index){
+            let f_name = path.basename(item.path);
+            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
 
             /* Copy File */
-            p_array.push(Utils.File.copyFile( v, path.join(options['_smppath'] ,f_name) ).then(function(data){
+            p_array.push(Utils.File.copyFile( item.path, path.join(options['_smppath'] ,f_name) ).then(function(data){
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
@@ -354,7 +351,7 @@ class SamplesManager {
             }));
 
             /* Create txt link file */
-            p_array.push(Utils.File.writeTextFile(path.join(_links_dir ,link_file_name), v /* text */).catch(function(data){
+            p_array.push(Utils.File.writeTextFile(path.join(_links_dir ,link_file_name), item.path /* text */).catch(function(data){
                 console.log('   generateSamplesDir - link file copy failed '+data.path_to);
                 console.error(data.err);
             }));
