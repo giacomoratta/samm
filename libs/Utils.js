@@ -16,14 +16,41 @@ class Utils {
         process.exit(0);
     }
 
-    sortFilesArray(arr){
-        return arr.sort(function(a,b){
+
+    sortFilesArray(array){
+        array.sort(function(a,b){
             let a_name = _.toLower(a);
             let b_name = _.toLower(b);
             if(a_name<b_name) return -1;
             if(a_name>b_name) return 1;
             return 0;
         });
+    }
+
+
+    sortParallelArrays(array, compare_fn, swap_fn){
+        if(!compare_fn) compare_fn=function(){};
+        if(!swap_fn) swap_fn=function(){};
+        for(let i=0,j=0,tmp=null; i<array.length-1; i++){
+            for(j=i+1; j<array.length; j++){
+                if(compare_fn(array[i],array[j])>0){
+                    tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                    swap_fn(i /*old index*/, j /*new index*/, array[i], array[j]);
+                }
+            }
+        }
+    }
+
+    sortFilesParallelArrays(array, swap_fn){
+        this.sortParallelArrays(array,function(a,b){
+            let a_name = _.toLower(a);
+            let b_name = _.toLower(b);
+            if(a_name<b_name) return -1;
+            if(a_name>b_name) return 1;
+            return 0;
+        },swap_fn);
     }
 
     replaceAll(str, str1, str2, ignore){

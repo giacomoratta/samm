@@ -7,36 +7,50 @@ class Samples {
 
 
     init(){
-        this.tags = [];
-        this.array = [];
-        this.array_normalized = [];
-        this.random = []; //TODO:remove; after set random, array should be replaced with random
+        this._tags = [];
+        this._array = [];
+        this._n_array = [];
+
+        this._coll = []; // collection of { path:'', n_path:'' }
     }
 
     isEmpty(){
-        return !(this.array.length>0 && this.random.length>0);
+        return !(this._array.length>0);
     }
 
     size(){
-        return this.array.length;
+        return this._array.length;
     }
 
     add(sample_path){
-        this.array.push(sample_path);
-        this.array_normalized.push(_.toLower(sample_path));
-    }
-
-    copyItem(obj,index){
-        this.array.push(obj.array[index]);
-        this.array_normalized.push(obj.array_normalized[index]);
+        this._array.push(sample_path);
+        this._n_array.push(_.toLower(sample_path));
     }
 
     get(index){
-        return this.array[index];
+        return this._coll[index];
     }
 
-    getNormalized(index){
-        return this.array_normalized[index];
+    set(sample_path, index){
+        this._array[index] = sample_path;
+        this._n_array[index] = _.toLower(sample_path);
+    }
+
+    addItem(item){
+        this._array.push(item.path);
+        this._n_array.push(item.n_path);
+    }
+
+    getItem(index){
+        return {
+            path:this._coll[index],
+            n_path:this._coll[index]
+        };
+    }
+
+    setItem(item,index){
+        this._array[index]=item.path;
+        this._n_array[index]=item.n_path;
     }
 
     copy(clone){
@@ -53,24 +67,31 @@ class Samples {
 
     forEach(callback){
         //callback(value,normalized,index)
+        for(let i=0, ref=null; i<this.size(); i++){
+            ref = callback(this.getItem(i),i);
+            if(ref) this.set(ref,i);
+        }
     }
 
     sort(){
-        //Utils.sortFilesArray(r_array);
-        //manage items with array of objects
+        Utils.sortFilesParallelArrays(this._array,function(old_index,new_index){
+            let tmp = this._n_array[old_index];
+            this._n_array[old_index] = this._n_array[new_index];
+            this._n_array[new_index] = tmp;
+        });
     }
 
 
     toTextAll(){
-        let text_to_file = _.join(this.array,"\n");
-        text_to_file = _.join(this.tags,", ")+"\n\n"+text_to_file;
+        let text_to_file = _.join(this._array,"\n");
+        text_to_file = _.join(this._tags,", ")+"\n\n"+text_to_file;
         return text_to_file;
     }
 
 
     toText(){
-        let text_to_file = _.join(this.random,"\n");
-        text_to_file = _.join(this.tags,", ")+"\n\n"+text_to_file;
+        let text_to_file = _.join(this._array,"\n");
+        text_to_file = _.join(this._tags,", ")+"\n\n"+text_to_file;
         return text_to_file;
     }
 
@@ -81,7 +102,7 @@ class Samples {
         let file_rows = _.split(_.trim(text),"\n");
         if(!_.isArray(file_rows) || file_rows.length<5) return false;
 
-        this.tags = _.split(file_rows[0],',');
+        this._tags = _.split(file_rows[0],',');
         for(let i=2; i<file_rows.length; i++){
             this.add(file_rows[i]);
         }
@@ -90,8 +111,7 @@ class Samples {
 
 
     toJsonString(){
-        let obj_save = { array: this.array }
-        let json_string = JSON.stringify(obj_save);
+        let json_string = JSON.stringify({ collection: this._array });
         return json_string;
     }
 
@@ -103,7 +123,7 @@ class Samples {
         try{
             let _self = this;
             let json_obj = JSON.parse(json_string);
-            json_obj.array.forEach(function(v){
+            json_obj.collection.forEach(function(v){
                 _self.add(v);
             });
         }catch(e){
@@ -116,10 +136,10 @@ class Samples {
 
     getRandom(count,max_occur){
         let local_path = path;
-        if(this.array.length>0 && this.array[0].indexOf('\\')>0) local_path=path.win32; //TODO:remove
+        if(this._array.length>0 && this._array[0].indexOf('\\')>0) local_path=path.win32; //TODO:remove
 
         let _sameDirectoryMaxOccurs = function(f,o_obj,max_o){
-            let f_path = local_path.win32.dirname(f);
+            let f_path = local_path.win32.dirname(f); //TODO:remove 'win32.'
             if(!o_obj[f_path]) o_obj[f_path]=0;
             else if(o_obj[f_path]>=max_o) return true;
             o_obj[f_path]++;
@@ -133,16 +153,17 @@ class Samples {
         let occur_obj = {};
         if(_.isNil(max_occur)) max_occur=-1;
 
-        let smp_obj_random = new Samples(); //TODO: improve
+        // New object for random samples
+        let smp_obj_random = new this.constructor();
 
         while(i<count && sec>0){
             sec--;
             rn=((_.random(0,size)*7)%size);
-            rf=this.get(rn);
-            if(_sameDirectoryMaxOccurs(rf,occur_obj,max_occur)){
+            rf=this.getItem(rn);
+            if(_sameDirectoryMaxOccurs(rf.path,occur_obj,max_occur)){
                 continue;
             }
-            smp_obj_random.copyItem(this,rn);
+            smp_obj_random.addItem(rf);
             i++;
         }
         smp_obj_random.sort();
