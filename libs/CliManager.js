@@ -165,7 +165,9 @@ class CliManager {
             dirPath:null,       //custom path
             tagQuery:null,     //query tags
             getUncovered:true,
-            consoleOutput:true
+            consoleOutput:true,
+            progressive:false,
+            progressive_keepalive:false
         };
 
         C_coverage_options.dirPath = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_path);
@@ -189,6 +191,9 @@ class CliManager {
         C_coverage_options.getUncovered = this.cli_params.getOptionValue(ConfigMgr._cli_options.selection);
         if(C_coverage_options.getUncovered=='covered') C_coverage_options.getUncovered=false;
         else C_coverage_options.getUncovered=true;
+
+        C_coverage_options.progressive = this.cli_params.hasOption(ConfigMgr._cli_options.progressive);
+        C_coverage_options.progressive_keepalive = this.cli_params.hasOption(ConfigMgr._cli_options.progressive_keepalive);
 
         let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
         if(!_.isObject(smp_obj)){
