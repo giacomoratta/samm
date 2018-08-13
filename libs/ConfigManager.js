@@ -18,6 +18,8 @@ class ConfigManager {
             directory_path:'-d',
             tag_query:'-q',
             selection:'-s',
+            progressive:'-p',
+            progressive_keepalive:'-pk',
             force:'-f'
         };
 
@@ -53,29 +55,34 @@ class ConfigManager {
         console.log("  HELP");
         console.log("----------------------------------------------------------------------------------------------------");
         console.log("\n  set: modifies a configuration parameter.");
-        console.log("       [e.g.#"+(i++)+"]  set Project project-name  / (or path)");
+        console.log("       [e.g.#"+(i++)+"]  set Project project-name                   / (or path)");
         console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3 ");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext  / (or .ext)");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext  / (or !.ext)");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext        / (or .ext)");
+        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext       / (or !.ext)");
 
         console.log("\n  config: shows the current configuration parameters.");
 
         console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
         console.log("       in order to avoid resource wasting, if the index is already present the scan does not start;");
-        console.log("       use the option "+this._cli_options.force+" to force the rescan.");
+        console.log("       [e.g.#"+(i++)+"]  scan "+this._cli_options.force+"   / force the rescan");
 
         console.log("\n  lookup: looks for the tags and selects random samples;");
         console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
         console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label  / select query from config.Tags[tag_label]");
-
-        console.log("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
-        console.log("       it collects some stats and print them at the end.");
-        console.log("       [e.g.#"+(i++)+"]  coverage -d=\"C:\\abs\\path\\\"  / coverage on external path (e.g. new samples)");
+        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label            / select query from config.Tags[tag_label]");
 
         console.log("\n  save: create a directory with the samples previously found;");
         console.log("       the directory name is set automatically with some tag names;");
-        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name  / save in a custom directory");
+        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name               / save in a custom directory");
+
+        console.log("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
+        console.log("       it collects some stats and print them at the end.");
+        console.log("       [e.g.#"+(i++)+"]  coverage ");
+        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
+        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.tag_query                +"=query,tag+tag2,or,tag3   / custom query on tags");
+        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
+        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive              +"                          / (progressive) stops when some files which do not pass the check are found");
+        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive_keepalive     +"                         / (progressive) keep-alive waiting for key 'enter'");
 
         console.log("\n----------------------------------------------------------------------------------------------------");
     }
