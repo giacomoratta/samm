@@ -47,8 +47,7 @@ class SamplesManager {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
                 console_log("  ",path_string);
-                smp_obj.array.push(path_string);
-                smp_obj.array_normalized.push(_.toLower(path_string));
+                smp_obj.add(path_string);
             }
         });
         if(smp_obj.array.length<=0) return null;
@@ -234,9 +233,9 @@ class SamplesManager {
             smp_obj.tags = ptags_obj.array;
 
             for(let i=0; i<smp_obj_scan.array.length; i++) {
-                if(ptags_obj.check_fn(smp_obj_scan.array_normalized[i])){
+                if(ptags_obj.check_fn(smp_obj_scan.getItem(i).n_path)){
                     //console.log("  ",ConfigMgr._sampleScan[i]);
-                    smp_obj.add(smp_obj_scan.get(i));
+                    smp_obj.addItem(smp_obj_scan.get(i));
                 }
             }
             if(smp_obj.array.length<=0) return smp_obj;
@@ -453,10 +452,10 @@ class SamplesManager {
             options.console_log("\n    Q#"+(i1+1)+" "+v1.string);
             options.console_log("  "+_.repeat('-', 100));
 
-            smp_obj.array_normalized.forEach(function(v2,i2,a2){
-                if(v1.check_fn(v2)!==options.getUncovered){
-                    options.console_log("    "+(smp_obj.get(i2).substring(options.dirPath.length+1)));
-                    smp_coverage.add(smp_obj.get(i2));
+            smp_obj.forEach(function(item,i2){
+                if(v1.check_fn(item.n_path)!==options.getUncovered){
+                    options.console_log("    "+(item.path.substring(options.dirPath.length+1)));
+                    smp_coverage.addItem(item);
                 }
             });
         });

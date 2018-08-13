@@ -66,10 +66,11 @@ class Samples {
     }
 
     forEach(callback){
-        //callback(value,normalized,index)
+        //callback(item,index)
+        // ...if return the item object, the data will be modified with its values
         for(let i=0, ref=null; i<this.size(); i++){
-            ref = callback(this.getItem(i),i);
-            if(ref) this.set(ref,i);
+            item_ref = callback(this.getItem(i),i);
+            if(item_ref) this.set(item_ref,i);
         }
     }
 
