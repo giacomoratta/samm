@@ -17,13 +17,26 @@ class Samples {
         return !(this.array.length>0 && this.random.length>0);
     }
 
+    size(){
+        return this.array.length;
+    }
+
     add(sample_path){
         this.array.push(sample_path);
         this.array_normalized.push(_.toLower(sample_path));
     }
 
+    copyItem(obj,index){
+        this.array.push(obj.array[index]);
+        this.array_normalized.push(obj.array_normalized[index]);
+    }
+
     get(index){
         return this.array[index];
+    }
+
+    getNormalized(index){
+        return this.array_normalized[index];
     }
 
     copy(clone){
@@ -40,6 +53,11 @@ class Samples {
 
     forEach(callback){
         //callback(value,normalized,index)
+    }
+
+    sort(){
+        //Utils.sortFilesArray(r_array);
+        //manage items with array of objects
     }
 
 
@@ -65,7 +83,7 @@ class Samples {
 
         this.tags = _.split(file_rows[0],',');
         for(let i=2; i<file_rows.length; i++){
-            this.array.push(file_rows[i]);
+            this.add(file_rows[i]);
         }
         return true;
     }
@@ -83,8 +101,11 @@ class Samples {
         if(!_.isString(json_string)) return false;
         json_string = _.trim(json_string);
         try{
+            let _self = this;
             let json_obj = JSON.parse(json_string);
-            this.array = json_obj.array;
+            json_obj.array.forEach(function(v){
+                _self.add(v);
+            });
         }catch(e){
             console.log(e);
             return false;
@@ -93,9 +114,9 @@ class Samples {
     }
 
 
-    setRandom(count,max_occur){
+    getRandom(count,max_occur){
         let local_path = path;
-        if(this.array.length>0 && this.array[0].indexOf('\\')>0) local_path=path.win32;
+        if(this.array.length>0 && this.array[0].indexOf('\\')>0) local_path=path.win32; //TODO:remove
 
         let _sameDirectoryMaxOccurs = function(f,o_obj,max_o){
             let f_path = local_path.win32.dirname(f);
@@ -107,24 +128,25 @@ class Samples {
 
         if(!_.isInteger(count) || count<=1) count=10;
         let r_array = [];
-        let size = this.array.length;
+        let size = this.size();
         let i=0, sec=size, rf, rn;
         let occur_obj = {};
         if(_.isNil(max_occur)) max_occur=-1;
+
+        let smp_obj_random = new Samples(); //TODO: improve
+
         while(i<count && sec>0){
             sec--;
             rn=((_.random(0,size)*7)%size);
-            rf=this.array[rn];
+            rf=this.get(rn);
             if(_sameDirectoryMaxOccurs(rf,occur_obj,max_occur)){
-                //d(sec,i,count,'jump',rf);
                 continue;
             }
-            r_array.push(rf);
-            //console.log("   - ",'...'+rf.substring(16));
+            smp_obj_random.copyItem(this,rn);
             i++;
         }
-        this.random = Utils.sortFilesArray(r_array);
-        return this.random;
+        smp_obj_random.sort();
+        return smp_obj_random;
     }
 }
 
