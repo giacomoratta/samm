@@ -77,7 +77,6 @@ class ConfigManager {
 
         console.log("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
         console.log("       it collects some stats and print them at the end.");
-        console.log("       [e.g.#"+(i++)+"]  coverage ");
         console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
         console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.tag_query                +"=query,tag+tag2,or,tag3   / custom query on tags");
         console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
