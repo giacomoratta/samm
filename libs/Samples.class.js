@@ -22,6 +22,10 @@ class Samples {
         return this._array.length;
     }
 
+    setTags(tagsArray){
+        this._tags = tagsArray;
+    }
+
     add(sample_path){
         this._array.push(sample_path);
         this._n_array.push(_.toLower(sample_path));
@@ -57,8 +61,16 @@ class Samples {
         //clone=false (default) => shallow copy
     }
 
-    compare(smp_obj){
-
+    isEqual(smp_obj){
+        if(smp_obj._array.length != this._array.length) return false;
+        let eq=true;
+        for(let i=0; i<smp_obj._array.length; i++){
+            if(smp_obj._array[i]!=this._array[i]){
+                eq=false;
+                break;
+            }
+        }
+        return eq;
     }
 
     compareSample(index,sample_path){
@@ -169,6 +181,16 @@ class Samples {
         }
         smp_obj_random.sort();
         return smp_obj_random;
+    }
+
+
+    print(prefix,processFn){
+        let padding = (""+this.size()+"").length+1;
+        if(!processFn) processFn=function(n){ return n; };
+        if(!prefix) prefix='';
+        this.forEach(function(item,index){
+            console.log(prefix+_.padStart((index+1)+')', padding)+" "+processFn(item.path));
+        });
     }
 }
 

@@ -55,7 +55,7 @@ class CliManager {
             console.log("Scan command: job failed");
             return this._error_code;
         }
-        console.log("Scan command: job completed ("+smp_obj.array.length+" samples found)");
+        console.log("Scan command: job completed ("+smp_obj.size()+" samples found)");
         if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
             console.log("Scan command: cannot write the index file");
             return this._error_code;

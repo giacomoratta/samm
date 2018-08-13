@@ -75,7 +75,7 @@ class Utils {
 
     printArrayOrderedList(array,prefix,processFn){
         let padding = (""+array.length+"").length+1;
-        if(!processFn) SamplesDirectory=function(n){ return n; };
+        if(!processFn) processFn=function(n){ return n; };
         if(!prefix) prefix='';
         array.forEach(function(v,i,a){
             console.log(prefix+_.padStart((i+1)+')', padding)+" "+processFn(v));

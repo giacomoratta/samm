@@ -50,7 +50,7 @@ class SamplesManager {
                 smp_obj.add(path_string);
             }
         });
-        if(smp_obj.array.length<=0) return null;
+        if(smp_obj.empty()) return null;
         return smp_obj;
     }
 
@@ -230,24 +230,24 @@ class SamplesManager {
 
         while(attempts>0){
             smp_obj.init();
-            smp_obj.tags = ptags_obj.array;
+            smp_obj.setTags(ptags_obj.array);
 
-            for(let i=0; i<smp_obj_scan.array.length; i++) {
-                if(ptags_obj.check_fn(smp_obj_scan.getItem(i).n_path)){
+            smp_obj_scan.forEach(function(item,index){
+                if(ptags_obj.check_fn(item.n_path)){
                     //console.log("  ",ConfigMgr._sampleScan[i]);
-                    smp_obj.addItem(smp_obj_scan.get(i));
+                    smp_obj.addItem(item);
                 }
-            }
-            if(smp_obj.array.length<=0) return smp_obj;
+            });
+            if(smp_obj.empty()) return smp_obj;
 
-            smp_obj.setRandom(_RandomCount, _MaxOccurrencesSameDirectory);
-            if(smp_obj.random.length==_RandomCount) break;
+            let smp_obj_random = smp_obj.setRandom(_RandomCount, _MaxOccurrencesSameDirectory);
+            if(smp_obj_random && smp_obj_random.size()>=_RandomCount) break;
             _MaxOccurrencesSameDirectory++;
             attempts--;
         }
-        if(smp_obj.random.length<=0) return smp_obj;
+        if(smp_obj_random.empty()) return smp_obj;
 
-        Utils.printArrayOrderedList(smp_obj.random,'   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
+        smp_obj_random.print('   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
         console.log("\n   Performed search: '"+ptags_obj.string+"'");
         console.log(  "   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
         return smp_obj;
@@ -263,15 +263,7 @@ class SamplesManager {
     isEqualToPreviousLookup(smp_obj){
         let old_smp_obj = this.openLookupFile();
         if(!old_smp_obj) return false;
-        if(smp_obj.random.length!=old_smp_obj.random.length) return false;
-        let eq=true;
-        for(let i=0; i<smp_obj.random.length; i++){
-            if(smp_obj.random[i]!=old_smp_obj.random[i]){
-                eq=false;
-                break;
-            }
-        }
-        return eq;
+        return old_smp_obj.isEqual(smp_obj);
     }
 
 
@@ -310,7 +302,6 @@ class SamplesManager {
         }
         let smp_obj = new Samples();
         if(!smp_obj.fromText(file_to_text)) return null;
-        smp_obj.random = smp_obj.array;
         return smp_obj;
     }
 
@@ -332,7 +323,7 @@ class SamplesManager {
             _smppath:null    //absolute path (private)
         };
 
-        if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.tags,0,2),'_');//.substring(0,20);
+        if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.getTags(),0,2),'_');//.substring(0,20);
         options['_smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
             options['_smppath'] = Utils.File.checkAndSetDirectoryName(options['_smppath']);
@@ -436,8 +427,8 @@ class SamplesManager {
             _d("dirPath from config; reading the scan index...");
         }
         let smp_obj = this.scanSamples(options.dirPath);
-        _d("Found "+smp_obj.array.length+" samples \n");
-        if(smp_obj.array.length<=0) return null;
+        _d("Found "+smp_obj.size()+" samples \n");
+        if(smp_obj.empty()) return null;
 
         return this._checkSamplesCoverage(smp_obj, options, _ptags, _d);
     }
