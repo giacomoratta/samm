@@ -43,7 +43,7 @@ class Utils {
         }
     }
 
-    sortFilesParallelArrays(array, swap_fn){
+    sortParallelFileArrays(array, swap_fn){
         this.sortParallelArrays(array,function(a,b){
             let a_name = _.toLower(a);
             let b_name = _.toLower(b);

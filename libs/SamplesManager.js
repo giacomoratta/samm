@@ -157,9 +157,10 @@ class SamplesManager {
 
         let _setSeparateAndFunctions = function(){};
         if(_.isArray(splitFn)){
-            _setSeparateAndFunctions = function(string,fn_body){
+            _setSeparateAndFunctions = function(string,tag_array,fn_body){
                 splitFn.push({
                     string:string,
+                    tag_array:[],
                     check_fn:Utils.newFunction('f',fn_body)
                 });
             };
@@ -194,7 +195,7 @@ class SamplesManager {
             proc_obj._check_fn_string+="if "+_this_fn_IF+" return true;\n";
             proc_obj._string.push(_this_string);
 
-            _setSeparateAndFunctions(_this_string, "return "+_this_fn_IF+"; ");
+            _setSeparateAndFunctions(_this_string, tagAND, "return "+_this_fn_IF+"; ");
         });
 
         proc_obj.string = _.join(proc_obj._string,", ");
@@ -434,20 +435,38 @@ class SamplesManager {
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
         options.dirPath = path.resolve(options.dirPath);
-        let smp_coverage = new Samples();
+        let coverage_array = [];
 
         _ptags.forEach(function(v1,i1,a1){
             options.console_log("\n    Q#"+(i1+1)+" "+v1.string);
             options.console_log("  "+_.repeat('-', 100));
 
+            let smp_coverage = new Samples();
+            smp_coverage.setTags(v1.tag_array);
+            coverage_array.push({
+                total:smp_obj.size(),
+                found:0,
+                query:v1.string,
+                samples:smp_coverage
+            });
+
             smp_obj.forEach(function(item,i2){
                 if(v1.check_fn(item.n_path)!==options.getUncovered){
                     options.console_log("    "+(item.path.substring(options.dirPath.length+1)));
                     smp_coverage.addItem(item);
+                    coverage_array[coverage_array.length-1].found++;
                 }
             });
+
+            if(options.progressive && coverage_array[coverage_array.length-1].found>0){
+                Utils.EXIT();
+            }
+
+            if(options.progressive_keepalive && coverage_array[coverage_array.length-1].found>0){
+                readlinesync.question();
+            }
         });
-        return smp_coverage;
+        return coverage_array;
     }
 };
 

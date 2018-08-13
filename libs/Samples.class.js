@@ -22,6 +22,10 @@ class Samples {
         return this._array.length;
     }
 
+    getTags(){
+        return this._tags;
+    }
+
     setTags(tagsArray){
         this._tags = tagsArray;
     }
@@ -87,7 +91,7 @@ class Samples {
     }
 
     sort(){
-        Utils.sortFilesParallelArrays(this._array,function(old_index,new_index){
+        Utils.sortParallelFileArrays(this._array,function(old_index,new_index){
             let tmp = this._n_array[old_index];
             this._n_array[old_index] = this._n_array[new_index];
             this._n_array[new_index] = tmp;
