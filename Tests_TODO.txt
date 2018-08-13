@@ -34,6 +34,8 @@ node . coverage -s=uncovered
 node . coverage -d="C:\\new\\samples\\dir" -s=uncovered
 node . coverage -q=abc+de,fgf,cbs+tr -s=uncovered
 node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir" -s=uncovered
+node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir" -s=uncovered -p
+node . coverage -q=abc+de,fgf,cbs+tr -d="C:\\new\\samples\\dir" -s=uncovered -pk
 
 ## Scan
 node . scan

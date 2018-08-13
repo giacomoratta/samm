@@ -163,8 +163,8 @@ class CliManager {
     C_coverage(){
         let C_coverage_options = {
             dirPath:null,       //custom path
-            tagQuery:null,     //query tags
-            getUncovered:true,
+            tagQuery:null,      //query tags
+            lookingForCoverage:false,
             consoleOutput:true,
             progressive:false,
             progressive_keepalive:false
@@ -188,9 +188,8 @@ class CliManager {
             }
         }
 
-        C_coverage_options.getUncovered = this.cli_params.getOptionValue(ConfigMgr._cli_options.selection);
-        if(C_coverage_options.getUncovered=='covered') C_coverage_options.getUncovered=false;
-        else C_coverage_options.getUncovered=true;
+        if(this.cli_params.getOptionValue(ConfigMgr._cli_options.selection)==='covered') C_coverage_options.lookingForCoverage=true;
+        else C_coverage_options.lookingForCoverage=false;
 
         C_coverage_options.progressive = this.cli_params.hasOption(ConfigMgr._cli_options.progressive);
         C_coverage_options.progressive_keepalive = this.cli_params.hasOption(ConfigMgr._cli_options.progressive_keepalive);

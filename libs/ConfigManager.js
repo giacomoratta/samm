@@ -6,6 +6,7 @@ class ConfigManager {
             config: 'config.json',
             config_sample: 'config.sample.json',
             temp_dir: 'temp/',
+            custom_indexes: 'c_indexes/',
             latest_lookup: 'temp/latest_lookup',
             samples_index: 'temp/samples_index'
         };
@@ -29,8 +30,9 @@ class ConfigManager {
             Utils.EXIT('Cannot create or read the configuration file '+this._filename.config);
         }
 
-        // Create temp directory
-        fs_extra.ensureDirSync(Utils.abspath()+this._filename.temp_dir);
+        // Create directories
+        fs_extra.ensureDirSync(path.join(Utils.abspath(),this._filename.temp_dir));
+        fs_extra.ensureDirSync(path.join(Utils.abspath(),this._filename.temp_dir,this._filename.custom_indexes));
     }
 
     _openConfigJson(){

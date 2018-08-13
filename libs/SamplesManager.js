@@ -121,15 +121,22 @@ class SamplesManager {
     /**
      * Create the index file for all samples.
      * @param {Samples} smp_obj
+     * @param {bool} is_custom_index
      * @returns {boolean}
      */
-    saveSampleScanToFile(smp_obj){
+    saveSampleScanToFile(smp_obj, is_custom_index){
         if(!smp_obj) return false;
-        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
+        let abs_index_path=null;
+        if(is_custom_index!==true){
+            abs_index_path = path.join(Utils.abspath(),this._filename.samples_index);
+        }else{
+            abs_index_path = path.join(Utils.abspath(),this._filename.temp_dir,this._filename.custom_indexes,smp_obj.getTagLabel());
+        }
+        let samples_index = path.resolve(abs_index_path);
         let json_string = smp_obj.toJsonString();
         if(!json_string) return false;
         try{
-            fs.writeFileSync(samples_index, json_string, 'utf8');
+            fs.writeFileSync(abs_index_path, json_string, 'utf8');
         }catch(e){
             console.log(e);
             return false;
@@ -378,14 +385,16 @@ class SamplesManager {
      *        - tagQuery: custom query string with tags
      *        - getUncovered: true to collect uncovered samples
      *        - consoleOutput: true to print result directly in the console
+     *        - createIndexes: true to generate the index files
      * @returns {Samples} smp_obj
      */
     checkSamplesCoverage(options){
         options = _.merge({
             dirPath:null,
             tagQuery:null,
-            getUncovered:true,
-            consoleOutput:true
+            coverageCondition:true,
+            consoleOutput:true,
+            createIndexes:false
         },options);
 
         let _d = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
@@ -394,8 +403,8 @@ class SamplesManager {
         options.console_log = (options.consoleOutput===true?console.log:function(){});
 
         /* Check getUncovered */
-        if(!_.isBoolean(options.getUncovered)) options.getUncovered=true;
-        _d("uncovered ",options.getUncovered,"\n");
+        if(!_.isBoolean(options.coverageCondition)) options.coverageCondition=true;
+        _d("uncovered ",options.coverageCondition,"\n");
 
         /* Check tagQuery */
         let _tagQueries = {};
@@ -438,32 +447,48 @@ class SamplesManager {
         let coverage_array = [];
 
         _ptags.forEach(function(v1,i1,a1){
-            options.console_log("\n    Q#"+(i1+1)+" "+v1.string);
-            options.console_log("  "+_.repeat('-', 100));
 
             let smp_coverage = new Samples();
             smp_coverage.setTags(v1.tag_array);
             coverage_array.push({
-                total:smp_obj.size(),
-                found:0,
+                covered:0,
+                uncovered:0,
                 query:v1.string,
                 samples:smp_coverage
             });
 
             smp_obj.forEach(function(item,i2){
-                if(v1.check_fn(item.n_path)!==options.getUncovered){
-                    options.console_log("    "+(item.path.substring(options.dirPath.length+1)));
+                let is_covered = v1.check_fn(item.n_path);
+                if(is_covered===options.lookingForCoverage){
                     smp_coverage.addItem(item);
-                    coverage_array[coverage_array.length-1].found++;
                 }
+                if(is_covered)  coverage_array[coverage_array.length-1].covered++;
+                else            coverage_array[coverage_array.length-1].uncovered++;
             });
 
-            if(options.progressive && coverage_array[coverage_array.length-1].found>0){
+            if(options.consoleOutput){
+                options.console_log("\n    Q#"+(i1+1)+" "+v1.string+'   [c:'+coverage_array[coverage_array.length-1].covered+', u:'+coverage_array[coverage_array.length-1].uncovered+']');
+                options.console_log("  "+_.repeat('-', 100));
+                smp_coverage.forEach(function(item,index){ options.console_log("    "+(item.path.substring(options.dirPath.length+1))); });
+            }
+
+            if(!options.dirPath && options.createIndexes===true && coverage_array[coverage_array.length-1].uncovered<=0){
+                //reading from config.samplesdir
+                this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
+            }
+
+            if(options.progressive &&
+                ((options.lookingForCoverage && coverage_array[coverage_array.length-1].covered>0)
+                    || (!options.lookingForCoverage && coverage_array[coverage_array.length-1].uncovered>0))
+            ){
                 Utils.EXIT();
             }
 
-            if(options.progressive_keepalive && coverage_array[coverage_array.length-1].found>0){
-                readlinesync.question();
+            if(options.progressive_keepalive &&
+                ((options.lookingForCoverage && coverage_array[coverage_array.length-1].covered>0)
+                    || (!options.lookingForCoverage && coverage_array[coverage_array.length-1].uncovered>0))
+            ){
+                    readlinesync.question();
             }
         });
         return coverage_array;

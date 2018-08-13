@@ -26,6 +26,10 @@ class Samples {
         return this._tags;
     }
 
+    getTagLabel(){
+        return _.join(this._tags,'_');
+    }
+
     setTags(tagsArray){
         this._tags = tagsArray;
     }
