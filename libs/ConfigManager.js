@@ -181,6 +181,15 @@ class ConfigManager {
             this._config['ProjectsDirectory'] = ph.dir+path.sep;
         }
 
+        if(n=="SamplesDirectory"){
+            let ph = path.parse(v);
+            if(!Utils.File.directoryExists(v)){
+                console.log("   The samples directory does not exist: "+v);
+                return;
+            }
+            this._config['SamplesDirectory'] = v;
+        }
+
         if(_outcome.type=='array' && this._config[n].length>0){
             let _ot = this._set(this._config[n][0],v);
             if(_ot.error==true){
