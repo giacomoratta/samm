@@ -167,7 +167,7 @@ class SamplesManager {
             _setSeparateAndFunctions = function(string,tag_array,fn_body){
                 splitFn.push({
                     string:string,
-                    tag_array:[],
+                    tag_array:tag_array,
                     check_fn:Utils.newFunction('f',fn_body)
                 });
             };

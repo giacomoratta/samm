@@ -212,6 +212,7 @@ class ConfigManager {
             if(this._config[n].indexOf(v)<0) this._config[n].push(v);
             return this._config[n];
         }
+
         this._config[n] = v;
         return v;
     }
@@ -258,6 +259,7 @@ class ConfigManager {
             delete this._config['Tags'][values[0]];
         } else if(_.isString(values[1])) {
             this._config['Tags'][values[0]] = values[1];
+            this._config['Tags'] = Utils.sortObjectByKey(this._config['Tags']);
         }
         return true;
     }
