@@ -10,6 +10,7 @@ class Samples {
         this._tags = [];
         this._array = [];
         this._n_array = [];
+        this._origin_path = null;
     }
 
     empty(){
@@ -18,6 +19,14 @@ class Samples {
 
     size(){
         return this._array.length;
+    }
+
+    getOriginPath(){
+        return this._origin_path;
+    }
+
+    setOriginPath(path){
+        this._origin_path = path;
     }
 
     getTags(){

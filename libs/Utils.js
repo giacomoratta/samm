@@ -10,7 +10,7 @@ class Utils {
     }
 
     EXIT(message,data){
-        console.log("\n"+message);
+        if(message) console.log("\n"+message);
         if(data) console.log(data);
         console.log("Process terminated.\n");
         process.exit(0);
@@ -112,6 +112,13 @@ class Utils {
         s = _.trim(s);
         if(s.length<=0) return null;
         return s;
+    }
+
+    searchInObjectArray(array,key,value){
+        for(let i=0; i<array.length; i++){
+            if(array[i][key]==value) return true;
+        }
+        return false;
     }
 }
 
