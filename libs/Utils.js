@@ -25,6 +25,7 @@ class Utils {
             if(a_name>b_name) return 1;
             return 0;
         });
+        return array;
     }
 
 
@@ -41,6 +42,7 @@ class Utils {
                 }
             }
         }
+        return array;
     }
 
     sortParallelFileArrays(array, swap_fn){
@@ -51,6 +53,7 @@ class Utils {
             if(a_name>b_name) return 1;
             return 0;
         },swap_fn);
+        return array;
     }
 
     replaceAll(str, str1, str2, ignore){

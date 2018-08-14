@@ -10,11 +10,9 @@ class Samples {
         this._tags = [];
         this._array = [];
         this._n_array = [];
-
-        this._coll = []; // collection of { path:'', n_path:'' }
     }
 
-    isEmpty(){
+    empty(){
         return !(this._array.length>0);
     }
 
@@ -40,7 +38,7 @@ class Samples {
     }
 
     get(index){
-        return this._coll[index];
+        return this._array[index];
     }
 
     set(sample_path, index){
@@ -55,8 +53,8 @@ class Samples {
 
     getItem(index){
         return {
-            path:this._coll[index],
-            n_path:this._coll[index]
+            path:this._array[index],
+            n_path:this._n_array[index]
         };
     }
 
@@ -88,17 +86,18 @@ class Samples {
     forEach(callback){
         //callback(item,index)
         // ...if return the item object, the data will be modified with its values
-        for(let i=0, ref=null; i<this.size(); i++){
+        for(let i=0, item_ref=null; i<this.size(); i++){
             item_ref = callback(this.getItem(i),i);
             if(item_ref) this.set(item_ref,i);
         }
     }
 
     sort(){
+        let _self = this;
         Utils.sortParallelFileArrays(this._array,function(old_index,new_index){
-            let tmp = this._n_array[old_index];
-            this._n_array[old_index] = this._n_array[new_index];
-            this._n_array[new_index] = tmp;
+            let tmp = _self._n_array[old_index];
+            _self._n_array[old_index] = _self._n_array[new_index];
+            _self._n_array[new_index] = tmp;
         });
     }
 

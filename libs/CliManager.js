@@ -89,7 +89,7 @@ class CliManager {
         }
 
         let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
-        if(!smp_obj_scan){
+        if(smp_obj_scan.empty()){
             console.log("Lookup command: no sample scan found");
             return this._error_code;
         }
@@ -99,7 +99,7 @@ class CliManager {
             console.log("Lookup command: sample search failed");
             return this._error_code;
         }
-        else if(smp_obj.isEmpty()){
+        else if(smp_obj.empty()){
             console.log("Lookup command: no samples found");
             return this._error_code;
         }

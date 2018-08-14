@@ -5,6 +5,9 @@ global.fs = require('fs');
 global.readlinesync = require('readline-sync');
 global.fs_extra = require('fs-extra');
 global.d = console.log;
+global.MPL_Options = {
+    
+};
 
 /* Project Libraries */
 global.Utils = require('./libs/Utils.js');

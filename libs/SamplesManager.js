@@ -29,7 +29,7 @@ class SamplesManager {
      */
     scanSamples(absPath, force, consoleOutput){
         let smp_obj = new Samples();
-        let console_log = (consoleOutput===true?console.log:function(){});
+        let console_log = (consoleOutput!==false?console.log:function(){});
 
         if(!_.isString(absPath)){
             absPath=ConfigMgr.get('SamplesDirectory');
@@ -128,9 +128,9 @@ class SamplesManager {
         if(!smp_obj) return false;
         let abs_index_path=null;
         if(is_custom_index!==true){
-            abs_index_path = path.join(Utils.abspath(),this._filename.samples_index);
+            abs_index_path = path.join(Utils.abspath(),ConfigMgr._filename.samples_index);
         }else{
-            abs_index_path = path.join(Utils.abspath(),this._filename.temp_dir,this._filename.custom_indexes,smp_obj.getTagLabel());
+            abs_index_path = path.join(Utils.abspath(),ConfigMgr._filename.temp_dir,this._filename.custom_indexes,smp_obj.getTagLabel());
         }
         let samples_index = path.resolve(abs_index_path);
         let json_string = smp_obj.toJsonString();
@@ -235,10 +235,13 @@ class SamplesManager {
         let attempts = 5;
         let _MaxOccurrencesSameDirectory = ConfigMgr.get('MaxOccurrencesSameDirectory');
         let _RandomCount = ConfigMgr.get('RandomCount');
+        let smp_obj_random = null;
 
         while(attempts>0){
             smp_obj.init();
             smp_obj.setTags(ptags_obj.array);
+
+            d(smp_obj_scan);
 
             smp_obj_scan.forEach(function(item,index){
                 if(ptags_obj.check_fn(item.n_path)){
@@ -248,12 +251,12 @@ class SamplesManager {
             });
             if(smp_obj.empty()) return smp_obj;
 
-            let smp_obj_random = smp_obj.setRandom(_RandomCount, _MaxOccurrencesSameDirectory);
+            smp_obj_random = smp_obj.getRandom(_RandomCount, _MaxOccurrencesSameDirectory);
             if(smp_obj_random && smp_obj_random.size()>=_RandomCount) break;
             _MaxOccurrencesSameDirectory++;
             attempts--;
         }
-        if(smp_obj_random.empty()) return smp_obj;
+        if(!smp_obj_random || smp_obj_random.empty()) return smp_obj_random;
 
         smp_obj_random.print('   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
         console.log("\n   Performed search: '"+ptags_obj.string+"'");
