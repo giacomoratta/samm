@@ -38,6 +38,7 @@ class Utils_Files {
             overwrite:true,
             errorOnExist:false
         },options);
+        let _self = this;
         let _ret_value = {
             err:null,
             path_from:path_from,
@@ -47,7 +48,7 @@ class Utils_Files {
             fs_extra.copySync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
-            this._console(_ret_value);
+            _self._console(_ret_value);
         }
         return _ret_value;
     }
@@ -57,6 +58,7 @@ class Utils_Files {
             overwrite:true,
             errorOnExist:false
         },options);
+        let _self = this;
         return new Promise(function(resolve,reject){
             let _ret_value = {
                 err:null,
@@ -66,7 +68,7 @@ class Utils_Files {
             fs_extra.copy(path_from, path_to, options, function(err){
                 if(err){
                     _ret_value.err = err;
-                    this._console(_ret_value);
+                    _self._console(_ret_value);
                     return reject(_ret_value);
                 }
                 return resolve(_ret_value);

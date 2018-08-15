@@ -234,8 +234,6 @@ class SamplesManager {
         let ptags_obj = this.processTagString(tagString);
         if(!ptags_obj) return null;
 
-        console.log(" Looking for: '"+ptags_obj.string+"'");
-
         let attempts = 5;
         let _MaxOccurrencesSameDirectory = ConfigMgr.get('MaxOccurrencesSameDirectory');
         let _RandomCount = ConfigMgr.get('RandomCount');
@@ -243,10 +241,6 @@ class SamplesManager {
 
         while(attempts>0){
             smp_obj.init();
-            smp_obj.setTags(ptags_obj.array);
-
-            d(smp_obj_scan);
-
             smp_obj_scan.forEach(function(item,index){
                 if(ptags_obj.check_fn(item.n_path)){
                     //console.log("  ",ConfigMgr._sampleScan[i]);
@@ -261,11 +255,13 @@ class SamplesManager {
             attempts--;
         }
         if(!smp_obj_random || smp_obj_random.empty()) return smp_obj_random;
+        smp_obj_random.setTags(ptags_obj.array);
 
         smp_obj_random.print('   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
         console.log("\n   Performed search: '"+ptags_obj.string+"'");
         console.log(  "   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
-        return smp_obj;
+        //d(smp_obj_random);
+        return smp_obj_random;
     }
 
 
@@ -292,12 +288,7 @@ class SamplesManager {
         if(!smp_obj) return null;
         let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
-        return new Promise(function(res,rej){
-            fs.writeFile(lookup_file, text_to_file, 'utf8',function(err){
-                if(err){ rej(err); return; }
-                res(lookup_file);
-            });
-        });
+        return Utils.File.writeTextFile(lookup_file,text_to_file);
     }
 
 
@@ -374,7 +365,7 @@ class SamplesManager {
 
         return Promise.all(p_array)
             .then(function(data){
-                console.log('   generateSamplesDir - '+p_array.length+' files successfully copied!');
+                console.log('   generateSamplesDir - '+(p_array.length/2)+' files successfully copied!');
                 return data;
             })
             .catch(function(err){

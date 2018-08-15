@@ -38,7 +38,17 @@ class Samples {
     }
 
     setTags(tagsArray){
-        this._tags = tagsArray;
+        if(!_.isArray(tagsArray)) return;
+        let _ta = tagsArray;
+        if(_.isArray(tagsArray[0])){
+            _ta = [];
+            tagsArray.forEach(function(c){
+                c.forEach(function(v){
+                    _ta.push(v);
+                })
+            })
+        };
+        this._tags = _ta;
     }
 
     add(sample_path){

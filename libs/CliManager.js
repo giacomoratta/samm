@@ -43,14 +43,20 @@ class CliManager {
 
 
     C_scan(){
+        let C_scan_options = {
+            force:false //force scan
+        };
+
         if(!this.cli_params.hasOption(ConfigMgr._cli_options.force)){
             if(SamplesMgr.sampleScanFileExists()){
                 console.log("Scan command: the index file already exists. Use -f to force a rescan.");
                 return this._error_code;
             }
+        }else{
+            C_scan_options.force = true;
         }
 
-        let smp_obj = SamplesMgr.scanSamples();
+        let smp_obj = SamplesMgr.scanSamples(null,C_scan_options.force);
         if(!smp_obj){
             console.log("Scan command: job failed");
             return this._error_code;
