@@ -13,11 +13,9 @@ class SamplesManager {
      * @private
      */
     _checkSampleName(path_string){
+        let pp = path.parse(path_string);
         path_string = _.toLower(path_string);
-        if(_.indexOf(ConfigMgr.get('ExtensionExcludedForSamples'),path.extname(' '+path_string))>=0){ //space needed to read 'only-ext' files
-            return false;
-        }
-        return true;
+        return ( _.indexOf( ConfigMgr.get('ExtensionExcludedForSamples') , ((pp.ext.length!=0?pp.ext:pp.name)) )<0 );
     }
 
 
@@ -49,8 +47,14 @@ class SamplesManager {
         this._scanSamples(smp_obj, absPath, {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
-                console_log("  ",path_string);
+                //console_log("  ",path_string);
                 smp_obj.add(path_string);
+            },
+            callback_dir:function(path_string, found_samples, level){
+                if(consoleOutput){
+                    if(level>1) path_string=path.sep+path.parse(path_string).name;
+                    console_log((level>1?+_.repeat(' ',3*level)+'|':'')+_.repeat('-',3*level), path_string,'('+found_samples+' samples)');
+                }
             }
         });
         if(smp_obj.empty()) return null;
@@ -65,11 +69,15 @@ class SamplesManager {
      * @param {object} _options
      * @private
      */
-    _scanSamples(smp_obj, dir_path, _options){
+    _scanSamples(smp_obj, dir_path, _options, _level){
+        _options.maxRec--;
         if(_options.maxRec<=0){
             console.log('scanSamples: max recursions reached');
             return;
         }
+
+        if(!_level) _level=1;
+        let _sc_pre;
 
         let items = fs.readdirSync(dir_path);
         items = Utils.sortFilesArray(items);
@@ -81,7 +89,9 @@ class SamplesManager {
             let fsStat = fs.lstatSync(path_string);
 
             if(fsStat.isDirectory()){
-                this._scanSamples(smp_obj, path_string, _options);
+                _sc_pre = smp_obj.size();
+                this._scanSamples(smp_obj, path_string, _options, _level-1);
+                _options.callback_dir(path_string,smp_obj.size()-_sc_pre,_level);
 
             }else if(fsStat.isFile() && this._checkSampleName(path_string)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
