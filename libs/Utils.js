@@ -9,8 +9,8 @@ class Utils {
         return this._abspath;
     }
 
-    setAbsPath(rel_path){
-        return path.join(this.AbsPath(),rel_path,path.sep);
+    setAbsPath(rel_path, isFile){
+        return path.join(this.AbsPath(),rel_path,(isFile!==true?path.sep:''));
     }
 
     EXIT(message,data){

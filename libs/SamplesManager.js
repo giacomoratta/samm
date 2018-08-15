@@ -294,10 +294,8 @@ class SamplesManager {
      */
     saveLookupToFile(smp_obj){
         if(!smp_obj) return null;
-        let text_to_file = smp_obj.toText();
-        return Utils.File.writeTextFile(ConfigMgr.path('latest_lookup,text_to_file'));
+        return Utils.File.writeTextFile(ConfigMgr.path('latest_lookup'),smp_obj.toJsonString());
     }
-
 
 
     /**
@@ -313,7 +311,7 @@ class SamplesManager {
             return null;
         }
         let smp_obj = new Samples();
-        if(!smp_obj.fromText(file_to_text)) return null;
+        if(!smp_obj.fromJsonString(file_to_text)) return null;
         return smp_obj;
     }
 
@@ -457,6 +455,7 @@ class SamplesManager {
             return null;
         }
 
+        /* Option fixes */
         if(options.stats) {
             options.progressive = options.progressive_keepalive = false;
         }
@@ -473,7 +472,7 @@ class SamplesManager {
         //options.dirPath = path.resolve(smp_obj.getOriginPath());
 
         let coverage_array = [];
-        let uncovered_items = [];
+        let __uncovered_items = {};
 
         _ptags.forEach(function(v1,i1,a1){
 
@@ -489,37 +488,42 @@ class SamplesManager {
             let coverage_item = coverage_array[coverage_array.length-1];
 
             smp_obj.forEach(function(item,i2){
+                if(!__uncovered_items[item.n_path]) __uncovered_items[item.n_path]={ path:item.path, check:true };
+
                 let is_covered = v1.check_fn(item.n_path);
                 if(is_covered===options.lookingForCoverage){
                     smp_coverage.addItem(item);
                 }
                 if(is_covered){
                     coverage_item.covered++;
+                    __uncovered_items[item.n_path].check = false;
                 }
                 else{
                     coverage_item.uncovered++;
-                    if(uncovered_items.indexOf(item.path)<0) uncovered_items.push(item.path);
+                    //if(uncovered_items.indexOf(item.path)<0) uncovered_items.push(item.path);
                 }
             });
 
             if(options.consoleOutput){
-                if(!options.stats && (options.progressive || options.progressive_keepalive)){
+                if((options.progressive || options.progressive_keepalive)){
                     options.console_log("\n");
                     smp_coverage.forEach(function(item,index){ options.console_log("    "+(item.path.substring(options.dirPath.length))); });
                     options.console_log("  "+_.repeat('-', 100));
                 }
 
-                options.console_log(_.padEnd("    Q#"+(i1+1)+" "+v1.string,options._output.max_length_tag_string+12)+
-                                    ' [ c:'+_.padEnd(coverage_item.covered+',',12)+
-                                    ' u:'+_.padEnd(coverage_item.uncovered+',',12)+
-                                    ' coverage:'+_.padEnd(Math.round((coverage_item.covered/(coverage_item.covered+coverage_item.uncovered)*100))+'%',6)+']');
+                options.console_log(_.padEnd(/*"    Q#"+(i1+1)+" "*/"     "+v1.string,options._output.max_length_tag_string+9)+
+                                    ' c:'+_.padEnd(coverage_item.covered,10)+
+                                    ' u:'+_.padEnd(coverage_item.uncovered,10)+
+                                    ' coverage:'+_.padEnd(Math.round((coverage_item.covered/(coverage_item.covered+coverage_item.uncovered)*100))+'%',5));
             }
 
+            /* Save Custom INDEX */
             if(!options.dirPathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
                 //reading from config.samplesdir
                 this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
             }
 
+            /* Progressive */
             if(options.progressive &&
                 ((options.lookingForCoverage && coverage_item.covered>0)
                     || (!options.lookingForCoverage && coverage_item.uncovered>0))
@@ -527,6 +531,7 @@ class SamplesManager {
                 Utils.EXIT();
             }
 
+            /* Progressive and Keep-Alive */
             if(options.progressive_keepalive &&
                 ((options.lookingForCoverage && coverage_item.covered>0)
                     || (!options.lookingForCoverage && coverage_item.uncovered>0))
@@ -534,13 +539,18 @@ class SamplesManager {
                     readlinesync.question();
             }
         });
+        options.console_log("");
 
         if(options.stats){
-            uncovered_items.sort();
-            options.console_log("  Uncovered samples:");
-            uncovered_items.forEach(function(v){
-                options.console_log("    "+v);
+            //uncovered_items.sort();
+            let __uncovered_items_count = 0;
+            Object.keys(__uncovered_items).forEach(function(v){
+                if(__uncovered_items[v].check===false) return;
+                options.console_log("    "+__uncovered_items[v].path);
+                __uncovered_items_count++;
             });
+            if(__uncovered_items_count>0) options.console_log("  Found "+__uncovered_items_count+" uncovered samples.");
+            else options.console_log("  All samples are covered!");
         }
 
         return coverage_array;

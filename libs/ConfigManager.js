@@ -25,12 +25,12 @@ class ConfigManager {
         };
 
         // Check and set paths
-        this._paths.config_file = Utils.setAbsPath(this._paths.config_file);
-        this._paths.config_file_sample = Utils.setAbsPath(this._paths.config_file_sample);
+        this._paths.config_file = Utils.setAbsPath(this._paths.config_file,true);
+        this._paths.config_file_sample = Utils.setAbsPath(this._paths.config_file_sample,true);
         this._paths.temp_dir = Utils.setAbsPath(this._paths.temp_dir);
         this._paths.custom_indexes = Utils.setAbsPath(this._paths.custom_indexes);
-        this._paths.latest_lookup = Utils.setAbsPath(this._paths.latest_lookup);
-        this._paths.samples_index = Utils.setAbsPath(this._paths.samples_index);
+        this._paths.latest_lookup = Utils.setAbsPath(this._paths.latest_lookup,true);
+        this._paths.samples_index = Utils.setAbsPath(this._paths.samples_index,true);
 
         // Open config.json
         this._config = this._openConfigJson();
@@ -64,11 +64,11 @@ class ConfigManager {
     }
 
     printStatus(){
-        console.log("\nCONFIGURATION Status");
+        console.log("\n CONFIGURATION Status");
         let _self = this;
-        console.log("\n# Work directories:");
+        console.log("\n # Work directories");
         Object.keys(this._paths).forEach(function(v){
-            console.log("    "+v+" : "+_self._paths[v]);
+            console.log("   "+v+" : "+_self._paths[v]);
         });
         console.log();
     }

@@ -53,7 +53,7 @@ class Samples {
 
     add(sample_path){
         this._array.push(sample_path);
-        this._n_array.push(_.toLower(sample_path));
+        this._n_array.push(_.kebabCase(sample_path));
     }
 
     get(index){
@@ -121,36 +121,12 @@ class Samples {
     }
 
 
-    toTextAll(){
-        let text_to_file = _.join(this._array,"\n");
-        text_to_file = _.join(this._tags,", ")+"\n\n"+text_to_file;
-        return text_to_file;
-    }
-
-
-    toText(){
-        let text_to_file = _.join(this._array,"\n");
-        text_to_file = _.join(this._tags,", ")+"\n\n"+text_to_file;
-        return text_to_file;
-    }
-
-
-    fromText(text){
-        this.init();
-        if(!_.isString(text)) return false;
-        let file_rows = _.split(_.trim(text),"\n");
-        if(!_.isArray(file_rows) || file_rows.length<5) return false;
-
-        this._tags = _.split(file_rows[0],',');
-        for(let i=2; i<file_rows.length; i++){
-            this.add(file_rows[i]);
-        }
-        return true;
-    }
-
-
     toJsonString(){
-        let json_string = JSON.stringify({ collection: this._array });
+        let json_string = JSON.stringify({
+            tags: this._tags,
+            origin_path: this._origin_path,
+            collection: this._array
+        });
         return json_string;
     }
 
@@ -165,6 +141,8 @@ class Samples {
             json_obj.collection.forEach(function(v){
                 _self.add(v);
             });
+            _self._tags = json_obj.tags;
+            _self._origin_path = json_obj.origin_path;
         }catch(e){
             console.log(e);
             return false;
