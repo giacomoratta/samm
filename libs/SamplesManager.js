@@ -77,16 +77,13 @@ class SamplesManager {
         }
 
         if(!_level) _level=1;
-        let _sc_pre;
+        let _sc_pre, items;
 
-        let items = fs.readdirSync(dir_path);
-        items = Utils.sortFilesArray(items);
-
-        for (let i=0; i<items.length; i++) {
-            //console.log(' >> ',items[i]);
-
-            let path_string = path.join(dir_path,items[i]);
-            let fsStat = fs.lstatSync(path_string);
+        items = Utils.File.readDirectorySync(dir_path, function(a){
+            Utils.sortFilesArray(a);
+        },function(v,i,a){
+            let path_string = path.join(dir_path,v);
+            let fsStat = Utils.File.getPathStatsSync(path_string);
 
             if(fsStat.isDirectory()){
                 _sc_pre = smp_obj.size();
@@ -97,6 +94,10 @@ class SamplesManager {
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
                 _options.callback(path_string);
             }
+        });
+
+        if(!items){
+            console.log('scanSamples: cannot read path '+dir_path);
         }
     }
 
@@ -116,13 +117,8 @@ class SamplesManager {
      * @returns { Samples | null }
      */
     loadSampleScanFromFile(){
-        let json_string = '';
-        try{
-            json_string = fs.readFileSync(ConfigMgr.path('samples_index'),'utf8');
-        }catch(e){
-            //console.log(e);
-            return null;
-        }
+        let json_string = Utils.readFileSync(ConfigMgr.path('samples_index'));
+        if(!json_string) return null;
         let smp_obj = new Samples();
         if(!smp_obj.fromJsonString(json_string)) return null;
         return smp_obj;
@@ -146,12 +142,7 @@ class SamplesManager {
         let samples_index = path.resolve(abs_index_path);
         let json_string = smp_obj.toJsonString();
         if(!json_string) return false;
-        try{
-            fs.writeFileSync(abs_index_path, json_string, 'utf8');
-        }catch(e){
-            console.log(e);
-            return false;
-        }
+        if(!Utils.File.writeFileSync(abs_index_path, json_string))  return false;
         return true;
     }
 
@@ -303,13 +294,8 @@ class SamplesManager {
      * @returns { {Samples} | null }
      */
     openLookupFile(){
-        let file_to_text = "";
-        try{
-            file_to_text = fs.readFileSync(ConfigMgr.path('latest_lookup'), 'utf8');
-        }catch(e){
-            //console.log(e);
-            return null;
-        }
+        let file_to_text = Utils.File.readFileSync(ConfigMgr.path('latest_lookup'));
+        if(!file_to_text) return null;
         let smp_obj = new Samples();
         if(!smp_obj.fromJsonString(file_to_text)) return null;
         return smp_obj;
@@ -344,8 +330,8 @@ class SamplesManager {
         let p_array = [];
         let _links_dir = path.join(options['_smppath'],'_links');
 
-        fs_extra.ensureDirSync(options['_smppath']);
-        fs_extra.ensureDirSync(_links_dir);
+        Utils.File.ensureDirSync(options['_smppath']);
+        Utils.File.ensureDirSync(_links_dir);
 
         console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){

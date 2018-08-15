@@ -39,8 +39,8 @@ class ConfigManager {
         }
 
         // Create directories
-        fs_extra.ensureDirSync(this.path('temp_dir'));
-        fs_extra.ensureDirSync(this.path('custom_indexes'));
+        Utils.File.ensureDirSync(this.path('temp_dir'));
+        Utils.File.ensureDirSync(this.path('custom_indexes'));
     }
 
     _openConfigJson(){

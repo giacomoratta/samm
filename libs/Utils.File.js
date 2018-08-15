@@ -33,6 +33,55 @@ class Utils_Files {
         return true;
     }
 
+
+    ensureDirSync(path_string){
+        fs_extra.ensureDirSync(path_string);
+    }
+
+
+    readFileSync(path_string){
+        try{
+            return fs.readFileSync(path_string,'utf8');
+        }catch(e){
+            console.log(e);
+            return false;
+        }
+    }
+
+
+    writeFileSync(path_string, content_string){
+        try{
+            fs.writeFileSync(path_string, content_string, 'utf8');
+            return true;
+        }catch(e){
+            console.log(e);
+            return false;
+        }
+    }
+
+
+    readDirectorySync(path_string,preFn,callback){
+        if(!callback) callback=function(){};
+        if(!preFn) preFn=function(){};
+        let items = null;
+        try{
+            let items = fs.readdirSync(path_string);
+        }catch(e){
+            return null;
+        }
+        if(!items) return null;
+        preFn(items);
+        for (let i=0; i<items.length; i++) {
+            callback(item[i],i,items);
+        }
+        return items;
+    }
+
+    getPathStatsSync(path_string){
+        // usage: isDirectory, isFile
+        return fs.lstatSync(path_string);
+    }
+
     copyFileSync(path_from, path_to, options){
         options = _.merge({
             overwrite:true,
