@@ -5,8 +5,12 @@ class Utils {
         this.File = require('./Utils.File');
     }
 
-    abspath(){
+    AbsPath(){
         return this._abspath;
+    }
+
+    setAbsPath(rel_path){
+        return path.join(this.AbsPath(),rel_path,path.sep);
     }
 
     EXIT(message,data){

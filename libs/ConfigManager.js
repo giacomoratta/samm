@@ -2,8 +2,8 @@ class ConfigManager {
 
     constructor(){
         this._sampleScan = null;
-        this._filename = {
-            config: 'config.json',
+        this._paths = {
+            config_file: 'config.json',
             config_sample: 'config.sample.json',
             temp_dir: 'temp/',
             custom_indexes: 'c_indexes/',
@@ -24,31 +24,43 @@ class ConfigManager {
             force:'-f'
         };
 
+        // Check and set paths
+        this._paths.config_file = Utils.setAbsPath(this._paths.config_file);
+        this._paths.config_file_sample = Utils.setAbsPath(this._paths.config_file_sample);
+        this._paths.temp_dir = Utils.setAbsPath(this._paths.temp_dir);
+        this._paths.custom_indexes = Utils.setAbsPath(this._paths.custom_indexes);
+        this._paths.latest_lookup = Utils.setAbsPath(this._paths.latest_lookup);
+        this._paths.samples_index = Utils.setAbsPath(this._paths.samples_index);
+
         // Open config.json
         this._config = this._openConfigJson();
         if(!this._config){
-            Utils.EXIT('Cannot create or read the configuration file '+this._filename.config);
+            Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
         }
 
         // Create directories
-        fs_extra.ensureDirSync(path.join(Utils.abspath(),this._filename.temp_dir));
-        fs_extra.ensureDirSync(path.join(Utils.abspath(),this._filename.temp_dir,this._filename.custom_indexes));
+        fs_extra.ensureDirSync(this.path('temp_dir'));
+        fs_extra.ensureDirSync(this.path('custom_indexes'));
     }
 
     _openConfigJson(){
         let _config = null;
         try{
-            _config = require('../'+this._filename.config);
+            _config = require('../config.json');
             return _config;
         }catch(e){
-            Utils.File.copyFileSync(Utils.abspath()+this._filename.config_sample,Utils.mainPath()+this._filename.config,{overwrite:false});
+            Utils.File.copyFileSync(this._path.config_file_sample,this._path.config_file,{overwrite:false});
         }
         try{
-            _config = require('../'+this._filename.config);
+            _config = require('../config');
         }catch(e){
             return null;
         }
         return _config;
+    }
+
+    path(name){
+        return this._paths(name);
     }
 
     printHelp(){
@@ -218,10 +230,9 @@ class ConfigManager {
     }
 
     save(){
-        let file_path = path.resolve(this._filename.config);
         let config_text = JSON.stringify(this._config, null, '\t');
         try{
-            fs.writeFileSync(file_path, config_text, 'utf8');
+            fs.writeFileSync(this._path.config_file, config_text, 'utf8');
         }catch(e){
             console.log(e);
             return false;

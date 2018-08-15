@@ -106,8 +106,7 @@ class SamplesManager {
      * @returns { boolean }
      */
     sampleScanFileExists(){
-        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
-        return Utils.File.fileExists(samples_index);
+        return Utils.File.fileExists(ConfigMgr.path('samples_index'));
     }
 
 
@@ -117,10 +116,9 @@ class SamplesManager {
      * @returns { Samples | null }
      */
     loadSampleScanFromFile(){
-        let samples_index = path.resolve('./'+ConfigMgr._filename.samples_index);
         let json_string = '';
         try{
-            json_string = fs.readFileSync(samples_index,'utf8');
+            json_string = fs.readFileSync(ConfigMgr.path('samples_index'),'utf8');
         }catch(e){
             //console.log(e);
             return null;
@@ -141,9 +139,9 @@ class SamplesManager {
         if(!smp_obj) return false;
         let abs_index_path=null;
         if(is_custom_index!==true){
-            abs_index_path = path.join(Utils.abspath(),ConfigMgr._filename.samples_index);
+            abs_index_path = ConfigMgr.path('samples_index');
         }else{
-            abs_index_path = path.join(Utils.abspath(),ConfigMgr._filename.temp_dir,this._filename.custom_indexes,smp_obj.getTagLabel());
+            abs_index_path = path.join(ConfigMgr.path('custom_indexes,smp_obj.getTagLabel()'));
         }
         let samples_index = path.resolve(abs_index_path);
         let json_string = smp_obj.toJsonString();
@@ -296,9 +294,8 @@ class SamplesManager {
      */
     saveLookupToFile(smp_obj){
         if(!smp_obj) return null;
-        let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let text_to_file = smp_obj.toText();
-        return Utils.File.writeTextFile(lookup_file,text_to_file);
+        return Utils.File.writeTextFile(ConfigMgr.path('latest_lookup,text_to_file'));
     }
 
 
@@ -308,10 +305,9 @@ class SamplesManager {
      * @returns { {Samples} | null }
      */
     openLookupFile(){
-        let lookup_file = path.resolve('./'+ConfigMgr._filename.latest_lookup);
         let file_to_text = "";
         try{
-            file_to_text = fs.readFileSync(lookup_file, 'utf8');
+            file_to_text = fs.readFileSync(ConfigMgr.path('latest_lookup'), 'utf8');
         }catch(e){
             //console.log(e);
             return null;
