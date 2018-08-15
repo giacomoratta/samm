@@ -4,7 +4,7 @@ class ConfigManager {
         this._sampleScan = null;
         this._paths = {
             config_file: 'config.json',
-            config_sample: 'config.sample.json',
+            config_file_sample: 'config.sample.json',
             temp_dir: 'temp/',
             custom_indexes: 'c_indexes/',
             latest_lookup: 'temp/latest_lookup',
@@ -60,7 +60,17 @@ class ConfigManager {
     }
 
     path(name){
-        return this._paths(name);
+        return this._paths[name];
+    }
+
+    printStatus(){
+        console.log("\nCONFIGURATION Status");
+        let _self = this;
+        console.log("\n# Work directories:");
+        Object.keys(this._paths).forEach(function(v){
+            console.log("    "+v+" : "+_self._paths[v]);
+        });
+        console.log();
     }
 
     printHelp(){

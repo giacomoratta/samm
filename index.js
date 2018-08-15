@@ -18,6 +18,7 @@ global.SamplesMgr = require('./libs/SamplesManager.js');
 /* Project logic & interface */
 let CliParams = CliMgr.processParams();
 if(CliParams.isError()){
+    ConfigMgr.printStatus();
     ConfigMgr.printHelp();
     Utils.EXIT("Invalid parameters");
 }
