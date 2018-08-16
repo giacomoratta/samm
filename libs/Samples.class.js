@@ -152,11 +152,11 @@ class Samples {
 
 
     getRandom(count,max_occur){
-        let local_path = path;
+        let local_path = path; // TODO:remove
         if(this._array.length>0 && this._array[0].indexOf('\\')>0) local_path=path.win32; //TODO:remove
 
         let _sameDirectoryMaxOccurs = function(f,o_obj,max_o){
-            let f_path = local_path.win32.dirname(f); //TODO:remove 'win32.'
+            let f_path = local_path.dirname(f); //TODO:replace with > let f_path = Utils.File.pathDirname
             if(!o_obj[f_path]) o_obj[f_path]=0;
             else if(o_obj[f_path]>=max_o) return true;
             o_obj[f_path]++;

@@ -13,7 +13,7 @@ class SamplesManager {
      * @private
      */
     _checkSampleName(path_string){
-        let pp = path.parse(path_string);
+        let pp = Utils.File.pathParse(path_string);
         path_string = _.toLower(path_string);
         return ( _.indexOf( ConfigMgr.get('ExtensionExcludedForSamples') , ((pp.ext.length!=0?pp.ext:pp.name)) )<0 );
     }
@@ -52,7 +52,7 @@ class SamplesManager {
             },
             callback_dir:function(path_string, found_samples, level){
                 if(consoleOutput){
-                    if(level>1) path_string=path.sep+path.parse(path_string).name;
+                    if(level>1) path_string=Utils.File.pathSeparator+Utils.File.pathParse(path_string).name;
                     console_log((level>1?+_.repeat(' ',3*level)+'|':'')+_.repeat('-',3*level), path_string,'('+found_samples+' samples)');
                 }
             }
@@ -82,7 +82,7 @@ class SamplesManager {
         items = Utils.File.readDirectorySync(dir_path, function(a){
             Utils.sortFilesArray(a);
         },function(v,i,a){
-            let path_string = path.join(dir_path,v);
+            let path_string = Utils.File.pathJoin(dir_path,v);
             let fsStat = Utils.File.getPathStatsSync(path_string);
 
             if(fsStat.isDirectory()){
@@ -137,9 +137,9 @@ class SamplesManager {
         if(is_custom_index!==true){
             abs_index_path = ConfigMgr.path('samples_index');
         }else{
-            abs_index_path = path.join(ConfigMgr.path('custom_indexes,smp_obj.getTagLabel()'));
+            abs_index_path = Utils.File.pathJoin(ConfigMgr.path('custom_indexes,smp_obj.getTagLabel()'));
         }
-        let samples_index = path.resolve(abs_index_path);
+        let samples_index = Utils.File.pathResolve(abs_index_path);
         let json_string = smp_obj.toJsonString();
         if(!json_string) return false;
         if(!Utils.File.writeFileSync(abs_index_path, json_string))  return false;
@@ -312,7 +312,6 @@ class SamplesManager {
      * @returns { Promise{array} | null }
      */
     generateSamplesDir(smp_obj,options){
-        let _path = path;
         if(!_.isObject(options)) options={
             dirname:null,   //custom name
             forcedir:false, //force overwrite
@@ -320,7 +319,7 @@ class SamplesManager {
         };
 
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.getTags(),0,2),'_');//.substring(0,20);
-        options['_smppath'] = path.join(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
+        options['_smppath'] = Utils.File.pathJoin(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
             options['_smppath'] = Utils.File.checkAndSetDirectoryName(options['_smppath']);
         }
@@ -328,18 +327,18 @@ class SamplesManager {
         if(smp_obj.empty()) return null;
 
         let p_array = [];
-        let _links_dir = path.join(options['_smppath'],'_links');
+        let _links_dir = Utils.File.pathJoin(options['_smppath'],'_links');
 
         Utils.File.ensureDirSync(options['_smppath']);
         Utils.File.ensureDirSync(_links_dir);
 
         console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
-            let f_name = path.basename(item.path);
-            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),_path.sep,'___');
+            let f_name = Utils.File.pathBasename(item.path);
+            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
-            p_array.push(Utils.File.copyFile( item.path, path.join(options['_smppath'] ,f_name) ).then(function(data){
+            p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options['_smppath'] ,f_name) ).then(function(data){
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
@@ -347,7 +346,7 @@ class SamplesManager {
             }));
 
             /* Create txt link file */
-            p_array.push(Utils.File.writeTextFile(path.join(_links_dir ,link_file_name), item.path /* text */).catch(function(data){
+            p_array.push(Utils.File.writeTextFile(Utils.File.pathJoin(_links_dir ,link_file_name), item.path /* text */).catch(function(data){
                 console.log('   generateSamplesDir - link file copy failed '+data.path_to);
                 console.error(data.err);
             }));
@@ -455,7 +454,7 @@ class SamplesManager {
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
         options.dirPath = smp_obj.getOriginPath();
-        //options.dirPath = path.resolve(smp_obj.getOriginPath());
+        //options.dirPath = Utils.File.pathResolve(smp_obj.getOriginPath());
 
         let coverage_array = [];
         let __uncovered_items = {};

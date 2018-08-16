@@ -1,9 +1,30 @@
+const fs = require('fs');
+const fs_extra = require('fs-extra');
 
 class Utils_Files {
 
     constructor(){
         this._console = console.log;
+        this._fs = fs;
+        this._fs_extra = fs_extra;
         //this._console = function(){};
+
+        this.pathBasename = path.basename;
+        this.pathDirname = path.dirname;
+        this.pathParse = path.parse;
+        this.pathJoin = path.join;
+        this.pathResolve = path.resolve;
+        this.pathSeparator = path.sep;
+
+        this._abspath = this.pathJoin(process.cwd(),this.pathSeparator);
+    }
+
+    AbsPath(){
+        return this._abspath;
+    }
+
+    setAbsPath(rel_path, isFile){
+        return Utils.File.pathJoin(this.AbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
     checkAndSetDirectoryName(path_string){
@@ -24,7 +45,7 @@ class Utils_Files {
     checkAndSetPath(path_string,callback){
         if(!_.isString(path_string)) return null;
         if(!fs.existsSync(path_string)) return null;
-        path_string = path.resolve(path_string)+path.sep;
+        path_string = Utils.File.pathResolve(path_string)+Utils.File.pathSeparator;
         if(callback) callback(path_string);
         return path_string;
     }

@@ -1,13 +1,16 @@
 class CliParams {
 
     constructor(values){
-        if(!values) values=process.argv;
+        if(!values){
+            values=process.argv;
+            values = _.slice(values,2);
+        }
         this._error = true;
         this.command = '';
         this._argv =  [];
         this.values = [];
         this.options = [];
-        if(!this.init(_.slice(values,2))) return;
+        if(!this.init(values)) return;
         this._error = false;
     }
 

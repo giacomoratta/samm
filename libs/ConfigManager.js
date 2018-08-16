@@ -26,12 +26,12 @@ class ConfigManager {
         let _self=this;
 
         // Check and set paths
-        this._paths.config_file = Utils.setAbsPath(this._paths.config_file,true);
-        this._paths.config_file_sample = Utils.setAbsPath(this._paths.config_file_sample,true);
-        this._paths.temp_dir = Utils.setAbsPath(this._paths.temp_dir);
-        this._paths.custom_indexes = Utils.setAbsPath(this._paths.custom_indexes);
-        this._paths.latest_lookup = Utils.setAbsPath(this._paths.latest_lookup,true);
-        this._paths.samples_index = Utils.setAbsPath(this._paths.samples_index,true);
+        this._paths.config_file = Utils.File.setAbsPath(this._paths.config_file,true);
+        this._paths.config_file_sample = Utils.File.setAbsPath(this._paths.config_file_sample,true);
+        this._paths.temp_dir = Utils.File.setAbsPath(this._paths.temp_dir);
+        this._paths.custom_indexes = Utils.File.setAbsPath(this._paths.custom_indexes);
+        this._paths.latest_lookup = Utils.File.setAbsPath(this._paths.latest_lookup,true);
+        this._paths.samples_index = Utils.File.setAbsPath(this._paths.samples_index,true);
 
         // Open config.json
         this._config = this._openConfigJson();
@@ -202,17 +202,17 @@ class ConfigManager {
         if(n=="Project"){
             let proj_dir_ck = null;
             let proj_dir = this._config['ProjectsDirectory'];
-            let ph = path.parse(v);
+            let ph = Utils.File.pathParse(v);
             v = ph.base || ph.name;
             if(ph.dir.length>0) proj_dir = ph.dir;
 
-            proj_dir_ck = Utils.checkAndSetPath(proj_dir);
+            proj_dir_ck = Utils.File.checkAndSetPath(proj_dir);
             if(!proj_dir_ck){
                 console.log("   The projects directory does not exist: "+proj_dir);
                 return;
             }
 
-            let proj_dir_ck = Utils.checkAndSetPath(proj_dir+v);
+            let proj_dir_ck = Utils.File.checkAndSetPath(proj_dir+v);
             if(!proj_dir_ck){
                 console.log("   The project directory does not exist: "+proj_dir+v);
                 return;
@@ -222,8 +222,8 @@ class ConfigManager {
         }
 
         if(n=="SamplesDirectory"){
-            let ph = path.parse(v);
-            v = Utils.checkAndSetPath(v);
+            let ph = Utils.File.pathParse(v);
+            v = Utils.File.checkAndSetPath(v);
             if(!v){
                 console.log("   The samples directory does not exist: "+v);
                 return;
@@ -261,7 +261,7 @@ class ConfigManager {
     save(){
         let config_text = JSON.stringify(this._config, null, '\t');
         try{
-            fs.writeFileSync(this._path.config_file, config_text, 'utf8');
+            Utils.File.writeFileSync(this._path.config_file, config_text);
         }catch(e){
             console.log(e);
             return false;

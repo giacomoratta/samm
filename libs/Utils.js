@@ -1,16 +1,7 @@
 class Utils {
 
     constructor(){
-        this._abspath = process.cwd()+path.sep;
         this.File = require('./Utils.File');
-    }
-
-    AbsPath(){
-        return this._abspath;
-    }
-
-    setAbsPath(rel_path, isFile){
-        return path.join(this.AbsPath(),rel_path,(isFile!==true?path.sep:''));
     }
 
     EXIT(message,data){
