@@ -1,3 +1,4 @@
+const path = require('path');
 const fs = require('fs');
 const fs_extra = require('fs-extra');
 
@@ -5,6 +6,7 @@ class Utils_Files {
 
     constructor(){
         this._console = console.log;
+        this._path = path;
         this._fs = fs;
         this._fs_extra = fs_extra;
         //this._console = function(){};

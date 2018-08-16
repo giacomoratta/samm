@@ -1,6 +1,5 @@
 /* Standard Libraries */
 global._ =  require('lodash');
-global.path = require('path');
 global.readlinesync = require('readline-sync');
 global.d = console.log;
 global.MPL_Options = {
