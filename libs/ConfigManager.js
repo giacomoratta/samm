@@ -23,6 +23,7 @@ class ConfigManager {
             progressive_keepalive:'-pk',
             force:'-f'
         };
+        let _self=this;
 
         // Check and set paths
         this._paths.config_file = Utils.setAbsPath(this._paths.config_file,true);
@@ -37,6 +38,10 @@ class ConfigManager {
         if(!this._config){
             Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
         }
+
+        // Check and set paths [2]
+        Utils.File.checkAndSetPath(this._config.SamplesDirectory,function(p){ _self._config.SamplesDirectory=p; });
+        Utils.File.checkAndSetPath(this._config.ProjectsDirectory,function(p){ _self._config.ProjectsDirectory=p; });
 
         // Create directories
         Utils.File.ensureDirSync(this.path('temp_dir'));
@@ -64,12 +69,15 @@ class ConfigManager {
     }
 
     printStatus(){
-        console.log("\n CONFIGURATION Status");
+        console.log("\n  CONFIGURATION Status");
         let _self = this;
-        console.log("\n # Work directories");
+        console.log("\n  # Work directories");
         Object.keys(this._paths).forEach(function(v){
-            console.log("   "+v+" : "+_self._paths[v]);
+            console.log("    "+v+" : "+_self._paths[v]);
         });
+        console.log("    ProjectsDirectory : "+this._config.ProjectsDirectory);
+        console.log("    SamplesDirectory : "+this._config.SamplesDirectory);
+
         console.log();
     }
 
@@ -192,24 +200,35 @@ class ConfigManager {
         let v = _outcome.value;
 
         if(n=="Project"){
+            let proj_dir_ck = null;
+            let proj_dir = this._config['ProjectsDirectory'];
             let ph = path.parse(v);
             v = ph.base || ph.name;
-            let proj_dir = this._config['ProjectsDirectory'];
-            if(_.isString(ph.dir) && ph.dir.length>0) proj_dir=ph.dir+path.sep;
-            if(!Utils.File.directoryExists(proj_dir+v)){
+            if(ph.dir.length>0) proj_dir = ph.dir;
+
+            proj_dir_ck = Utils.checkAndSetPath(proj_dir);
+            if(!proj_dir_ck){
+                console.log("   The projects directory does not exist: "+proj_dir);
+                return;
+            }
+
+            let proj_dir_ck = Utils.checkAndSetPath(proj_dir+v);
+            if(!proj_dir_ck){
                 console.log("   The project directory does not exist: "+proj_dir+v);
                 return;
             }
-            this._config['ProjectsDirectory'] = ph.dir+path.sep;
+
+            this._config.ProjectsDirectory = proj_dir;
         }
 
         if(n=="SamplesDirectory"){
             let ph = path.parse(v);
-            if(!Utils.File.directoryExists(v)){
+            v = Utils.checkAndSetPath(v);
+            if(!v){
                 console.log("   The samples directory does not exist: "+v);
                 return;
             }
-            this._config['SamplesDirectory'] = v;
+            this._config.SamplesDirectory = v;
         }
 
         if(_outcome.type=='array' && this._config[n].length>0){

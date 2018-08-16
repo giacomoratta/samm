@@ -21,6 +21,14 @@ class Utils_Files {
         return null;
     }
 
+    checkAndSetPath(path_string,callback){
+        if(!_.isString(path_string)) return null;
+        if(!fs.existsSync(path_string)) return null;
+        path_string = path.resolve(path_string)+path.sep;
+        if(callback) callback(path_string);
+        return path_string;
+    }
+
     fileExists(path_string){
         if(!_.isString(path_string)) return false;
         if(!fs.existsSync(path_string)) return false;

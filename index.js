@@ -6,7 +6,7 @@ global.readlinesync = require('readline-sync');
 global.fs_extra = require('fs-extra');
 global.d = console.log;
 global.MPL_Options = {
-    
+
 };
 
 /* Project Libraries */
@@ -18,7 +18,6 @@ global.SamplesMgr = require('./libs/SamplesManager.js');
 /* Project logic & interface */
 let CliParams = CliMgr.processParams();
 if(CliParams.isError()){
-    ConfigMgr.printStatus();
     ConfigMgr.printHelp();
     Utils.EXIT("Invalid parameters");
 }
@@ -33,7 +32,7 @@ if(CliParams.commandIs('lookup')){
     CliMgr.C_set();
 
 } else if(CliParams.commandIs('config')){
-    ConfigMgr.printHelp();
+    ConfigMgr.printStatus();
     ConfigMgr.print();
 
 } else if(CliParams.commandIs('coverage')){
