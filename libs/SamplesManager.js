@@ -521,7 +521,7 @@ class SamplesManager {
                 ((options.lookingForCoverage && coverage_item.covered>0)
                     || (!options.lookingForCoverage && coverage_item.uncovered>0))
             ){
-                    readlinesync.question();
+                CliMgr.waitForEnter();
             }
         });
         options.console_log("");

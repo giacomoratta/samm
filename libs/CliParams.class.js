@@ -1,79 +1,80 @@
+const _inc = {};
+_inc.stringArgv = require('string-argv');
+_inc.minimist = require('minimist');
+
 class CliParams {
 
     constructor(values){
-        if(!values){
-            values=process.argv;
-            values = _.slice(values,2);
-        }
-        this._error = true;
-        this.command = '';
-        this._argv =  [];
-        this.values = [];
-        this.options = [];
-        if(!this.init(values)) return;
-        this._error = false;
+        this.init(values);
     }
 
     isError(){
         return this._error;
     }
 
-    init(values){
-        if(!_.isArray(values) || values.length<=0) return false;
-        let _this=this;
-        this.command = '';
-        this._argv =  values;
-        this.values = [];
-        this.options = [];
-        this.options_kv = {};
-        values.forEach(function(v){
-            v = _.trim(v);
-            if(_.startsWith(v,'-')){
-                let _split = v.split('=');
-                if(_split.length>1){
-                    _this.options.push(_split[0]);
-                    _this.options_kv[_split[0]]=_.join(_.slice(_split,1));
-                }else{
-                    _this.options.push(v);
-                }
-            }
-            else _this.values.push(v);
-        });
-        this.command = this.values[0];
-        this.values = _.slice(this.values,1);
-        return true;
+    parseParameters(values){
+        if(_.isString(values)) {
+            values = Utils.replaceAll(values,'"','');
+            return _inc.minimist(_incstringArgv(values));
+        }
+        if(_.isArray(values)) {
+            return _inc.minimist(values);
+        }
+        if(!values){
+            values=process.argv;
+            values = _.slice(values,2);
+            return _inc.minimist(values);
+        }
     }
+
+    init(values){
+        this._error = true;
+        this.command = null;
+        this.params =  { _:[] };
+
+        let p_values = this.parseParameters(values);
+        if(!_.isObject(p_values)) return;
+
+        this.command = (p_values._.length>0 ? p_values._[0] : null);
+        p_values._   = (p_values._.length>0 ? p_values._[0] : null);
+        this.options_count = Math.max(Object.keys(p_values)-1,0);
+        this.params = p_values;
+        this._error = false;
+    }
+
 
     commandIs(c){
         return (c==this.command);
     }
 
+
     hasValues(c){
-        return (this.values.length>0);
+        return (this.params._.length>0);
     }
 
-    hasOptions(c){
-        return (this.options.length>0);
+    hasOptions(){
+        return (this.options_count);
     }
 
     hasOption(o){
-        return (_.indexOf(this.options,o)>=0 || _.indexOf(this.options,'-'+o)>=0);
+        o = _.lowerCase(o);
+        return (!_.isNil(this.params[o]));
     }
 
-    getOptionValue(o){
-        if(_.indexOf(this.options,o)>=0) return this.options_kv[o];
-        if(_.indexOf(this.options,'-'+o)>=0) return this.options_kv['-'+o];
-        return null;
-    }
 
     get(i){
-        if(!_.isNil(this.values[i])) return this.values[i];
+        if(!_.isNil(this.params._[i])) return this.params._[i];
         return null;
     }
 
     getValues(start,end){
-        if(_.isNil(start) && _.isNil(end)) return this.values;
-        return _.slice(this.values,start,end);
+        if(_.isNil(start) && _.isNil(end)) return this.params._;
+        return _.slice(this.params._,start,end);
+    }
+
+    getOptionValue(o){
+        if(!_.isNil(this.params[o])) return this.params[o];
+        return null;
     }
 }
 

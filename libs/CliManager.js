@@ -1,4 +1,5 @@
 const CliParams = require('./CliParams.class.js');
+const scanf = require('scanf');
 
 class CliManager {
 
@@ -11,6 +12,15 @@ class CliManager {
     processParams(cli_values){
         this.cli_params = new CliParams(cli_values);
         return this.cli_params;
+    }
+
+
+    readLine(){
+        scanf('%S');
+    }
+
+    waitForEnter(){
+        scanf('%s');
     }
 
 
