@@ -84,7 +84,7 @@ class CliManager {
         let tagString=null;
 
         if(this.cli_params.hasOption(ConfigMgr._cli_options.tag_label)){
-            tagString= this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_label);
+            tagString= this.cli_params.getOption(ConfigMgr._cli_options.tag_label);
             if(!tagString){
                 UI.print("Lookup command: empty tag name after option "+ConfigMgr._cli_options.tag_label);
                 return this._error_code;
@@ -157,7 +157,7 @@ class CliManager {
             return this._error_code;
         }
 
-        C_save_options.dirname = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_name);
+        C_save_options.dirname = this.cli_params.getOption(ConfigMgr._cli_options.directory_name);
         if(this.cli_params.hasOption(ConfigMgr._cli_options.directory_name) && !C_save_options.dirname){
             UI.print("Save command: directory name missing");
             return this._error_code;
@@ -186,7 +186,7 @@ class CliManager {
             progressive_keepalive:false
         };
 
-        C_coverage_options.dirPath = this.cli_params.getOptionValue(ConfigMgr._cli_options.directory_path);
+        C_coverage_options.dirPath = this.cli_params.getOption(ConfigMgr._cli_options.directory_path);
         if(!C_coverage_options.dirPath){
             if(!SamplesMgr.sampleScanFileExists()){
                 UI.print("Coverage command: the index file does not exist.\n" +
@@ -195,7 +195,7 @@ class CliManager {
             }
         }
 
-        C_coverage_options.tagQuery = this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_query);
+        C_coverage_options.tagQuery = this.cli_params.getOption(ConfigMgr._cli_options.tag_query);
         if(!C_coverage_options.tagQuery){
             if(!ConfigMgr.get('Tags')){
                 UI.print("Coverage command: no configured tags found.\n" +
@@ -204,7 +204,7 @@ class CliManager {
             }
         }
 
-        if(this.cli_params.getOptionValue(ConfigMgr._cli_options.selection)==='covered') C_coverage_options.lookingForCoverage=true;
+        if(this.cli_params.getOption(ConfigMgr._cli_options.selection)==='covered') C_coverage_options.lookingForCoverage=true;
         else C_coverage_options.lookingForCoverage=false;
 
         C_coverage_options.progressive = this.cli_params.hasOption(ConfigMgr._cli_options.progressive);

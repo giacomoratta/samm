@@ -60,7 +60,7 @@ class CliParams {
         return (_.indexOf(this.options,o)>=0 || _.indexOf(this.options,'-'+o)>=0);
     }
 
-    getOptionValue(o){
+    getOption(o){
         if(_.indexOf(this.options,o)>=0) return this.options_kv[o];
         if(_.indexOf(this.options,'-'+o)>=0) return this.options_kv['-'+o];
         return null;

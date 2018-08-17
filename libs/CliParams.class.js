@@ -93,7 +93,7 @@ class CliParams {
         //return _.slice(this.params._,start,end);
     }
 
-    getOptionValue(o){
+    getOption(o){
         if(!_.isNil(this.params[o])) return this.params[o];
         return null;
     }

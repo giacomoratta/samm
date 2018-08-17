@@ -29,6 +29,7 @@ class CliManager {
         this.C_Config();
         this.C_Scan();
         this.C_Lookup();
+        this.C_Save();
     }
 
     _getActionFn(cmdName, cmdFn){
@@ -61,7 +62,7 @@ class CliManager {
                 let tagString=null;
 
                 if(this.cli_params.hasOption(ConfigMgr._cli_options.tag_label)){
-                    tagString= this.cli_params.getOptionValue(ConfigMgr._cli_options.tag_label);
+                    tagString= this.cli_params.getOption(ConfigMgr._cli_options.tag_label);
                     if(!tagString){
                         UI.print("Lookup command: empty tag label");
                         return this._error_code;
@@ -148,6 +149,38 @@ class CliManager {
                     return this._error_code;
                 }
                 return smp_obj;
+            }));
+    }
+
+
+    C_Save(){
+        vorpal
+            .command('save')
+            .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.')
+            .option('-n, --name <path>', 'Save in a directory with a custom name.')
+            .option('-o, --overwrite', 'Overwrite the existent directory.')
+            .action(this._getActionFn('save',()=>{
+                let smp_dirname = null;
+                let C_save_options = {
+                    dirname:null,   //custom name
+                    forcedir:false, //force overwrite
+                    smppath:null    //absolute path
+                };
+
+                if(!ConfigMgr.path('project_directory')){
+                    UI.print("Save command: project directory is not set; check the configuration.");
+                    return this._error_code;
+                }
+
+                C_save_options.dirname = this.cli_params.getOption('name');
+                C_save_options.forcedir = this.cli_params.getOption('overwrite');
+
+                let smp_obj = SamplesMgr.openLookupFile();
+                if(!_.isObject(smp_obj)){
+                    UI.print("Save command: latest lookup missing");
+                    return this._error_code;
+                }
+                return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
             }));
     }
 
