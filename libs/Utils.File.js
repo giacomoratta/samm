@@ -21,12 +21,12 @@ class Utils_Files {
         this._abspath = this.pathJoin(process.cwd(),this.pathSeparator);
     }
 
-    AbsPath(){
+    getAbsPath(){
         return this._abspath;
     }
 
     setAsAbsPath(rel_path, isFile){
-        return Utils.File.pathJoin(this.AbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
+        return Utils.File.pathJoin(this.getAbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
     checkAndSetDirectoryName(path_string){
