@@ -30,6 +30,7 @@ class CliManager {
         this.C_Scan();
         this.C_Lookup();
         this.C_Save();
+        this.C_Coverage();
     }
 
     _getActionFn(cmdName, cmdFn){
@@ -48,6 +49,19 @@ class CliManager {
 
     waitForEnter(){
         readlineSync.prompt();
+    }
+
+
+    C_Coverage(){
+        // vorpal
+        //     .command('config show')
+        //     .description('Show the configuration.')
+        //     .option('-i, --internals', 'Show internal configuration data.')
+        //     .action(this._getActionFn('config',()=>{
+        //         if(this.cli_params.hasOption('internals') || this.cli_params.hasOption('i')) ConfigMgr.printInternals();
+        //         else ConfigMgr.print();
+        //         return this._success_code;
+        //     }));
     }
 
 

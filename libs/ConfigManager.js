@@ -103,10 +103,6 @@ class ConfigManager {
     printHelp(){
         let i=1;
 
-        UI.print("\n  save: create a directory with the samples previously found;");
-        UI.print("       the directory name is set automatically with some tag names;");
-        UI.print("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name               / save in a custom directory");
-
         UI.print("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
         UI.print("       it collects some stats and print them at the end.");
         UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
@@ -114,8 +110,6 @@ class ConfigManager {
         UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
         UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive              +"                          / (progressive) stops when some files which do not pass the check are found");
         UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive_keepalive     +"                         / (progressive) keep-alive waiting for key 'enter'");
-
-        UI.print("\n----------------------------------------------------------------------------------------------------");
     }
 
     checkProperty(name){
