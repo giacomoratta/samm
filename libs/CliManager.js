@@ -51,8 +51,9 @@ class CliManager {
         vorpal
             .command('config')
             .description('Show the current configuration status.')
+            .option('-a, --all', 'Show internal configuration data.')
             .action(this._getActionFn('config',()=>{
-                ConfigMgr.printStatus();
+                if(this.cli_params.hasOption('all') || this.cli_params.hasOption('a')) ConfigMgr.printStatus();
                 ConfigMgr.print();
             }));
     }
