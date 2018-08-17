@@ -102,18 +102,6 @@ class ConfigManager {
 
     printHelp(){
         let i=1;
-        UI.print("\n----------------------------------------------------------------------------------------------------");
-        UI.print("  HELP");
-        UI.print("----------------------------------------------------------------------------------------------------");
-
-        UI.print("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
-        UI.print("       in order to avoid resource wasting, if the index is already present the scan does not start;");
-        UI.print("       [e.g.#"+(i++)+"]  scan "+this._cli_options.force+"   / force the rescan");
-
-        UI.print("\n  lookup: looks for the tags and selects random samples;");
-        UI.print("       the tag query is an AND/OR query (','=or, '+'=and).");
-        UI.print("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        UI.print("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label            / select query from config.Tags[tag_label]");
 
         UI.print("\n  save: create a directory with the samples previously found;");
         UI.print("       the directory name is set automatically with some tag names;");
