@@ -94,7 +94,7 @@ class CliParams {
     }
 
     getOption(o){
-        if(!_.isNil(this.params[o])) return this.params[o];
+        if(!_.isNil(this.options[o])) return this.options[o];
         return null;
     }
 }

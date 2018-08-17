@@ -53,15 +53,54 @@ class CliManager {
 
 
     C_Coverage(){
-        // vorpal
-        //     .command('config show')
-        //     .description('Show the configuration.')
-        //     .option('-i, --internals', 'Show internal configuration data.')
-        //     .action(this._getActionFn('config',()=>{
-        //         if(this.cli_params.hasOption('internals') || this.cli_params.hasOption('i')) ConfigMgr.printInternals();
-        //         else ConfigMgr.print();
-        //         return this._success_code;
-        //     }));
+        vorpal
+            .command('coverage')
+            .description('Check the coverage of samples in according to the tag labels present in the configuration.')
+            .option('-d, --directory <directory>', 'External absolute path.')
+            .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
+            .option('-c, --covered', 'Get the covered tags (by default, the uncovered tags are returned).')
+            .option('-p, --progressive', 'Stops when some files which did not pass the check are found.')
+            .option('-k, --prog-keepalive', 'Like --progressive but it keeps the command alive waiting for key \'enter\'.')
+            .action(this._getActionFn('coverage',()=>{
+                let C_coverage_options = {
+                    dirPath:null,       //custom path
+                    tagQuery:null,      //query tags
+                    lookingForCoverage:false,
+                    consoleOutput:true,
+                    progressive:false,
+                    progressive_keepalive:false
+                };
+
+                C_coverage_options.dirPath = this.cli_params.getOption('directory');
+                if(!C_coverage_options.dirPath){
+                    if(!SamplesMgr.sampleScanFileExists()){
+                        UI.print("Coverage command: the index file does not exist.\n" +
+                            "Perform a scan or specify an absolute path with -p option.");
+                        return this._error_code;
+                    }
+                }
+
+                C_coverage_options.tagQuery = this.cli_params.getOption('query');
+                if(!C_coverage_options.tagQuery){
+                    if(!ConfigMgr.get('Tags')){
+                        UI.print("Coverage command: no configured tags found.\n" +
+                            "Add one or more tags to the configuration or specify a custom query with -q option.");
+                        return this._error_code;
+                    }
+                }
+
+                C_coverage_options.lookingForCoverage = this.cli_params.hasOption('covered');
+                C_coverage_options.progressive = this.cli_params.hasOption('progressive');
+                C_coverage_options.progressive_keepalive = this.cli_params.hasOption('prog-keepalive');
+
+                let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
+                if(!_.isObject(smp_obj)){
+                    UI.print("Coverage command: something went wrong.");
+                    return this._error_code;
+                }
+
+                return smp_obj;
+            }));
     }
 
 
@@ -75,8 +114,8 @@ class CliManager {
             .action(this._getActionFn('lookup',()=>{
                 let tagString=null;
 
-                if(this.cli_params.hasOption(ConfigMgr._cli_options.tag_label)){
-                    tagString= this.cli_params.getOption(ConfigMgr._cli_options.tag_label);
+                if(this.cli_params.hasOption('tag')){
+                    tagString= this.cli_params.getOption('tag');
                     if(!tagString){
                         UI.print("Lookup command: empty tag label");
                         return this._error_code;
@@ -143,7 +182,7 @@ class CliManager {
                     force:false //force scan
                 };
 
-                if(!this.cli_params.hasOption('f')){
+                if(!this.cli_params.hasOption('force')){
                     if(SamplesMgr.sampleScanFileExists()){
                         UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
@@ -205,7 +244,7 @@ class CliManager {
             .description('Show the configuration.')
             .option('-i, --internals', 'Show internal configuration data.')
             .action(this._getActionFn('config',()=>{
-                if(this.cli_params.hasOption('internals') || this.cli_params.hasOption('i')) ConfigMgr.printInternals();
+                if(this.cli_params.hasOption('internals')) ConfigMgr.printInternals();
                 else ConfigMgr.print();
                 return this._success_code;
             }));
