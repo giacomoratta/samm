@@ -1,7 +1,7 @@
 class CliParams {
 
-    constructor(values){
-        this.init(values);
+    constructor(values, command){
+        this.init(values,command);
     }
 
     isError(){
@@ -48,11 +48,11 @@ class CliParams {
         this.params = values.options;
         this.options_count = Math.max(Object.keys(values.options)-1,0);
         this.params._ = [];
-        if(values.requiredArg) this.params._.push(values.requiredArg);
         if(values.optionalArg){
             if(!_.isArray(values.optionalArg)) this.params._.push(values.optionalArg);
-            else values.optionalArg.forEach((v)=>{ this.params._.push(v); });
+            else this.params._ = values.optionalArg;
         }
+        if(values.requiredArg) this.params._.unshift(values.requiredArg);
         this._error = false;
 
         /*

@@ -8,11 +8,12 @@ class CliManager {
         this._error_code = -1;
         this._success_code = 1;
         this.cli_params = null;
-        this.setCommands();
+        this._setCliCommandManagers();
     }
 
-    processParams(cli_values){
-        this.cli_params = new CliParams(cli_values);
+    processParams(cli_values, command){
+        this.cli_params = new CliParams(cli_values, command);
+        d(this.cli_params);
         return this.cli_params;
     }
 
@@ -22,8 +23,17 @@ class CliManager {
             .show();
     }
 
-    setCommands(){
+    _setCliCommandManagers(){
         this.C_Config();
+    }
+
+    _getActionFn(cmdName, cmdFn){
+        return (args,callback)=>{
+            this.processParams(args,cmdName);
+            cmdFn();
+            console.log("");
+            callback();
+        };
     }
 
 
@@ -41,11 +51,10 @@ class CliManager {
         vorpal
             .command('config')
             .description('Show the current configuration status.')
-            .action(function(args,callback) {
+            .action(this._getActionFn('config',()=>{
                 ConfigMgr.printStatus();
                 ConfigMgr.print();
-                callback();
-            });
+            }));
     }
 
     C_xx(){
