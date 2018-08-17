@@ -26,12 +26,12 @@ class ConfigManager {
         let _self=this;
 
         // Check and set paths
-        this._paths.config_file = Utils.File.setAbsPath(this._paths.config_file,true /*isFile*/);
-        this._paths.config_file_sample = Utils.File.setAbsPath(this._paths.config_file_sample,true /*isFile*/);
-        this._paths.temp_dir = Utils.File.setAbsPath(this._paths.temp_dir);
-        this._paths.custom_indexes = Utils.File.setAbsPath(this._paths.custom_indexes);
-        this._paths.latest_lookup = Utils.File.setAbsPath(this._paths.latest_lookup,true /*isFile*/);
-        this._paths.samples_index = Utils.File.setAbsPath(this._paths.samples_index,true /*isFile*/);
+        this._paths.config_file = Utils.File.setAsAbsPath(this._paths.config_file,true /*isFile*/);
+        this._paths.config_file_sample = Utils.File.setAsAbsPath(this._paths.config_file_sample,true /*isFile*/);
+        this._paths.temp_dir = Utils.File.setAsAbsPath(this._paths.temp_dir);
+        this._paths.custom_indexes = Utils.File.setAsAbsPath(this._paths.custom_indexes);
+        this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
+        this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
         this._paths.project_directory = null;
 
         // Open config.json
@@ -43,7 +43,7 @@ class ConfigManager {
         // Check and set paths [2]
         Utils.File.checkAndSetPath(this._config.SamplesDirectory,function(p){ _self._config.SamplesDirectory=p; });
         Utils.File.checkAndSetPath(this._config.ProjectsDirectory,function(p){ _self._config.ProjectsDirectory=p; });
-        if(this._config.ProjectsDirectory) this._paths.project_directory = Utils.File.setAbsPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project),true /*isFile*/);
+        if(this._config.ProjectsDirectory) this._paths.project_directory = Utils.File.setAsAbsPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project),true /*isFile*/);
 
         // Create directories
         Utils.File.ensureDirSync(this.path('temp_dir'));

@@ -25,7 +25,7 @@ class Utils_Files {
         return this._abspath;
     }
 
-    setAbsPath(rel_path, isFile){
+    setAsAbsPath(rel_path, isFile){
         return Utils.File.pathJoin(this.AbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
