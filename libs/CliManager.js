@@ -48,6 +48,41 @@ class CliManager {
     }
 
 
+    C_scan(){
+        vorpal
+            .command('scan')
+            .description("Perform a full scan of the samples directory." +
+                "\nin order to avoid resource wasting, if the index is already present the scan does not start.")
+            .option('-f, --force', 'Force the rescan.')
+            .action(this._getActionFn('scan',()=>{
+                let C_scan_options = {
+                    force:false //force scan
+                };
+
+                if(!this.cli_params.hasOption('f')){
+                    if(SamplesMgr.sampleScanFileExists()){
+                        UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
+                        return this._error_code;
+                    }
+                }else{
+                    C_scan_options.force = true;
+                }
+
+                let smp_obj = SamplesMgr.scanSamples(null,C_scan_options.force);
+                if(!smp_obj){
+                    UI.print("Scan command: job failed");
+                    return this._error_code;
+                }
+                UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
+                if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
+                    UI.print("Scan command: cannot write the index file");
+                    return this._error_code;
+                }
+                return smp_obj;
+            }));
+    }
+
+
     C_Config(){
         vorpal
             .command('config show')
@@ -80,27 +115,6 @@ class CliManager {
                 ConfigMgr.print();
                 return this._success_code;
             }));
-    }
-
-    C_xx(){
-        /*
-        vorpal
-            .command('foo <requiredArg> [optionalArg]')
-            .option('-v, --verbose', 'Print foobar instead.')
-            .option('-a, --amo-unt <coffee>', 'Number of cups of coffee.')
-            .option('-A', 'Does amazing things.', ['Unicorn', 'Narwhal', 'Pixie'])
-            .description('Outputs "bar".')
-            //.alias('foosball')
-            .action(function(args, callback) {
-                console.log(args);
-                if (args.options.verbose) {
-                    this.log('foobar');
-                } else {
-                    this.log('bar');
-                }
-                callback();
-            });
-        */
     }
 
 };
