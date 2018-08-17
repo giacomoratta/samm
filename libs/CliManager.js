@@ -1,5 +1,5 @@
 const CliParams = require('./CliParams.class.js');
-const scanf = require('scanf');
+const readlineSync = require('readline-sync');
 
 class CliManager {
 
@@ -16,11 +16,11 @@ class CliManager {
 
 
     readLine(){
-        scanf('%S');
+        return readlineSync.prompt()
     }
 
     waitForEnter(){
-        scanf('%s');
+        readlineSync.prompt();
     }
 
 

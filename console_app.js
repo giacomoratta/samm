@@ -1,15 +1,22 @@
-var scanf = require('scanf');
+const vorpal = require('vorpal')();
 
-function x(){
-    var name = scanf('%s');
-    console.log(name);
-}
+vorpal
+    .command('foo <requiredArg> [optionalArg]')
+    .option('-v, --verbose', 'Print foobar instead.')
+    .option('-a, --amo-unt <coffee>', 'Number of cups of coffee.')
+    .option('-A', 'Does amazing things.', ['Unicorn', 'Narwhal', 'Pixie'])
+    .description('Outputs "bar".')
+    //.alias('foosball')
+    .action(function(args, callback) {
+        console.log(args);
+        if (args.options.verbose) {
+            this.log('foobar');
+        } else {
+            this.log('bar');
+        }
+        callback();
+    });
 
-while(true){
-    console.log('Pleas input your name');
-    var name = scanf('%S');
-    console.log(name);
-    x();
-}
-
-//https://github.com/dthree/vorpal
+vorpal
+    .delimiter('mpl$')
+    .show();

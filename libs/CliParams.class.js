@@ -1,7 +1,3 @@
-const _inc = {};
-_inc.stringArgv = require('string-argv');
-_inc.minimist = require('minimist');
-
 class CliParams {
 
     constructor(values){
@@ -12,34 +8,63 @@ class CliParams {
         return this._error;
     }
 
-    parseParameters(values){
-        if(_.isString(values)) {
-            values = Utils.replaceAll(values,'"','');
-            return _inc.minimist(_incstringArgv(values));
-        }
-        if(_.isArray(values)) {
-            return _inc.minimist(values);
-        }
-        if(!values){
-            values=process.argv;
-            values = _.slice(values,2);
-            return _inc.minimist(values);
-        }
-    }
+    // parseParameters(values){
+    //     if(_.isString(values)) {
+    //         values = Utils.replaceAll(values,'"','');
+    //         return minimist(stringArgv(values));
+    //     }
+    //     if(_.isArray(values)) {
+    //         return minimist(values);
+    //     }
+    //     if(!values){
+    //         values=process.argv;
+    //         values = _.slice(values,2);
+    //         return minimist(values);
+    //     }
+    // }
 
-    init(values){
+    // _old_init(values){
+    //     this._error = true;
+    //     this.command = null;
+    //     this.params =  { _:[] };
+    //
+    //     let p_values = this.parseParameters(values);
+    //     if(!_.isObject(p_values)) return;
+    //
+    //     this.command = (p_values._.length>0 ? p_values._[0] : null);
+    //     p_values._   = (p_values._.length>0 ? p_values._[0] : null);
+    //     this.options_count = Math.max(Object.keys(p_values)-1,0);
+    //     this.params = p_values;
+    //     this._error = false;
+    // }
+
+    init(values, command){
         this._error = true;
         this.command = null;
         this.params =  { _:[] };
+        if(!_.isObject(values)) return;
 
-        let p_values = this.parseParameters(values);
-        if(!_.isObject(p_values)) return;
-
-        this.command = (p_values._.length>0 ? p_values._[0] : null);
-        p_values._   = (p_values._.length>0 ? p_values._[0] : null);
-        this.options_count = Math.max(Object.keys(p_values)-1,0);
-        this.params = p_values;
+        this.command = command;
+        this.params = values.options;
+        this.options_count = Math.max(Object.keys(values.options)-1,0);
+        this.params._ = [];
+        if(values.requiredArg) this.params._.push(values.requiredArg);
+        if(values.optionalArg){
+            if(!_.isArray(values.optionalArg)) this.params._.push(values.optionalArg);
+            else values.optionalArg.forEach((v)=>{ this.params._.push(v); });
+        }
         this._error = false;
+
+        /*
+        this.params has the same data-format returned by minimist library.
+        {
+            _: [ array of values ],
+            opt1: true (if does not have a value, just to check the presence)
+            opt2: 'value',
+            opt2: 12321, (already converted)
+            opt2: 123.21
+        }
+        */
     }
 
 
