@@ -2,6 +2,11 @@
 global._ =  require('lodash');
 global.readlinesync = require('readline-sync');
 global.d = console.log;
+global.UI = {
+    print:console.log,
+    warning:console.warn,
+    error:console.error
+};
 global.MPL_Options = {
 
 };

@@ -45,14 +45,11 @@ class CliParams {
         if(!_.isObject(values)) return;
 
         this.command = command;
-        this.params = values.options;
-        this.options_count = Math.max(Object.keys(values.options)-1,0);
-        this.params._ = [];
-        if(values.optionalArg){
-            if(!_.isArray(values.optionalArg)) this.params._.push(values.optionalArg);
-            else this.params._ = values.optionalArg;
-        }
-        if(values.requiredArg) this.params._.unshift(values.requiredArg);
+        this.options = values.options;
+        this.options_count = Object.keys(values.options).length;
+        delete values.options;
+        this.params_count = Object.keys(values).length;
+        this.params = values;
         this._error = false;
 
         /*
@@ -74,7 +71,7 @@ class CliParams {
 
 
     hasValues(c){
-        return (this.params._.length>0);
+        return (this.params_count);
     }
 
     hasOptions(){
@@ -82,19 +79,18 @@ class CliParams {
     }
 
     hasOption(o){
-        o = _.lowerCase(o);
-        return (!_.isNil(this.params[o]));
+        return (!_.isNil(this.options[o]));
     }
 
 
     get(i){
-        if(!_.isNil(this.params._[i])) return this.params._[i];
+        if(!_.isNil(this.params[i])) return this.params[i];
         return null;
     }
 
     getValues(start,end){
-        if(_.isNil(start) && _.isNil(end)) return this.params._;
-        return _.slice(this.params._,start,end);
+        //if(_.isNil(start) && _.isNil(end)) return this.params._;
+        //return _.slice(this.params._,start,end);
     }
 
     getOptionValue(o){

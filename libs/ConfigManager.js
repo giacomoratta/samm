@@ -32,7 +32,9 @@ class ConfigManager {
         this._paths.custom_indexes = Utils.File.setAsAbsPath(this._paths.custom_indexes);
         this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
+        this._paths.projects_directory = null;
         this._paths.project_directory = null;
+        this._paths.samples_directory = null;
 
         // Open config.json
         this._config = this._openConfigJson();
@@ -41,9 +43,7 @@ class ConfigManager {
         }
 
         // Check and set paths [2]
-        Utils.File.checkAndSetPath(this._config.SamplesDirectory,function(p){ _self._config.SamplesDirectory=p; });
-        Utils.File.checkAndSetPath(this._config.ProjectsDirectory,function(p){ _self._config.ProjectsDirectory=p; });
-        if(this._config.ProjectsDirectory) this._paths.project_directory = Utils.File.setAsAbsPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project),true /*isFile*/);
+       this._setInternals();
 
         // Create directories
         Utils.File.ensureDirSync(this.path('temp_dir'));
@@ -66,61 +66,68 @@ class ConfigManager {
         return _config;
     }
 
+
+    _setInternals(){
+        this._paths.samples_directory = Utils.File.checkAndSetPath(this._config.SamplesDirectory);
+        if(!this._paths.samples_directory) UI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
+
+        this._paths.projects_directory = Utils.File.checkAndSetPath(this._config.ProjectsDirectory);
+        if(!this._paths.projects_directory) UI.warning("Projects directory does not exist: ",this._config.ProjectsDirectory);
+
+        this._paths.project_directory = Utils.File.checkAndSetPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
+        if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
+
+        UI.print();
+    }
+
+
     path(name){
         return this._paths[name];
     }
 
-    printStatus(){
-        console.log("\n  CONFIGURATION Status");
+
+    getConfigParams(){
+        return Object.keys(this._config);
+    }
+
+
+    printInternals(){
+        UI.print("\nInternal Configuration");
         let _self = this;
-        console.log("\n  # Work directories");
+        UI.print("\n# Work directories");
         Object.keys(this._paths).forEach(function(v){
-            console.log("    "+v+" : "+_self._paths[v]);
+            UI.print("  "+v+" : "+_self._paths[v]);
         });
-        console.log();
-
-        console.log("    SamplesDirectory  : "+this._config.SamplesDirectory);
-        console.log("    ProjectsDirectory : "+this._config.ProjectsDirectory);
-        console.log("    Project           : "+this._config.Project);
-
-        console.log();
     }
 
     printHelp(){
         let i=1;
-        console.log("\n----------------------------------------------------------------------------------------------------");
-        console.log("  HELP");
-        console.log("----------------------------------------------------------------------------------------------------");
-        console.log("\n  set: modifies a configuration parameter.");
-        console.log("       [e.g.#"+(i++)+"]  set Project project-name                   / (or path)");
-        console.log("       [e.g.#"+(i++)+"]  set Tag tag-label query,tag+tag2,or,tag3 ");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples ext        / (or .ext)");
-        console.log("       [e.g.#"+(i++)+"]  set ExtensionExcludedForSamples !ext       / (or !.ext)");
+        UI.print("\n----------------------------------------------------------------------------------------------------");
+        UI.print("  HELP");
+        UI.print("----------------------------------------------------------------------------------------------------");
 
-        console.log("\n  config: shows the current configuration parameters.");
+        UI.print("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
+        UI.print("       in order to avoid resource wasting, if the index is already present the scan does not start;");
+        UI.print("       [e.g.#"+(i++)+"]  scan "+this._cli_options.force+"   / force the rescan");
 
-        console.log("\n  scan: starts a full scan of the sample directory config.ProjectsDirectory.");
-        console.log("       in order to avoid resource wasting, if the index is already present the scan does not start;");
-        console.log("       [e.g.#"+(i++)+"]  scan "+this._cli_options.force+"   / force the rescan");
+        UI.print("\n  lookup: looks for the tags and selects random samples;");
+        UI.print("       the tag query is an AND/OR query (','=or, '+'=and).");
+        UI.print("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
+        UI.print("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label            / select query from config.Tags[tag_label]");
 
-        console.log("\n  lookup: looks for the tags and selects random samples;");
-        console.log("       the tag query is an AND/OR query (','=or, '+'=and).");
-        console.log("       [e.g.#"+(i++)+"]  lookup query,tag+tag2,or,tag3");
-        console.log("       [e.g.#"+(i++)+"]  lookup "+this._cli_options.tag_label+"=tag_label            / select query from config.Tags[tag_label]");
+        UI.print("\n  save: create a directory with the samples previously found;");
+        UI.print("       the directory name is set automatically with some tag names;");
+        UI.print("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name               / save in a custom directory");
 
-        console.log("\n  save: create a directory with the samples previously found;");
-        console.log("       the directory name is set automatically with some tag names;");
-        console.log("       [e.g.#"+(i++)+"]  save "+this._cli_options.directory_name+"=dir-name               / save in a custom directory");
+        UI.print("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
+        UI.print("       it collects some stats and print them at the end.");
+        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
+        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.tag_query                +"=query,tag+tag2,or,tag3   / custom query on tags");
+        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
+        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive              +"                          / (progressive) stops when some files which do not pass the check are found");
+        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive_keepalive     +"                         / (progressive) keep-alive waiting for key 'enter'");
 
-        console.log("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
-        console.log("       it collects some stats and print them at the end.");
-        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
-        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.tag_query                +"=query,tag+tag2,or,tag3   / custom query on tags");
-        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
-        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive              +"                          / (progressive) stops when some files which do not pass the check are found");
-        console.log("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive_keepalive     +"                         / (progressive) keep-alive waiting for key 'enter'");
-
-        console.log("\n----------------------------------------------------------------------------------------------------");
+        UI.print("\n----------------------------------------------------------------------------------------------------");
     }
 
     checkProperty(name){
@@ -191,9 +198,9 @@ class ConfigManager {
         let _outcome = this._set(this._config[name],value);
         if(_outcome.error==true){
             if(_outcome.type){
-                console.log("   Config.set: current value and old value have different types.\n");
-                console.log("               old: ",this._config[name]);
-                console.log("               new: ",value);
+                UI.print("   Config.set: current value and old value have different types.\n");
+                UI.print("               old: ",this._config[name]);
+                UI.print("               new: ",value);
             }
             return null;
         }
@@ -213,13 +220,13 @@ class ConfigManager {
 
             proj_dir_ck = Utils.File.checkAndSetPath(proj_dir);
             if(!proj_dir_ck){
-                console.log("   The projects directory does not exist: "+proj_dir);
+                UI.print("   The projects directory does not exist: "+proj_dir);
                 return;
             }
 
-            let proj_dir_ck = Utils.File.checkAndSetPath(proj_dir+v);
+            proj_dir_ck = Utils.File.checkAndSetPath(proj_dir+v);
             if(!proj_dir_ck){
-                console.log("   The project directory does not exist: "+proj_dir+v);
+                UI.print("   The project directory does not exist: "+proj_dir+v);
                 return;
             }
 
@@ -230,7 +237,7 @@ class ConfigManager {
             let ph = Utils.File.pathParse(v);
             v = Utils.File.checkAndSetPath(v);
             if(!v){
-                console.log("   The samples directory does not exist: "+v);
+                UI.print("   The samples directory does not exist: "+v);
                 return;
             }
             this._config.SamplesDirectory = v;
@@ -240,9 +247,9 @@ class ConfigManager {
             let _ot = this._set(this._config[n][0],v);
             if(_ot.error==true){
                 if(_ot.type){
-                    console.log("   Config.set [Array]: current value and old value have different types.");
-                    console.log("\n                       old: ",this._config[n][0]);
-                    console.log("\n                       new: ",v);
+                    UI.print("   Config.set [Array]: current value and old value have different types.");
+                    UI.print("\n                       old: ",this._config[n][0]);
+                    UI.print("\n                       new: ",v);
                 }
                 return null;
             }
@@ -266,16 +273,16 @@ class ConfigManager {
     save(){
         let config_text = JSON.stringify(this._config, null, '\t');
         try{
-            Utils.File.writeFileSync(this._path.config_file, config_text);
+            Utils.File.writeFileSync(this._paths.config_file, config_text);
         }catch(e){
-            console.log(e);
+            UI.print(e);
             return false;
         }
         return true;
     }
 
     print(){
-        console.log("\n  Configuration");
+        UI.print("\nConfiguration File");
         let keys = _.keys(this._config);
         let _this=this;
         keys.forEach(function(v){
@@ -286,7 +293,7 @@ class ConfigManager {
                 if(vprint.length>3) vprint = "\n\t  "+Utils.replaceAll(vprint,"\n","\n\t  ");
             }
             else vprint=JSON.stringify(_this._config[v], null, '');
-            console.log("    "+v+':'+" "+vprint);
+            UI.print("  "+v+':'+" "+vprint);
         });
     }
 
