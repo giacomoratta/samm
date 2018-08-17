@@ -6,7 +6,7 @@ class ConfigManager {
             config_file: 'config.json',
             config_file_sample: 'config.sample.json',
             temp_dir: 'temp/',
-            custom_indexes: 'c_indexes/',
+            custom_indexes: 'temp/c_indexes/',
             latest_lookup: 'temp/latest_lookup',
             samples_index: 'temp/samples_index'
         };
@@ -32,6 +32,7 @@ class ConfigManager {
         this._paths.custom_indexes = Utils.File.setAbsPath(this._paths.custom_indexes);
         this._paths.latest_lookup = Utils.File.setAbsPath(this._paths.latest_lookup,true);
         this._paths.samples_index = Utils.File.setAbsPath(this._paths.samples_index,true);
+        this._paths.project_directory = null;
 
         // Open config.json
         this._config = this._openConfigJson();
@@ -42,6 +43,7 @@ class ConfigManager {
         // Check and set paths [2]
         Utils.File.checkAndSetPath(this._config.SamplesDirectory,function(p){ _self._config.SamplesDirectory=p; });
         Utils.File.checkAndSetPath(this._config.ProjectsDirectory,function(p){ _self._config.ProjectsDirectory=p; });
+        Utils.File.checkAndSetPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project),function(p){ _self._paths.project_directory=p; });
 
         // Create directories
         Utils.File.ensureDirSync(this.path('temp_dir'));
@@ -75,8 +77,11 @@ class ConfigManager {
         Object.keys(this._paths).forEach(function(v){
             console.log("    "+v+" : "+_self._paths[v]);
         });
+        console.log();
+
+        console.log("    SamplesDirectory  : "+this._config.SamplesDirectory);
         console.log("    ProjectsDirectory : "+this._config.ProjectsDirectory);
-        console.log("    SamplesDirectory : "+this._config.SamplesDirectory);
+        console.log("    Project           : "+this._config.Project);
 
         console.log();
     }

@@ -1,22 +1,15 @@
-const vorpal = require('vorpal')();
+/* Standard Libraries */
+global._ =  require('lodash');
+global.readlinesync = require('readline-sync');
+global.d = console.log;
+global.MPL_Options = {
 
-vorpal
-    .command('foo <requiredArg> [optionalArg]')
-    .option('-v, --verbose', 'Print foobar instead.')
-    .option('-a, --amo-unt <coffee>', 'Number of cups of coffee.')
-    .option('-A', 'Does amazing things.', ['Unicorn', 'Narwhal', 'Pixie'])
-    .description('Outputs "bar".')
-    //.alias('foosball')
-    .action(function(args, callback) {
-        console.log(args);
-        if (args.options.verbose) {
-            this.log('foobar');
-        } else {
-            this.log('bar');
-        }
-        callback();
-    });
+};
 
-vorpal
-    .delimiter('mpl$')
-    .show();
+/* Project Libraries */
+global.Utils = require('./libs/Utils.js');
+global.ConfigMgr = require('./libs/ConfigManager.js');
+global.CliMgr = require('./libs/CliManager.js');
+global.SamplesMgr = require('./libs/SamplesManager.js');
+
+CliMgr.show();

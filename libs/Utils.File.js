@@ -47,7 +47,7 @@ class Utils_Files {
     checkAndSetPath(path_string,callback){
         if(!_.isString(path_string)) return null;
         if(!fs.existsSync(path_string)) return null;
-        path_string = Utils.File.pathResolve(path_string)+Utils.File.pathSeparator;
+        path_string = this.pathResolve(path_string)+Utils.File.pathSeparator;
         if(callback) callback(path_string);
         return path_string;
     }
