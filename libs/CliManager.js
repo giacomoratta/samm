@@ -191,7 +191,9 @@ class CliManager {
                     C_scan_options.force = true;
                 }
 
-                let smp_obj = SamplesMgr.scanSamples(null,C_scan_options.force);
+                C_scan_options.printFn = function(s){ UI.print(s); };
+
+                let smp_obj = SamplesMgr.scanSamples(null,C_scan_options);
                 if(!smp_obj){
                     UI.print("Scan command: job failed");
                     return this._error_code;

@@ -25,13 +25,16 @@ class SamplesManager {
      * @param {boolean} force
      * @returns { Samples | null }
      */
-    scanSamples(absPath, force, consoleOutput){
+    scanSamples(absPath, options){
+        options = _.merge({
+            force:false,
+            printFn:null
+        },options);
         let smp_obj = new Samples();
-        let console_log = (consoleOutput!==false?console.log:function(){});
 
         if(!_.isString(absPath)){
             absPath=ConfigMgr.get('SamplesDirectory');
-            if(this.sampleScanFileExists() && force!==true){
+            if(this.sampleScanFileExists() && options.force!==true){
                 smp_obj = this.loadSampleScanFromFile();
             }
         }
@@ -40,21 +43,20 @@ class SamplesManager {
         if(!smp_obj.empty()) return smp_obj;
 
         if(!Utils.File.directoryExists(absPath)){
-            console_log('   SamplesMgr.scan: directory does not exists! ('+absPath+')');
+            UI.warning('   SamplesMgr.scan: directory does not exists! ('+absPath+')');
             return null;
         }
+
+        let absPathLength = absPath.length;
 
         this._scanSamples(smp_obj, absPath, {
             maxRec:1000000, //1.000.000
             callback:function(path_string){
-                //console_log("  ",path_string);
+                //UI.print("  ",path_string);
                 smp_obj.add(path_string);
             },
-            callback_dir:function(path_string, found_samples, level){
-                if(consoleOutput){
-                    if(level>1) path_string=Utils.File.pathSeparator+Utils.File.pathParse(path_string).name;
-                    console_log((level>1?+_.repeat(' ',3*level)+'|':'')+_.repeat('-',3*level), path_string,'('+found_samples+' samples)');
-                }
+            callback_dir:function(path_string, found_samples){
+                UI.print( path_string.substring(absPathLength) + ' ['+found_samples+' samples]');
             }
         });
         if(smp_obj.empty()) return null;
@@ -79,15 +81,15 @@ class SamplesManager {
         if(!_level) _level=1;
         let _sc_pre, items;
 
-        items = Utils.File.readDirectorySync(dir_path, function(a){
+        items = Utils.File.readDirectorySync(dir_path,(a)=>{
             Utils.sortFilesArray(a);
-        },function(v,i,a){
+        },(v,i,a)=>{
             let path_string = Utils.File.pathJoin(dir_path,v);
             let fsStat = Utils.File.getPathStatsSync(path_string);
 
             if(fsStat.isDirectory()){
                 _sc_pre = smp_obj.size();
-                this._scanSamples(smp_obj, path_string, _options, _level-1);
+                this._scanSamples(smp_obj, path_string, _options, _level+1);
                 _options.callback_dir(path_string,smp_obj.size()-_sc_pre,_level);
 
             }else if(fsStat.isFile() && this._checkSampleName(path_string)){
@@ -117,7 +119,7 @@ class SamplesManager {
      * @returns { Samples | null }
      */
     loadSampleScanFromFile(){
-        let json_string = Utils.readFileSync(ConfigMgr.path('samples_index'));
+        let json_string = Utils.File.readFileSync(ConfigMgr.path('samples_index'));
         if(!json_string) return null;
         let smp_obj = new Samples();
         if(!smp_obj.fromJsonString(json_string)) return null;

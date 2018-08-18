@@ -1,16 +1,24 @@
-
 class Samples {
 
     constructor(){
         this.init();
     }
 
-
     init(){
         this._tags = [];
         this._array = [];
         this._n_array = [];
         this._origin_path = null;
+
+        // TODO
+        this._tree = {};
+
+    }
+
+    _addToTree(sample_path){
+        // dir = Utils.File.pathParse(sample_path).dirname
+        // if(this._treeMap.has(dir)) go to obj and putn new _S
+        // 
     }
 
     empty(){
@@ -135,6 +143,7 @@ class Samples {
         this.init();
         if(!_.isString(json_string)) return false;
         json_string = _.trim(json_string);
+
         try{
             let _self = this;
             let json_obj = JSON.parse(json_string);
@@ -144,7 +153,7 @@ class Samples {
             _self._tags = json_obj.tags;
             _self._origin_path = json_obj.origin_path;
         }catch(e){
-            console.log(e);
+            d(e);
             return false;
         }
         return true;

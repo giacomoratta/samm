@@ -1,4 +1,4 @@
-# 1) duplicate scan file
+# 1) duplicate scan file, config, etc.
 # 2) Try with wrong values (different types, etc.)
 
 

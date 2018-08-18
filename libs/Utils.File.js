@@ -96,14 +96,15 @@ class Utils_Files {
         if(!preFn) preFn=function(){};
         let items = null;
         try{
-            let items = fs.readdirSync(path_string);
+            items = fs.readdirSync(path_string);
         }catch(e){
+            d(e);
             return null;
         }
         if(!items) return null;
         preFn(items);
         for (let i=0; i<items.length; i++) {
-            callback(item[i],i,items);
+            callback(items[i],i,items);
         }
         return items;
     }

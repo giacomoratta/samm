@@ -15,6 +15,7 @@ global.MPL_Options = {
 global.Utils = require('./libs/Utils.js');
 global.ConfigMgr = require('./libs/ConfigManager.js');
 global.CliMgr = require('./libs/CliManager.js');
+global.DataMgr = require('./libs/DataManager.js');
 global.SamplesMgr = require('./libs/SamplesManager.js');
 
 CliMgr.show();
