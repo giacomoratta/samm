@@ -47,20 +47,7 @@ class SamplesManager {
             return null;
         }
 
-        let absPathLength = absPath.length;
-
-        this._scanSamples(smp_obj, absPath, {
-            maxRec:1000000, //1.000.000
-            callback:function(path_string){
-                //UI.print("  ",path_string);
-                smp_obj.add(path_string);
-            },
-            callback_dir:function(path_string, found_samples){
-                UI.print( path_string.substring(absPathLength) + ' ['+found_samples+' samples]');
-            }
-        });
-        if(smp_obj.empty()) return null;
-        return smp_obj;
+        smp_obj.setDirectoryTree();
     }
 
 
@@ -81,6 +68,9 @@ class SamplesManager {
         if(!_level) _level=1;
         let _sc_pre, items;
 
+        let _s_node = smp_obj.addNode(dir_path);
+        _options.parentNode =
+
         items = Utils.File.readDirectorySync(dir_path,(a)=>{
             Utils.sortFilesArray(a);
         },(v,i,a)=>{
@@ -94,6 +84,7 @@ class SamplesManager {
 
             }else if(fsStat.isFile() && this._checkSampleName(path_string)){
                 // checkSampleName on path_string because we want to accept samples belonging directory with good name
+                smp_obj.addNode(path_string, _s_node /*parent*/);
                 _options.callback(path_string);
             }
         });

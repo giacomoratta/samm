@@ -1,40 +1,20 @@
 class Samples {
 
-    constructor(){
-        this.init();
-    }
-
-    init(){
+    constructor(absPath){
         this._tags = [];
-        this._array = [];
-        this._n_array = [];
-        this._origin_path = null;
-
-        // TODO
-        this._tree = {};
-
-    }
-
-    _addToTree(sample_path){
-        // dir = Utils.File.pathParse(sample_path).dirname
-        // if(this._treeMap.has(dir)) go to obj and putn new _S
-        // 
+        this._query_tag = '';
+        this._origin_path = absPath;
+        this._tree = new DirectoryTree(absPath,{});
     }
 
     empty(){
-        return !(this._array.length>0);
     }
 
     size(){
-        return this._array.length;
     }
 
     getOriginPath(){
         return this._origin_path;
-    }
-
-    setOriginPath(path){
-        this._origin_path = path;
     }
 
     getTags(){
