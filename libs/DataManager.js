@@ -4,6 +4,22 @@ class DataManager {
         this._obj_map = new Map();
     }
 
+    _parseOptions(options){
+        if(!options) return;
+        if(!options.label) return;
+        //if(!options.filePath) return; //???
+        let O = _.merge({
+            label:null,
+            filePath:null,
+            preLoad:false,
+            autoLoad:false,
+            checkCb:(data)=>{ },
+            getCb:(data)=>{ },
+            setCb:(data)=>{ }
+        },options);
+        return options;
+    }
+
     _openTextFile(abspath){
 
     }
@@ -20,6 +36,20 @@ class DataManager {
 
     }
 
+    set(options){
+        options = this._parseOptions(options);
+        if(!options) return;
+        this._map[options.label] = options;
+        if(options.preLoad===true){
+            this._loadData(options.label);
+        }
+    }
+
+    _loadData(label){
+
+    }
+
+
     getJsonFile(abspath){
 
     }
@@ -32,9 +62,7 @@ class DataManager {
 
     }
 
-    createFileObjectRelationship(abspath,label,callback){
 
-    }
 }
 
 module.exports = new DataManager();

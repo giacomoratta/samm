@@ -53,6 +53,11 @@ class DirectoryTree {
     }
 
 
+    error(){
+        return (this._tree==null);
+    }
+
+
     walk(options){
         if(!this._tree || !this._root) return;
         let _tree = this._tree;
@@ -156,24 +161,16 @@ class DirectoryTree {
         const _wk = function(absPath, O) {
             if(O.excludedPaths && O.excludedPaths.some((e) => e.test(absPath))) return null;
 
-            let stats = Utils.File.getPathStatsSync(absPath);
-            if(!stats || (!stats.isFile() && !stats.isDirectory())) return;
+            let p_info = new _PathInfo(absPath);
+            if(p_info.error==true || (!p_info.isFile && !p_info.isDirectory)) return;
 
-            let p_info = Utils.File.pathParse(absPath);
-            p_info.path = absPath;
-
-            if (stats.isFile()) {
+            if (p_info.isFile) {
                 if (O.excludedExtensions && O.excludedExtensions.test(_.lowerCase(p_info.ext))) return null;
-
-                p_info.size = stats.size;  // bytes
-                p_info.isFile = true;
                 O.itemCb(p_info);
                 return p_info;
             }
-            else if (stats.isDirectory()) {
-                p_info.isDirectory = true;
+            else if (p_info.isDirectory) {
                 O.itemCb(p_info);
-                p_info.size = 0;
 
                 Utils.File.readDirectorySync(absPath,(a)=>{
                     Utils.sortFilesArray(a);
@@ -193,5 +190,60 @@ class DirectoryTree {
         _wk(absPath, options);
     }
 }
+
+
+class _PathInfo {
+    constructor(absPath){
+        this.error = true;
+        this._info = {};
+
+        if(absPath){
+            let p_info = Utils.File.pathParse(absPath);
+            if(!p_info) return;
+            let stats = Utils.File.getPathStatsSync(absPath);
+            if(!p_info) return;
+            this.error = false;
+
+            this._info = p_info;
+            this._info.path = absPath;
+            this._info.size = (stats.size?stats.size:0);
+            this._info.is_file = stats.isFile();
+            this._info.is_directory = stats.isDirectory();
+        }
+    }
+
+    get root() { return this._info.root; }
+    set root(root) { this._info.root = root; }
+
+    get dir() { return this._info.dir; }
+    set dir(dir) { this._info.dir = dir; }
+
+    get base() { return this._info.base; }
+    set base(base) { this._info.base = base; }
+
+    get ext() { return this._info.ext; }
+    set ext(ext) { this._info.ext = ext; }
+
+    get name() { return this._info.name; }
+    set name(ext) { this._info.name = name; }
+
+    get path() { return this._info.path; }
+    set path(ext) { this._info.path = path; }
+
+    get size() { return this._info.size; }
+    set size(size) { this._info.size = size; }
+
+    get isFile() { return this._info.is_file; }
+    get isDirectory() { return this._info.is_directory; }
+
+    toJson(){
+        return this._info;
+    }
+
+    fromJson(data){
+        this._info = data;
+    }
+}
+
 
 module.exports = DirectoryTree;
