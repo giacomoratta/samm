@@ -7,19 +7,19 @@ DM.setRelationship({
     label:'scan_index',
     filePath:"/dir/dir/scan_file",
     fileType:'json',
-    checkFn:(dataObj)=>{
+    checkFn:(dataObj,args)=>{
         return (dataObj && !dataObj.error());
     },
-    getFn:(dataObj,$cfg)=>{
+    getFn:(dataObj,$cfg,args)=>{
     },
-    setFn:($cfg)=>{
+    setFn:($cfg,args)=>{
         let tt = new DT("/Users/ictmacbook/Documents/Adobe");
         tt.set();
         if(!tt.error()) {
             return tt;
         }
     },
-    loadFn:(fileData,$cfg)=>{
+    loadFn:(fileData,$cfg,args)=>{
         if(filedata){
             let tt = new DT("/Users/ictmacbook/Documents/Adobe");
             tt.fromJsonString(filedata);
@@ -27,7 +27,7 @@ DM.setRelationship({
         }
 
     },
-    saveFn:(dataObj,$cfg)=>{
+    saveFn:(dataObj,$cfg,args)=>{
         if(!$cfg.checkFn(dataObj)) return;
         return tt.toJsonString();
     }

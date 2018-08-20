@@ -16,11 +16,11 @@ class DataManager {
             autoLoad:false,
             preSet:false,
             autoSet:false,
-            checkFn:(data)=>{ },
-            getFn:(data)=>{ },
-            setFn:(data)=>{ },
-            loadFn:(data)=>{ },
-            saveFn:(data)=>{ }
+            checkFn:null,
+            getFn:null,
+            setFn:null,
+            loadFn:null,
+            saveFn:null,
         };
         let _$cfg = _.merge(_default$cfg,$cfg);
         if(_.indexOf(_$cfg.fileType,['json','text'])<0) _$cfg.fileType='json';
@@ -40,41 +40,50 @@ class DataManager {
         }
     }
 
-    load(label){
-        if(!this._map[label]) return;
-        if(!this._map[label].filePath) return;
-        // read file
-        // this._map[label]
+
+    load(label,args){
+        let $cfg = this._map[label];
+        if(!$cfg || !$cfg.filePath || !$cfg.loadFn) return;
+        let filedata = this._loadFileData($cfg.filePath, $cfg.fileType);
+
+        this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+        return this._data[label];
     }
 
 
-    set(label,data){
-        if(!this._map[label]) return;
-        if(!this._map[label].filePath) return;
-        // read file
-        // this._map[label]
+    save(label,args){
+        let $cfg = this._map[label];
+        if(!$cfg || !$cfg.filePath || !$cfg.saveFn || !this._data[label]) return;
+
+        let filedata = $cfg.saveFn(this._data[label],$cfg,args);
+        return this._saveFileData(filedata, $cfg.filePath, $cfg.fileType);
     }
 
 
-    save(label){
-
-    }
-
-
-    get(label){
+    get(label,args){
         let _data = this._data[label];
         if(!t_data){
             if($cfg.preLoad===true){
-                this.load($cfg.label);
+                this.load($cfg.label,args);
             }else if($cfg.preSet===true){
-                this.set($cfg.label);
+                this.set($cfg.label,args);
             }
         }
-
     }
 
 
-    check(label){
+    set(label,data,args){
+        let $cfg = this._map[label];
+        if(!$cfg || !$cfg.filePath || !$cfg.setFn) return;
+
+        this._data[label]=null;
+        if(data) this._data[label]=data;
+        else this._data[label] = $cfg.setFn($cfg,args);
+        return this._data[label];
+    }
+
+
+    check(label,args){
 
     }
 
