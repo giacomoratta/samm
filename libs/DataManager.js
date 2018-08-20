@@ -4,20 +4,27 @@ class DataManager {
         this._obj_map = new Map();
     }
 
-    _parseOptions(options){
-        if(!options) return;
-        if(!options.label) return;
+    _parseConfiguration($cfg){
+        if(!$cfg) return;
+        if(!$cfg.label) return;
         //if(!options.filePath) return; //???
-        let O = _.merge({
+        let _default$cfg = {
             label:null,
             filePath:null,
+            fileType:'json',
             preLoad:false,
             autoLoad:false,
-            checkCb:(data)=>{ },
-            getCb:(data)=>{ },
-            setCb:(data)=>{ }
-        },options);
-        return options;
+            preSet:false,
+            autoSet:false,
+            checkFn:(data)=>{ },
+            getFn:(data)=>{ },
+            setFn:(data)=>{ },
+            loadFn:(data)=>{ },
+            saveFn:(data)=>{ }
+        };
+        let _$cfg = _.merge(_default$cfg,$cfg);
+        if(_.indexOf(_$cfg.fileType,['json','text'])<0) _$cfg.fileType='json';
+        return _$cfg;
     }
 
     _openTextFile(abspath){
@@ -36,17 +43,20 @@ class DataManager {
 
     }
 
-    set(options){
-        options = this._parseOptions(options);
-        if(!options) return;
-        this._map[options.label] = options;
-        if(options.preLoad===true){
-            this._loadData(options.label);
+    setRelationship($cfg){
+        $cfg = this._parseConfiguration($cfg);
+        if(!$cfg) return;
+        this._map[$cfg.label] = $cfg;
+        if($cfg.preLoad===true){
+            this._loadFile($cfg.label);
         }
     }
 
-    _loadData(label){
-
+    _loadFile(label){
+        if(!this._map[label]) return;
+        if(!this._map[label].filePath) return;
+        // read file
+        // this._map[label]
     }
 
 

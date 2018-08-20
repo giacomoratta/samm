@@ -4,8 +4,7 @@ class DirectoryTree {
 
     constructor(absPath,options){
 
-        this._dt = null; /* Directory Tree */
-        this._tree = null;
+        this._tree = null; /* Directory Tree */
         this._root = {}; //empty root
 
         this._data = {
@@ -21,13 +20,24 @@ class DirectoryTree {
             itemCb:function(){},
             afterDirectoryCb:function(){}
         },options);
+    }
+
+
+    set(){
+        this._tree = null; /* Directory Tree */
+        this._root = {}; //empty root
+
+        this._data = {
+            files_count : 0,
+            directories_count : 0
+        };
 
         let _tree = new SymbolTree();
         let _t_parent = this._root;
 
         DirectoryTree.walkDirectory(this._data.root_path,{
-            excludedExtensions:options.excludedExtensions,
-            excludedPaths:options.excludedPaths,
+            excludedExtensions:this._data.options.excludedExtensions,
+            excludedPaths:this._data.options.excludedPaths,
             itemCb:(item)=>{
                 // callback for each item
                 if(item.isFile===true){
@@ -38,12 +48,12 @@ class DirectoryTree {
                     _t_parent = _tree.appendChild(_t_parent,item);
                     this._data.directories_count++;
                 }
-                options.itemCb(item);
+                this._data.options.itemCb(item);
             },
             afterDirectoryCb:(item)=>{
                 // callback after reading directory
                 _t_parent = _tree.parent(item);
-                options.afterDirectoryCb(item);
+                this._data.options.afterDirectoryCb(item);
             }
         });
 

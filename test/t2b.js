@@ -3,24 +3,39 @@ global.Utils = require('../libs/Utils.js');
 global.DT = require('../libs/DirectoryTree.class.js');
 global.DM = require('../libs/DataManager.js');
 
-DM.setFileObjectRelationship({
+DM.setRelationship({
     label:'scan_index',
-    filePath:"/Users/ictmacbook/Documents/Adobe",
-    autoLoad:false,
-    getCb:(data)=>{
+    filePath:"/dir/dir/scan_file",
+    fileType:'json',
+    checkFn:(dataObj)=>{
+        return (dataObj && !dataObj.error());
     },
-    setCb:(data)=>{
-        let tt = new DT(data.filePath);
+    getFn:(dataObj,$cfg)=>{
+    },
+    setFn:($cfg)=>{
+        let tt = new DT("/Users/ictmacbook/Documents/Adobe");
+        tt.set();
         if(!tt.error()) {
-            tt.walk({
-                itemCb:(data)=>{
-                    console.log(data.level, data.is_first_child, data.is_last_child, data.item.path, data.parent.path);
-                }
-            });
             return tt;
         }
+    },
+    loadFn:(fileData,$cfg)=>{
+        if(filedata){
+            let tt = new DT("/Users/ictmacbook/Documents/Adobe");
+            tt.fromJsonString(filedata);
+            if(!tt.error()) return tt;
+        }
+
+    },
+    saveFn:(dataObj,$cfg)=>{
+        if(!$cfg.checkFn(dataObj)) return;
+        return tt.toJsonString();
     }
 });
+
+DM.get('scan_index');
+DM.set('scan_index');
+DM.set('scan_index',obj);
 
 let tt = new DT("/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder");
 if(!tt.error()) {
