@@ -7,88 +7,121 @@ class DirectoryTree {
         this._dt = null; /* Directory Tree */
         this._root_path = absPath;
         this._tree = null;
+        this._root = {}; //empty root
+
+        this._stats = {
+            files_count:0,
+            directories_count:0
+        };
 
         options = _.merge({
             excludedExtensions:[],
-            excludedPaths:[]
+            excludedPaths:[],
+            itemCb:function(){},
+            afterDirectoryCb:function(){}
         },options);
 
         let _tree = new SymbolTree();
-        let _t_parent = {};
-
-        // let v = _tree.appendChild(_t_parent,{ehi:true});
-        // console.log(v);
-        //  v = _tree.appendChild(_t_parent,v);
-        // console.log(v);
-        //
-        // return;
+        let _t_parent = this._root;
 
         Utils.File.walkDirectory(this._root_path,{
-            nodeCallback:(item)=>{
+            excludedExtensions:options.excludedExtensions,
+            excludedPaths:options.excludedPaths,
+            itemCb:(item)=>{
                 // callback for each item
                 if(item.isFile===true){
                     _tree.appendChild(_t_parent,item);
+                    this._stats.files_count++;
                 }
                 else if(item.isDirectory===true){
                     _t_parent = _tree.appendChild(_t_parent,item);
+                    this._stats.directories_count++;
                 }
+                options.itemCb(item);
             },
-            afterDirectoryCallback:(item)=>{
+            afterDirectoryCb:(item)=>{
                 // callback after reading directory
                 _t_parent = _tree.parent(item);
+                options.afterDirectoryCb(item);
             }
         });
 
-        let _x_parent = _tree.firstChild(_t_parent);
-        let level = -1;
-        let prev_index = 0;
-
-        const iterator = _tree.treeIterator(_x_parent);
-        for (const object of iterator) {
-
-            _x_parent = _tree.parent(object);
-
-            let isFirst = (_tree.firstChild(_x_parent)===object);
-            let isLast = (_tree.lastChild(_x_parent)===object);
-
-            if((_tree.index(object)-prev_index)==1){
-
-            }else if(_tree.index(object)==0){
-                level++;
-            }else{
-                level--;
-            }
-            prev_index = _tree.index(object);
-
-            console.log(level,' - ',isFirst,isLast,_tree.index(object),object.path);
-
-
-
-            //console.log(_tree.firstChild);
-            //console.log(object.path);
-
-
-
+        if(_tree.childrenCount(this._root)>0){
+            this._tree = _tree;
         }
-
-        return;
-
-        // const iterator = _tree.treeIterator(_t_parent);
-        // for (const object of iterator) {
-        //     console.log(object.path);
-        // }
-
     }
 
+
+    walk(options){
+        if(!this._tree || !this._root) return;
+        let _tree = this._tree;
+        let _t_parent = _tree.firstChild(this._root);
+        if(!_t_parent) return;
+
+        options = _.merge({
+            itemCb:function(){}
+        },options);
+
+        let level = -1;
+        let prev_index = 0;
+        let isFirstChild, isLastChild;
+
+        const iterator = _tree.treeIterator(_t_parent);
+        for (const item of iterator) {
+            _t_parent = _tree.parent(item);
+
+            isFirstChild = (_tree.firstChild(_t_parent)===item);
+            isLastChild = (_tree.lastChild(_t_parent)===item);
+
+            if(_tree.index(item)==0){
+                level++;
+            }else if((_tree.index(item)-prev_index)!=1){
+                level--;
+            }
+            prev_index = _tree.index(item);
+
+            //console.log(level,' - ',isFirstChild,isLastChild,_tree.index(item),item.path);
+            options.itemCb({
+                item:item,
+                parent:_t_parent,
+                level:level,
+                is_first_child:isFirstChild,
+                is_last_child:isLastChild
+            });
+        }
+    }
+
+
+    forEach(options){
+        if(!this._tree || !this._root) return;
+        let _tree = this._tree;
+
+        options = _.merge({
+            itemCb:function(){}
+        },options);
+
+        const iterator = _tree.treeIterator(_t_parent);
+        for (const item of iterator) {
+            //console.log(level,' - ',isFirstChild,isLastChild,_tree.index(item),item.path);
+            options.itemCb({
+                item:item
+            });
+        }
+    }
+
+
     empty(){
+        return (this._stats.files_count==0 && this._stats.directories_count==0);
     }
 
 
     size(){
+        return (this._stats.files_count+this._stats.directories_count);
     }
 
 
-    getOriginPath(){
+    getRootPath(){
+        return this._root_path;
     }
 
 

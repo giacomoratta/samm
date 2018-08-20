@@ -208,12 +208,12 @@ class Utils_Files {
 
         		p_info.size = stats.size;  // bytes
         		p_info.isFile = true;
-        		O.nodeCallback(p_info);
+        		O.itemCb(p_info);
                 return p_info;
         	}
         	else if (stats.isDirectory()) {
                 p_info.isDirectory = true;
-                O.nodeCallback(p_info);
+                O.itemCb(p_info);
                 p_info.size = 0;
 
                 _self.readDirectorySync(absPath,(a)=>{
@@ -224,16 +224,14 @@ class Utils_Files {
                     if(_pi.size) p_info.size += _pi.size;
                 });
 
-                O.afterDirectoryCallback(p_info);
+                O.afterDirectoryCb(p_info);
                 return p_info;
         	}
         };
 
         options.excludedPaths = _prepareExcludedPaths(options.excludedPaths),
         options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions)
-
         _wk(absPath, options);
-
     }
 }
 
