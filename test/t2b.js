@@ -7,7 +7,7 @@ let tt = new DT("/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder");
 tt.walk({
     itemCb:(data)=>{
 
-        //console.log(data.level, data.is_first_child, data.is_last_child, data.item.path, data.parent.path);
+        console.log(data.level, data.is_first_child, data.is_last_child, data.item.path, data.parent.path);
     }
 });
 //console.log(tt);

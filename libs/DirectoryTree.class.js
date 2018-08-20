@@ -5,13 +5,14 @@ class DirectoryTree {
     constructor(absPath,options){
 
         this._dt = null; /* Directory Tree */
-        this._root_path = absPath;
         this._tree = null;
         this._root = {}; //empty root
 
-        this._stats = {
-            files_count:0,
-            directories_count:0
+        this._data = {
+            options     : options,
+            root_path   : absPath,
+            files_count : 0,
+            directories_count : 0
         };
 
         options = _.merge({
@@ -24,18 +25,18 @@ class DirectoryTree {
         let _tree = new SymbolTree();
         let _t_parent = this._root;
 
-        Utils.File.walkDirectory(this._root_path,{
+        DirectoryTree.walkDirectory(this._data.root_path,{
             excludedExtensions:options.excludedExtensions,
             excludedPaths:options.excludedPaths,
             itemCb:(item)=>{
                 // callback for each item
                 if(item.isFile===true){
                     _tree.appendChild(_t_parent,item);
-                    this._stats.files_count++;
+                    this._data.files_count++;
                 }
                 else if(item.isDirectory===true){
                     _t_parent = _tree.appendChild(_t_parent,item);
-                    this._stats.directories_count++;
+                    this._data.directories_count++;
                 }
                 options.itemCb(item);
             },
@@ -111,17 +112,17 @@ class DirectoryTree {
 
 
     empty(){
-        return (this._stats.files_count==0 && this._stats.directories_count==0);
+        return (this._data.files_count==0 && this._data.directories_count==0);
     }
 
 
     size(){
-        return (this._stats.files_count+this._stats.directories_count);
+        return (this._data.files_count+this._data.directories_count);
     }
 
 
     getRootPath(){
-        return this._root_path;
+        return this._data.root_path;
     }
 
 
@@ -130,6 +131,66 @@ class DirectoryTree {
 
 
     fromJsonString(json_string){
+    }
+
+
+    static walkDirectory(absPath, options){
+
+        const _prepareExcludedPaths = function(excludedPaths){
+            // /some_path_to_exclude/
+            if(!_.isArray(excludedPaths) || excludedPaths.length==0) return null;
+            let exclArray = [];
+            excludedPaths.forEach(function(v){
+                exclArray.push(_.escapeRegExp(v));
+            });
+            if(excludedPaths.length==0) return null;
+            return exclArray;
+        };
+
+        const _prepareExcludedExtensions = function(excludedExtensions){
+            //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
+            if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
+            return '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
+        };
+
+        const _wk = function(absPath, O) {
+            if(O.excludedPaths && O.excludedPaths.some((e) => e.test(absPath))) return null;
+
+            let stats = Utils.File.getPathStatsSync(absPath);
+            if(!stats || (!stats.isFile() && !stats.isDirectory())) return;
+
+            let p_info = Utils.File.pathParse(absPath);
+            p_info.path = absPath;
+
+            if (stats.isFile()) {
+                if (O.excludedExtensions && O.excludedExtensions.test(_.lowerCase(p_info.ext))) return null;
+
+                p_info.size = stats.size;  // bytes
+                p_info.isFile = true;
+                O.itemCb(p_info);
+                return p_info;
+            }
+            else if (stats.isDirectory()) {
+                p_info.isDirectory = true;
+                O.itemCb(p_info);
+                p_info.size = 0;
+
+                Utils.File.readDirectorySync(absPath,(a)=>{
+                    Utils.sortFilesArray(a);
+                },(v,i,a)=>{
+                    v = Utils.File.pathJoin(absPath,v);
+                    let _pi = _wk(v,O);
+                    if(_pi.size) p_info.size += _pi.size;
+                });
+
+                O.afterDirectoryCb(p_info);
+                return p_info;
+            }
+        };
+
+        options.excludedPaths = _prepareExcludedPaths(options.excludedPaths),
+            options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions)
+        _wk(absPath, options);
     }
 }
 
