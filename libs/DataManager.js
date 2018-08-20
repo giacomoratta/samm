@@ -1,7 +1,7 @@
 class DataManager {
     constructor(){
-        this._file_map = new Map();
-        this._obj_map = new Map();
+        this._cfg = {};
+        this._data = {};
     }
 
     _parseConfiguration($cfg){
@@ -27,6 +27,58 @@ class DataManager {
         return _$cfg;
     }
 
+
+    setRelationship($cfg){
+        $cfg = this._parseConfiguration($cfg);
+        if(!$cfg) return;
+        this._cfg[$cfg.label] = $cfg;
+        if($cfg.preLoad===true){
+            this.load($cfg.label);
+        }
+        if($cfg.preSet===true){
+            this.set($cfg.label);
+        }
+    }
+
+    load(label){
+        if(!this._map[label]) return;
+        if(!this._map[label].filePath) return;
+        // read file
+        // this._map[label]
+    }
+
+
+    set(label,data){
+        if(!this._map[label]) return;
+        if(!this._map[label].filePath) return;
+        // read file
+        // this._map[label]
+    }
+
+
+    save(label){
+
+    }
+
+
+    get(label){
+        let _data = this._data[label];
+        if(!t_data){
+            if($cfg.preLoad===true){
+                this.load($cfg.label);
+            }else if($cfg.preSet===true){
+                this.set($cfg.label);
+            }
+        }
+
+    }
+
+
+    check(label){
+
+    }
+
+
     _openTextFile(abspath){
 
     }
@@ -43,21 +95,9 @@ class DataManager {
 
     }
 
-    setRelationship($cfg){
-        $cfg = this._parseConfiguration($cfg);
-        if(!$cfg) return;
-        this._map[$cfg.label] = $cfg;
-        if($cfg.preLoad===true){
-            this._loadFile($cfg.label);
-        }
-    }
 
-    _loadFile(label){
-        if(!this._map[label]) return;
-        if(!this._map[label].filePath) return;
-        // read file
-        // this._map[label]
-    }
+
+
 
 
     getJsonFile(abspath){
