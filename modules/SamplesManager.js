@@ -30,7 +30,7 @@ class SamplesManager {
             force:false,
             printFn:null
         },options);
-        let smp_obj = new Samples();
+        let smp_obj = null;
 
         if(!_.isString(absPath)){
             absPath=ConfigMgr.get('SamplesDirectory');
@@ -47,7 +47,7 @@ class SamplesManager {
             return null;
         }
 
-        smp_obj.setDirectoryTree();
+        smp_obj = new Samples(absPath);
     }
 
 

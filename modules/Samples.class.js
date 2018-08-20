@@ -3,7 +3,6 @@ class Samples {
     constructor(absPath){
         this._tags = [];
         this._query_tag = '';
-        this._origin_path = absPath;
         this._tree = new DirectoryTree(absPath,{});
     }
 

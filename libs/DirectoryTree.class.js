@@ -1,37 +1,34 @@
-const directory_tree = require('directory-tree');
-
-const _prepareExcludedPaths = function(excludedPaths){
-    return null; // /some_path_to_exclude/
-};
-
-const _prepareExcludedExtensions = function(excludedExtensions){
-    return null; // /\.txt$/
-};
+const SymbolTree = require('symbol-tree');
 
 class DirectoryTree {
 
     constructor(absPath,options){
+
         this._dt = null; /* Directory Tree */
+        this._root_path = absPath;
+        this._tree = null;
 
         options = _.merge({
             excludedExtensions:[],
             excludedPaths:[]
         },options);
 
-        try{
-            let dt = dirTree('./test/test_data', {
-                exclude:_prepareExcludedPaths(options.excludedPaths),
-                extensions:_prepareExcludedExtensions(options.excludedExtensions)
-            }, (item, PATH) => {
-                console.log(item);
-            });
-            if(!dt) this._dt=dt;
+        let x = new SymbolTree();
+        let t = x.initialize({});
+                console.log(t);return;
 
-        }catch(e){
-            d(e);
-        }
+        Utils.File.walkDirectory(this._root_path,{
+            nodeCallback:(item)=>{
+                // callback for each item
+                if(item.isFile===true) t.appendChild(item);
+                if(item.isDirectory===true) t=t.addChild(item)
+            },
+            afterDirectoryCallback:(item)=>{
+                // callback after reading directory
+                t = t.parent;
+            }
+        });
     }
-
 
     empty(){
     }

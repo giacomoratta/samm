@@ -96,7 +96,7 @@ class Utils_Files {
         if(!preFn) preFn=function(){};
         let items = null;
         try{
-            items = fs.readdirSync(path_string);
+            items = this._fs.readdirSync(path_string);
         }catch(e){
             d(e);
             return null;
@@ -171,6 +171,69 @@ class Utils_Files {
                 return resolve(_ret_value);
             });
         });
+    }
+
+
+    walkDirectory(absPath, options){
+        const _self = this;
+
+        const _prepareExcludedPaths = function(excludedPaths){
+            // /some_path_to_exclude/
+            if(!_.isArray(excludedPaths) || excludedPaths.length==0) return null;
+            let exclArray = [];
+            excludedPaths.forEach(function(v){
+                exclArray.push(_.escapeRegExp(v));
+            });
+            if(excludedPaths.length==0) return null;
+            return exclArray;
+        };
+
+        const _prepareExcludedExtensions = function(excludedExtensions){
+            //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
+            if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
+            return '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
+        };
+
+        const _wk = function(absPath, O) {
+            if(O.excludedPaths && O.excludedPaths.some((e) => e.test(absPath))) return null;
+
+        	let stats = _self.getPathStatsSync(absPath);
+            if(!stats || (!stats.isFile() && !stats.isDirectory())) return;
+
+            let p_info = _self.pathParse(absPath);
+            p_info.path = absPath;
+
+        	if (stats.isFile()) {
+        		if (O.excludedExtensions && O.excludedExtensions.test(_.lowerCase(p_info.ext))) return null;
+
+        		p_info.size = stats.size;  // bytes
+        		p_info.isFile = true;
+        		O.nodeCallback(p_info);
+                return p_info;
+        	}
+        	else if (stats.isDirectory()) {
+                p_info.isDirectory = true;
+                O.nodeCallback(p_info);
+                p_info.size = 0;
+
+                _self.readDirectorySync(absPath,(a)=>{
+                    Utils.sortFilesArray(a);
+                },(v,i,a)=>{
+                    v = _self.pathJoin(absPath,v);
+                    let _pi = _wk(v,O);
+                    if(_pi.size) p_info.size += _pi.size;
+                });
+
+                O.afterDirectoryCallback(p_info);
+                return p_info;
+        	}
+        };
+
+        options.excludedPaths = _prepareExcludedPaths(options.excludedPaths),
+        options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions)
+
+        _wk(absPath, options);
+
     }
 }
 
