@@ -60,18 +60,6 @@ class DataManager {
     }
 
 
-    get(label,args){
-        let _data = this._data[label];
-        if(!t_data){
-            if($cfg.preLoad===true){
-                this.load($cfg.label,args);
-            }else if($cfg.preSet===true){
-                this.set($cfg.label,args);
-            }
-        }
-    }
-
-
     set(label,data,args){
         let $cfg = this._map[label];
         if(!$cfg || !$cfg.filePath || !$cfg.setFn) return;
@@ -80,6 +68,22 @@ class DataManager {
         if(data) this._data[label]=data;
         else this._data[label] = $cfg.setFn($cfg,args);
         return this._data[label];
+    }
+
+
+    get(label,args){
+        let $cfg = this._map[label];
+        if(!$cfg) return;
+        let dataObj = this._data[label];
+        if(!dataObj){
+            if($cfg.preLoad===true){
+                dataObj = this.load($cfg.label,args);
+            }else if($cfg.preSet===true){
+                dataObj = this.set($cfg.label,args);
+            }
+        }
+        if(!$cfg.getFn) return dataObj;
+        return $cfg.getFn(dataObj,$cfg,args);
     }
 
 
