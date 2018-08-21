@@ -1,8 +1,8 @@
 const test_config = require('../require.js');
 
 describe('DataManager.class', function() {
-    describe('#setRelationship()', function() {
-        it("set a relation between file and object", function() {
+    describe("#setRelationship('scan_index')", function() {
+        it("set a relationship between file and object", function() {
             DataMgr.setRelationship({
                 label:'scan_index',
                 filePath:ConfigMgr.path('samples_index'),
@@ -34,10 +34,20 @@ describe('DataManager.class', function() {
             });
             assert.equal(DataMgr.hasData('scan_index'),false);
             assert.equal(DataMgr.hasRelationship('scan_index'),true);
+        });
+    });
 
-            // DM.get('scan_index');
-            // DM.set('scan_index');
-            // DM.set('scan_index',obj);
+    describe("#checkRelationship('scan_index')", function() {
+        it("check the relationship between file and object", function() {
+            assert.equal(DataMgr.hasData('scan_index'),false);
+            assert.equal(DataMgr.hasRelationship('scan_index'),true);
+        });
+    });
+
+    describe("#get('scan_index')", function() {
+        it("get the data of the relationship between file and object", function() {
+            assert.equal(DataMgr.hasData('scan_index'),false);
+            assert.equal(DataMgr.hasRelationship('scan_index'),true);
         });
     });
 });

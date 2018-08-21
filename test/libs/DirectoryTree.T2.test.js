@@ -3,7 +3,7 @@ const test_config = require('../require.js');
 describe('DirectoryTree.class', function() {
     describe('#walk()', function() {
         it("traverses the directory tree, showing more info", function() {
-            let tt = new DirectoryTree(test_config.SamplesDirectory);
+            let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
             tt.read();
             assert.equal(tt.error(),false);
             tt.walk({
@@ -20,7 +20,7 @@ describe('DirectoryTree.class', function() {
     });
     describe('#walk()', function() {
         it("traverses the directory tree, with wrong address", function() {
-            let tt = new DirectoryTree(test_config.SamplesDirectory+'_not_exists');
+            let tt = new DirectoryTree(ConfigMgr.path('samples_directory')+'_not_exists');
             tt.read();
             assert.equal(tt.error(),true);
             tLog('DirectoryTree root path: '+tt.rootPath());

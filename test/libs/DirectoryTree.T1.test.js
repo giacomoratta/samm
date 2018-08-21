@@ -3,7 +3,7 @@ const test_config = require('../require.js');
 describe('DirectoryTree.class', function() {
     describe('#walkDirectory() - static method', function() {
         it("show the node's path informations", function() {
-            DirectoryTree.walkDirectory(test_config.SamplesDirectory,{
+            DirectoryTree.walkDirectory(ConfigMgr.path('samples_directory'),{
                 itemCb:(item)=>{
                     // callback for each item
                     //if(item.isDirectory===true) console.log('\t\t',item.rel_path,'\t',item.name,item.size);
