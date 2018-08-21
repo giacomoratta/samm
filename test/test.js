@@ -1,4 +1,6 @@
-let assert = require('assert');
+require('../globals.js');
+global.assert = require('assert');
+
 describe('libs', () => {
     require('./libs/testA.js');
 });
