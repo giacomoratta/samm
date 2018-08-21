@@ -1,9 +1,9 @@
 const test_config = require('../require.js');
 
 describe('DataManager.class', function() {
-    describe("#setRelationship('scan_index')", function() {
-        it("set a relationship between file and object", function() {
-            DataMgr.setRelationship({
+    describe("#setHolder('scan_index')", function() {
+        it("set an holder for file and object", function() {
+            DataMgr.setHolder({
                 label:'scan_index',
                 filePath:ConfigMgr.path('samples_index'),
                 fileType:'json',
@@ -32,25 +32,25 @@ describe('DataManager.class', function() {
                 }
             });
             assert.equal(DataMgr.hasData('scan_index'),false);
-            assert.equal(DataMgr.hasRelationship('scan_index'),true);
+            assert.equal(DataMgr.hasHolder('scan_index'),true);
         });
     });
 
-    describe("#checkRelationship('scan_index')", function() {
-        it("check the relationship between file and object", function() {
+    describe("#checkContainer('scan_index')", function() {
+        it("check the holder of file and object", function() {
             assert.equal(DataMgr.hasData('scan_index'),false);
-            assert.equal(DataMgr.hasRelationship('scan_index'),true);
+            assert.equal(DataMgr.hasHolder('scan_index'),true);
         });
     });
 
     describe("#get('scan_index')", function() {
-        it("get the data of the relationship between file and object;\n\t should not find data and should not call loadFn and setFn", function() {
+        it("get the data of the holder of file and object;\n\t should not find data and should not call loadFn and setFn", function() {
             assert.equal(DataMgr.get('scan_index'),null);
         });
     });
 
     describe("#save('scan_index')", function() {
-        it("save the data of the relationship between file and object - should not find data and should not call saveFn", function() {
+        it("save the data of the holder of file and object - should not find data and should not call saveFn", function() {
             assert.equal(DataMgr.save('scan_index'),null);
         });
     });

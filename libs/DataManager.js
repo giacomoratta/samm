@@ -39,12 +39,12 @@ class DataManager {
         return !_.isNil(this._data[label]);
     }
 
-    hasRelationship(label){
+    hasHolder(label){
         return _.isObject(this._cfg[label]);
     }
 
 
-    setRelationship($cfg){
+    setHolder($cfg){
         $cfg = this._parseConfiguration($cfg);
         if(!$cfg) return null;
         this._cfg[$cfg.label] = $cfg;
