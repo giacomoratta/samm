@@ -132,6 +132,11 @@ class DirectoryTree {
     }
 
 
+    rootPath(){
+        return (this._data.root_path);
+    }
+
+
     nodeCount(){
         return (this._data.files_count+this._data.directories_count);
     }

@@ -12,6 +12,7 @@ describe('DirectoryTree.class', function() {
                     tLog(_.padStart(' ',(data.level+1)*3),' > Parent:',data.parent.path,"\n");
                 }
             });
+            tLog('DirectoryTree root path: '+tt.rootPath());
             tLog('DirectoryTree files: '+tt.fileCount());
             tLog('DirectoryTree directories: '+tt.directoryCount());
             tLog('DirectoryTree nodes: '+tt.nodeCount());
@@ -22,6 +23,7 @@ describe('DirectoryTree.class', function() {
             let tt = new DirectoryTree(test_config.SamplesDirectory+'_not_exists');
             tt.read();
             assert.equal(tt.error(),true);
+            tLog('DirectoryTree root path: '+tt.rootPath());
             tLog('DirectoryTree files: '+tt.fileCount());
             tLog('DirectoryTree directories: '+tt.directoryCount());
             tLog('DirectoryTree nodes: '+tt.nodeCount());
