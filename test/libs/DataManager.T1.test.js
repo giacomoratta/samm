@@ -45,9 +45,14 @@ describe('DataManager.class', function() {
     });
 
     describe("#get('scan_index')", function() {
-        it("get the data of the relationship between file and object", function() {
-            assert.equal(DataMgr.hasData('scan_index'),false);
-            assert.equal(DataMgr.hasRelationship('scan_index'),true);
+        it("get the data of the relationship between file and object - should not find data", function() {
+            assert.equal(DataMgr.get('scan_index'),null);
+        });
+    });
+
+    describe("#save('scan_index')", function() {
+        it("save the data of the relationship between file and object - should not find data", function() {
+            assert.equal(DataMgr.save('scan_index'),null);
         });
     });
 });
