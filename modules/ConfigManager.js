@@ -1,18 +1,14 @@
 class ConfigManager {
 
     constructor(options){
-        options = _.merge({
-            config_file: 'config.json'
-        },options);
-
-        this._sampleScan = null;
+       options = this._parseExternalOptions(options);
         this._paths = {
             config_file: options.config_file,
-            config_file_sample: 'config.sample.json',
-            temp_dir: 'temp/',
-            custom_indexes: 'temp/c_indexes/',
-            latest_lookup: 'temp/latest_lookup',
-            samples_index: 'temp/samples_index'
+            config_file_sample: options.config_file_sample,
+            temp_dir: options.temp_dir,
+            custom_indexes: options.custom_indexes,
+            latest_lookup: options.latest_lookup,
+            samples_index: options.samples_index,
         };
         this._labels = {
             'sample_dir':'mpl'
@@ -44,8 +40,21 @@ class ConfigManager {
         Utils.File.ensureDirSync(this.path('custom_indexes'));
     }
 
+    _parseExternalOptions(options){
+        options = _.merge({
+            config_file: 'config.json',
+            config_file_sample: 'config.sample.json',
+            temp_dir: 'temp/',
+            custom_indexes: 'temp/c_indexes/',
+            latest_lookup: 'temp/latest_lookup',
+            samples_index: 'temp/samples_index'
+        },options);
+        return options;
+    }
+
     _openConfigJson(){
         let _config = null;
+        d('Loading configuration file: ',this._paths.config_file);
         try{
             _config = require(this._paths.config_file);
             return _config;
@@ -282,4 +291,4 @@ class ConfigManager {
     }
 };
 
-module.exports = new ConfigManager();
+module.exports = new ConfigManager(global.ConfigManagerOptions);

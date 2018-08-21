@@ -28,6 +28,15 @@ class DataManager {
     }
 
 
+    hasData(label){
+        return !_.isNil(this._data[label]);
+    }
+
+    hasRelationship(label){
+        return _.isObject(this._cfg[label]);
+    }
+
+
     setRelationship($cfg){
         $cfg = this._parseConfiguration($cfg);
         if(!$cfg) return;

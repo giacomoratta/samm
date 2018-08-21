@@ -235,7 +235,6 @@ class SamplesManager {
             smp_obj.init();
             smp_obj_scan.forEach(function(item,index){
                 if(ptags_obj.check_fn(item.n_path)){
-                    //console.log("  ",ConfigMgr._sampleScan[i]);
                     smp_obj.addItem(item);
                 }
             });

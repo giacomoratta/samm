@@ -1,16 +1,15 @@
-let _config = {
-    window: {
-
-    },
-    osx:{
-
-    },
-    osx_test1:{
-        SamplesDirectory:"/Users/ictmacbook/Documents/Adobe/Premiere Pro"
-    }
+let _test_data = {
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+global.ConfigManagerOptions = {
+    config_file:'test/configs/config_osx_test1.json',
+    temp_dir: 'test/temp_dir/',
+    custom_indexes: 'test/temp_dir/c_indexes/',
+    latest_lookup: 'test/temp_dir/latest_lookup',
+    samples_index: 'test/temp_dir/samples_index'
+}
 
 require('../globals.js');
 global.assert = require('assert');
@@ -22,7 +21,4 @@ global.tLog = function(){
     console.log.apply(null,arguments);
 };
 
-let _loaded_cfg = require('../config.json');
-_config = _.merge(_loaded_cfg,_config.osx_test1);
-
-module.exports = _config;
+module.exports = _test_data;
