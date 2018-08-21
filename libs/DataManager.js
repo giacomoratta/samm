@@ -2,6 +2,13 @@ class DataManager {
     constructor(){
         this._cfg = {};
         this._data = {};
+
+        this.ENUMS = {
+            fileType: {
+                json:'json',
+                text:'text',
+            }
+        };
     }
 
     _parseConfiguration($cfg){
@@ -23,7 +30,7 @@ class DataManager {
             saveFn:null,
         };
         let _$cfg = _.merge(_default$cfg,$cfg);
-        if(_.indexOf(_$cfg.fileType,['json','text'])<0) _$cfg.fileType='json';
+        _$cfg.fileType = this._checkEnumValue('fileType',_$cfg.fileType,this.ENUMS.fileType.json);
         return _$cfg;
     }
 
@@ -65,7 +72,7 @@ class DataManager {
         if(!$cfg || !$cfg.filePath || !$cfg.saveFn || !this._data[label]) return null;
 
         let filedata = $cfg.saveFn(this._data[label],$cfg,args);
-        return this._saveFileData(filedata, $cfg.filePath, $cfg.fileType);
+        return this._saveFileData($cfg.filePath, $cfg.fileType, filedata);
     }
 
 
@@ -96,40 +103,31 @@ class DataManager {
     }
 
 
-    _openTextFile(abspath){
-
-    }
-
-    setJsonFile(abspath,text){
-
-    }
-
-    setTextFile(abspath,text){
-
-    }
-
-    setObject(label,data){
-
+    _checkEnumValue(label,value,defaultValue){
+        let _check = (_.indexOf(value,Object.values(this.ENUMS[label]))>=0);
+        if(_check===true) return value;
+        if(!_.isNil(defaultValue)) return defaultValue;
+        return null;
     }
 
 
-
-
-
-
-    getJsonFile(abspath){
-
+    _loadFileData(filePath, fileType){
+        if(fileType==this.ENUMS.fileType.json){
+            return Utils.File.readJsonFile(filePath);
+        }else if(fileType==this.ENUMS.fileType.text){
+            return Utils.File.readTextFile(filePath);
+        }
+        return null;
     }
 
-    getTextFile(abspath){
-
+    _saveFileData(filePath, fileType, content){
+        if(fileType==this.ENUMS.fileType.json){
+            return Utils.File.saveJsonFile(filePath,content);
+        }else if(fileType==this.ENUMS.fileType.text){
+            return Utils.File.saveTextFile(filePath,content);
+        }
+        return null;
     }
-
-    getObject(label){
-
-    }
-
-
 }
 
 module.exports = new DataManager();

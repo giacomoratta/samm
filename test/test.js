@@ -7,7 +7,7 @@ describe('libs', () => {
 });
 
 describe('modules', () => {
-    require('./modules/testB.js');
+    //require('./modules/testB.js');
 });
 
 describe('configuration', function() {

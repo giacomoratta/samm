@@ -25,7 +25,6 @@ describe('DataManager.class', function() {
                         tt.fromJsonString(filedata);
                         if(!tt.error()) return tt;
                     }
-
                 },
                 saveFn:(dataObj,$cfg,args)=>{
                     if(!$cfg.checkFn(dataObj)) return;
@@ -45,14 +44,21 @@ describe('DataManager.class', function() {
     });
 
     describe("#get('scan_index')", function() {
-        it("get the data of the relationship between file and object - should not find data", function() {
+        it("get the data of the relationship between file and object;\n\t should not find data and should not call loadFn and setFn", function() {
             assert.equal(DataMgr.get('scan_index'),null);
         });
     });
 
     describe("#save('scan_index')", function() {
-        it("save the data of the relationship between file and object - should not find data", function() {
+        it("save the data of the relationship between file and object - should not find data and should not call saveFn", function() {
             assert.equal(DataMgr.save('scan_index'),null);
+        });
+    });
+
+    describe("#load('scan_index')", function() {
+        it("should call loadFn", function() {
+            DataMgr.load('scan_index')
+            //assert.equal(DataMgr.save('scan_index'),null);
         });
     });
 });
