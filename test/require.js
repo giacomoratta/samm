@@ -14,6 +14,7 @@ let _config = {
 
 require('../globals.js');
 global.assert = require('assert');
+global.d = function(){};
 global.tLog = function(){
     if(_.isString(arguments[0])){
         arguments[0]='\t'+arguments[0];

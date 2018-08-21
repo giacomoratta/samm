@@ -112,7 +112,7 @@ class Utils_Files {
     getPathStatsSync(path_string){
         // usage: isDirectory, isFile
         try{
-            return fs.lstatSync(path_string);
+            return this._fs.lstatSync(path_string);
         }catch(e){
             d(e);
         }
