@@ -1,9 +1,13 @@
 class ConfigManager {
 
-    constructor(){
+    constructor(options){
+        options = _.merge({
+            config_file: 'config.json'
+        },options);
+
         this._sampleScan = null;
         this._paths = {
-            config_file: 'config.json',
+            config_file: options.config_file,
             config_file_sample: 'config.sample.json',
             temp_dir: 'temp/',
             custom_indexes: 'temp/c_indexes/',
@@ -12,16 +16,6 @@ class ConfigManager {
         };
         this._labels = {
             'sample_dir':'mpl'
-        };
-        this._cli_options = {
-            tag_label:'-t',
-            directory_name:'-n',
-            directory_path:'-d',
-            tag_query:'-q',
-            selection:'-s',
-            progressive:'-p',
-            progressive_keepalive:'-pk',
-            force:'-f'
         };
         let _self=this;
 
@@ -100,17 +94,6 @@ class ConfigManager {
         });
     }
 
-    printHelp(){
-        let i=1;
-
-        UI.print("\n  coverage: check the coverage of samples in according to the tags present in config.Tags;");
-        UI.print("       it collects some stats and print them at the end.");
-        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.directory_path           +"=\"C:\\abs\\path\\\"           / external path");
-        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.tag_query                +"=query,tag+tag2,or,tag3   / custom query on tags");
-        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.selection                +"=uncovered                / (selection) to check uncovered samples (or 'covered') ");
-        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive              +"                          / (progressive) stops when some files which do not pass the check are found");
-        UI.print("       [e.g.#"+(i++)+"]  coverage "+this._cli_options.progressive_keepalive     +"                         / (progressive) keep-alive waiting for key 'enter'");
-    }
 
     checkProperty(name){
         return !_.isUndefined(this._config[name]);

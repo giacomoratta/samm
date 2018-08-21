@@ -8,13 +8,16 @@ class DirectoryTree {
         this._root = {}; //empty root
 
         this._data = {
-            options     : options,
+            options     : DirectoryTree._parseOptions(options),
             root_path   : absPath,
             files_count : 0,
             directories_count : 0
         };
+    }
 
-        options = _.merge({
+
+    static _parseOptions(options){
+        return _.merge({
             excludedExtensions:[],
             excludedPaths:[],
             itemCb:function(){},
@@ -23,14 +26,12 @@ class DirectoryTree {
     }
 
 
-    set(){
+    read(){
         this._tree = null; /* Directory Tree */
         this._root = {}; //empty root
 
-        this._data = {
-            files_count : 0,
-            directories_count : 0
-        };
+        this._data.files_count = 0;
+        this._data.directories_count = 0;
 
         let _tree = new SymbolTree();
         let _t_parent = this._root;
@@ -127,12 +128,20 @@ class DirectoryTree {
 
 
     empty(){
-        return (this._data.files_count==0 && this._data.directories_count==0);
+        return (this.nodeCount()==0);
     }
 
 
-    size(){
+    nodeCount(){
         return (this._data.files_count+this._data.directories_count);
+    }
+
+    fileCount(){
+        return (this._data.files_count);
+    }
+
+    directoryCount(){
+        return (this._data.directories_count);
     }
 
 
@@ -150,6 +159,7 @@ class DirectoryTree {
 
 
     static walkDirectory(absPath, options){
+        options = DirectoryTree._parseOptions(options);
 
         const _prepareExcludedPaths = function(excludedPaths){
             // /some_path_to_exclude/
@@ -168,11 +178,12 @@ class DirectoryTree {
             return '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
         };
 
-        const _wk = function(absPath, O) {
+        const _wk = function(rootPath, absPath, O) {
             if(O.excludedPaths && O.excludedPaths.some((e) => e.test(absPath))) return null;
 
             let p_info = new _PathInfo(absPath);
             if(p_info.error==true || (!p_info.isFile && !p_info.isDirectory)) return;
+            p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
                 if (O.excludedExtensions && O.excludedExtensions.test(_.lowerCase(p_info.ext))) return null;
@@ -186,7 +197,7 @@ class DirectoryTree {
                     Utils.sortFilesArray(a);
                 },(v,i,a)=>{
                     v = Utils.File.pathJoin(absPath,v);
-                    let _pi = _wk(v,O);
+                    let _pi = _wk(rootPath,v,O);
                     if(_pi.size) p_info.size += _pi.size;
                 });
 
@@ -195,9 +206,10 @@ class DirectoryTree {
             }
         };
 
-        options.excludedPaths = _prepareExcludedPaths(options.excludedPaths),
-            options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions)
-        _wk(absPath, options);
+        absPath = Utils.File.pathResolve(absPath)+Utils.File.pathSeparator;
+        options.excludedPaths = _prepareExcludedPaths(options.excludedPaths);
+        options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions);
+        _wk(absPath, absPath, options);
     }
 }
 
@@ -211,7 +223,7 @@ class _PathInfo {
             let p_info = Utils.File.pathParse(absPath);
             if(!p_info) return;
             let stats = Utils.File.getPathStatsSync(absPath);
-            if(!p_info) return;
+            if(!stats) return;
             this.error = false;
 
             this._info = p_info;
@@ -245,6 +257,22 @@ class _PathInfo {
 
     get isFile() { return this._info.is_file; }
     get isDirectory() { return this._info.is_directory; }
+
+    get rel_root() { return this._info.rel_root; }
+    set rel_root(root) {
+        this._info.rel_root = root;
+        this._info.rel_path = this._info.path.substring(this._info.rel_root.length);
+    }
+    get rel_path() { return this._info.rel_path; }
+
+    get sizeString() {
+        let s = this._info.size;
+        if(s<1024) return s+' B';
+        if(s<1048576) return Math.round(s/1024)+' KB';
+        if(s<1073741824) return Math.round(s/1048576)+' MB';
+        if(s<1099511627776) return Math.round(s/1073741824)+' GB';
+        return Math.round(s/(1099511627776))+' TB';
+    }
 
     toJson(){
         return this._info;

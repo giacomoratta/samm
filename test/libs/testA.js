@@ -1,3 +1,4 @@
+require('../require.js');
 
 describe('Array', function() {
     describe('#indexOf()', function() {

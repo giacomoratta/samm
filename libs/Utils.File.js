@@ -111,7 +111,11 @@ class Utils_Files {
 
     getPathStatsSync(path_string){
         // usage: isDirectory, isFile
-        return fs.lstatSync(path_string);
+        try{
+            return fs.lstatSync(path_string);
+        }catch(e){
+            d(e);
+        }
     }
 
     copyFileSync(path_from, path_to, options){
