@@ -313,7 +313,7 @@ class SamplesManager {
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.getTags(),0,2),'_');//.substring(0,20);
         options['_smppath'] = Utils.File.pathJoin(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
-            options['_smppath'] = Utils.File.checkAndSetDirectoryName(options['_smppath']);
+            options['_smppath'] = Utils.File.checkAndSetDuplicatedDirectoryName(options['_smppath']);
         }
         if(!options['_smppath']) return null;
         if(smp_obj.empty()) return null;

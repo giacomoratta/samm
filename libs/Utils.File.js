@@ -28,6 +28,8 @@ class Utils_Files {
     }
 
     setAsAbsPath(rel_path, isFile){
+        rel_path = _.trim(rel_path);
+        if(isFile===true && _.endsWith(rel_path,Utils.File.pathSeparator)) rel_path=rel_path.substr(0,rel_path.length-1);
         return Utils.File.pathJoin(this.getAbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
@@ -35,13 +37,13 @@ class Utils_Files {
 
     /* CHECKS  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    checkAndSetDirectoryName(path_string){
+    checkAndSetDuplicatedDirectoryName(path_string){
         if(!_.isString(path_string)) return null;
         if(!this._FS.existsSync(path_string)) return path_string;
 
         let _safe=1000;
         let new_path_string='';
-        let prefix=1;
+        let prefix=0;
         while(_safe>prefix){
             prefix++;
             new_path_string = path_string+'_'+prefix;
@@ -72,6 +74,7 @@ class Utils_Files {
 
 
 
+
     /* PATH R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     getPathStatsSync(path_string){
@@ -82,6 +85,7 @@ class Utils_Files {
             d(e);
         }
     }
+
 
 
 
@@ -200,6 +204,8 @@ class Utils_Files {
     }
 
 
+
+
     /* DIRECTORY R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     ensureDirSync(path_string){
@@ -223,6 +229,7 @@ class Utils_Files {
         }
         return items;
     }
+
 
 }
 
