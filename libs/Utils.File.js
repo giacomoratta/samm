@@ -91,18 +91,30 @@ class Utils_Files {
 
     /* FILE R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    readFileSync(path_string){
+    readFileSync(path_string,encoding,flag){
         try{
-            return this._FS.readFileSync(path_string,'utf8');
+            if(!encoding) encoding='utf8';
+            if(!flag) flag='r';
+            return this._FS.readFileSync(path_string,{
+                encoding:encoding,
+                flag:flag
+            });
         }catch(e){
             d(e);
             return false;
         }
     }
 
-    writeFileSync(path_string, file_content){
+    writeFileSync(path_string, file_content, encoding, flag, mode){
         try{
-            this._FS.writeFileSync(path_string, file_content, 'utf8');
+            if(!encoding) encoding='utf8';
+            if(!flag) flag='w';
+            if(!mode) mode=0o666;
+            this._FS.writeFileSync(path_string, file_content, {
+                encoding:encoding,
+                flag:flag,
+                mode:mode
+            });
             return true;
         }catch(e){
             d(e);
@@ -111,7 +123,7 @@ class Utils_Files {
     }
 
     readJsonFileSync(path_string){
-        let file_content = this.readFileSync(path_string);
+        let file_content = this.readFileSync(path_string,'utf8');
         if(file_content === false) return false;
         try{
             let json_obj = JSON.parse(json_string);
@@ -124,7 +136,7 @@ class Utils_Files {
     }
 
     readTextFileSync(path_string){
-        let file_content = this.readFileSync(path_string);
+        let file_content = this.readFileSync(path_string,'utf8');
         if(file_content === false) return false;
         return _.trim(file_content);
     }
