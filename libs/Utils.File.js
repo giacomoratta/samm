@@ -89,9 +89,9 @@ class Utils_Files {
 
 
 
-    /* FILE R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* FILE R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    readFileSync(path_string,encoding,flag){
+    readFileSync(path_string, encoding, flag){
         try{
             if(!encoding) encoding='utf8';
             if(!flag) flag='r';
@@ -99,23 +99,6 @@ class Utils_Files {
                 encoding:encoding,
                 flag:flag
             });
-        }catch(e){
-            d(e);
-            return false;
-        }
-    }
-
-    writeFileSync(path_string, file_content, encoding, flag, mode){
-        try{
-            if(!encoding) encoding='utf8';
-            if(!flag) flag='w';
-            if(!mode) mode=0o666;
-            this._FS.writeFileSync(path_string, file_content, {
-                encoding:encoding,
-                flag:flag,
-                mode:mode
-            });
-            return true;
         }catch(e){
             d(e);
             return false;
@@ -141,7 +124,29 @@ class Utils_Files {
         return _.trim(file_content);
     }
 
+    writeFileSync(path_string, file_content, encoding, flag, mode){
+        try{
+            if(!encoding) encoding='utf8';
+            if(!flag) flag='w';
+            if(!mode) mode=0o666;
+            this._FS.writeFileSync(path_string, file_content, {
+                encoding:encoding,
+                flag:flag,
+                mode:mode
+            });
+            return true;
+        }catch(e){
+            d(e);
+            return false;
+        }
+    }
+
+    writeTextFileSync(path_string, file_content){
+        return this.writeFileSync(path_string, file_content, 'utf8');
+    }
+
     writeJsonFileSync(path_string, json_obj){
+        if(!_.isObject(json_obj)) return false;
         let file_content = '';
         try{
             file_content = JSON.stringify(json_obj, null, '\t');
@@ -149,12 +154,13 @@ class Utils_Files {
             d(e);
             return false;
         }
-        return this.writeFileSync(path_string,file_content);
+        return this.writeTextFileSync(path_string,file_content);
     }
 
-    writeTextFileSync(path_string, file_content){
-        return this.writeFileSync(path_string, file_content);
-    }
+
+
+
+    /* FILE R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     writeTextFile(path_to, text){
         return new Promise(function(resolve,reject){
@@ -171,6 +177,38 @@ class Utils_Files {
             });
         });
     }
+
+
+
+
+    /* DIRECTORY R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    ensureDirSync(path_string){
+        this._FS_EXTRA.ensureDirSync(path_string);
+    }
+
+    readDirectorySync(path_string,preFn,callback){
+        if(!callback) callback=function(){};
+        if(!preFn) preFn=function(){};
+        let items = null;
+        try{
+            items = this._FS.readdirSync(path_string);
+        }catch(e){
+            d(e);
+            return null;
+        }
+        if(!items) return null;
+        preFn(items);
+        for (let i=0; i<items.length; i++) {
+            callback(items[i],i,items);
+        }
+        return items;
+    }
+
+
+
+
+    /* FileSystem R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     copyFileSync(path_from, path_to, options){
         options = _.merge({
@@ -213,33 +251,6 @@ class Utils_Files {
                 return resolve(_ret_value);
             });
         });
-    }
-
-
-
-
-    /* DIRECTORY R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    ensureDirSync(path_string){
-        this._FS_EXTRA.ensureDirSync(path_string);
-    }
-
-    readDirectorySync(path_string,preFn,callback){
-        if(!callback) callback=function(){};
-        if(!preFn) preFn=function(){};
-        let items = null;
-        try{
-            items = this._FS.readdirSync(path_string);
-        }catch(e){
-            d(e);
-            return null;
-        }
-        if(!items) return null;
-        preFn(items);
-        for (let i=0; i<items.length; i++) {
-            callback(items[i],i,items);
-        }
-        return items;
     }
 
 

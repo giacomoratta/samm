@@ -5,9 +5,10 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
 let _temp_path_checkAndSetDuplicatedDirectoryName = UF.pathJoin(ConfigMgr.path('temp_dir'),'checkAndSetDuplicatedDirectoryName');
-let ck_file1 = UF.pathJoin(ConfigMgr.path('temp_dir'),'file1.txt');
-let ck_directory1 = UF.pathJoin(ConfigMgr.path('temp_dir'),'directory1');
-let ck_directory1_file11 = UF.pathJoin(ConfigMgr.path('temp_dir'),'directory1','file11.txt');
+let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('temp_dir'),'utils_file');
+let ck_file1 = UF.pathJoin(tmp_dir_utils_file,'file1.txt');
+let ck_directory1 = UF.pathJoin(tmp_dir_utils_file,'directory1');
+let ck_directory1_file11 = UF.pathJoin(tmp_dir_utils_file,'directory1','file11.txt');
 
 describe('Utils.File.singleton', function() {
     describe("#getAbsPath + #setAsAbsPath", function() {
