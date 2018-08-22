@@ -36,6 +36,8 @@ describe('Utils.File.singleton', function() {
             assert.notEqual(ck_file1_content,false);
             assert.notEqual(ck_file1_content,null);
             assert.equal(ck_file1_content.array.length>0,true);
+            assert.equal(UF.readFileSync(ck_file1_json+'xxx'),false);
+            assert.notEqual(UF.readFileSync(ck_file1_json+'xxx'),null);
         });
 
         it("read bad json file", function() {
@@ -44,6 +46,8 @@ describe('Utils.File.singleton', function() {
             tLog('content',ck_file1_content);
             assert.notEqual(ck_file1_content,false);
             assert.equal(ck_file1_content,null);
+            assert.equal(UF.readFileSync(ck_file1_bad_json+'xxx'),false);
+            assert.notEqual(UF.readFileSync(ck_file1_bad_json+'xxx'),null);
         });
     });
 });
