@@ -15,18 +15,18 @@ describe('Utils.File.singleton', function() {
         it("read generic file", function() {
             tLog('ck_file1 > ',ck_file1);
             let ck_file1_content = UF.readFileSync(ck_file1);
+            tLog('\n',ck_file1_content);
             assert.notEqual(ck_file1_content,false);
             assert.equal(UF.readFileSync(ck_file1+'xxx'),false);
-            tLog('content',ck_file1_content);
         });
 
         it("read text file", function() {
             tLog('ck_file1 > ',ck_file1);
             let ck_file1_content = UF.readTextFileSync(ck_file1);
+            tLog('\n',ck_file1_content);
             assert.notEqual(ck_file1_content,false);
             assert.equal(_.isString(ck_file1_content),true);
             assert.equal(ck_file1_content.length>0,true);
-            tLog('content',ck_file1_content);
         });
 
         it("read json file", function() {
