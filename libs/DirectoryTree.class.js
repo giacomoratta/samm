@@ -26,13 +26,16 @@ class DirectoryTree {
     }
 
 
-    read(){
+    init(){
         this._tree = null; /* Directory Tree */
         this._root = {}; //empty root
-
         this._data.files_count = 0;
         this._data.directories_count = 0;
+    }
 
+
+    read(){
+        this.init();
         let _tree = new SymbolTree();
         let _t_parent = this._root;
 
@@ -117,7 +120,7 @@ class DirectoryTree {
             itemCb:function(){}
         },options);
 
-        const iterator = _tree.treeIterator(_t_parent);
+        const iterator = _tree.treeIterator(this._root);
         for (const item of iterator) {
             //console.log(level,' - ',isFirstChild,isLastChild,_tree.index(item),item.path);
             options.itemCb({
@@ -152,6 +155,77 @@ class DirectoryTree {
 
     getRootPath(){
         return this._data.root_path;
+    }
+
+
+    toJson(){
+        let exportObj = {};
+        //exportObj._tree =  this._tree;
+        //exportObj._root =  this._root;
+        exportObj.data =  this._data;
+        exportObj.struct = [];
+        let current_node = exportObj.struct;
+        let current_level = 0;
+        this.walk({
+            itemCb:(itemData)=>{
+                delete itemData.parent;
+                itemData.item = itemData.item.toJson();
+                exportObj.struct.push(itemData);
+            }
+        })
+        return exportObj;
+    }
+
+
+    fromJson(importObj){
+        this.init();
+        let _tree = new SymbolTree();
+        let _t_parent = this._root;
+
+        this._data.options.excludedExtensions = importObj.data.options.excludedExtensions;
+        this._data.options.excludedPaths = importObj.data.options.excludedPaths;
+        this._data.root_path = importObj.data.root_path;
+        this._data.files_count = importObj.data.files_count;
+        this._data.directories_count = importObj.data.directories_count;
+
+        let current_level = -1;
+        for(let i=0; i<importObj.struct.length; i++){
+            let itemData = importObj.struct[i];
+            let _newpathinfo = new _PathInfo();
+            _newpathinfo.fromJson(itemData.item);
+            itemData.item = _newpathinfo;
+            if(itemData.level==current_level){
+                _tree.appendChild(_t_parent,itemData);
+
+            }else if(itemData.level>current_level){
+                _t_parent = _tree.appendChild(_t_parent,itemData);
+
+            }else{
+                _t_parent = _tree.parent(itemData);
+                _tree.appendChild(_t_parent,itemData);
+            }
+            current_level = itemData.level;
+        }
+        this._tree = _tree;
+        /*
+            itemCb:(item)=>{
+                // callback for each item
+                if(item.isFile===true){
+                    _tree.appendChild(_t_parent,item);
+                    this._data.files_count++;
+                }
+                else if(item.isDirectory===true){
+                    _t_parent = _tree.appendChild(_t_parent,item);
+                    this._data.directories_count++;
+                }
+                this._data.options.itemCb(item);
+            },
+            afterDirectoryCb:(item)=>{
+                // callback after reading directory
+                _t_parent = _tree.parent(item);
+                this._data.options.afterDirectoryCb(item);
+            }
+        */
     }
 
 
@@ -285,6 +359,7 @@ class _PathInfo {
 
     fromJson(data){
         this._info = data;
+        this.error = false;
     }
 }
 

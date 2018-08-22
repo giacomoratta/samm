@@ -7,7 +7,7 @@ global.ConfigManagerOptions = {
     temp_dir: 'test/temp_dir/',
     custom_indexes: 'test/temp_dir/c_indexes/',
     latest_lookup: 'test/temp_dir/latest_lookup',
-    samples_index: 'test/temp_dir/samples_index'
+    samples_index: 'test/temp_dir/samples_index.json'
 }
 
 require('../globals.js');

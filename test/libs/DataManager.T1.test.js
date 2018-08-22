@@ -1,4 +1,5 @@
 const test_config = require('../require.js');
+let UF = Utils.File;
 
 describe('DataManager.class - Tests for an holder of file-object', function() {
     describe("#setHolder('scan_index')", function() {
@@ -13,22 +14,22 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 getFn:(dataObj,$cfg,args)=>{
                 },
                 setFn:($cfg,args)=>{
-                    let tt = new DirectoryTree(test_config.SamplesDirectory);
-                    tt.set();
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.read();
                     if(!tt.error()) {
                         return tt;
                     }
+                    return null;
                 },
                 loadFn:(fileData,$cfg,args)=>{
-                    if(filedata){
-                        let tt = new DirectoryTree(test_config.SamplesDirectory);
-                        tt.fromJsonString(filedata);
-                        if(!tt.error()) return tt;
-                    }
+                    if(!_.isObject(fileData)) return null;
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.fromJson(fileData);
+                    if(!tt.error()) return tt;
                 },
                 saveFn:(dataObj,$cfg,args)=>{
                     if(!$cfg.checkFn(dataObj)) return;
-                    return tt.toJsonString();
+                    return dataObj.toJson();
                 }
             });
             assert.equal(DataMgr.hasData('scan_index'),false);
@@ -57,8 +58,39 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
 
     describe("#load('scan_index')", function() {
         it("should call loadFn", function() {
-            DataMgr.load('scan_index')
-            //assert.equal(DataMgr.save('scan_index'),null);
+            UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
+            assert.equal(DataMgr.load('scan_index'),null);
+        });
+    });
+
+    describe("#set('scan_index')", function() {
+        it("should call setFn", function() {
+            UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
+            let samples_tt = DataMgr.set('scan_index');
+            assert.notEqual(samples_tt,null);
+            assert.notEqual(samples_tt,undefined);
+            assert.equal(samples_tt.nodeCount()>0,true);
+            assert.equal(samples_tt.fileCount()>0,true);
+            assert.equal(samples_tt.directoryCount()>0,true);
+        });
+    });
+
+    describe("#save('scan_index')", function() {
+        it("should call saveFn", function() {
+            assert.notEqual(DataMgr.save('scan_index'),null);
+        });
+    });
+
+    describe("#load('scan_index')", function() {
+        it("should call loadFn", function() {
+            let tt = DataMgr.load('scan_index');
+            console.log(tt);
+            tt.walk({
+                itemCb:(itemData)=>{
+                    console.log(itemData.level,itemData.item.constructor.name,itemData.item.name);
+                }
+            })
+            //assert.notEqual(DataMgr.load('scan_index'),null);
         });
     });
 });

@@ -113,18 +113,18 @@ class DataManager {
 
     _loadFileData(filePath, fileType){
         if(fileType==this.ENUMS.fileType.json){
-            return Utils.File.readJsonFile(filePath);
+            return Utils.File.readJsonFileSync(filePath);
         }else if(fileType==this.ENUMS.fileType.text){
-            return Utils.File.readTextFile(filePath);
+            return Utils.File.readTextFileSync(filePath);
         }
         return null;
     }
 
     _saveFileData(filePath, fileType, content){
         if(fileType==this.ENUMS.fileType.json){
-            return Utils.File.saveJsonFile(filePath,content);
+            return Utils.File.writeJsonFileSync(filePath,content);
         }else if(fileType==this.ENUMS.fileType.text){
-            return Utils.File.saveTextFile(filePath,content);
+            return Utils.File.writeTextFileSync(filePath,content);
         }
         return null;
     }
