@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 
-describe('DirectoryTree.class', function() {
+describe('DirectoryTree.class - TEST the static methods of DirectoryTree', function() {
     describe('#walkDirectory() - static method', function() {
         it("show the node's path informations", function() {
             DirectoryTree.walkDirectory(ConfigMgr.path('samples_directory'),{

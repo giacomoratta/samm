@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 
-describe('DataManager.class', function() {
+describe('DataManager.class - Tests for a file-only holder', function() {
     describe("#setHolder('my_file')", function() {
         it("set a file-only holder", function() {
             DataMgr.setHolder({

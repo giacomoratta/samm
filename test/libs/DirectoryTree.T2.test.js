@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 
-describe('DirectoryTree.class', function() {
+describe('DirectoryTree.class - TEST the traversing of a DirectoryTree', function() {
     describe('#walk()', function() {
         it("traverses the directory tree, showing more info", function() {
             let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));

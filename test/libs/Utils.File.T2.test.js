@@ -1,7 +1,3 @@
-/**
- * TEST for file read/write
- */
-
 const test_config = require('../require.js');
 let UF = Utils.File;
 let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('temp_dir'),'utils_file');
@@ -17,7 +13,7 @@ let ck_directory2_file11 = UF.pathJoin(tmp_dir_utils_file,'directory2','file11.t
 let ck_file2_content = "new2\ncontent2";
 let ck_file2_json_content = { array:[1,2,3], str:'newcontent222' };
 
-describe('Utils.File.singleton', function() {
+describe('Utils.File.singleton - TEST for file read/write', function() {
     describe("#readFileSync", function() {
         it("read generic file", function() {
             tLog('ck_file1 > ',ck_file1);
