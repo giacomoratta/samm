@@ -126,12 +126,12 @@ class Utils_Files {
         let file_content = this.readFileSync(path_string,'utf8');
         if(file_content === false) return false;
         try{
-            let json_obj = JSON.parse(json_string);
+            let json_obj = JSON.parse(file_content);
             if(!_.isObject(json_obj)) return null;
             return json_obj;
         }catch(e){
             d(e);
-            return false;
+            return null;
         }
     }
 
