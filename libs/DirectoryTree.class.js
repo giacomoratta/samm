@@ -96,8 +96,8 @@ class DirectoryTree {
 
             // TODO: do it better without string manipulation
             if(!base_level){
-                if(_item_path.endsWith('/')) _item_path = _item_path.substr(0,_item_path.length-2);
-                base_level=_.split(_item_path,'/').length;
+                if(_item_path.endsWith(Utils.File.pathSeparator)) _item_path = _item_path.substr(0,_item_path.length-2);
+                base_level=_.split(_item_path,Utils.File.pathSeparator).length;
             }
 
             level = _.split(_item_path,'/').length - base_level;
