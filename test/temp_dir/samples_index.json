@@ -5,7 +5,7 @@
 			"excludedPaths": []
 		},
 		"root_path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-		"files_count": 47,
+		"files_count": 50,
 		"directories_count": 18
 	},
 	"struct": [
@@ -17,15 +17,15 @@
 				"ext": "",
 				"name": "Premiere Pro",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"size": 110285,
+				"size": 132921,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": ""
 			},
 			"level": 0,
-			"is_first_child": true,
-			"is_last_child": true
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -78,7 +78,7 @@
 				"rel_path": "11.0/Extension Config.xml"
 			},
 			"level": 2,
-			"is_first_child": true,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -97,7 +97,7 @@
 			},
 			"level": 2,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -107,15 +107,33 @@
 				"ext": ".0",
 				"name": "12",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
-				"size": 53357,
+				"size": 75993,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0"
 			},
-			"level": 2,
+			"level": 1,
 			"is_first_child": false,
 			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
+				"base": ".DS_Store",
+				"ext": "",
+				"name": ".DS_Store",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/.DS_Store",
+				"size": 6148,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
+				"rel_path": "12.0/.DS_Store"
+			},
+			"level": 2,
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -125,15 +143,33 @@
 				"ext": "",
 				"name": "Profile-ictmacbook",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
-				"size": 53261,
+				"size": 69717,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook"
 			},
+			"level": 2,
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": ".DS_Store",
+				"ext": "",
+				"name": ".DS_Store",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/.DS_Store",
+				"size": 8196,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
+				"rel_path": "12.0/Profile-ictmacbook/.DS_Store"
+			},
 			"level": 3,
-			"is_first_child": true,
-			"is_last_child": true
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -149,8 +185,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Adobe Premiere Pro Prefs"
 			},
-			"level": 4,
-			"is_first_child": true,
+			"level": 3,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -167,7 +203,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/ArchivedLayouts"
 			},
-			"level": 4,
+			"level": 3,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -185,7 +221,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Layouts"
 			},
-			"level": 4,
+			"level": 3,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -203,9 +239,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Layouts/WorkspaceConfig.xml"
 			},
-			"level": 5,
-			"is_first_child": true,
-			"is_last_child": true
+			"level": 4,
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -221,7 +257,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Mac"
 			},
-			"level": 4,
+			"level": 3,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -233,15 +269,33 @@
 				"ext": "",
 				"name": "Settings",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
-				"size": 35163,
+				"size": 43391,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings"
 			},
+			"level": 3,
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"base": ".DS_Store",
+				"ext": "",
+				"name": ".DS_Store",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/.DS_Store",
+				"size": 8196,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
+				"rel_path": "12.0/Profile-ictmacbook/Settings/.DS_Store"
+			},
 			"level": 4,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -257,8 +311,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound"
 			},
-			"level": 5,
-			"is_first_child": true,
+			"level": 4,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -275,9 +329,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default"
 			},
-			"level": 6,
-			"is_first_child": true,
-			"is_last_child": true
+			"level": 5,
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -293,8 +347,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience"
 			},
-			"level": 7,
-			"is_first_child": true,
+			"level": 6,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -311,8 +365,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Config).essentialsound"
 			},
-			"level": 8,
-			"is_first_child": true,
+			"level": 7,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -329,7 +383,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Default).essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -347,7 +401,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Focused.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -365,7 +419,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/From Outside.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -383,7 +437,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Room Tone.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -401,9 +455,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Wide and Deep.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -419,7 +473,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog"
 			},
-			"level": 7,
+			"level": 6,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -437,8 +491,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Config).essentialsound"
 			},
-			"level": 8,
-			"is_first_child": true,
+			"level": 7,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -455,7 +509,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Default).essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -473,7 +527,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Background Walla Walla.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -491,7 +545,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Female Voice.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -509,7 +563,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Male Voice.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -527,7 +581,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Clean Up Noisy Dialogue.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -545,7 +599,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From Outside a Building.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -563,7 +617,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Radio.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -581,7 +635,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Telephone.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -599,7 +653,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Television.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -617,7 +671,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Large Room.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -635,7 +689,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Small Room.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -653,7 +707,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Close Up.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -671,7 +725,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Distant.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -689,7 +743,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Medium Shot.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -707,7 +761,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Over the Intercom.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -725,9 +779,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Podcast Voice.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -743,7 +797,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic"
 			},
-			"level": 7,
+			"level": 6,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -761,8 +815,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Config).essentialsound"
 			},
-			"level": 8,
-			"is_first_child": true,
+			"level": 7,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -779,9 +833,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Default).essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -797,7 +851,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music"
 			},
-			"level": 7,
+			"level": 6,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -815,8 +869,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Config).essentialsound"
 			},
-			"level": 8,
-			"is_first_child": true,
+			"level": 7,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -833,7 +887,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Default).essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -851,7 +905,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Balanced Background Music.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -869,7 +923,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 30 Seconds.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -887,7 +941,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 60 Seconds.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -905,9 +959,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 90 Seconds.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -923,9 +977,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx"
 			},
-			"level": 7,
+			"level": 6,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -941,8 +995,8 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Config).essentialsound"
 			},
-			"level": 8,
-			"is_first_child": true,
+			"level": 7,
+			"is_first_child": false,
 			"is_last_child": false
 		},
 		{
@@ -959,7 +1013,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Default).essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -977,7 +1031,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Explosion.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -995,7 +1049,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From Outside.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1013,7 +1067,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Left.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1031,7 +1085,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Right.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1049,7 +1103,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/In a Large Room.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1067,7 +1121,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Close Up.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1085,7 +1139,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Distant.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1103,9 +1157,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Medium Shot.essentialsound"
 			},
-			"level": 8,
+			"level": 7,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -1121,7 +1175,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/Overlay Presets"
 			},
-			"level": 7,
+			"level": 4,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1139,9 +1193,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/Overlay Presets/Custom Overlay.olp"
 			},
-			"level": 8,
-			"is_first_child": true,
-			"is_last_child": true
+			"level": 5,
+			"is_first_child": false,
+			"is_last_child": false
 		},
 		{
 			"item": {
@@ -1157,7 +1211,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/Source Patcher Presets"
 			},
-			"level": 7,
+			"level": 4,
 			"is_first_child": false,
 			"is_last_child": false
 		},
@@ -1175,9 +1229,9 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/Track Height Presets"
 			},
-			"level": 7,
+			"level": 4,
 			"is_first_child": false,
-			"is_last_child": true
+			"is_last_child": false
 		}
 	]
 }

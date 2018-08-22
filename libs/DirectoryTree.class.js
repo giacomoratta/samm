@@ -1,4 +1,5 @@
 const SymbolTree = require('symbol-tree');
+const scanf = require('scanf');
 
 class DirectoryTree {
 
@@ -87,20 +88,22 @@ class DirectoryTree {
         let isFirstChild, isLastChild;
 
         const iterator = _tree.treeIterator(_t_parent);
-        for (const item of iterator) {
-            _t_parent = _tree.parent(item);
+        let base_level = null;
+        let _item_path = null;
 
+        for (const item of iterator) {
+            _item_path = item.path;
+
+            // TODO: do it better without string manipulation
+            if(!base_level){
+                if(_item_path.endsWith('/')) _item_path = _item_path.substr(0,_item_path.length-2);
+                base_level=_.split(_item_path,'/').length;
+            }
+
+            level = _.split(_item_path,'/').length - base_level;
             isFirstChild = (_tree.firstChild(_t_parent)===item);
             isLastChild = (_tree.lastChild(_t_parent)===item);
 
-            if(_tree.index(item)==0){
-                level++;
-            }else if((_tree.index(item)-prev_index)!=1){
-                level--;
-            }
-            prev_index = _tree.index(item);
-
-            //console.log(level,' - ',isFirstChild,isLastChild,_tree.index(item),item.path);
             options.itemCb({
                 item:item,
                 parent:_t_parent,
@@ -188,23 +191,42 @@ class DirectoryTree {
         this._data.files_count = importObj.data.files_count;
         this._data.directories_count = importObj.data.directories_count;
 
-        let current_level = -1;
+        let _x = function(i,n){
+            if(i!=n) return;
+            Utils.EXIT('');
+        }
+
+        let current_level = 0;
+        let latest_item = null;
+
         for(let i=0; i<importObj.struct.length; i++){
+
             let itemData = importObj.struct[i];
             let _newpathinfo = new _PathInfo();
+
             _newpathinfo.fromJson(itemData.item);
             itemData.item = _newpathinfo;
+            //console.log(itemData.item);
+
             if(itemData.level==current_level){
-                _tree.appendChild(_t_parent,itemData);
+                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' = same level',itemData.level,current_level);
+                _tree.appendChild(_t_parent,_newpathinfo);
 
             }else if(itemData.level>current_level){
-                _t_parent = _tree.appendChild(_t_parent,itemData);
+                _t_parent = latest_item;
+                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' > current',itemData.level,current_level);
+                _tree.appendChild(_t_parent,_newpathinfo);
 
             }else{
-                _t_parent = _tree.parent(itemData);
-                _tree.appendChild(_t_parent,itemData);
+                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' < current',itemData.level,current_level);
+                _t_parent = _tree.parent(_t_parent);
+                _tree.appendChild(_t_parent,_newpathinfo);
             }
+            //console.log(' --- end --- ',itemData.level,current_level);
             current_level = itemData.level;
+            latest_item = _newpathinfo;
+
+            //_x(i,2);
         }
         this._tree = _tree;
         /*
