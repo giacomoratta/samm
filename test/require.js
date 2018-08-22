@@ -3,7 +3,7 @@ let _test_data = {
 
 global.ConfigManagerOptions = {
     //config_file:'test/configs/config_osx_test1.json',
-    config_file:'test/configs/config_win_test1.json',
+    config_file:'test/configs/config_osx_test1.json',
     temp_dir: 'test/temp_dir/',
     custom_indexes: 'test/temp_dir/c_indexes/',
     latest_lookup: 'test/temp_dir/latest_lookup',
