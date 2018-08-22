@@ -1,3 +1,6 @@
+const _ = require('lodash');
+// function d(){ ...print debug msg... }
+
 class Utils {
 
     constructor(){
@@ -65,7 +68,7 @@ class Utils {
             F.prototype = Function.prototype;
             return new F(arguments);
         }catch(e){
-            //console.log(e);
+            d(e);
             return null;
         }
         return null;
