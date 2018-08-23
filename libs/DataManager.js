@@ -63,6 +63,23 @@ class DataManager {
     }
 
 
+    check(label,args){
+        let $cfg = this._cfg[label];
+        if(!$cfg || !$cfg.filePath) return null;
+
+        if(!this.hasData(label)) return false;
+        if($cfg.checkFn){
+            try{
+                return $cfg.checkFn(this._data[label],$cfg,args);
+            }catch(e){
+                d(e);
+                return null;
+            }
+        }
+        return this.hasData(label);
+    }
+
+
     load(label,args){
         let $cfg = this._cfg[label];
         if(!$cfg || !$cfg.filePath) return null;
