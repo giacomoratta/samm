@@ -107,7 +107,7 @@ class DirectoryTree {
             options.itemCb({
                 item:item,
                 parent:_t_parent,
-                level:level,
+                //level:level,
                 is_first_child:isFirstChild,
                 is_last_child:isLastChild
             });
@@ -191,12 +191,7 @@ class DirectoryTree {
         this._data.files_count = importObj.data.files_count;
         this._data.directories_count = importObj.data.directories_count;
 
-        let _x = function(i,n){
-            if(i!=n) return;
-            Utils.EXIT('');
-        }
-
-        let current_level = 0;
+        let prev_level = 0;
         let latest_item = null;
 
         for(let i=0; i<importObj.struct.length; i++){
@@ -208,46 +203,24 @@ class DirectoryTree {
             itemData.item = _newpathinfo;
             //console.log(itemData.item);
 
-            if(itemData.level==current_level){
-                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' = same level',itemData.level,current_level);
-                _tree.appendChild(_t_parent,_newpathinfo);
+            if(itemData.level==prev_level){
+                //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' = same level',itemData.level,prev_level);
 
-            }else if(itemData.level>current_level){
+            }else if(itemData.level>prev_level){
                 _t_parent = latest_item;
-                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' > current',itemData.level,current_level);
-                _tree.appendChild(_t_parent,_newpathinfo);
+                //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' > previous',itemData.level,prev_level);
 
             }else{
-                console.log(_.padStart(' ',itemData.level*3),_t_parent.name,_newpathinfo.base,' < current',itemData.level,current_level);
-                _t_parent = _tree.parent(_t_parent);
-                _tree.appendChild(_t_parent,_newpathinfo);
+                for(let j=itemData.level; j<prev_level; j++) _t_parent = _tree.parent(_t_parent);
+                //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' < previous',itemData.level,prev_level);
+                //console.log(_.padStart(' ',itemData.level*3),'>> ',_t_parent.base);
             }
-            //console.log(' --- end --- ',itemData.level,current_level);
-            current_level = itemData.level;
-            latest_item = _newpathinfo;
+            _tree.appendChild(_t_parent,_newpathinfo);
 
-            //_x(i,2);
+            prev_level = itemData.level;
+            latest_item = _newpathinfo;
         }
         this._tree = _tree;
-        /*
-            itemCb:(item)=>{
-                // callback for each item
-                if(item.isFile===true){
-                    _tree.appendChild(_t_parent,item);
-                    this._data.files_count++;
-                }
-                else if(item.isDirectory===true){
-                    _t_parent = _tree.appendChild(_t_parent,item);
-                    this._data.directories_count++;
-                }
-                this._data.options.itemCb(item);
-            },
-            afterDirectoryCb:(item)=>{
-                // callback after reading directory
-                _t_parent = _tree.parent(item);
-                this._data.options.afterDirectoryCb(item);
-            }
-        */
     }
 
 
@@ -256,6 +229,21 @@ class DirectoryTree {
 
 
     fromJsonString(json_string){
+    }
+
+
+    print(){
+        console.log("\n\n    Directory Tree\n  --------------------------------------------------------------");
+        let preFn = function(data){
+            if(data.item.level<1) return '';
+            return _.padStart(' ',(data.item.level)*3)
+        }
+        this.walk({
+            itemCb:(data)=>{
+                console.log(preFn(data),data.item.base,data.item.level);
+            }
+        });
+        console.log("\n\n");
     }
 
 
@@ -329,6 +317,7 @@ class _PathInfo {
 
             this._info = p_info;
             this._info.path = absPath;
+            this._info.level = 1;
             this._info.size = (stats.size?stats.size:0);
             this._info.is_file = stats.isFile();
             this._info.is_directory = stats.isDirectory();
@@ -363,8 +352,12 @@ class _PathInfo {
     set rel_root(root) {
         this._info.rel_root = root;
         this._info.rel_path = this._info.path.substring(this._info.rel_root.length);
+
+        if(this._info.rel_path.endsWith(Utils.File.pathSeparator)) this._info.rel_path = this._info.rel_path.substr(0,this._info.rel_path.length-2);
+        if(this._info.rel_path.length>0) this._info.level = 1+_.split(this._info.rel_path,Utils.File.pathSeparator).length;
     }
     get rel_path() { return this._info.rel_path; }
+    get level() { return this._info.level; }
 
     get sizeString() {
         let s = this._info.size;

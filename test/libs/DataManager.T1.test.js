@@ -72,11 +72,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
             assert.equal(samples_tt.nodeCount()>0,true);
             assert.equal(samples_tt.fileCount()>0,true);
             assert.equal(samples_tt.directoryCount()>0,true);
-            samples_tt.walk({
-                itemCb:(itemData)=>{
-                    console.log(itemData.level,itemData.item.constructor.name,itemData.item.base);
-                }
-            });
+            samples_tt.print();
         });
     });
 
@@ -88,12 +84,8 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
 
     describe("#load('scan_index')", function() {
         it("should call loadFn", function() {
-            let tt = DataMgr.load('scan_index');
-            tt.walk({
-                itemCb:(itemData)=>{
-                    console.log(itemData.level,itemData.item.constructor.name,itemData.item.base);
-                }
-            });
+            let samples_tt = DataMgr.load('scan_index');
+            samples_tt.print();
         });
     });
 });
