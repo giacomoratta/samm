@@ -3,12 +3,15 @@ DataMgr.setHolder({
     filePath:ConfigMgr.path('samples_index'),
     fileType:'json',
     preLoad:true,
+
     checkFn:(dataObj,args)=>{
         return (dataObj && !dataObj.error());
     },
+
     getFn:(dataObj,$cfg,args)=>{
         return dataObj;
     },
+
     setFn:($cfg,args)=>{
         let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
         try{
@@ -19,6 +22,7 @@ DataMgr.setHolder({
         }
         return null;
     },
+
     loadFn:(fileData,$cfg,args)=>{
         if(!_.isObject(fileData)) return null;
         let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
@@ -30,6 +34,7 @@ DataMgr.setHolder({
         }
         return null;
     },
+
     saveFn:(dataObj,$cfg,args)=>{
         if(!$cfg.checkFn(dataObj)) return;
         return dataObj.toJson();
