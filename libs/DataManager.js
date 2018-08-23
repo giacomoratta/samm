@@ -68,7 +68,14 @@ class DataManager {
         if(!$cfg || !$cfg.filePath) return null;
         let filedata = this._loadFileData($cfg.filePath, $cfg.fileType);
 
-        if($cfg.loadFn) this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+        if($cfg.loadFn){
+            try{
+                this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+            }catch(e){
+                d(e);
+                return null;
+            }
+        }
         else this._data[label] = filedata;
         return this._data[label];
     }
@@ -79,7 +86,14 @@ class DataManager {
         if(!$cfg || !$cfg.filePath || !this._data[label]) return null;
         let filedata = null;
 
-        if($cfg.saveFn) filedata = $cfg.saveFn(this._data[label],$cfg,args);
+        if($cfg.saveFn){
+            try{
+                filedata = $cfg.saveFn(this._data[label],$cfg,args);
+            }catch(e){
+                d(e);
+                return null;
+            }
+        }
         else filedata = this._data[label];
         return this._saveFileData($cfg.filePath, $cfg.fileType, filedata);
     }
@@ -91,7 +105,14 @@ class DataManager {
 
         this._data[label]=null;
         if(data) this._data[label]=data;
-        else if($cfg.setFn) this._data[label] = $cfg.setFn($cfg,args);
+        else if($cfg.setFn){
+            try{
+                this._data[label] = $cfg.setFn($cfg,args);
+            }catch(e){
+                d(e);
+                return null;
+            }
+        }
         return this._data[label];
     }
 
@@ -107,7 +128,14 @@ class DataManager {
                 dataObj = this.set($cfg.label,args);
             }
         }
-        if($cfg.getFn) return $cfg.getFn(dataObj,$cfg,args);
+        if($cfg.getFn){
+            try{
+                return $cfg.getFn(dataObj,$cfg,args);
+            }catch(e){
+                d(e);
+                return null;
+            }
+        }
         return dataObj;
     }
 

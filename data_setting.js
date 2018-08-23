@@ -26,12 +26,8 @@ DataMgr.setHolder({
     loadFn:(fileData,$cfg,args)=>{
         if(!_.isObject(fileData)) return null;
         let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
-        try{
-            tt.fromJson(fileData);
-            if(!tt.error()) return tt;
-        }catch(e){
-            return null;
-        }
+        tt.fromJson(fileData);
+        if(!tt.error()) return tt;
         return null;
     },
 
