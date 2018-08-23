@@ -12,6 +12,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     return (dataObj && !dataObj.error());
                 },
                 getFn:(dataObj,$cfg,args)=>{
+                    return dataObj;
                 },
                 setFn:($cfg,args)=>{
                     let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
@@ -37,6 +38,42 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
     });
 
+    describe("#setHolder('scan_index_reference')", function() {
+        it("set an holder of file-object", function() {
+            DataMgr.setHolder({
+                label:'scan_index_reference',
+                filePath:ConfigMgr.path('samples_index'),
+                fileType:'json',
+                checkFn:(dataObj,args)=>{
+                    return (dataObj && !dataObj.error());
+                },
+                getFn:(dataObj,$cfg,args)=>{
+                    return dataObj;
+                },
+                setFn:($cfg,args)=>{
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.read();
+                    if(!tt.error()) {
+                        return tt;
+                    }
+                    return null;
+                },
+                loadFn:(fileData,$cfg,args)=>{
+                    if(!_.isObject(fileData)) return null;
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.fromJson(fileData);
+                    if(!tt.error()) return tt;
+                },
+                saveFn:(dataObj,$cfg,args)=>{
+                    if(!$cfg.checkFn(dataObj)) return;
+                    return dataObj.toJson();
+                }
+            });
+            assert.equal(DataMgr.hasData('scan_index_reference'),false);
+            assert.equal(DataMgr.hasHolder('scan_index_reference'),true);
+        });
+    });
+
     describe("#checkContainer('scan_index')", function() {
         it("check the holder of file-object", function() {
             assert.equal(DataMgr.hasData('scan_index'),false);
@@ -44,9 +81,22 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
     });
 
+    describe("#checkContainer('scan_index_reference')", function() {
+        it("check the holder of file-object", function() {
+            assert.equal(DataMgr.hasData('scan_index_reference'),false);
+            assert.equal(DataMgr.hasHolder('scan_index_reference'),true);
+        });
+    });
+
     describe("#get('scan_index')", function() {
         it("get the data of the holder of file-object;\n\t should not find data and should not call loadFn and setFn", function() {
             assert.equal(DataMgr.get('scan_index'),null);
+        });
+    });
+
+    describe("#get('scan_index_reference')", function() {
+        it("get the data of the holder of file-object;\n\t should not find data and should not call loadFn and setFn", function() {
+            assert.equal(DataMgr.get('scan_index_reference'),null);
         });
     });
 
@@ -76,6 +126,18 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
     });
 
+    describe("#set('scan_index_reference')", function() {
+        it("should call setFn", function() {
+            let samples_tt = DataMgr.set('scan_index_reference');
+            assert.notEqual(samples_tt,null);
+            assert.notEqual(samples_tt,undefined);
+            assert.equal(samples_tt.nodeCount()>0,true);
+            assert.equal(samples_tt.fileCount()>0,true);
+            assert.equal(samples_tt.directoryCount()>0,true);
+            samples_tt.print();
+        });
+    });
+
     describe("#save('scan_index')", function() {
         it("should call saveFn", function() {
             assert.notEqual(DataMgr.save('scan_index'),null);
@@ -86,6 +148,16 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         it("should call loadFn", function() {
             let samples_tt = DataMgr.load('scan_index');
             samples_tt.print();
+        });
+    });
+
+    describe("#compare 2 DirectoryTree", function() {
+        it("should call getFn 2 times and compare 2 directory tree", function() {
+            let samples_tt = DataMgr.get('scan_index');
+            let samples_tt_ref = DataMgr.get('scan_index_reference');
+            assert.notEqual(samples_tt,null);
+            assert.notEqual(samples_tt_ref,null);
+            assert.equal(samples_tt.isEqualTo(samples_tt_ref),true);
         });
     });
 });

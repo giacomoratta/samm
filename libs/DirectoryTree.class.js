@@ -191,34 +191,32 @@ class DirectoryTree {
         this._data.files_count = importObj.data.files_count;
         this._data.directories_count = importObj.data.directories_count;
 
-        let prev_level = 0;
-        let latest_item = null;
+        let prev_level = 1;
+        let latest_item,_newpathinfo = null;
 
         for(let i=0; i<importObj.struct.length; i++){
 
-            let itemData = importObj.struct[i];
-            let _newpathinfo = new _PathInfo();
-
-            _newpathinfo.fromJson(itemData.item);
-            itemData.item = _newpathinfo;
+            _newpathinfo = new _PathInfo();
+            _newpathinfo.fromJson(importObj.struct[i].item);
             //console.log(itemData.item);
 
-            if(itemData.level==prev_level){
+            if(_newpathinfo.level==prev_level){
                 //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' = same level',itemData.level,prev_level);
 
-            }else if(itemData.level>prev_level){
+            }else if(_newpathinfo.level>prev_level){
                 _t_parent = latest_item;
                 //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' > previous',itemData.level,prev_level);
 
             }else{
-                for(let j=itemData.level; j<prev_level; j++) _t_parent = _tree.parent(_t_parent);
+                for(let j=_newpathinfo.level; j<prev_level; j++) _t_parent = _tree.parent(_t_parent);
                 //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' < previous',itemData.level,prev_level);
                 //console.log(_.padStart(' ',itemData.level*3),'>> ',_t_parent.base);
             }
-            _tree.appendChild(_t_parent,_newpathinfo);
-
-            prev_level = itemData.level;
-            latest_item = _newpathinfo;
+            prev_level = _newpathinfo.level;
+            //console.log(latest_item,_t_parent,_newpathinfo);
+            //Utils.EXIT('');
+            latest_item = _tree.appendChild(_t_parent,_newpathinfo);
+            //console.log(latest_item);
         }
         this._tree = _tree;
     }
@@ -229,6 +227,43 @@ class DirectoryTree {
 
 
     fromJsonString(json_string){
+    }
+
+
+    isEqualTo(tree2){
+        if(!tree2._tree || !tree2._root) return;
+        if(!this._tree || !this._root) return;
+        let _tree1 = this._tree;
+        let _tree2 = tree2._tree;
+
+        // options = _.merge({
+        //     itemCb:function(){}
+        // },options);
+
+        const iterator1 = _tree1.treeIterator(this._root);
+        const iterator2 = _tree2.treeIterator(tree2._root);
+        let item1,item2;
+        item1 = iterator1.next(); // discard the empty root
+        item2 = iterator2.next(); // discard the empty root
+        item1 = iterator1.next();
+        item2 = iterator2.next();
+
+        let flag = true;
+        while(item1.done===false && item2.done===false){
+
+            item1 = item1.value;
+            item2 = item2.value;
+            flag = item1.isEqualTo(item2);
+            //console.log(flag,item1,item2);
+
+            if(!flag) return null;
+
+            item1 = iterator1.next();
+            item2 = iterator2.next();
+        }
+
+        flag=(item1.done===item2.done);
+        return flag;
     }
 
 
@@ -322,6 +357,23 @@ class _PathInfo {
             this._info.is_file = stats.isFile();
             this._info.is_directory = stats.isDirectory();
         }
+    }
+
+    isEqualTo(obj2){
+        return (
+            (this._info.path===obj2._info.path)
+            && (this._info.root===obj2._info.root)
+            && (this._info.dir===obj2._info.dir)
+            && (this._info.base===obj2._info.base)
+            && (this._info.ext===obj2._info.ext)
+            && (this._info.name===obj2._info.name)
+            && (this._info.level===obj2._info.level)
+            && (this._info.rel_root===obj2._info.rel_root)
+            && (this._info.rel_path===obj2._info.rel_path)
+            && (this._info.size===obj2._info.size)
+            && (this._info.is_file===obj2._info.is_file)
+            && (this._info.is_directory===obj2._info.is_directory)
+        );
     }
 
     get root() { return this._info.root; }
