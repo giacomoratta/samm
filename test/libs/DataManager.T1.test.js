@@ -200,6 +200,8 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     return dataObj.toJson();
                 }
             });
+            assert.equal(_.isObject(DataMgr.$cfg('scan_index2')),true);
+            UF._FS_EXTRA.removeSync(DataMgr.$cfg('scan_index2').filePath);
             assert.equal(DataMgr.hasData('scan_index2'),false);
             assert.equal(DataMgr.hasHolder('scan_index2'),true);
             let samples_tt = DataMgr.set('scan_index2');
