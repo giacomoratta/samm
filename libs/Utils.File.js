@@ -145,11 +145,15 @@ class Utils_Files {
         return this.writeFileSync(path_string, file_content, 'utf8');
     }
 
-    writeJsonFileSync(path_string, json_obj){
+    writeJsonFileSync(path_string, json_obj, space){
         if(!_.isObject(json_obj)) return false;
+
+        if(space===false) space=null;
+        else space='\t';
+
         let file_content = '';
         try{
-            file_content = JSON.stringify(json_obj, null, '\t');
+            file_content = JSON.stringify(json_obj, null, space);
         }catch(e){
             d(e);
             return false;

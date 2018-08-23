@@ -107,7 +107,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
     });
 
     describe("#load('scan_index')", function() {
-        it("should call loadFn", function() {
+        it("should call loadFn but the file does not exist", function() {
             UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
             assert.equal(DataMgr.load('scan_index'),null);
         });
@@ -166,6 +166,49 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
             assert.notEqual(samples_tt,null);
             assert.notEqual(samples_tt_ref,null);
             assert.equal(samples_tt.isEqualTo(samples_tt_ref),true);
+        });
+    });
+
+    describe("#setHolder('scan_index2')", function() {
+        it("set an holder of file-object and performs save with json-compact", function() {
+            DataMgr.setHolder({
+                label:'scan_index2',
+                filePath:ConfigMgr.path('samples_index')+'_2.json',
+                fileType:'json-compact',
+                checkFn:(dataObj,args)=>{
+                    return (dataObj && !dataObj.error());
+                },
+                getFn:(dataObj,$cfg,args)=>{
+                    return dataObj;
+                },
+                setFn:($cfg,args)=>{
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.read();
+                    if(!tt.error()) {
+                        return tt;
+                    }
+                    return null;
+                },
+                loadFn:(fileData,$cfg,args)=>{
+                    if(!_.isObject(fileData)) return null;
+                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    tt.fromJson(fileData);
+                    if(!tt.error()) return tt;
+                },
+                saveFn:(dataObj,$cfg,args)=>{
+                    if(!$cfg.checkFn(dataObj)) return;
+                    return dataObj.toJson();
+                }
+            });
+            assert.equal(DataMgr.hasData('scan_index2'),false);
+            assert.equal(DataMgr.hasHolder('scan_index2'),true);
+            let samples_tt = DataMgr.set('scan_index2');
+            assert.notEqual(samples_tt,null);
+            assert.notEqual(samples_tt,undefined);
+            assert.equal(samples_tt.nodeCount()>0,true);
+            assert.equal(samples_tt.fileCount()>0,true);
+            assert.equal(samples_tt.directoryCount()>0,true);
+            assert.notEqual(DataMgr.save('scan_index2'),null);
         });
     });
 });
