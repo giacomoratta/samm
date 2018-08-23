@@ -65,19 +65,22 @@ class DataManager {
 
     load(label,args){
         let $cfg = this._cfg[label];
-        if(!$cfg || !$cfg.filePath || !$cfg.loadFn) return null;
+        if(!$cfg || !$cfg.filePath) return null;
         let filedata = this._loadFileData($cfg.filePath, $cfg.fileType);
 
-        this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+        if($cfg.loadFn) this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+        else this._data[label] = filedata;
         return this._data[label];
     }
 
 
     save(label,args){
         let $cfg = this._cfg[label];
-        if(!$cfg || !$cfg.filePath || !$cfg.saveFn || !this._data[label]) return null;
+        if(!$cfg || !$cfg.filePath || !this._data[label]) return null;
+        let filedata = null;
 
-        let filedata = $cfg.saveFn(this._data[label],$cfg,args);
+        if($cfg.saveFn) filedata = $cfg.saveFn(this._data[label],$cfg,args);
+        else filedata = this._data[label];
         return this._saveFileData($cfg.filePath, $cfg.fileType, filedata);
     }
 
@@ -129,7 +132,6 @@ class DataManager {
     }
 
     _saveFileData(filePath, fileType, content){
-        console.log(filePath, fileType);
         if(fileType==this.ENUMS.fileType.json){
             return Utils.File.writeJsonFileSync(filePath,content);
 
