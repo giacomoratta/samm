@@ -57,6 +57,11 @@ class DataManager {
     }
 
 
+    $cfg(label){
+        return this._cfg[label];
+    }
+
+
     load(label,args){
         let $cfg = this._cfg[label];
         if(!$cfg || !$cfg.filePath || !$cfg.loadFn) return null;

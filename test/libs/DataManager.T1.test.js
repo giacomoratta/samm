@@ -42,7 +42,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         it("set an holder of file-object", function() {
             DataMgr.setHolder({
                 label:'scan_index_reference',
-                filePath:ConfigMgr.path('samples_index'),
+                filePath:ConfigMgr.path('samples_index')+'_ref.json',
                 fileType:'json',
                 checkFn:(dataObj,args)=>{
                     return (dataObj && !dataObj.error());
@@ -148,6 +148,14 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         it("should call loadFn", function() {
             let samples_tt = DataMgr.load('scan_index');
             samples_tt.print();
+        });
+    });
+
+    describe("#save('scan_index_reference')", function() {
+        it("should call saveFn", function() {
+            assert.equal(_.isObject(DataMgr.$cfg('scan_index_reference')),true);
+            UF._FS_EXTRA.removeSync(DataMgr.$cfg('scan_index_reference').filePath);
+            assert.notEqual(DataMgr.save('scan_index_reference'),null);
         });
     });
 
