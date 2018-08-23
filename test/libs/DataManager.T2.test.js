@@ -9,7 +9,7 @@ describe('DataManager.class - Tests for a file-only holder', function() {
                 fileType:'text'
             });
             assert.equal(DataMgr.hasData('my_file'),false);
-            assert.equal(DataMgr.setHolder('my_file'),true);
+            assert.equal(DataMgr.hasHolder('my_file'),true);
         });
     });
 });
