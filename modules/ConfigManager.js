@@ -195,6 +195,7 @@ class ConfigManager {
                 UI.print("The projects directory does not exist: "+proj_dir);
                 return null;
             }
+            proj_dir = proj_dir_ck;
 
             proj_dir_ck = Utils.File.checkAndSetPathSync(proj_dir+v);
             if(!proj_dir_ck){
