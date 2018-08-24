@@ -4,6 +4,8 @@ describe('libs', () => {
     require('./libs/DirectoryTree.T1.test.js');
     require('./libs/DirectoryTree.T2.test.js');
     require('./libs/DataManager.T1.test');
+    require('./libs/DataManager.T2.test');
+    require('./libs/DataManager.T3.test');
 });
 
 describe('modules', () => {
