@@ -35,9 +35,9 @@ class Utils_Files {
 
 
 
-    /* CHECKS  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    checkAndSetDuplicatedDirectoryName(path_string){
+    checkAndSetDuplicatedDirectoryNameSync(path_string){
         if(!_.isString(path_string)) return null;
         if(!this._FS.existsSync(path_string)) return path_string;
 
@@ -52,7 +52,7 @@ class Utils_Files {
         return null;
     }
 
-    checkAndSetPath(path_string,callback){
+    checkAndSetPathSync(path_string,callback){
         if(!_.isString(path_string)) return null;
         if(!this._FS.existsSync(path_string)) return null;
         path_string = this.pathResolve(path_string)+Utils.File.pathSeparator;
@@ -60,13 +60,13 @@ class Utils_Files {
         return path_string;
     }
 
-    fileExists(path_string){
+    fileExistsSync(path_string){
         if(!_.isString(path_string)) return false;
         if(!this._FS.existsSync(path_string)) return false;
         return true;
     }
 
-    directoryExists(path_string){
+    directoryExistsSync(path_string){
         if(!_.isString(path_string)) return false;
         if(!this._FS.existsSync(path_string)) return false;
         return true;
@@ -75,7 +75,7 @@ class Utils_Files {
 
 
 
-    /* PATH R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* PATH R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     getPathStatsSync(path_string){
         // usage: isDirectory, isFile
@@ -185,7 +185,7 @@ class Utils_Files {
 
 
 
-    /* DIRECTORY R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* DIRECTORY R/W - SYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     ensureDirSync(path_string){
         this._FS_EXTRA.ensureDirSync(path_string);
@@ -212,7 +212,7 @@ class Utils_Files {
 
 
 
-    /* FileSystem R/W   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* FileSystem R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     copyFileSync(path_from, path_to, options){
         options = _.merge({

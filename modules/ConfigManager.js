@@ -26,8 +26,18 @@ class ConfigManager {
         this._paths.project_directory = null;
         this._paths.samples_directory = null;
 
+        // DataManager
+        DataMgr.setHolder({
+            label:'config_file',
+            filePath:this._paths.config_file,
+            fileType:'json',
+
+            preLoad:true,
+            cloneFrom:this._paths.config_file_sample
+        });
+
         // Open config.json
-        this._config = this._openConfigJson();
+        this._config = DataMgr.get('config_file');
         if(!this._config){
             Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
         }
@@ -52,32 +62,15 @@ class ConfigManager {
         return options;
     }
 
-    _openConfigJson(){
-        let _config = null;
-        d('Loading configuration file: ',this._paths.config_file);
-        try{
-            _config = require(this._paths.config_file);
-            return _config;
-        }catch(e){
-            Utils.File.copyFileSync(this._paths.config_file_sample,this._paths.config_file,{overwrite:false});
-        }
-        try{
-            _config = require(this._paths.config_file);
-        }catch(e){
-            return null;
-        }
-        return _config;
-    }
-
 
     _setInternals(){
-        this._paths.samples_directory = Utils.File.checkAndSetPath(this._config.SamplesDirectory);
+        this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) UI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
-        this._paths.projects_directory = Utils.File.checkAndSetPath(this._config.ProjectsDirectory);
+        this._paths.projects_directory = Utils.File.checkAndSetPathSync(this._config.ProjectsDirectory);
         if(!this._paths.projects_directory) UI.warning("Projects directory does not exist: ",this._config.ProjectsDirectory);
 
-        this._paths.project_directory = Utils.File.checkAndSetPath(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
+        this._paths.project_directory = Utils.File.checkAndSetPathSync(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
         if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
 
         UI.print();
@@ -172,13 +165,16 @@ class ConfigManager {
         let _outcome = this._set(this._config[name],value);
         if(_outcome.error==true){
             if(_outcome.type){
-                UI.print("   Config.set: current value and old value have different types.\n");
-                UI.print("               old: ",this._config[name]);
-                UI.print("               new: ",value);
+                UI.print("Config.set: current value and old value have different types.\n");
+                UI.print("             old: ",this._config[name]);
+                UI.print("             new: ",value);
             }
             return null;
         }
-        return this._setFinalValue(name,_outcome);
+        let _new_value = this._setFinalValue(name,_outcome);
+        if(_new_value===null) return null;
+        DataMgr.set('config_file',this._config);
+        return _new_value;
     }
 
 
@@ -192,38 +188,47 @@ class ConfigManager {
             v = ph.base || ph.name;
             if(ph.dir.length>0) proj_dir = ph.dir;
 
-            proj_dir_ck = Utils.File.checkAndSetPath(proj_dir);
+            proj_dir_ck = Utils.File.checkAndSetPathSync(proj_dir);
             if(!proj_dir_ck){
-                UI.print("   The projects directory does not exist: "+proj_dir);
-                return;
+                UI.print("The projects directory does not exist: "+proj_dir);
+                return null;
             }
 
-            proj_dir_ck = Utils.File.checkAndSetPath(proj_dir+v);
+            proj_dir_ck = Utils.File.checkAndSetPathSync(proj_dir+v);
             if(!proj_dir_ck){
-                UI.print("   The project directory does not exist: "+proj_dir+v);
-                return;
+                UI.print("The project directory does not exist: "+proj_dir+v);
+                return null;
             }
 
             this._config.ProjectsDirectory = proj_dir;
         }
 
-        if(n=="SamplesDirectory"){
+        else if(n=="ProjectsDirectory"){
+            let proj_dir_ck = Utils.File.checkAndSetPathSync(v);
+            if(!proj_dir_ck){
+                UI.print("The project directory does not exist: "+v);
+                return null;
+            }
+            v = proj_dir_ck;
+        }
+
+        else if(n=="SamplesDirectory"){
             let ph = Utils.File.pathParse(v);
-            v = Utils.File.checkAndSetPath(v);
+            v = Utils.File.checkAndSetPathSync(v);
             if(!v){
-                UI.print("   The samples directory does not exist: "+v);
-                return;
+                UI.print("The samples directory does not exist: "+v);
+                return null;
             }
             this._config.SamplesDirectory = v;
         }
 
-        if(_outcome.type=='array' && this._config[n].length>0){
+        else if(_outcome.type=='array' && this._config[n].length>0){
             let _ot = this._set(this._config[n][0],v);
             if(_ot.error==true){
                 if(_ot.type){
-                    UI.print("   Config.set [Array]: current value and old value have different types.");
-                    UI.print("\n                       old: ",this._config[n][0]);
-                    UI.print("\n                       new: ",v);
+                    UI.print("Config.set [Array]: current value and old value have different types.");
+                    UI.print("\n                   old: ",this._config[n][0]);
+                    UI.print("\n                   new: ",v);
                 }
                 return null;
             }
@@ -245,14 +250,8 @@ class ConfigManager {
     }
 
     save(){
-        let config_text = JSON.stringify(this._config, null, '\t');
-        try{
-            Utils.File.writeFileSync(this._paths.config_file, config_text);
-        }catch(e){
-            UI.print(e);
-            return false;
-        }
-        return true;
+        DataMgr.set('config_file',this._config);
+        return DataMgr.save('config_file');
     }
 
     print(){
@@ -273,6 +272,7 @@ class ConfigManager {
 
 
     setFromCliParams(name,values){
+        if(!_.isString(name) || !_.isArray(values)) return null;
         /* Custom action 'set' */
         if(name=='Tags') return this.setTags(values);
         return this.set(name,values[0]);

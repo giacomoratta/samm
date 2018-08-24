@@ -1,3 +1,4 @@
+
 DataMgr.setHolder({
     label:'scan_index',
     filePath:ConfigMgr.path('samples_index'),
@@ -36,3 +37,4 @@ DataMgr.setHolder({
         return dataObj.toJson();
     }
 });
+

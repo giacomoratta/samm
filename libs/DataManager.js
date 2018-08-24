@@ -20,16 +20,22 @@ class DataManager {
             label:null,
             filePath:null,
             fileType:'json',
-            preLoad:false,
-            autoLoad:false,
-            preSet:false,
-            autoSet:false,
+
+            /* Behaviour */
+            cloneFrom:'',       // if filePath does not exist, clone from this path
+            preLoad:false,      // calls loadFn after creating relationship
+            autoLoad:false,     // calls loadFn if it has no data
+            preSet:false,       // calls setFn after creating relationship
+            autoSet:false,      // calls setFn if it has no data
+
+            /* Custom functions */
             checkFn:null,
             getFn:null,
             setFn:null,
             loadFn:null,
-            saveFn:null,
+            saveFn:null
         };
+
         let _$cfg = _.merge(_default$cfg,$cfg);
         _$cfg.fileType = this._checkEnumValue('fileType',_$cfg.fileType,this.ENUMS.fileType.json);
         return _$cfg;
@@ -165,7 +171,10 @@ class DataManager {
     }
 
 
-    _loadFileData(filePath, fileType){
+    _loadFileData(filePath, fileType, cloneFrom){
+        if(cloneFrom.length>0 && !Utils.File.fileExistsSync(filePath)){
+            Utils.File.copyFileSync(cloneFrom,filePath);
+        }
         if(fileType==this.ENUMS.fileType.json){
             return Utils.File.readJsonFileSync(filePath);
 

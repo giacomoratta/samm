@@ -13,9 +13,7 @@ class CliManager {
     }
 
     processParams(cli_values, command){
-        //d(cli_values);
         this.cli_params = new CliParams(cli_values, command);
-        d(this.cli_params);
         return this.cli_params;
     }
 
@@ -73,7 +71,7 @@ class CliManager {
 
                 C_coverage_options.dirPath = this.cli_params.getOption('directory');
                 if(!C_coverage_options.dirPath){
-                    if(!SamplesMgr.sampleScanFileExists()){
+                    if(!SamplesMgr.sampleScanfileExistsSync()){
                         UI.print("Coverage command: the index file does not exist.\n" +
                             "Perform a scan or specify an absolute path with -p option.");
                         return this._error_code;
@@ -183,7 +181,7 @@ class CliManager {
                 };
 
                 if(!this.cli_params.hasOption('force')){
-                    if(SamplesMgr.sampleScanFileExists()){
+                    if(SamplesMgr.sampleScanfileExistsSync()){
                         UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
                     }

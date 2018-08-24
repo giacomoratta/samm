@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
-let _temp_path_checkAndSetDuplicatedDirectoryName = UF.pathJoin(ConfigMgr.path('temp_dir'),'checkAndSetDuplicatedDirectoryName');
+let _temp_path_checkAndSetDuplicatedDirectoryNameSync= UF.pathJoin(ConfigMgr.path('temp_dir'),'checkAndSetDuplicatedDirectoryNameSync');
 let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('temp_dir'),'utils_file');
 let ck_file1 = UF.pathJoin(tmp_dir_utils_file,'file1.txt');
 let ck_directory1 = UF.pathJoin(tmp_dir_utils_file,'directory1');
@@ -23,23 +23,23 @@ describe('Utils.File.singleton - TEST for existence, ensure directories, path fi
         });
     });
 
-    describe("#checkAndSetDuplicatedDirectoryName", function() {
+    describe("#checkAndSetDuplicatedDirectoryNameSync", function() {
         it("check if the directory exists and set another name to avoid collisions", function() {
-            let base_dir = _temp_path_checkAndSetDuplicatedDirectoryName;
+            let base_dir = _temp_path_checkAndSetDuplicatedDirectoryNameSync;
             UF._FS_EXTRA.removeSync(base_dir);
 
-            assert.equal(UF.checkAndSetDuplicatedDirectoryName(324352/*wrong type*/),null);
+            assert.equal(UF.checkAndSetDuplicatedDirectoryNameSync(324352/*wrong type*/),null);
 
             tLog(base_dir);
-            assert.equal(UF.checkAndSetDuplicatedDirectoryName(base_dir),base_dir);
+            assert.equal(UF.checkAndSetDuplicatedDirectoryNameSync(base_dir),base_dir);
             UF.ensureDirSync(base_dir);
 
-            let new_dir1 = UF.checkAndSetDuplicatedDirectoryName(base_dir);
+            let new_dir1 = UF.checkAndSetDuplicatedDirectoryNameSync(base_dir);
             tLog('D1',new_dir1);
             assert.notEqual(new_dir1,base_dir);
             UF.ensureDirSync(new_dir1);
 
-            let new_dir2 = UF.checkAndSetDuplicatedDirectoryName(base_dir);
+            let new_dir2 = UF.checkAndSetDuplicatedDirectoryNameSync(base_dir);
             tLog('D2',new_dir2);
             assert.notEqual(new_dir2,base_dir);
             assert.notEqual(new_dir2,new_dir1);
@@ -51,15 +51,15 @@ describe('Utils.File.singleton - TEST for existence, ensure directories, path fi
         });
     });
 
-    describe("#checkAndSetPath", function() {
+    describe("#checkAndSetPathSync", function() {
         it("check if the path exists", function() {
             let base_dir = ConfigMgr.path('temp_dir');
             let base_dir_no_sep = base_dir.substring(0,base_dir.length-1);
             tLog('base_dir > ',base_dir);
             tLog('base_dir_no_sep > ',base_dir_no_sep);
-            assert.equal(UF.checkAndSetPath(base_dir),base_dir);
-            assert.equal(UF.checkAndSetPath(base_dir+'not_exist'),null);
-            let base_dir_no_sep_corrected = UF.checkAndSetPath(base_dir_no_sep);
+            assert.equal(UF.checkAndSetPathSync(base_dir),base_dir);
+            assert.equal(UF.checkAndSetPathSync(base_dir+'not_exist'),null);
+            let base_dir_no_sep_corrected = UF.checkAndSetPathSync(base_dir_no_sep);
             assert.notEqual(base_dir_no_sep,base_dir_no_sep_corrected);
             tLog('base_dir_no_sep_corrected > ',base_dir_no_sep_corrected);
         });
@@ -69,16 +69,16 @@ describe('Utils.File.singleton - TEST for existence, ensure directories, path fi
         it("check if some file system nodes exist", function() {
 
             tLog('file exists > ',ck_file1);
-            assert.equal(UF.fileExists(ck_file1),true);
-            assert.equal(UF.fileExists(ck_file1+'xxx'),false);
+            assert.equal(UF.fileExistsSync(ck_file1),true);
+            assert.equal(UF.fileExistsSync(ck_file1+'xxx'),false);
 
             tLog('directory exists > ',ck_directory1);
-            assert.equal(UF.directoryExists(ck_directory1),true);
-            assert.equal(UF.directoryExists(ck_directory1+'xxx'),false);
+            assert.equal(UF.directoryExistsSync(ck_directory1),true);
+            assert.equal(UF.directoryExistsSync(ck_directory1+'xxx'),false);
 
             tLog('file exists > ',ck_directory1_file11);
-            assert.equal(UF.fileExists(ck_directory1_file11),true);
-            assert.equal(UF.fileExists(ck_directory1_file11+'xxx'),false);
+            assert.equal(UF.fileExistsSync(ck_directory1_file11),true);
+            assert.equal(UF.fileExistsSync(ck_directory1_file11+'xxx'),false);
         });
     });
 });

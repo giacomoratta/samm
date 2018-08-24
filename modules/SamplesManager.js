@@ -34,7 +34,7 @@ class SamplesManager {
 
         if(!_.isString(absPath)){
             absPath=ConfigMgr.get('SamplesDirectory');
-            if(this.sampleScanFileExists() && options.force!==true){
+            if(this.sampleScanfileExistsSync() && options.force!==true){
                 smp_obj = this.loadSampleScanFromFile();
             }
         }
@@ -42,7 +42,7 @@ class SamplesManager {
         smp_obj.setOriginPath(absPath);
         if(!smp_obj.empty()) return smp_obj;
 
-        if(!Utils.File.directoryExists(absPath)){
+        if(!Utils.File.directoryExistsSync(absPath)){
             UI.warning('   SamplesMgr.scan: directory does not exists! ('+absPath+')');
             return null;
         }
@@ -99,8 +99,8 @@ class SamplesManager {
      * Check the main index file
      * @returns { boolean }
      */
-    sampleScanFileExists(){
-        return Utils.File.fileExists(ConfigMgr.path('samples_index'));
+    sampleScanfileExistsSync(){
+        return Utils.File.fileExistsSync(ConfigMgr.path('samples_index'));
     }
 
 
@@ -313,7 +313,7 @@ class SamplesManager {
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=_.join(_.slice(smp_obj.getTags(),0,2),'_');//.substring(0,20);
         options['_smppath'] = Utils.File.pathJoin(ConfigMgr.get('ProjectsDirectory'), ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
         if(options['forcedir']!==true){
-            options['_smppath'] = Utils.File.checkAndSetDuplicatedDirectoryName(options['_smppath']);
+            options['_smppath'] = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options['_smppath']);
         }
         if(!options['_smppath']) return null;
         if(smp_obj.empty()) return null;
