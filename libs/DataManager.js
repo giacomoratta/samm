@@ -43,7 +43,7 @@ class DataManager {
             logErrorsFn:function(){},
 
             /* Private functions */
-            _checkDataType = null
+            _checkDataType: null
         };
 
         let _$cfg = _.merge(_default$cfg,$cfg);
@@ -106,13 +106,18 @@ class DataManager {
     load(label,args){
         let $cfg = this._cfg[label];
         if(!$cfg || !$cfg.filePath) return null;
-        let filedata = this._loadFileData($cfg.filePath, $cfg.fileType, $cfg.cloneFrom);
+
+        let filedata = this._loadFileData($cfg);
+        if(filedata === false){
+            $cfg.logErrorsFn(filedata,'DataMgr.load > the file does exist');
+            return false;
+        }
 
         if($cfg.loadFn){
             try{
                 let data = $cfg.loadFn(filedata,$cfg,args);
                 if(!$cfg._checkDataType(data)){
-                    $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                    $cfg.logErrorsFn(filedata,'DataMgr.load > loaded data type is not '+$cfg.dataType);
                     return false;
                 }
                 this._data[label]=data;
@@ -148,7 +153,7 @@ class DataManager {
             }
         }
         else filedata = this._data[label];
-        return this._saveFileData($cfg.filePath, $cfg.fileType, filedata);
+        return this._saveFileData($cfg, filedata);
     }
 
 
@@ -183,8 +188,7 @@ class DataManager {
 
 
     get(label,args){
-        let $cfg = this._cfg[label];
-        if(!$cfg) return null;
+        let $cfg = this._cfg[label]; if(!$cfg) return null;
         let dataObj = this._data[label];
         if(!dataObj){
             if($cfg.preLoad===true){
@@ -224,32 +228,30 @@ class DataManager {
     }
 
 
-    _loadFileData(filePath, fileType, cloneFrom){
-        let $cfg = this._cfg[label];
-        if(!$cfg) return null;
-        if(cloneFrom.length>0 && !Utils.File.fileExistsSync(filePath)){
-            let cpF = Utils.File.copyFileSync(cloneFrom,filePath);
-            if(cpF.err) $cfg.logErrorsFn('DataMgr > Cloning of file failed','src: '+cloneFrom,'dst: '+filePath);
+    _loadFileData($cfg){
+        if($cfg.cloneFrom.length>0 && !Utils.File.fileExistsSync($cfg.filePath)){
+            let cpF = Utils.File.copyFileSync($cfg.cloneFrom,$cfg.filePath);
+            if(cpF.err) $cfg.logErrorsFn('DataMgr > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
         }
-        if(fileType==this.ENUMS.fileType.json){
-            return Utils.File.readJsonFileSync(filePath);
+        if($cfg.fileType==this.ENUMS.fileType.json){
+            return Utils.File.readJsonFileSync($cfg.filePath);
 
-        }else if(fileType==this.ENUMS.fileType.text){
-            return Utils.File.readTextFileSync(filePath);
+        }else if($cfg.fileType==this.ENUMS.fileType.text){
+            return Utils.File.readTextFileSync($cfg.filePath);
 
         }
         return null;
     }
 
-    _saveFileData(filePath, fileType, content){
-        if(fileType==this.ENUMS.fileType.json){
-            return Utils.File.writeJsonFileSync(filePath,content);
+    _saveFileData($cfg, content){
+        if($cfg.fileType==this.ENUMS.fileType.json){
+            return Utils.File.writeJsonFileSync($cfg.filePath,content);
 
-        }else if(fileType==this.ENUMS.fileType.json_compact){
-            return Utils.File.writeJsonFileSync(filePath,content,false);
+        }else if($cfg.fileType==this.ENUMS.fileType.json_compact){
+            return Utils.File.writeJsonFileSync($cfg.filePath,content,false);
 
-        }else if(fileType==this.ENUMS.fileType.text){
-            return Utils.File.writeTextFileSync(filePath,content);
+        }else if($cfg.fileType==this.ENUMS.fileType.text){
+            return Utils.File.writeTextFileSync($cfg.filePath,content);
         }
         return null;
     }

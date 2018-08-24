@@ -9,7 +9,9 @@ describe('DataManager.class - Tests for a file-only holder', function() {
             DataMgr.setHolder({
                 label:'my_file1',
                 filePath:my_file1_abspath,
-                fileType:'text'
+                fileType:'text',
+                dataType:'string',
+                logErrorsFn:console.log
             });
             UF._FS_EXTRA.removeSync(DataMgr.$cfg('my_file1').filePath);
         });
@@ -77,16 +79,18 @@ describe('DataManager.class - Tests for a file-only holder', function() {
             DataMgr.setHolder({
                 label:'my_file1_clone',
                 filePath:my_file1_abspath,
-                fileType:'text'
+                fileType:'text',
+                dataType:'string',
+                logErrorsFn:console.log
             });
             let file_content = null;
             file_content = DataMgr.load('my_file1_clone');
-            tLog(file_content);
+            tLog('1>',file_content);
             assert.equal(_.isString(file_content),true);
             assert.equal(file_content,'This is my text on my_file1');
 
             file_content = DataMgr.get('my_file1_clone');
-            tLog(file_content);
+            tLog('2>',file_content);
             assert.equal(_.isString(file_content),true);
             assert.equal(file_content,'This is my text on my_file1');
         });

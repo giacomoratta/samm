@@ -8,6 +8,8 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 label:'scan_index',
                 filePath:ConfigMgr.path('samples_index'),
                 fileType:'json',
+                logErrorsFn:console.log,
+
                 checkFn:(dataObj,args)=>{
                     return (dataObj && !dataObj.error());
                 },
@@ -109,7 +111,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
     describe("#load('scan_index')", function() {
         it("should call loadFn but the file does not exist", function() {
             UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
-            assert.equal(DataMgr.load('scan_index'),null);
+            assert.equal(DataMgr.load('scan_index'),false);
         });
     });
 

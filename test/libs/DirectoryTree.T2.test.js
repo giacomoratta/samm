@@ -8,8 +8,14 @@ describe('DirectoryTree.class - TEST the traversing of a DirectoryTree', functio
             assert.equal(tt.error(),false);
             tt.walk({
                 itemCb:(data)=>{
-                    tLog(_.padStart(' ',(data.level+1)*3),'',data.level, data.is_first_child, data.is_last_child, "'"+data.item.rel_path+"'",data.item.sizeString);
-                    tLog(_.padStart(' ',(data.level+1)*3),' > Parent:',data.parent.path,"\n");
+                    assert.equal(_.isInteger(data.item.level),true);
+                    assert.equal(_.isString(data.item.rel_root),true);
+                    assert.equal(_.isString(data.item.rel_path),true);
+                    assert.equal(_.isBoolean(data.is_first_child),true);
+                    assert.equal(_.isBoolean(data.is_last_child),true);
+                    assert.equal(_.isObject(data.parent),true);
+                    tLog(_.padStart(' ',(data.item.level+1)*3),'',data.item.level, data.is_first_child, data.is_last_child, "'"+data.item.rel_path+"'",data.item.sizeString);
+                    tLog(_.padStart(' ',(data.item.level+1)*3),' > Parent:',data.parent.path,"\n");
                 }
             });
             tLog('DirectoryTree root path: '+tt.rootPath());
