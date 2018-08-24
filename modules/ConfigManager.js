@@ -31,9 +31,11 @@ class ConfigManager {
             label:'config_file',
             filePath:this._paths.config_file,
             fileType:'json',
+            dataType:'object',
 
             preLoad:true,
-            cloneFrom:this._paths.config_file_sample
+            cloneFrom:this._paths.config_file_sample,
+            logErrorsFn:console.log
         });
 
         // Open config.json

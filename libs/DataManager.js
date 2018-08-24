@@ -40,6 +40,7 @@ class DataManager {
             setFn:null,
             loadFn:null,
             saveFn:null,
+            logErrorsFn:function(){},
 
             /* Private functions */
             _checkDataType = null
@@ -64,14 +65,18 @@ class DataManager {
 
     setHolder($cfg){
         $cfg = this._parseConfiguration($cfg);
-        if(!$cfg) return null;
+        if(!$cfg) {
+            $cfg.logErrorsFn('DataMgr.setHolder > configuration not valid');
+            return null;
+        }
         this._cfg[$cfg.label] = $cfg;
         if($cfg.preLoad===true){
-            this.load($cfg.label);
+            return this.load($cfg.label);
         }
         if($cfg.preSet===true){
-            this.set($cfg.label);
+            return this.set($cfg.label);
         }
+        return true;
     }
 
 
@@ -90,6 +95,7 @@ class DataManager {
                 return $cfg.checkFn(this._data[label],$cfg,args);
             }catch(e){
                 d(e);
+                $cfg.logErrorsFn('DataMgr.check > checkFn callback failed');
                 return null;
             }
         }
@@ -105,15 +111,22 @@ class DataManager {
         if($cfg.loadFn){
             try{
                 let data = $cfg.loadFn(filedata,$cfg,args);
-                if(!$cfg._checkDataType(data)) return false;
+                if(!$cfg._checkDataType(data)){
+                    $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                    return false;
+                }
                 this._data[label]=data;
             }catch(e){
                 d(e);
+                $cfg.logErrorsFn('DataMgr.load > loadFn callback failed!');
                 return null;
             }
         }
         else{
-            if(!$cfg._checkDataType(filedata)) return false;
+            if(!$cfg._checkDataType(filedata)){
+                $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                return false;
+            }
             this._data[label]=filedata;
         }
         return this._data[label];
@@ -130,6 +143,7 @@ class DataManager {
                 filedata = $cfg.saveFn(this._data[label],$cfg,args);
             }catch(e){
                 d(e);
+                $cfg.logErrorsFn('DataMgr.save > saveFn callback failed!');
                 return null;
             }
         }
@@ -144,16 +158,23 @@ class DataManager {
 
         this._data[label]=null;
         if(data){
-            if(!$cfg._checkDataType(data)) return false;
+            if(!$cfg._checkDataType(data)){
+                $cfg.logErrorsFn('DataMgr.set > data type is not '+$cfg.dataType);
+                return false;
+            }
             this._data[label]=data;
         }
         else if($cfg.setFn){
             try{
                 data = $cfg.setFn($cfg,args);
-                if(!$cfg._checkDataType(data)) return false;
+                if(!$cfg._checkDataType(data)){
+                    $cfg.logErrorsFn('DataMgr.set > data type is not '+$cfg.dataType);
+                    return false;
+                }
                 this._data[label]=data;
             }catch(e){
                 d(e);
+                $cfg.logErrorsFn('DataMgr.set > setFn callback failed!');
                 return null;
             }
         }
@@ -177,6 +198,7 @@ class DataManager {
                 return $cfg.getFn(dataObj,$cfg,args);
             }catch(e){
                 d(e);
+                $cfg.logErrorsFn('DataMgr.get > getFn callback failed');
                 return null;
             }
         }
@@ -203,8 +225,11 @@ class DataManager {
 
 
     _loadFileData(filePath, fileType, cloneFrom){
+        let $cfg = this._cfg[label];
+        if(!$cfg) return null;
         if(cloneFrom.length>0 && !Utils.File.fileExistsSync(filePath)){
-            Utils.File.copyFileSync(cloneFrom,filePath);
+            let cpF = Utils.File.copyFileSync(cloneFrom,filePath);
+            if(cpF.err) $cfg.logErrorsFn('DataMgr > Cloning of file failed','src: '+cloneFrom,'dst: '+filePath);
         }
         if(fileType==this.ENUMS.fileType.json){
             return Utils.File.readJsonFileSync(filePath);
@@ -221,7 +246,6 @@ class DataManager {
             return Utils.File.writeJsonFileSync(filePath,content);
 
         }else if(fileType==this.ENUMS.fileType.json_compact){
-
             return Utils.File.writeJsonFileSync(filePath,content,false);
 
         }else if(fileType==this.ENUMS.fileType.text){
