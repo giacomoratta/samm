@@ -210,6 +210,15 @@ class DataManager {
     }
 
 
+    print(label,args){
+        let $cfg = this._cfg[label]; if(!$cfg) return null;
+        let dataObj = this.get(label,args);
+        if($cfg.printFn){
+            return $cfg.printFn(dataObj,$cfg,args);
+        }
+    }
+
+
     _checkEnumValue(label,value,defaultValue){
         let _check = (_.indexOf(Object.values(this.ENUMS[label]),value)>=0);
         if(_check===true) return value;

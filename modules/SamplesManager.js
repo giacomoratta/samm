@@ -3,6 +3,59 @@ const Samples = require('./Samples.class.js');
 class SamplesManager {
 
     constructor(){
+        this._samples_index_label = 'samples_index';
+        this._createDataHolder(
+            this._samples_index_label,
+            ConfigMgr.path('samples_index'),
+            ConfigMgr.path('samples_directory')
+        );
+    }
+
+    _createDataHolder(label,filePath,directoryToScan){
+        DataMgr.setHolder({
+            label:label,
+            filePath:filePath,
+            fileType:'json',
+            dataType:'object',
+            logErrorsFn:console.log,
+
+            checkFn:(dataObj,args)=>{
+                return (dataObj && !dataObj.error());
+            },
+
+            getFn:(dataObj,$cfg,args)=>{
+                return dataObj;
+            },
+
+            printFn:(dataObj,$cfg,args)=>{
+                if(!dataObj) return;
+                dataObj.walk({
+                    itemCb:(data)=>{
+                        console.log(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
+                    }
+                });
+            },
+
+            setFn:($cfg,args)=>{
+                let tt = new DirectoryTree(directoryToScan);
+                tt.read();
+                if(!tt.error()) return tt;
+                return null;
+            },
+
+            loadFn:(fileData,$cfg,args)=>{
+                if(!_.isObject(fileData)) return null;
+                let tt = new DirectoryTree(directoryToScan);
+                tt.fromJson(fileData);
+                if(!tt.error()) return tt;
+                return null;
+            },
+
+            saveFn:(dataObj,$cfg,args)=>{
+                if(!$cfg.checkFn(dataObj)) return;
+                return dataObj.toJson();
+            }
+        });
     }
 
 
@@ -100,7 +153,7 @@ class SamplesManager {
      * @returns { boolean }
      */
     sampleScanfileExistsSync(){
-        return Utils.File.fileExistsSync(ConfigMgr.path('samples_index'));
+        return DataMgr.hasData(this._samples_index_label);
     }
 
 
