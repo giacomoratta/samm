@@ -11,13 +11,25 @@ class SamplesManager {
         );
     }
 
-    _createDataHolder(label,filePath,directoryToScan){
+    _parseOptions(options){
+        return _.merge({
+            label:'',
+            filePath:'',
+            directoryToScan:'',
+            force:false,
+            printFn:console.log
+        },options);
+    }
+
+    _createDataHolder(options){
+        options  = this._parseOptions(options);
+
         DataMgr.setHolder({
-            label:label,
-            filePath:filePath,
+            label:options.label,
+            filePath:options.filePath,
             fileType:'json',
             dataType:'object',
-            logErrorsFn:console.log,
+            logErrorsFn:options.printFn,
 
             checkFn:(dataObj,args)=>{
                 return (dataObj && !dataObj.error());
@@ -31,13 +43,13 @@ class SamplesManager {
                 if(!dataObj) return;
                 dataObj.walk({
                     itemCb:(data)=>{
-                        console.log(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
+                        options.printFn(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
                     }
                 });
             },
 
             setFn:($cfg,args)=>{
-                let tt = new DirectoryTree(directoryToScan);
+                let tt = new DirectoryTree(options.directoryToScan);
                 tt.read();
                 if(!tt.error()) return tt;
                 return null;
@@ -45,7 +57,7 @@ class SamplesManager {
 
             loadFn:(fileData,$cfg,args)=>{
                 if(!_.isObject(fileData)) return null;
-                let tt = new DirectoryTree(directoryToScan);
+                let tt = new DirectoryTree(options.directoryToScan);
                 tt.fromJson(fileData);
                 if(!tt.error()) return tt;
                 return null;
