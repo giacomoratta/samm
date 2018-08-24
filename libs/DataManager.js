@@ -89,7 +89,7 @@ class DataManager {
     load(label,args){
         let $cfg = this._cfg[label];
         if(!$cfg || !$cfg.filePath) return null;
-        let filedata = this._loadFileData($cfg.filePath, $cfg.fileType);
+        let filedata = this._loadFileData($cfg.filePath, $cfg.fileType, $cfg.cloneFrom);
 
         if($cfg.loadFn){
             try{
