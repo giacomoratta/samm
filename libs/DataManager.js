@@ -8,6 +8,11 @@ class DataManager {
                 json:'json',
                 json_compact:'json-compact',
                 text:'text',
+            },
+            dataType: {
+                object:'object',
+                string:'string',
+                array:'array'
             }
         };
     }
@@ -20,6 +25,7 @@ class DataManager {
             label:null,
             filePath:null,
             fileType:'json',
+            dataType:'object',
 
             /* Behaviour */
             cloneFrom:'',       // if filePath does not exist, clone from this path
@@ -33,11 +39,16 @@ class DataManager {
             getFn:null,
             setFn:null,
             loadFn:null,
-            saveFn:null
+            saveFn:null,
+
+            /* Private functions */
+            _checkDataType = null
         };
 
         let _$cfg = _.merge(_default$cfg,$cfg);
         _$cfg.fileType = this._checkEnumValue('fileType',_$cfg.fileType,this.ENUMS.fileType.json);
+        _$cfg.dataType = this._checkEnumValue('dataType',_$cfg.dataType,this.ENUMS.dataType.object);
+        _$cfg._checkDataType = this._setcheckDataTypeFn(_$cfg.dataType);
         return _$cfg;
     }
 
@@ -93,13 +104,18 @@ class DataManager {
 
         if($cfg.loadFn){
             try{
-                this._data[label] = $cfg.loadFn(filedata,$cfg,args);
+                let data = $cfg.loadFn(filedata,$cfg,args);
+                if(!$cfg._checkDataType(data)) return false;
+                this._data[label]=data;
             }catch(e){
                 d(e);
                 return null;
             }
         }
-        else this._data[label] = filedata;
+        else{
+            if(!$cfg._checkDataType(filedata)) return false;
+            this._data[label]=filedata;
+        }
         return this._data[label];
     }
 
@@ -127,10 +143,15 @@ class DataManager {
         if(!$cfg || !$cfg.filePath) return null;
 
         this._data[label]=null;
-        if(data) this._data[label]=data;
+        if(data){
+            if(!$cfg._checkDataType(data)) return false;
+            this._data[label]=data;
+        }
         else if($cfg.setFn){
             try{
-                this._data[label] = $cfg.setFn($cfg,args);
+                data = $cfg.setFn($cfg,args);
+                if(!$cfg._checkDataType(data)) return false;
+                this._data[label]=data;
             }catch(e){
                 d(e);
                 return null;
@@ -168,6 +189,16 @@ class DataManager {
         if(_check===true) return value;
         if(!_.isNil(defaultValue)) return defaultValue;
         return null;
+    }
+
+
+    _setcheckDataTypeFn(dataType){
+        if(this.ENUMS.dataType.array === dataType){
+            return _.isArray;
+        }else if(this.ENUMS.dataType.string === dataType){
+            return _.isString;
+        }
+        return _.isObject;
     }
 
 
