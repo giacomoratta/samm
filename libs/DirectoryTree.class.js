@@ -35,17 +35,21 @@ class DirectoryTree {
     }
 
 
-    read(){
+    read(options){
         this.init();
         let _tree = new SymbolTree();
         let _t_parent = this._root;
+
+        options = _.merge({
+            fileAcceptabilityFn:function(/*  {PathInfo} item  */){return true;}
+        },options);
 
         DirectoryTree.walkDirectory(this._data.root_path,{
             excludedExtensions:this._data.options.excludedExtensions,
             excludedPaths:this._data.options.excludedPaths,
             itemCb:(item)=>{
                 // callback for each item
-                if(item.isFile===true){
+                if(item.isFile===true && options.fileAcceptabilityFn(item)===true){
                     _tree.appendChild(_t_parent,item);
                     this._data.files_count++;
                 }

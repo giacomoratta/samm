@@ -1,9 +1,9 @@
 class Samples {
 
-    constructor(absPath){
+    constructor(){
         this._tags = [];
         this._query_tag = '';
-        this._tree = new DirectoryTree(absPath,{});
+        this._tree = null; //new DirectoryTree(absPath,{});
     }
 
     empty(){
@@ -109,33 +109,10 @@ class Samples {
 
 
     toJsonString(){
-        let json_string = JSON.stringify({
-            tags: this._tags,
-            origin_path: this._origin_path,
-            collection: this._array
-        });
-        return json_string;
     }
 
 
     fromJsonString(json_string){
-        this.init();
-        if(!_.isString(json_string)) return false;
-        json_string = _.trim(json_string);
-
-        try{
-            let _self = this;
-            let json_obj = JSON.parse(json_string);
-            json_obj.collection.forEach(function(v){
-                _self.add(v);
-            });
-            _self._tags = json_obj.tags;
-            _self._origin_path = json_obj.origin_path;
-        }catch(e){
-            d(e);
-            return false;
-        }
-        return true;
     }
 
 
@@ -183,6 +160,121 @@ class Samples {
         this.forEach(function(item,index){
             console.log(prefix+_.padStart((index+1)+')', padding)+" "+processFn(item.path));
         });
+    }
+
+
+    /**
+     * Check and process the tag query string.
+     * The tag string is formatted with ',' (OR) and '+' (AND).
+     * @param {string} ts
+     * @returns { object | null }
+     */
+    processTagString(ts, splitFn){
+        let proc_obj = {
+            _string:[],  //temporary array with strings e.g. ['a+b+c','d+e']
+            string:"",  //final tag processed query
+            array:[],   //array with subarrays of separated tags
+            check_fn:null,  //function used to check the filename
+            _check_fn_string:"" //temporary string with composed function which is evaluated
+        };
+        ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');
+
+        let _setSeparateAndFunctions = function(){};
+        if(_.isArray(splitFn)){
+            _setSeparateAndFunctions = function(string,tag_array,fn_body){
+                if(Utils.searchInObjectArray(splitFn,'string',string)===true) return; //avoid duplicates
+                splitFn.push({
+                    string:string,
+                    tag_array:tag_array,
+                    check_fn:Utils.newFunction('f',fn_body)
+                });
+            };
+        }
+
+        /* Split tags and shuffle */
+        let tagOR = _.split(ts,',');
+        if(!_.isArray(tagOR) || tagOR.length<=0) return null;
+        tagOR = _.shuffle(tagOR);
+
+        /* Writing new function */
+        tagOR.forEach(function(v1,i1,a1){
+            v1=_.trim(v1);
+            if(v1.length<=0) return;
+
+            let _this_string, _this_fn_IF;
+            let tagAND=_.split(v1,'+');
+            proc_obj.array.push([]);
+            let po_index = proc_obj.array.length-1;
+
+            tagAND.forEach(function(v2,i2,a2){
+                v2=_.trim(v2);
+                if(v2.length<=0) return;
+                a2[i2]=_.trim(a2[i2]);
+                proc_obj.array[po_index].push(a2[i2]);
+            });
+            if(tagAND.length<=0) return;
+
+            _this_fn_IF = "( f.indexOf('"+ _.join(tagAND,"')>=0 && f.indexOf('") +"')>=0 )";
+            _this_string = _.join(tagAND,"+");
+
+            proc_obj._check_fn_string+="if "+_this_fn_IF+" return true;\n";
+            proc_obj._string.push(_this_string);
+
+            _setSeparateAndFunctions(_this_string, tagAND, "return "+_this_fn_IF+"; ");
+        });
+
+        proc_obj.string = _.join(proc_obj._string,", ");
+        proc_obj._check_fn_string+="return false;\n";
+
+        /* Building new function */
+        proc_obj.check_fn = Utils.newFunction('f',proc_obj._check_fn_string);
+        if(!proc_obj.check_fn) return null;
+
+        delete proc_obj._string;
+        delete proc_obj._check_fn_string;
+        return proc_obj;
+    }
+
+
+
+    /**
+     * Perform a search by tags.
+     * The tag string is formatted with ',' (OR) and '+' (AND).
+     * @param tagString
+     * @returns { Samples | null }
+     */
+    searchSamplesByTags(smp_obj_scan, tagString){
+        let smp_obj = new Samples();
+        let ptags_obj = this.processTagString(tagString);
+        if(!ptags_obj) return null;
+
+        let attempts = 5;
+        let _MaxOccurrencesSameDirectory = ConfigMgr.get('MaxOccurrencesSameDirectory');
+        let _RandomCount = ConfigMgr.get('RandomCount');
+        let smp_obj_random = null;
+
+        while(attempts>0){
+            smp_obj.init();
+            smp_obj_scan.forEach(function(item,index){
+                if(ptags_obj.check_fn(item.n_path)){
+                    smp_obj.addItem(item);
+                }
+            });
+            if(smp_obj.empty()) return smp_obj;
+
+            smp_obj_random = smp_obj.getRandom(_RandomCount, _MaxOccurrencesSameDirectory);
+            if(smp_obj_random && smp_obj_random.size()>=_RandomCount) break;
+            _MaxOccurrencesSameDirectory++;
+            attempts--;
+        }
+        if(!smp_obj_random || smp_obj_random.empty()) return smp_obj_random;
+        smp_obj_random.setTags(ptags_obj.array);
+
+        smp_obj_random.print('   ',function(n){ return n.substring(ConfigMgr.get('SamplesDirectory').length); });
+        console.log("\n   Performed search: '"+ptags_obj.string+"'");
+        console.log(  "   Random selection of "+_RandomCount+" samples","(max "+_MaxOccurrencesSameDirectory+" from the same directory)");
+        //d(smp_obj_random);
+        return smp_obj_random;
     }
 }
 

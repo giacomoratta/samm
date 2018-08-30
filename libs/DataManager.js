@@ -54,6 +54,12 @@ class DataManager {
     }
 
 
+    fileExistsSync(label){
+        if(_.isNil(this._data[label]) || _.isNil(this._data[label].filePath)) return null;
+        return Utils.File.fileExistsSync(this._data[label].filePath);
+    }
+
+
     hasData(label){
         return !_.isNil(this._data[label]);
     }

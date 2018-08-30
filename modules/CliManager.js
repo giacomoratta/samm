@@ -169,43 +169,6 @@ class CliManager {
     }
 
 
-    C_Scan(){
-        vorpal
-            .command('scan')
-            .description("Perform a full scan of the samples directory. " +
-                "In order to avoid resource wasting, if the index is already present the scan does not start.")
-            .option('-f, --force', 'Force the rescan.')
-            .action(this._getActionFn('scan',()=>{
-                let C_scan_options = {
-                    force:false //force scan
-                };
-
-                if(!this.cli_params.hasOption('force')){
-                    if(SamplesMgr.sampleScanfileExistsSync()){
-                        UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
-                        return this._error_code;
-                    }
-                }else{
-                    C_scan_options.force = true;
-                }
-
-                C_scan_options.printFn = function(s){ UI.print(s); };
-
-                let smp_obj = SamplesMgr.scanSamples(null,C_scan_options);
-                if(!smp_obj){
-                    UI.print("Scan command: job failed");
-                    return this._error_code;
-                }
-                UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
-                if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
-                    UI.print("Scan command: cannot write the index file");
-                    return this._error_code;
-                }
-                return smp_obj;
-            }));
-    }
-
-
     C_Save(){
         vorpal
             .command('save')
@@ -269,6 +232,42 @@ class CliManager {
                 UI.print("Set command: configuration saved successfully");
                 ConfigMgr.print();
                 return this._success_code;
+            }));
+    }
+
+
+    C_Scan(){
+        vorpal
+            .command('scan')
+            .description("Perform a full scan of the samples directory. " +
+                "In order to avoid resource wasting, if the index is already present the scan does not start.")
+            .option('-f, --force', 'Force the rescan.')
+            .action(this._getActionFn('scan',()=>{
+                let C_scan_options = {
+                    printFn: function(s){ UI.print(s); },
+                    force:   false //force scan
+                };
+
+                if(!this.cli_params.hasOption('force')){
+                    if(SamplesMgr.sampleScanfileExistsSync()){
+                        UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
+                        return this._error_code;
+                    }
+                }else{
+                    C_scan_options.force = true;
+                }
+
+                let smp_obj = SamplesMgr.scanSamples(C_scan_options);
+                if(!smp_obj){
+                    UI.print("Scan command: job failed");
+                    return this._error_code;
+                }
+                UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
+                if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
+                    UI.print("Scan command: cannot write the index file");
+                    return this._error_code;
+                }
+                return smp_obj;
             }));
     }
 
