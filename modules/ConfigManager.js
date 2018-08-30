@@ -22,7 +22,6 @@ class ConfigManager {
         this._paths.custom_indexes = Utils.File.setAsAbsPath(this._paths.custom_indexes);
         this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
-        this._paths.projects_directory = null;
         this._paths.project_directory = null;
         this._paths.samples_directory = null;
 

@@ -4,32 +4,20 @@ class SamplesManager {
 
     constructor(){
         this._samples_index_label = 'samples_index';
-        this._createDataHolder(
-            this._samples_index_label,
-            ConfigMgr.path('samples_index'),
-            ConfigMgr.path('samples_directory')
-        );
+        this._createIndexHolder({
+                label: this._samples_index_label,
+                filePath: ConfigMgr.path('samples_index'),
+                directoryToScan: ConfigMgr.path('samples_directory')
+        });
     }
 
-    _parseOptions(options){
-        return _.merge({
-            label:'',
-            filePath:'',
-            directoryToScan:'',
-            force:false,
-            printFn:console.log
-        },options);
-    }
-
-    _createDataHolder(options){
-        options  = this._parseOptions(options);
-
-        DataMgr.setHolder({
+    _createIndexHolder(options){
+        return DataMgr.setHolder({
             label:options.label,
             filePath:options.filePath,
             fileType:'json',
             dataType:'object',
-            logErrorsFn:options.printFn,
+            logErrorsFn:console.log,
 
             checkFn:(dataObj,args)=>{
                 return (dataObj && !dataObj.error());
@@ -43,7 +31,7 @@ class SamplesManager {
                 if(!dataObj) return;
                 dataObj.walk({
                     itemCb:(data)=>{
-                        options.printFn(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
+                        console.log(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
                     }
                 });
             },
