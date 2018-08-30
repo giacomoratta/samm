@@ -249,24 +249,23 @@ class CliManager {
                 };
 
                 if(!this.cli_params.hasOption('force')){
-                    if(SamplesMgr.sampleScanfileExistsSync()){
+                    if(SamplesMgr.sampleIndexFileExistsSync()){
                         UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
+                    }else{
+                        C_scan_options.force = true;
                     }
                 }else{
                     C_scan_options.force = true;
                 }
 
-                let smp_obj = SamplesMgr.scanSamples(C_scan_options);
-                if(!smp_obj){
+                let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
+                if(smp_obj==null || smp_obj===false){
                     UI.print("Scan command: job failed");
                     return this._error_code;
                 }
                 UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
-                if(!SamplesMgr.saveSampleScanToFile(smp_obj)){
-                    UI.print("Scan command: cannot write the index file");
-                    return this._error_code;
-                }
+
                 return smp_obj;
             }));
     }

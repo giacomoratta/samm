@@ -115,7 +115,7 @@ class DataManager {
 
         let filedata = this._loadFileData($cfg);
         if(filedata === false){
-            $cfg.logErrorsFn(filedata,'DataMgr.load > the file does exist');
+            $cfg.logErrorsFn('DataMgr.load > the file does exist');
             return false;
         }
 
@@ -123,8 +123,8 @@ class DataManager {
             try{
                 let data = $cfg.loadFn(filedata,$cfg,args);
                 if(!$cfg._checkDataType(data)){
-                    $cfg.logErrorsFn(filedata,'DataMgr.load > loaded data type is not '+$cfg.dataType);
-                    return false;
+                    $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                    return null;
                 }
                 this._data[label]=data;
             }catch(e){
@@ -136,7 +136,7 @@ class DataManager {
         else{
             if(!$cfg._checkDataType(filedata)){
                 $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
-                return false;
+                return null;
             }
             this._data[label]=filedata;
         }
@@ -171,7 +171,7 @@ class DataManager {
         if(data){
             if(!$cfg._checkDataType(data)){
                 $cfg.logErrorsFn('DataMgr.set > data type is not '+$cfg.dataType);
-                return false;
+                return null;
             }
             this._data[label]=data;
         }
@@ -180,7 +180,7 @@ class DataManager {
                 data = $cfg.setFn($cfg,args);
                 if(!$cfg._checkDataType(data)){
                     $cfg.logErrorsFn('DataMgr.set > data type is not '+$cfg.dataType);
-                    return false;
+                    return null;
                 }
                 this._data[label]=data;
             }catch(e){

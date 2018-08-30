@@ -18,6 +18,7 @@ class SamplesManager {
             fileType:'json',
             dataType:'object',
             logErrorsFn:console.log,
+            preLoad:true,
 
             checkFn:(dataObj,args)=>{
                 return (dataObj && !dataObj.error());
@@ -40,7 +41,7 @@ class SamplesManager {
                 let tt = new DirectoryTree(options.directoryToScan);
                 tt.read({
                     fileAcceptabilityFn:function(/* {PathInfo} */ item){
-                        return ( _.indexOf( ConfigMgr.get('ExtensionExcludedForSamples') , _.toLower((pp.ext.length!=0?pp.ext:pp.name)) )<0 );
+                        return ( _.indexOf( ConfigMgr.get('ExtensionExcludedForSamples') , _.toLower((item.ext.length!=0?item.ext:item.name)) )<0 );
                     }
                 });
                 if(!tt.error()) return tt;
@@ -67,8 +68,21 @@ class SamplesManager {
      * Check the main index file
      * @returns { boolean | null } true if exists, false if not exists, null if missing data
      */
-    sampleScanfileExistsSync(){
+    sampleIndexFileExistsSync(){
         return DataMgr.fileExistsSync(this._samples_index_label);
+    }
+
+
+    setSamplesIndex(options){
+        options = _.merge({
+            printFn:function(){},
+            force:false
+        },options);
+
+        if(options.force === true){
+            return DataMgr.set(this._samples_index_label);
+        }
+        return DataMgr.load(this._samples_index_label);
     }
 
 
