@@ -69,11 +69,8 @@ class ConfigManager {
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) UI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
-        this._paths.projects_directory = Utils.File.checkAndSetPathSync(this._config.ProjectsDirectory);
-        if(!this._paths.projects_directory) UI.warning("Projects directory does not exist: ",this._config.ProjectsDirectory);
-
-        this._paths.project_directory = Utils.File.checkAndSetPathSync(Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
-        if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",Utils.File.pathJoin(this._config.ProjectsDirectory,this._config.Project));
+        this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
+        if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",this._config.Project);
 
         UI.print();
     }
@@ -184,35 +181,12 @@ class ConfigManager {
         let v = _outcome.value;
 
         if(n=="Project"){
-            let proj_dir_ck = null;
-            let proj_dir = this._config['ProjectsDirectory'];
             let ph = Utils.File.pathParse(v);
-            v = ph.base || ph.name;
-            if(ph.dir.length>0) proj_dir = ph.dir;
-
-            proj_dir_ck = Utils.File.checkAndSetPathSync(proj_dir);
-            if(!proj_dir_ck){
-                UI.print("The projects directory does not exist: "+proj_dir);
+            v = Utils.File.checkAndSetPathSync(v);
+            if(!v){
+                UI.print("The projects directory does not exist: "+v);
                 return null;
             }
-            proj_dir = proj_dir_ck;
-
-            proj_dir_ck = Utils.File.checkAndSetPathSync(proj_dir+v);
-            if(!proj_dir_ck){
-                UI.print("The project directory does not exist: "+proj_dir+v);
-                return null;
-            }
-
-            this._config.ProjectsDirectory = proj_dir;
-        }
-
-        else if(n=="ProjectsDirectory"){
-            let proj_dir_ck = Utils.File.checkAndSetPathSync(v);
-            if(!proj_dir_ck){
-                UI.print("The project directory does not exist: "+v);
-                return null;
-            }
-            v = proj_dir_ck;
         }
 
         else if(n=="SamplesDirectory"){
@@ -222,7 +196,6 @@ class ConfigManager {
                 UI.print("The samples directory does not exist: "+v);
                 return null;
             }
-            this._config.SamplesDirectory = v;
         }
 
         else if(_outcome.type=='array' && this._config[n].length>0){

@@ -1,7 +1,6 @@
 {
 	"SamplesDirectory": "L:\\Samples\\",
-	"ProjectsDirectory": "C:\\Ableton Projects\\",
-	"Project": "p1 Project",
+	"Project": "C:\\Ableton Projects\\p1 Project",
 	"ExtensionExcludedForSamples": [
 		".asd",
 		".DS_Store",
