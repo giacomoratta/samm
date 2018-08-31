@@ -1,5 +1,3 @@
-const Samples = require('./Samples.class.js');
-
 class SamplesManager {
 
     constructor(){
@@ -249,7 +247,7 @@ class SamplesManager {
 
         _ptags.forEach(function(v1,i1,a1){
 
-            let smp_coverage = new Samples();
+            let smp_coverage = new SamplesTree();
             smp_coverage.setTags(v1.tag_array);
             coverage_array.push({
                 covered:0,

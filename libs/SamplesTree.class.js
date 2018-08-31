@@ -1,9 +1,9 @@
-class Samples {
+class SamplesTree {
 
-    constructor(){
+    constructor(absPath, ST_options, DT_options){
         this._tags = [];
         this._query_tag = '';
-        this._tree = null; //new DirectoryTree(absPath,{});
+        this.T = new DirectoryTree(absPath,DT_options);
     }
 
     empty(){
@@ -278,4 +278,4 @@ class Samples {
     }
 }
 
-module.exports = Samples;
+module.exports = SamplesTree;

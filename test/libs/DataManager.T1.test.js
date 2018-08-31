@@ -13,9 +13,11 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 checkFn:(dataObj,args)=>{
                     return (dataObj && !dataObj.error());
                 },
+
                 getFn:(dataObj,$cfg,args)=>{
                     return dataObj;
                 },
+
                 setFn:($cfg,args)=>{
                     let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
                     tt.read();

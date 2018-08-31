@@ -75,7 +75,10 @@ class DataManager {
             $cfg.logErrorsFn('DataMgr.setHolder > configuration not valid');
             return null;
         }
+
         this._cfg[$cfg.label] = $cfg;
+        this._data[$cfg.label] = null;
+
         if($cfg.preLoad===true){
             return this.load($cfg.label);
         }

@@ -25,9 +25,10 @@ global.MPL_Options = {
 /* Common Libraries */
 global.Utils = require('./libs/Utils.js');
 global.DirectoryTree = require('./libs/DirectoryTree.class.js');
+global.SamplesTree = require('./libs/SamplesTree.class.js');
 global.DataMgr = require('./libs/DataManager.js');
 
 /* Project Modules */
 global.ConfigMgr = require('./modules/ConfigManager.js');
 global.CliMgr = require('./modules/CliManager.js');
-global.SamplesMgr = require('./modules/SamplesManager.js');
+//global.SamplesMgr = require('./modules/SamplesManager.js');
