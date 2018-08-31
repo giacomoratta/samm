@@ -4,6 +4,7 @@ let UF = Utils.File;
 describe('DataManager.class - Tests for an holder of file-object', function() {
     describe("#setHolder('samples_index')", function() {
         it("set an holder of file-object", function() {
+            UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
 
             let options = {
                 directoryToScan: ConfigMgr.path('samples_directory')
@@ -75,12 +76,31 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
 
         it("loads and check data", function() {
-            assert.notEqual(DataMgr.load('samples_index_test'),null);
-            assert.equal(DataMgr.hasData('samples_index_test'),true);
-
+            assert.equal(DataMgr.load('samples_index_test'),false);
+            assert.notEqual(DataMgr.hasData('samples_index_test'),true);
             DataMgr.print('samples_index_test');
         });
 
+        it("sets and check data", function() {
+            assert.notEqual(DataMgr.set('samples_index_test'),null);
+            assert.equal(DataMgr.hasData('samples_index_test'),true);
+            DataMgr.print('samples_index_test');
+        });
+
+        it("save data", function() {
+            let save_outcome = DataMgr.save('samples_index_test');
+            assert.notEqual(save_outcome,null);
+            assert.notEqual(save_outcome,false);
+            assert.equal(UF.fileExistsSync(ConfigMgr.path('samples_index')),true);
+        });
+
+        it("loads and check data", function() {
+            let load_outcome = DataMgr.save('samples_index_test')
+            assert.notEqual(load_outcome,null);
+            assert.notEqual(load_outcome,false);
+            assert.equal(DataMgr.hasData('samples_index_test'),true);
+            DataMgr.print('samples_index_test');
+        });
 
     });
 });

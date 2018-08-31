@@ -303,40 +303,41 @@ class DirectoryTree {
         const _prepareExcludedExtensions = function(excludedExtensions){
             //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
             if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
-            return '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
+            let _regex_str = '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
+            return new RegExp(_regex_str);
         };
 
-        const _wk = function(rootPath, absPath, O) {
-            if(O.excludedPaths && O.excludedPaths.some((e) => e.test(absPath))) return null;
+        const _wk = function(rootPath, absPath, options) {
+            if(options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null;
 
             let p_info = new _PathInfo(absPath);
             if(p_info.error==true || (!p_info.isFile && !p_info.isDirectory)) return;
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
-                if (O.excludedExtensions && O.excludedExtensions.test(_.lowerCase(p_info.ext))) return null;
-                O.itemCb(p_info);
+                if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test(_.lowerCase(p_info.ext))) return null;
+                options.itemCb(p_info);
                 return p_info;
             }
             else if (p_info.isDirectory) {
-                O.itemCb(p_info);
+                options.itemCb(p_info);
 
                 Utils.File.readDirectorySync(absPath,(a)=>{
                     Utils.sortFilesArray(a);
                 },(v,i,a)=>{
                     v = Utils.File.pathJoin(absPath,v);
-                    let _pi = _wk(rootPath,v,O);
+                    let _pi = _wk(rootPath,v,options);
                     if(_pi.size) p_info.size += _pi.size;
                 });
 
-                O.afterDirectoryCb(p_info);
+                options.afterDirectoryCb(p_info);
                 return p_info;
             }
         };
 
         absPath = Utils.File.pathResolve(absPath)+Utils.File.pathSeparator;
         options.excludedPaths = _prepareExcludedPaths(options.excludedPaths);
-        options.excludedExtensions = _prepareExcludedExtensions(options.excludedExtensions);
+        options.excludedExtensionsRegex = _prepareExcludedExtensions(options.excludedExtensions);
         _wk(absPath, absPath, options);
     }
 }

@@ -1,13 +1,7 @@
 {
 	"data": {
 		"options": {
-			"excludedExtensions": [
-				".asd",
-				".DS_Store",
-				".cfg",
-				".txt",
-				".exe"
-			],
+			"excludedExtensions": [],
 			"excludedPaths": []
 		},
 		"root_path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
