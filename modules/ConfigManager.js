@@ -211,10 +211,11 @@ class ConfigManager {
             if(n=="ExtensionExcludedForSamples"){
                 if(v[0]=='!'){
                     v=v.slice(1);
+                    if(v[0]=='.') v=v.slice(1);
                     _.remove(this._config[n],function(value){ return (value==v || value=='.'+v ); });
                     return v;
                 }
-                if(v[0]!='.') v='.'+v;
+                if(v[0]=='.') v=v.slice(1);
             }
             if(this._config[n].indexOf(v)<0) this._config[n].push(v);
             return this._config[n];
