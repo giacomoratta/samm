@@ -95,11 +95,17 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
 
         it("loads and check data", function() {
-            let load_outcome = DataMgr.save('samples_index_test')
+            let load_outcome = DataMgr.save('samples_index_test');
             assert.notEqual(load_outcome,null);
             assert.notEqual(load_outcome,false);
             assert.equal(DataMgr.hasData('samples_index_test'),true);
             DataMgr.print('samples_index_test');
+        });
+
+        it("get data and calls a simple method", function() {
+            let ST = DataMgr.get('samples_index_test');
+            assert.equal(_.isObject(ST),true);
+            ST.T.print();
         });
 
     });

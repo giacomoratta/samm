@@ -2,11 +2,12 @@
 	"SamplesDirectory": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 	"Project": "C:\\Ableton Projects\\techno_e2018\\exp\\te_3 Project",
 	"ExtensionExcludedForSamples": [
-		".asd",
-		".DS_Store",
-		".cfg",
-		".txt",
-		".exe"
+		"asd",
+		"DS_Store",
+		"cfg",
+		"txt",
+		"exe",
+		"olp"
 	],
 	"RandomCount": 31,
 	"MaxOccurrencesSameDirectory": 1,

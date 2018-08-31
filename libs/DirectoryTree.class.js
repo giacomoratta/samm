@@ -92,19 +92,17 @@ class DirectoryTree {
         let isFirstChild, isLastChild;
 
         const iterator = _tree.treeIterator(_t_parent);
-        let base_level = null;
+        let prev_level = 0;
         let _item_path = null;
 
         for (const item of iterator) {
             _item_path = item.path;
 
-            // TODO: do it better without string manipulation
-            if(!base_level){
-                if(_item_path.endsWith(Utils.File.pathSeparator)) _item_path = _item_path.substr(0,_item_path.length-2);
-                base_level=_.split(_item_path,Utils.File.pathSeparator).length;
+            if(prev_level != item.level){
+                _t_parent = _tree.parent(item);
+                prev_level = item.level;
             }
 
-            level = _.split(_item_path,'/').length - base_level;
             isFirstChild = (_tree.firstChild(_t_parent)===item);
             isLastChild = (_tree.lastChild(_t_parent)===item);
 
@@ -226,14 +224,6 @@ class DirectoryTree {
     }
 
 
-    toJsonString(){
-    }
-
-
-    fromJsonString(json_string){
-    }
-
-
     isEqualTo(tree2){
         if(!tree2._tree || !tree2._root) return;
         if(!this._tree || !this._root) return;
@@ -272,14 +262,49 @@ class DirectoryTree {
 
 
     print(){
-        console.log("\n\n    Directory Tree\n  --------------------------------------------------------------");
+        //console.log("\n\n    Directory Tree\n  --------------------------------------------------------------");
+        let ppre = '';
+        let def1 = '|    ';
+        let prev_level=0;
+
+        String.prototype.replaceAt=function(index, replacement) {
+            return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+        }
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
         let preFn = function(data){
+            ppre = ppre.replaceAll('\u2514',' ');
+            ppre = ppre.replaceAll('\u251C','\u2502');
+            ppre = ppre.replaceAll('\u2500',' ');
+
             if(data.item.level<1) return '';
-            return _.padStart(' ',(data.item.level)*3)
+            let p = '';
+            let _level = data.item.level;
+            if(_level<=1) return '';
+
+            _level-=2;
+            if(ppre.length < (5*(_level+1))) ppre += def1;
+            if(ppre.length > (5*(_level+1))) ppre = ppre.substr(0,ppre.length-5*(prev_level-_level));
+
+            if(data.is_last_child===true){
+                // unique + last
+                ppre = ppre.replaceAt(_level*5,'\u2514');
+
+            }else{
+                // first + between
+                ppre = ppre.replaceAt(_level*5,'\u251C');
+            }
+            ppre = ppre.replaceAt(_level*5+1,'\u2500\u2500');
+
+            prev_level = _level;
+            return ppre;
         }
         this.walk({
             itemCb:(data)=>{
-                console.log(preFn(data),data.item.base,data.item.level);
+                console.log(preFn(data)+data.item.base); //,data.item.level, data.is_first_child, data.is_last_child);
             }
         });
         console.log("\n\n");
@@ -303,8 +328,11 @@ class DirectoryTree {
         const _prepareExcludedExtensions = function(excludedExtensions){
             //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
             if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
-            let _regex_str = '('+_.escapeRegExp(_.join(excludedExtensions,'|'))+')$';
-            return new RegExp(_regex_str);
+            let _nw = [];
+            excludedExtensions.forEach(function(v){
+                _nw.push(_.escapeRegExp(v));
+            });
+            return new RegExp('('+_.join(_nw,'|')+')$');
         };
 
         const _wk = function(rootPath, absPath, options) {
@@ -327,6 +355,7 @@ class DirectoryTree {
                 },(v,i,a)=>{
                     v = Utils.File.pathJoin(absPath,v);
                     let _pi = _wk(rootPath,v,options);
+                    if(!_pi) return;
                     if(_pi.size) p_info.size += _pi.size;
                 });
 
