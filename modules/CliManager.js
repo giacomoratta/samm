@@ -24,6 +24,7 @@ class CliManager {
     }
 
     _setCliCommandManagers(){
+        this.C_Show();
         this.C_Config();
         this.C_Scan();
         this.C_Lookup();
@@ -202,15 +203,6 @@ class CliManager {
 
 
     C_Config(){
-        vorpal
-            .command('config show')
-            .description('Show the configuration.')
-            .option('-i, --internals', 'Show internal configuration data.')
-            .action(this._getActionFn('config',()=>{
-                if(this.cli_params.hasOption('internals')) ConfigMgr.printInternals();
-                else ConfigMgr.print();
-                return this._success_code;
-            }));
 
         vorpal
             .command('config set <name> [values...]')
@@ -245,28 +237,44 @@ class CliManager {
             .action(this._getActionFn('scan',()=>{
                 let C_scan_options = {
                     printFn: function(s){ UI.print(s); },
-                    force:   false //force scan
+                    force:   this.cli_params.hasOption('force') //force scan
                 };
 
                 if(!this.cli_params.hasOption('force')){
                     if(SamplesMgr.sampleIndexFileExistsSync()){
                         UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
-                    }else{
-                        C_scan_options.force = true;
                     }
-                }else{
-                    C_scan_options.force = true;
                 }
 
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
-                if(smp_obj==null || smp_obj===false){
+                if(!_.isObject(smp_obj) || smp_obj.error()){
                     UI.print("Scan command: job failed");
                     return this._error_code;
                 }
                 UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
-
                 return smp_obj;
+            }));
+    }
+
+
+    C_Show(){
+        vorpal
+            .command('show config')
+            .description('Show the configuration.')
+            .option('-i, --internals', 'Show internal configuration data.')
+            .action(this._getActionFn('show_config',()=>{
+                if(this.cli_params.hasOption('internals')) ConfigMgr.printInternals();
+                else ConfigMgr.print();
+                return this._success_code;
+            }));
+
+        vorpal
+            .command('show samples')
+            .description('Show the samples tree.')
+            .action(this._getActionFn('show_samples',()=>{
+                SamplesMgr.printSamplesTree();
+                return this._success_code;
             }));
     }
 

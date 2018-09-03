@@ -118,7 +118,7 @@ class DataManager {
 
         let filedata = this._loadFileData($cfg);
         if(filedata === false){
-            $cfg.logErrorsFn('DataMgr.load > the file does exist');
+            $cfg.logErrorsFn('DataMgr.load > the file does not exist');
             return false;
         }
 

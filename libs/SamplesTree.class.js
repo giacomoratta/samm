@@ -10,6 +10,11 @@ class SamplesTree {
     }
 
     size(){
+        return this.T.fileCount();
+    }
+
+    error(){
+        return this.T.error();
     }
 
     getOriginPath(){

@@ -10,6 +10,16 @@ class SamplesManager {
     }
 
     _createIndexHolder(options){
+        let __new_SamplesTree = function(){
+            let STree = new SamplesTree(options.directoryToScan,{
+                /* SampleTree options */
+            },{
+                /* DirectoryTree options */
+                excludedExtensions:ConfigMgr.get('ExtensionExcludedForSamples')
+            });
+            return STree;
+        }
+
         return DataMgr.setHolder({
             label:options.label,
             filePath:options.filePath,
@@ -18,45 +28,37 @@ class SamplesManager {
             logErrorsFn:console.log,
             preLoad:true,
 
-            checkFn:(dataObj,args)=>{
-                return (dataObj && !dataObj.error());
+            checkFn:(STree,args)=>{
+                return (STree && STree.T && !STree.T.error());
             },
 
-            getFn:(dataObj,$cfg,args)=>{
-                return dataObj;
+            getFn:(STree, $cfg, args)=>{
+                return STree;
             },
 
-            printFn:(dataObj,$cfg,args)=>{
-                if(!dataObj) return;
-                dataObj.walk({
-                    itemCb:(data)=>{
-                        console.log(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
-                    }
-                });
+            printFn:(STree, $cfg, args)=>{
+                if(!$cfg.checkFn(STree)) return;
+                STree.T.print();
             },
 
             setFn:($cfg,args)=>{
-                let tt = new DirectoryTree(options.directoryToScan);
-                tt.read({
-                    fileAcceptabilityFn:function(/* {PathInfo} */ item){
-                        return ( _.indexOf( ConfigMgr.get('ExtensionExcludedForSamples') , _.toLower((item.ext.length!=0?item.ext:item.name)) )<0 );
-                    }
-                });
-                if(!tt.error()) return tt;
-                return null;
+                let STree = __new_SamplesTree();
+                STree.T.read();
+                if(!$cfg.checkFn(STree)) return;
+                return STree;
             },
 
-            loadFn:(fileData,$cfg,args)=>{
-                if(!_.isObject(fileData)) return null;
-                let tt = new DirectoryTree(options.directoryToScan);
-                tt.fromJson(fileData);
-                if(!tt.error()) return tt;
-                return null;
+            loadFn:(fileData, $cfg, args)=>{
+                if(!_.isObject(fileData)) return;
+                let STree = __new_SamplesTree();
+                STree.T.fromJson(fileData);
+                if(!$cfg.checkFn(STree)) return;
+                return STree;
             },
 
-            saveFn:(dataObj,$cfg,args)=>{
-                if(!$cfg.checkFn(dataObj)) return;
-                return dataObj.toJson();
+            saveFn:(STree, $cfg, args)=>{
+                if(!$cfg.checkFn(STree)) return;
+                return STree.T.toJson();
             }
         });
     }
@@ -71,14 +73,21 @@ class SamplesManager {
     }
 
 
+    printSamplesTree(){
+        DataMgr.print(this._samples_index_label)
+    }
+
+
     setSamplesIndex(options){
         options = _.merge({
-            printFn:function(){},
+            //printFn:function(){},
             force:false
         },options);
 
         if(options.force === true){
-            return DataMgr.set(this._samples_index_label);
+            let smp_obj = DataMgr.set(this._samples_index_label);
+            if(!DataMgr.save(this._samples_index_label)) return;
+            return smp_obj;
         }
         return DataMgr.load(this._samples_index_label);
     }

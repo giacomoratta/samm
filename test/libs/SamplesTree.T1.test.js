@@ -38,11 +38,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
 
                 printFn:(STree, $cfg, args)=>{
                     if(!$cfg.checkFn(STree)) return;
-                    STree.T.walk({
-                        itemCb:(data)=>{
-                            console.log(_.padStart(' ',(data.item.level+1)*3),data.item.rel_path,'('+data.item.sizeString+')');
-                        }
-                    });
+                    STree.T.print();
                 },
 
                 setFn:($cfg,args)=>{
@@ -71,18 +67,19 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
             assert.equal(DataMgr.hasHolder('samples_index_test'),true);
         });
 
-        it("should have data", function() {
+        it("should not have data", function() {
             assert.equal(DataMgr.hasData('samples_index_test'),false);
         });
 
-        it("loads and check data", function() {
+        it("try to load data from non-existent file", function() {
             assert.equal(DataMgr.load('samples_index_test'),false);
             assert.notEqual(DataMgr.hasData('samples_index_test'),true);
             //DataMgr.print('samples_index_test');
         });
 
         it("sets and check data", function() {
-            assert.notEqual(DataMgr.set('samples_index_test'),null);
+            let smp_obj = DataMgr.set('samples_index_test');
+            assert.notEqual(smp_obj,null);
             assert.equal(DataMgr.hasData('samples_index_test'),true);
             //DataMgr.print('samples_index_test');
         });

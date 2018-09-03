@@ -31,4 +31,4 @@ global.DataMgr = require('./libs/DataManager.js');
 /* Project Modules */
 global.ConfigMgr = require('./modules/ConfigManager.js');
 global.CliMgr = require('./modules/CliManager.js');
-//global.SamplesMgr = require('./modules/SamplesManager.js');
+global.SamplesMgr = require('./modules/SamplesManager.js');
