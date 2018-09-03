@@ -24,12 +24,12 @@ class CliManager {
     }
 
     _setCliCommandManagers(){
-        this.C_Show();
-        this.C_Config();
         this.C_Scan();
         this.C_Lookup();
         this.C_Save();
         this.C_Coverage();
+        this.C_Show();
+        this.C_Config();
     }
 
     _getActionFn(cmdName, cmdFn){
