@@ -24,10 +24,10 @@ class CliManager {
     }
 
     _setCliCommandManagers(){
-        this.C_Scan();
         this.C_Lookup();
         this.C_Save();
         this.C_Coverage();
+        this.C_Scan();
         this.C_Show();
         this.C_Config();
     }
