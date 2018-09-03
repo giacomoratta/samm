@@ -304,7 +304,7 @@ class DirectoryTree {
         }
         this.walk({
             itemCb:(data)=>{
-                console.log(preFn(data)+data.item.base); //,data.item.level, data.is_first_child, data.is_last_child);
+                console.log(preFn(data)+data.item.base+(data.item.isDirectory?'/':'')); //,data.item.level, data.is_first_child, data.is_last_child);
             }
         });
         console.log("\n\n");

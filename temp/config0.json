@@ -2,11 +2,11 @@
 	"SamplesDirectory": "L:\\MPL\\",
 	"Project": "C:\\Ableton Projects\\techno_e2018\\exp\\te_4 Project",
 	"ExtensionExcludedForSamples": [
-		".asd",
-		".DS_Store",
-		".cfg",
-		".txt",
-		".exe"
+		"asd",
+		"DS_Store",
+		"cfg",
+		"txt",
+		"exe"
 	],
 	"RandomCount": 28,
 	"MaxOccurrencesSameDirectory": 1,

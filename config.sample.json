@@ -2,11 +2,11 @@
 	"SamplesDirectory": "L:\\Samples\\",
 	"Project": "C:\\Ableton Projects\\p1 Project",
 	"ExtensionExcludedForSamples": [
-		".asd",
-		".DS_Store",
-		".cfg",
-		".txt",
-		".exe"
+		"asd",
+		"DS_Store",
+		"cfg",
+		"txt",
+		"exe"
 	],
 	"RandomCount": 20,
 	"MaxOccurrencesSameDirectory": 1,
