@@ -2,9 +2,6 @@ class SamplesTree {
 
     constructor(absPath, ST_options, DT_options){
         this.T = new DirectoryTree(absPath,DT_options);
-
-        this._lastFilterByTags = null;
-        this._lastFilterRandom = null;
     }
 
     empty(){

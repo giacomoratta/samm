@@ -89,3 +89,5 @@ class PathInfo {
         this.error = false;
     }
 }
+
+module.exports = PathInfo;

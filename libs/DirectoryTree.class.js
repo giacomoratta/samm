@@ -330,7 +330,7 @@ class DirectoryTree {
             excludedExtensions.forEach(function(v){
                 _nw.push(_.escapeRegExp(v));
             });
-            return new RegExp('('+_.join(_nw,'|')+')$');
+            return new RegExp('^\\.?('+_.join(_nw,'|')+')$','i');
         };
 
         const _wk = function(rootPath, absPath, options) {
@@ -341,7 +341,7 @@ class DirectoryTree {
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
-                if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test(_.lowerCase(p_info.ext))) return null;
+                if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
                 options.itemCb(p_info);
                 return p_info;
             }

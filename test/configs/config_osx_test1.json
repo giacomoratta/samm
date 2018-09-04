@@ -7,7 +7,10 @@
 		"cfg",
 		"txt",
 		"exe",
-		"olp"
+		"olp",
+		"sound",
+		"log",
+		"xml"
 	],
 	"RandomCount": 31,
 	"MaxOccurrencesSameDirectory": 1,

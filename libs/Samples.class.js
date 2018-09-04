@@ -4,16 +4,12 @@ class Samples{
         this._error = false;
         this._origin_path = absPath;
         this._ptags_obj = Samples.processTagString(tagQuery);
+        this._array = [];
 
         if(!_.isString(this._origin_path) || !_.isObject(this._ptags_obj)){
             this._error = true;
             return;
         }
-
-        this._array = [];
-        this._n_array = [];
-        this._tags = [];
-        this._query_tag = '';
     }
 
 
@@ -112,12 +108,11 @@ class Samples{
     }
 
 
-    add(sample_path){
-        if(ptags_obj.check_fn(item.n_path)){
-            smp_obj.addItem(item);
+    add(item){
+        if(!item.isFile) return;
+        if(this._ptags_obj.check_fn(_.toLower(item.rel_path))){
+            this._array.push(item.rel_path);
         }
-        this._array.push(sample_path);
-        this._n_array.push(_.kebabCase(sample_path));
     }
 
 
@@ -129,11 +124,11 @@ class Samples{
 
 
     getTags(){
-        return this._tags;
+        return this._ptags_obj; //TODO use _ptags_obj
     }
 
     getTagLabel(){
-        return _.join(this._tags,'_');
+        return _.join(this._ptags_obj,'_'); //TODO use _ptags_obj
     }
 
 

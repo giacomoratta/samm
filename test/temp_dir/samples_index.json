@@ -7,12 +7,15 @@
 				"cfg",
 				"txt",
 				"exe",
-				"olp"
+				"olp",
+				"sound",
+				"log",
+				"xml"
 			],
 			"excludedPaths": []
 		},
 		"root_path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-		"files_count": 51,
+		"files_count": 42,
 		"directories_count": 18
 	},
 	"struct": [
@@ -25,7 +28,7 @@
 				"name": "Premiere Pro",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"level": 1,
-				"size": 142785,
+				"size": 50521,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
@@ -38,73 +41,19 @@
 			"item": {
 				"root": "/",
 				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/.DS_Store",
-				"level": 2,
-				"size": 6148,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": ".DS_Store"
-			},
-			"is_first_child": true,
-			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro",
 				"base": "11.0",
 				"ext": ".0",
 				"name": "11",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
 				"level": 2,
-				"size": 50620,
+				"size": 128,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "11.0"
 			},
-			"is_first_child": false,
-			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
-				"base": "Extension Config.xml",
-				"ext": ".xml",
-				"name": "Extension Config",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0/Extension Config.xml",
-				"level": 3,
-				"size": 218,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "11.0/Extension Config.xml"
-			},
 			"is_first_child": true,
 			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
-				"base": "Plugin Loading.log",
-				"ext": ".log",
-				"name": "Plugin Loading",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0/Plugin Loading.log",
-				"level": 3,
-				"size": 50274,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "11.0/Plugin Loading.log"
-			},
-			"is_first_child": false,
-			"is_last_child": true
 		},
 		{
 			"item": {
@@ -115,7 +64,7 @@
 				"name": "12",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
 				"level": 2,
-				"size": 85857,
+				"size": 50233,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
@@ -128,55 +77,19 @@
 			"item": {
 				"root": "/",
 				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/.DS_Store",
-				"level": 3,
-				"size": 6148,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/.DS_Store"
-			},
-			"is_first_child": true,
-			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
 				"base": "Profile-ictmacbook",
 				"ext": "",
 				"name": "Profile-ictmacbook",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
 				"level": 3,
-				"size": 79581,
+				"size": 50105,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook"
 			},
-			"is_first_child": false,
-			"is_last_child": true
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/.DS_Store",
-				"level": 4,
-				"size": 8196,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/Profile-ictmacbook/.DS_Store"
-			},
 			"is_first_child": true,
-			"is_last_child": false
+			"is_last_child": true
 		},
 		{
 			"item": {
@@ -193,7 +106,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Adobe Premiere Pro Prefs"
 			},
-			"is_first_child": false,
+			"is_first_child": true,
 			"is_last_child": false
 		},
 		{
@@ -223,7 +136,7 @@
 				"name": "Layouts",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts",
 				"level": 4,
-				"size": 884,
+				"size": 96,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
@@ -231,24 +144,6 @@
 			},
 			"is_first_child": false,
 			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts",
-				"base": "WorkspaceConfig.xml",
-				"ext": ".xml",
-				"name": "WorkspaceConfig",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts/WorkspaceConfig.xml",
-				"level": 5,
-				"size": 788,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/Profile-ictmacbook/Layouts/WorkspaceConfig.xml"
-			},
-			"is_first_child": true,
-			"is_last_child": true
 		},
 		{
 			"item": {
@@ -277,7 +172,7 @@
 				"name": "Settings",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
 				"level": 4,
-				"size": 53255,
+				"size": 32763,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
@@ -290,52 +185,16 @@
 			"item": {
 				"root": "/",
 				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/.DS_Store",
-				"level": 5,
-				"size": 8196,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/Profile-ictmacbook/Settings/.DS_Store"
-			},
-			"is_first_child": true,
-			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
 				"base": "EssentialSound",
 				"ext": "",
 				"name": "EssentialSound",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound",
 				"level": 5,
-				"size": 44611,
+				"size": 32315,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound"
-			},
-			"is_first_child": false,
-			"is_last_child": false
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/.DS_Store",
-				"level": 6,
-				"size": 6148,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/.DS_Store"
 			},
 			"is_first_child": true,
 			"is_last_child": false
@@ -349,32 +208,14 @@
 				"name": "Default",
 				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
 				"level": 6,
-				"size": 38335,
+				"size": 32187,
 				"is_file": false,
 				"is_directory": true,
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default"
 			},
-			"is_first_child": false,
-			"is_last_child": true
-		},
-		{
-			"item": {
-				"root": "/",
-				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
-				"base": ".DS_Store",
-				"ext": "",
-				"name": ".DS_Store",
-				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/.DS_Store",
-				"level": 7,
-				"size": 6148,
-				"is_file": true,
-				"is_directory": false,
-				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
-				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/.DS_Store"
-			},
 			"is_first_child": true,
-			"is_last_child": false
+			"is_last_child": true
 		},
 		{
 			"item": {
@@ -391,7 +232,7 @@
 				"rel_root": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/",
 				"rel_path": "12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience"
 			},
-			"is_first_child": false,
+			"is_first_child": true,
 			"is_last_child": false
 		},
 		{
