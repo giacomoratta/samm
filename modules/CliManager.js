@@ -279,27 +279,6 @@ class CliManager {
             }));
     }
 
-
-    C_Show2(){
-        vorpal
-            .command('show config')
-            .description('Show the configuration.')
-            .option('-i, --internals', 'Show internal configuration data.')
-            .action(this._getActionFn('show_config',()=>{
-                if(this.cli_params.hasOption('internals')) ConfigMgr.printInternals();
-                else ConfigMgr.print();
-                return this._success_code;
-            }));
-
-        vorpal
-            .command('show samples')
-            .description('Show the samples tree.')
-            .action(this._getActionFn('show_samples',()=>{
-                SamplesMgr.printSamplesTree();
-                return this._success_code;
-            }));
-    }
-
 };
 
 module.exports = new CliManager();
