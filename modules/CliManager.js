@@ -260,6 +260,28 @@ class CliManager {
 
     C_Show(){
         vorpal
+            .command('show <label>')
+            .description('Show internal data.')
+            .autocomplete(['config','samples'])
+            .action(this._getActionFn('show',()=>{
+                let label = this.cli_params.get('label');
+                if(label == 'config'){
+                    ConfigMgr.print();
+                    console.log("\n");
+                    ConfigMgr.printInternals();
+                    return this._success_code;
+                }
+                if(label == 'samples'){
+                    SamplesMgr.printSamplesTree();
+                    return this._success_code;
+                }
+                return this._error_code;
+            }));
+    }
+
+
+    C_Show2(){
+        vorpal
             .command('show config')
             .description('Show the configuration.')
             .option('-i, --internals', 'Show internal configuration data.')

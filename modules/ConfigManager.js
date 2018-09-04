@@ -86,11 +86,11 @@ class ConfigManager {
 
 
     printInternals(){
-        UI.print("\nInternal Configuration");
+        UI.print("Internal Configuration");
         let _self = this;
-        UI.print("\n# Work directories");
+        UI.print("  # Work directories");
         Object.keys(this._paths).forEach(function(v){
-            UI.print("  "+v+" : "+_self._paths[v]);
+            UI.print("    "+v+" : "+_self._paths[v]);
         });
     }
 
@@ -231,7 +231,7 @@ class ConfigManager {
     }
 
     print(){
-        UI.print("\nConfiguration File");
+        UI.print("Configuration File");
         let keys = _.keys(this._config);
         let _this=this;
         keys.forEach(function(v){
