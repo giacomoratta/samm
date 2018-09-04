@@ -200,9 +200,9 @@ class DataManager {
         let $cfg = this._cfg[label]; if(!$cfg) return null;
         let dataObj = this._data[label];
         if(!dataObj){
-            if($cfg.preLoad===true){
+            if($cfg.autoLoad===true){
                 dataObj = this.load($cfg.label,args);
-            }else if($cfg.preSet===true){
+            }else if($cfg.autoSet===true){
                 dataObj = this.set($cfg.label,args);
             }
         }

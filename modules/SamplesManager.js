@@ -1,7 +1,14 @@
 class SamplesManager {
 
     constructor(){
+        this._data = {
+            tags_indexes: {
+
+            }
+        };
+
         this._samples_index_label = 'samples_index';
+
         this._createIndexHolder({
                 label: this._samples_index_label,
                 filePath: ConfigMgr.path('samples_index'),
@@ -33,11 +40,11 @@ class SamplesManager {
             },
 
             getFn:(STree, $cfg, args)=>{
+                if(!$cfg.checkFn(STree,args)) return;
                 return STree;
             },
 
             printFn:(STree, $cfg, args)=>{
-                if(!$cfg.checkFn(STree)) return;
                 STree.T.print();
             },
 
@@ -78,6 +85,11 @@ class SamplesManager {
     }
 
 
+    hasSamplesIndex(){
+        return DataMgr.hasData(this._samples_index_label);
+    }
+
+
     setSamplesIndex(options){
         options = _.merge({
             //printFn:function(){},
@@ -91,6 +103,33 @@ class SamplesManager {
         }
         return DataMgr.load(this._samples_index_label);
     }
+
+
+
+    _getTagsIndex(tagString){
+        return this._data.tags_indexes[tagString];
+    }
+
+    _setTagsIndex(tagString, value){
+        delete this._data.tags_indexes;
+        this._data.tags_indexes = {}; //delete everything
+        this._data.tags_indexes[tagString] = value;
+    }
+
+
+    searchSamplesByTags(tagString, random){
+        let smp_obj = DataMgr.get(this._samples_index_label);
+        if(!smp_obj) return null;
+
+        let search_array = this._getTagsIndex(tagString);
+        if(!search_array) search_array = smp_obj.filterByTags(tagString);
+        if(!_.isArray(search_array) || search_array.length<1) return null;
+
+        this._setTagsIndex(tagString, search_array);
+        return search_array;
+    }
+
+
 
 
 

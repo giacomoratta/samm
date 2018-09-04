@@ -177,7 +177,7 @@ class DirectoryTree {
                 itemData.item = itemData.item.toJson();
                 exportObj.struct.push(itemData);
             }
-        })
+        });
         return exportObj;
     }
 
@@ -198,7 +198,7 @@ class DirectoryTree {
 
         for(let i=0; i<importObj.struct.length; i++){
 
-            _newpathinfo = new _PathInfo();
+            _newpathinfo = new PathInfo();
             _newpathinfo.fromJson(importObj.struct[i].item);
             //console.log(itemData.item);
 
@@ -262,7 +262,6 @@ class DirectoryTree {
 
 
     print(){
-        //console.log("\n\n    Directory Tree\n  --------------------------------------------------------------");
         let ppre = '';
         let def1 = '|    ';
         let prev_level=0;
@@ -337,7 +336,7 @@ class DirectoryTree {
         const _wk = function(rootPath, absPath, options) {
             if(options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null;
 
-            let p_info = new _PathInfo(absPath);
+            let p_info = new PathInfo(absPath);
             if(p_info.error==true || (!p_info.isFile && !p_info.isDirectory)) return;
             p_info.rel_root = rootPath;
 
@@ -367,99 +366,6 @@ class DirectoryTree {
         options.excludedPaths = _prepareExcludedPaths(options.excludedPaths);
         options.excludedExtensionsRegex = _prepareExcludedExtensions(options.excludedExtensions);
         _wk(absPath, absPath, options);
-    }
-}
-
-
-class _PathInfo {
-    constructor(absPath){
-        this.error = true;
-        this._info = {};
-
-        if(absPath){
-            let p_info = Utils.File.pathParse(absPath);
-            if(!p_info) return;
-            let stats = Utils.File.getPathStatsSync(absPath);
-            if(!stats) return;
-            this.error = false;
-
-            this._info = p_info;
-            this._info.path = absPath;
-            this._info.level = 1;
-            this._info.size = (stats.size?stats.size:0);
-            this._info.is_file = stats.isFile();
-            this._info.is_directory = stats.isDirectory();
-        }
-    }
-
-    isEqualTo(obj2){
-        return (
-            (this._info.path===obj2._info.path)
-            && (this._info.root===obj2._info.root)
-            && (this._info.dir===obj2._info.dir)
-            && (this._info.base===obj2._info.base)
-            && (this._info.ext===obj2._info.ext)
-            && (this._info.name===obj2._info.name)
-            && (this._info.level===obj2._info.level)
-            && (this._info.rel_root===obj2._info.rel_root)
-            && (this._info.rel_path===obj2._info.rel_path)
-            && (this._info.size===obj2._info.size)
-            && (this._info.is_file===obj2._info.is_file)
-            && (this._info.is_directory===obj2._info.is_directory)
-        );
-    }
-
-    get root() { return this._info.root; }
-    set root(root) { this._info.root = root; }
-
-    get dir() { return this._info.dir; }
-    set dir(dir) { this._info.dir = dir; }
-
-    get base() { return this._info.base; }
-    set base(base) { this._info.base = base; }
-
-    get ext() { return this._info.ext; }
-    set ext(ext) { this._info.ext = ext; }
-
-    get name() { return this._info.name; }
-    set name(ext) { this._info.name = name; }
-
-    get path() { return this._info.path; }
-    set path(ext) { this._info.path = path; }
-
-    get size() { return this._info.size; }
-    set size(size) { this._info.size = size; }
-
-    get isFile() { return this._info.is_file; }
-    get isDirectory() { return this._info.is_directory; }
-
-    get rel_root() { return this._info.rel_root; }
-    set rel_root(root) {
-        this._info.rel_root = root;
-        this._info.rel_path = this._info.path.substring(this._info.rel_root.length);
-
-        if(this._info.rel_path.endsWith(Utils.File.pathSeparator)) this._info.rel_path = this._info.rel_path.substr(0,this._info.rel_path.length-2);
-        if(this._info.rel_path.length>0) this._info.level = 1+_.split(this._info.rel_path,Utils.File.pathSeparator).length;
-    }
-    get rel_path() { return this._info.rel_path; }
-    get level() { return this._info.level; }
-
-    get sizeString() {
-        let s = this._info.size;
-        if(s<1024) return s+' B';
-        if(s<1048576) return Math.round(s/1024)+' KB';
-        if(s<1073741824) return Math.round(s/1048576)+' MB';
-        if(s<1099511627776) return Math.round(s/1073741824)+' GB';
-        return Math.round(s/(1099511627776))+' TB';
-    }
-
-    toJson(){
-        return this._info;
-    }
-
-    fromJson(data){
-        this._info = data;
-        this.error = false;
     }
 }
 

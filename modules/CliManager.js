@@ -107,8 +107,7 @@ class CliManager {
         let config_tags = ConfigMgr.get('Tags');
         vorpal
             .command('lookup [query]')
-            .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and). " +
-                "In order to avoid resource wasting, if the index is already present the scan does not start.")
+            .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>.',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup',()=>{
                 let tagString=null;
@@ -133,39 +132,23 @@ class CliManager {
                     return this._error_code;
                 }
 
-                let smp_obj_scan = SamplesMgr.loadSampleScanFromFile();
-                if(smp_obj_scan.empty()){
-                    UI.print("Lookup command: no sample scan found");
+                if(!SamplesMgr.hasSamplesIndex()){
+                    UI.print("Lookup command: no samples scan found; perform a scan first");
                     return this._error_code;
                 }
 
-                let smp_obj = SamplesMgr.searchSamplesByTags(smp_obj_scan, tagString);
-                if(!smp_obj){
+                if(!SamplesMgr.searchSamplesByTags(tagString)){
                     UI.print("Lookup command: sample search failed");
                     return this._error_code;
                 }
-                else if(smp_obj.empty()){
-                    UI.print("Lookup command: no samples found");
-                    return this._error_code;
-                }
 
-                if(SamplesMgr.isEqualToPreviousLookup(smp_obj)){
-                    UI.print("Lookup command: result not changed from last lookup.\n");
-                    return this._success_code;
-                }
+                if(this.cli_params.hasOption('all')){
+                    // Print all samples
 
-                let _promise = SamplesMgr.saveLookupToFile(smp_obj);
-                if(!_promise){
-                    UI.print("Lookup command: invalid tags");
-                    return this._error_code;
-                }
+                }else{
+                    // Filter randomly
 
-                return _promise.then(function(lf){
-                    //UI.print("Lookup command: lookup file successfully created");
-                    return lf;
-                }).catch(function(e){
-                    UI.print("Lookup command: lookup file writing failed");
-                });
+                }
             }));
     }
 
