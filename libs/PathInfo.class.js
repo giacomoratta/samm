@@ -1,9 +1,10 @@
 class PathInfo {
-    constructor(absPath){
+    constructor(initdata){
         this.error = true;
         this._info = {};
 
-        if(absPath){
+        if(_.isString(initdata)){
+            let absPath = initdata;
             let p_info = Utils.File.pathParse(absPath);
             if(!p_info) return;
             let stats = Utils.File.getPathStatsSync(absPath);
@@ -16,6 +17,10 @@ class PathInfo {
             this._info.size = (stats.size?stats.size:0);
             this._info.is_file = stats.isFile();
             this._info.is_directory = stats.isDirectory();
+
+        }else if(initdata.constructor.name === 'PathInfo'){
+            this.error = false;
+            this._info = initdata._info;
         }
     }
 

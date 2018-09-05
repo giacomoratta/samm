@@ -110,12 +110,21 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
     });
 
     describe("Samples manipulation",function(){
-        it("21. filter all samples with 1 tag", function() {
+        it("21. filter all samples with some queries", function() {
             let ST = DataMgr.get('samples_index_test');
             tLog(ConfigMgr.get('ExtensionExcludedForSamples'));
             //ST.T.print();
-            let smp_obj = ST.filterByTags('de');
-            tLog(smp_obj);
+            let smp_obj1 = ST.filterByTags('ge');
+            tLog("\n > smp_obj1\n",smp_obj1.getArray());
+            assert.equal(!smp_obj1.error(),true);
+
+            let smp_obj2 = ST.filterByTags('la');
+            tLog("\n > smp_obj2\n",smp_obj2.getArray());
+            assert.equal(!smp_obj2.error(),true);
+
+            let smp_obj3 = ST.filterByTags('la+mus,ge+om');
+            tLog("\n > smp_obj3\n",smp_obj3.getArray());
+            assert.equal(!smp_obj3.error(),true);
         });
     })
 });

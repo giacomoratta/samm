@@ -111,8 +111,17 @@ class Samples{
     add(item){
         if(!item.isFile) return;
         if(this._ptags_obj.check_fn(_.toLower(item.rel_path))){
-            this._array.push(item.rel_path);
+            this._array.push(item);
         }
+    }
+
+
+    getArray(){
+        return this._array;
+    }
+
+    getQueryTag(){
+        return this._ptags_obj.string;
     }
 
 

@@ -31,7 +31,7 @@ class SamplesTree {
 
         this.T.walk({
             itemCb:(itemData)=>{
-                smp_obj.add(itemData.item /* {PathInfo} */);
+                smp_obj.add(new PathInfo(itemData.item) /* {PathInfo} */);
             }
         });
         if(smp_obj.empty()) return;
