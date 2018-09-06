@@ -225,7 +225,6 @@ class SamplesManager {
 
         let _d = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
-        let _self = this;
         options.console_log = (options.consoleOutput===true?console.log:function(){});
 
         /* Check getUncovered */
@@ -247,10 +246,10 @@ class SamplesManager {
         /* Process all tag queries */
         let _ptags = [];
         Object.keys(_tagQueries).forEach(function(v,i,a){
-            let ptag_obj = _self.processTagString(_tagQueries[v],_ptags);
+            let ptag_obj = Samples.processTagString(_tagQueries[v],_ptags);
         });
         _ptags.forEach(function(v){
-            if(v.string.length> options._output.max_length_tag_string)
+            if(v.string.length > options._output.max_length_tag_string)
                 options._output.max_length_tag_string=v.string.length;
         });
         _d("found ",_ptags.length," tag 'AND conditions'\n");
@@ -268,8 +267,8 @@ class SamplesManager {
             _d("setting progressive as 'true'...");
         }
 
-        let smp_obj = this.scanSamples(options.dirPath);
-        if(smp_obj.empty()){
+        let ST = DataMgr.get(this._samples_index_label);
+        if(ST.empty()){
             _d("Cannot check the coverage: no samples found. \n");
             return null;
         }
@@ -279,16 +278,15 @@ class SamplesManager {
             options.progressive = options.progressive_keepalive = false;
         }
 
-        return this._checkSamplesCoverage(smp_obj, options, _ptags, _d);
+        return this._checkSamplesCoverage(ST, options, _ptags, _d);
     }
 
-    _checkSamplesCoverage(smp_obj, options, _ptags, _d){
-        _d("checking the coverage of "+smp_obj.size()+" samples...");
+    _checkSamplesCoverage(ST, options, _ptags, _d){
+        _d("checking the coverage of "+ST.size()+" samples...");
 
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
-        options.dirPath = smp_obj.getOriginPath();
-        //options.dirPath = Utils.File.pathResolve(smp_obj.getOriginPath());
+        options.dirPath = ST.getOriginPath();
 
         let coverage_array = [];
         let __uncovered_items = {};
@@ -306,20 +304,22 @@ class SamplesManager {
 
             let coverage_item = coverage_array[coverage_array.length-1];
 
-            smp_obj.forEach(function(item,i2){
-                if(!__uncovered_items[item.n_path]) __uncovered_items[item.n_path]={ path:item.path, check:true };
+            ST.T.forEach({
+                itemCb:function(data){
+                    if(!__uncovered_items[data.item.n_path]) __uncovered_items[data.item.n_path]={ path:data.item.path, check:true };
 
-                let is_covered = v1.check_fn(item.n_path);
-                if(is_covered===options.lookingForCoverage){
-                    smp_coverage.addItem(item);
-                }
-                if(is_covered){
-                    coverage_item.covered++;
-                    __uncovered_items[item.n_path].check = false;
-                }
-                else{
-                    coverage_item.uncovered++;
-                    //if(uncovered_items.indexOf(item.path)<0) uncovered_items.push(item.path);
+                    let is_covered = v1.check_fn(data.item.n_path);
+                    if(is_covered===options.lookingForCoverage){
+                        smp_coverage.addItem(data.item);
+                    }
+                    if(is_covered){
+                        coverage_item.covered++;
+                        __uncovered_items[data.item.n_path].check = false;
+                    }
+                    else{
+                        coverage_item.uncovered++;
+                        //if(uncovered_items.indexOf(item.path)<0) uncovered_items.push(item.path);
+                    }
                 }
             });
 
