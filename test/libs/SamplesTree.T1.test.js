@@ -110,7 +110,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
     });
 
     describe("Samples manipulation",function(){
-        it("21. filter all samples with some queries", function() {
+        it("2. filter all samples with some queries", function() {
             let ST = DataMgr.get('samples_index_test');
             tLog(ConfigMgr.get('ExtensionExcludedForSamples'));
             //ST.T.print();
@@ -135,6 +135,23 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
 
             let smp_obj5 = ST.filterByTags();
             assert.equal(smp_obj5,null);
+        });
+
+        it("3. filter random samples with some queries", function() {
+            let ST = DataMgr.get('samples_index_test');
+
+            let smp_obj2 = ST.filterByTags('la');
+            //tLog("\n > smp_obj2\n",smp_obj2._array);
+            smp_obj2.print();
+            assert.equal(!smp_obj2.error(),true);
+
+            tLog(" > query tag: "+smp_obj2.getTagLabel());
+            tLog(" > size: "+smp_obj2.size());
+
+            let smp_rnd_obj2 = smp_obj2.getRandom(10,2);
+            //tLog("\n > smp_rnd_obj2\n",smp_rnd_obj2._array);
+            smp_rnd_obj2.print();
+            assert.equal(!smp_rnd_obj2.error(),true);
         });
     })
 });

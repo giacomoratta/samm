@@ -12,6 +12,15 @@ class Samples{
         }
     }
 
+    _createFromThis(){
+        let newobj = new this.constructor();
+        newobj._error = false;
+        newobj._origin_path = this._origin_path;
+        newobj._ptags_obj = this._ptags_obj;
+        newobj._array = [];
+        return newobj;
+    }
+
 
     /**
      * Check and process the tag query string.
@@ -171,18 +180,19 @@ class Samples{
     }
 
 
-
-
-
-    /* work in progress * * * * * * * * * * * * * * * * * * * * * * * */
+    print(prefix,processFn){
+        let padding = (""+this.size()+"").length+1;
+        if(!processFn) processFn=function(n){ return n; };
+        if(!prefix) prefix='';
+        this.forEach(function(item,index){
+            console.log(prefix+_.padStart((index+1)+')', padding)+" "+processFn(item.rel_path));
+        });
+    }
 
 
     getRandom(count,max_occur){
-        let local_path = Utils.File._path; // TODO:remove
-        if(this._array.length>0 && this._array[0].indexOf('\\')>0) local_path=Utils.File._path.win32; //TODO:remove
-
-        let _sameDirectoryMaxOccurs = function(f,o_obj,max_o){
-            let f_path = local_path.dirname(f); //TODO:replace with > let f_path = Utils.File.pathDirname
+        let _sameDirectoryMaxOccurs = function(item,o_obj,max_o){
+            let f_path = item.dir;
             if(!o_obj[f_path]) o_obj[f_path]=0;
             else if(o_obj[f_path]>=max_o) return true;
             o_obj[f_path]++;
@@ -197,30 +207,23 @@ class Samples{
         if(_.isNil(max_occur)) max_occur=-1;
 
         // New object for random samples
-        let smp_obj_random = new this.constructor();
+        let smp_obj_random = this._createFromThis();
 
         while(i<count && sec>0){
             sec--;
             rn=((_.random(0,size)*7)%size);
-            rf=this.getItem(rn);
-            if(_sameDirectoryMaxOccurs(rf.path,occur_obj,max_occur)){
+            rf=this.get(rn);
+            if(_sameDirectoryMaxOccurs(rf, occur_obj, max_occur)){
                 continue;
             }
-            smp_obj_random.addItem(rf);
+            smp_obj_random.add(rf);
             i++;
         }
         return smp_obj_random;
     }
 
 
-    print(prefix,processFn){
-        let padding = (""+this.size()+"").length+1;
-        if(!processFn) processFn=function(n){ return n; };
-        if(!prefix) prefix='';
-        this.forEach(function(item,index){
-            console.log(prefix+_.padStart((index+1)+')', padding)+" "+processFn(item.path));
-        });
-    }
+
 }
 
 module.exports = Samples;
