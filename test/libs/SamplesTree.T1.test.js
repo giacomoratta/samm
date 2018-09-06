@@ -115,15 +115,15 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
             tLog(ConfigMgr.get('ExtensionExcludedForSamples'));
             //ST.T.print();
             let smp_obj1 = ST.filterByTags('ge');
-            tLog("\n > smp_obj1\n",smp_obj1.getArray());
+            tLog("\n > smp_obj1\n",smp_obj1._array);
             assert.equal(!smp_obj1.error(),true);
 
             let smp_obj2 = ST.filterByTags('la');
-            tLog("\n > smp_obj2\n",smp_obj2.getArray());
+            tLog("\n > smp_obj2\n",smp_obj2._array);
             assert.equal(!smp_obj2.error(),true);
 
             let smp_obj3 = ST.filterByTags('la+mu,ge+om');
-            tLog("\n > smp_obj3\n",smp_obj3.getArray(),"\n");
+            tLog("\n > smp_obj3\n",smp_obj3._array,"\n");
             tLog("smp_obj3 label: ",smp_obj3.getTagLabel());
             tLog("smp_obj3 short label: ",smp_obj3.getTagShortLabel());
             assert.equal(!smp_obj3.error(),true);

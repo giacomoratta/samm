@@ -125,10 +125,15 @@ class Samples{
         }
     }
 
-
-    getArray(){
-        return this._array;
+    get(index){
+        return this._array[index];
     }
+
+    set(item, index){
+        this._array[index] = item;
+    }
+
+
 
     getQueryTag(){
         return this._ptags_obj.string;
@@ -143,54 +148,11 @@ class Samples{
     }
 
 
-
-
-
-
-    /* work in progress * * * * * * * * * * * * * * * * * * * * * * * */
-
-
-    getTags(){
-        return this._ptags_obj; //TODO use _ptags_obj
-    }
-
-
-
-    get(index){
-        return this._array[index];
-    }
-
-    set(sample_path, index){
-        this._array[index] = sample_path;
-        this._n_array[index] = _.toLower(sample_path);
-    }
-
-    addItem(item){
-        this._array.push(item.path);
-        this._n_array.push(item.n_path);
-    }
-
-    getItem(index){
-        return {
-            path:this._array[index],
-            n_path:this._n_array[index]
-        };
-    }
-
-    setItem(item,index){
-        this._array[index]=item.path;
-        this._n_array[index]=item.n_path;
-    }
-
-    copy(clone){
-        //clone=false (default) => shallow copy
-    }
-
-    isEqual(smp_obj){
+    isEqualTo(smp_obj){
         if(smp_obj._array.length != this._array.length) return false;
         let eq=true;
         for(let i=0; i<smp_obj._array.length; i++){
-            if(smp_obj._array[i]!=this._array[i]){
+            if(smp_obj._array[i].isEqualTo(this._array[i])){
                 eq=false;
                 break;
             }
@@ -198,27 +160,21 @@ class Samples{
         return eq;
     }
 
-    compareSample(index,sample_path){
-
-    }
 
     forEach(callback){
         //callback(item,index)
         // ...if return the item object, the data will be modified with its values
-        for(let i=0, item_ref=null; i<this.size(); i++){
-            item_ref = callback(this.getItem(i),i);
-            if(item_ref) this.set(item_ref,i);
+        for(let i=0, item_ref=null; i<this._array.length; i++){
+            item_ref = callback(this._array[i],i);
+            if(item_ref) this._array[i] = item_ref;
         }
     }
 
-    sort(){
-        let _self = this;
-        Utils.sortParallelFileArrays(this._array,function(old_index,new_index){
-            let tmp = _self._n_array[old_index];
-            _self._n_array[old_index] = _self._n_array[new_index];
-            _self._n_array[new_index] = tmp;
-        });
-    }
+
+
+
+
+    /* work in progress * * * * * * * * * * * * * * * * * * * * * * * */
 
 
     getRandom(count,max_occur){
@@ -253,7 +209,6 @@ class Samples{
             smp_obj_random.addItem(rf);
             i++;
         }
-        smp_obj_random.sort();
         return smp_obj_random;
     }
 
