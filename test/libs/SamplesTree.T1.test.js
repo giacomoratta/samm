@@ -122,9 +122,19 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
             tLog("\n > smp_obj2\n",smp_obj2.getArray());
             assert.equal(!smp_obj2.error(),true);
 
-            let smp_obj3 = ST.filterByTags('la+mus,ge+om');
-            tLog("\n > smp_obj3\n",smp_obj3.getArray());
+            let smp_obj3 = ST.filterByTags('la+mu,ge+om');
+            tLog("\n > smp_obj3\n",smp_obj3.getArray(),"\n");
+            tLog("smp_obj3 label: ",smp_obj3.getTagLabel());
+            tLog("smp_obj3 short label: ",smp_obj3.getTagShortLabel());
             assert.equal(!smp_obj3.error(),true);
+
+            let smp_obj4 = ST.filterByTags('large+music,balanced,ge+room');
+            tLog("smp_obj4 label: ",smp_obj4.getTagLabel());
+            tLog("smp_obj4 short label: ",smp_obj4.getTagShortLabel());
+            assert.equal(!smp_obj4.error(),true);
+
+            let smp_obj5 = ST.filterByTags();
+            assert.equal(smp_obj5,null);
         });
     })
 });

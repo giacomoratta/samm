@@ -23,14 +23,18 @@ class Samples{
         let proc_obj_empty = {
             string:"",
             array:[],
+            label:"",
+            short_label:"",
             check_fn:function(){ return true; },
         };
         let proc_obj = {
-            _string:[],  //temporary array with strings e.g. ['a+b+c','d+e']
-            string:"",  //final tag processed query
-            array:[],   //array with subarrays of separated tags
-            check_fn:null,  //function used to check the filename
-            _check_fn_string:"" //temporary string with composed function which is evaluated
+            _string:[],         // temporary array with strings e.g. ['a+b+c','d+e']
+            string:"",          // final tag processed query
+            array:[],           // array with subarrays of separated tags
+            label:"",           // label with all tags
+            short_label:"",     // short version of this.label
+            check_fn:null,      // function used to check the filename
+            _check_fn_string:"" // temporary string with composed function which is evaluated
         };
         ts = _.toLower(ts).replace(/[^a-zA-Z0-9\s +,]/g,'');
 
@@ -85,6 +89,12 @@ class Samples{
         proc_obj.check_fn = Utils.newFunction('f',proc_obj._check_fn_string);
         if(!proc_obj.check_fn) return proc_obj_empty;
 
+        /* Setting the label */
+        proc_obj.array.forEach(function(v){ proc_obj.label += _.join(v,'_')+'_'; });
+        proc_obj.label = proc_obj.label.slice(0,-1);
+        proc_obj.short_label = proc_obj.label.substr(0,22);
+        if(proc_obj.short_label.length>21) proc_obj.short_label = proc_obj.short_label.substr(0,proc_obj.short_label.lastIndexOf('_'));
+
         delete proc_obj._string;
         delete proc_obj._check_fn_string;
         return proc_obj;
@@ -124,6 +134,14 @@ class Samples{
         return this._ptags_obj.string;
     }
 
+    getTagLabel(){
+        return this._ptags_obj.label;
+    }
+
+    getTagShortLabel(){
+        return this._ptags_obj.short_label;
+    }
+
 
 
 
@@ -134,10 +152,6 @@ class Samples{
 
     getTags(){
         return this._ptags_obj; //TODO use _ptags_obj
-    }
-
-    getTagLabel(){
-        return _.join(this._ptags_obj,'_'); //TODO use _ptags_obj
     }
 
 
