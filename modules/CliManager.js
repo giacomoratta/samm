@@ -133,7 +133,7 @@ class CliManager {
                 }
 
                 if(!SamplesMgr.hasSamplesIndex()){
-                    UI.print("Lookup command: no samples scan found; perform a scan first");
+                    UI.print("Lookup command: no samples scan found; perform a scan before this command");
                     return this._error_code;
                 }
 

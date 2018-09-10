@@ -1,11 +1,7 @@
 class SamplesManager {
 
     constructor(){
-        this._data = {
-            tags_indexes: {
-
-            }
-        };
+        this._cache = new DataCache();
 
         this._samples_index_label = 'samples_index';
 
@@ -105,28 +101,32 @@ class SamplesManager {
     }
 
 
-
-    _getTagsIndex(tagString){
-        return this._data.tags_indexes[tagString];
-    }
-
-    _setTagsIndex(tagString, value){
-        delete this._data.tags_indexes;
-        this._data.tags_indexes = {}; //delete everything
-        this._data.tags_indexes[tagString] = value;
-    }
-
-
     searchSamplesByTags(tagString, random){
-        let smp_obj = DataMgr.get(this._samples_index_label);
-        if(!smp_obj) return null;
+        let smp_obj_search = this._cache.get('searchtagquery_'+tagString /* label */,function(){
 
-        let search_array = this._getTagsIndex(tagString);
-        if(!search_array) search_array = smp_obj.filterByTags(tagString);
-        if(!_.isArray(search_array) || search_array.length<1) return null;
+            let ST = DataMgr.get(this._samples_index_label);
+            if(!ST) return null;
 
-        this._setTagsIndex(tagString, search_array);
-        return search_array;
+            let smp_obj2 = ST.filterByTags(tagString);
+            if(smp_obj2.error() || smp_obj2.size()==0) return null;
+
+            return smp_obj2;
+        });
+        if(!smp_obj_search) return null;
+        if(random!==true) return smp_obj_search;
+
+
+        this._cache.remove('randomsearchtagquery_'+tagString /* label */);
+        let smp_obj_search_random = this._cache.get('randomsearchtagquery_'+tagString /* label */,function(){
+
+            let smp_rnd_obj2 = smp_obj_search.getRandom(10,2);
+            if(smp_rnd_obj2.error() || smp_rnd_obj2.size()==0) return null;
+
+            return smp_rnd_obj2;
+        });
+
+        if(!smp_obj_search_random) return null;
+        return smp_obj_search_random;
     }
 
 
