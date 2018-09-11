@@ -1,7 +1,8 @@
 class SamplesManager {
 
     constructor(){
-        this._cache = new DataCache();
+        this._cache_stqall = new DataCache();
+        this._cache_stqrnd = new DataCache();
 
         this._samples_index_label = 'samples_index';
 
@@ -102,7 +103,7 @@ class SamplesManager {
 
 
     searchSamplesByTags(tagString, random){
-        let smp_obj_search = this._cache.get('searchtagquery_'+tagString /* label */,function(){
+        let smp_obj_search = this._cache_stqall.get(tagString /* label */,function(){
 
             let ST = DataMgr.get(this._samples_index_label);
             if(!ST) return null;
@@ -115,9 +116,8 @@ class SamplesManager {
         if(!smp_obj_search) return null;
         if(random!==true) return smp_obj_search;
 
-
-        this._cache.remove('randomsearchtagquery_'+tagString /* label */);
-        let smp_obj_search_random = this._cache.get('randomsearchtagquery_'+tagString /* label */,function(){
+        this._cache_stqrnd.remove(tagString /* label */);
+        let smp_obj_search_random = this._cache_stqrnd.get(tagString /* label */,function(){
 
             let smp_rnd_obj2 = smp_obj_search.getRandom(10,2);
             if(smp_rnd_obj2.error() || smp_rnd_obj2.size()==0) return null;
@@ -149,7 +149,7 @@ class SamplesManager {
         if(!_.isObject(options)) options={
             dirname:null,   //custom name
             forcedir:false, //force overwrite
-            _smppath:null    //absolute path (private)
+            _smppath:null   //absolute path (private)
         };
 
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=smp_obj.getTagShortLabel();
