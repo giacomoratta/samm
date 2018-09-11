@@ -131,12 +131,6 @@ class SamplesManager {
 
 
 
-
-
-
-
-    /* ... work in progress ...*/
-
     /**
      * Generate the directory with samples.
      * @param {Samples} smp_obj
@@ -152,9 +146,21 @@ class SamplesManager {
             _smppath:null   //absolute path (private)
         };
 
+        // Set smp_obj
+        if(!_.isObject(smp_obj)){
+            smp_obj = this._cache_stqrnd.getLast();
+        }
+
+        // DirName
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=smp_obj.getTagShortLabel();
+
+        // SmpPath (absolute)
         options['_smppath'] = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
-        if(options['forcedir']!==true){
+
+        // ForceDir
+        if(options['forcedir']===true){
+            // TODO: remove directory
+        }else{
             options['_smppath'] = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options['_smppath']);
         }
         if(!options['_smppath']) return null;
@@ -197,6 +203,12 @@ class SamplesManager {
             });
     }
 
+
+
+
+
+
+    /* ... work in progress ...*/
 
 
     /**

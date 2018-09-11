@@ -24,6 +24,7 @@ global.MPL_Options = {
 
 /* Common Libraries */
 global.Utils = require('./libs/Utils.js');
+global.DataCache = require('./libs/DataCache.class.js');
 global.PathInfo = require('./libs/PathInfo.class.js');
 global.DirectoryTree = require('./libs/DirectoryTree.class.js');
 global.Samples = require('./libs/Samples.class.js');
