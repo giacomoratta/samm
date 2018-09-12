@@ -27,14 +27,13 @@ class SamplesTree {
         if(!this.T) return;
 
         let smp_obj = new Samples(this.T.rootPath(),tagString);
-        if(smp_obj.error()) return null;
+        if(smp_obj.error()) return smp_obj;
 
         this.T.walk({
             itemCb:(itemData)=>{
                 smp_obj.add(new PathInfo(itemData.item) /* {PathInfo} */);
             }
         });
-        if(smp_obj.empty()) return;
         return smp_obj;
     }
 }

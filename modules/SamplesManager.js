@@ -103,9 +103,10 @@ class SamplesManager {
 
 
     searchSamplesByTags(tagString, random){
+        let _self = this;
         let smp_obj_search = this._cache_stqall.get(tagString /* label */,function(){
 
-            let ST = DataMgr.get(this._samples_index_label);
+            let ST = DataMgr.get(_self._samples_index_label);
             if(!ST) return null;
 
             let smp_obj2 = ST.filterByTags(tagString);
