@@ -231,7 +231,7 @@ class CliManager {
                 }
 
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
-                if(!_.isObject(smp_obj) || smp_obj.error()){
+                if(!_.isObject(smp_obj) || smp_obj.empty()){
                     UI.print("Scan command: job failed");
                     return this._error_code;
                 }

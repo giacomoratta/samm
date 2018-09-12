@@ -18,7 +18,7 @@ class PathInfo {
             this._info.is_file = stats.isFile();
             this._info.is_directory = stats.isDirectory();
 
-        }else if(initdata.constructor.name === 'PathInfo'){
+        }else if(_.isObject(initdata) && initdata.constructor.name === 'PathInfo'){
             this.error = false;
             this._info = initdata._info;
         }
