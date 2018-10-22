@@ -61,6 +61,12 @@ class CliManager {
             .option('-p, --progressive', 'Stops when some files which did not pass the check are found.')
             .option('-k, --prog-keepalive', 'Like --progressive but it keeps the command alive waiting for key \'enter\'.')
             .action(this._getActionFn('coverage',()=>{
+
+                if(!SamplesMgr.hasSamplesIndex()){
+                    UI.print("Lookup command: no samples scan found; perform a scan before this command");
+                    return this._error_code;
+                }
+
                 let C_coverage_options = {
                     dirPath:null,       //custom path
                     tagQuery:null,      //query tags
@@ -108,8 +114,15 @@ class CliManager {
         vorpal
             .command('lookup [query]')
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
+            .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>.',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup',()=>{
+
+                if(!SamplesMgr.hasSamplesIndex()){
+                    UI.print("Lookup command: no samples scan found; perform a scan before this command");
+                    return this._error_code;
+                }
+
                 let tagString=null;
 
                 if(this.cli_params.hasOption('tag')){
@@ -132,15 +145,14 @@ class CliManager {
                     return this._error_code;
                 }
 
-                if(!SamplesMgr.hasSamplesIndex()){
-                    UI.print("Lookup command: no samples scan found; perform a scan before this command");
-                    return this._error_code;
-                }
-
-                if(!SamplesMgr.searchSamplesByTags(tagString)){
+                let random = !this.cli_params.hasOption('all');
+                let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
+                if(!smp_obj || smp_obj.error()){
                     UI.print("Lookup command: sample search failed");
                     return this._error_code;
                 }
+
+                smp_obj.print();
 
                 if(this.cli_params.hasOption('all')){
                     // Print all samples
@@ -160,6 +172,17 @@ class CliManager {
             .option('-n, --name <path>', 'Save in a directory with a custom name.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
             .action(this._getActionFn('save',()=>{
+                if(!ConfigMgr.path('project_directory')){
+                    UI.print("Save command: project directory is not set; check the configuration.");
+                    return this._error_code;
+                }
+
+                let smp_obj = SamplesMgr.openLookupFile();
+                if(!_.isObject(smp_obj)){
+                    UI.print("Save command: latest lookup missing");
+                    return this._error_code;
+                }
+
                 let smp_dirname = null;
                 let C_save_options = {
                     dirname:null,   //custom name
@@ -167,19 +190,9 @@ class CliManager {
                     smppath:null    //absolute path
                 };
 
-                if(!ConfigMgr.path('project_directory')){
-                    UI.print("Save command: project directory is not set; check the configuration.");
-                    return this._error_code;
-                }
-
                 C_save_options.dirname = this.cli_params.getOption('name');
                 C_save_options.forcedir = this.cli_params.getOption('overwrite');
 
-                let smp_obj = SamplesMgr.openLookupFile();
-                if(!_.isObject(smp_obj)){
-                    UI.print("Save command: latest lookup missing");
-                    return this._error_code;
-                }
                 return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
             }));
     }
@@ -228,6 +241,7 @@ class CliManager {
                         UI.print("Scan command: the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
                     }
+                    C_scan_options.force = true;
                 }
 
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);

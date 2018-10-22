@@ -1,8 +1,8 @@
 class SamplesManager {
 
     constructor(){
-        this._cache_stqall = new DataCache();
-        this._cache_stqrnd = new DataCache();
+        this._cache_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
+        this._cache_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
 
         this._samples_index_label = 'samples_index';
 
@@ -120,7 +120,7 @@ class SamplesManager {
         this._cache_stqrnd.remove(tagString /* label */);
         let smp_obj_search_random = this._cache_stqrnd.get(tagString /* label */,function(){
 
-            let smp_rnd_obj2 = smp_obj_search.getRandom(10,2);
+            let smp_rnd_obj2 = smp_obj_search.getRandom(ConfigMgr.get('RandomCount'),ConfigMgr.get('MaxOccurrencesSameDirectory'));
             if(smp_rnd_obj2.error() || smp_rnd_obj2.size()==0) return null;
 
             return smp_rnd_obj2;

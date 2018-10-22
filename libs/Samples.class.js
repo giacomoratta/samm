@@ -181,7 +181,7 @@ class Samples{
 
 
     print(prefix,processFn){
-        let padding = (""+this.size()+"").length+1;
+        let padding = (""+this.size()+"").length+2;
         if(!processFn) processFn=function(n){ return n; };
         if(!prefix) prefix='';
         this.forEach(function(item,index){
