@@ -244,7 +244,7 @@ class CliManager {
     C_Show(){
         vorpal
             .command('show <label>')
-            .description('Show internal data.')
+            .description('Show internal data [values: config, samples].')
             .autocomplete(['config','samples'])
             .action(this._getActionFn('show',()=>{
                 let label = this.cli_params.get('label');
