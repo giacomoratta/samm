@@ -186,7 +186,7 @@ class SamplesManager {
         Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
 
-        console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
+        //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
             // TODO: check if file exists...rename!
 
@@ -196,29 +196,26 @@ class SamplesManager {
             /* Copy File */
             p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){
                 smp_success_count++;
-                console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
+                //console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
-                console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
-                console.error(data.err);
+                d$('generateSamplesDir - sample file copy failed '+data.path_to,data.err);
             }));
 
             /* Create txt link file */
             p_array.push(Utils.File.writeTextFile(Utils.File.pathJoin(_links_dir ,link_file_name), item.path /* text */).then(function(data){
                 smp_success_count++;
             }).catch(function(data){
-                console.log('   generateSamplesDir - link file copy failed '+data.path_to);
-                console.error(data.err);
+                d$('generateSamplesDir - link file copy failed '+data.path_to,data.err);
             }));
         });
 
         return Promise.all(p_array)
             .then(function(data){
-                console.log('   generateSamplesDir - '+(smp_success_count/2)+'/'+(smp_obj.size())+' files copied.');
+                //console.log('   generateSamplesDir - '+(smp_success_count/2)+'/'+(smp_obj.size())+' files copied.');
                 return data;
             })
             .catch(function(err){
-                console.log('   generateSamplesDir - error on final step');
-                console.error(err);
+                d$('generateSamplesDir - error on final step',err);
             });
     }
 

@@ -3,7 +3,7 @@ const fs = require('fs');
 const fs_extra = require('fs-extra');
 const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
 const _ = require('lodash');
-// function d(){ ...print debug msg... }
+// function d$(){ ...print debug msg... }
 
 class Utils_Files {
 
@@ -92,7 +92,7 @@ class Utils_Files {
         try{
             return this._FS.lstatSync(path_string);
         }catch(e){
-            d(e);
+            d$(e);
         }
     }
 
@@ -110,7 +110,7 @@ class Utils_Files {
                 flag:flag
             });
         }catch(e){
-            d(e);
+            d$(e);
             return false;
         }
     }
@@ -123,7 +123,7 @@ class Utils_Files {
             if(!_.isObject(json_obj)) return null;
             return json_obj;
         }catch(e){
-            d(e);
+            d$(e);
             return null;
         }
     }
@@ -146,7 +146,7 @@ class Utils_Files {
             });
             return true;
         }catch(e){
-            d(e);
+            d$(e);
             return false;
         }
     }
@@ -165,7 +165,7 @@ class Utils_Files {
         try{
             file_content = JSON.stringify(json_obj, null, space);
         }catch(e){
-            d(e);
+            d$(e);
             return false;
         }
         return this.writeTextFileSync(path_string,file_content);
@@ -209,7 +209,7 @@ class Utils_Files {
         try{
             items = this._FS.readdirSync(path_string);
         }catch(e){
-            d(e);
+            d$(e);
             return null;
         }
         if(!items) return null;

@@ -103,7 +103,7 @@ class DataManager {
             try{
                 return $cfg.checkFn(this._data[label],$cfg,args);
             }catch(e){
-                d(e);
+                d$(e);
                 $cfg.logErrorsFn('DataMgr.check > checkFn callback failed');
                 return null;
             }
@@ -131,7 +131,7 @@ class DataManager {
                 }
                 this._data[label]=data;
             }catch(e){
-                d(e);
+                d$(e);
                 $cfg.logErrorsFn('DataMgr.load > loadFn callback failed!');
                 return null;
             }
@@ -156,7 +156,7 @@ class DataManager {
             try{
                 filedata = $cfg.saveFn(this._data[label],$cfg,args);
             }catch(e){
-                d(e);
+                d$(e);
                 $cfg.logErrorsFn('DataMgr.save > saveFn callback failed!');
                 return null;
             }
@@ -187,7 +187,7 @@ class DataManager {
                 }
                 this._data[label]=data;
             }catch(e){
-                d(e);
+                d$(e);
                 $cfg.logErrorsFn('DataMgr.set > setFn callback failed!');
                 return null;
             }
@@ -210,7 +210,7 @@ class DataManager {
             try{
                 return $cfg.getFn(dataObj,$cfg,args);
             }catch(e){
-                d(e);
+                d$(e);
                 $cfg.logErrorsFn('DataMgr.get > getFn callback failed');
                 return null;
             }

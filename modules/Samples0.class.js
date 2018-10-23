@@ -132,7 +132,7 @@ class Samples extends DirectoryTree{
             _self._tags = json_obj.tags;
             _self._origin_path = json_obj.origin_path;
         }catch(e){
-            d(e);
+            d$(e);
             return false;
         }
         return true;

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-// function d(){ ...print debug msg... }
+// function d$(){ ...print debug msg... }
 
 class Utils {
 
@@ -68,7 +68,7 @@ class Utils {
             F.prototype = Function.prototype;
             return new F(arguments);
         }catch(e){
-            d(e);
+            d$(e);
             return null;
         }
         return null;

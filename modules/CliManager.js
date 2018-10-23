@@ -43,7 +43,7 @@ class CliManager {
                     callback();
                 }).catch((e)=>{
                     console.log("\n");
-                    console.error('_getActionFn',e);
+                    d$('_getActionFn',e);
                     callback();
                 })
                 return;

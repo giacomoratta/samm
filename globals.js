@@ -1,6 +1,6 @@
 
 /* Standard Libraries */
-global.d = function(){
+global.d$ = function(){
     let pp = '------------------------------';
     let pre = '';
     let post = ' '+pp+pp;
