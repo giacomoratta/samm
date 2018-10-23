@@ -1,6 +1,8 @@
 class SamplesManager {
 
     constructor(){
+        this._cache_latest_smp_obj_search = null;
+
         this._cache_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
         this._cache_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
 
@@ -68,6 +70,15 @@ class SamplesManager {
     }
 
 
+    getLatestLookup(){
+        return this._cache_latest_smp_obj_search;
+    }
+
+    setLatestLookup(smp_obj){
+        this._cache_latest_smp_obj_search = smp_obj;
+    }
+
+
     /**
      * Check the main index file
      * @returns { boolean | null } true if exists, false if not exists, null if missing data
@@ -103,6 +114,8 @@ class SamplesManager {
 
 
     searchSamplesByTags(tagString, random){
+        this.setLatestLookup(null);
+
         let _self = this;
         let smp_obj_search = this._cache_stqall.get(tagString /* label */,function(){
 
@@ -115,7 +128,10 @@ class SamplesManager {
             return smp_obj2;
         });
         if(!smp_obj_search) return null;
-        if(random!==true) return smp_obj_search;
+        if(random!==true){
+            this.setLatestLookup(smp_obj_search);
+            return smp_obj_search;
+        }
 
         this._cache_stqrnd.remove(tagString /* label */);
         let smp_obj_search_random = this._cache_stqrnd.get(tagString /* label */,function(){
@@ -127,6 +143,7 @@ class SamplesManager {
         });
 
         if(!smp_obj_search_random) return null;
+        this.setLatestLookup(smp_obj_search_random);
         return smp_obj_search_random;
     }
 

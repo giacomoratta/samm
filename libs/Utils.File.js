@@ -37,6 +37,14 @@ class Utils_Files {
 
     /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    isAbsoluteParentDirSync(path_string, check_exists){
+        if(!_.isString(path_string)) return false;
+        if(!this._PATH.isAbsolute(path_string)) return false;
+        if(check_exists !== true) return true;
+        let ps_dirname = this._PATH.dirname(path_string);
+        return this.directoryExistsSync(ps_dirname);
+    }
+
     checkAndSetDuplicatedDirectoryNameSync(path_string){
         if(!_.isString(path_string)) return null;
         if(!this._FS.existsSync(path_string)) return path_string;
