@@ -156,7 +156,21 @@ class CliManager {
                     return this._error_code;
                 }
 
-                return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
+                return SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
+                    if(!_.isObject(smp_copied_obj)){
+                        UI.print("Save command: no file saved [error#1].");
+                        return;
+                    }
+                    if(smp_copied_obj.size()==0){
+                        UI.print("Save command: no file saved.");
+                        return;
+                    }
+                    UI.print("Save command: "+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
+                    smp_copied_obj.print();
+
+                }).catch(()=>{
+                    UI.print("Save command: no file saved [error#2].");
+                });
             }));
     }
 

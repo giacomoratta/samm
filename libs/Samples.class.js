@@ -12,7 +12,7 @@ class Samples{
         }
     }
 
-    _createFromThis(){
+    createEmptyFromThis(){
         let newobj = new this.constructor();
         newobj._error = false;
         newobj._origin_path = this._origin_path;
@@ -207,7 +207,7 @@ class Samples{
         if(_.isNil(max_occur)) max_occur=-1;
 
         // New object for random samples
-        let smp_obj_random = this._createFromThis();
+        let smp_obj_random = this.createEmptyFromThis();
 
         while(i<count && sec>0){
             sec--;

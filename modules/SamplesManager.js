@@ -180,7 +180,7 @@ class SamplesManager {
         if(smp_obj.empty()) return null;
 
         let p_array = [];
-        let smp_success_count = 0;
+        let smp_copied_obj = smp_obj.createEmptyFromThis();
         let _links_dir = Utils.File.pathJoin(options.path,'_links');
 
         Utils.File.ensureDirSync(options.path);
@@ -195,7 +195,7 @@ class SamplesManager {
 
             /* Copy File */
             p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){
-                smp_success_count++;
+                smp_copied_obj.add(item);
                 //console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 d$('generateSamplesDir - sample file copy failed '+data.path_to,data.err);
@@ -203,7 +203,7 @@ class SamplesManager {
 
             /* Create txt link file */
             p_array.push(Utils.File.writeTextFile(Utils.File.pathJoin(_links_dir ,link_file_name), item.path /* text */).then(function(data){
-                smp_success_count++;
+                // do something
             }).catch(function(data){
                 d$('generateSamplesDir - link file copy failed '+data.path_to,data.err);
             }));
@@ -211,8 +211,8 @@ class SamplesManager {
 
         return Promise.all(p_array)
             .then(function(data){
-                //console.log('   generateSamplesDir - '+(smp_success_count/2)+'/'+(smp_obj.size())+' files copied.');
-                return data;
+                //console.log('   generateSamplesDir - '+(smp_copied_obj.size())+'/'+(smp_obj.size())+' files copied.');
+                return smp_copied_obj;
             })
             .catch(function(err){
                 d$('generateSamplesDir - error on final step',err);
