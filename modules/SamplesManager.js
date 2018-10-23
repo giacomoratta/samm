@@ -164,30 +164,25 @@ class SamplesManager {
             path:null   //absolute path
         };
 
-        // Set smp_obj
-        if(!_.isObject(smp_obj)){
-            smp_obj = this._cache_stqrnd.getLast();
+        // Set Path
+        if(!_.isString(options.path)){
+            if(!_.isString(options.dirname) || options.dirname.length<2) options.dirname=smp_obj.getTagShortLabel(); // DirName
+            options.path = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options.dirname);
         }
-
-        // DirName
-        if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=smp_obj.getTagShortLabel();
-
-        // SmpPath (absolute)
-        options['path'] = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
 
         // Overwrite
-        if(options['overwrite']===true){
-            // TODO: remove directory
+        if(options.overwrite===true){
+            Utils.File.removeDirSync(options.path);
         }else{
-            options['path'] = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options['path']);
+            options.path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options.path);
         }
-        if(!options['path']) return null;
+        if(!options.path) return null;
         if(smp_obj.empty()) return null;
 
         let p_array = [];
-        let _links_dir = Utils.File.pathJoin(options['path'],'_links');
+        let _links_dir = Utils.File.pathJoin(options.path,'_links');
 
-        Utils.File.ensureDirSync(options['path']);
+        Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
 
         console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
@@ -196,7 +191,7 @@ class SamplesManager {
             let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
-            p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options['path'] ,f_name) ).then(function(data){
+            p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);

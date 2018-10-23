@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const fs_extra = require('fs-extra');
+const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
 const _ = require('lodash');
 // function d(){ ...print debug msg... }
 
@@ -11,6 +12,7 @@ class Utils_Files {
         this._PATH = path;
         this._FS = fs;
         this._FS_EXTRA = fs_extra;
+        this._RIMRAF = rimraf;
         //this._console = function(){};
 
         this.pathBasename = path.basename;
@@ -215,6 +217,10 @@ class Utils_Files {
             callback(items[i],i,items);
         }
         return items;
+    }
+
+    removeDirSync(path_string){
+        return this._RIMRAF.sync(path_string);
     }
 
 
