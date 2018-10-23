@@ -75,6 +75,9 @@ class CliManager {
             .option('-k, --prog-keepalive', 'Like --progressive but it keeps the command alive waiting for key \'enter\'.')
             .action(this._getActionFn('coverage',()=>{
 
+                // TODO
+                // -lt -gt per selezionare samples poco o troppo coperti
+
                 if(!SamplesMgr.hasSamplesIndex()){
                     UI.print("Lookup command: no samples scan found; perform a scan before this command");
                     return this._error_code;
