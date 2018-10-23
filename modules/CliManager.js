@@ -140,7 +140,6 @@ class CliManager {
                     UI.print("Save command: absolute path does not exists.");
                     return this._error_code;
                 }
-                return;
 
                 return SamplesMgr.generateSamplesDir(smp_obj,C_save_options);
             }));
