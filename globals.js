@@ -12,6 +12,7 @@ global.d = function(){
 //global.d = function(){};
 
 global._ =  require('lodash');
+require('./libs/Lodash.Extensions.js');
 global.readlinesync = require('readline-sync');
 
 global.UI = {

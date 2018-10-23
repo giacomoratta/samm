@@ -43,7 +43,7 @@ class Utils_Files {
         if(!_.isString(path_string)) return false;
         if(!this._PATH.isAbsolute(path_string)) return false;
         if(check_exists !== true) return true;
-        let ps_dirname = this._PATH.dirname(path_string);
+        let ps_dirname = this.pathDirname(path_string);
         return this.directoryExistsSync(ps_dirname);
     }
 
@@ -177,12 +177,13 @@ class Utils_Files {
     /* FILE R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     writeTextFile(path_to, text){
+        const _self = this;
         return new Promise(function(resolve,reject){
             let _ret_value = {
                 err:null,
                 path_to:path_to
             };
-            this._FS.writeFile(path_to, text, 'utf8',function(err){
+            _self._FS.writeFile(path_to, text, 'utf8',function(err){
                 if(err){
                     _ret_value.err = err;
                     return reject(_ret_value);
@@ -249,6 +250,9 @@ class Utils_Files {
     }
 
     copyFile(path_from, path_to, options){
+        //console.log(path_from, path_to, options);
+        //return new Promise(function(){},function(){});
+
         options = _.merge({
             overwrite:true,
             errorOnExist:false
@@ -260,7 +264,7 @@ class Utils_Files {
                 path_from:path_from,
                 path_to:path_to
             };
-            this._FS_EXTRA.copy(path_from, path_to, options, function(err){
+            _self._FS_EXTRA.copy(path_from, path_to, options, function(err){
                 if(err){
                     _ret_value.err = err;
                     _self._console(_ret_value);

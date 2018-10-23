@@ -35,7 +35,20 @@ class CliManager {
     _getActionFn(cmdName, cmdFn){
         return (args,callback)=>{
             this.processParams(args,cmdName);
-            cmdFn();
+            let cmdFnResult = cmdFn();
+
+            if(_.isPromise(cmdFnResult)){
+                cmdFnResult.then((d)=>{
+                    console.log("");
+                    callback();
+                }).catch((e)=>{
+                    console.log("\n");
+                    console.error('_getActionFn',e);
+                    callback();
+                })
+                return;
+            }
+
             console.log("");
             callback();
         };
@@ -110,13 +123,15 @@ class CliManager {
 
 
     C_Save(){
+        const _self = this;
         vorpal
             .command('save')
             .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.')
             .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
-            .action(this._getActionFn('save',()=>{
+            .action(_self._getActionFn('save',()=>{
+
                 if(!ConfigMgr.path('project_directory')){
                     UI.print("Save command: project directory is not set; check the configuration.");
                     return this._error_code;

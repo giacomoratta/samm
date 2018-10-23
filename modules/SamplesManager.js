@@ -180,6 +180,7 @@ class SamplesManager {
         if(smp_obj.empty()) return null;
 
         let p_array = [];
+        let smp_success_count = 0;
         let _links_dir = Utils.File.pathJoin(options.path,'_links');
 
         Utils.File.ensureDirSync(options.path);
@@ -187,11 +188,14 @@ class SamplesManager {
 
         console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
+            // TODO: check if file exists...rename!
+
             let f_name = Utils.File.pathBasename(item.path);
             let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
             p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){
+                smp_success_count++;
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
@@ -199,7 +203,9 @@ class SamplesManager {
             }));
 
             /* Create txt link file */
-            p_array.push(Utils.File.writeTextFile(Utils.File.pathJoin(_links_dir ,link_file_name), item.path /* text */).catch(function(data){
+            p_array.push(Utils.File.writeTextFile(Utils.File.pathJoin(_links_dir ,link_file_name), item.path /* text */).then(function(data){
+                smp_success_count++;
+            }).catch(function(data){
                 console.log('   generateSamplesDir - link file copy failed '+data.path_to);
                 console.error(data.err);
             }));
@@ -207,7 +213,7 @@ class SamplesManager {
 
         return Promise.all(p_array)
             .then(function(data){
-                console.log('   generateSamplesDir - '+(p_array.length/2)+' files successfully copied!');
+                console.log('   generateSamplesDir - '+(smp_success_count/2)+'/'+(smp_obj.size())+' files copied.');
                 return data;
             })
             .catch(function(err){
