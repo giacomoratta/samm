@@ -113,7 +113,7 @@ class CliManager {
         vorpal
             .command('save')
             .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.')
-            .option('-n, --name <dirname>', 'Save in a directory with a custom name.')
+            .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
             .action(this._getActionFn('save',()=>{
@@ -130,13 +130,13 @@ class CliManager {
 
                 let smp_dirname = null;
                 let C_save_options = {
-                    dirname:    this.cli_params.getOption('name'),      //custom name
-                    forcedir:   this.cli_params.getOption('overwrite'), //force overwrite
-                    smppath:    this.cli_params.getOption('path')       //absolute path
+                    dirname:    this.cli_params.getOption('dirname'),      //custom name
+                    overwrite:   this.cli_params.getOption('overwrite'), //force overwrite
+                    path:    this.cli_params.getOption('path')       //absolute path
                 };
 
                 // check path if is good path and exists
-                if(_.isString(C_save_options.smppath) && Utils.File.isAbsoluteParentDirSync(C_save_options.smppath,true)){
+                if(_.isString(C_save_options.path) && Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
                     UI.print("Save command: absolute path does not exists.");
                     return this._error_code;
                 }

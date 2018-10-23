@@ -154,14 +154,14 @@ class SamplesManager {
      * @param {Samples} smp_obj
      * @param options
      *        - dirname: custom name for the directory
-     *        - forcedir: force overwrite otherwise rename
+     *        - overwrite: force overwrite otherwise rename
      * @returns { Promise{array} | null }
      */
     generateSamplesDir(smp_obj,options){
         if(!_.isObject(options)) options={
             dirname:null,   //custom name
-            forcedir:false, //force overwrite
-            _smppath:null   //absolute path (private)
+            overwrite:false, //force overwrite
+            path:null   //absolute path
         };
 
         // Set smp_obj
@@ -173,21 +173,21 @@ class SamplesManager {
         if(!_.isString(options['dirname']) || options['dirname'].length<2) options['dirname']=smp_obj.getTagShortLabel();
 
         // SmpPath (absolute)
-        options['_smppath'] = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
+        options['path'] = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options['dirname']);
 
-        // ForceDir
-        if(options['forcedir']===true){
+        // Overwrite
+        if(options['overwrite']===true){
             // TODO: remove directory
         }else{
-            options['_smppath'] = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options['_smppath']);
+            options['path'] = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options['path']);
         }
-        if(!options['_smppath']) return null;
+        if(!options['path']) return null;
         if(smp_obj.empty()) return null;
 
         let p_array = [];
-        let _links_dir = Utils.File.pathJoin(options['_smppath'],'_links');
+        let _links_dir = Utils.File.pathJoin(options['path'],'_links');
 
-        Utils.File.ensureDirSync(options['_smppath']);
+        Utils.File.ensureDirSync(options['path']);
         Utils.File.ensureDirSync(_links_dir);
 
         console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
@@ -196,7 +196,7 @@ class SamplesManager {
             let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
-            p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options['_smppath'] ,f_name) ).then(function(data){
+            p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options['path'] ,f_name) ).then(function(data){
                 console.log('   generateSamplesDir - sample file successfully copied '+data.path_to);
             }).catch(function(data){
                 console.log('   generateSamplesDir - sample file copy failed '+data.path_to);
