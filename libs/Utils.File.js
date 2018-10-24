@@ -41,13 +41,13 @@ class Utils_Files {
 
     pathChangeFilename(path_string,changeFn){
         let _pinfo = this.pathParse(path_string);
-        _pinfo_name = changeFn(_pinfo.name,_pinfo);
+        let _pinfo_name = changeFn(_pinfo.name,_pinfo);
         return this.pathJoin(_pinfo.dir,_pinfo_name+_pinfo.ext);
     }
 
     pathChangeDirname(path_string,changeFn){
         let _pinfo = this.pathParse(path_string);
-        _pinfo_base = changeFn(_pinfo.base,_pinfo);
+        let _pinfo_base = changeFn(_pinfo.base,_pinfo);
         return this.pathJoin(_pinfo.dir,_pinfo_base);
     }
 
@@ -73,8 +73,9 @@ class Utils_Files {
         };
         return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
-            let cv = renameFn(v,index);
+            cv = renameFn(v,i);
             d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
+            return cv;
         });
     }
 
@@ -87,8 +88,9 @@ class Utils_Files {
         };
         return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
-            let cv = renameFn(v,index);
+            cv = renameFn(v,i);
             d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
+            return cv;
         });
     }
 

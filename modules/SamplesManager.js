@@ -176,8 +176,8 @@ class SamplesManager {
         }else{
             options.path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options.path);
         }
-        if(!options.path) return null;
-        if(smp_obj.empty()) return null;
+        if(!options.path) return _.readyPromise(null);
+        if(smp_obj.empty()) return _.readyPromise(null);
 
         let p_array = [];
         let fname_array = [];
@@ -190,7 +190,13 @@ class SamplesManager {
         //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
 
-            let f_name = Utils.File.pathBasename(item.path);
+            let f_name = _.noDuplicatedValues(fname_array,Utils.File.pathBasename(item.path),(v,cv,i,a)=>{
+                if(_.indexOf(a,cv)<0) return true;
+                return Utils.File.pathChangeFilename(v,(old_name)=>{
+                    return old_name+'_'+i;
+                });
+            });
+            fname_array.push(f_name);
             let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
