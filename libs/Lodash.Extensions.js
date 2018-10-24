@@ -21,9 +21,7 @@ global._.mixin({ 'noDuplicatedValues':(array,value,cb)=>{
     while(_limit>index){
         index++;
         new_value_check = cb(value, new_value, index, array);
-        d$('noDuplicatedValues',new_value,new_value_check)
         if(new_value_check===true) return new_value; //found a free value
-        d$('noDuplicatedValues',new_value,new_value_check)
         new_value = new_value_check;
     }
     return null;

@@ -74,7 +74,7 @@ class Utils_Files {
         return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
-            d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
+            //d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
             return cv;
         });
     }
@@ -89,7 +89,7 @@ class Utils_Files {
         return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
-            d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
+            //d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
             return cv;
         });
     }
