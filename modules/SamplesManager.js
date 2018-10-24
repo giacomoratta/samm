@@ -180,6 +180,7 @@ class SamplesManager {
         if(smp_obj.empty()) return null;
 
         let p_array = [];
+        let fname_array = [];
         let smp_copied_obj = smp_obj.createEmptyFromThis();
         let _links_dir = Utils.File.pathJoin(options.path,'_links');
 
@@ -188,7 +189,6 @@ class SamplesManager {
 
         //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
-            // TODO: check if file exists...rename!
 
             let f_name = Utils.File.pathBasename(item.path);
             let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');

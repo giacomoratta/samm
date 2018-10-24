@@ -37,6 +37,23 @@ class Utils_Files {
 
 
 
+    /* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    pathChangeFilename(path_string,changeFn){
+        let _pinfo = this.pathParse(path_string);
+        _pinfo_name = changeFn(_pinfo.name,_pinfo);
+        return this.pathJoin(_pinfo.dir,_pinfo_name+_pinfo.ext);
+    }
+
+    pathChangeDirname(path_string,changeFn){
+        let _pinfo = this.pathParse(path_string);
+        _pinfo_base = changeFn(_pinfo.base,_pinfo);
+        return this.pathJoin(_pinfo.dir,_pinfo_base);
+    }
+
+
+
+
     /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     isAbsoluteParentDirSync(path_string, check_exists){
@@ -47,20 +64,52 @@ class Utils_Files {
         return this.directoryExistsSync(ps_dirname);
     }
 
-    checkAndSetDuplicatedDirectoryNameSync(path_string){
-        if(!_.isString(path_string)) return null;
-        if(!this._FS.existsSync(path_string)) return path_string;
-
-        let _safe=1000;
-        let new_path_string='';
-        let prefix=0;
-        while(_safe>prefix){
-            prefix++;
-            new_path_string = path_string+'_'+prefix;
-            if(!this._FS.existsSync(new_path_string)) return new_path_string;
-        }
-        return null;
+    checkAndSetDuplicatedFileNameSync(path_string, renameFn){
+        const _self = this;
+        if(!_.isFunction(renameFn)) renameFn = function(p_str,index){
+            return _self.pathChangeFilename(p_str,function(old_name){
+                return old_name+'_'+index;
+            });
+        };
+        return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
+            if(!this._FS.existsSync(cv)) return true; //found a free value
+            let cv = renameFn(v,index);
+            d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
+        });
     }
+
+    checkAndSetDuplicatedDirectoryNameSync(path_string, renameFn){
+        const _self = this;
+        if(!_.isFunction(renameFn)) renameFn = function(p_str,index){
+            return _self.pathChangeDirname(p_str,function(old_name){
+                return old_name+'_'+index;
+            });
+        };
+        return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
+            if(!this._FS.existsSync(cv)) return true; //found a free value
+            let cv = renameFn(v,index);
+            d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
+        });
+    }
+
+    // checkAndSetDuplicatedPathNameSync(path_string, renameFn){
+    //     if(!_.isString(path_string)) return null;
+    //     return _.noDuplicatedValues(null,path_string,(v,i,a)=>{
+    //         if(!this._FS.existsSync(path_string)) return path_string;
+    //         let new_path_string = renameFn(path_string,index);
+    //         d$('checkAndSetDuplicatedPathNameSync ... changing '+path_string+' to '+new_path_string);
+    //     });
+    //
+    //     // let _safe=1000;
+    //     // let new_path_string='';
+    //     // let index=0;
+    //     // while(_safe>index){
+    //     //     index++;
+    //     //     new_path_string = renameFn(path_string,index);
+    //     //     if(!this._FS.existsSync(new_path_string)) return new_path_string;
+    //     // }
+    //     // return null;
+    // }
 
     checkAndSetPathSync(path_string,callback){
         if(!_.isString(path_string)) return null;
