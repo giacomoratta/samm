@@ -64,14 +64,14 @@ class ConfigManager {
     }
 
 
-    _setInternals(){
+    _setInternals(print){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) UI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
         this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
         if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",this._config.Project);
 
-        UI.print();
+        UI.print(); //new empty row
     }
 
 
@@ -171,6 +171,9 @@ class ConfigManager {
         }
         let _new_value = this._setFinalValue(name,_outcome);
         if(_new_value===null) return null;
+
+        this._setInternals();
+
         DataMgr.set('config_file',this._config);
         return _new_value;
     }
@@ -178,12 +181,13 @@ class ConfigManager {
 
     _setFinalValue(n,_outcome){
         let v = _outcome.value;
+        let v_copy = v;
 
         if(n=="Project"){
             let ph = Utils.File.pathParse(v);
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
-                UI.print("The projects directory does not exist: "+v);
+                UI.print("The projects directory does not exist: "+v_copy);
                 return null;
             }
         }
@@ -192,7 +196,7 @@ class ConfigManager {
             let ph = Utils.File.pathParse(v);
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
-                UI.print("The samples directory does not exist: "+v);
+                UI.print("The samples directory does not exist: "+v_copy);
                 return null;
             }
         }
