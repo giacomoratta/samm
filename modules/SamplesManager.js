@@ -2,12 +2,15 @@ class SamplesManager {
 
     constructor(){
 
+        /* LABELS */
         this._LABEL_samples_index = 'samples_index';
 
+        /* CACHES */
         this._CACHE_latest_smp_obj_search = null;
         this._CACHE_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
         this._CACHE_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
 
+        /* DATA HOLDER */
         this._createIndexHolder({
                 label: this._LABEL_samples_index,
                 filePath: ConfigMgr.path('samples_index'),
@@ -236,8 +239,8 @@ class SamplesManager {
     /**
      * Check the coverage (or uncoverage) of all samples.
      * @param options
-     *        - dirPath: custom absolute path for the directory
-     *        - tagQuery: custom query string with tags
+     *        - path: custom absolute path for the directory
+     *        - query: custom query string with tags
      *        - getUncovered: true to collect uncovered samples
      *        - consoleOutput: true to print result directly in the console
      *        - createIndexes: true to generate the index files
@@ -246,10 +249,9 @@ class SamplesManager {
     checkSamplesCoverage(options){
         options = _.merge({
             stats:true,
-            dirPath:null,
-            dirPathCustom:false,
-            tagQuery:null,
-            coverageCondition:true,
+            path:null,
+            pathCustom:false,
+            query:null,
             consoleOutput:true,
             createIndexes:false,
             _output:{
@@ -261,17 +263,13 @@ class SamplesManager {
 
         options.console_log = (options.consoleOutput===true?console.log:function(){});
 
-        /* Check getUncovered */
-        if(!_.isBoolean(options.coverageCondition)) options.coverageCondition=true;
-        _d("uncovered ",options.coverageCondition,"\n");
-
-        /* Check tagQuery */
+        /* Check query */
         let _tagQueries = {};
-        if(_.isString(options.tagQuery)){
-            _d("tagQuery from string");
-            _tagQueries['default']=options.tagQuery;
+        if(_.isString(options.query)){
+            _d("query from string");
+            _tagQueries['default']=options.query;
         }else if(_.isObject(ConfigMgr.get('Tags'))) {
-            _d("tagQuery from config.Tags");
+            _d("query from config.Tags");
             _tagQueries = ConfigMgr.get('Tags');
         }
         _d("tagQueries are",_tagQueries,"\n");
@@ -291,12 +289,12 @@ class SamplesManager {
         //_d("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
         if(_ptags.length<=0) return null;
 
-        /* Check dirPath */
-        if(_.isString(options.dirPath)){
-            _d("dirPath from string; scanning the absolute path "+options.dirPath+" ...");
+        /* Check path */
+        if(_.isString(options.path)){
+            _d("path from string; scanning the absolute path "+options.path+" ...");
         }else{
-            options.dirPath = null;
-            _d("dirPath from config; reading the scan index...");
+            options.path = null;
+            _d("path from config; reading the scan index...");
             options.progressive = true;
             _d("setting progressive as 'true'...");
         }
@@ -320,7 +318,7 @@ class SamplesManager {
 
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
-        options.dirPath = ST.getOriginPath();
+        options.path = ST.getOriginPath();
 
         let coverage_array = [];
         let __uncovered_items = {};
@@ -343,7 +341,7 @@ class SamplesManager {
                     if(!__uncovered_items[data.item.n_path]) __uncovered_items[data.item.n_path]={ path:data.item.path, check:true };
 
                     let is_covered = v1.check_fn(data.item.n_path);
-                    if(is_covered===options.lookingForCoverage){
+                    if(is_covered===options.lookingForCovered){
                         smp_coverage.addItem(data.item);
                     }
                     if(is_covered){
@@ -360,7 +358,7 @@ class SamplesManager {
             if(options.consoleOutput){
                 if((options.progressive || options.progressive_keepalive)){
                     options.console_log("\n");
-                    smp_coverage.forEach(function(item,index){ options.console_log("    "+(item.path.substring(options.dirPath.length))); });
+                    smp_coverage.forEach(function(item,index){ options.console_log("    "+(item.path.substring(options.path.length))); });
                     options.console_log("  "+_.repeat('-', 100));
                 }
 
@@ -371,25 +369,25 @@ class SamplesManager {
             }
 
             /* Save Custom INDEX */
-            if(!options.dirPathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
+            if(!options.pathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
                 //reading from config.samplesdir
                 this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
             }
 
             /* Progressive */
             if(options.progressive &&
-                ((options.lookingForCoverage && coverage_item.covered>0)
-                    || (!options.lookingForCoverage && coverage_item.uncovered>0))
+                ((options.lookingForCovered && coverage_item.covered>0)
+                    || (!options.lookingForCovered && coverage_item.uncovered>0))
             ){
-                Utils.EXIT();
+                return;
             }
 
             /* Progressive and Keep-Alive */
             if(options.progressive_keepalive &&
-                ((options.lookingForCoverage && coverage_item.covered>0)
-                    || (!options.lookingForCoverage && coverage_item.uncovered>0))
+                ((options.lookingForCovered && coverage_item.covered>0)
+                    || (!options.lookingForCovered && coverage_item.uncovered>0))
             ){
-                CliMgr.waitForEnter();
+                CliMgr.waitForEnter('...');
             }
         });
         options.console_log("");

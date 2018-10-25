@@ -54,13 +54,15 @@ class CliManager {
         };
     }
 
-
     readLine(){
         return readlineSync.prompt()
     }
 
-    waitForEnter(){
-        readlineSync.prompt();
+    waitForEnter(msg){
+        if(!_.isString(msg)) msg='[press any key to continue]';
+        readlineSync.question("\n"+msg,{
+            defaultInput: ''
+        });
     }
 
 
@@ -68,39 +70,46 @@ class CliManager {
         vorpal
             .command('coverage')
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
-            .option('-d, --directory <directory>', 'External absolute path.')
+            .option('-p, --path <path>', 'Absolute custom path.')
             .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
             .option('-c, --covered', 'Get the covered tags (by default, the uncovered tags are returned).')
-            .option('-p, --progressive', 'Stops when some files which did not pass the check are found.')
+            .option('-g, --progressive', 'Stops when some files which did not pass the check are found.')
             .option('-k, --prog-keepalive', 'Like --progressive but it keeps the command alive waiting for key \'enter\'.')
             .action(this._getActionFn('coverage',()=>{
 
                 // TODO
                 // -lt -gt per selezionare samples poco o troppo coperti
 
-                if(!SamplesMgr.hasSamplesIndex()){
-                    UI.print("Lookup command: no samples scan found; perform a scan before this command");
+                let C_coverage_options = {
+                    path:null,          //custom path   //old: dirPath
+                    query:null,         //query tags    //old: tagQuery
+
+                    lookingForCovered:false, //old: lookingForCoverage
+                    progressive:false,
+                    progressive_keepalive:false,
+                    consoleOutput:true
+                };
+
+                /* BOOLEANS */
+                C_coverage_options.lookingForCovered = this.cli_params.hasOption('covered');
+                C_coverage_options.progressive = this.cli_params.hasOption('progressive');
+                C_coverage_options.progressive_keepalive = this.cli_params.hasOption('prog-keepalive');
+
+                /* PATH */
+                C_coverage_options.path = this.cli_params.getOption('path');
+                if(!C_coverage_options.path){
+                    if(!SamplesMgr.hasSamplesIndex()){
+                        UI.print("Coverage command: no samples index found;\n" +
+                            "perform a scan or specify an absolute path with -p option.");
+                        return this._error_code;
+                    }
+                }else if(!_.isString(C_coverage_options.path) || !Utils.File.isAbsoluteParentDirSync(C_coverage_options.path,true)){
+                    // check path if is a good absolute path and exists
+                    UI.print("Coverage command: path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
 
-                let C_coverage_options = {
-                    dirPath:null,       //custom path
-                    tagQuery:null,      //query tags
-                    lookingForCoverage:false,
-                    consoleOutput:true,
-                    progressive:false,
-                    progressive_keepalive:false
-                };
-
-                C_coverage_options.dirPath = this.cli_params.getOption('directory');
-                if(!C_coverage_options.dirPath){
-                    if(!SamplesMgr.sampleScanfileExistsSync()){
-                        UI.print("Coverage command: the index file does not exist.\n" +
-                            "Perform a scan or specify an absolute path with -p option.");
-                        return this._error_code;
-                    }
-                }
-
+                /* QUERY */
                 C_coverage_options.tagQuery = this.cli_params.getOption('query');
                 if(!C_coverage_options.tagQuery){
                     if(!ConfigMgr.get('Tags')){
@@ -110,9 +119,11 @@ class CliManager {
                     }
                 }
 
-                C_coverage_options.lookingForCoverage = this.cli_params.hasOption('covered');
-                C_coverage_options.progressive = this.cli_params.hasOption('progressive');
-                C_coverage_options.progressive_keepalive = this.cli_params.hasOption('prog-keepalive');
+                //CliMgr.waitForEnter('...');
+
+
+                console.log(C_coverage_options);
+                return;
 
                 let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
                 if(!_.isObject(smp_obj)){
@@ -153,9 +164,9 @@ class CliManager {
                     path:    this.cli_params.getOption('path')       //absolute path
                 };
 
-                // check path if is good path and exists
-                if(_.isString(C_save_options.path) && Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
-                    UI.print("Save command: absolute path does not exists.");
+                // check path if is a good absolute path and exists
+                if(!_.isString(C_save_options.path) || !Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
+                    UI.print("Coverage command: path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
 
