@@ -1,15 +1,15 @@
 class SamplesManager {
 
     constructor(){
-        this._cache_latest_smp_obj_search = null;
 
-        this._cache_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
-        this._cache_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
+        this._LABEL_samples_index = 'samples_index';
 
-        this._samples_index_label = 'samples_index';
+        this._CACHE_latest_smp_obj_search = null;
+        this._CACHE_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
+        this._CACHE_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
 
         this._createIndexHolder({
-                label: this._samples_index_label,
+                label: this._LABEL_samples_index,
                 filePath: ConfigMgr.path('samples_index'),
                 directoryToScan: ConfigMgr.path('samples_directory')
         });
@@ -71,11 +71,11 @@ class SamplesManager {
 
 
     getLatestLookup(){
-        return this._cache_latest_smp_obj_search;
+        return this._CACHE_latest_smp_obj_search;
     }
 
     setLatestLookup(smp_obj){
-        this._cache_latest_smp_obj_search = smp_obj;
+        this._CACHE_latest_smp_obj_search = smp_obj;
     }
 
 
@@ -84,17 +84,17 @@ class SamplesManager {
      * @returns { boolean | null } true if exists, false if not exists, null if missing data
      */
     sampleIndexFileExistsSync(){
-        return DataMgr.fileExistsSync(this._samples_index_label);
+        return DataMgr.fileExistsSync(this._LABEL_samples_index);
     }
 
 
     printSamplesTree(){
-        DataMgr.print(this._samples_index_label)
+        DataMgr.print(this._LABEL_samples_index)
     }
 
 
     hasSamplesIndex(){
-        return DataMgr.hasData(this._samples_index_label);
+        return DataMgr.hasData(this._LABEL_samples_index);
     }
 
 
@@ -105,11 +105,11 @@ class SamplesManager {
         },options);
 
         if(options.force === true){
-            let smp_obj = DataMgr.set(this._samples_index_label);
-            if(!DataMgr.save(this._samples_index_label)) return;
+            let smp_obj = DataMgr.set(this._LABEL_samples_index);
+            if(!DataMgr.save(this._LABEL_samples_index)) return;
             return smp_obj;
         }
-        return DataMgr.load(this._samples_index_label);
+        return DataMgr.load(this._LABEL_samples_index);
     }
 
 
@@ -117,9 +117,9 @@ class SamplesManager {
         this.setLatestLookup(null);
 
         let _self = this;
-        let smp_obj_search = this._cache_stqall.get(tagString /* label */,function(){
+        let smp_obj_search = this._CACHE_stqall.get(tagString /* label */,function(){
 
-            let ST = DataMgr.get(_self._samples_index_label);
+            let ST = DataMgr.get(_self._LABEL_samples_index);
             if(!ST) return null;
 
             let smp_obj2 = ST.filterByTags(tagString);
@@ -133,8 +133,8 @@ class SamplesManager {
             return smp_obj_search;
         }
 
-        this._cache_stqrnd.remove(tagString /* label */);
-        let smp_obj_search_random = this._cache_stqrnd.get(tagString /* label */,function(){
+        this._CACHE_stqrnd.remove(tagString /* label */);
+        let smp_obj_search_random = this._CACHE_stqrnd.get(tagString /* label */,function(){
 
             let smp_rnd_obj2 = smp_obj_search.getRandom(ConfigMgr.get('RandomCount'),ConfigMgr.get('MaxOccurrencesSameDirectory'));
             if(smp_rnd_obj2.error() || smp_rnd_obj2.size()==0) return null;
@@ -301,7 +301,7 @@ class SamplesManager {
             _d("setting progressive as 'true'...");
         }
 
-        let ST = DataMgr.get(this._samples_index_label);
+        let ST = DataMgr.get(this._LABEL_samples_index);
         if(ST.empty()){
             _d("Cannot check the coverage: no samples found. \n");
             return null;
