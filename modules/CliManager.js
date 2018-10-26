@@ -97,13 +97,13 @@ class CliManager {
 
                 /* PATH */
                 C_coverage_options.path = this.cli_params.getOption('path');
-                if(!C_coverage_options.path){
+                if(!_.isString(C_coverage_options.path)){
                     if(!SamplesMgr.hasSamplesIndex()){
                         UI.print("Coverage command: no samples index found;\n" +
                             "perform a scan or specify an absolute path with -p option.");
                         return this._error_code;
                     }
-                }else if(!_.isString(C_coverage_options.path) || !Utils.File.isAbsoluteParentDirSync(C_coverage_options.path,true)){
+                }else if(!Utils.File.isAbsoluteParentDirSync(C_coverage_options.path,true)){
                     // check path if is a good absolute path and exists
                     UI.print("Coverage command: path is not an absolute path or it does not exists.");
                     return this._error_code;
@@ -163,7 +163,7 @@ class CliManager {
                 };
 
                 // check path if is a good absolute path and exists
-                if(!_.isString(C_save_options.path) || !Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
+                if(_.isString(C_save_options.path) && !Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
                     UI.print("Coverage command: path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
