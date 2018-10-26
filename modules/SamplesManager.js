@@ -254,7 +254,7 @@ class SamplesManager {
             }
         },options);
 
-        let d$ = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
+        let d$ = function(m){ arguments[0]='> coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         options.console_log = (options.consoleOutput===true?console.log:function(){});
 
