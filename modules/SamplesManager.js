@@ -231,11 +231,6 @@ class SamplesManager {
 
 
 
-
-
-    /* ... work in progress ...*/
-
-
     /**
      * Check the coverage (or uncoverage) of all samples.
      * @param options
@@ -259,20 +254,20 @@ class SamplesManager {
             }
         },options);
 
-        let _d = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
+        let d$ = function(m){ arguments[0]='coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         options.console_log = (options.consoleOutput===true?console.log:function(){});
 
         /* Check query */
         let _tagQueries = {};
         if(_.isString(options.query)){
-            _d("query from string");
+            d$("query from string");
             _tagQueries['default']=options.query;
         }else if(_.isObject(ConfigMgr.get('Tags'))) {
-            _d("query from config.Tags");
+            d$("query from config.Tags");
             _tagQueries = ConfigMgr.get('Tags');
         }
-        _d("tagQueries are",_tagQueries,"\n");
+        d$("tagQueries are",_tagQueries,"\n");
         if(_tagQueries.length<=0) return null;
 
         /* Process all tag queries */
@@ -284,24 +279,24 @@ class SamplesManager {
             if(v.string.length > options._output.max_length_tag_string)
                 options._output.max_length_tag_string=v.string.length;
         });
-        _d("found ",_ptags.length," tag 'AND conditions'\n");
-        //_d("processed tag 'AND conditions' are",_ptags,"\n");
-        //_d("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
+        d$("found ",_ptags.length," tag 'AND conditions'\n");
+        //d$("processed tag 'AND conditions' are",_ptags,"\n");
+        //d$("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
         if(_ptags.length<=0) return null;
 
         /* Check path */
         if(_.isString(options.path)){
-            _d("path from string; scanning the absolute path "+options.path+" ...");
+            d$("path from string; scanning the absolute path "+options.path+" ...");
         }else{
             options.path = null;
-            _d("path from config; reading the scan index...");
+            d$("path from config; reading the scan index...");
             options.progressive = true;
-            _d("setting progressive as 'true'...");
+            d$("setting progressive as 'true'...");
         }
 
         let ST = DataMgr.get(this._LABEL_samples_index);
         if(ST.empty()){
-            _d("Cannot check the coverage: no samples found. \n");
+            d$("Cannot check the coverage: no samples found. \n");
             return null;
         }
 
@@ -310,11 +305,11 @@ class SamplesManager {
             options.progressive = options.progressive_keepalive = false;
         }
 
-        return this._checkSamplesCoverage(ST, options, _ptags, _d);
+        return this._checkSamplesCoverage(ST, options, _ptags, d$);
     }
 
-    _checkSamplesCoverage(ST, options, _ptags, _d){
-        _d("checking the coverage of "+ST.size()+" samples...");
+    _checkSamplesCoverage(ST, options, _ptags, d$){
+        d$("checking the coverage of "+ST.size()+" samples...");
 
         // _ptags = array of {string,check_fn} objects
         _.sortBy(_ptags, [function(o) { return o.string; }]);
