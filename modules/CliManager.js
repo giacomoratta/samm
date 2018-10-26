@@ -81,13 +81,13 @@ class CliManager {
                 // -lt -gt per selezionare samples poco o troppo coperti
 
                 let C_coverage_options = {
-                    path:null,          //custom path   //old: dirPath
-                    query:null,         //query tags    //old: tagQuery
+                    path:null,                  //custom path
+                    query:null,                 //query tags
 
-                    lookingForCovered:false, //old: lookingForCoverage
+                    lookingForCovered:false,
                     progressive:false,
                     progressive_keepalive:false,
-                    consoleOutput:true
+                    consoleLog:UI.print
                 };
 
                 /* BOOLEANS */
@@ -103,15 +103,15 @@ class CliManager {
                             "perform a scan or specify an absolute path with -p option.");
                         return this._error_code;
                     }
-                }else if(!Utils.File.isAbsoluteParentDirSync(C_coverage_options.path,true)){
+                }else if(!Utils.File.isAbsoluteParentDirSync(C_coverage_options.path) || !Utils.File.directoryExistsSync(C_coverage_options.path)){
                     // check path if is a good absolute path and exists
                     UI.print("Coverage command: path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
 
                 /* QUERY */
-                C_coverage_options.tagQuery = this.cli_params.getOption('query');
-                if(!C_coverage_options.tagQuery){
+                C_coverage_options.query = this.cli_params.getOption('query');
+                if(!C_coverage_options.query){
                     if(!ConfigMgr.get('Tags')){
                         UI.print("Coverage command: no configured tags found.\n" +
                             "Add one or more tags to the configuration or specify a custom query with -q option.");

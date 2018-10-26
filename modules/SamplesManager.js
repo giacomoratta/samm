@@ -242,57 +242,85 @@ class SamplesManager {
      * @returns {Samples} smp_obj
      */
     checkSamplesCoverage(options){
-        options = _.merge({
-            stats:true,
-            path:null,
-            pathCustom:false,
-            query:null,
-            consoleOutput:true,
-            createIndexes:false,
-            _output:{
+
+        function __coverage_set_queries(){
+            if(_.isString(options.query)){
+                d$("query from string");
+                _data.tag_queries['default']=options.query;
+            }else if(_.isObject(ConfigMgr.get('Tags'))) {
+                d$("query from config.Tags");
+                _data.tag_queries = ConfigMgr.get('Tags');
+            }
+            d$("tag_queries are",_data.tag_queries,"\n");
+            if(_data.tag_queries.length<=0) return false;
+            return true;
+        }
+
+        function __coverage_set_path(){
+            if(_.isString(options.path)){
+                d$("path from string; scanning the absolute path "+options.path+" ...");
+            }else{
+                options.path = null;
+                d$("path from config; reading the scan index...");
+                options.progressive = true;
+                d$("setting progressive as 'true'...");
+            }
+        }
+
+        /* Internal data */
+        let _data = {
+            tag_queries: {},
+            output:{
+                enabled: true,
                 max_length_tag_string:10
             }
+        }
+
+        /* Options */
+        options = _.merge({
+            path:null,
+            query:null,
+
+            lookingForCovered:false,
+            progressive:false,
+            progressive_keepalive:false,
+
+            stats:true,
+            pathCustom:false,
+            consoleOutput:true,
+            createIndexes:false,
+            consoleLog:null
         },options);
 
         let d$ = function(m){ arguments[0]='> coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
-        options.console_log = (options.consoleOutput===true?console.log:function(){});
+        /* Console */
+        _data.output.enabled = _.isNil(options.consoleLog);
+        options.consoleLog = (_.isNil(options.consoleLog)?function(){}:options.consoleLog);
 
-        /* Check query */
-        let _tagQueries = {};
-        if(_.isString(options.query)){
-            d$("query from string");
-            _tagQueries['default']=options.query;
-        }else if(_.isObject(ConfigMgr.get('Tags'))) {
-            d$("query from config.Tags");
-            _tagQueries = ConfigMgr.get('Tags');
-        }
-        d$("tagQueries are",_tagQueries,"\n");
-        if(_tagQueries.length<=0) return null;
+        /* Tag Query */
+        if(!__coverage_set_queries()) return null;
+
+        /* Path */
+        __coverage_set_path();
+
+        console.log(options); return;
 
         /* Process all tag queries */
         let _ptags = [];
-        Object.keys(_tagQueries).forEach(function(v,i,a){
-            let ptag_obj = Samples.processTagString(_tagQueries[v],_ptags);
+        Object.keys(_data.tag_queries).forEach(function(v,i,a){
+            let ptag_obj = Samples.processTagString(_data.tag_queries[v],_ptags);
         });
         _ptags.forEach(function(v){
-            if(v.string.length > options._output.max_length_tag_string)
-                options._output.max_length_tag_string=v.string.length;
+            if(v.string.length > _data.output.max_length_tag_string)
+                _data.output.max_length_tag_string=v.string.length;
         });
         d$("found ",_ptags.length," tag 'AND conditions'\n");
         //d$("processed tag 'AND conditions' are",_ptags,"\n");
         //d$("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
         if(_ptags.length<=0) return null;
 
-        /* Check path */
-        if(_.isString(options.path)){
-            d$("path from string; scanning the absolute path "+options.path+" ...");
-        }else{
-            options.path = null;
-            d$("path from config; reading the scan index...");
-            options.progressive = true;
-            d$("setting progressive as 'true'...");
-        }
+
 
         let ST = DataMgr.get(this._LABEL_samples_index);
         if(ST.empty()){
@@ -350,24 +378,24 @@ class SamplesManager {
                 }
             });
 
-            if(options.consoleOutput){
+            if(_data.output.enabled){
                 if((options.progressive || options.progressive_keepalive)){
-                    options.console_log("\n");
-                    smp_coverage.forEach(function(item,index){ options.console_log("    "+(item.path.substring(options.path.length))); });
-                    options.console_log("  "+_.repeat('-', 100));
+                    options.consoleLog("\n");
+                    smp_coverage.forEach(function(item,index){ options.consoleLog("    "+(item.path.substring(options.path.length))); });
+                    options.consoleLog("  "+_.repeat('-', 100));
                 }
 
-                options.console_log(_.padEnd(/*"    Q#"+(i1+1)+" "*/"     "+v1.string,options._output.max_length_tag_string+9)+
+                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/"     "+v1.string,_data.output.max_length_tag_string+9)+
                                     ' c:'+_.padEnd(coverage_item.covered,10)+
                                     ' u:'+_.padEnd(coverage_item.uncovered,10)+
                                     ' coverage:'+_.padEnd(Math.round((coverage_item.covered/(coverage_item.covered+coverage_item.uncovered)*100))+'%',5));
             }
 
             /* Save Custom INDEX */
-            if(!options.pathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
-                //reading from config.samplesdir
-                this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
-            }
+            // if(!options.pathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
+            //     //reading from config.samplesdir
+            //     this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
+            // }
 
             /* Progressive */
             if(options.progressive &&
@@ -385,18 +413,18 @@ class SamplesManager {
                 CliMgr.waitForEnter('...');
             }
         });
-        options.console_log("");
+        options.consoleLog("");
 
         if(options.stats){
             //uncovered_items.sort();
             let __uncovered_items_count = 0;
             Object.keys(__uncovered_items).forEach(function(v){
                 if(__uncovered_items[v].check===false) return;
-                options.console_log("    "+__uncovered_items[v].path);
+                options.consoleLog("    "+__uncovered_items[v].path);
                 __uncovered_items_count++;
             });
-            if(__uncovered_items_count>0) options.console_log("  Found "+__uncovered_items_count+" uncovered samples.");
-            else options.console_log("  All samples are covered!");
+            if(__uncovered_items_count>0) options.consoleLog("  Found "+__uncovered_items_count+" uncovered samples.");
+            else options.consoleLog("  All samples are covered!");
         }
 
         return coverage_array;
