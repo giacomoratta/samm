@@ -212,7 +212,7 @@ class ConfigManager {
                 return null;
             }
 
-            if(n=="ExtensionsIncludedForSamples" || n=="ExtensionsExcludedForSamples"){
+            if(n=="IncludedExtensionsForSamples" || n=="ExcludedExtensionsForSamples"){
                 if(v[0]=='!'){
                     v=v.slice(1);
                     if(v[0]=='.') v=v.slice(1);

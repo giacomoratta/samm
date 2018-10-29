@@ -7,10 +7,10 @@ node . config
 node . set RandomCount 28
 node . set Project "C:\\abc\\def\\project1"
 node . set Tag kick2 techno+kick,kick,berlin+kick
-node . set ExtensionsExcludedForSamples exe
-node . set ExtensionsExcludedForSamples .bash
-node . set ExtensionsExcludedForSamples !.exe
-node . set ExtensionsExcludedForSamples !bash
+node . set ExcludedExtensionsForSamples exe
+node . set ExcludedExtensionsForSamples .bash
+node . set ExcludedExtensionsForSamples !.exe
+node . set ExcludedExtensionsForSamples !bash
 
 ## Lookup
 node . lookup bass,loop+synth,deep+synth
