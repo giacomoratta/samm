@@ -34,7 +34,7 @@ class SamplesManager {
             filePath:options.filePath,
             fileType:'json',
             dataType:'object',
-            logErrorsFn:console.log,
+            logErrorsFn:d$,
             preLoad:true,
 
             checkFn:(STree,args)=>{

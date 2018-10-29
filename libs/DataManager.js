@@ -40,6 +40,7 @@ class DataManager {
             setFn:null,
             loadFn:null,
             saveFn:null,
+            printFn:null,
             logErrorsFn:function(){},
 
             /* Private functions */

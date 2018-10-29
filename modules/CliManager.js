@@ -157,9 +157,9 @@ class CliManager {
 
                 let smp_dirname = null;
                 let C_save_options = {
-                    dirname:    this.cli_params.getOption('dirname'),      //custom name
-                    overwrite:   this.cli_params.getOption('overwrite'), //force overwrite
-                    path:    this.cli_params.getOption('path')       //absolute path
+                    dirname:    this.cli_params.getOption('dirname'),       //custom name
+                    overwrite:   this.cli_params.getOption('overwrite'),    //force overwrite
+                    path:    this.cli_params.getOption('path')              //absolute path
                 };
 
                 // check path if is a good absolute path and exists
@@ -225,20 +225,17 @@ class CliManager {
 
                 let random = !this.cli_params.hasOption('all');
                 let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
-                if(!smp_obj || smp_obj.error()){
+                if(_.isNil(smp_obj)){
+                    UI.print("Lookup command: no samples found");
+                    return this._success_code;
+                }
+                if(smp_obj.error()){
                     UI.print("Lookup command: sample search failed");
                     return this._error_code;
                 }
 
                 smp_obj.print();
-
-                if(this.cli_params.hasOption('all')){
-                    // Print all samples
-
-                }else{
-                    // Filter randomly
-
-                }
+                return this._success_code;
             }));
     }
 
@@ -289,12 +286,13 @@ class CliManager {
                     C_scan_options.force = true;
                 }
 
+                UI.print("Scan command: indexing in progress...");
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
                 if(!_.isObject(smp_obj) || smp_obj.empty()){
                     UI.print("Scan command: job failed");
                     return this._error_code;
                 }
-                UI.print("Scan command: job completed ("+smp_obj.size()+" samples found)");
+                UI.print("Scan command: "+smp_obj.size()+" samples found");
                 return smp_obj;
             }));
     }
