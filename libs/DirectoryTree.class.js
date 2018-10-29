@@ -19,6 +19,7 @@ class DirectoryTree {
 
     static _parseOptions(options){
         return _.merge({
+            includedExtensions:[],
             excludedExtensions:[],
             excludedPaths:[],
             itemCb:function(){},
@@ -45,6 +46,7 @@ class DirectoryTree {
         },options);
 
         DirectoryTree.walkDirectory(this._data.root_path,{
+            includedExtensions:this._data.options.includedExtensions,
             excludedExtensions:this._data.options.excludedExtensions,
             excludedPaths:this._data.options.excludedPaths,
             itemCb:(item)=>{
@@ -187,6 +189,7 @@ class DirectoryTree {
         let _tree = new SymbolTree();
         let _t_parent = this._root;
 
+        this._data.options.includedExtensions = importObj.data.options.includedExtensions;
         this._data.options.excludedExtensions = importObj.data.options.excludedExtensions;
         this._data.options.excludedPaths = importObj.data.options.excludedPaths;
         this._data.root_path = importObj.data.root_path;
@@ -323,6 +326,16 @@ class DirectoryTree {
             return exclArray;
         };
 
+        const _prepareIncludedExtensions = function(includedExtensions){
+            //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
+            if(!_.isArray(includedExtensions) || includedExtensions.length==0) return null;
+            let _nw = [];
+            includedExtensions.forEach(function(v){
+                _nw.push(_.escapeRegExp(v));
+            });
+            return new RegExp('^\\.?('+_.join(_nw,'|')+')$','i');
+        };
+
         const _prepareExcludedExtensions = function(excludedExtensions){
             //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
             if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
@@ -341,7 +354,13 @@ class DirectoryTree {
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
-                if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
+                
+                if (options.includedExtensionsRegex){ /* included extensions have the priority */
+                    if ( !options.includedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
+                }
+
+                else if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
+
                 options.itemCb(p_info);
                 return p_info;
             }
@@ -364,6 +383,7 @@ class DirectoryTree {
 
         absPath = Utils.File.pathResolve(absPath)+Utils.File.pathSeparator;
         options.excludedPaths = _prepareExcludedPaths(options.excludedPaths);
+        options.includedExtensionsRegex = _prepareExcludedExtensions(options.includedExtensions);
         options.excludedExtensionsRegex = _prepareExcludedExtensions(options.excludedExtensions);
         _wk(absPath, absPath, options);
     }

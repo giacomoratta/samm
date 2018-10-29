@@ -1,19 +1,31 @@
 {
 	"SamplesDirectory": "L:\\Samples\\",
 	"Project": "C:\\Ableton Projects\\p1 Project",
-	"ExtensionExcludedForSamples": [
-		"asd",
-		"DS_Store",
-		"cfg",
-		"txt",
-		"exe"
+	"ExtensionIncludedForSamples": [
+		".wav",
+		".aif",
+		".alp",
+		".alc",
+		".mid",
+		".adg"
 	],
-	"RandomCount": 20,
+	"ExtensionExcludedForSamples": [
+		".asd",
+		".DS_Store",
+		".cfg",
+		".txt",
+		".exe"
+	],
+	"RandomCount": 10,
 	"MaxOccurrencesSameDirectory": 1,
 	"Tags": {
-		"kick": "techno,kick,deep,sub",
+		"kick": "techno,kick,berlin",
+		"kick_raw": "techno,kick,raw,analog,industr,berlin",
+		"kick_sub": "techno,kick,berlin,deep,sub,",
+		"dark": "dark,atmo,deep,ambi,field,textu,drone,white,noise",
 		"impact": "impact,boom,shot,crash,bomb,808,efx",
 		"hihat": "hihat,hi-hat,hh,top",
-		"abstract": "abstract,complex"
+		"abstract": "abstract,complex",
+		"kick2": "techno+kick,kick,berlin+kick"
 	}
 }
