@@ -248,8 +248,8 @@ class CliManager {
             .description("Set the value of a configuration parameter." +
                 "\n$ config set Project project-name / (or path)" +
                 "\n$ config set Tag tag-label query,tag+tag2,or,tag3" +
-                "\n$ config set ExtensionExcludedForSamples ext / (or .ext)" +
-                "\n$ config set ExtensionExcludedForSamples !ext / (or !.ext)")
+                "\n$ config set ExtensionsExcludedForSamples ext / (or .ext)" +
+                "\n$ config set ExtensionsExcludedForSamples !ext / (or !.ext)")
             .action(this._getActionFn('config',()=>{
                 if(ConfigMgr.setFromCliParams(this.cli_params.get('name'),this.cli_params.get('values'))===null){
                     UI.print("Set command: configuration not changed");
@@ -306,9 +306,9 @@ class CliManager {
             .action(this._getActionFn('show',()=>{
                 let label = this.cli_params.get('label');
                 if(label == 'config'){
-                    ConfigMgr.print();
-                    console.log("\n");
                     ConfigMgr.printInternals();
+                    console.log("\n");
+                    ConfigMgr.print();
                     return this._success_code;
                 }
                 if(label == 'samples'){

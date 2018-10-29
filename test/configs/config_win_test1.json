@@ -1,7 +1,7 @@
 {
 	"SamplesDirectory": "L:\\MPL\\One Shots\\Cymatics - Vocals",
 	"Project": "C:\\Ableton Projects\\techno_e2018\\exp\\te_3 Project",
-	"ExtensionExcludedForSamples": [
+	"ExtensionsExcludedForSamples": [
 		"asd",
 		"DS_Store",
 		"cfg",

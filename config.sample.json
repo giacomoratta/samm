@@ -1,7 +1,7 @@
 {
 	"SamplesDirectory": "L:\\Samples\\",
 	"Project": "C:\\Ableton Projects\\p1 Project",
-	"ExtensionIncludedForSamples": [
+	"ExtensionsIncludedForSamples": [
 		".wav",
 		".aif",
 		".alp",
@@ -9,7 +9,7 @@
 		".mid",
 		".adg"
 	],
-	"ExtensionExcludedForSamples": [
+	"ExtensionsExcludedForSamples": [
 		".asd",
 		".DS_Store",
 		".cfg",

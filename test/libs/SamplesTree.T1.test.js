@@ -15,7 +15,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     /* SampleTree options */
                 },{
                     /* DirectoryTree options */
-                    excludedExtensions:ConfigMgr.get('ExtensionExcludedForSamples')
+                    excludedExtensions:ConfigMgr.get('ExtensionsExcludedForSamples')
                 });
                 return STree;
             }
@@ -112,7 +112,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
     describe("Samples manipulation",function(){
         it("2. filter all samples with some queries", function() {
             let ST = DataMgr.get('samples_index_test');
-            tLog(ConfigMgr.get('ExtensionExcludedForSamples'));
+            tLog(ConfigMgr.get('ExtensionsExcludedForSamples'));
             //ST.T.print();
             let smp_obj1 = ST.filterByTags('ge');
             tLog("\n > smp_obj1\n",smp_obj1._array);
