@@ -24,7 +24,7 @@ class SamplesManager {
                 /* SampleTree options */
             },{
                 /* DirectoryTree options */
-                includedExtensions:ConfigMgr.get('ExtensionIncludedForSamples')
+                includedExtensions:ConfigMgr.get('ExtensionIncludedForSamples'),
                 excludedExtensions:ConfigMgr.get('ExtensionExcludedForSamples')
             });
             return STree;
