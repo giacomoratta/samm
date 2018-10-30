@@ -86,6 +86,7 @@ class DirectoryTree {
         if(!_t_parent) return;
 
         options = _.merge({
+            skip_empty:false,
             itemCb:function(){}
         },options);
 
@@ -99,6 +100,16 @@ class DirectoryTree {
 
         for (const item of iterator) {
             _item_path = item.path;
+            if(options.skip_empty==true && item.isDirectory && item.size<1){
+                options.itemCb({
+                    item:item,
+                    parent:_t_parent,
+                    //level:level,
+                    is_first_child:isFirstChild,
+                    is_last_child:true /* also works with isLastChild */
+                });
+                continue;
+            }
 
             if(prev_level != item.level){
                 _t_parent = _tree.parent(item);
@@ -264,7 +275,14 @@ class DirectoryTree {
     }
 
 
-    print(){
+    print(options){
+        options = _.merge({
+            skip_empty:true,
+            itemCb:(data)=>{
+                console.log(preFn(data)+data.item.base+(data.item.isDirectory?'/':'')); //,data.item.level, data.is_first_child, data.is_last_child);
+            }
+        },options);
+
         let ppre = '';
         let def1 = '|    ';
         let prev_level=0;
@@ -304,11 +322,7 @@ class DirectoryTree {
             prev_level = _level;
             return ppre;
         }
-        this.walk({
-            itemCb:(data)=>{
-                console.log(preFn(data)+data.item.base+(data.item.isDirectory?'/':'')); //,data.item.level, data.is_first_child, data.is_last_child);
-            }
-        });
+        this.walk(options);
     }
 
 
@@ -354,8 +368,7 @@ class DirectoryTree {
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
-                
-                if (options.includedExtensionsRegex){ /* included extensions have the priority */
+                if(options.includedExtensionsRegex){ /* included extensions have the priority */
                     if ( !options.includedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
                 }
 
@@ -383,7 +396,7 @@ class DirectoryTree {
 
         absPath = Utils.File.pathResolve(absPath)+Utils.File.pathSeparator;
         options.excludedPaths = _prepareExcludedPaths(options.excludedPaths);
-        options.includedExtensionsRegex = _prepareExcludedExtensions(options.includedExtensions);
+        options.includedExtensionsRegex = _prepareIncludedExtensions(options.includedExtensions);
         options.excludedExtensionsRegex = _prepareExcludedExtensions(options.excludedExtensions);
         _wk(absPath, absPath, options);
     }

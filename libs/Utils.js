@@ -105,6 +105,16 @@ class Utils {
         return n;
     }
 
+    strToBoolean(s){
+        s = _.trim(s);
+        if(s.length<=0) return null;
+        s = _.toLower(s);
+        let n = null;
+        if(s==="true"  || s==="1" || s==="y") n=true;
+        if(s==="false" || s==="0" || s==="n") n=false;
+        return n;
+    }
+
     strToString(s){
         if(!_.isString(s)) return null;
         s = _.trim(s);

@@ -20,13 +20,16 @@ class SamplesManager {
 
     _createIndexHolder(options){
         let __new_SamplesTree = function(){
+            let dTreeOptions = {
+                /* DirectoryTree options */
+            };
+            if(ConfigMgr.get('ExtensionCheckForSamples')!==false){
+                //dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
+                dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
+            }
             let STree = new SamplesTree(options.directoryToScan,{
                 /* SampleTree options */
-            },{
-                /* DirectoryTree options */
-                //excludedExtensions:ConfigMgr.get('ExcludedExtensionsForSamples'),
-                includedExtensions:ConfigMgr.get('IncludedExtensionsForSamples')
-            });
+            },dTreeOptions);
             return STree;
         }
 

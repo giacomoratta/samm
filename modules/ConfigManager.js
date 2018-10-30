@@ -148,6 +148,14 @@ class ConfigManager {
             return _outcome_value;
         }
 
+        if(_.isBoolean(old_v)){
+            _outcome_value.type = _outcome_error.type = 'boolean';
+            new_v = Utils.strToBoolean(new_v);
+            if(_.isNil(new_v)) return _outcome_error;
+            _outcome_value.value = new_v;
+            return _outcome_value;
+        }
+
         if(_.isString(old_v)){
             _outcome_value.type = _outcome_error.type = 'string';
             new_v = Utils.strToString(new_v);
