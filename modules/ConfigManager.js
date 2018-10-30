@@ -1,7 +1,12 @@
 class ConfigManager {
 
     constructor(options){
-       options = this._parseExternalOptions(options);
+        this._flags = {
+            samples_index_scan_needed:false,
+            samples_index_update_needed:false,
+        };
+
+        options = this._parseExternalOptions(options);
         this._paths = {
             config_file: options.config_file,
             config_file_sample: options.config_file_sample,
@@ -77,6 +82,14 @@ class ConfigManager {
 
     path(name){
         return this._paths[name];
+    }
+
+    getFlag(name){
+        return this._flags[name];
+    }
+
+    setFlag(name,value){
+        this._flags[name] = value;
     }
 
 
@@ -207,6 +220,15 @@ class ConfigManager {
                 UI.print("The samples directory does not exist: "+v_copy);
                 return null;
             }
+            this.setFlag('samples_index_update_needed',true);
+        }
+
+        else if(n=="ExtensionCheckForSamples"){
+            if(_.indexOf(['I','E','X'],v)<0){
+                UI.print("Wrong value for ExtensionCheckForSamples. Allowed values: I (included), E (excluded), X (disabled)");
+                return null;
+            }
+            this.setFlag('samples_index_update_needed',true);
         }
 
         else if(_outcome.type=='array' && this._config[n].length>0){
@@ -225,11 +247,13 @@ class ConfigManager {
                     v=v.slice(1);
                     if(v[0]=='.') v=v.slice(1);
                     _.remove(this._config[n],function(value){ return (value==v || value=='.'+v ); });
+                    this.setFlag('samples_index_update_needed',true);
                     return v;
                 }
                 if(v[0]=='.') v=v.slice(1);
             }
             if(this._config[n].indexOf(v)<0) this._config[n].push(v);
+            this.setFlag('samples_index_update_needed',true);
             return this._config[n];
         }
 
@@ -276,6 +300,10 @@ class ConfigManager {
             this._config['Tags'] = Utils.sortObjectByKey(this._config['Tags']);
         }
         return true;
+    }
+
+    printMessages(){
+        console.log('cfgmgr msg');
     }
 };
 

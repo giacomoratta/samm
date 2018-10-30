@@ -23,9 +23,11 @@ class SamplesManager {
             let dTreeOptions = {
                 /* DirectoryTree options */
             };
-            if(ConfigMgr.get('ExtensionCheckForSamples')!==false){
-                //dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
-                dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
+            if(ConfigMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
+            else if(ConfigMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
+            else{
+                dTreeOptions.includedExtensions = null;
+                dTreeOptions.excludedExtensions = null;
             }
             let STree = new SamplesTree(options.directoryToScan,{
                 /* SampleTree options */
@@ -62,7 +64,10 @@ class SamplesManager {
             },
 
             loadFn:(fileData, $cfg, args)=>{
-                if(!_.isObject(fileData)) return;
+                if(!_.isObject(fileData)){
+                    this.setFlag('samples_index_scan_needed',true);
+                    return;
+                }
                 let STree = __new_SamplesTree();
                 STree.T.fromJson(fileData);
                 if(!$cfg.checkFn(STree)) return;
