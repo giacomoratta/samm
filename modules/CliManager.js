@@ -30,6 +30,7 @@ class CliManager {
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
+        this.C_Dir();
         this.C_Config();
     }
 
@@ -247,11 +248,11 @@ class CliManager {
             .command('config set <name> [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
             .description("Set the value of a configuration parameter." +
-                "\n$ config set Project project-name / (or path)" +
-                "\n$ config set Tag tag-label query,tag+tag2,or,tag3" +
-                "\n$ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
-                "\n$ config set ExcludedExtensionsForSamples ext / (or .ext)" +
-                "\n$ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
+                "\n  $ config set Project project-name / (or path)" +
+                "\n  $ config set Tag tag-label query,tag+tag2,or,tag3" +
+                "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
+                "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
+                "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
             .action(this._getActionFn('config',()=>{
                 if(ConfigMgr.setFromCliParams(this.cli_params.get('name'),this.cli_params.get('values'))===null){
                     UI.print("Set command: configuration not changed");
@@ -315,6 +316,24 @@ class CliManager {
                 }
                 if(label == 'samples'){
                     SamplesMgr.printSamplesTree();
+                    return this._success_code;
+                }
+                return this._error_code;
+            }));
+    }
+
+
+    C_Dir(){
+        vorpal
+            .command('dir <action>')
+            .description('Some useful actions with the work directories (e.g. Samples, Project, etc.)'+
+                "\n  $ dir ext  / show the full list of extensions and useful stats")
+            .autocomplete(['ext'])
+            //.option('-f, --force', 'Force the rescan.')
+            .action(this._getActionFn('dir',()=>{
+                let action = this.cli_params.get('action');
+                if(action == 'ext'){
+                    DirCommand.listExtensionsStats();
                     return this._success_code;
                 }
                 return this._error_code;

@@ -54,6 +54,10 @@ class Utils {
         return array;
     }
 
+    sortObjectByValue(obj){
+        return _(obj).toPairs().sortBy(1).fromPairs().value();
+    }
+
     sortObjectByKey(obj){
         return _(obj).toPairs().sortBy(0).fromPairs().value();
     }
