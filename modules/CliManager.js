@@ -5,7 +5,7 @@ const readlineSync = require('readline-sync');
 class CliManager {
 
     constructor(){
-        this.ui_log = vorpal.log;
+        //this.ui_log = vorpal.log;
         this._error_code = -1;
         this._success_code = 1;
         this.cli_params = null;
@@ -40,11 +40,11 @@ class CliManager {
 
             if(_.isPromise(cmdFnResult)){
                 cmdFnResult.then((d)=>{
-                    console.log("");
                     ConfigMgr.printMessages();
                     callback();
+
                 }).catch((e)=>{
-                    console.log("\n");
+                    UI.print("\n");
                     d$('_getActionFn',e);
                     callback();
                 })
@@ -309,7 +309,7 @@ class CliManager {
                 let label = this.cli_params.get('label');
                 if(label == 'config'){
                     ConfigMgr.printInternals();
-                    console.log("\n");
+                    UI.print("\n");
                     ConfigMgr.print();
                     return this._success_code;
                 }

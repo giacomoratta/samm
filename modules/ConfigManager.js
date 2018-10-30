@@ -303,7 +303,14 @@ class ConfigManager {
     }
 
     printMessages(){
-        console.log('cfgmgr msg');
+        UI.print("");
+        if(this.getFlag('samples_index_scan_needed')==true){
+            UI.print("\nWARNING: no samples index detected; perform 'scan' before using other commands.\n");
+        }
+        if(this.getFlag('samples_index_update_needed')==true){
+            UI.print("\nWARNING: samples index not compliant with current configuration;");
+            UI.print(  "         perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
+        }
     }
 };
 
