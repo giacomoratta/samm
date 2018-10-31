@@ -330,13 +330,15 @@ class CliManager {
                 "\n  $ dir ext  / show the full list of extensions and useful stats"+
                 "\n  $ dir ext -e exe  / show the full list of file with the specified extension")
             .option('-e, --extension <name>', 'Focus on the specified extension.')
+            .option('-i, --index', 'Works with the internal samples index')
             .autocomplete(['ext'])
             //.option('-f, --force', 'Force the rescan.')
             .action(this._getActionFn('dir',()=>{
                 let action = this.cli_params.get('action');
                 if(action == 'ext'){
                     DirCommand.listExtensionsStats({
-                        extension:this.cli_params.getOption('extension')
+                        extension:this.cli_params.getOption('extension'),
+                        index:this.cli_params.hasOption('index')
                     });
                     return this._success_code;
                 }

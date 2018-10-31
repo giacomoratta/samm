@@ -49,22 +49,22 @@ class DirectoryTree {
             includedExtensions:this._data.options.includedExtensions,
             excludedExtensions:this._data.options.excludedExtensions,
             excludedPaths:this._data.options.excludedPaths,
-            itemCb:(item)=>{
+            itemCb:(data)=>{
                 // callback for each item
-                if(item.isFile===true && options.fileAcceptabilityFn(item)===true){
-                    _tree.appendChild(_t_parent,item);
+                if(data.item.isFile===true && options.fileAcceptabilityFn(data.item)===true){
+                    _tree.appendChild(_t_parent,data.item);
                     this._data.files_count++;
                 }
-                else if(item.isDirectory===true){
-                    _t_parent = _tree.appendChild(_t_parent,item);
+                else if(data.item.isDirectory===true){
+                    _t_parent = _tree.appendChild(_t_parent,data.item);
                     this._data.directories_count++;
                 }
-                this._data.options.itemCb(item);
+                this._data.options.itemCb(data);
             },
-            afterDirectoryCb:(item)=>{
+            afterDirectoryCb:(data)=>{
                 // callback after reading directory
-                _t_parent = _tree.parent(item);
-                this._data.options.afterDirectoryCb(item);
+                _t_parent = _tree.parent(data.item);
+                this._data.options.afterDirectoryCb(data);
             }
         });
 
@@ -374,11 +374,11 @@ class DirectoryTree {
 
                 else if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
 
-                options.itemCb(p_info);
+                options.itemCb({ item:p_info });
                 return p_info;
             }
             else if (p_info.isDirectory) {
-                options.itemCb(p_info);
+                options.itemCb({ item:p_info });
 
                 Utils.File.readDirectorySync(absPath,(a)=>{
                     Utils.sortFilesArray(a);
@@ -389,7 +389,7 @@ class DirectoryTree {
                     if(_pi.size) p_info.size += _pi.size;
                 });
 
-                options.afterDirectoryCb(p_info);
+                options.afterDirectoryCb({ item:p_info });
                 return p_info;
             }
         };

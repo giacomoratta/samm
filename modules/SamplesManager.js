@@ -110,6 +110,11 @@ class SamplesManager {
     }
 
 
+    getSamplesIndex_DirectoryTree(){
+        if(DataMgr.check(this._LABEL_samples_index)!==true) return null;
+        return DataMgr.get(this._LABEL_samples_index).T;
+    }
+
     setSamplesIndex(options){
         options = _.merge({
             //printFn:function(){},

@@ -13,7 +13,7 @@
 		"abstract": "abstract,complex",
 		"kick2": "techno+kick,kick,berlin+kick"
 	},
-	"ExtensionCheckForSamples": "0",
+	"ExtensionCheckForSamples": "X",
 	"IncludedExtensionsForSamples": [
 		".wav",
 		".aif",
