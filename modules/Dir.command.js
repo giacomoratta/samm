@@ -1,6 +1,5 @@
 class DirCommand {
     constructor(){
-        // TODO: datamanager for extensions - no preset/preload - double array filepath/extension
         this._cache_extsearch = null;
     }
 
