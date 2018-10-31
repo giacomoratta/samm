@@ -231,15 +231,18 @@ class ConfigManager {
             this.setFlag('samples_index_update_needed',true);
         }
 
-        else if(_outcome.type=='array' && this._config[n].length>0){
-            let _ot = this._set(this._config[n][0],v);
-            if(_ot.error==true){
-                if(_ot.type){
-                    UI.print("Config.set [Array]: current value and old value have different types.");
-                    UI.print("\n                   old: ",this._config[n][0]);
-                    UI.print("\n                   new: ",v);
+        else if(_outcome.type=='array'){
+
+            if(this._config[n].length>0){
+                let _ot = this._set(this._config[n][0],v);
+                if(_ot.error==true){
+                    if(_ot.type){
+                        UI.print("Config.set [Array]: current value and old value have different types.");
+                        UI.print("\n                   old: ",this._config[n][0]);
+                        UI.print("\n                   new: ",v);
+                    }
+                    return null;
                 }
-                return null;
             }
 
             if(n=="IncludedExtensionsForSamples" || n=="ExcludedExtensionsForSamples"){

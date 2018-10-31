@@ -1,5 +1,6 @@
 class DirCommand {
     constructor(){
+        // TODO: datamanager for extensions - no preset/preload - double array filepath/extension
     }
 
     listExtensionsStats(){
@@ -8,7 +9,8 @@ class DirCommand {
         DirectoryTree.walkDirectory(ConfigMgr.get('SamplesDirectory'),{
             itemCb:(item)=>{
                 if(!item.isFile) return;
-                let _ext = (item.ext.length>0?item.ext:item.base);
+                //let _ext = (item.ext.length>0?item.ext:item.base);
+                let _ext = item.ext;
                 if(_ext.length==0) return;
                 if(!extensions[_ext]) extensions[_ext]=0;
                 extensions[_ext]++;
@@ -24,7 +26,7 @@ class DirCommand {
 
         let padding = (''+filecount+'').length;
         UI.print("Extensions found in '"+ConfigMgr.get('SamplesDirectory')+"' ");
-        for(let i=k.length-1; i>=0; i--){
+        for(let i=0; i<k.length; i++){
             UI.print(' ',_.padStart(extensions[k[i]],padding),'',k[i]);
         }
     }
