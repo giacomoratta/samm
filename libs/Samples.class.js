@@ -7,10 +7,12 @@ class Samples{
 
         this._error = false;
         this._origin_path = absPath;
-        this._ptags_obj = Samples.processTagString(tagQuery);
+        this._ptags_obj = (_.isString(tagQuery)?Samples.processTagString(tagQuery):null);
         this._array = [];
 
-        if(!_.isString(this._origin_path) || !_.isObject(this._ptags_obj)){
+        if(!_.isString(this._origin_path) ||
+            (_.isString(tagQuery) && !_.isObject(this._ptags_obj))
+        ){
             this._error = true;
             return;
         }
@@ -138,7 +140,11 @@ class Samples{
 
     add(item){
         if(!item.isFile) return;
-        if(this._ptags_obj.check_fn(_.toLower(item.rel_path)) != this._options.opposite_matching){
+        if(!this._ptags_obj){
+            this._array.push(item);
+            return true;
+
+        } else if(this._ptags_obj.check_fn(_.toLower(item.rel_path)) !== this._options.opposite_matching){
             this._array.push(item);
             return true;
         }
@@ -156,14 +162,17 @@ class Samples{
 
 
     getQueryTag(){
+        if(!this._ptags_obj) return '';
         return this._ptags_obj.string;
     }
 
     getTagLabel(){
+        if(!this._ptags_obj) return '';
         return this._ptags_obj.label;
     }
 
     getTagShortLabel(){
+        if(!this._ptags_obj) return '';
         return this._ptags_obj.short_label;
     }
 

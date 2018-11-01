@@ -272,6 +272,7 @@ class SamplesManager {
                 _data.tag_queries = ConfigMgr.get('Tags');
             }
             d$("tag_queries are",_data.tag_queries,"\n");
+            _data.tags = Object.keys(_data.tag_queries);
             if(_data.tag_queries.length<=0) return false;
             return true;
         }
@@ -290,6 +291,8 @@ class SamplesManager {
         /* Internal data */
         let _data = {
             tag_queries: {},
+            tags:[],
+            smpobj_by_tag:{},
             output:{
                 enabled: true,
                 max_length_tag_string:10
@@ -306,7 +309,6 @@ class SamplesManager {
             progressive_keepalive:false,
 
             stats:true,
-            pathCustom:false,
             consoleOutput:true,
             createIndexes:false,
             consoleLog:null
@@ -324,6 +326,11 @@ class SamplesManager {
         /* Path */
         __coverage_set_path();
 
+        /* Option fixes */
+        if(options.stats) {
+            options.progressive = options.progressive_keepalive = false;
+        }
+
         /* Get SamplesTree */
         let ST = null;
         if(!options.path) ST=DataMgr.get(this._LABEL_samples_index);
@@ -331,15 +338,49 @@ class SamplesManager {
             ST=new SamplesTree(options.directoryToScan,{/* SampleTree options */},this._directoryTreeOptionsFromConfig());
             ST.read();
         }
-        if(!ST) return null;
-
-        if(ST.empty()){
+        if(!ST || ST.empty()){
             d$("Cannot check the coverage: no samples found. \n");
             return null;
         }
 
+        /* Set objects */
+        _data.tags.forEach((v,i,a)=>{
+            _data.smpobj_by_tag[v] = {
+                obj:new Samples(ST.T.rootPath(), _data.tag_queries[v], {
+                    opposite_matching:options.lookingForCovered
+                })
+            };
+        });
+        _data.smpobj_by_tag._ = {
+            obj:new Samples(ST.T.rootPath())
+        };
 
-        /* Process all tag queries */
+
+        /* Loop on each file */
+        ST.T.forEach({
+            itemCb:(data)=>{
+                let smp_excluded = true
+
+                _data.tags.forEach((v,i,a)=>{
+                    if(_data.smpobj_by_tag[v].obj.add(data.item)===true){
+                        //console.log(v,data.item.base);
+                        smp_excluded = false;
+                    }else{
+
+                    }
+                });
+
+                //console.log('');
+
+                if(smp_excluded===true) _data.smpobj_by_tag._.obj.add(data.item);
+            }
+        });
+
+        _data.smpobj_by_tag._.obj.print();
+        console.log(_data.tags);
+        return;
+
+
         let _ptags = [];
         Object.keys(_data.tag_queries).forEach(function(v,i,a){
             let ptag_obj = Samples.processTagString(_data.tag_queries[v],_ptags);
@@ -354,13 +395,6 @@ class SamplesManager {
         if(_ptags.length<=0) return null;
 
         //console.log(_ptags); return;
-
-
-        /* Option fixes */
-        if(options.stats) {
-            options.progressive = options.progressive_keepalive = false;
-        }
-
         return this._checkSamplesCoverage(ST, options, _ptags, d$);
     }
 

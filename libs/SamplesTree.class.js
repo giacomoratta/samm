@@ -26,7 +26,7 @@ class SamplesTree {
     filterByTags(tagString){
         if(!this.T) return;
 
-        let smp_obj = new Samples(this.T.rootPath(),tagString);
+        let smp_obj = new Samples(this.T.rootPath(), tagString);
         if(smp_obj.error()) return smp_obj;
 
         this.T.walk({
