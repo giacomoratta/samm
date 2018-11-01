@@ -318,6 +318,17 @@ class SamplesManager {
         /* Path */
         __coverage_set_path();
 
+        /* Get SamplesTree */
+        let ST = null;
+        if(!options.path) ST=DataMgr.get(_self._LABEL_samples_index);
+        else ST=new SamplesTree(options.directoryToScan,{
+            /* SampleTree options */
+        },dTreeOptions);
+        if(!ST) return null;
+
+        let smp_obj2 = ST.filterByTags(tagString);
+        if(smp_obj2.error() || smp_obj2.size()==0) return null;
+
         console.log(options); return;
 
         /* Process all tag queries */
