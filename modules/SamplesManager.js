@@ -180,6 +180,7 @@ class SamplesManager {
      * @returns { Promise{array} | null }
      */
     generateSamplesDir(smp_obj,options){
+        // TODO: non salva tutti i files [BUG]
         if(!_.isObject(options)) options={
             dirname:null,   //custom name
             overwrite:false, //force overwrite
@@ -203,7 +204,7 @@ class SamplesManager {
 
         let p_array = [];
         let fname_array = [];
-        let smp_copied_obj = smp_obj.createEmptyFromThis();
+        let smp_copied_obj = smp_obj.createFromThis();
         let _links_dir = Utils.File.pathJoin(options.path,'_links');
 
         Utils.File.ensureDirSync(options.path);

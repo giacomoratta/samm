@@ -16,12 +16,17 @@ class Samples{
         }
     }
 
-    createEmptyFromThis(){
+    createFromThis(copy){
         let newobj = new this.constructor();
         newobj._error = false;
         newobj._origin_path = this._origin_path;
         newobj._ptags_obj = this._ptags_obj;
         newobj._array = [];
+        if(copy===true){
+            this.forEach((v,i)=>{
+                newobj.add(v);
+            });
+        }
         return newobj;
     }
 
@@ -196,7 +201,11 @@ class Samples{
     }
 
 
-    getRandom(count,max_occur){
+    getRandom(count, max_occur, adapt_window){
+        // Return a copy if found less files than count
+        if(this.size()<=count) return this.createFromThis(true /* copy items */);
+
+        //TODO: non aumenta la finestra [BUG]
         let _sameDirectoryMaxOccurs = function(item,o_obj,max_o){
             let f_path = item.dir;
             if(!o_obj[f_path]) o_obj[f_path]=0;
@@ -205,25 +214,40 @@ class Samples{
             return false;
         };
 
+        if(!_.isBoolean(adapt_window)) adapt_window=true;
+        let max_attempts=(adapt_window?10:1);
+
         if(!_.isInteger(count) || count<=1) count=10;
-        let r_array = [];
         let size = this.size();
-        let i=0, sec=size, rf, rn;
+        let rf, rn, r_array=[];
         let occur_obj = {};
         if(_.isNil(max_occur)) max_occur=-1;
 
         // New object for random samples
-        let smp_obj_random = this.createEmptyFromThis();
+        let smp_obj_random = this.createFromThis();
 
-        while(i<count && sec>0){
-            sec--;
-            rn=((_.random(0,size)*7)%size);
-            rf=this.get(rn);
-            if(_sameDirectoryMaxOccurs(rf, occur_obj, max_occur)){
-                continue;
+        while(max_attempts>0){
+            let i=0, sec=size;
+            while(i<count && sec>0){
+                sec--;
+                rn=((_.random(0,size)*7)%size);
+
+                if(r_array.indexOf(rn)>=0) continue;
+                r_array.push(rn);
+
+                rf=this.get(rn);
+                if(_sameDirectoryMaxOccurs(rf, occur_obj, max_occur)){
+                    continue;
+                }
+                smp_obj_random.add(rf);
+
+                if(smp_obj_random.size()>=count) break;
+                i++;
             }
-            smp_obj_random.add(rf);
-            i++;
+
+            if(smp_obj_random.size()>=count) break;
+            max_occur++;
+            max_attempts--;
         }
         return smp_obj_random;
     }
