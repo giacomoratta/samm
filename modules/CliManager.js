@@ -75,7 +75,7 @@ class CliManager {
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
-            .option('-c, --covered', 'Get the covered tags (by default, the uncovered tags are returned).')
+            //.option('-c, --covered', 'Get the covered tags (by default, the uncovered tags are returned).')
             .option('-g, --progressive', 'Stops when some files which did not pass the check are found.')
             .option('-k, --prog-keepalive', 'Like --progressive but it keeps the command alive waiting for key \'enter\'.')
             .action(this._getActionFn('coverage',()=>{
@@ -87,16 +87,11 @@ class CliManager {
                     path:null,                  //custom path
                     query:null,                 //query tags
 
-                    lookingForCovered:false,
-                    progressive:false,
-                    progressive_keepalive:false,
+                    //lookingForCovered:this.cli_params.hasOption('covered'),
+                    progressive:this.cli_params.hasOption('progressive'),
+                    progressive_keepalive:this.cli_params.hasOption('prog-keepalive'),
                     consoleLog:UI.print
                 };
-
-                /* BOOLEANS */
-                C_coverage_options.lookingForCovered = this.cli_params.hasOption('covered');
-                C_coverage_options.progressive = this.cli_params.hasOption('progressive');
-                C_coverage_options.progressive_keepalive = this.cli_params.hasOption('prog-keepalive');
 
                 /* PATH */
                 C_coverage_options.path = this.cli_params.getOption('path');

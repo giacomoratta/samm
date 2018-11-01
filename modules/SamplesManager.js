@@ -345,22 +345,26 @@ class SamplesManager {
 
         /* Set objects */
         _data.tags.forEach((v,i,a)=>{
+
+            // Sample data and objects
             _data.smpobj_by_tag[v] = {
                 obj:new Samples(ST.T.rootPath(), _data.tag_queries[v], {
-                    opposite_matching:options.lookingForCovered
+                    //opposite_matching:options.lookingForCovered
                 })
             };
+
+            // Max length tag string
+            if(v.string.length > _data.output.max_length_tag_string)
+                _data.output.max_length_tag_string=v.string.length;
         });
         _data.smpobj_by_tag._ = {
             obj:new Samples(ST.T.rootPath())
         };
 
-
         /* Loop on each file */
         ST.T.forEach({
             itemCb:(data)=>{
                 let smp_excluded = true
-
                 _data.tags.forEach((v,i,a)=>{
                     if(_data.smpobj_by_tag[v].obj.add(data.item)===true){
                         //console.log(v,data.item.base);
@@ -369,9 +373,6 @@ class SamplesManager {
 
                     }
                 });
-
-                //console.log('');
-
                 if(smp_excluded===true) _data.smpobj_by_tag._.obj.add(data.item);
             }
         });
@@ -411,7 +412,7 @@ class SamplesManager {
         _ptags.forEach(function(v1,i1,a1){
 
             let smp_coverage = new Samples(options.path,v1.tag_array,{
-                opposite_matching:!options.lookingForCovered
+                //opposite_matching:!options.lookingForCovered
             });
             coverage_array.push({
                 covered:0,
