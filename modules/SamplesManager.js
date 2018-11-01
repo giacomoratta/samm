@@ -381,21 +381,6 @@ class SamplesManager {
         console.log(_data.tags);
         return;
 
-
-        let _ptags = [];
-        Object.keys(_data.tag_queries).forEach(function(v,i,a){
-            let ptag_obj = Samples.processTagString(_data.tag_queries[v],_ptags);
-        });
-        _ptags.forEach(function(v){
-            if(v.string.length > _data.output.max_length_tag_string)
-                _data.output.max_length_tag_string=v.string.length;
-        });
-        d$("found ",_ptags.length," tag 'AND conditions'\n");
-        //d$("processed tag 'AND conditions' are",_ptags,"\n");
-        //d$("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
-        if(_ptags.length<=0) return null;
-
-        //console.log(_ptags); return;
         return this._checkSamplesCoverage(ST, options, _ptags, d$);
     }
 
