@@ -18,20 +18,25 @@ class SamplesManager {
         });
     }
 
+    _directoryTreeOptionsFromConfig(){
+        let dTreeOptions = {
+            /* DirectoryTree options */
+        };
+        if(ConfigMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
+        else if(ConfigMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
+        else{
+            dTreeOptions.includedExtensions = null;
+            dTreeOptions.excludedExtensions = null;
+        }
+        return dTreeOptions;
+    }
+
     _createIndexHolder(options){
+        let _self = this;
         let __new_SamplesTree = function(){
-            let dTreeOptions = {
-                /* DirectoryTree options */
-            };
-            if(ConfigMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
-            else if(ConfigMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
-            else{
-                dTreeOptions.includedExtensions = null;
-                dTreeOptions.excludedExtensions = null;
-            }
             let STree = new SamplesTree(options.directoryToScan,{
                 /* SampleTree options */
-            },dTreeOptions);
+            },_self._directoryTreeOptionsFromConfig());
             return STree;
         }
 
@@ -277,7 +282,7 @@ class SamplesManager {
                 options.path = null;
                 d$("path from config; reading the scan index...");
                 options.progressive = true;
-                d$("setting progressive as 'true'...");
+                d$("setting progressive as 'true'..."); //because the samples directory could be too big!
             }
         }
 
@@ -320,16 +325,18 @@ class SamplesManager {
 
         /* Get SamplesTree */
         let ST = null;
-        if(!options.path) ST=DataMgr.get(_self._LABEL_samples_index);
-        else ST=new SamplesTree(options.directoryToScan,{
-            /* SampleTree options */
-        },dTreeOptions);
+        if(!options.path) ST=DataMgr.get(this._LABEL_samples_index);
+        else{
+            ST=new SamplesTree(options.directoryToScan,{/* SampleTree options */},this._directoryTreeOptionsFromConfig());
+            ST.read();
+        }
         if(!ST) return null;
 
-        let smp_obj2 = ST.filterByTags(tagString);
-        if(smp_obj2.error() || smp_obj2.size()==0) return null;
+        if(ST.empty()){
+            d$("Cannot check the coverage: no samples found. \n");
+            return null;
+        }
 
-        console.log(options); return;
 
         /* Process all tag queries */
         let _ptags = [];
@@ -345,13 +352,8 @@ class SamplesManager {
         //d$("processed tag 'AND conditions' are"); _ptags.forEach(function(v){ console.log("\t"+v.string); });
         if(_ptags.length<=0) return null;
 
+        //console.log(_ptags); return;
 
-
-        let ST = DataMgr.get(this._LABEL_samples_index);
-        if(ST.empty()){
-            d$("Cannot check the coverage: no samples found. \n");
-            return null;
-        }
 
         /* Option fixes */
         if(options.stats) {
@@ -373,8 +375,9 @@ class SamplesManager {
 
         _ptags.forEach(function(v1,i1,a1){
 
-            let smp_coverage = new SamplesTree();
-            smp_coverage.setTags(v1.tag_array);
+            let smp_coverage = new Samples(options.path,v1.tag_array,{
+                opposite_matching:!options.lookingForCovered
+            });
             coverage_array.push({
                 covered:0,
                 uncovered:0,
@@ -390,7 +393,7 @@ class SamplesManager {
 
                     let is_covered = v1.check_fn(data.item.n_path);
                     if(is_covered===options.lookingForCovered){
-                        smp_coverage.addItem(data.item);
+                        smp_coverage.add(data.item);
                     }
                     if(is_covered){
                         coverage_item.covered++;

@@ -1,6 +1,10 @@
 class Samples{
 
-    constructor(absPath, tagQuery){
+    constructor(absPath, tagQuery, options){
+        this._options = _.merge({
+            opposite_matching:false     // if ture, add items which do not match with tag check fn()
+        },options);
+
         this._error = false;
         this._origin_path = absPath;
         this._ptags_obj = Samples.processTagString(tagQuery);
@@ -129,9 +133,11 @@ class Samples{
 
     add(item){
         if(!item.isFile) return;
-        if(this._ptags_obj.check_fn(_.toLower(item.rel_path))){
+        if(this._ptags_obj.check_fn(_.toLower(item.rel_path)) != this._options.opposite_matching){
             this._array.push(item);
+            return true;
         }
+        return false;
     }
 
     get(index){
