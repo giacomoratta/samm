@@ -321,15 +321,13 @@ class SamplesManager {
         options.consoleLog = (_.isNil(options.consoleLog)?function(){}:options.consoleLog);
 
         /* Tag Query */
-        if(!__coverage_set_queries()) return null;
+        if(!__coverage_set_queries()){
+            options.consoleLog("No tags or queries found.");
+            return false;
+        }
 
         /* Path */
         __coverage_set_path();
-
-        /* Option fixes */
-        if(options.stats) {
-            options.progressive = options.progressive_keepalive = false;
-        }
 
         /* Get SamplesTree */
         let ST = null;
@@ -339,8 +337,8 @@ class SamplesManager {
             ST.read();
         }
         if(!ST || ST.empty()){
-            d$("Cannot check the coverage: no samples found. \n");
-            return null;
+            options.consoleLog("Cannot check the coverage: no samples found.");
+            return false;
         }
 
         /* Set objects */

@@ -117,12 +117,9 @@ class CliManager {
                     }
                 }
 
-                //CliMgr.waitForEnter('...');
-
                 let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
-                //console.log(smp_obj);
-                return;
-                if(!_.isObject(smp_obj) || smp_obj.error()){
+                //if(!_.isObject(smp_obj) || smp_obj.error()){
+                if(smp_obj===null){
                     UI.print("Coverage command: something went wrong.");
                     return this._error_code;
                 }
