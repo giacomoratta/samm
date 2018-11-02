@@ -81,6 +81,7 @@ class CliManager {
 
                 // TODO
                 // -lt -gt per selezionare samples poco o troppo coperti
+                // -t query label
 
                 let C_coverage_options = {
                     path:null,                  //custom path
