@@ -256,8 +256,6 @@ class SamplesManager {
      * @param options
      *        - path: custom absolute path for the directory
      *        - query: custom query string with tags
-     *        - getUncovered: true to collect uncovered samples
-     *        - consoleOutput: true to print result directly in the console
      *        - createIndexes: true to generate the index files
      * @returns {Samples} smp_obj
      */
@@ -283,13 +281,13 @@ class SamplesManager {
             }else{
                 options.path = null;
                 d$("path from config; reading the scan index...");
-                options.progressive = true;
                 d$("setting progressive as 'true'..."); //because the samples directory could be too big!
             }
         }
 
         /* Internal data */
         let _data = {
+            samples_count:0,
             tag_queries: {},
             tags:[],
             smpobj_by_tag:{},
@@ -306,10 +304,8 @@ class SamplesManager {
 
             lookingForCovered:false,
             progressive:false,
-            progressive_keepalive:false,
 
             stats:true,
-            consoleOutput:true,
             createIndexes:false,
             consoleLog:null
         },options);
@@ -317,7 +313,6 @@ class SamplesManager {
         let d$ = function(m){ arguments[0]='> coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         /* Console */
-        _data.output.enabled = _.isNil(options.consoleLog);
         options.consoleLog = (_.isNil(options.consoleLog)?function(){}:options.consoleLog);
 
         /* Tag Query */
@@ -352,10 +347,10 @@ class SamplesManager {
             };
 
             // Max length tag string
-            if(v.string.length > _data.output.max_length_tag_string)
-                _data.output.max_length_tag_string=v.string.length;
+            if(v.length > _data.output.max_length_tag_string)
+                _data.output.max_length_tag_string=v.length;
         });
-        _data.smpobj_by_tag._ = {
+        _data.smpobj_unmatched = {
             obj:new Samples(ST.T.rootPath())
         };
 
@@ -371,110 +366,49 @@ class SamplesManager {
 
                     }
                 });
-                if(smp_excluded===true) _data.smpobj_by_tag._.obj.add(data.item);
+                if(smp_excluded===true) _data.smpobj_unmatched.obj.add(data.item);
             }
         });
+        _data.samples_count = ST.size();
 
-        _data.smpobj_by_tag._.obj.print();
-        console.log(_data.tags);
-        return;
+        this._checkSamplesCoverageOutput(_data, options, d$);
 
-        return this._checkSamplesCoverage(ST, options, _ptags, d$);
+        return _data.smpobj_unmatched.obj;
     }
 
-    _checkSamplesCoverage(ST, options, _ptags, d$){
-        d$("checking the coverage of "+ST.size()+" samples...");
+    _checkSamplesCoverageOutput(_data, options, d$){
+        if(!_data.output.enabled) return;
+        _data.smpobj_by_tag = Utils.sortObjectByKey(_data.smpobj_by_tag);
 
-        // _ptags = array of {string,check_fn} objects
-        _.sortBy(_ptags, [function(o) { return o.string; }]);
-        options.path = ST.getOriginPath();
+        let _max_len_size = (''+_data.samples_count+'').length+1;
 
-        let coverage_array = [];
-        let __uncovered_items = {};
+        options.consoleLog();
+        let _big_separator = _.repeat('-',120);
 
-        _ptags.forEach(function(v1,i1,a1){
-
-            let smp_coverage = new Samples(options.path,v1.tag_array,{
-                //opposite_matching:!options.lookingForCovered
-            });
-            coverage_array.push({
-                covered:0,
-                uncovered:0,
-                query:v1.string,
-                samples:smp_coverage
-            });
-
-            let coverage_item = coverage_array[coverage_array.length-1];
-
-            ST.T.forEach({
-                itemCb:function(data){
-                    if(!__uncovered_items[data.item.n_path]) __uncovered_items[data.item.n_path]={ path:data.item.path, check:true };
-
-                    let is_covered = v1.check_fn(data.item.n_path);
-                    if(is_covered===options.lookingForCovered){
-                        smp_coverage.add(data.item);
-                    }
-                    if(is_covered){
-                        coverage_item.covered++;
-                        __uncovered_items[data.item.n_path].check = false;
-                    }
-                    else{
-                        coverage_item.uncovered++;
-                        //if(uncovered_items.indexOf(item.path)<0) uncovered_items.push(item.path);
-                    }
-                }
-            });
-
-            if(_data.output.enabled){
-                if((options.progressive || options.progressive_keepalive)){
-                    options.consoleLog("\n");
-                    smp_coverage.forEach(function(item,index){ options.consoleLog("    "+(item.path.substring(options.path.length))); });
-                    options.consoleLog("  "+_.repeat('-', 100));
-                }
-
-                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/"     "+v1.string,_data.output.max_length_tag_string+9)+
-                                    ' c:'+_.padEnd(coverage_item.covered,10)+
-                                    ' u:'+_.padEnd(coverage_item.uncovered,10)+
-                                    ' coverage:'+_.padEnd(Math.round((coverage_item.covered/(coverage_item.covered+coverage_item.uncovered)*100))+'%',5));
+        let k_array = Object.keys(_data.smpobj_by_tag);
+        k_array.forEach((v,i)=>{
+            if(!options.allinfo){
+                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string),
+                    'coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/),
+                    _.padEnd('('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11),
+                    'q: '+_data.tag_queries[v]
+                    //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
+                );
+            }else{
+                options.consoleLog(v,
+                    'coverage: '+_data.smpobj_by_tag[v].obj.size(),
+                    '('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',
+                    'q: '+_data.tag_queries[v]
+                    //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
+                );
+                options.consoleLog(_big_separator);
+                _data.smpobj_by_tag[v].obj.print();
+                options.consoleLog('');
             }
-
-            /* Save Custom INDEX */
-            // if(!options.pathCustom && options.createIndexes===true && coverage_item.uncovered<=0){
-            //     //reading from config.samplesdir
-            //     this.saveSampleScanToFile(smp_coverage,true /*is_custom_index*/);
-            // }
-
-            /* Progressive */
-            if(options.progressive &&
-                ((options.lookingForCovered && coverage_item.covered>0)
-                    || (!options.lookingForCovered && coverage_item.uncovered>0))
-            ){
-                return;
-            }
-
-            /* Progressive and Keep-Alive */
-            if(options.progressive_keepalive &&
-                ((options.lookingForCovered && coverage_item.covered>0)
-                    || (!options.lookingForCovered && coverage_item.uncovered>0))
-            ){
-                CliMgr.waitForEnter('...');
-            }
+            if(options.progressive==true) CliMgr.waitForEnter('');
         });
-        options.consoleLog("");
-
-        if(options.stats){
-            //uncovered_items.sort();
-            let __uncovered_items_count = 0;
-            Object.keys(__uncovered_items).forEach(function(v){
-                if(__uncovered_items[v].check===false) return;
-                options.consoleLog("    "+__uncovered_items[v].path);
-                __uncovered_items_count++;
-            });
-            if(__uncovered_items_count>0) options.consoleLog("  Found "+__uncovered_items_count+" uncovered samples.");
-            else options.consoleLog("  All samples are covered!");
-        }
-
-        return coverage_array;
+        options.consoleLog("\nUncovered samples:");
+        _data.smpobj_unmatched.obj.print();
     }
 };
 
