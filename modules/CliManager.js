@@ -68,13 +68,25 @@ class CliManager {
         });
     }
 
+    questionYesNo(msg){
+        if(!_.isString(msg)) msg='Do you want to continue?';
+        let ans = readlineSync.question("\n"+msg+' [y/n] ',{
+            defaultInput: ''
+        });
+        if(_.toLower(ans)==='y') return true;
+        if(_.toLower(ans)==='n') return false;
+        return null;
+    }
+
 
     C_Coverage(){
+        let config_tags = ConfigMgr.get('Tags');
         vorpal
             .command('coverage')
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
+            .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
             .action(this._getActionFn('coverage',()=>{
@@ -84,8 +96,9 @@ class CliManager {
                 // -t query label
 
                 let C_coverage_options = {
-                    path:null,                  //custom path
-                    query:null,                 //query tags
+                    path:null,        //custom path
+                    query:null,       //query tags
+                    tag:'',           //query tags
 
                     allinfo:this.cli_params.hasOption('allinfo'),
                     progressive:this.cli_params.hasOption('progressive'),
@@ -108,10 +121,15 @@ class CliManager {
 
                 /* QUERY */
                 C_coverage_options.query = this.cli_params.getOption('query');
+                C_coverage_options.tag = this.cli_params.getOption('tag');
                 if(!C_coverage_options.query){
                     if(!ConfigMgr.get('Tags')){
                         UI.print("Coverage command: no configured tags found.\n" +
                             "Add one or more tags to the configuration or specify a custom query with -q option.");
+                        return this._error_code;
+                    }
+                    if(_.isString(C_coverage_options.tag) && !ConfigMgr.get('Tags')[C_coverage_options.tag]){
+                        UI.print("Coverage command: tag with label '"+C_coverage_options.tag+"' not found.");
                         return this._error_code;
                     }
                 }
@@ -186,7 +204,7 @@ class CliManager {
             .command('lookup [query]')
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
-            .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>.',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup',()=>{
 
                 if(!SamplesMgr.hasSamplesIndex()){

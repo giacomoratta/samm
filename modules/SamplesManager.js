@@ -265,6 +265,11 @@ class SamplesManager {
             if(_.isString(options.query)){
                 d$("query from string");
                 _data.tag_queries['default']=options.query;
+
+            }else if(_.isString(options.tag)){
+                d$("query from string");
+                _data.tag_queries[options.tag]=ConfigMgr.get('Tags')[options.tag];
+
             }else if(_.isObject(ConfigMgr.get('Tags'))) {
                 d$("query from config.Tags");
                 _data.tag_queries = ConfigMgr.get('Tags');
@@ -293,7 +298,7 @@ class SamplesManager {
             smpobj_by_tag:{},
             output:{
                 enabled: true,
-                max_length_tag_string:10
+                max_length_tag_string:3
             }
         }
 
@@ -388,7 +393,7 @@ class SamplesManager {
         let k_array = Object.keys(_data.smpobj_by_tag);
         k_array.forEach((v,i)=>{
             if(!options.allinfo){
-                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string),
+                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
                     'coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/),
                     _.padEnd('('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11),
                     'q: '+_data.tag_queries[v]
@@ -407,8 +412,16 @@ class SamplesManager {
             }
             if(options.progressive==true) CliMgr.waitForEnter('');
         });
-        options.consoleLog("\nUncovered samples:");
-        _data.smpobj_unmatched.obj.print();
+        options.consoleLog("\nUncovered samples:",
+            _data.smpobj_unmatched.obj.size(),
+            '('+_.round((_data.smpobj_unmatched.obj.size()/_data.samples_count*100),2)+'%)'
+        );
+
+        let show_uncovered=true;
+        if(_data.smpobj_unmatched.obj.size()>10 && !options.progressive){
+            show_uncovered = CliMgr.questionYesNo('There are many uncovered samples. Do you want to see them?');
+        }
+        if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
     }
 };
 
