@@ -265,18 +265,18 @@ class SamplesManager {
 
         function __coverage_set_queries(){
             if(_.isString(options.query)){
-                d$("query from string");
+                d$("> coverage: query from string");
                 _data.tag_queries['default']=options.query;
 
             }else if(_.isString(options.tag)){
-                d$("query from string");
+                d$("> coverage: query from string");
                 _data.tag_queries[options.tag]=ConfigMgr.get('Tags')[options.tag];
 
             }else if(_.isObject(ConfigMgr.get('Tags'))) {
-                d$("query from config.Tags");
+                d$("> coverage: query from config.Tags");
                 _data.tag_queries = ConfigMgr.get('Tags');
             }
-            d$("tag_queries are",_data.tag_queries,"\n");
+            d$("> coverage: tag_queries are",_data.tag_queries,"\n");
             _data.tags = Object.keys(_data.tag_queries);
             if(_data.tag_queries.length<=0) return false;
             return true;
@@ -284,11 +284,11 @@ class SamplesManager {
 
         function __coverage_set_path(){
             if(_.isString(options.path)){
-                d$("path from string; scanning the absolute path "+options.path+" ...");
+                d$("> coverage: path from string; scanning the absolute path "+options.path+" ...");
             }else{
                 options.path = null;
-                d$("path from config; reading the scan index...");
-                d$("setting progressive as 'true'..."); //because the samples directory could be too big!
+                d$("> coverage: path from config; reading the scan index...");
+                d$("> coverage: setting progressive as 'true'..."); //because the samples directory could be too big!
             }
         }
 
@@ -315,8 +315,6 @@ class SamplesManager {
             stats:true,
             createIndexes:false
         },options);
-
-        let d$ = function(m){ arguments[0]='> coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         /* Console */
         UI.print = (_.isNil(UI.print)?function(){}:UI.print);
