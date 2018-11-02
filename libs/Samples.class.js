@@ -137,15 +137,18 @@ class Samples{
         return this._origin_path;
     }
 
+    _add(item){
+        this._array.push(item);
+    }
 
     add(item){
         if(!item.isFile) return;
         if(!this._ptags_obj){
-            this._array.push(item);
+            this._add(item);
             return true;
 
         } else if(this._ptags_obj.check_fn(_.toLower(item.rel_path)) !== this._options.opposite_matching){
-            this._array.push(item);
+            this._add(item);
             return true;
         }
         return false;
@@ -214,7 +217,6 @@ class Samples{
         // Return a copy if found less files than count
         if(this.size()<=count) return this.createFromThis(true /* copy items */);
 
-        //TODO: non aumenta la finestra [BUG]
         let _sameDirectoryMaxOccurs = function(item,o_obj,max_o){
             let f_path = item.dir;
             if(!o_obj[f_path]) o_obj[f_path]=0;
@@ -239,16 +241,17 @@ class Samples{
             let i=0, sec=size;
             while(i<count && sec>0){
                 sec--;
-                rn=((_.random(0,size)*7)%size);
+                rn=((_.random(0,size))%size);
 
                 if(r_array.indexOf(rn)>=0) continue;
-                r_array.push(rn);
 
                 rf=this.get(rn);
                 if(_sameDirectoryMaxOccurs(rf, occur_obj, max_occur)){
                     continue;
                 }
-                smp_obj_random.add(rf);
+                if(smp_obj_random._add(rf)===true){
+                    r_array.push(rn);
+                }
 
                 if(smp_obj_random.size()>=count) break;
                 i++;
