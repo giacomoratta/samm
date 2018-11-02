@@ -181,11 +181,11 @@ class SamplesManager {
      */
     generateSamplesDir(smp_obj,options){
         // TODO: non salva tutti i files [BUG]
-        if(!_.isObject(options)) options={
-            dirname:null,   //custom name
-            overwrite:false, //force overwrite
-            path:null   //absolute path
-        };
+        options = _.merge({
+            dirname:null,     //custom name
+            overwrite:false,  //force overwrite
+            path:null         //absolute path
+        },options);
 
         // Set Path
         if(!_.isString(options.path)){
@@ -209,6 +209,8 @@ class SamplesManager {
 
         Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
+
+        UI.print("Copying "+smp_obj.size()+" samples...");
 
         //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
@@ -311,18 +313,17 @@ class SamplesManager {
             progressive:false,
 
             stats:true,
-            createIndexes:false,
-            consoleLog:null
+            createIndexes:false
         },options);
 
         let d$ = function(m){ arguments[0]='> coverage: '+arguments[0]; console.log.apply(null,arguments); };
 
         /* Console */
-        options.consoleLog = (_.isNil(options.consoleLog)?function(){}:options.consoleLog);
+        UI.print = (_.isNil(UI.print)?function(){}:UI.print);
 
         /* Tag Query */
         if(!__coverage_set_queries()){
-            options.consoleLog("No tags or queries found.");
+            UI.print("No tags or queries found.");
             return false;
         }
 
@@ -337,7 +338,7 @@ class SamplesManager {
             ST.read();
         }
         if(!ST || ST.empty()){
-            options.consoleLog("Cannot check the coverage: no samples found.");
+            UI.print("Cannot check the coverage: no samples found.");
             return false;
         }
 
@@ -387,32 +388,32 @@ class SamplesManager {
 
         let _max_len_size = (''+_data.samples_count+'').length+1;
 
-        options.consoleLog();
+        UI.print();
         let _big_separator = _.repeat('-',120);
 
         let k_array = Object.keys(_data.smpobj_by_tag);
         k_array.forEach((v,i)=>{
             if(!options.allinfo){
-                options.consoleLog(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
+                UI.print(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
                     'coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/),
                     _.padEnd('('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11),
                     'q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
             }else{
-                options.consoleLog(v,
+                UI.print(v,
                     'coverage: '+_data.smpobj_by_tag[v].obj.size(),
                     '('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',
                     'q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
-                options.consoleLog(_big_separator);
+                UI.print(_big_separator);
                 _data.smpobj_by_tag[v].obj.print();
-                options.consoleLog('');
+                UI.print('');
             }
             if(options.progressive==true) CliMgr.waitForEnter('');
         });
-        options.consoleLog("\nUncovered samples:",
+        UI.print("\nUncovered samples:",
             _data.smpobj_unmatched.obj.size(),
             '('+_.round((_data.smpobj_unmatched.obj.size()/_data.samples_count*100),2)+'%)'
         );

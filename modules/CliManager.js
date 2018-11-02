@@ -101,8 +101,7 @@ class CliManager {
                     tag:'',           //query tags
 
                     allinfo:this.cli_params.hasOption('allinfo'),
-                    progressive:this.cli_params.hasOption('progressive'),
-                    consoleLog:UI.print
+                    progressive:this.cli_params.hasOption('progressive')
                 };
 
                 /* PATH */
