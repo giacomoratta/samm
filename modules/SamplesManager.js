@@ -380,7 +380,9 @@ class SamplesManager {
         return _data.smpobj_unmatched.obj;
     }
 
+
     _checkSamplesCoverageOutput(_data, options, d$){
+
         if(!_data.output.enabled) return;
         _data.smpobj_by_tag = Utils.sortObjectByKey(_data.smpobj_by_tag);
 
@@ -417,10 +419,10 @@ class SamplesManager {
         );
 
         let show_uncovered=true;
-        if(_data.smpobj_unmatched.obj.size()>10 && !options.progressive){
-            show_uncovered = CliMgr.questionYesNo('There are many uncovered samples. Do you want to see them?');
+        if(_data.smpobj_unmatched.obj.size()>10 /*&& !options.progressive*/){
+            show_uncovered = CliMgr.questionYesNo('There are many uncovered samples. Do you want to show them?');
         }
-        if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
+        //if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
     }
 };
 
