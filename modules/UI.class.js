@@ -5,7 +5,20 @@ class UI {
                 printFn:console.log,
                 warningFn:console.warn,
                 errorFn:console.error,
-                debugFn:console.log,
+                debugFn:function(){
+                    let vv = Object.values(arguments);
+                    vv.unshift('[DEBUG]');
+                    console.log.apply(null,vv);
+                },
+                debugTimedFn:function(){
+                    let pp = '------------------------------';
+                    let pre = '';
+                    let post = ' '+pp+pp;
+                    let tp = " - "+Date.now()+' ';
+                    console.log("\n\n"+pre+"< debug"+tp+">"+post);
+                    console.log.apply(null,arguments);
+                    console.log(pre+"< END debug"+tp+">"+post+"\n");
+                },
                 prefix:null
             },options);
         }
@@ -20,6 +33,9 @@ class UI {
     }
 
     _newInstance(options){
+        this.debug = options.debugFn;
+        this.debugTimed = options.debugTimedFn;
+
         if(!options.prefix){
             this.print = options.printFn;
             this.warning = options.warningFn;
