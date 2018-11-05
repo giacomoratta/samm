@@ -1,5 +1,4 @@
 const SymbolTree = require('symbol-tree');
-const scanf = require('scanf');
 
 class DirectoryTree {
 

@@ -1,4 +1,3 @@
-
 require('./globals_dev.js');
 require('./globals.js');
 

@@ -13,16 +13,9 @@ global.d$ = function(){
 
 global._ =  require('lodash');
 require('./libs/Lodash.Extensions.js');
+global.scanf = require('scanf');
 global.readlinesync = require('readline-sync');
-
-global.UI = {
-    print:console.log,
-    warning:console.warn,
-    error:console.error
-};
-global.MPL_Options = {
-
-};
+global.UI = new (require('./modules/UI.class.js'))({ /*options*/ });
 
 /* Common Libraries */
 global.Utils = require('./libs/Utils.js');

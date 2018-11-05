@@ -422,7 +422,7 @@ class SamplesManager {
         if(_data.smpobj_unmatched.obj.size()>10 /*&& !options.progressive*/){
             show_uncovered = CliMgr.questionYesNo('There are many uncovered samples. Do you want to show them?');
         }
-        //if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
+        if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
     }
 };
 
