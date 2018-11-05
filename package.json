@@ -1,7 +1,7 @@
 {
   "name": "mpl",
-  "version": "1.0.0",
-  "description": "Select randomly a set of samples",
+  "version": "0.1.0",
+  "description": "Creativity-oriented manager for music production library",
   "main": "app.js",
   "scripts": {
     "test": "mocha",
