@@ -1,10 +1,15 @@
 const { compile } = require('nexe');
-global.prod = true;
+
+/*
+* read package version
+* create 3 directories
+* copy config.samples
+* make zip files
+* */
 
 compile({
-    input: './my-app.js',
+    input: './app-prod.js',
     output: './build/y',
-    build: true, //required to use patches
     verbose:true
 }).then(() => {
     console.log('success')
