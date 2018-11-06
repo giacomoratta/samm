@@ -50,16 +50,17 @@ let b$cfg = {
 
 };
 
-console.log("\n\n"+'MPL:Build');
+console.log("\n"+'MPL:Build');
 
-console.log("\n\n"+'Delete directory',b$cfg.build_dir);
+console.log("\n"+'Delete directory for build:',b$cfg.build_dir);
 Utils.File.removeDirSync(b$cfg.build_dir);
+
+console.log("\n"+'Create directory for build:',b$cfg.build_dir);
+Utils.File.ensureDirSync(b$cfg.build_dir);
 
 Utils.EXIT();
 
 /*
-* delete directory ./build with rimraf
-* create directory ./build
 * create directory ./build/mpl.0.0.0.mac.x64
 * create file      ./build/mpl.0.0.0.mac.x64/config.sample.json from config.sample.unix.json
 * create directory ./build/mpl.0.0.0.win.x86
