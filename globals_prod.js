@@ -1,3 +1,4 @@
 
-/* Standard Libraries */
-global.d$ = function(){};
+global.ENV_CONFIG = {
+    debug_enabled:false
+}

@@ -50,12 +50,12 @@ let b$cfg = {
 
 };
 
-console.log("\n"+'MPL:Build');
+console.log("\n"+'MPL :: Build :: Start');
 
-console.log("\n"+'Delete directory for build:',b$cfg.build_dir);
+console.log("\n"+'Delete directory for build ::',b$cfg.build_dir);
 Utils.File.removeDirSync(b$cfg.build_dir);
 
-console.log("\n"+'Create directory for build:',b$cfg.build_dir);
+console.log("\n"+'Create directory for build ::',b$cfg.build_dir);
 Utils.File.ensureDirSync(b$cfg.build_dir);
 
 let compileForPlatform = function(platform){
@@ -71,18 +71,18 @@ let compileForPlatform = function(platform){
     poz.compile_options.output = Utils.File.pathJoin(poz.build_dir,'mpl');
     poz.config_sample_copy = Utils.File.pathJoin(poz.build_dir,'config.sample.json');
 
-    console.log("\n"+'['+platform+'] Create directory for build:',poz.build_dir);
+    console.log("\n"+'['+platform+'] Create directory for build ::',poz.build_dir);
     Utils.File.ensureDirSync(poz.build_dir);
 
-    console.log("\n"+'['+platform+'] Copying sample config file:',poz.config_sample_copy);
+    console.log("\n"+'['+platform+'] Copying sample config file ::',poz.config_sample_copy);
     Utils.File.copyFileSync(poz.config_sample, poz.config_sample_copy);
 
     console.log(poz.compile_options);
 
     return compile(poz.compile_options).then(() => {
-        console.log("\n"+'['+platform+'] Build complete:',poz.compile_options.output,"\n");
+        console.log("\n"+'['+platform+'] Build complete ::',poz.compile_options.output,"\n");
     }).catch(() => {
-        console.log("\n"+'['+platform+'] Build failed:',poz.compile_options.output,"\n");
+        console.log("\n"+'['+platform+'] Build failed ::',poz.compile_options.output,"\n");
     });
 }
 
@@ -97,13 +97,13 @@ let platformsToBuildFor = [
 if(platformsToBuildFor.length>0){
     let _recursivePromise = function(a,i){
         return compileForPlatform(a[i]).then(()=>{
-            if(i>=a.length){
-                console.log('FINISHED');
+            if(i>=a.length-1){
+                console.log("\n"+'MPL :: Build :: Finished',"\n\n");
             }else{
                 return _recursivePromise(a,i+1);
             }
         }).catch((e)=>{
-            console.error('ERROR',e);
+            console.error("\n"+'MPL :: Build :: Error',e,"\n\n");
         });
     }
     _recursivePromise(platformsToBuildFor,0);

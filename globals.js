@@ -6,7 +6,12 @@ global.scanf = require('scanf');
 global.readlinesync = require('readline-sync');
 
 /* Output */
-global.UI = new (require('./modules/UI.class.js'))({ /*options*/ });
+let UI_options = {};
+if(!ENV_CONFIG.debug_enabled){
+    UI_options.debugFn=function(){};
+    UI_options.debugTimedFn=function(){};
+}
+global.UI = new (require('./modules/UI.class.js'))(UI_options);
 global.d$ = UI.debug;
 global.dt$ = UI.debugTimed;
 
