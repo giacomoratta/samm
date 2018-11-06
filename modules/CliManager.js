@@ -31,7 +31,7 @@ class CliManager {
         this.C_Scan();
         this.C_Show();
         this.C_Dir();
-        this.C_Config();
+        this.C_Config_Set();
     }
 
     _getActionFn(cmdName, cmdFn){
@@ -255,16 +255,16 @@ class CliManager {
     }
 
 
-    C_Config(){
+    C_Config_Set(){
         vorpal
             .command('config set <name> [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
             .description("Set the value of a configuration parameter." +
-                "\n  $ config set Project project-name / (or path)" +
-                "\n  $ config set Tag tag-label query,tag+tag2,or,tag3" +
-                "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
-                "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
-                "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
+                        "\n  $ config set Project project-name / (or path)" +
+                        "\n  $ config set Tag tag-label query,tag+tag2,or,tag3" +
+                        "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
+                        "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
+                        "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
             .action(this._getActionFn('config',()=>{
                 let _UI = UI.newLocalUI('> config-set:');
 

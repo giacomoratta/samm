@@ -301,9 +301,6 @@ class Utils_Files {
     }
 
     copyFile(path_from, path_to, options){
-        //console.log(path_from, path_to, options);
-        //return new Promise(function(){},function(){});
-
         options = _.merge({
             overwrite:true,
             errorOnExist:false
