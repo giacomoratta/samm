@@ -1,6 +1,61 @@
 const compile = require('nexe');
 const package_json = require('./package.json');
-const Utils = require('./libs/Utils.js');
+global.Utils = require('./libs/Utils.js');
+
+let b$cfg = {
+    version:package_json.version,
+    build_dir:Utils.File.setAsAbsPath('build'),
+    compile_options:{
+        input: './app-prod.js',
+        output: null, //'./build/y',
+        verbose:true
+    },
+    platforms:{
+        /*
+        * key: only [a-z\_]
+        * _ will be replaced with . to create a signature
+        */
+        'mac_x64':{
+            config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            compile_options:{
+                target: 'mac-x64-10.13.0'
+            }
+        },
+        'win_x64':{
+            config_sample: Utils.File.setAsAbsPath('config.sample.win.json',true),
+            compile_options:{
+                target: 'windows-x64-10.13.0'
+            }
+        },
+        'win_x86':{
+            config_sample: Utils.File.setAsAbsPath('config.sample.win.json',true),
+            compile_options:{
+                target: 'windows-x86-10.13.0'
+            }
+        },
+        'linux_x64':{
+            config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            compile_options:{
+                target: 'linux-x64-10.13.0'
+            }
+        },
+        'linux_x86':{
+            config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            compile_options:{
+                target: 'linux-x86-10.13.0'
+            }
+        },
+    }
+
+};
+
+console.log("\n\n"+'MPL:Build');
+
+console.log("\n\n"+'Delete directory',b$cfg.build_dir);
+Utils.File.removeDirSync(b$cfg.build_dir);
+
+console.log(b$cfg);
+Utils.EXIT();
 
 /*
 * delete directory ./build with rimraf
