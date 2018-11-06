@@ -1,5 +1,6 @@
-const compile = require('nexe');
+const nexe_compiler = require('nexe');
 const package_json = require('./package.json');
+global._ =  require('lodash');
 global.Utils = require('./libs/Utils.js');
 
 let b$cfg = {
@@ -54,7 +55,6 @@ console.log("\n\n"+'MPL:Build');
 console.log("\n\n"+'Delete directory',b$cfg.build_dir);
 Utils.File.removeDirSync(b$cfg.build_dir);
 
-console.log(b$cfg);
 Utils.EXIT();
 
 /*
@@ -78,7 +78,7 @@ Utils.EXIT();
 * make zip files and delete original directories
 * */
 
-compile({
+nexe_compiler({
     input: './app-prod.js',
     output: './build/y',
     verbose:true
