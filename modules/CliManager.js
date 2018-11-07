@@ -58,7 +58,7 @@ class CliManager {
     }
 
     readLine(){
-        return readlineSync.prompt()
+        return readlineSync.prompt();
     }
 
     waitForEnter(msg){

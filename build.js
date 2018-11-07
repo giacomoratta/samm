@@ -52,9 +52,6 @@ let b$cfg = {
 
 console.log("\n"+'MPL :: Build :: Start');
 
-console.log("\n"+'Delete directory for build ::',b$cfg.build_dir);
-Utils.File.removeDirSync(b$cfg.build_dir);
-
 console.log("\n"+'Create directory for build ::',b$cfg.build_dir);
 Utils.File.ensureDirSync(b$cfg.build_dir);
 
@@ -70,6 +67,9 @@ let compileForPlatform = function(platform){
     poz.build_dir = Utils.File.pathJoin(b$cfg.build_dir,poz.signature);
     poz.compile_options.output = Utils.File.pathJoin(poz.build_dir,'mpl');
     poz.config_sample_copy = Utils.File.pathJoin(poz.build_dir,'config.sample.json');
+
+    console.log("\n"+'['+platform+'] Delete directory for build ::',poz.build_dir);
+    Utils.File.removeDirSync(poz.build_dir);
 
     console.log("\n"+'['+platform+'] Create directory for build ::',poz.build_dir);
     Utils.File.ensureDirSync(poz.build_dir);
@@ -87,10 +87,10 @@ let compileForPlatform = function(platform){
 }
 
 let platformsToBuildFor = [
-    'mac_x64',
-    //'win_x64',
+    //'mac_x64',
+    'win_x64',
     //'win_x86',
-    'linux_x64',
+    //'linux_x64',
     //'linux_x86'
 ];
 
