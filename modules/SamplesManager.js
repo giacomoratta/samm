@@ -210,7 +210,7 @@ class SamplesManager {
         Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
 
-        UI.print("Copying "+smp_obj.size()+" samples...");
+        clUI .print("Copying "+smp_obj.size()+" samples...");
 
         //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
@@ -317,11 +317,11 @@ class SamplesManager {
         },options);
 
         /* Console */
-        UI.print = (_.isNil(UI.print)?function(){}:UI.print);
+        clUI .print = (_.isNil(clUI .print)?function(){}:clUI .print);
 
         /* Tag Query */
         if(!__coverage_set_queries()){
-            UI.print("No tags or queries found.");
+            clUI .print("No tags or queries found.");
             return false;
         }
 
@@ -336,7 +336,7 @@ class SamplesManager {
             ST.read();
         }
         if(!ST || ST.empty()){
-            UI.print("Cannot check the coverage: no samples found.");
+            clUI .print("Cannot check the coverage: no samples found.");
             return false;
         }
 
@@ -388,32 +388,32 @@ class SamplesManager {
 
         let _max_len_size = (''+_data.samples_count+'').length+1;
 
-        UI.print();
+        clUI .print();
         let _big_separator = _.repeat('-',120);
 
         let k_array = Object.keys(_data.smpobj_by_tag);
         k_array.forEach((v,i)=>{
             if(!options.allinfo){
-                UI.print(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
+                clUI .print(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
                     'coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/),
                     _.padEnd('('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11),
                     'q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
             }else{
-                UI.print(v,
+                clUI .print(v,
                     'coverage: '+_data.smpobj_by_tag[v].obj.size(),
                     '('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',
                     'q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
-                UI.print(_big_separator);
+                clUI .print(_big_separator);
                 _data.smpobj_by_tag[v].obj.print();
-                UI.print('');
+                clUI .print('');
             }
             if(options.progressive==true) CliMgr.waitForEnter('');
         });
-        UI.print("\nUncovered samples:",
+        clUI .print("\nUncovered samples:",
             _data.smpobj_unmatched.obj.size(),
             '('+_.round((_data.smpobj_unmatched.obj.size()/_data.samples_count*100),2)+'%)'
         );

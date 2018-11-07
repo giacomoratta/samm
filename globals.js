@@ -2,8 +2,6 @@
 /* Standard Libraries */
 global._ =  require('lodash');
 require('./libs/Lodash.Extensions.js');
-global.scanf = require('scanf');
-global.readlinesync = require('readline-sync');
 
 /* Output */
 let UI_options = {};
@@ -11,9 +9,9 @@ if(!ENV_CONFIG.debug_enabled){
     UI_options.debugFn=function(){};
     UI_options.debugTimedFn=function(){};
 }
-global.UI = new (require('./modules/UI.class.js'))(UI_options);
-global.d$ = UI.debug;
-global.dt$ = UI.debugTimed;
+global.clUI  = new (require('./modules/UI.class.js'))(UI_options);
+global.d$ = clUI .debug;
+global.dt$ = clUI .debugTimed;
 
 /* Common Libraries */
 global.Utils = require('./libs/Utils.js');

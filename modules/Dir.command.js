@@ -59,33 +59,33 @@ class DirCommand {
         },options);
         let _esobj = this._listExtensionsStats_getSearchObj(options);
         if(!_esobj){
-            UI.print("No data found ");
+            clUI .print("No data found ");
             return;
         }
 
         if(_.isString(options.extension) && options.extension.length>0){
             if(options.extension[0]!='.') options.extension='.'+options.extension;
             if(!_.isArray(_esobj.filepaths[options.extension]) || _esobj.filepaths[options.extension].length==0){
-                UI.print("No files for the extension '"+options.extension+"' ");
+                clUI .print("No files for the extension '"+options.extension+"' ");
                 return;
             }
-            UI.print("Files found with extension '"+options.extension+"' ");
+            clUI .print("Files found with extension '"+options.extension+"' ");
             for(let i=0; i<_esobj.filepaths[options.extension].length; i++){
-                UI.print(' ',_esobj.filepaths[options.extension][i]);
+                clUI .print(' ',_esobj.filepaths[options.extension][i]);
             }
             return;
         }
 
         let k = _.keys(_esobj.extensions);
         if(k.length==0){
-            UI.print("No extensions found in '"+_esobj.path+"' ");
+            clUI .print("No extensions found in '"+_esobj.path+"' ");
             return;
         }
 
         let padding = (''+_esobj.filecount+'').length;
-        UI.print("Extensions found in '"+_esobj.path+"' ");
+        clUI .print("Extensions found in '"+_esobj.path+"' ");
         for(let i=0; i<k.length; i++){
-            UI.print(' ',_.padStart(_esobj.extensions[k[i]],padding),'',k[i]);
+            clUI .print(' ',_.padStart(_esobj.extensions[k[i]],padding),'',k[i]);
         }
     }
 

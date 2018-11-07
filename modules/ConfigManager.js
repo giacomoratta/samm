@@ -71,12 +71,12 @@ class ConfigManager {
 
     _setInternals(print){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
-        if(!this._paths.samples_directory) UI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
+        if(!this._paths.samples_directory) clUI .warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
         this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
-        if(!this._paths.project_directory) UI.warning("The project directory does not exist: ",this._config.Project);
+        if(!this._paths.project_directory) clUI .warning("The project directory does not exist: ",this._config.Project);
 
-        UI.print(); //new empty row
+        clUI .print(); //new empty row
     }
 
 
@@ -99,11 +99,11 @@ class ConfigManager {
 
 
     printInternals(){
-        UI.print("Internal Configuration");
+        clUI .print("Internal Configuration");
         let _self = this;
-        UI.print("  # Work directories");
+        clUI .print("  # Work directories");
         Object.keys(this._paths).forEach(function(v){
-            UI.print("    "+v+" : "+_self._paths[v]);
+            clUI .print("    "+v+" : "+_self._paths[v]);
         });
     }
 
@@ -184,9 +184,9 @@ class ConfigManager {
         let _outcome = this._set(this._config[name],value);
         if(_outcome.error==true){
             if(_outcome.type){
-                UI.print("Config.set: current value and old value have different types.\n");
-                UI.print("             old: ",this._config[name]);
-                UI.print("             new: ",value);
+                clUI .print("Config.set: current value and old value have different types.\n");
+                clUI .print("             old: ",this._config[name]);
+                clUI .print("             new: ",value);
             }
             return null;
         }
@@ -208,7 +208,7 @@ class ConfigManager {
             let ph = Utils.File.pathParse(v);
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
-                UI.print("The projects directory does not exist: "+v_copy);
+                clUI .print("The projects directory does not exist: "+v_copy);
                 return null;
             }
         }
@@ -217,7 +217,7 @@ class ConfigManager {
             let ph = Utils.File.pathParse(v);
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
-                UI.print("The samples directory does not exist: "+v_copy);
+                clUI .print("The samples directory does not exist: "+v_copy);
                 return null;
             }
             this.setFlag('samples_index_update_needed',true);
@@ -225,7 +225,7 @@ class ConfigManager {
 
         else if(n=="ExtensionCheckForSamples"){
             if(_.indexOf(['I','E','X'],v)<0){
-                UI.print("Wrong value for ExtensionCheckForSamples. Allowed values: I (included), E (excluded), X (disabled)");
+                clUI .print("Wrong value for ExtensionCheckForSamples. Allowed values: I (included), E (excluded), X (disabled)");
                 return null;
             }
             this.setFlag('samples_index_update_needed',true);
@@ -237,9 +237,9 @@ class ConfigManager {
                 let _ot = this._set(this._config[n][0],v);
                 if(_ot.error==true){
                     if(_ot.type){
-                        UI.print("Config.set [Array]: current value and old value have different types.");
-                        UI.print("\n                   old: ",this._config[n][0]);
-                        UI.print("\n                   new: ",v);
+                        clUI .print("Config.set [Array]: current value and old value have different types.");
+                        clUI .print("\n                   old: ",this._config[n][0]);
+                        clUI .print("\n                   new: ",v);
                     }
                     return null;
                 }
@@ -270,7 +270,7 @@ class ConfigManager {
     }
 
     print(){
-        UI.print("Configuration File");
+        clUI .print("Configuration File");
         let keys = _.keys(this._config);
         let _this=this;
         keys.forEach(function(v){
@@ -281,7 +281,7 @@ class ConfigManager {
                 if(vprint.length>3) vprint = "\n\t  "+Utils.replaceAll(vprint,"\n","\n\t  ");
             }
             else vprint=JSON.stringify(_this._config[v], null, '');
-            UI.print("  "+v+':'+" "+vprint);
+            clUI .print("  "+v+':'+" "+vprint);
         });
     }
 
@@ -306,13 +306,13 @@ class ConfigManager {
     }
 
     printMessages(){
-        UI.print("");
+        clUI .print("");
         if(this.getFlag('samples_index_scan_needed')==true){
-            UI.print("\nWARNING: no samples index detected; perform 'scan' before using other commands.\n");
+            clUI .print("\nWARNING: no samples index detected; perform 'scan' before using other commands.\n");
         }
         if(this.getFlag('samples_index_update_needed')==true){
-            UI.print("\nWARNING: samples index not compliant with current configuration;");
-            UI.print(  "         perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
+            clUI .print("\nWARNING: samples index not compliant with current configuration;");
+            clUI .print(  "         perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
         }
     }
 };

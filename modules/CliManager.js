@@ -45,7 +45,7 @@ class CliManager {
                     callback();
 
                 }).catch((e)=>{
-                    UI.print("\n");
+                    clUI .print("\n");
                     d$('_getActionFn',e);
                     callback();
                 })
@@ -92,7 +92,7 @@ class CliManager {
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
             .action(this._getActionFn('coverage',()=>{
-                let _UI = UI.newLocalUI('> coverage:');
+                let _clUI  = clUI .newLocalUI('> coverage:');
 
                 // TODO
                 // -lt -gt per selezionare samples poco o troppo coperti
@@ -111,13 +111,13 @@ class CliManager {
                 C_coverage_options.path = this.cli_params.getOption('path');
                 if(!_.isString(C_coverage_options.path)){
                     if(!SamplesMgr.hasSamplesIndex()){
-                        _UI.print("no samples index found;\n" +
+                        _clUI .print("no samples index found;\n" +
                             "perform a scan or specify an absolute path with -p option.");
                         return this._error_code;
                     }
                 }else if(!Utils.File.isAbsoluteParentDirSync(C_coverage_options.path) || !Utils.File.directoryExistsSync(C_coverage_options.path)){
                     // check path if is a good absolute path and exists
-                    _UI.print("path is not an absolute path or it does not exists.");
+                    _clUI .print("path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
 
@@ -126,19 +126,19 @@ class CliManager {
                 C_coverage_options.tag = this.cli_params.getOption('tag');
                 if(!C_coverage_options.query){
                     if(!ConfigMgr.get('Tags')){
-                        _UI.print("no configured tags found.\n" +
+                        _clUI .print("no configured tags found.\n" +
                             "Add one or more tags to the configuration or specify a custom query with -q option.");
                         return this._error_code;
                     }
                     if(_.isString(C_coverage_options.tag) && !ConfigMgr.get('Tags')[C_coverage_options.tag]){
-                        _UI.print("tag with label '"+C_coverage_options.tag+"' not found.");
+                        _clUI .print("tag with label '"+C_coverage_options.tag+"' not found.");
                         return this._error_code;
                     }
                 }
 
                 let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
                 if(smp_obj===null || (_.isObject(smp_obj) && smp_obj.error())){
-                    _UI.print("something went wrong.");
+                    _clUI .print("something went wrong.");
                     return this._error_code;
                 }
 
@@ -156,16 +156,16 @@ class CliManager {
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
             .action(_self._getActionFn('save',()=>{
-                let _UI = _UI.newLocalUI('> save:');
+                let _clUI  = _clUI .newLocalUI('> save:');
 
                 if(!ConfigMgr.path('project_directory')){
-                    _UI.print("project directory is not set; check the configuration.");
+                    _clUI .print("project directory is not set; check the configuration.");
                     return this._error_code;
                 }
 
                 let smp_obj = SamplesMgr.getLatestLookup();
                 if(!_.isObject(smp_obj)){
-                    _UI.print("latest lookup missing.");
+                    _clUI .print("latest lookup missing.");
                     return this._error_code;
                 }
 
@@ -178,24 +178,24 @@ class CliManager {
 
                 // check path if is a good absolute path and exists
                 if(_.isString(C_save_options.path) && !Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
-                    _UI.print("path is not an absolute path or it does not exists.");
+                    _clUI .print("path is not an absolute path or it does not exists.");
                     return this._error_code;
                 }
 
                 return SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
                     if(!_.isObject(smp_copied_obj)){
-                        _UI.print("no file saved [error#1].");
+                        _clUI .print("no file saved [error#1].");
                         return;
                     }
                     if(smp_copied_obj.size()==0){
-                        _UI.print("no file saved.");
+                        _clUI .print("no file saved.");
                         return;
                     }
-                    _UI.print(""+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
+                    _clUI .print(""+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
                     smp_copied_obj.print();
 
                 }).catch(()=>{
-                    _UI.print("no file saved [error#2].");
+                    _clUI .print("no file saved [error#2].");
                 });
             }));
     }
@@ -209,10 +209,10 @@ class CliManager {
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup',()=>{
-                let _UI = UI.newLocalUI('> lookup:');
+                let _clUI  = clUI .newLocalUI('> lookup:');
 
                 if(!SamplesMgr.hasSamplesIndex()){
-                    _UI.print("no samples scan found; perform a scan before this command");
+                    _clUI .print("no samples scan found; perform a scan before this command");
                     return this._error_code;
                 }
 
@@ -221,12 +221,12 @@ class CliManager {
                 if(this.cli_params.hasOption('tag')){
                     tagString= this.cli_params.getOption('tag');
                     if(!tagString){
-                        _UI.print("empty tag label");
+                        _clUI .print("empty tag label");
                         return this._error_code;
                     }
                     tagString = ConfigMgr.get('Tags')[tagString];
                     if(_.isNil(tagString)){
-                        _UI.print("unknown tag label after");
+                        _clUI .print("unknown tag label after");
                         return this._error_code;
                     }
                 }else{
@@ -234,18 +234,18 @@ class CliManager {
                 }
 
                 if(!_.isString(tagString) || tagString.length<1){
-                    _UI.print("empty tag list");
+                    _clUI .print("empty tag list");
                     return this._error_code;
                 }
 
                 let random = !this.cli_params.hasOption('all');
                 let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
                 if(_.isNil(smp_obj)){
-                    _UI.print("no samples found");
+                    _clUI .print("no samples found");
                     return this._success_code;
                 }
                 if(smp_obj.error()){
-                    _UI.print("sample search failed");
+                    _clUI .print("sample search failed");
                     return this._error_code;
                 }
 
@@ -266,17 +266,17 @@ class CliManager {
                         "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
                         "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
             .action(this._getActionFn('config',()=>{
-                let _UI = UI.newLocalUI('> config-set:');
+                let _clUI  = clUI .newLocalUI('> config-set:');
 
                 if(ConfigMgr.setFromCliParams(this.cli_params.get('name'),this.cli_params.get('values'))===null){
-                    _UI.print("configuration not changed");
+                    _clUI .print("configuration not changed");
                     return this._error_code;
                 }
                 if(ConfigMgr.save()!==true){
-                    _UI.print("error during file writing");
+                    _clUI .print("error during file writing");
                     return this._error_code;
                 }
-                _UI.print("configuration saved successfully");
+                _clUI .print("configuration saved successfully");
                 ConfigMgr.print();
                 return this._success_code;
             }));
@@ -290,28 +290,28 @@ class CliManager {
                 "In order to avoid resource wasting, if the index is already present the scan does not start.")
             .option('-f, --force', 'Force the rescan.')
             .action(this._getActionFn('scan',()=>{
-                let _UI = UI.newLocalUI('> scan:');
+                let _clUI  = clUI .newLocalUI('> scan:');
 
                 let C_scan_options = {
-                    printFn: function(s){ _UI.print(s); },
+                    printFn: function(s){ _clUI .print(s); },
                     force:   this.cli_params.hasOption('force') //force scan
                 };
 
                 if(!this.cli_params.hasOption('force')){
                     if(SamplesMgr.sampleIndexFileExistsSync()){
-                        _UI.print("the index file already exists. Use -f to force a rescan.");
+                        _clUI .print("the index file already exists. Use -f to force a rescan.");
                         return this._error_code;
                     }
                     C_scan_options.force = true;
                 }
 
-                _UI.print("indexing in progress...");
+                _clUI .print("indexing in progress...");
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
                 if(!_.isObject(smp_obj) || smp_obj.empty()){
-                    _UI.print("job failed");
+                    _clUI .print("job failed");
                     return this._error_code;
                 }
-                _UI.print(""+smp_obj.size()+" samples found");
+                _clUI .print(""+smp_obj.size()+" samples found");
                 return smp_obj;
             }));
     }
@@ -323,12 +323,12 @@ class CliManager {
             .description('Show internal data [values: config, samples].')
             .autocomplete(['config','samples'])
             .action(this._getActionFn('show',()=>{
-                let _UI = UI.newLocalUI('> save:');
+                let _clUI  = clUI .newLocalUI('> save:');
 
                 let label = this.cli_params.get('label');
                 if(label == 'config'){
                     ConfigMgr.printInternals();
-                    UI.print("\n");
+                    clUI .print("\n");
                     ConfigMgr.print();
                     return this._success_code;
                 }
@@ -352,7 +352,7 @@ class CliManager {
             .autocomplete(['ext'])
             //.option('-f, --force', 'Force the rescan.')
             .action(this._getActionFn('dir',()=>{
-                let _UI = UI.newLocalUI('> dir:');
+                let _clUI  = clUI .newLocalUI('> dir:');
                 let action = this.cli_params.get('action');
                 if(action == 'ext'){
                     DirCommand.listExtensionsStats({
