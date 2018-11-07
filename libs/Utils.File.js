@@ -3,7 +3,6 @@ const fs = require('fs');
 const fs_extra = require('fs-extra');
 const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
 const _ = require('lodash');
-// function d$(){ ...print debug msg... }
 
 class Utils_Files {
 
@@ -21,8 +20,22 @@ class Utils_Files {
         this.pathJoin = path.join;
         this.pathResolve = path.resolve;
         this.pathSeparator = path.sep;
+        this._abspath = './';
 
-        this._abspath = this.pathJoin(__this_dirname__,this.pathSeparator);
+        if(typeof ENV_CONFIG == 'undefined') return;
+        this._abspath = this._setAbsPath();
+        console.log('9',this._abspath);
+    }
+
+    _setAbsPath(){
+        let abspth = ENV_CONFIG.absolute_app_path;
+        console.log('1',ENV_CONFIG);
+        if(fs.lstatSync(abspth).isFile()){
+            abspth = path.dirname(abspth);
+            ENV_CONFIG.absolute_app_path = abspth;
+        }
+        console.log('2',ENV_CONFIG);
+        return this.pathJoin(abspth,this.pathSeparator);
     }
 
     getAbsPath(){
