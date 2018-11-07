@@ -1,3 +1,4 @@
+global.__this_dirname__ = __dirname;
 
 /* Standard Libraries */
 global._ =  require('lodash');

@@ -22,7 +22,7 @@ class Utils_Files {
         this.pathResolve = path.resolve;
         this.pathSeparator = path.sep;
 
-        this._abspath = this.pathJoin(process.cwd(),this.pathSeparator);
+        this._abspath = this.pathJoin(__this_dirname__,this.pathSeparator);
     }
 
     getAbsPath(){
