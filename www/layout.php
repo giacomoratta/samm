@@ -86,6 +86,7 @@
             <p>Don't waste your time in writing a big query everytime. Store a labeled query!</p>
             <p>configure set Tags rockbass bass+rock,bass+electro,bass+loop+rock</p>
             <p>lookup -t rockbass</p>
+            <p>You can check the coverage of your labels with command 'coverage' (see doc)</p>
         </section>
 
         <h4>Save the samples</h4>
