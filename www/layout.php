@@ -135,7 +135,44 @@
     <section>
         <h2>Documentation</h2>
         <section class="text">
-            <p>...abc...</p>
+            <p>menu with descriprions and anchors</p>
+        </section>
+
+        <section class="command">
+            <h3>coverage</h3>
+            <section class="text">
+                <p>
+                    Check how many samples are covered by the queries stored in the configuration or by an inline query;
+                    then prints the uncovered samples.
+                </p>
+                <p>
+                    By analysing the uncovered samples it is possible to add or modify configured queries in order
+                    to match more samples inside the collections. If many uncovered samples are left, the search results
+                    will be incomplete and some samples could be never used.
+                </p>
+                <p>
+                    <strong>Standard behaviour.</strong>
+                </p>
+                <div class="code_syntax">
+                    mpl$ command opz 23
+                </div>
+                <p>...abc...</p>
+                <h5>same font-size bold margin</h5>
+                <p>...abc...</p>
+
+                <section class="option">
+                    <h4>custom absolute path: -p, --path &lt;path&gt;</h4>
+                    <section class="text">
+                        <p>...abc...</p>
+                        <div class="code_syntax">
+                            mpl$ command opz 23
+                        </div>
+                        <p>...abc...</p>
+                        <p>...abc...</p>
+                    </section>
+                </section>
+
+            </section>
         </section>
 
         <section class="command">

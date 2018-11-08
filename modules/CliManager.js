@@ -86,7 +86,7 @@ class CliManager {
         vorpal
             .command('coverage')
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
-            .option('-p, --path <path>', 'Absolute custom path.')
+            .option('-p, --path <path>', 'Custom absolute path.')
             .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .option('-a, --allinfo', 'Shows also the covered files.')
