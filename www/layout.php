@@ -151,7 +151,9 @@
                     will be incomplete and some samples could be never used.
                 </p>
                 <p>
-                    <strong>Standard behaviour.</strong>
+                    <strong>Standard behaviour.</strong> It works with Samples Directory and tagged queries (see Configuration).
+                    For each tagged query, this command prints how many samples are covered.
+                    At the end, it prints the list of uncovered samples.
                 </p>
                 <div class="code_syntax">
                     mpl$ command opz 23
@@ -163,12 +165,26 @@
                 <section class="option">
                     <h4>custom absolute path: -p, --path &lt;path&gt;</h4>
                     <section class="text">
-                        <p>...abc...</p>
+                        <p>
+                            Let's suppose that you bought hundred of new samples. Before addind them to your samples collection
+                            you may want see if they are well covered by your tagged queries and which ones are uncovered.
+                            After that you can fix your configured tagged queries.
+                        </p>
                         <div class="code_syntax">
-                            mpl$ command opz 23
+                            mpl$ command -p "/Users/default/Downloads/New Samples Big Pack"
                         </div>
-                        <p>...abc...</p>
-                        <p>...abc...</p>
+                    </section>
+                </section>
+
+                <section class="option">
+                    <h4>custom query on tags; e.g.'tag1+tag2,tag3': -q, --query &lt;query&gt;</h4>
+                    <section class="text">
+                        <p>
+                            Checks the coverage provided by the custom query instead of working with configured tagged queries.
+                        </p>
+                        <div class="code_syntax">
+                            mpl$ command -q tag1+tag2,tag3
+                        </div>
                     </section>
                 </section>
 
