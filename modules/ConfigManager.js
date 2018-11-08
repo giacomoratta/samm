@@ -18,7 +18,6 @@ class ConfigManager {
         this._labels = {
             'sample_dir':'mpl'
         };
-        let _self=this;
 
         // Check and set paths
         this._paths.config_file = Utils.File.setAsAbsPath(this._paths.config_file,true /*isFile*/);
@@ -69,7 +68,7 @@ class ConfigManager {
     }
 
 
-    _setInternals(print){
+    _setInternals(){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) clUI .warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
@@ -107,10 +106,6 @@ class ConfigManager {
         });
     }
 
-
-    checkProperty(name){
-        return !_.isUndefined(this._config[name]);
-    }
 
     get(name){
         return this._config[name];
@@ -182,7 +177,7 @@ class ConfigManager {
 
     set(name, value){
         let _outcome = this._set(this._config[name],value);
-        if(_outcome.error==true){
+        if(_outcome.error!==true){
             if(_outcome.type){
                 clUI .print("Config.set: current value and old value have different types.\n");
                 clUI .print("             old: ",this._config[name]);
@@ -204,8 +199,7 @@ class ConfigManager {
         let v = _outcome.value;
         let v_copy = v;
 
-        if(n=="Project"){
-            let ph = Utils.File.pathParse(v);
+        if(n==="Project"){
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
                 clUI .print("The projects directory does not exist: "+v_copy);
@@ -213,8 +207,7 @@ class ConfigManager {
             }
         }
 
-        else if(n=="SamplesDirectory"){
-            let ph = Utils.File.pathParse(v);
+        else if(n==="SamplesDirectory"){
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
                 clUI .print("The samples directory does not exist: "+v_copy);
@@ -223,7 +216,7 @@ class ConfigManager {
             this.setFlag('samples_index_update_needed',true);
         }
 
-        else if(n=="ExtensionCheckForSamples"){
+        else if(n==="ExtensionCheckForSamples"){
             if(_.indexOf(['I','E','X'],v)<0){
                 clUI .print("Wrong value for ExtensionCheckForSamples. Allowed values: I (included), E (excluded), X (disabled)");
                 return null;
@@ -231,11 +224,11 @@ class ConfigManager {
             this.setFlag('samples_index_update_needed',true);
         }
 
-        else if(_outcome.type=='array'){
+        else if(_outcome.type==='array'){
 
             if(this._config[n].length>0){
                 let _ot = this._set(this._config[n][0],v);
-                if(_ot.error==true){
+                if(_ot.error===true){
                     if(_ot.type){
                         clUI .print("Config.set [Array]: current value and old value have different types.");
                         clUI .print("\n                   old: ",this._config[n][0]);
@@ -245,15 +238,15 @@ class ConfigManager {
                 }
             }
 
-            if(n=="IncludedExtensionsForSamples" || n=="ExcludedExtensionsForSamples"){
-                if(v[0]=='!'){
+            if(n==="IncludedExtensionsForSamples" || n==="ExcludedExtensionsForSamples"){
+                if(v[0]==='!'){
                     v=v.slice(1);
-                    if(v[0]=='.') v=v.slice(1);
-                    _.remove(this._config[n],function(value){ return (value==v || value=='.'+v ); });
+                    if(v[0]==='.') v=v.slice(1);
+                    _.remove(this._config[n],function(value){ return (value===v || value==='.'+v ); });
                     this.setFlag('samples_index_update_needed',true);
                     return v;
                 }
-                if(v[0]=='.') v=v.slice(1);
+                if(v[0]==='.') v=v.slice(1);
             }
             if(this._config[n].indexOf(v)<0) this._config[n].push(v);
             this.setFlag('samples_index_update_needed',true);
@@ -289,13 +282,13 @@ class ConfigManager {
     setFromCliParams(name,values){
         if(!_.isString(name) || !_.isArray(values)) return null;
         /* Custom action 'set' */
-        if(name=='Tags') return this.setTags(values);
+        if(name==='Tags') return this.setTags(values);
         return this.set(name,values[0]);
     }
 
     setTags(values){
         if(!_.isObject(this._config['Tags'])) this._config['Tags']={};
-        if(values.length==1){
+        if(values.length===1){
             if(!this._config['Tags'][values[0]]) return null;
             delete this._config['Tags'][values[0]];
         } else if(_.isString(values[1])) {
@@ -307,14 +300,14 @@ class ConfigManager {
 
     printMessages(){
         clUI .print("");
-        if(this.getFlag('samples_index_scan_needed')==true){
+        if(this.getFlag('samples_index_scan_needed')===true){
             clUI .print("\nWARNING: no samples index detected; perform 'scan' before using other commands.\n");
         }
-        if(this.getFlag('samples_index_update_needed')==true){
+        if(this.getFlag('samples_index_update_needed')===true){
             clUI .print("\nWARNING: samples index not compliant with current configuration;");
             clUI .print(  "         perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
         }
     }
-};
+}
 
 module.exports = new ConfigManager(global.ConfigManagerOptions);

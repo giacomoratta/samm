@@ -1,7 +1,4 @@
 
-console.log(process.argv);
-console.log('5',ENV_CONFIG);
-
 /* Standard Libraries */
 global._ =  require('lodash');
 require('./libs/Lodash.Extensions.js');
@@ -30,5 +27,3 @@ global.ConfigMgr = require('./modules/ConfigManager.js');
 global.CliMgr = require('./modules/CliManager.js');
 global.SamplesMgr = require('./modules/SamplesManager.js');
 global.DirCommand = require('./modules/Dir.command.js');
-
-console.log('6',ENV_CONFIG);

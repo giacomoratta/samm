@@ -22,19 +22,16 @@ class Utils_Files {
         this.pathSeparator = path.sep;
         this._abspath = './';
 
-        if(typeof ENV_CONFIG == 'undefined') return;
+        if(typeof ENV_CONFIG === 'undefined') return; // Workaround: nexe does not find this global
         this._abspath = this._setAbsPath();
-        console.log('9',this._abspath);
     }
 
     _setAbsPath(){
         let abspth = ENV_CONFIG.absolute_app_path;
-        console.log('1',ENV_CONFIG);
         if(fs.lstatSync(abspth).isFile()){
             abspth = path.dirname(abspth);
             ENV_CONFIG.absolute_app_path = abspth;
         }
-        console.log('2',ENV_CONFIG);
         return this.pathJoin(abspth,this.pathSeparator);
     }
 
@@ -84,7 +81,7 @@ class Utils_Files {
                 return old_name+'_'+index;
             });
         };
-        return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
+        return _.noDuplicatedValues(null,path_string,(v,cv,i /*,a*/)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
             //d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
@@ -99,32 +96,13 @@ class Utils_Files {
                 return old_name+'_'+index;
             });
         };
-        return _.noDuplicatedValues(null,path_string,(v,cv,i,a)=>{
+        return _.noDuplicatedValues(null,path_string,(v,cv,i /*,a*/)=>{
             if(!this._FS.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
             //d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
             return cv;
         });
     }
-
-    // checkAndSetDuplicatedPathNameSync(path_string, renameFn){
-    //     if(!_.isString(path_string)) return null;
-    //     return _.noDuplicatedValues(null,path_string,(v,i,a)=>{
-    //         if(!this._FS.existsSync(path_string)) return path_string;
-    //         let new_path_string = renameFn(path_string,index);
-    //         d$('checkAndSetDuplicatedPathNameSync ... changing '+path_string+' to '+new_path_string);
-    //     });
-    //
-    //     // let _safe=1000;
-    //     // let new_path_string='';
-    //     // let index=0;
-    //     // while(_safe>index){
-    //     //     index++;
-    //     //     new_path_string = renameFn(path_string,index);
-    //     //     if(!this._FS.existsSync(new_path_string)) return new_path_string;
-    //     // }
-    //     // return null;
-    // }
 
     checkAndSetPathSync(path_string,callback){
         if(!_.isString(path_string)) return null;
@@ -136,14 +114,12 @@ class Utils_Files {
 
     fileExistsSync(path_string){
         if(!_.isString(path_string)) return false;
-        if(!this._FS.existsSync(path_string)) return false;
-        return true;
+        return this._FS.existsSync(path_string);
     }
 
     directoryExistsSync(path_string){
         if(!_.isString(path_string)) return false;
-        if(!this._FS.existsSync(path_string)) return false;
-        return true;
+        return this._FS.existsSync(path_string);
     }
 
 
