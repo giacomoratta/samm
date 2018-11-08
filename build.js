@@ -87,8 +87,8 @@ let compileForPlatform = function(platform){
 }
 
 let platformsToBuildFor = [
-    'mac_x64',
-    //'win_x64',
+    //'mac_x64',
+    'win_x64',
     //'win_x86',
     //'linux_x64',
     //'linux_x86'
