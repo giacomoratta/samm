@@ -11,17 +11,25 @@
 
 <header>
     <h1>MPL: a creativity-oriented samples manager</h1>
-    <div class="whatis">
+    <section class="whatis">
         <p>
             MPL (<i>&quot;Music Production Library&quot;</i>) is a command line based software
-            which helps your creativity flow. Dive into your big samples library,
+            which helps your creativity flow. Dive into your wide samples library,
             make researchs, extract random samples and save them into the current project directory.
         </p>
+    </section>
+    <section class="howhelp">
         <p>
-            Don't be afraid about the command line: it's easy, it's fast, it's light.
-            It does not waste CPU and RAM: these are necessary for your DAW!
+            Save your creativity flow without wasting time with your wide samples collection.
         </p>
-    </div>
+        <p>
+            Improve your creativity with a random selection of your samples, base on a detailed query.
+        </p>
+        <p>
+            Easy, fast and light interface to avoid CPU and RAM wastefulness.
+        </p>
+    </section>
+
     <div class="download">
         <a href="#" class="download_button">
             <span class="tx">Download latest version for OS [beta]</span>
@@ -35,6 +43,25 @@
 </header>
 
 <section class="central_container">
+
+    <div class="ideasbehind">
+        <h2>The ideas behind the MPL project</h2>
+        <section class="text">
+            <p>
+                <strong>Save your creativity flow!</strong> MPL avoid wasting your time dealing with hundred of samples
+                inside many nested directories. With MPL you just ask!
+            </p>
+            <p>
+                <strong>Improve your creativity with randomness!</strong> MPL does not care about how you organize your samples.
+                MPL selects samples randomly based on detailed queries. Sometime you will <strong>find old-but-gold samples</strong>
+                again or <strong>some good unwanted samples</strong> which for some reasons matched the query.
+            </p>
+            <p>
+                <strong>Why this <i>nerd</i> interface?</strong> Don't be afraid about the command line: it's easy, it's fast, it's light.
+                It does not waste CPU and RAM: these are necessary for your DAW!
+            </p>
+        </section>
+    </div>
 
     <section>
         <h2>Getting started</h2>
