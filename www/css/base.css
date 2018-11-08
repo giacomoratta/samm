@@ -1,0 +1,66 @@
+body {
+
+}
+h1,h2,h3,h4,h5 {
+
+}
+
+h2 {
+
+}
+
+h3 {
+
+}
+
+h4 {
+
+}
+
+h5 {
+
+}
+
+p {
+
+}
+
+a {
+
+}
+
+a:hover {
+
+}
+
+strong {
+
+}
+
+header {
+
+}
+
+footer {
+
+}
+
+section.central_container {
+    max-width:900px;
+    margin:0 auto;
+    background-color:#eee;
+    border: 3px solid #000;
+}
+
+section.command,
+section.option {
+    padding-left:2em;
+}
+
+section.text {
+
+}
+
+.code_syntax {
+
+}
