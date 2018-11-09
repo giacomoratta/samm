@@ -193,7 +193,7 @@ class SamplesManager {
             options.path = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options.dirname);
         }
 
-        // Overwrite
+        // Overwrite option
         if(options.overwrite===true){
             Utils.File.removeDirSync(options.path);
         }else{
@@ -202,6 +202,9 @@ class SamplesManager {
         if(!options.path) return _.readyPromise(null);
         if(smp_obj.empty()) return _.readyPromise(null);
 
+        // TODO: confirm message
+
+        // Create directory and files
         let p_array = [];
         let fname_array = [];
         let smp_copied_obj = smp_obj.createFromThis();

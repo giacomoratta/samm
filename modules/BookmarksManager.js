@@ -16,7 +16,7 @@ class BookmarksManager {
     }
 
     setBookmarks(){
-
+        // TODO: confirm message
     }
 
 }
