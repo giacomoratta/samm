@@ -26,11 +26,12 @@ class CliManager {
 
     _setCliCommandManagers(){
         this.C_Lookup();
-        this.C_Save();
-        this.C_Bookmarks();
+        this.C_Save(); //TODO (add feature)
+        this.C_Bookmarks(); //TODO
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
+        this.C_Project(); //TODO
         this.C_Dir();
         this.C_Config_Set();
     }
@@ -266,54 +267,6 @@ class CliManager {
         bookm !1,2,3            // remove bookmarks
         bookm !1,2,3 -t hihat   // remove bookmarks to the specified label (autocomplete)
         */
-        vorpal
-            .command('bookm [values...]')
-            .description("Bookmark the samples to have a ready-to-work collection (base on the latest lookup)")
-            //.option('-t, --tag <label>', 'Tag label for the samples ',(_.isObject(config_tags)?Object.keys(config_tags):null))
-            .action(this._getActionFn('lookup',()=>{
-                let _clUI  = clUI .newLocalUI('> lookup:');
-
-                if(!SamplesMgr.hasSamplesIndex()){
-                    _clUI .print("no samples scan found; perform a scan before this command");
-                    return this._error_code;
-                }
-
-                let tagString=null;
-
-                if(this.cli_params.hasOption('tag')){
-                    tagString= this.cli_params.getOption('tag');
-                    if(!tagString){
-                        _clUI .print("empty tag label");
-                        return this._error_code;
-                    }
-                    tagString = ConfigMgr.get('Tags')[tagString];
-                    if(_.isNil(tagString)){
-                        _clUI .print("unknown tag label after");
-                        return this._error_code;
-                    }
-                }else{
-                    tagString = this.cli_params.get('query');
-                }
-
-                if(!_.isString(tagString) || tagString.length<1){
-                    _clUI .print("empty tag list");
-                    return this._error_code;
-                }
-
-                let random = !this.cli_params.hasOption('all');
-                let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
-                if(_.isNil(smp_obj)){
-                    _clUI .print("no samples found");
-                    return this._success_code;
-                }
-                if(smp_obj.error()){
-                    _clUI .print("sample search failed");
-                    return this._error_code;
-                }
-
-                smp_obj.print();
-                return this._success_code;
-            }));
     }
 
 
@@ -400,6 +353,15 @@ class CliManager {
                 }
                 return this._error_code;
             }));
+    }
+
+
+    C_Project(){
+        /*
+        // create config param ProjectsExportDir
+
+        project export      // zip, tar, etc.
+        */
     }
 
 
