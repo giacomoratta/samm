@@ -57,7 +57,7 @@ section.central_container {
 }
 
 section.command section.option {
-    padding-left:2em;
+    padding-left:3em;
 }
 
 section.text {
@@ -69,7 +69,7 @@ section.text {
     font-size:0.95em;
 }
 p.code {
-    background-color: #EEEEEE;
+    background-color: #E9E9E9;
     margin:0.8em 0 1.2em 0;
     padding:16px 24px;
     font-size:1em;
