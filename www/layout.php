@@ -140,6 +140,8 @@ $TemplateMgr = new TemplateManager();
 
         <?php include('sections/command/save.php'); ?>
 
+        <?php include('sections/command/config.php'); ?>
+
         <?php include('sections/command/coverage.php'); ?>
 
 

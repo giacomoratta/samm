@@ -277,7 +277,7 @@ class CliManager {
             .command('config set <name> [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
             .description("Set the value of a configuration parameter." +
-                        "\n  $ config set Project project-name / (or path)" +
+                        "\n  $ config set Project /musicprojects/project1 / (or path)" +
                         "\n  $ config set Tag tag-label query,tag+tag2,or,tag3" +
                         "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
                         "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +

@@ -14,9 +14,17 @@ class TemplateManager {
         echo '<h4>' .$text. ': <span class="code">' .$option. '</span></h4>'."\n";
     }
 
+    public function printOptionDetail($text){
+        echo '<h5>' .$text. '</h5>'."\n";
+    }
+
     public function printCfgParamLink($cfg_param,$txt=null){
         if(!$txt) $txt='cfg.'.$cfg_param;
         echo '<a href="#cfgparam-'.$cfg_param.'">'.$txt.'</a>';
+    }
+
+    public function  printCfgParamID($cfg_param){
+        echo 'cfgparam-'.$cfg_param;
     }
 
 }
