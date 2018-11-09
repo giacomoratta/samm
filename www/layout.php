@@ -168,7 +168,7 @@ $TemplateMgr = new TemplateManager();
                 <section class="option">
                     <?php $TemplateMgr->printCommandOption('custom absolute path','-p, --path <path>'); ?>
                     <p class="code">
-                        mpl$ command -p "/Users/default/Downloads/New Samples Big Pack"
+                        mpl$ coverage -p "/Users/default/Downloads/New Samples Big Pack"
                     </p>
                     <section class="text">
                         <p>
@@ -181,12 +181,12 @@ $TemplateMgr = new TemplateManager();
 
                 <section class="option">
                     <?php $TemplateMgr->printCommandOption('custom query','-q, --query <query>'); ?>
+                    <p class="code">
+                        mpl$ coverage -q tag1+tag2,tag3
+                    </p>
                     <section class="text">
                         <p>
                             Checks the coverage provided by the custom query instead of working with configured tagged queries.
-                        </p>
-                        <p class="code">
-                            mpl$ command -q tag1+tag2,tag3
                         </p>
                     </section>
                 </section>

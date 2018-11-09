@@ -27,6 +27,7 @@ class CliManager {
     _setCliCommandManagers(){
         this.C_Lookup();
         this.C_Save();
+        this.C_Bookmarks();
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
@@ -87,7 +88,7 @@ class CliManager {
             .command('coverage')
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
             .option('-p, --path <path>', 'Custom absolute path.')
-            .option('-q, --query <query>', 'Custom query on tags; e.g.\'tag1+tag2,tag3\'.')
+            .option('-q, --query <query>', 'Custom query; e.g.\'tag1+tag2,tag3\'.')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
@@ -208,6 +209,67 @@ class CliManager {
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .action(this._getActionFn('lookup',()=>{
+                let _clUI  = clUI .newLocalUI('> lookup:');
+
+                if(!SamplesMgr.hasSamplesIndex()){
+                    _clUI .print("no samples scan found; perform a scan before this command");
+                    return this._error_code;
+                }
+
+                let tagString=null;
+
+                if(this.cli_params.hasOption('tag')){
+                    tagString= this.cli_params.getOption('tag');
+                    if(!tagString){
+                        _clUI .print("empty tag label");
+                        return this._error_code;
+                    }
+                    tagString = ConfigMgr.get('Tags')[tagString];
+                    if(_.isNil(tagString)){
+                        _clUI .print("unknown tag label after");
+                        return this._error_code;
+                    }
+                }else{
+                    tagString = this.cli_params.get('query');
+                }
+
+                if(!_.isString(tagString) || tagString.length<1){
+                    _clUI .print("empty tag list");
+                    return this._error_code;
+                }
+
+                let random = !this.cli_params.hasOption('all');
+                let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
+                if(_.isNil(smp_obj)){
+                    _clUI .print("no samples found");
+                    return this._success_code;
+                }
+                if(smp_obj.error()){
+                    _clUI .print("sample search failed");
+                    return this._error_code;
+                }
+
+                smp_obj.print();
+                return this._success_code;
+            }));
+    }
+
+
+    C_Bookmarks(){
+        /*
+        bookm -a                // show all bookmarks
+        bookm                   // show and works latest lookup
+        bookm -t hihat          // show all bookmarks with this label (autocomplete)
+        bookm 1,4,7             // set bookmarks to default label
+        bookm 1,4,7 -t hihat    // set bookmarks to the specified label (autocomplete)
+        bookm !1,2,3            // remove bookmarks
+        bookm !1,2,3 -t hihat   // remove bookmarks to the specified label (autocomplete)
+        */
+        vorpal
+            .command('bookm [values...]')
+            .description("Bookmark the samples to have a ready-to-work collection (base on the latest lookup)")
+            //.option('-t, --tag <label>', 'Tag label for the samples ',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup',()=>{
                 let _clUI  = clUI .newLocalUI('> lookup:');
 
