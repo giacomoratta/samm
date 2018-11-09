@@ -31,7 +31,7 @@ class CliManager {
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
-        this.C_Project(); //TODO
+        this.C_Export(); //TODO
         this.C_Dir();
         this.C_Config_Set();
     }
@@ -157,6 +157,7 @@ class CliManager {
             .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
+            //.option('-b, --bookm', 'Save boomkarked samples.')
             .action(_self._getActionFn('save',()=>{
                 let _clUI  = _clUI .newLocalUI('> save:');
 
@@ -266,6 +267,7 @@ class CliManager {
         bookm 1,4,7 -t hihat    // set bookmarks to the specified label (autocomplete)
         bookm !1,2,3            // remove bookmarks
         bookm !1,2,3 -t hihat   // remove bookmarks to the specified label (autocomplete)
+        save  -b,--bookm
         */
     }
 
@@ -356,11 +358,12 @@ class CliManager {
     }
 
 
-    C_Project(){
+    C_Export(){
         /*
-        // create config param ProjectsExportDir
+        // create config param ExportDir - warning if not set!
 
-        project export      // zip, tar, etc.
+        export project      // zip, tar, etc.
+        export bookm        // zip, tar, etc.
         */
     }
 
