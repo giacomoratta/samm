@@ -1,3 +1,7 @@
+<?php
+include('template.class.php');
+$TemplateMgr = new TemplateManager();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,10 +72,12 @@
 
         <h4>Installation</h4>
         <section class="text">
-            <p>Download the application</p>
-            <p>Unzip the application in a folder</p>
-            <p>Add the path to the environment variable PATH</p>
-            <p>Close and open the console</p>
+            <ol>
+                <li><p>Download the application</p></li>
+                <li><p>Unzip the application in a folder</p></li>
+                <li><p>Add the path to the environment variable PATH</p></li>
+                <li><p>Close and open the console</p></li>
+            </ol>
         </section>
 
         <h4>Start and configuration</h4>
@@ -141,6 +147,9 @@
         <section class="command">
             <h3>coverage</h3>
             <section class="text">
+                <p class="code">
+                    mpl$ coverage
+                </p>
                 <p>
                     Check how many samples are covered by the queries stored in the configuration or by an inline query;
                     then prints the uncovered samples.
@@ -151,40 +160,34 @@
                     will be incomplete and some samples could be never used.
                 </p>
                 <p>
-                    <strong>Standard behaviour.</strong> It works with Samples Directory and tagged queries (see Configuration).
+                    <strong>Default behaviour.</strong> It works with Samples Directory and tagged queries (see Configuration).
                     For each tagged query, this command prints how many samples are covered.
                     At the end, it prints the list of uncovered samples.
                 </p>
-                <div class="code_syntax">
-                    mpl$ command opz 23
-                </div>
-                <p>...abc...</p>
-                <h5>same font-size bold margin</h5>
-                <p>...abc...</p>
 
                 <section class="option">
-                    <h4>custom absolute path: -p, --path &lt;path&gt;</h4>
+                    <?php $TemplateMgr->printCommandOption('custom absolute path','-p, --path <path>'); ?>
+                    <p class="code">
+                        mpl$ command -p "/Users/default/Downloads/New Samples Big Pack"
+                    </p>
                     <section class="text">
                         <p>
                             Let's suppose that you bought hundred of new samples. Before addind them to your samples collection
                             you may want see if they are well covered by your tagged queries and which ones are uncovered.
                             After that you can fix your configured tagged queries.
                         </p>
-                        <div class="code_syntax">
-                            mpl$ command -p "/Users/default/Downloads/New Samples Big Pack"
-                        </div>
                     </section>
                 </section>
 
                 <section class="option">
-                    <h4>custom query on tags; e.g.'tag1+tag2,tag3': -q, --query &lt;query&gt;</h4>
+                    <?php $TemplateMgr->printCommandOption('custom query','-q, --query <query>'); ?>
                     <section class="text">
                         <p>
                             Checks the coverage provided by the custom query instead of working with configured tagged queries.
                         </p>
-                        <div class="code_syntax">
+                        <p class="code">
                             mpl$ command -q tag1+tag2,tag3
-                        </div>
+                        </p>
                     </section>
                 </section>
 
@@ -195,7 +198,7 @@
             <h3>command title</h3>
             <section class="text">
                 <p>...abc...</p>
-                <div class="code_syntax">
+                <div class="code">
                     mpl$ command opz 23
                 </div>
                 <p>...abc...</p>
@@ -206,7 +209,7 @@
                     <h4>option title</h4>
                     <section class="text">
                         <p>...abc...</p>
-                        <div class="code_syntax">
+                        <div class="code">
                             mpl$ command opz 23
                         </div>
                         <p>...abc...</p>
