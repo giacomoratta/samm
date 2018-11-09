@@ -39,7 +39,7 @@ a:hover {
 }
 
 strong {
-
+    font-weight: 600;
 }
 
 header {
@@ -74,3 +74,17 @@ p.code {
     padding:16px 24px;
     font-size:1em;
 }
+
+
+/* colors */
+/*body {*/
+    /*background-color: rgb(38,44,54);*/
+    /*color: rgb(145,165,185);*/
+/*}*/
+/*a {*/
+    /*!*color: rgb(208,154,102);*!*/
+    /*color: rgb(240,220,120);*/
+/*}*/
+/*p.code {*/
+    /*background-color: rgb(54,60,70);*/
+/*}*/

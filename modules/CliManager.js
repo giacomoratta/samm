@@ -157,7 +157,7 @@ class CliManager {
             .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
-            //.option('-b, --bookm', 'Save boomkarked samples.')
+            //.option('-b, --bookm', 'Save samples in the bookmarks splitted by tags.')
             .action(_self._getActionFn('save',()=>{
                 let _clUI  = _clUI .newLocalUI('> save:');
 

@@ -34,22 +34,12 @@ $TemplateMgr = new TemplateManager();
         </p>
     </section>
 
-    <div class="download">
-        <a href="#" class="download_button">
-            <span class="tx">Download latest version for OS [beta]</span>
-            <br/>
-            <span class="fn">mpl.0.1.0.mac.x64.zip</span>
-        </a>
-    </div>
-    <div class="releases_history">
-        <a href="#">Releases history</a>
-    </div>
 </header>
 
 <section class="central_container">
 
-    <div class="ideasbehind">
-        <h2>The ideas behind the MPL project</h2>
+    <section class="ideasbehind">
+        <h2>What MPL can do for you</h2>
         <section class="text">
             <p>
                 <strong>Save your creativity flow!</strong> MPL avoid wasting your time dealing with hundred of samples
@@ -65,7 +55,9 @@ $TemplateMgr = new TemplateManager();
                 It does not waste CPU and RAM: these are necessary for your DAW!
             </p>
         </section>
-    </div>
+    </section>
+
+    <?php include('sections/email_form.php'); ?>
 
     <section>
         <h2>Getting started</h2>
@@ -76,7 +68,7 @@ $TemplateMgr = new TemplateManager();
                 <li><p>Download the application</p></li>
                 <li><p>Unzip the application in a folder</p></li>
                 <li><p>Add the path to the environment variable PATH</p></li>
-                <li><p>Close and open the console</p></li>
+                <li><p>Close and open the console, try if the short command works</p></li>
             </ol>
         </section>
 
@@ -91,7 +83,7 @@ $TemplateMgr = new TemplateManager();
             <p>config set maxrandom</p>
         </section>
 
-        <h4>Indexes your samples directory</h4>
+        <h4>Scan your samples directory</h4>
         <section class="text">
             <p>most important step</p>
             <p>scan</p>
@@ -144,33 +136,14 @@ $TemplateMgr = new TemplateManager();
             <p>menu with descriprions and anchors</p>
         </section>
 
+        <?php include('sections/command/lookup.php'); ?>
+
+        <?php include('sections/command/save.php'); ?>
+
         <?php include('sections/command/coverage.php'); ?>
 
-        <section class="command">
-            <h3>command title</h3>
-            <section class="text">
-                <p>...abc...</p>
-                <div class="code">
-                    mpl$ command opz 23
-                </div>
-                <p>...abc...</p>
-                <h5>same font-size bold margin</h5>
-                <p>...abc...</p>
 
-                <section class="option">
-                    <h4>option title</h4>
-                    <section class="text">
-                        <p>...abc...</p>
-                        <div class="code">
-                            mpl$ command opz 23
-                        </div>
-                        <p>...abc...</p>
-                        <p>...abc...</p>
-                    </section>
-                </section>
 
-            </section>
-        </section>
     </section>
 
 </section>

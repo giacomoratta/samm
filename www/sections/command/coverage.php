@@ -15,7 +15,8 @@
                     will be incomplete and some samples could be never used.
                 </p>
                 <p>
-                    <strong>Default behaviour.</strong> It works with Samples Directory and tagged queries (see Configuration).
+                    <strong>Default behaviour.</strong> It works with <?php $TemplateMgr->printCfgParamLink('SamplesDirectory','samples directory'); ?>
+                    and <?php $TemplateMgr->printCfgParamLink('Tags','tagged queries'); ?>.
                     For each tagged query, this command prints how many samples are covered.
                     At the end, it prints the list of uncovered samples.
                 </p>
@@ -28,8 +29,9 @@
                     <section class="text">
                         <p>
                             Let's suppose that you bought hundred of new samples. Before addind them to your samples collection
-                            you may want see if they are well covered by your tagged queries and which ones are uncovered.
-                            After that you can fix your configured tagged queries.
+                            you may want see if they are well covered by your <?php $TemplateMgr->printCfgParamLink('Tags','tagged queries'); ?>
+                            and which ones are uncovered.
+                            After that you can fix your configured <?php $TemplateMgr->printCfgParamLink('Tags','tagged queries'); ?>.
                         </p>
                     </section>
                 </section>
@@ -42,7 +44,8 @@
                     </p>
                     <section class="text">
                         <p>
-                            Checks the coverage provided by the custom query instead of working with configured tagged queries.
+                            Checks the coverage provided by the custom query instead of working with configured
+                            <?php $TemplateMgr->printCfgParamLink('Tags','tagged queries'); ?>.
                         </p>
                     </section>
                 </section>
@@ -54,7 +57,8 @@
                     </p>
                     <section class="text">
                         <p>
-                            Checks the coverage provided by one of the configured tagged query.
+                            Checks the coverage provided by one of the configured
+                            <?php $TemplateMgr->printCfgParamLink('Tags','tagged query'); ?>.
                         </p>
                     </section>
                 </section>
