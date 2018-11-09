@@ -1,5 +1,5 @@
 
-        <section class="command">
+        <section class="command" id="cmd_coverage">
             <h3>coverage</h3>
             <section class="text">
                 <p class="code">
