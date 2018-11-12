@@ -136,13 +136,13 @@ $TemplateMgr = new TemplateManager();
             <p>menu with descriprions and anchors</p>
         </section>
 
-        <?php include('sections/command/lookup.php'); ?>
+        <?php include('sections/command/guide_lookup.php'); ?>
 
-        <?php include('sections/command/save.php'); ?>
+        <?php include('sections/command/guide_save.php'); ?>
 
-        <?php include('sections/command/config.php'); ?>
+        <?php include('sections/command/guide_config.php'); ?>
 
-        <?php include('sections/command/coverage.php'); ?>
+        <?php include('sections/command/guide_coverage.php'); ?>
 
 
 

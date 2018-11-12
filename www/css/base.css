@@ -60,6 +60,16 @@ section.command section.option {
     padding-left:3em;
 }
 
+section.option section.detail {
+    padding-left: 1.2em;
+}
+section.option section.detail label {
+    font-weight: 600;
+}
+section.option section.detail span.code {
+    background-color: #E9E9E9;
+}
+
 section.text {
 
 }

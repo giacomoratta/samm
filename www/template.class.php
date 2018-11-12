@@ -24,7 +24,15 @@ class TemplateManager {
     }
 
     public function  printCfgParamID($cfg_param){
-        echo 'cfgparam-'.$cfg_param;
+        echo 'id="cfgparam-'.$cfg_param.'"';
+    }
+
+    public function printCommandLink($cmd_code,$txt){
+        echo '<a href="#cmdcode-'.$cmd_code.'">'.$txt.'</a>';
+    }
+
+    public function  printCommandID($cmd_code){
+        echo 'cmdcode-'.$cmd_code;
     }
 
 }
