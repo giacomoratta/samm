@@ -1,5 +1,5 @@
 
-        <section class="command" id="cmd_coverage">
+        <section class="command" <?php $TemplateMgr->printCommandID('coverage'); ?>>
             <h3>coverage</h3>
             <section class="text">
                 <p class="code">

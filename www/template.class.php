@@ -32,7 +32,7 @@ class TemplateManager {
     }
 
     public function  printCommandID($cmd_code){
-        echo 'cmdcode-'.$cmd_code;
+        echo 'id="cmdcode-'.$cmd_code.'"';
     }
 
 }

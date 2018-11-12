@@ -132,9 +132,6 @@ $TemplateMgr = new TemplateManager();
 
     <section>
         <h2>Documentation</h2>
-        <section class="text">
-            <p>menu with descriprions and anchors</p>
-        </section>
 
         <?php include('sections/command/guide_config.php'); ?>
 
@@ -144,7 +141,9 @@ $TemplateMgr = new TemplateManager();
 
         <?php include('sections/command/guide_save.php'); ?>
 
+        <?php include('sections/command/guide_scan.php'); ?>
 
+        <?php include('sections/command/guide_show.php'); ?>
 
     </section>
 

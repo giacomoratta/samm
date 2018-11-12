@@ -1,5 +1,5 @@
 
-        <section class="command" id="cmd_lookup">
+        <section class="command" <?php $TemplateMgr->printCommandID('lookup'); ?>>
             <h3>lookup</h3>
             <section class="text">
                 <p class="code">

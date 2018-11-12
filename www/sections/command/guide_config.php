@@ -1,9 +1,9 @@
 
-        <section class="command" id="cmd_config">
+        <section class="command" <?php $TemplateMgr->printCommandID('config'); ?>>
             <h3>config</h3>
             <section class="text">
                 <p class="code">
-                    mpl$ config
+                    mpl$ config &lt;command&gt; [&lt;name&gt;] [values...]
                 </p>
                 <p>
                     Manage the configuration of the whole application.

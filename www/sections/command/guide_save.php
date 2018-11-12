@@ -1,5 +1,5 @@
 
-        <section class="command" id="cmd_save">
+        <section class="command" <?php $TemplateMgr->printCommandID('save'); ?>>
             <h3>save</h3>
             <section class="text">
                 <p class="code">
