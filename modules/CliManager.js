@@ -399,16 +399,16 @@ class CliManager {
         */
         vorpal
             .command('export <type>')
-            .description("Export project or samples data in a compressed archive.")
-            .option('-t, --tag <label>', 'Put samples under the specified custom label')
-            .option('-r, --remove', 'Remove bookmarks')
-            .action(this._getActionFn('bookm set',()=>{
+            .description("Export project or samples data in a compressed archive. " +
+                "Allowed values: project (export the project) and bookm (export bookmarks collection).")
+            .option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
+            .action(this._getActionFn('export',()=>{
                 //let _clUI = clUI.newLocalUI('> bookm:');
-                let C_bookm_options = {
-                    tagString:this.cli_params.getOption('tag')
+                let C_export_options = {
+                    type:this.cli_params.getOption('type')
                 };
 
-                BookmarksMgr.set(this.cli_params.get('ids'), C_bookm_options);
+                //ExportMgr.set(this.cli_params.get('ids'), C_bookm_options);
                 return this._success_code;
             }));
     }
