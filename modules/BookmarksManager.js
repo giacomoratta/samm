@@ -22,14 +22,14 @@ class BookmarksManager {
         // bookm -t x 1 2 3 4 5
     }
 
-    show(){
-
+    show(options){
+        if(!SamplesMgr.hasLatestLookup()){
+            _clUI.print("no recent lookup found; perform a lookup before this command");
+            return this._error_code;
+        }
     }
 
-    add(){
-    }
-
-    remove(){
+    set(options){
     }
 
 }

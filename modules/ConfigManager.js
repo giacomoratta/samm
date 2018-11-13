@@ -26,8 +26,10 @@ class ConfigManager {
         this._paths.custom_indexes = Utils.File.setAsAbsPath(this._paths.custom_indexes);
         this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
+        this._paths.bookmarks = Utils.File.setAsAbsPath(this._paths.bookmarks,true /*isFile*/);
         this._paths.project_directory = null;
         this._paths.samples_directory = null;
+        this._paths.export_directory = null;
 
         // DataManager
         DataMgr.setHolder({
@@ -48,7 +50,7 @@ class ConfigManager {
         }
 
         // Check and set paths [2]
-       this._setInternals();
+       this._setInternals(true /*isInit*/);
 
         // Create directories
         Utils.File.ensureDirSync(this.path('temp_dir'));
@@ -62,19 +64,23 @@ class ConfigManager {
             temp_dir: 'temp/',
             custom_indexes: 'temp/c_indexes/',
             latest_lookup: 'temp/latest_lookup',
-            samples_index: 'temp/samples_index'
+            samples_index: 'temp/samples_index',
+            bookmarks: 'bookmarks.json',
         },options);
         return options;
     }
 
 
-    _setInternals(){
+    _setInternals(isInit){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) clUI .warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
         this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
         if(!this._paths.project_directory) clUI .warning("The project directory does not exist: ",this._config.Project);
 
+        this._paths.export_directory = Utils.File.checkAndSetPathSync(this._config.ExportDirectory);
+        if(!isInit && !this._paths.export_directory) clUI .warning("The export directory does not exist: ",this._config.ExportDirectory);
+        if(!this._paths.export_directory) Utils.File.ensureDirSync(this._paths.export_directory);
         clUI .print(); //new empty row
     }
 
@@ -203,6 +209,14 @@ class ConfigManager {
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
                 clUI .print("The projects directory does not exist: "+v_copy);
+                return null;
+            }
+        }
+
+        else if(n==="ExportDirectory"){
+            v = Utils.File.checkAndSetPathSync(v);
+            if(!v){
+                clUI .print("The export directory does not exist: "+v_copy);
                 return null;
             }
         }

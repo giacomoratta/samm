@@ -270,39 +270,35 @@ class CliManager {
         save  -b,--bookm
         */
         vorpal
-            .command('bookm [ids...]')
-            .description("Manage customized samples collections to import and work with immediately. " +
-                "With no options, it shows all bookmarks")
-            .option('-a, --all', 'Works with all the bookmarks')
-            .option('-l, --lookup', 'Works with the latest lookup')
-            .option('-t, --tag <label>', 'Works with bookmarks under the specified custom label')
+            .command('bookm show')
+            .description("Prints the samples collection to work with in the next command 'bookm set'.")
+            .option('-a, --all', 'Shows all the bookmarks')
+            .option('-l, --lookup', 'Shows the latest lookup')
+            .option('-t, --tag <label>', 'Shows the bookmarks under the specified custom label')
+            .action(this._getActionFn('bookm show',()=>{
+                //let _clUI = clUI.newLocalUI('> bookm:');
+                let C_bookm_options = {
+                    all:this.cli_params.getOption('all'),
+                    lookup:this.cli_params.getOption('lookup'),
+                    tagString:this.cli_params.getOption('tag')
+                };
+
+                BookmarksMgr.show(C_bookm_options);
+                return this._success_code;
+            }));
+
+        vorpal
+            .command('bookm set [ids...]')
+            .description("Add or remove samples to the bookmarks.")
+            .option('-t, --tag <label>', 'Put samples under the specified custom label')
             .option('-r, --remove', 'Remove bookmarks')
-            .action(this._getActionFn('bookm',()=>{
-                let _clUI = clUI.newLocalUI('> bookm:');
+            .action(this._getActionFn('bookm set',()=>{
+                //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_bookm_options = {
                     tagString:this.cli_params.getOption('tag')
                 };
 
-                if(!SamplesMgr.hasSamplesIndex()){
-                    _clUI.print("no samples scan found; perform a scan before this command");
-                    return this._error_code;
-                }
-
-                if(this.cli_params.hasOption('all')){
-                    BookmarksMgr.show();
-                    return this._success_code;
-                }
-
-                if(!SamplesMgr.hasLatestLookup()){
-                    _clUI.print("no recent lookup found; perform a lookup before this command");
-                    return this._error_code;
-                }
-
-                if(!this.cli_params.hasOption('remove')){
-                    BookmarksMgr.add(this.cli_params.get('ids'), C_bookm_options);
-                }else{
-                    BookmarksMgr.remove(this.cli_params.get('ids'), C_bookm_options);
-                }
+                BookmarksMgr.set(this.cli_params.get('ids'), C_bookm_options);
                 return this._success_code;
             }));
     }
@@ -401,6 +397,20 @@ class CliManager {
         export project      // zip, tar, etc.
         export bookm        // zip, tar, etc.
         */
+        vorpal
+            .command('export <type>')
+            .description("Export project or samples data in a compressed archive.")
+            .option('-t, --tag <label>', 'Put samples under the specified custom label')
+            .option('-r, --remove', 'Remove bookmarks')
+            .action(this._getActionFn('bookm set',()=>{
+                //let _clUI = clUI.newLocalUI('> bookm:');
+                let C_bookm_options = {
+                    tagString:this.cli_params.getOption('tag')
+                };
+
+                BookmarksMgr.set(this.cli_params.get('ids'), C_bookm_options);
+                return this._success_code;
+            }));
     }
 
 

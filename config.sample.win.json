@@ -1,5 +1,6 @@
 {
 	"SamplesDirectory": "L:\\Samples\\",
+	"ExportDirectory": "L:\\MPL_Export\\",
 	"Project": "C:\\Ableton Projects\\p1 Project",
 	"RandomCount": 10,
 	"MaxOccurrencesSameDirectory": 1,
