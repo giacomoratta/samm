@@ -27,11 +27,11 @@ class CliManager {
     _setCliCommandManagers(){
         this.C_Lookup();
         this.C_Save(); //TODO (add feature)
-        this.C_Bookmarks(); //TODO
+        //this.C_Bookmarks(); //TODO
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
-        this.C_Export(); //TODO
+        //this.C_Export(); //TODO
         this.C_Dir();
         this.C_Config_Set();
     }
@@ -172,7 +172,6 @@ class CliManager {
                     return this._error_code;
                 }
 
-                let smp_dirname = null;
                 let C_save_options = {
                     dirname:    this.cli_params.getOption('dirname'),       //custom name
                     overwrite:   this.cli_params.getOption('overwrite'),    //force overwrite
@@ -190,7 +189,7 @@ class CliManager {
                         _clUI.print("no file saved [error#1].");
                         return;
                     }
-                    if(smp_copied_obj.size()==0){
+                    if(smp_copied_obj.size()===0){
                         _clUI.print("no file saved.");
                         return;
                     }
@@ -265,10 +264,47 @@ class CliManager {
         bookm -t hihat          // show all bookmarks with this label (autocomplete)
         bookm 1,4,7             // set bookmarks to default label
         bookm 1,4,7 -t hihat    // set bookmarks to the specified label (autocomplete)
-        bookm !1,2,3            // remove bookmarks
-        bookm !1,2,3 -t hihat   // remove bookmarks to the specified label (autocomplete)
+        bookm 1,2,3 -r          // remove bookmarks
+        bookm -r -t hihat       // remove all bookmarks with the specified label (autocomplete)
+        bookm 1,2,3 -r -t hihat // remove bookmarks to the specified label (autocomplete)
         save  -b,--bookm
         */
+        vorpal
+            .command('bookm [ids...]')
+            .description("Manage customized samples collections to import and work with immediately. " +
+                "With no options, it shows all bookmarks")
+            .option('-a, --all', 'Works with all the bookmarks')
+            .option('-l, --lookup', 'Works with the latest lookup')
+            .option('-t, --tag <label>', 'Works with bookmarks under the specified custom label')
+            .option('-r, --remove', 'Remove bookmarks')
+            .action(this._getActionFn('bookm',()=>{
+                let _clUI = clUI.newLocalUI('> bookm:');
+                let C_bookm_options = {
+                    tagString:this.cli_params.getOption('tag')
+                };
+
+                if(!SamplesMgr.hasSamplesIndex()){
+                    _clUI.print("no samples scan found; perform a scan before this command");
+                    return this._error_code;
+                }
+
+                if(this.cli_params.hasOption('all')){
+                    BookmarksMgr.show();
+                    return this._success_code;
+                }
+
+                if(!SamplesMgr.hasLatestLookup()){
+                    _clUI.print("no recent lookup found; perform a lookup before this command");
+                    return this._error_code;
+                }
+
+                if(!this.cli_params.hasOption('remove')){
+                    BookmarksMgr.add(this.cli_params.get('ids'), C_bookm_options);
+                }else{
+                    BookmarksMgr.remove(this.cli_params.get('ids'), C_bookm_options);
+                }
+                return this._success_code;
+            }));
     }
 
 
@@ -340,7 +376,7 @@ class CliManager {
             .description('Show internal data [values: config, samples].')
             .autocomplete(['config','samples'])
             .action(this._getActionFn('show',()=>{
-                let _clUI= clUI.newLocalUI('> save:');
+                //let _clUI = clUI.newLocalUI('> show:');
 
                 let label = this.cli_params.get('label');
                 if(label === 'config'){

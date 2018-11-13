@@ -6,7 +6,7 @@ class SamplesManager {
         this._LABEL_samples_index = 'samples_index';
 
         /* CACHES */
-        this._CACHE_latest_smp_obj_search = null;
+        this._CACHE_latest_smp_obj_search = null; //latest lookup
         this._CACHE_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
         this._CACHE_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
 
@@ -86,6 +86,10 @@ class SamplesManager {
         });
     }
 
+
+    hasLatestLookup(){
+        return _.isObject(this._CACHE_latest_smp_obj_search);
+    }
 
     getLatestLookup(){
         return this._CACHE_latest_smp_obj_search;
@@ -177,10 +181,9 @@ class SamplesManager {
      * @param options
      *        - dirname: custom name for the directory
      *        - overwrite: force overwrite otherwise rename
-     * @returns { Promise{array} | null }
+     * @returns Promise{array} | null
      */
     generateSamplesDir(smp_obj,options){
-        // TODO: non salva tutti i files [BUG]
         options = _.merge({
             dirname:null,     //custom name
             overwrite:false,  //force overwrite
