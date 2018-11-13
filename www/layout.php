@@ -145,6 +145,8 @@ $TemplateMgr = new TemplateManager();
 
         <?php include('sections/command/guide_show.php'); ?>
 
+        <?php include('sections/command/guide_dir.php'); ?>
+
     </section>
 
 </section>

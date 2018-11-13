@@ -343,13 +343,13 @@ class CliManager {
                 let _clUI= clUI.newLocalUI('> save:');
 
                 let label = this.cli_params.get('label');
-                if(label == 'config'){
+                if(label === 'config'){
                     ConfigMgr.printInternals();
                     clUI.print("\n");
                     ConfigMgr.print();
                     return this._success_code;
                 }
-                if(label == 'samples'){
+                if(label === 'samples'){
                     SamplesMgr.printSamplesTree();
                     return this._success_code;
                 }

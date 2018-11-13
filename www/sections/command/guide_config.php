@@ -8,6 +8,7 @@
         <p>
             Manage the configuration of the whole application.
         </p>
+
         <?php $TemplateMgr->printCommandOption('set parameters','$ config set <name> [values...]'); ?>
         <p class="code">
             mpl$ config &lt;name&gt; [values...]
