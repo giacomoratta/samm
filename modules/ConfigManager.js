@@ -80,7 +80,7 @@ class ConfigManager {
 
         this._paths.export_directory = Utils.File.checkAndSetPathSync(this._config.ExportDirectory);
         if(!isInit && !this._paths.export_directory) clUI .warning("The export directory does not exist: ",this._config.ExportDirectory);
-        if(!this._paths.export_directory) Utils.File.ensureDirSync(this._paths.export_directory);
+        if(this._paths.export_directory) Utils.File.ensureDirSync(this._paths.export_directory);
         clUI .print(); //new empty row
     }
 
