@@ -71,7 +71,7 @@ class ConfigManager {
     }
 
 
-    _setInternals(isInit){
+    _setInternals(){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) clUI .warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
