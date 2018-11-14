@@ -5,6 +5,7 @@ class BookmarksManager {
     constructor(){
 
         this._createBookmarksHolder();
+        this._latestArray = [];
 
         /* CACHES */
         this._CACHE_latest_usage = {
@@ -26,14 +27,46 @@ class BookmarksManager {
         // bookm -t x 1 2 3 4 5
     }
 
-    show(){
-        let bookmObj = DataMgr.print('bookmarks');
-        bookmObj.print();
+    showAndSet(options){
+
+        //bookmObj.add();
+    }
+
+    show(options){
+        options = _.merge({
+            all:false,
+            lookup:false,
+            tag:null
+        },options);
+        let bookmObj = DataMgr.get('bookmarks');
+        this._latestArray = [];
+
+        if(options.all===true){
+            bookmObj.forEach((v,lb,i,diffLb)=>{
+                this._latestArray.push(v);
+            });
+
+        }else if(options.lookup===true){
+            bookmObj.forEach((v,lb,i,diffLb)=>{
+                this._latestArray.push(v);
+            });
+
+        }else if(_.isString(options.tag) && options.tag.length>0){
+            bookmObj.forEach(options.tag,(v,lb,i,diffLb)=>{
+                this._latestArray.push(v);
+            });
+        }
     }
 
     set(options){
-        let bookmObj = DataMgr.print('bookmarks');
-        bookmObj.add();
+        //let bookmObj = DataMgr.print('bookmarks');
+        //bookmObj.add();
+        while(true){
+            // ask for ids and label
+            // add/remove
+            // no input = exit
+            break;
+        }
     }
 
     _createBookmarksHolder(){
