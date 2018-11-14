@@ -78,9 +78,14 @@ class ConfigManager {
         this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
         if(!this._paths.project_directory) clUI .warning("The project directory does not exist: ",this._config.Project);
 
+        if(Utils.File.isAbsoluteParentDirSync(this._config.ExportDirectory)){
+            if(!Utils.File.ensureDirSync(this._config.ExportDirectory)){
+                clUI .warning("Cannot create the export directory: ",this._config.ExportDirectory);
+            }
+        }
         this._paths.export_directory = Utils.File.checkAndSetPathSync(this._config.ExportDirectory);
-        if(!isInit && !this._paths.export_directory) clUI .warning("The export directory does not exist: ",this._config.ExportDirectory);
-        if(this._paths.export_directory) Utils.File.ensureDirSync(this._paths.export_directory);
+        if(!this._paths.export_directory) clUI .warning("The export directory does not exist: ",this._config.ExportDirectory);
+
         clUI .print(); //new empty row
     }
 

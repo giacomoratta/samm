@@ -239,7 +239,12 @@ class Utils_Files {
     /* DIRECTORY R/W - SYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     ensureDirSync(path_string){
-        this._FS_EXTRA.ensureDirSync(path_string);
+        try{
+            this._FS_EXTRA.ensureDirSync(path_string);
+        }catch(e){
+            return false;
+        }
+        return true;
     }
 
     readDirectorySync(path_string,preFn,callback){
