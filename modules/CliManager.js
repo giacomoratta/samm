@@ -280,9 +280,8 @@ class CliManager {
                 let C_bookm_options = {
                     all:this.cli_params.getOption('all'),
                     lookup:this.cli_params.getOption('lookup'),
-                    tagString:this.cli_params.getOption('tag')
+                    tag:this.cli_params.getOption('tag')
                 };
-
                 BookmarksMgr.show(C_bookm_options);
                 return this._success_code;
             }));
@@ -295,9 +294,9 @@ class CliManager {
             .action(this._getActionFn('bookm set',()=>{
                 //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_bookm_options = {
-                    tagString:this.cli_params.getOption('tag')
+                    tag:this.cli_params.getOption('tag'),
+                    remove:this.cli_params.hasOption('remove'),
                 };
-
                 BookmarksMgr.set(this.cli_params.get('ids'), C_bookm_options);
                 return this._success_code;
             }));

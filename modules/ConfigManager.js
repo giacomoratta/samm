@@ -14,6 +14,7 @@ class ConfigManager {
             custom_indexes: options.custom_indexes,
             latest_lookup: options.latest_lookup,
             samples_index: options.samples_index,
+            bookmarks: options.bookmarks
         };
         this._labels = {
             'sample_dir':'mpl'

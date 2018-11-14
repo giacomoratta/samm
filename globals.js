@@ -28,3 +28,4 @@ global.CliMgr = require('./modules/CliManager.js');
 global.SamplesMgr = require('./modules/SamplesManager.js');
 global.DirCommand = require('./modules/Dir.command.js');
 global.BookmarksMgr = require('./modules/BookmarksManager.js');
+global.ExportMgr = require('./modules/ExportManager.js');

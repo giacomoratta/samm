@@ -38,7 +38,7 @@ class SamplesManager {
                 /* SampleTree options */
             },_self._directoryTreeOptionsFromConfig());
             return STree;
-        }
+        };
 
         return DataMgr.setHolder({
             label:options.label,

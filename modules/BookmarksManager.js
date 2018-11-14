@@ -2,6 +2,8 @@ class BookmarksManager {
 
     constructor(){
 
+        this._bookmHolder = this._createBookmarksHolder();
+
         /* CACHES */
         this._CACHE_latest_usage = {
             enums: { lookup:1, collection:2, subcollection:3 },
@@ -30,6 +32,17 @@ class BookmarksManager {
     }
 
     set(options){
+    }
+
+    _createBookmarksHolder(options){
+        return DataMgr.setHolder({
+            label:'bookmarks',
+            filePath:ConfigMgr.path('bookmarks'),
+            fileType:'json',
+            dataType:'object',
+            logErrorsFn:console.log,
+            preLoad:true
+        });
     }
 
 }
