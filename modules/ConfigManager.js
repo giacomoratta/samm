@@ -183,9 +183,9 @@ class ConfigManager {
         let _outcome = this._set(this._config[name],value);
         if(_outcome.error!==false){
             if(_outcome.type){
-                clUI .print("Config.set: current value and old value have different types:");
-                clUI .print("             old: ",this._config[name]);
-                clUI .print("             new: ",value);
+                clUI .print("> current value and old value have different types:");
+                clUI .print("    old: ",this._config[name]);
+                clUI .print("    new: ",value);
             }
             return null;
         }
