@@ -61,6 +61,10 @@ class BookmarksManager {
 
         // TAGGED BOOKMARKS
         }else if(_.isString(options.tag) && options.tag.length>0){
+            if(bookmObj.empty() || bookmObj.empty(options.tag)){
+                _clUI.print("no bookmarked samples under the label '"+options.tag+"'.");
+                return null;
+            }
             _clUI.print("all bookmarked samples under the label '"+options.tag+"'");
             bookmObj.forEach(options.tag,(v,i)=>{
                 BookmarksManager.printLI(' ',i,v);
@@ -68,6 +72,10 @@ class BookmarksManager {
 
         // ALL BOOKMARKS
         }else{
+            if(bookmObj.empty()){
+                _clUI.print("no bookmarked samples.");
+                return null;
+            }
             _clUI.print("all bookmarked samples");
             bookmObj.forEach((v,i,lb,diffLb)=>{
                 this._latestArray.push(v);
