@@ -36,6 +36,7 @@ class DataManager {
 
             /* Custom functions */
             checkFn:null,
+            initFn:null,
             getFn:null,
             setFn:null,
             loadFn:null,
@@ -80,12 +81,19 @@ class DataManager {
         this._cfg[$cfg.label] = $cfg;
         this._data[$cfg.label] = null;
 
+        let _outcomeLoadSet = null;
         if($cfg.preLoad===true){
-            return this.load($cfg.label);
+            _outcomeLoadSet = this.load($cfg.label);
+            if(!this.hasData($cfg.label)) this.init($cfg.label);
+            return _outcomeLoadSet;
         }
         if($cfg.preSet===true){
-            return this.set($cfg.label);
+            _outcomeLoadSet = this.set($cfg.label);
+            if(!this.hasData($cfg.label)) this.init($cfg.label);
+            return _outcomeLoadSet;
         }
+
+        this.init($cfg.label);
         return true;
     }
 
@@ -113,13 +121,28 @@ class DataManager {
     }
 
 
+    init(label,args){
+        let $cfg = this._cfg[label];
+        if($cfg.initFn){
+            try{
+                this._data[label] = $cfg.initFn(this._data[label],$cfg,args);
+            }catch(e){
+                d$(e);
+                $cfg.logErrorsFn('DataMgr.init > initFn callback failed');
+                return null;
+            }
+        }
+        return this.hasData(label);
+    }
+
+
     load(label,args){
         let $cfg = this._cfg[label];
         if(!$cfg || !$cfg.filePath) return null;
 
         let filedata = this._loadFileData($cfg);
         if(filedata === false){
-            $cfg.logErrorsFn('DataMgr.load > the file does not exist');
+            $cfg.logErrorsFn('DataMgr.load > the file does not exist:',$cfg.filePath);
             return false;
         }
 

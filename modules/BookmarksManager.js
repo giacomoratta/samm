@@ -1,4 +1,4 @@
-let BookmarksClass = require('../libs/Bookmarks.class');
+let Bookmarks = require('../libs/Bookmarks.class');
 
 class BookmarksManager {
 
@@ -42,9 +42,9 @@ class BookmarksManager {
             lookup:false,
             tag:null
         },options);
-        let bookmObj = DataMgr.get('bookmarks');
         this._latestArray = [];
         let _clUI = clUI.newLocalUI('> bookm show:');
+        let bookmObj = DataMgr.get('bookmarks');
 
         // LATEST LOOKUP
         if(options.lookup===true){
@@ -55,8 +55,8 @@ class BookmarksManager {
             }
             _clUI.print("samples in the latest lookup");
             smp_obj.forEach((v,i)=>{
-                this._latestArray.push(v);
-                BookmarksManager.printLI(' ',i,v);
+                this._latestArray.push(v.path);
+                BookmarksManager.printLI(' ',i,v.path);
             });
 
         // TAGGED BOOKMARKS
@@ -72,6 +72,7 @@ class BookmarksManager {
 
         // ALL BOOKMARKS
         }else{
+            d$(bookmObj);
             if(bookmObj.empty()){
                 _clUI.print("no bookmarked samples.");
                 return null;
@@ -109,8 +110,13 @@ class BookmarksManager {
             //     return __new_bookmObj();
             // },
 
+            initFn:()=>{
+                return new Bookmarks();
+            },
+
             loadFn:(fileData)=>{
-                let bookmObj = new BookmarksClass();
+                d$('loading');
+                let bookmObj = new Bookmarks();
                 if(!_.isObject(fileData)){
                     return bookmObj;
                 }

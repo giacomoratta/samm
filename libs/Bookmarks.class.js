@@ -1,30 +1,44 @@
 class Bookmarks {
 
     constructor(){
-        this.data = {
+        this._data = {
             _:this._newBookmNode()
-        }
+        };
+        this._size = 0;
     }
 
     _newBookmNode(){
         return {
-            info:{},
+            info:{
+                size:0
+            },
             array:[]
         };
     }
 
+    empty(){
+        return (this._size===0);
+    }
+
+    size(){
+        return this._size;
+    }
 
     add(bdata,label){
+        let _bobj = null;
         if(!_.isString(label)){
-            if(_.indexOf(this.data._.array,bdata)>=0) return false;
-            this.data._.array.push(bdata);
+            if(_.indexOf(this._data._.array,bdata)>=0) return false;
+            _bobj = this._data._;
         }else{
-            if(!_.isObject(this.data[label])){
-                this.data[label] = this._newBookmNode();
+            if(!_.isObject(this._data[label])){
+                this._data[label] = this._newBookmNode();
             }
-            if(_.indexOf(this.data[label].array,bdata)>=0) return false;
-            this.data[label].array.push(bdata);
+            if(_.indexOf(this._data[label].array,bdata)>=0) return false;
+            _bobj = this._data[label];
         }
+        _bobj.array.push(bdata);
+        _bobj.info.size++;
+        this._size++;
         return true;
     }
 
@@ -32,16 +46,18 @@ class Bookmarks {
     remove(bdata,label){
         let _bobj = null;
         if(!_.isString(label)){
-            _bobj = this.data._;
+            _bobj = this._data._;
         }else{
-            if(!_.isObject(this.data[label])){
+            if(!_.isObject(this._data[label])){
                 return false;
             }
-            _bobj = this.data[label];
+            _bobj = this._data[label];
         }
         let index = _.indexOf(_bobj.array,bdata);
         if(index<0) return false;
         _bobj.array.splice(index,0);
+        _bobj.info.size--;
+        this._size--;
         return true;
     }
 
@@ -57,7 +73,7 @@ class Bookmarks {
 
     _forEachValues(label,cb,index){
         let diffLb=true;
-        this.data[label].array.forEach((value)=>{
+        this._data[label].array.forEach((value)=>{
             cb(value,index,label,diffLb);
             diffLb=false;
             index++;
@@ -67,21 +83,25 @@ class Bookmarks {
 
 
     _forEachAll(cb){
-        let bkeys = Object.keys(this.data);
+        let bkeys = Object.keys(this._data);
         let index=0;
         bkeys.forEach((label)=>{
-            index=this.forEachValues(label,cb,index);
+            index=this._forEachValues(label,cb,index);
         });
     }
 
 
-    fromJson(data){
-        this._data = data;
+    fromJson(jsondata){
+        this._data = jsondata.data;
+        this._size = jsondata.size;
     }
 
 
     toJson(){
-        return this._data;
+        return {
+            size:this._size,
+            data:this._data
+        }
     }
 }
 

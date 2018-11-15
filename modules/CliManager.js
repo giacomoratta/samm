@@ -27,7 +27,7 @@ class CliManager {
     _setCliCommandManagers(){
         this.C_Lookup();
         this.C_Save(); //TODO (add feature)
-        //this.C_Bookmarks(); //TODO
+        this.C_Bookmarks(); //TODO
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
@@ -270,7 +270,7 @@ class CliManager {
         save  -b,--bookm
         */
         vorpal
-            .command('bookm show')
+            .command('bookm')
             .description("Prints the samples collection to work with in the next command 'bookm set'.")
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
@@ -283,21 +283,6 @@ class CliManager {
                     tag:this.cli_params.getOption('tag')
                 };
                 BookmarksMgr.show(C_bookm_options);
-                return this._success_code;
-            }));
-
-        vorpal
-            .command('bookm set [ids...]')
-            .description("Add or remove samples to the bookmarks.")
-            .option('-t, --tag <label>', 'Put samples under the specified custom label')
-            .option('-r, --remove', 'Remove bookmarks')
-            .action(this._getActionFn('bookm set',()=>{
-                //let _clUI = clUI.newLocalUI('> bookm:');
-                let C_bookm_options = {
-                    tag:this.cli_params.getOption('tag'),
-                    remove:this.cli_params.hasOption('remove'),
-                };
-                BookmarksMgr.set(this.cli_params.get('ids'), C_bookm_options);
                 return this._success_code;
             }));
     }
