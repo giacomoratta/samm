@@ -27,6 +27,10 @@ class BookmarksManager {
         // bookm -t x 1 2 3 4 5
     }
 
+    static printLI(pre,i,v){
+        clUI.print(pre, (i+1)+")", v);
+    }
+
     showAndSet(options){
 
         //bookmObj.add();
@@ -40,20 +44,35 @@ class BookmarksManager {
         },options);
         let bookmObj = DataMgr.get('bookmarks');
         this._latestArray = [];
+        let _clUI = clUI.newLocalUI('> bookm show:');
 
-        if(options.all===true){
-            bookmObj.forEach((v,lb,i,diffLb)=>{
+        // LATEST LOOKUP
+        if(options.lookup===true){
+            let smp_obj = SamplesMgr.getLatestLookup();
+            if(!_.isObject(smp_obj) || smp_obj.empty()){
+                _clUI.print("latest lookup missing or empty.");
+                return null;
+            }
+            _clUI.print("samples in the latest lookup");
+            smp_obj.forEach((v,i)=>{
                 this._latestArray.push(v);
+                BookmarksManager.printLI(' ',i,v);
             });
 
-        }else if(options.lookup===true){
-            bookmObj.forEach((v,lb,i,diffLb)=>{
-                this._latestArray.push(v);
-            });
-
+        // TAGGED BOOKMARKS
         }else if(_.isString(options.tag) && options.tag.length>0){
-            bookmObj.forEach(options.tag,(v,lb,i,diffLb)=>{
+            _clUI.print("all bookmarked samples under the label '"+options.tag+"'");
+            bookmObj.forEach(options.tag,(v,i)=>{
+                BookmarksManager.printLI(' ',i,v);
+            });
+
+        // ALL BOOKMARKS
+        }else{
+            _clUI.print("all bookmarked samples");
+            bookmObj.forEach((v,i,lb,diffLb)=>{
                 this._latestArray.push(v);
+                if(diffLb===true) clUI.print(' >', "label:", lb);
+                BookmarksManager.printLI('    ',i,v);
             });
         }
     }
