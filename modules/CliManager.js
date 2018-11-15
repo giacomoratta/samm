@@ -189,9 +189,9 @@ class CliManager {
                 }
 
                 let C_save_options = {
-                    dirname:    this.cli_params.getOption('dirname'),       //custom name
-                    overwrite:   this.cli_params.getOption('overwrite'),    //force overwrite
-                    path:    this.cli_params.getOption('path')              //absolute path
+                    dirname:   this.cli_params.getOption('dirname'),      //custom name
+                    overwrite: this.cli_params.getOption('overwrite'),    //force overwrite
+                    path:      this.cli_params.getOption('path')          //absolute path
                 };
 
                 // check path if is a good absolute path and exists
@@ -200,7 +200,7 @@ class CliManager {
                     return returnFn(this._error_code);
                 }
 
-                return SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
+                return returnFn(SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
                     if(!_.isObject(smp_copied_obj)){
                         _clUI.print("no file saved [error#1].");
                         return;
@@ -214,7 +214,7 @@ class CliManager {
 
                 }).catch(()=>{
                     _clUI.print("no file saved [error#2].");
-                });
+                }));
             }));
     }
 
@@ -342,26 +342,33 @@ class CliManager {
                 let _clUI = clUI.newLocalUI('> scan:');
 
                 let C_scan_options = {
+                    thisVorpal:thisVorpal,
+                    returnFn:()=>{
+                        console.log('hey333');
+
+                        if(!this.cli_params.hasOption('force')){
+                            if(SamplesMgr.sampleIndexFileExistsSync()){
+                                _clUI.print("the index file already exists. Use -f to force a rescan.");
+                                return returnFn(this._error_code);
+                            }
+                            C_scan_options.force = true;
+                        }
+
+                        _clUI.print("indexing in progress...");
+                        smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
+                        if(!_.isObject(smp_obj) || smp_obj.empty()){
+                            _clUI.print("job failed");
+                            return returnFn(this._error_code);
+                        }
+                        _clUI.print(""+smp_obj.size()+" samples found");
+                        return returnFn(smp_obj);
+                    },
                     printFn: function(s){ _clUI.print(s); },
                     force:   this.cli_params.hasOption('force') //force scan
                 };
 
-                if(!this.cli_params.hasOption('force')){
-                    if(SamplesMgr.sampleIndexFileExistsSync()){
-                        _clUI.print("the index file already exists. Use -f to force a rescan.");
-                        return returnFn(this._error_code);
-                    }
-                    C_scan_options.force = true;
-                }
-
-                _clUI.print("indexing in progress...");
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
-                if(!_.isObject(smp_obj) || smp_obj.empty()){
-                    _clUI.print("job failed");
-                    return returnFn(this._error_code);
-                }
-                _clUI.print(""+smp_obj.size()+" samples found");
-                return returnFn(smp_obj);
+
             }));
     }
 

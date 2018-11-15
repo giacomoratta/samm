@@ -130,12 +130,22 @@ class SamplesManager {
             force:false
         },options);
 
-        if(options.force === true){
-            let smp_obj = DataMgr.set(this._LABEL_samples_index);
-            if(!DataMgr.save(this._LABEL_samples_index)) return;
-            return smp_obj;
-        }
-        return DataMgr.load(this._LABEL_samples_index);
+        options.thisVorpal.prompt({
+            type: 'input',
+            name: 'time',
+            message: 'When would you like your pizza?'
+        },  (result)=>{
+            console.log('hey111');
+            if(options.force === true){
+                let smp_obj = DataMgr.set(this._LABEL_samples_index);
+                if(!DataMgr.save(this._LABEL_samples_index)) return;
+                return smp_obj;
+            }
+            console.log('hey222');
+            return options.returnFn(DataMgr.load(this._LABEL_samples_index));
+        });
+
+
     }
 
 
