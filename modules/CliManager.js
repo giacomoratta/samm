@@ -37,30 +37,46 @@ class CliManager {
     }
 
     _getActionFn(cmdName, cmdFn){
-        return (args,callback)=>{
-            this.processParams(args,cmdName);
-            let cmdFnResult = cmdFn();
+        const thisCliMgr = this;
+        return function(args,cb){
+            const thisVorpal = this;
+            // thisVorpal.prompt({
+            //     type: 'input',
+            //     name: 'time',
+            //     message: 'When would you like your pizza?'
+            // }, function (result) {
+            //     thisVorpal.log(`Okay, ${result.time} it is!`);
+            //
+            //     thisVorpal.prompt({
+            //         type: 'input',
+            //         name: 'time',
+            //         message: 'Whffffffen would you like your pizza?'
+            //     }, function (result) {
+            //         thisVorpal.log(`Okay, ${result.time} it is!`);
+            //         cb();
+            //     });
+            // });
+            //
+            // return;
 
-            if(_.isPromise(cmdFnResult)){
-                cmdFnResult.then((d)=>{
-                    ConfigMgr.printMessages();
-                    callback();
+            thisCliMgr.processParams(args,cmdName);
+            cmdFn(thisVorpal,(cmdFnResult)=>{
+                if(_.isPromise(cmdFnResult)){
+                    cmdFnResult.then((d)=>{
+                        ConfigMgr.printMessages();
+                        cb();
 
-                }).catch((e)=>{
-                    clUI.print("\n");
-                    d$('_getActionFn',e);
-                    callback();
-                })
-                return;
-            }
-
-            ConfigMgr.printMessages();
-            callback();
+                    }).catch((e)=>{
+                        clUI.print("\n");
+                        d$('_getActionFn',e);
+                        cb();
+                    });
+                    return;
+                }
+                ConfigMgr.printMessages();
+                cb();
+            });
         };
-    }
-
-    readLine(){
-        return readlineSync.prompt();
     }
 
     waitForEnter(msg){
@@ -93,7 +109,7 @@ class CliManager {
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
-            .action(this._getActionFn('coverage',()=>{
+            .action(this._getActionFn('coverage', (thisVorpal,returnFn)=>{
                 let _clUI = clUI.newLocalUI('> coverage:');
 
                 // TODO
@@ -115,12 +131,12 @@ class CliManager {
                     if(!SamplesMgr.hasSamplesIndex()){
                         _clUI.print("no samples index found;\n" +
                             "perform a scan or specify an absolute path with -p option.");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                 }else if(!Utils.File.isAbsoluteParentDirSync(C_coverage_options.path) || !Utils.File.directoryExistsSync(C_coverage_options.path)){
                     // check path if is a good absolute path and exists
                     _clUI.print("path is not an absolute path or it does not exists.");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 /* QUERY */
@@ -130,21 +146,21 @@ class CliManager {
                     if(!ConfigMgr.get('Tags')){
                         _clUI.print("no configured tags found.\n" +
                             "Add one or more tags to the configuration or specify a custom query with -q option.");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                     if(_.isString(C_coverage_options.tag) && !ConfigMgr.get('Tags')[C_coverage_options.tag]){
                         _clUI.print("tag with label '"+C_coverage_options.tag+"' not found.");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                 }
 
                 let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
                 if(smp_obj===null || (_.isObject(smp_obj) && smp_obj.error())){
                     _clUI.print("something went wrong.");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
-                return this._success_code;
+                return returnFn(this._success_code);
             }));
     }
 
@@ -158,18 +174,18 @@ class CliManager {
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
             //.option('-b, --bookm', 'Save samples in the bookmarks splitted by tags.')
-            .action(_self._getActionFn('save',()=>{
+            .action(_self._getActionFn('save', (thisVorpal,returnFn)=>{
                 let _clUI = clUI.newLocalUI('> save:');
 
                 if(!ConfigMgr.path('project_directory')){
                     _clUI.print("project directory is not set; check the configuration.");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 let smp_obj = SamplesMgr.getLatestLookup();
                 if(!_.isObject(smp_obj)){
                     _clUI.print("latest lookup missing.");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 let C_save_options = {
@@ -181,7 +197,7 @@ class CliManager {
                 // check path if is a good absolute path and exists
                 if(_.isString(C_save_options.path) && !Utils.File.isAbsoluteParentDirSync(C_save_options.path,true)){
                     _clUI.print("path is not an absolute path or it does not exists.");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 return SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
@@ -210,12 +226,12 @@ class CliManager {
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
             .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
-            .action(this._getActionFn('lookup',()=>{
+            .action(this._getActionFn('lookup', (thisVorpal,returnFn)=>{
                 let _clUI = clUI.newLocalUI('> lookup:');
 
                 if(!SamplesMgr.hasSamplesIndex()){
                     _clUI.print("no samples scan found; perform a scan before this command");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 let tagString=null;
@@ -224,12 +240,12 @@ class CliManager {
                     tagString= this.cli_params.getOption('tag');
                     if(!tagString){
                         _clUI.print("empty tag label");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                     tagString = ConfigMgr.get('Tags')[tagString];
                     if(_.isNil(tagString)){
                         _clUI.print("unknown tag label after");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                 }else{
                     tagString = this.cli_params.get('query');
@@ -237,22 +253,22 @@ class CliManager {
 
                 if(!_.isString(tagString) || tagString.length<1){
                     _clUI.print("empty tag list");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 let random = !this.cli_params.hasOption('all');
                 let smp_obj = SamplesMgr.searchSamplesByTags(tagString,random);
                 if(_.isNil(smp_obj)){
                     _clUI.print("no samples found");
-                    return this._success_code;
+                    return returnFn(this._success_code);
                 }
                 if(smp_obj.error()){
                     _clUI.print("sample search failed");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
 
                 smp_obj.print();
-                return this._success_code;
+                return returnFn(this._success_code);
             }));
     }
 
@@ -275,7 +291,7 @@ class CliManager {
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
             .option('-t, --tag <label>', 'Shows the bookmarks under the specified custom label')
-            .action(this._getActionFn('bookm show',()=>{
+            .action(this._getActionFn('bookm show', (thisVorpal,returnFn)=>{
                 //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_bookm_options = {
                     all:this.cli_params.getOption('all'),
@@ -283,7 +299,7 @@ class CliManager {
                     tag:this.cli_params.getOption('tag')
                 };
                 BookmarksMgr.show(C_bookm_options);
-                return this._success_code;
+                return returnFn(this._success_code);
             }));
     }
 
@@ -298,20 +314,20 @@ class CliManager {
                         "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
                         "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
                         "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
-            .action(this._getActionFn('config',()=>{
+            .action(this._getActionFn('config', (thisVorpal,returnFn)=>{
                 let _clUI = clUI.newLocalUI('> config-set:');
 
                 if(ConfigMgr.setFromCliParams(this.cli_params.get('name'),this.cli_params.get('values'))===null){
                     _clUI.print("configuration not changed");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
                 if(ConfigMgr.save()!==true){
                     _clUI.print("error during file writing");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
                 _clUI.print("configuration saved successfully");
                 ConfigMgr.print();
-                return this._success_code;
+                return returnFn(this._success_code);
             }));
     }
 
@@ -322,7 +338,7 @@ class CliManager {
             .description("Perform a full scan of the samples directory. " +
                 "In order to avoid resource wasting, if the index is already present the scan does not start.")
             .option('-f, --force', 'Force the rescan.')
-            .action(this._getActionFn('scan',()=>{
+            .action(this._getActionFn('scan', (thisVorpal,returnFn)=>{
                 let _clUI = clUI.newLocalUI('> scan:');
 
                 let C_scan_options = {
@@ -333,7 +349,7 @@ class CliManager {
                 if(!this.cli_params.hasOption('force')){
                     if(SamplesMgr.sampleIndexFileExistsSync()){
                         _clUI.print("the index file already exists. Use -f to force a rescan.");
-                        return this._error_code;
+                        return returnFn(this._error_code);
                     }
                     C_scan_options.force = true;
                 }
@@ -342,10 +358,10 @@ class CliManager {
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
                 if(!_.isObject(smp_obj) || smp_obj.empty()){
                     _clUI.print("job failed");
-                    return this._error_code;
+                    return returnFn(this._error_code);
                 }
                 _clUI.print(""+smp_obj.size()+" samples found");
-                return smp_obj;
+                return returnFn(smp_obj);
             }));
     }
 
@@ -355,21 +371,20 @@ class CliManager {
             .command('show <label>')
             .description('Show internal data [values: config, samples].')
             .autocomplete(['config','samples'])
-            .action(this._getActionFn('show',()=>{
+            .action(this._getActionFn('show', (thisVorpal,returnFn)=>{
                 //let _clUI = clUI.newLocalUI('> show:');
-
                 let label = this.cli_params.get('label');
                 if(label === 'config'){
                     ConfigMgr.printInternals();
                     clUI.print("\n");
                     ConfigMgr.print();
-                    return this._success_code;
+                    return returnFn(this._success_code);
                 }
                 if(label === 'samples'){
                     SamplesMgr.printSamplesTree();
-                    return this._success_code;
+                    return returnFn(this._success_code);
                 }
-                return this._error_code;
+                return returnFn(this._error_code);
             }));
     }
 
@@ -386,14 +401,14 @@ class CliManager {
             .description("Export project or samples data in a compressed archive. " +
                 "Allowed values: project (export the project) and bookm (export bookmarks collection).")
             .option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
-            .action(this._getActionFn('export',()=>{
+            .action(this._getActionFn('export', (thisVorpal,returnFn)=>{
                 //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_export_options = {
                     type:this.cli_params.getOption('type')
                 };
 
                 //ExportMgr.set(this.cli_params.get('ids'), C_bookm_options);
-                return this._success_code;
+                return returnFn(this._success_code);
             }));
     }
 
@@ -408,7 +423,7 @@ class CliManager {
             .option('-i, --index', 'Works with the internal samples index')
             .autocomplete(['ext'])
             //.option('-f, --force', 'Force the rescan.')
-            .action(this._getActionFn('dir',()=>{
+            .action(this._getActionFn('dir', (thisVorpal,returnFn)=>{
                 let _clUI  = clUI.newLocalUI('> dir:');
                 let action = this.cli_params.get('action');
                 if(action === 'ext'){
@@ -416,9 +431,9 @@ class CliManager {
                         extension:this.cli_params.getOption('extension'),
                         index:this.cli_params.hasOption('index')
                     });
-                    return this._success_code;
+                    return returnFn(this._success_code);
                 }
-                return this._error_code;
+                return returnFn(this._error_code);
             }));
     }
 
