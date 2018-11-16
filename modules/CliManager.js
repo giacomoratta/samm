@@ -135,12 +135,14 @@ class CliManager {
                     }
                 }
 
+                // Check Coverage
                 let cv_output = SamplesMgr.checkSamplesCoverage(C_coverage_options);
                 if(cv_output===null || (_.isObject(cv_output) && cv_output.error===true)){
                     _clUI.print("something went wrong.");
                     return cliNextCb(this._error_code);
                 }
 
+                // OUTPUT(s)
                 let showCoverageOutput = (i)=>{
                     if(i<0 || !cv_output.array[i]){
                         showUncoverageOutput();
@@ -168,7 +170,6 @@ class CliManager {
                     }
                     showCoverageOutput(i+1);
                 };
-
 
                 let showUncoverageOutput = (showuncovered)=>{
                     clUI.print(cv_output.uncovered_output_line);

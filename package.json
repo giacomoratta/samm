@@ -12,7 +12,6 @@
   "dependencies": {
     "fs-extra": "^7.0.0",
     "lodash": "^4.17.10",
-    "readline-sync": "^1.4.9",
     "rimraf": "^2.6.2",
     "symbol-tree": "^3.2.2",
     "vorpal": "^1.12.0"
