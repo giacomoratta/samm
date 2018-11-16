@@ -1,6 +1,10 @@
 class CliParams {
 
-    constructor(values, command){
+    constructor(values, command, rawdata){
+        if(rawdata===true){
+            this.initRawData(values,command);
+            return;
+        }
         this.init(values,command);
     }
 
@@ -37,6 +41,15 @@ class CliParams {
     //     this.params = p_values;
     //     this._error = false;
     // }
+
+    initRawData(values, command){
+        this.command = command;
+        this.options = {};
+        if(!_.isString(values)) return;
+        // split with space
+        // check options and values
+        // single values
+    }
 
     init(values, command){
         this._error = true;

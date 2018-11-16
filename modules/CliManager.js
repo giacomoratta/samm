@@ -356,10 +356,11 @@ class CliManager {
 
                 cliReference.prompt({
                     type: 'input',
-                    name: 'answer',
+                    name: 'clicmd',
                     message: 'Do you want to proceed? [y/n] '
                 }, function(result){
-                    if(result.answer !== 'y'){
+                    let cliInput = new CliParams(result.clicmd, null, true);
+                    if(result.clicmd !== 'y'){
                         return cliNextCb();
                     }
                     return cliNextCb();
