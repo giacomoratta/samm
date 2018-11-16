@@ -1,6 +1,7 @@
 class CliParams {
 
     constructor(values, command, rawdata){
+        this._error = true;
         if(rawdata===true){
             this.initRawData(values,command);
             return;
@@ -12,36 +13,6 @@ class CliParams {
         return this._error;
     }
 
-    // parseParameters(values){
-    //     if(_.isString(values)) {
-    //         values = Utils.replaceAll(values,'"','');
-    //         return minimist(stringArgv(values));
-    //     }
-    //     if(_.isArray(values)) {
-    //         return minimist(values);
-    //     }
-    //     if(!values){
-    //         values=process.argv;
-    //         values = _.slice(values,2);
-    //         return minimist(values);
-    //     }
-    // }
-
-    // _old_init(values){
-    //     this._error = true;
-    //     this.command = null;
-    //     this.params =  { _:[] };
-    //
-    //     let p_values = this.parseParameters(values);
-    //     if(!_.isObject(p_values)) return;
-    //
-    //     this.command = (p_values._.length>0 ? p_values._[0] : null);
-    //     p_values._   = (p_values._.length>0 ? p_values._[0] : null);
-    //     this.options_count = Math.max(Object.keys(p_values)-1,0);
-    //     this.params = p_values;
-    //     this._error = false;
-    // }
-
     initRawData(values, command){
         this.command = command;
         this.options = {};
@@ -49,6 +20,7 @@ class CliParams {
         // split with space
         // check options and values
         // single values
+        this._error = false;
     }
 
     init(values, command){
@@ -59,9 +31,7 @@ class CliParams {
 
         this.command = command;
         this.options = values.options;
-        this.options_count = Object.keys(values.options).length;
         delete values.options;
-        this.params_count = Object.keys(values).length;
         this.params = values;
         this._error = false;
 
@@ -77,20 +47,6 @@ class CliParams {
         */
     }
 
-
-    commandIs(c){
-        return (c==this.command);
-    }
-
-
-    hasValues(c){
-        return (this.params_count);
-    }
-
-    hasOptions(){
-        return (this.options_count);
-    }
-
     hasOption(o){
         return (!_.isNil(this.options[o]));
     }
@@ -99,11 +55,6 @@ class CliParams {
     get(i){
         if(!_.isNil(this.params[i])) return this.params[i];
         return null;
-    }
-
-    getValues(start,end){
-        //if(_.isNil(start) && _.isNil(end)) return this.params._;
-        //return _.slice(this.params._,start,end);
     }
 
     getOption(o){
