@@ -217,7 +217,7 @@ class SamplesManager {
         Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
 
-        clUI .print("Copying "+smp_obj.size()+" samples...");
+        clUI.print("Copying "+smp_obj.size()+" samples...");
 
         //console.log('   generateSamplesDir - start copying '+smp_obj.size()+' files...');
         smp_obj.forEach(function(item,index){
@@ -324,11 +324,11 @@ class SamplesManager {
         },options);
 
         /* Console */
-        clUI .print = (_.isNil(clUI .print)?function(){}:clUI .print);
+        clUI.print = (_.isNil(clUI.print)?function(){}:clUI.print);
 
         /* Tag Query */
         if(!__coverage_set_queries()){
-            clUI .print("No tags or queries found.");
+            clUI.print("No tags or queries found.");
             return false;
         }
 
@@ -343,7 +343,7 @@ class SamplesManager {
             ST.read();
         }
         if(!ST || ST.empty()){
-            clUI .print("Cannot check the coverage: no samples found.");
+            clUI.print("Cannot check the coverage: no samples found.");
             return false;
         }
 

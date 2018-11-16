@@ -103,9 +103,7 @@ class CliManager {
                     tag:'',           //query tags
 
                     allinfo:this.cli_params.hasOption('allinfo'),
-                    progressive:this.cli_params.hasOption('progressive'),
-                    //cliReference:cliReference,
-                    //cliNextCb:cliNextCb
+                    progressive:this.cli_params.hasOption('progressive')
                 };
 
                 /* PATH */
@@ -151,7 +149,7 @@ class CliManager {
                     clUI.print(cv_output.array[i].output_line);
                     if(C_coverage_options.allinfo){
                         cv_output.array[i].smpobj.print();
-                        clUI .print('');
+                        clUI.print('');
                     }
 
                     if(C_coverage_options.progressive===true){

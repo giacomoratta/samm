@@ -10,8 +10,8 @@ if(!ENV_CONFIG.debug_enabled){
     UI_options.debugTimedFn=function(){};
 }
 global.clUI  = new (require('./modules/UI.class.js'))(UI_options);
-global.d$ = clUI .debug;
-global.dt$ = clUI .debugTimed;
+global.d$ = clUI.debug;
+global.dt$ = clUI.debugTimed;
 
 /* Common Libraries */
 global.Utils = require('./libs/Utils.js');
