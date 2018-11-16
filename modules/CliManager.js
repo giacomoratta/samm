@@ -1,6 +1,5 @@
 const CliParams = require('./CliParams.class.js');
 const vorpal = require('vorpal')();
-const readlineSync = require('readline-sync');
 
 class CliManager {
 
@@ -328,7 +327,7 @@ class CliManager {
         bookm 1,2,3 -r          // remove bookmarks
         bookm -r -t hihat       // remove all bookmarks with the specified label (autocomplete)
         bookm 1,2,3 -r -t hihat // remove bookmarks to the specified label (autocomplete)
-        save  -b,--bookm
+        bookm
         */
         vorpal
             .command('bookm')
@@ -336,15 +335,38 @@ class CliManager {
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
             .option('-t, --tag <label>', 'Shows the bookmarks under the specified custom label')
+            .option('-s, --save', 'Save bookmarks in the current project')
             .action(this._getActionFn('bookm show', (cliReference,cliNextCb)=>{
                 //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_bookm_options = {
-                    all:this.cli_params.getOption('all'),
-                    lookup:this.cli_params.getOption('lookup'),
+                    all:this.cli_params.hasOption('all'),
+                    lookup:this.cli_params.hasOption('lookup'),
+                    save:this.cli_params.hasOption('save'),
                     tag:this.cli_params.getOption('tag')
                 };
+
+                // loop: prepare bkList
+                // loop: show bkList
+                // loop: read actions
+                //       1 2 3 4
+                //       !1 2 !3 4
+                //       2 !4 -t kick12
+
                 BookmarksMgr.show(C_bookm_options);
-                return cliNextCb(this._success_code);
+
+                cliReference.prompt({
+                    type: 'input',
+                    name: 'answer',
+                    message: 'Do you want to proceed? [y/n] '
+                }, function(result){
+                    if(result.answer !== 'y'){
+                        return cliNextCb();
+                    }
+                    return cliNextCb();
+                });
+
+
+                //return cliNextCb(this._success_code);
             }));
     }
 
@@ -482,6 +504,6 @@ class CliManager {
             }));
     }
 
-};
+}
 
 module.exports = new CliManager();
