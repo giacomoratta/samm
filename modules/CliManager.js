@@ -79,25 +79,6 @@ class CliManager {
         };
     }
 
-    waitForEnter(msg){
-        if(!_.isString(msg)) msg='[press any key to continue]';
-        readlineSync.question(msg,{
-            defaultInput: ''
-        });
-    }
-
-    questionYesNo(msg){
-        if(!_.isString(msg)) msg='Do you want to continue?';
-        let ans = readlineSync.question("\n"+msg+' [y/n] ',{
-            defaultInput: ''
-        });
-        // console.log("\n"+msg+' [y/n] ');
-        // let ans = scanf("%s");
-        if(_.toLower(ans)==='y') return true;
-        if(_.toLower(ans)==='n') return false;
-        return null;
-    }
-
 
     C_Coverage(){
         let config_tags = ConfigMgr.get('Tags');
@@ -122,7 +103,9 @@ class CliManager {
                     tag:'',           //query tags
 
                     allinfo:this.cli_params.hasOption('allinfo'),
-                    progressive:this.cli_params.hasOption('progressive')
+                    progressive:this.cli_params.hasOption('progressive'),
+                    //cliReference:cliReference,
+                    //cliNextCb:cliNextCb
                 };
 
                 /* PATH */
@@ -154,13 +137,61 @@ class CliManager {
                     }
                 }
 
-                let smp_obj = SamplesMgr.checkSamplesCoverage(C_coverage_options);
-                if(smp_obj===null || (_.isObject(smp_obj) && smp_obj.error())){
+                let cv_output = SamplesMgr.checkSamplesCoverage(C_coverage_options);
+                if(cv_output===null || (_.isObject(cv_output) && cv_output.error===true)){
                     _clUI.print("something went wrong.");
                     return cliNextCb(this._error_code);
                 }
 
-                return cliNextCb(this._success_code);
+                let showCoverageOutput = (i)=>{
+                    if(i<0 || !cv_output.array[i]){
+                        showUncoverageOutput();
+                        return;
+                    }
+                    clUI.print(cv_output.array[i].output_line);
+                    if(C_coverage_options.allinfo){
+                        cv_output.array[i].smpobj.print();
+                        clUI .print('');
+                    }
+
+                    if(C_coverage_options.progressive===true){
+                        cliReference.prompt({
+                            type: 'input',
+                            name: 'action',
+                            message: '[\'q\' to exit] '
+                        }, function(result){
+                            if(result.action==='q'){
+                                showUncoverageOutput();
+                                return;
+                            }
+                            showCoverageOutput(i+1);
+                        });
+                        return;
+                    }
+                    showCoverageOutput(i+1);
+                };
+
+
+                let showUncoverageOutput = (showuncovered)=>{
+                    clUI.print(cv_output.uncovered_output_line);
+                    if(cv_output.uncovered_smpobj.size()<11 || showuncovered===true /*|| C_coverage_options.allinfo*/){
+                        cv_output.uncovered_smpobj.print();
+                        return cliNextCb(cv_output);
+                    }
+                    if(_.isNil(showuncovered)){
+                        cliReference.prompt({
+                            type: 'input',
+                            name: 'show',
+                            message: 'There are many uncovered samples. Do you want to show them? [y/n]?'
+                        }, function (result) {
+                            showUncoverageOutput(result.show==='y');
+                        });
+                        return;
+                    }
+                    return cliNextCb(cv_output);
+                };
+
+                showCoverageOutput(0);
             }));
     }
 
@@ -349,7 +380,7 @@ class CliManager {
                 if(!this.cli_params.hasOption('force')){
                     if(SamplesMgr.sampleIndexFileExistsSync()){
                         _clUI.print("the index file already exists. Use -f to force a rescan.");
-                        return this._error_code;
+                        return cliNextCb(this._error_code);
                     }
                     C_scan_options.force = true;
                 }
@@ -358,10 +389,10 @@ class CliManager {
                 let smp_obj = SamplesMgr.setSamplesIndex(C_scan_options);
                 if(!_.isObject(smp_obj) || smp_obj.empty()){
                     _clUI.print("job failed");
-                    return this._error_code;
+                    return cliNextCb(this._error_code);
                 }
                 _clUI.print(""+smp_obj.size()+" samples found");
-                return smp_obj;
+                return cliNextCb(smp_obj);
             }));
     }
 

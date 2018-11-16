@@ -382,55 +382,73 @@ class SamplesManager {
         });
         _data.samples_count = ST.size();
 
-        this._checkSamplesCoverageOutput(_data, options, d$);
-
-        return _data.smpobj_unmatched.obj;
+        let coverage_output = this._checkSamplesCoverageOutput1(_data, options);
+        coverage_output.unmatched_obj = _data.smpobj_unmatched.obj;
+        return coverage_output;
     }
 
+    _checkSamplesCoverageOutput1(_data, options){
+        let coverage_output = { error:true };
 
-    _checkSamplesCoverageOutput(_data, options, d$){
-
-        if(!_data.output.enabled) return;
+        if(!_data.output.enabled) return coverage_output;
         _data.smpobj_by_tag = Utils.sortObjectByKey(_data.smpobj_by_tag);
 
         let _max_len_size = (''+_data.samples_count+'').length+1;
-
-        clUI .print();
         let _big_separator = _.repeat('-',120);
 
         let k_array = Object.keys(_data.smpobj_by_tag);
-        k_array.forEach((v,i)=>{
+        coverage_output.array=[];
+        k_array.forEach((v)=>{
+            let cv_obj = {};
+            coverage_output.array.push(cv_obj);
+
             if(!options.allinfo){
-                clUI .print(_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3),
-                    'coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/),
-                    _.padEnd('('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11),
-                    'q: '+_data.tag_queries[v]
+                cv_obj.output_line = (_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3) +
+                    ' coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/) +
+                    _.padEnd(' ('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11) +
+                    ' q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
             }else{
-                clUI .print(v,
-                    'coverage: '+_data.smpobj_by_tag[v].obj.size(),
-                    '('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',
-                    'q: '+_data.tag_queries[v]
+                cv_obj.output_line = ( v +
+                    ' coverage: '+_data.smpobj_by_tag[v].obj.size() +
+                    ' ('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)' +
+                    ' q: '+_data.tag_queries[v]
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
-                clUI .print(_big_separator);
-                _data.smpobj_by_tag[v].obj.print();
-                clUI .print('');
+                cv_obj.output_line += "\n"+_big_separator;
             }
-            if(options.progressive==true) CliMgr.waitForEnter('');
-        });
-        clUI .print("\nUncovered samples:",
-            _data.smpobj_unmatched.obj.size(),
-            '('+_.round((_data.smpobj_unmatched.obj.size()/_data.samples_count*100),2)+'%)'
-        );
 
-        let show_uncovered=true;
-        if(_data.smpobj_unmatched.obj.size()>10 /*&& !options.progressive*/){
-            show_uncovered = CliMgr.questionYesNo('There are many uncovered samples. Do you want to show them?');
-        }
-        if(show_uncovered===true) _data.smpobj_unmatched.obj.print();
+            cv_obj.label = v;
+            // cv_obj.label_print = cv_obj.label;
+            // cv_obj.label_print_pad = _.padEnd(/*"    Q#"+(i1+1)+" "*/cv_obj.label,_data.output.max_length_tag_string+3);
+
+            cv_obj.coverage_count = _data.smpobj_by_tag[v].obj.size();
+            // cv_obj.coverage_count_print = _data.smpobj_by_tag[v].obj.size();
+            // cv_obj.coverage_count_print_pad = _.padEnd(cv_obj.coverage_count_print,_max_len_size /*replace*/);
+
+            cv_obj.coverage_perc = _.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2);
+            // cv_obj.coverage_perc_print = '('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)';
+            // cv_obj.coverage_perc_print_pad = _.padEnd(cv_obj.coverage_perc,11);
+
+            cv_obj.query = _data.tag_queries[v];
+            // cv_obj.query_print = cv_obj.query;
+            // cv_obj.query_print_pad = cv_obj.query;
+
+            cv_obj.smpobj = _data.smpobj_by_tag[v].obj; //.print
+        });
+
+        coverage_output.uncovered_output_line = "\nUncovered samples: "+
+            _data.smpobj_unmatched.obj.size()+
+            ' ('+_.round((_data.smpobj_unmatched.obj.size()/_data.samples_count*100),2)+'%)';
+        coverage_output.uncovered_smpobj=_data.smpobj_unmatched.obj; //print/size
+        //coverage_output.uncovered_perc=_.round((coverage_output.uncovered_smpobj.size()/_data.samples_count*100),2);
+        //coverage_output.uncovered_perc_print='('+coverage_output.uncovered_perc+'%)';
+
+        coverage_output.error = false;
+        return coverage_output;
     }
-};
+
+}
 
 module.exports = new SamplesManager();

@@ -142,7 +142,7 @@ class DataManager {
 
         let filedata = this._loadFileData($cfg);
         if(filedata === false){
-            $cfg.logErrorsFn('DataMgr.load > the file does not exist:',$cfg.filePath);
+            $cfg.logErrorsFn('DataMgr.load ['+label+'] > the file does not exist:',$cfg.filePath);
             return false;
         }
 
@@ -150,19 +150,19 @@ class DataManager {
             try{
                 let data = $cfg.loadFn(filedata,$cfg,args);
                 if(!$cfg._checkDataType(data)){
-                    $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                    $cfg.logErrorsFn('DataMgr.load ['+label+'] > loaded data type is not '+$cfg.dataType);
                     return null;
                 }
                 this._data[label]=data;
             }catch(e){
                 d$(e);
-                $cfg.logErrorsFn('DataMgr.load > loadFn callback failed!');
+                $cfg.logErrorsFn('DataMgr.load ['+label+'] > loadFn callback failed!');
                 return null;
             }
         }
         else{
             if(!$cfg._checkDataType(filedata)){
-                $cfg.logErrorsFn('DataMgr.load > loaded data type is not '+$cfg.dataType);
+                $cfg.logErrorsFn('DataMgr.load ['+label+'] > loaded data type is not '+$cfg.dataType);
                 return null;
             }
             this._data[label]=filedata;
