@@ -180,7 +180,7 @@ class CliManager {
                         cliReference.prompt({
                             type: 'input',
                             name: 'show',
-                            message: 'There are many uncovered samples. Do you want to show them? [y/n]?'
+                            message: 'There are many uncovered samples. Do you want to show them? [y/n] '
                         }, function (result) {
                             showUncoverageOutput(result.show==='y');
                         });
@@ -229,21 +229,36 @@ class CliManager {
                     return cliNextCb(this._error_code);
                 }
 
-                return cliNextCb(SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
-                    if(!_.isObject(smp_copied_obj)){
-                        _clUI.print("no file saved [error#1].");
-                        return;
-                    }
-                    if(smp_copied_obj.size()===0){
-                        _clUI.print("no file saved.");
-                        return;
-                    }
-                    smp_copied_obj.print();
-                    _clUI.print(""+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
+                C_save_options = SamplesMgr.generateSamplesDir_setOptions(smp_obj,C_save_options);
 
-                }).catch(()=>{
-                    _clUI.print("no file saved [error#2].");
-                }));
+                clUI.print(""+smp_obj.size(),"samples will be saved in",C_save_options.path);
+                if(C_save_options.overwrite) clUI.print('This path will be overwritten!');
+                clUI.print();
+
+                cliReference.prompt({
+                    type: 'input',
+                    name: 'answer',
+                    message: 'Do you want to proceed? [y/n] '
+                }, function (result) {
+                    if(result.answer !== 'y'){
+                        return cliNextCb();
+                    }
+                    return cliNextCb(SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
+                        if(!_.isObject(smp_copied_obj)){
+                            _clUI.print("no file saved [error#1].");
+                            return;
+                        }
+                        if(smp_copied_obj.size()===0){
+                            _clUI.print("no file saved.");
+                            return;
+                        }
+                        smp_copied_obj.print();
+                        _clUI.print(""+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
+
+                    }).catch(()=>{
+                        _clUI.print("no file saved [error#2].");
+                    }));
+                });
             }));
     }
 

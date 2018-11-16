@@ -182,9 +182,9 @@ class SamplesManager {
      * @param options
      *        - dirname: custom name for the directory
      *        - overwrite: force overwrite otherwise rename
-     * @returns Promise{array} | null
+     * @returns object
      */
-    generateSamplesDir(smp_obj,options){
+    generateSamplesDir_setOptions(smp_obj,options){
         options = _.merge({
             dirname:null,     //custom name
             overwrite:false,  //force overwrite
@@ -197,22 +197,27 @@ class SamplesManager {
             options.path = Utils.File.pathJoin(ConfigMgr.get('Project'),ConfigMgr._labels.sample_dir, options.dirname);
         }
 
-        // Overwrite option
-        if(options.overwrite===true){
-            Utils.File.removeDirSync(options.path);
-        }else{
+        // Set directory name
+        if(options.overwrite!==true){
             options.path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(options.path);
         }
-        if(!options.path) return _.readyPromise(null);
-        if(smp_obj.empty()) return _.readyPromise(null);
 
-        // TODO: confirm message
+        if(!options.path) return null;
+        return options;
+    }
 
+
+    generateSamplesDir(smp_obj,options){
         // Create directory and files
         let p_array = [];
         let fname_array = [];
         let smp_copied_obj = smp_obj.createFromThis();
         let _links_dir = Utils.File.pathJoin(options.path,'_links');
+
+        // Overwrite option
+        if(options.overwrite===true){
+            Utils.File.removeDirSync(options.path);
+        }
 
         Utils.File.ensureDirSync(options.path);
         Utils.File.ensureDirSync(_links_dir);
