@@ -154,6 +154,11 @@ class Samples{
         return false;
     }
 
+    remove(index){
+        if(!this._array[index]) return false;
+        this._array.splice(index,1);
+    }
+
     get(index){
         return this._array[index];
     }

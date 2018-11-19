@@ -41,7 +41,7 @@ class BookmarksManager {
             if(bookmObj.empty() || bookmObj.empty(options.tag)){
                 return null;
             }
-            this._workingSet.cloneSubset(options.tag,bookmObj);
+            this._workingSet = bookmObj.cloneSubStructure(options.tag);
             return this._workingSet;
 
         // ALL BOOKMARKS
@@ -50,23 +50,26 @@ class BookmarksManager {
             if(bookmObj.empty()){
                 return null;
             }
-            this._workingSet = bookmObj.clone();
+            this._workingSet = bookmObj.cloneStructure();
             return this._workingSet;
         }
     }
 
 
     set(addIds, removeIds, label){
+        let elmt;
         let bookmObj = DataMgr.get('bookmarks');
-        addIds.forEach(function (elmtIndex){
-            let elmt = this._workingSet.get(elmtIndex);
-            this._workingSet.add(elmt /* PathInfo or absolute path (string) */,label);
-            bookmObj.add(elmt /* PathInfo | absolute path (string) */,label);
+        addIds.forEach(function(elmtIndex){
+            elmt = this._workingSet.getByIndex(elmtIndex);
+            if(!elmt) return;
+            this._workingSet.add(elmt.smpobj,label);
+            bookmObj.add(elmt.smpobj,label);
         });
-        removeIds.forEach(function (elmtIndex){
-            let elmt = this._workingSet.get(elmtIndex);
-            this._workingSet.remove(elmt /* PathInfo or absolute path (string) */,label);
-            bookmObj.remove(elmt /* PathInfo or absolute path (string) */,label);
+        removeIds.forEach(function(elmtIndex){
+            elmt = this._workingSet.getByIndex(elmtIndex);
+            if(!elmt) return;
+            this._workingSet.remove(elmt.index,label);
+            bookmObj.remove(elmt.index,label);
         });
     }
 

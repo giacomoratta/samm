@@ -19,6 +19,67 @@ class Bookmarks {
         return this._size;
     }
 
+
+    getByIndex(index){
+        let keys = Object.keys(this._data);
+        let fIndex = -1;
+        let fObj = null;
+        let totalCount = 0;
+        for(let i=0; i<keys.length; i++){
+            fObj = this._data[keys[i]];
+            totalCount += this._data[keys[i]].size();
+            if(index < totalCount){
+                fIndex = totalCount-index;
+                break;
+            }
+        }
+        if(fIndex===-1) return null;
+        let _return = {
+            index: fIndex,
+            smpobj: fObj.get(fIndex)
+        };
+        if(!_return.smpobj) return null;
+        return _return;
+    }
+
+
+    add(elmt,label){
+        if(!_.isString(label)) label='_';
+        if(!this._data[label]) this._data[label]=this._newBookmNode();
+        return this._data[label].add(elmt); //boolean
+    }
+
+
+    remove(elmt,label){
+        if(!_.isString(label)) label='_';
+        if(!this._data[label]) return false;
+        return this._data[label].remove(elmt);  //boolean
+    }
+
+
+    cloneStructure(){
+        let newBookm = new this.constructor();
+        this.forEach((value,index,label)=>{
+            newBookm.add(value,label);
+        });
+        return newBookm;
+    }
+
+
+    cloneSubStructure(label){
+        let newBookm = new this.constructor();
+        if(!this._data[label]){
+            return newBookm;
+        }
+        this.forEach(label,(value)=>{
+            newBookm.add(value);
+        });
+        return newBookm;
+    }
+
+
+
+
     add1(bdata,label){
         let _bobj = null;
         if(!_.isString(label)){
