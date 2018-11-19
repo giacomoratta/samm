@@ -157,7 +157,7 @@ class CliManager {
                         cliReference.prompt({
                             type: 'input',
                             name: 'action',
-                            message: '[\'q\' to exit] '
+                            message: "['q' to exit] "
                         }, function(result){
                             if(result.action==='q'){
                                 showUncoverageOutput();
@@ -231,8 +231,8 @@ class CliManager {
 
                 C_save_options = SamplesMgr.generateSamplesDir_setOptions(smp_obj,C_save_options);
 
-                clUI.print(""+smp_obj.size(),"samples will be saved in",C_save_options.path);
-                if(C_save_options.overwrite) clUI.print('This path will be overwritten!');
+                _clUI.print(""+smp_obj.size(),"samples will be saved in",C_save_options.path);
+                if(C_save_options.overwrite) _clUI.print('... and this path will be overwritten!');
                 clUI.print();
 
                 cliReference.prompt({
@@ -345,29 +345,34 @@ class CliManager {
                     tag:this.cli_params.getOption('tag')
                 };
 
-                // loop: prepare bkList
-                // loop: show bkList
-                // loop: read actions
-                //       1 2 3 4
-                //       !1 2 !3 4
-                //       2 !4 -t kick12
+                if(C_bookm_options.save===true){
+                    // generateSamplesDir
+                    return cliNextCb(this._success_code);
+                }
 
-                BookmarksMgr.show(C_bookm_options);
+                let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
 
-                cliReference.prompt({
-                    type: 'input',
-                    name: 'clicmd',
-                    message: 'Do you want to proceed? [y/n] '
-                }, function(result){
-                    let cliInput = new CliParams(result.clicmd, null, true);
-                    if(result.clicmd !== 'y'){
-                        return cliNextCb();
-                    }
-                    return cliNextCb();
-                });
+                let p1 = ()=>{
+                    bookmWkSet.print();
 
+                    cliReference.prompt({
+                        type: 'input',
+                        name: 'clicmd',
+                        message: "['q' to exit] > "
+                    }, function(result){
+                        let cliInput = new CliParams(result.clicmd, null, true);
+                        let bookmLabel = cliInput.filterGet(0,function(v){ if(_.isString(v) && v.length>0) return v; return null; });
+                        let addIds = cliInput.filterValues(function(v){ if(!_.startsWith('!') && _.isNumber(v)) return v; return null; });
+                        let removeIds = cliInput.filterValues(function(v){ if(_.startsWith('!')  && _.isNumber(v)) return v; return null; });
+                        BookmarksMgr.set(bookmLabel, addIds, removeIds);
 
-                //return cliNextCb(this._success_code);
+                        if(result.clicmd === 'q'){
+                            BookmarksMgr.save();
+                            return cliNextCb(this._success_code);
+                        }
+                        return p1();
+                    });
+                };
             }));
     }
 

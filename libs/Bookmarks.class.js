@@ -2,18 +2,13 @@ class Bookmarks {
 
     constructor(){
         this._data = {
-            _:this._newBookmNode()
+            _: this._newBookmNode()
         };
         this._size = 0;
     }
 
     _newBookmNode(){
-        return {
-            info:{
-                size:0
-            },
-            array:[]
-        };
+        return new Samples();
     }
 
     empty(){
@@ -24,7 +19,7 @@ class Bookmarks {
         return this._size;
     }
 
-    add(bdata,label){
+    add1(bdata,label){
         let _bobj = null;
         if(!_.isString(label)){
             if(_.indexOf(this._data._.array,bdata)>=0) return false;
@@ -43,7 +38,7 @@ class Bookmarks {
     }
 
 
-    remove(bdata,label){
+    remove1(bdata,label){
         let _bobj = null;
         if(!_.isString(label)){
             _bobj = this._data._;

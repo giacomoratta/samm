@@ -48,7 +48,7 @@ class SamplesManager {
             logErrorsFn:d$,
             preLoad:true,
 
-            checkFn:(STree,args)=>{
+            checkFn:(STree/*,args*/)=>{
                 return (STree && STree.T && !STree.T.error());
             },
 
@@ -57,18 +57,18 @@ class SamplesManager {
                 return STree;
             },
 
-            printFn:(STree, $cfg, args)=>{
+            printFn:(STree/*, $cfg, args*/)=>{
                 STree.T.print();
             },
 
-            setFn:($cfg,args)=>{
+            setFn:($cfg/*,args*/)=>{
                 let STree = __new_SamplesTree();
                 STree.T.read();
                 if(!$cfg.checkFn(STree)) return;
                 return STree;
             },
 
-            loadFn:(fileData, $cfg, args)=>{
+            loadFn:(fileData, $cfg/*,args*/)=>{
                 if(!_.isObject(fileData)){
                     this.setFlag('samples_index_scan_needed',true);
                     return;
@@ -79,7 +79,7 @@ class SamplesManager {
                 return STree;
             },
 
-            saveFn:(STree, $cfg, args)=>{
+            saveFn:(STree, $cfg/*,args*/)=>{
                 if(!$cfg.checkFn(STree)) return;
                 return STree.T.toJson();
             }
@@ -135,7 +135,6 @@ class SamplesManager {
             if(!DataMgr.save(this._LABEL_samples_index)) return;
             return smp_obj;
         }
-        console.log('hey222');
         return DataMgr.load(this._LABEL_samples_index);
     }
 

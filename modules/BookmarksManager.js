@@ -6,37 +6,72 @@ class BookmarksManager {
 
         this._createBookmarksHolder();
         this._latestArray = [];
-
-        /* CACHES */
-        this._CACHE_latest_usage = {
-            enums: { lookup:1, collection:2, subcollection:3 },
-            data:{
-                default:[]
-            }
-        };
-
-        // DataHolder
-
-        // [1] bookm -l     // set array with lookup
-        // [2] bookm -a     // set array with bookmarks
-        // [3] bookm -t x    // set array with bookmarks label
-                            // array sort A-Z
-
-        // bookm 1 2 3 4
-        // bookm -r 1 2 3 4
-        // bookm -t x 1 2 3 4 5
+        this._workingSet = null;
     }
 
     static printLI(pre,i,v){
         clUI.print(pre, (i+1)+")", v);
     }
 
-    showAndSet(options){
 
-        //bookmObj.add();
+    workingSet(options){
+        this._workingSet = null;
+        options = _.merge({
+            all:false,
+            lookup:false,
+            tag:null
+        },options);
+        this._latestArray = [];
+        let bookmObj = DataMgr.get('bookmarks');
+
+        // LATEST LOOKUP
+        if(options.lookup===true){
+            let smp_obj = SamplesMgr.getLatestLookup();
+            if(!_.isObject(smp_obj) || smp_obj.empty()){
+                return null;
+            }
+            this._workingSet = new Bookmarks();
+            smp_obj.forEach((v)=>{
+                this._workingSet.add(v);
+            });
+            return this._workingSet;
+
+        // TAGGED BOOKMARKS
+        }else if(_.isString(options.tag) && options.tag.length>0){
+            if(bookmObj.empty() || bookmObj.empty(options.tag)){
+                return null;
+            }
+            this._workingSet.cloneSubset(options.tag,bookmObj);
+            return this._workingSet;
+
+        // ALL BOOKMARKS
+        }else{
+            d$(bookmObj);
+            if(bookmObj.empty()){
+                return null;
+            }
+            this._workingSet = bookmObj.clone();
+            return this._workingSet;
+        }
     }
 
-    show(options){
+
+    set(addIds, removeIds, label){
+        let bookmObj = DataMgr.get('bookmarks');
+        addIds.forEach(function (elmtIndex){
+            let elmt = this._workingSet.get(elmtIndex);
+            this._workingSet.add(elmt /* PathInfo or absolute path (string) */,label);
+            bookmObj.add(elmt /* PathInfo | absolute path (string) */,label);
+        });
+        removeIds.forEach(function (elmtIndex){
+            let elmt = this._workingSet.get(elmtIndex);
+            this._workingSet.remove(elmt /* PathInfo or absolute path (string) */,label);
+            bookmObj.remove(elmt /* PathInfo or absolute path (string) */,label);
+        });
+    }
+
+
+    show1(options){
         options = _.merge({
             all:false,
             lookup:false,
@@ -83,17 +118,6 @@ class BookmarksManager {
                 if(diffLb===true) clUI.print(' >', "label:", lb);
                 BookmarksManager.printLI('    ',i,v);
             });
-        }
-    }
-
-    set(options){
-        //let bookmObj = DataMgr.print('bookmarks');
-        //bookmObj.add();
-        while(true){
-            // ask for ids and label
-            // add/remove
-            // no input = exit
-            break;
         }
     }
 
