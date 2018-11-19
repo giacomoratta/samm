@@ -16,7 +16,20 @@ class CliParams {
     initRawData(values, command){
         this.command = command;
         this.options = {};
+        this.params =  { _:[] };
         if(!_.isString(values)) return;
+        values = values.split(" ");
+        for(let i=0; i<values.length; i++){
+            if(values[i].startsWith('-')){
+                this.options[values[i]] = true;
+                if(values[i+1] && !values[i+1].startsWith('-')){
+                    this.options[values[i]] = values[i+1];
+                    i++;
+                }
+            }else{
+                this.params._.push(values[i]);
+            }
+        }
         // split with space
         // check options and values
         // single values
@@ -60,6 +73,23 @@ class CliParams {
     getOption(o){
         if(!_.isNil(this.options[o])) return this.options[o];
         return null;
+    }
+
+    filterGet(index,cb){
+        let value = this.params._[index];
+        if(!value) return null;
+        return cb(value);
+    }
+
+    filterValues(cb){
+        let array = [];
+        let value;
+        this.params._.forEach(function(v){
+            value = cb(v);
+            if(!value) return;
+            array.push(value);
+        });
+        return array;
     }
 }
 
