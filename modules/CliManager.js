@@ -337,7 +337,7 @@ class CliManager {
             .option('-t, --tag <label>', 'Shows the bookmarks under the specified custom label')
             .option('-s, --save', 'Save bookmarks in the current project')
             .action(this._getActionFn('bookm show', (cliReference,cliNextCb)=>{
-                //let _clUI = clUI.newLocalUI('> bookm:');
+                let _clUI = clUI.newLocalUI('> bookm:');
                 let C_bookm_options = {
                     all:this.cli_params.hasOption('all'),
                     lookup:this.cli_params.hasOption('lookup'),
@@ -353,26 +353,34 @@ class CliManager {
                 let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
 
                 let p1 = ()=>{
-                    bookmWkSet.print();
+                    if(!BookmarksMgr.printWorkingSet(
+                        C_bookm_options,
+                        function(msg){ _clUI.print(msg); },
+                        function(msg){ clUI.print(msg); }
+                    )){
+                        return cliNextCb(this._success_code);
+                    }
 
                     cliReference.prompt({
                         type: 'input',
                         name: 'clicmd',
                         message: "['q' to exit] > "
-                    }, function(result){
+                    }, (result)=>{
                         let cliInput = new CliParams(result.clicmd, null, true);
                         let bookmLabel = cliInput.filterGet(0,function(v){ if(_.isString(v) && v.length>0) return v; return null; });
                         let addIds = cliInput.filterValues(function(v){ if(!_.startsWith('!') && _.isNumber(v)) return v; return null; });
                         let removeIds = cliInput.filterValues(function(v){ if(_.startsWith('!')  && _.isNumber(v)) return v; return null; });
-                        BookmarksMgr.set(bookmLabel, addIds, removeIds);
-
                         if(result.clicmd === 'q'){
                             BookmarksMgr.save();
                             return cliNextCb(this._success_code);
                         }
+                        BookmarksMgr.set(bookmLabel, addIds, removeIds);
                         return p1();
+                        // lookup la
+                        // bookm -l
                     });
                 };
+                p1();
             }));
     }
 

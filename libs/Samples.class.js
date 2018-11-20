@@ -126,7 +126,7 @@ class Samples{
     }
 
     empty(){
-        return (this._array.length==0);
+        return (this._array.length===0);
     }
 
     size(){

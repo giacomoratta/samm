@@ -8,7 +8,7 @@ class Bookmarks {
     }
 
     _newBookmNode(){
-        return new Samples();
+        return new Samples(ConfigMgr.get('SamplesDirectory'));
     }
 
     empty(){
@@ -43,10 +43,30 @@ class Bookmarks {
     }
 
 
+    printByIndex(printFn){
+        let keys = Object.keys(this._data);
+        let printLabels = keys.length>1;
+        let index=0;
+        printFn('');
+        for(let i=0; i<keys.length; i++){
+            if(printLabels) printFn('Unlabeled:');
+            this._data[keys[i]].forEach((v)=>{
+                printFn('  ' + (index+1) + ') ' + v.rel_path);
+                index++;
+            });
+            printFn('');
+        }
+    }
+
+
     add(elmt,label){
         if(!_.isString(label)) label='_';
         if(!this._data[label]) this._data[label]=this._newBookmNode();
-        return this._data[label].add(elmt); //boolean
+        if(this._data[label].add(elmt)===true){
+            this._size++;
+            return true;
+        }
+        return false;
     }
 
 

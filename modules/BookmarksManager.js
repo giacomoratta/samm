@@ -14,6 +14,23 @@ class BookmarksManager {
     }
 
 
+    printWorkingSet(options,printPrefixFn,printFn){
+        if(options.lookup){
+            printPrefixFn('working with samples founded with latest lookup:');
+            if(!this._workingSet || this._workingSet.empty())  { printPrefixFn("no samples in the latest lookup."); return false; }
+        }else if(options.tag){
+            printPrefixFn('working with bookmarked samples under',options.tag);
+            if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples under'"+options.tag+"'."); return false; }
+        }else{
+            printPrefixFn('working with all bookmarked samples');
+            if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples."); return false; }
+        }
+        this._workingSet.printByIndex(printFn);
+        //d$(this._workingSet);
+        return true;
+    }
+
+
     workingSet(options){
         this._workingSet = null;
         options = _.merge({
@@ -46,7 +63,6 @@ class BookmarksManager {
 
         // ALL BOOKMARKS
         }else{
-            d$(bookmObj);
             if(bookmObj.empty()){
                 return null;
             }
@@ -71,6 +87,10 @@ class BookmarksManager {
             this._workingSet.remove(elmt.index,label);
             bookmObj.remove(elmt.index,label);
         });
+    }
+
+    save(){
+
     }
 
 
