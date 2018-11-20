@@ -137,19 +137,23 @@ class Samples{
         return this._origin_path;
     }
 
-    _add(item){
+    _add(item,no_clones){
+        if(no_clones===true){
+            for(let i=0, f=false; i<this._array.length; i++){
+                if(item.isEqualTo(this._array[i])) return false;
+            }
+        }
         this._array.push(item);
+        return true;
     }
 
-    add(item){
+    add(item,no_clones){
         if(!item.isFile) return;
         if(!this._ptags_obj){
-            this._add(item);
-            return true;
+            return this._add(item,no_clones);
 
         } else if(this._ptags_obj.check_fn(_.toLower(item.rel_path)) !== this._options.opposite_matching){
-            this._add(item);
-            return true;
+            return this._add(item,no_clones);
         }
         return false;
     }

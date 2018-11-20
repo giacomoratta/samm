@@ -29,7 +29,7 @@ class Bookmarks {
             fObj = this._data[keys[i]];
             totalCount += this._data[keys[i]].size();
             if(index < totalCount){
-                fIndex = totalCount-index;
+                fIndex = index - (totalCount-this._data[keys[i]].size());
                 break;
             }
         }
@@ -43,13 +43,16 @@ class Bookmarks {
     }
 
 
-    printByIndex(printFn){
+    printIndexedList(printFn){
         let keys = Object.keys(this._data);
         let printLabels = keys.length>1;
         let index=0;
         printFn('');
         for(let i=0; i<keys.length; i++){
-            if(printLabels) printFn('Unlabeled:');
+            if(printLabels){
+                if(keys[i]==='_') printFn('Unlabeled:');
+                else printFn(keys[i]+':');
+            }
             this._data[keys[i]].forEach((v)=>{
                 printFn('  ' + (index+1) + ') ' + v.rel_path);
                 index++;
@@ -62,7 +65,7 @@ class Bookmarks {
     add(elmt,label){
         if(!_.isString(label)) label='_';
         if(!this._data[label]) this._data[label]=this._newBookmNode();
-        if(this._data[label].add(elmt)===true){
+        if(this._data[label].add(elmt,true /*no clone*/)===true){
             this._size++;
             return true;
         }

@@ -390,10 +390,8 @@ class CliManager {
                             //BookmarksMgr.save();
                             return cliNextCb(this._success_code);
                         }
-                        BookmarksMgr.set(bookmLabel, addIds, removeIds);
+                        BookmarksMgr.set(addIds, removeIds, bookmLabel);
                         return p1();
-                        // lookup la
-                        // bookm -l
                     });
                 };
                 p1();

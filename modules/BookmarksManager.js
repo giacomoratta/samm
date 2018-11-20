@@ -7,6 +7,15 @@ class BookmarksManager {
         this._createBookmarksHolder();
         this._latestArray = [];
         this._workingSet = null;
+        this._workingSet_type = null;
+
+        this._enums = {
+            wkset_type: {
+                all:0,
+                tag:1,
+                lookup:2
+            }
+        }
     }
 
     static printLI(pre,i,v){
@@ -25,7 +34,7 @@ class BookmarksManager {
             printPrefixFn('working with all bookmarked samples');
             if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples."); return false; }
         }
-        this._workingSet.printByIndex(printFn);
+        this._workingSet.printIndexedList(printFn);
         //d$(this._workingSet);
         return true;
     }
@@ -33,6 +42,8 @@ class BookmarksManager {
 
     workingSet(options){
         this._workingSet = null;
+        this._workingSet_type = null;
+
         options = _.merge({
             all:false,
             lookup:false,
@@ -51,6 +62,7 @@ class BookmarksManager {
             smp_obj.forEach((v)=>{
                 this._workingSet.add(v);
             });
+            this._workingSet_type = this._enums.wkset_type.lookup;
             return this._workingSet;
 
         // TAGGED BOOKMARKS
@@ -59,6 +71,7 @@ class BookmarksManager {
                 return null;
             }
             this._workingSet = bookmObj.cloneSubStructure(options.tag);
+            this._workingSet_type = this._enums.wkset_type.tag;
             return this._workingSet;
 
         // ALL BOOKMARKS
@@ -67,6 +80,7 @@ class BookmarksManager {
                 return null;
             }
             this._workingSet = bookmObj.cloneStructure();
+            this._workingSet_type = this._enums.wkset_type.all;
             return this._workingSet;
         }
     }
@@ -75,18 +89,24 @@ class BookmarksManager {
     set(addIds, removeIds, label){
         let elmt;
         let bookmObj = DataMgr.get('bookmarks');
-        addIds.forEach(function(elmtIndex){
-            elmt = this._workingSet.getByIndex(elmtIndex);
+        addIds.forEach((elmtIndex)=>{
+            elmt = this._workingSet.getByIndex(elmtIndex-1);
             if(!elmt) return;
-            this._workingSet.add(elmt.smpobj,label);
+            if(this._workingSet_type !== this._enums.wkset_type.lookup){
+                this._workingSet.add(elmt.smpobj,label);
+            }
             bookmObj.add(elmt.smpobj,label);
         });
-        removeIds.forEach(function(elmtIndex){
-            elmt = this._workingSet.getByIndex(elmtIndex);
+        removeIds.forEach((elmtIndex)=>{
+            elmt = this._workingSet.getByIndex(elmtIndex-1);
             if(!elmt) return;
-            this._workingSet.remove(elmt.index,label);
+            if(this._workingSet_type !== this._enums.wkset_type.lookup){
+                this._workingSet.remove(elmt.index,label);
+            }
             bookmObj.remove(elmt.index,label);
         });
+
+        bookmObj.printIndexedList(console.log);
     }
 
     save(){
