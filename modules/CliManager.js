@@ -352,6 +352,22 @@ class CliManager {
 
                 let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
 
+                let matchAddId = function(v){
+                    if(_.startsWith(v,'!')) return null;
+                    let v1=Utils.strToInteger(v);
+                    return (v1!==null?v1:null);
+                };
+                let matchRemoveId = function(v){
+                    if(!_.startsWith(v,'!')) return null;
+                    let v1=Utils.strToInteger(v.substring(1));
+                    return (v1!==null?v1:null);
+                };
+                let matchLabel = function(v){
+                    if(!(_.isString(v) && v.length>0)) return null;
+                    if(matchAddId(v)===null && matchRemoveId(v)===null) return v;
+                    return null;
+                };
+
                 let p1 = ()=>{
                     if(!BookmarksMgr.printWorkingSet(
                         C_bookm_options,
@@ -367,11 +383,11 @@ class CliManager {
                         message: "['q' to exit] > "
                     }, (result)=>{
                         let cliInput = new CliParams(result.clicmd, null, true);
-                        let bookmLabel = cliInput.filterGet(0,function(v){ if(_.isString(v) && v.length>0) return v; return null; });
-                        let addIds = cliInput.filterValues(function(v){ if(!_.startsWith('!') && _.isNumber(v)) return v; return null; });
-                        let removeIds = cliInput.filterValues(function(v){ if(_.startsWith('!')  && _.isNumber(v)) return v; return null; });
+                        let bookmLabel = cliInput.filterGet(0,matchLabel);
+                        let addIds = cliInput.filterValues(matchAddId);
+                        let removeIds = cliInput.filterValues(matchRemoveId);
                         if(result.clicmd === 'q'){
-                            BookmarksMgr.save();
+                            //BookmarksMgr.save();
                             return cliNextCb(this._success_code);
                         }
                         BookmarksMgr.set(bookmLabel, addIds, removeIds);
