@@ -116,12 +116,10 @@ class BookmarksManager {
                     this._workingSet.remove(elmt.smpobj,elmt.label);
                     bookmObj.remove(elmt.smpobj,elmt.label);
                 }
-
             }else{
                 bookmObj.remove(elmt.smpobj,elmt.label);
             }
         });
-        //bookmObj.printIndexedList(console.log);
     }
 
 
