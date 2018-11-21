@@ -18,10 +18,6 @@ class BookmarksManager {
         }
     }
 
-    static printLI(pre,i,v){
-        clUI.print(pre, (i+1)+")", v);
-    }
-
 
     printWorkingSet(options,printPrefixFn,printFn){
         if(options.lookup){
@@ -89,25 +85,35 @@ class BookmarksManager {
     set(addIds, removeIds, label){
         let elmt;
         let bookmObj = DataMgr.get('bookmarks');
+        let addElmts = [];
+        let removeElmts = [];
+
         addIds.forEach((elmtIndex)=>{
             elmt = this._workingSet.getByIndex(elmtIndex-1);
             if(!elmt) return;
+            addElmts.push(elmt);
+        });
+        removeIds.forEach((elmtIndex)=>{
+            elmt = this._workingSet.getByIndex(elmtIndex-1);
+            if(!elmt) return;
+            removeElmts.push(elmt);
+        });
+
+        addElmts.forEach((elmt)=>{
             if(this._workingSet_type !== this._enums.wkset_type.lookup){
                 this._workingSet.add(elmt.smpobj,label);
             }
             bookmObj.add(elmt.smpobj,label);
         });
-        removeIds.forEach((elmtIndex)=>{
-            elmt = this._workingSet.getByIndex(elmtIndex-1);
-            if(!elmt) return;
+        removeElmts.forEach((elmt)=>{
             if(this._workingSet_type !== this._enums.wkset_type.lookup){
-                this._workingSet.remove(elmt.index,label);
-                bookmObj.remove(elmt.index,label);
+                this._workingSet.remove(elmt.smpobj,elmt.label);
+                bookmObj.remove(elmt.smpobj,elmt.label);
             }else{
-                bookmObj.remove(elmt.smpobj,label);
+                bookmObj.remove(elmt.smpobj,elmt.label);
             }
         });
-        bookmObj.printIndexedList(console.log);
+        //bookmObj.printIndexedList(console.log);
     }
 
 
@@ -115,56 +121,6 @@ class BookmarksManager {
         DataMgr.save('bookmarks');
     }
 
-
-    show1(options){
-        options = _.merge({
-            all:false,
-            lookup:false,
-            tag:null
-        },options);
-        this._latestArray = [];
-        let _clUI = clUI.newLocalUI('> bookm show:');
-        let bookmObj = DataMgr.get('bookmarks');
-
-        // LATEST LOOKUP
-        if(options.lookup===true){
-            let smp_obj = SamplesMgr.getLatestLookup();
-            if(!_.isObject(smp_obj) || smp_obj.empty()){
-                _clUI.print("latest lookup missing or empty.");
-                return null;
-            }
-            _clUI.print("samples in the latest lookup");
-            smp_obj.forEach((v,i)=>{
-                this._latestArray.push(v.path);
-                BookmarksManager.printLI(' ',i,v.path);
-            });
-
-        // TAGGED BOOKMARKS
-        }else if(_.isString(options.tag) && options.tag.length>0){
-            if(bookmObj.empty() || bookmObj.empty(options.tag)){
-                _clUI.print("no bookmarked samples under the label '"+options.tag+"'.");
-                return null;
-            }
-            _clUI.print("all bookmarked samples under the label '"+options.tag+"'");
-            bookmObj.forEach(options.tag,(v,i)=>{
-                BookmarksManager.printLI(' ',i,v);
-            });
-
-        // ALL BOOKMARKS
-        }else{
-            d$(bookmObj);
-            if(bookmObj.empty()){
-                _clUI.print("no bookmarked samples.");
-                return null;
-            }
-            _clUI.print("all bookmarked samples");
-            bookmObj.forEach((v,i,lb,diffLb)=>{
-                this._latestArray.push(v);
-                if(diffLb===true) clUI.print(' >', "label:", lb);
-                BookmarksManager.printLI('    ',i,v);
-            });
-        }
-    }
 
     _createBookmarksHolder(){
         return DataMgr.setHolder({

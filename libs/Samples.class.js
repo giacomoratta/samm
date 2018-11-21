@@ -156,6 +156,8 @@ class Samples{
                     break;
                 }
             }
+        }else if(_.isInteger(item)){
+            index=item;
         }
         if(index===-1 || !this._array[index]) return false;
         this._array.splice(index,1);

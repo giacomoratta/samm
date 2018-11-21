@@ -23,6 +23,7 @@ class Bookmarks {
     getByIndex(index){
         let keys = Object.keys(this._data);
         let fIndex = -1;
+        let fLabel = '_';
         let fObj = null;
         let totalCount = 0;
         for(let i=0; i<keys.length; i++){
@@ -30,12 +31,14 @@ class Bookmarks {
             totalCount += this._data[keys[i]].size();
             if(index < totalCount){
                 fIndex = index - (totalCount-this._data[keys[i]].size());
+                fLabel = keys[i];
                 break;
             }
         }
         if(fIndex===-1) return null;
         let _return = {
             index: fIndex,
+            label: fLabel,
             smpobj: fObj.get(fIndex)
         };
         if(!_return.smpobj) return null;
@@ -49,6 +52,7 @@ class Bookmarks {
         let index=0;
         printFn('');
         for(let i=0; i<keys.length; i++){
+            if(this._data[keys[i]].empty()) continue;
             if(printLabels){
                 if(keys[i]==='_') printFn('Unlabeled:');
                 else printFn(keys[i]+':');
@@ -134,6 +138,7 @@ class Bookmarks {
     fromJson(jsondata){
         let keys = Object.keys(jsondata.collection);
         for(let i=0; i<keys.length; i++){
+            if(jsondata.collection[keys[i]].length===0) continue;
             jsondata.collection[keys[i]].forEach((v)=>{
                 let phi = new PathInfo();
                 phi.fromJson(v);
@@ -146,9 +151,10 @@ class Bookmarks {
     toJson(){
         let jsondata = {
             size:this._size,
-            collection:{} //this._data
+            collection:{}
         };
         this.forEach((value,index,label,diffLb)=>{
+            if(!_.isObject(value)) return;
             if(diffLb===true) jsondata.collection[label]=[];
             jsondata.collection[label].push(value.toJson());
         });
