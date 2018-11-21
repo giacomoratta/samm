@@ -332,12 +332,19 @@ class Utils_Files {
         },options);
         return new Promise(function(res,rej){
 
+            if(!_self.directoryExistsSync(options.sourcePath)){
+                return rej({ code:'ENOENT_SOURCE' });
+            }
+            if(!_self.directoryExistsSync(options.destPath)){
+                return rej({ code:'ENOENT_DEST' });
+            }
+
             // create a file to stream archive data to.
-            let output = _self._FS.createWriteStream(__dirname + '/example1.zip');
+            let output = _self._FS.createWriteStream(_self.pathJoin(options.destPath,_self.pathBasename(options.sourcePath)+'.zip'));
             let archive = _self._ARCHIVER('zip', {
                 zlib: { level: options.compressionLevel } // Sets the compression level.
             });
-            archive.directory(ConfigMgr.get('Project'), 'new-subdir');
+            archive.directory(options.sourcePath, _self.pathBasename(options.sourcePath));
 
             output.on('close', function() {
                 res({
@@ -346,12 +353,9 @@ class Utils_Files {
             });
 
             //output.on('end', function() { console.log('Data has been drained'); });
+
             archive.on('warning', function(err) {
-                if (err.code === 'ENOENT') {
-                    res(null);
-                } else {
-                    rej(err);
-                }
+                rej(err);
             });
 
             archive.on('error', function(err) {
