@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const fs_extra = require('fs-extra');
 const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
+const archiver = require('archiver');
 const _ = require('lodash');
 
 class Utils_Files {
@@ -12,6 +13,7 @@ class Utils_Files {
         this._FS = fs;
         this._FS_EXTRA = fs_extra;
         this._RIMRAF = rimraf;
+        this._ARCHIVER = archiver;
         //this._console = function(){};
 
         this.pathBasename = path.basename;
@@ -317,6 +319,48 @@ class Utils_Files {
         });
     }
 
+
+
+    /* MIXED FUNCTIONS   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    archiveFromDirectory(options){
+        let _self = this;
+        options = _.merge({
+            sourcePath:null,
+            destPath:null,
+            compressionLevel:9
+        },options);
+        return new Promise(function(res,rej){
+
+            // create a file to stream archive data to.
+            let output = _self._FS.createWriteStream(__dirname + '/example1.zip');
+            let archive = _self._ARCHIVER('zip', {
+                zlib: { level: options.compressionLevel } // Sets the compression level.
+            });
+            archive.directory(ConfigMgr.get('Project'), 'new-subdir');
+
+            output.on('close', function() {
+                res({
+                    total_bytes:archive.pointer()
+                });
+            });
+
+            //output.on('end', function() { console.log('Data has been drained'); });
+            archive.on('warning', function(err) {
+                if (err.code === 'ENOENT') {
+                    res(null);
+                } else {
+                    rej(err);
+                }
+            });
+
+            archive.on('error', function(err) {
+                rej(err);
+            });
+            archive.pipe(output);
+            archive.finalize();
+        });
+    }
 
 }
 

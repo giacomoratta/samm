@@ -26,11 +26,11 @@ class CliManager {
     _setCliCommandManagers(){
         this.C_Lookup();
         this.C_Save(); //TODO (add feature)
-        this.C_Bookmarks(); //TODO
+        this.C_Bookmarks();
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
-        //this.C_Export(); //TODO
+        this.C_Export(); //TODO
         this.C_Dir();
         this.C_Config_Set();
     }
@@ -496,8 +496,9 @@ class CliManager {
             .command('export <type>')
             .description("Export project or samples data in a compressed archive. " +
                 "Allowed values: project (export the project) and bookm (export bookmarks collection).")
-            .option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
+            //.option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
             .action(this._getActionFn('export', (cliReference,cliNextCb)=>{
+
                 //let _clUI = clUI.newLocalUI('> bookm:');
                 let C_export_options = {
                     type:this.cli_params.getOption('type')
