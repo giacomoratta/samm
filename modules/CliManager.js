@@ -391,7 +391,7 @@ class CliManager {
                             BookmarksMgr.save();
                             return cliNextCb(this._success_code);
                         }
-                        BookmarksMgr.set(addIds, removeIds, bookmLabel);
+                        BookmarksMgr.set(addIds, removeIds, bookmLabel, C_bookm_options.tag);
                         return p1();
                     });
                 };

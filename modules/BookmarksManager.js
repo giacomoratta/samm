@@ -82,7 +82,7 @@ class BookmarksManager {
     }
 
 
-    set(addIds, removeIds, label){
+    set(addIds, removeIds, label, showingTag){
         let elmt;
         let bookmObj = DataMgr.get('bookmarks');
         let addElmts = [];
@@ -101,14 +101,22 @@ class BookmarksManager {
 
         addElmts.forEach((elmt)=>{
             if(this._workingSet_type !== this._enums.wkset_type.lookup){
-                this._workingSet.add(elmt.smpobj,label);
+                if(!(_.isString(showingTag) && this._workingSet_type === this._enums.wkset_type.tag)){
+                    this._workingSet.add(elmt.smpobj,label);
+                }
             }
             bookmObj.add(elmt.smpobj,label);
         });
         removeElmts.forEach((elmt)=>{
             if(this._workingSet_type !== this._enums.wkset_type.lookup){
-                this._workingSet.remove(elmt.smpobj,elmt.label);
-                bookmObj.remove(elmt.smpobj,elmt.label);
+                if(_.isString(showingTag) && this._workingSet_type === this._enums.wkset_type.tag){
+                    this._workingSet.remove(elmt.smpobj);
+                    bookmObj.remove(elmt.smpobj,showingTag);
+                }else{
+                    this._workingSet.remove(elmt.smpobj,elmt.label);
+                    bookmObj.remove(elmt.smpobj,elmt.label);
+                }
+
             }else{
                 bookmObj.remove(elmt.smpobj,elmt.label);
             }
