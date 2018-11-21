@@ -157,7 +157,7 @@ class CliManager {
                         cliReference.prompt({
                             type: 'input',
                             name: 'action',
-                            message: "['q' to exit] "
+                            message: "['q' to quit] "
                         }, function(result){
                             if(result.action==='q'){
                                 showUncoverageOutput();
@@ -350,8 +350,6 @@ class CliManager {
                     return cliNextCb(this._success_code);
                 }
 
-                let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
-
                 let matchAddId = function(v){
                     if(_.startsWith(v,'!')) return null;
                     let v1=Utils.strToInteger(v);
@@ -368,6 +366,9 @@ class CliManager {
                     return null;
                 };
 
+
+                let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
+
                 let p1 = ()=>{
                     if(!BookmarksMgr.printWorkingSet(
                         C_bookm_options,
@@ -380,14 +381,14 @@ class CliManager {
                     cliReference.prompt({
                         type: 'input',
                         name: 'clicmd',
-                        message: "['q' to exit] > "
+                        message: "['q' to quit] > "
                     }, (result)=>{
                         let cliInput = new CliParams(result.clicmd, null, true);
                         let bookmLabel = cliInput.filterGet(0,matchLabel);
                         let addIds = cliInput.filterValues(matchAddId);
                         let removeIds = cliInput.filterValues(matchRemoveId);
                         if(result.clicmd === 'q'){
-                            //BookmarksMgr.save();
+                            BookmarksMgr.save();
                             return cliNextCb(this._success_code);
                         }
                         BookmarksMgr.set(addIds, removeIds, bookmLabel);

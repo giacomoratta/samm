@@ -101,58 +101,19 @@ class Bookmarks {
     }
 
 
-
-
-    add1(bdata,label){
-        let _bobj = null;
-        if(!_.isString(label)){
-            if(_.indexOf(this._data._.array,bdata)>=0) return false;
-            _bobj = this._data._;
-        }else{
-            if(!_.isObject(this._data[label])){
-                this._data[label] = this._newBookmNode();
-            }
-            if(_.indexOf(this._data[label].array,bdata)>=0) return false;
-            _bobj = this._data[label];
-        }
-        _bobj.array.push(bdata);
-        _bobj.info.size++;
-        this._size++;
-        return true;
-    }
-
-
-    remove1(bdata,label){
-        let _bobj = null;
-        if(!_.isString(label)){
-            _bobj = this._data._;
-        }else{
-            if(!_.isObject(this._data[label])){
-                return false;
-            }
-            _bobj = this._data[label];
-        }
-        let index = _.indexOf(_bobj.array,bdata);
-        if(index<0) return false;
-        _bobj.array.splice(index,0);
-        _bobj.info.size--;
-        this._size--;
-        return true;
-    }
-
-
     forEach(label,cb){
         if(_.isString(label)){
             this._forEachValues(label, cb, 0/*index*/);
             return;
         }
+        cb=label;
         this._forEachAll(cb);
     }
 
 
     _forEachValues(label,cb,index){
         let diffLb=true;
-        this._data[label].array.forEach((value)=>{
+        this._data[label].forEach((value)=>{
             cb(value,index,label,diffLb);
             diffLb=false;
             index++;
@@ -171,16 +132,27 @@ class Bookmarks {
 
 
     fromJson(jsondata){
-        this._data = jsondata.data;
-        this._size = jsondata.size;
+        let keys = Object.keys(jsondata.collection);
+        for(let i=0; i<keys.length; i++){
+            jsondata.collection[keys[i]].forEach((v)=>{
+                let phi = new PathInfo();
+                phi.fromJson(v);
+                this.add(phi,keys[i]);
+            });
+        }
     }
 
 
     toJson(){
-        return {
+        let jsondata = {
             size:this._size,
-            data:this._data
-        }
+            collection:{} //this._data
+        };
+        this.forEach((value,index,label,diffLb)=>{
+            if(diffLb===true) jsondata.collection[label]=[];
+            jsondata.collection[label].push(value.toJson());
+        });
+        return jsondata;
     }
 }
 

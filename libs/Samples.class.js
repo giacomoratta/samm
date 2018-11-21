@@ -147,6 +147,21 @@ class Samples{
         return true;
     }
 
+    _remove(item){
+        let index = -1;
+        if(_.isObject(item)){
+            for(let i=0; i<this._array.length; i++){
+                if(this._array[i].isEqualTo(item)){
+                    index = i;
+                    break;
+                }
+            }
+        }
+        if(index===-1 || !this._array[index]) return false;
+        this._array.splice(index,1);
+        return true;
+    }
+
     add(item,no_clones){
         if(!item.isFile) return;
         if(!this._ptags_obj){
@@ -158,9 +173,8 @@ class Samples{
         return false;
     }
 
-    remove(index){
-        if(!this._array[index]) return false;
-        this._array.splice(index,1);
+    remove(item){
+        return this._remove(item);
     }
 
     get(index){

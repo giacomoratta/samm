@@ -102,15 +102,17 @@ class BookmarksManager {
             if(!elmt) return;
             if(this._workingSet_type !== this._enums.wkset_type.lookup){
                 this._workingSet.remove(elmt.index,label);
+                bookmObj.remove(elmt.index,label);
+            }else{
+                bookmObj.remove(elmt.smpobj,label);
             }
-            bookmObj.remove(elmt.index,label);
         });
-
         bookmObj.printIndexedList(console.log);
     }
 
-    save(){
 
+    save(){
+        DataMgr.save('bookmarks');
     }
 
 

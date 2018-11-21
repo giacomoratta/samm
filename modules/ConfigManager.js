@@ -66,7 +66,7 @@ class ConfigManager {
             custom_indexes: 'temp/c_indexes/',
             latest_lookup: 'temp/latest_lookup',
             samples_index: 'temp/samples_index',
-            bookmarks: 'bookmarks.json',
+            bookmarks: 'temp/bookmarks.json',
         },options);
         return options;
     }
