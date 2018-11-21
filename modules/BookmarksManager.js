@@ -100,24 +100,22 @@ class BookmarksManager {
         });
 
         addElmts.forEach((elmt)=>{
-            if(this._workingSet_type !== this._enums.wkset_type.lookup){
-                if(!(_.isString(showingTag) && this._workingSet_type === this._enums.wkset_type.tag)){
-                    this._workingSet.add(elmt.smpobj,label);
-                }
+            if(this._workingSet_type === this._enums.wkset_type.all){
+                this._workingSet.add(elmt.smpobj,label);
             }
             bookmObj.add(elmt.smpobj,label);
         });
         removeElmts.forEach((elmt)=>{
-            if(this._workingSet_type !== this._enums.wkset_type.lookup){
-                if(_.isString(showingTag) && this._workingSet_type === this._enums.wkset_type.tag){
-                    this._workingSet.remove(elmt.smpobj);
-                    bookmObj.remove(elmt.smpobj,showingTag);
-                }else{
-                    this._workingSet.remove(elmt.smpobj,elmt.label);
-                    bookmObj.remove(elmt.smpobj,elmt.label);
-                }
-            }else{
+            if(this._workingSet_type === this._enums.wkset_type.all){
+                this._workingSet.remove(elmt.smpobj,elmt.label);
                 bookmObj.remove(elmt.smpobj,elmt.label);
+
+            }else if(this._workingSet_type === this._enums.wkset_type.lookup){
+                bookmObj.remove(elmt.smpobj,elmt.label);
+
+            }else if(_.isString(showingTag) && this._workingSet_type === this._enums.wkset_type.tag){
+                this._workingSet.remove(elmt.smpobj);
+                bookmObj.remove(elmt.smpobj,showingTag);
             }
         });
     }
