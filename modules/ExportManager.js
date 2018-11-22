@@ -57,7 +57,7 @@ class ExportManager {
 
     exportProject(options){
         options.archiveNameFn = function(o){
-            return Utils.File.pathJoin(o.destPath,Utils.File.pathBasename(o.sourcePath)+'.zip');
+            return Utils.File.checkAndSetDuplicatedFileNameSync( Utils.File.pathJoin( o.destPath, Utils.File.pathBasename(o.sourcePath)+'_'+Utils.dateToYYYYMMDD()+'.zip' ) );
         };
         return this.exportDirectory(options);
     }
