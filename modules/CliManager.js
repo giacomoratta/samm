@@ -529,7 +529,7 @@ class CliManager {
                         _clUI.print("your bookmarks collection is empty.");
                         return cliNextCb(this._error_code);
                     }
-                    ExportFn = ExportMgr.exportBookmarks;
+                    ExportFn = function(opt){ return ExportMgr.exportBookmarks(opt); };
                 }
 
                 if(!_.isFunction(ExportFn)) return cliNextCb(this._error_code);

@@ -8,31 +8,35 @@ class ExportManager {
 
 
     exportBookmarks(options){
-        //  add root directory 'mpl_bookmarks'
-        //  archive.append(null, { name: 'mpl_bookmarks/' });
-        //  foreach label
-        //      archive.append(null, { name: 'mpl_bookmarks/label/' });
-        //      foreach sample
-        //          archive.append(<abspath>, { name: 'mpl_bookmarks/label/<basename>' });
-        //  export
         let _self = this;
         options = _.merge({
             sourcePath:null,
             destPath:null,
-            compressionLevel:9
+            compressionLevel:1,
+            archiveNameFn:null
         },options);
         return new Promise(function(res,rej){
-
             if(!Utils.File.directoryExistsSync(options.destPath)){
                 return rej({ code:'ENOENT_DEST' });
             }
 
+            let archive_name = 'mpl_bookmarks';
+            let archive_path = Utils.File.checkAndSetDuplicatedFileNameSync( Utils.File.pathJoin( options.destPath, archive_name+'_'+Utils.dateToYYYYMMDD()+'.zip' ) );
+
             // create a file to stream archive data to.
-            let output = Utils.File._FS.createWriteStream(Utils.File.pathJoin(options.destPath,'mpl_bookmarks.zip'));
+            let output = Utils.File._FS.createWriteStream(archive_path);
             let archive = _self._ARCHIVER('zip', {
                 zlib: { level: options.compressionLevel } // Sets the compression level.
             });
-            archive.directory(options.sourcePath, Utils.File.pathBasename(options.sourcePath));
+            archive.append(null, { name: archive_name+'/' }); // ROOT
+
+            BookmarksMgr.forEach(function(value,index,label,diffLb){
+                if(label==='_') label='_misc';
+                if(diffLb===true){
+                    archive.append(null, { name: archive_name+'/'+label+'/' });
+                }
+                archive.append(value.path, { name: archive_name+'/'+label+'/'+value.base });
+            });
 
             output.on('close', function() {
                 res({
@@ -54,13 +58,13 @@ class ExportManager {
         });
     }
 
-
     exportProject(options){
         options.archiveNameFn = function(o){
             return Utils.File.checkAndSetDuplicatedFileNameSync( Utils.File.pathJoin( o.destPath, Utils.File.pathBasename(o.sourcePath)+'_'+Utils.dateToYYYYMMDD()+'.zip' ) );
         };
         return this.exportDirectory(options);
     }
+
 
     exportDirectory(options){
         let _self = this;
@@ -79,12 +83,12 @@ class ExportManager {
                 return rej({ code:'ENOENT_DEST' });
             }
 
-            let archive_name = '';
-            if(!_.isFunction(options.archiveNameFn)) archive_name=Utils.File.pathJoin(options.destPath,Utils.File.pathBasename(options.sourcePath)+'.zip');
-            else archive_name=options.archiveNameFn(options);
+            let archive_path = '';
+            if(!_.isFunction(options.archiveNameFn)) archive_path=Utils.File.pathJoin(options.destPath,Utils.File.pathBasename(options.sourcePath)+'.zip');
+            else archive_path=options.archiveNameFn(options);
 
             // create a file to stream archive data to.
-            let output = Utils.File._FS.createWriteStream(archive_name);
+            let output = Utils.File._FS.createWriteStream(archive_path);
             let archive = _self._ARCHIVER('zip', {
                 zlib: { level: options.compressionLevel } // Sets the compression level.
             });

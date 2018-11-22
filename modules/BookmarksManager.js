@@ -126,6 +126,13 @@ class BookmarksManager {
     }
 
 
+    forEach(cb){
+        let bookmObj = DataMgr.get('bookmarks');
+        if(!_.isObject(bookmObj) || bookmObj.empty()) return false;
+        bookmObj.forEach(cb);
+    }
+
+
     save(){
         DataMgr.save('bookmarks');
     }
