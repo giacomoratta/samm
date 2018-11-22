@@ -521,7 +521,7 @@ class CliManager {
                         return cliNextCb(this._error_code);
                     }
                     archFD_options.sourcePath = ConfigMgr.path('project_directory');
-                    ExportFn = ExportMgr.exportProject;
+                    ExportFn = function(opt){ return ExportMgr.exportProject(opt); };
                 }
 
                 else if(C_export_options.param_data === 'bookm'){

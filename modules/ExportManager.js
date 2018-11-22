@@ -56,6 +56,9 @@ class ExportManager {
 
 
     exportProject(options){
+        options.archiveNameFn = function(o){
+            return Utils.File.pathJoin(o.destPath,Utils.File.pathBasename(o.sourcePath)+'.zip');
+        };
         return this.exportDirectory(options);
     }
 
@@ -64,7 +67,8 @@ class ExportManager {
         options = _.merge({
             sourcePath:null,
             destPath:null,
-            compressionLevel:9
+            compressionLevel:1,
+            archiveNameFn:null
         },options);
         return new Promise(function(res,rej){
 
@@ -75,8 +79,12 @@ class ExportManager {
                 return rej({ code:'ENOENT_DEST' });
             }
 
+            let archive_name = '';
+            if(!_.isFunction(options.archiveNameFn)) archive_name=Utils.File.pathJoin(options.destPath,Utils.File.pathBasename(options.sourcePath)+'.zip');
+            else archive_name=options.archiveNameFn(options);
+
             // create a file to stream archive data to.
-            let output = Utils.File._FS.createWriteStream(Utils.File.pathJoin(options.destPath,Utils.File.pathBasename(options.sourcePath)+'.zip'));
+            let output = Utils.File._FS.createWriteStream(archive_name);
             let archive = _self._ARCHIVER('zip', {
                 zlib: { level: options.compressionLevel } // Sets the compression level.
             });
