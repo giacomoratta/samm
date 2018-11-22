@@ -493,19 +493,53 @@ class CliManager {
         export bookm        // zip, tar, etc.
         */
         vorpal
-            .command('export <type>')
+            .command('export <data>')
             .description("Export project or samples data in a compressed archive. " +
                 "Allowed values: project (export the project) and bookm (export bookmarks collection).")
+            .autocomplete(['bookm','project'])
             //.option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
             .action(this._getActionFn('export', (cliReference,cliNextCb)=>{
+                let _clUI = clUI.newLocalUI('> export:');
 
-                //let _clUI = clUI.newLocalUI('> bookm:');
+                if(!ConfigMgr.path('export_directory')){
+                    _clUI.print("no valid export directory; set an existent directory for data export.");
+                    return cliNextCb(this._error_code);
+                }
+
+                let ExportFn = null;
                 let C_export_options = {
-                    type:this.cli_params.getOption('type')
+                    param_data:this.cli_params.get('data'),
+                };
+                let archFD_options = {
+                    sourcePath:null,
+                    destPath:ConfigMgr.path('export_directory')
                 };
 
-                //ExportMgr.set(this.cli_params.get('ids'), C_bookm_options);
-                return cliNextCb(this._success_code);
+                if(C_export_options.param_data === 'project'){
+                    if(!ConfigMgr.path('project_directory')){
+                        _clUI.print("no valid project directory; set an existent project directory.");
+                        return cliNextCb(this._error_code);
+                    }
+                    archFD_options.sourcePath = ConfigMgr.path('project_directory');
+                    ExportFn = ExportMgr.exportProject;
+                }
+
+                else if(C_export_options.param_data === 'bookm'){
+                    if(!BookmarksMgr.hasBookmarks()){
+                        _clUI.print("your bookmarks collection is empty.");
+                        return cliNextCb(this._error_code);
+                    }
+                    ExportFn = ExportMgr.exportBookmarks;
+                }
+
+                if(!_.isFunction(ExportFn)) return cliNextCb(this._error_code);
+
+                ExportFn(archFD_options).then(()=>{
+                    return cliNextCb(this._success_code);
+                }).catch(()=>{
+                    return cliNextCb(this._error_code);
+                });
+
             }));
     }
 
