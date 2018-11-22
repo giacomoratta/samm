@@ -5,7 +5,6 @@ class BookmarksManager {
     constructor(){
 
         this._createBookmarksHolder();
-        this._latestArray = [];
         this._workingSet = null;
         this._workingSet_type = null;
 
@@ -45,7 +44,6 @@ class BookmarksManager {
             lookup:false,
             tag:null
         },options);
-        this._latestArray = [];
         let bookmObj = DataMgr.get('bookmarks');
 
         // LATEST LOOKUP
