@@ -59,7 +59,7 @@ let compileForPlatform = function(platform){
     if(!b$cfg.platforms[platform]) return false;
     let poz = b$cfg.platforms[platform];
 
-    poz.signature = platform.replace(/[\_]/g,'.').replace(/[^a-zA-Z0-9\.]/g,'');
+    poz.signature = platform.replace(/[_]/g,'.').replace(/[^a-zA-Z0-9.]/g,'');
     poz.signature = 'mpl.'+b$cfg.version+'.'+poz.signature;
 
     poz.compile_options = _.merge(b$cfg.compile_options,poz.compile_options);
@@ -84,7 +84,7 @@ let compileForPlatform = function(platform){
     }).catch(() => {
         console.log("\n"+'['+platform+'] Build failed ::',poz.compile_options.output,"\n");
     });
-}
+};
 
 let platformsToBuildFor = [
     //'mac_x64',
@@ -105,7 +105,7 @@ if(platformsToBuildFor.length>0){
         }).catch((e)=>{
             console.error("\n"+'MPL :: Build :: Error',e,"\n\n");
         });
-    }
+    };
     _recursivePromise(platformsToBuildFor,0);
 }
 
