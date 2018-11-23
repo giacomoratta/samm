@@ -47,7 +47,7 @@ class ExportManager {
         options = _.merge({
             sourcePath:null,
             destPath:null,
-            compressionLevel:9
+            compressionLevel:0
         },options);
         return new Promise(function(res,rej){
 

@@ -25,52 +25,26 @@ class CliManager {
 
     _setCliCommandManagers(){
         this.C_Lookup();
-        this.C_Save(); //TODO (add feature)
+        this.C_Save();
         this.C_Bookmarks();
         this.C_Coverage();
         this.C_Scan();
         this.C_Show();
-        this.C_Export(); //TODO
+        this.C_Export();
         this.C_Dir();
-        this.C_Config_Set();
+        this.C_Config();
     }
 
     _getActionFn(cmdName, cmdFn){
         const thisCliMgr = this;
         return function(args,cb){
             const cliReference = this;
-            // cliReference.prompt({
-            //     type: 'input',
-            //     name: 'time',
-            //     message: 'When would you like your pizza?'
-            // }, function (result) {
-            //     cliReference.log(`Okay, ${result.time} it is!`);
-            //
-            //     cliReference.prompt({
-            //         type: 'input',
-            //         name: 'time',
-            //         message: 'Whffffffen would you like your pizza?'
-            //     }, function (result) {
-            //         cliReference.log(`Okay, ${result.time} it is!`);
-            //         cb();
-            //     });
-            // });
-            //
-            // return;
 
             thisCliMgr.processParams(args,cmdName);
-            cmdFn(cliReference,(cmdFnResult)=>{
-                if(_.isPromise(cmdFnResult)){
-                    cmdFnResult.then((d)=>{
-                        ConfigMgr.printMessages();
-                        cb();
-
-                    }).catch((e)=>{
-                        clUI.print("\n");
-                        d$('_getActionFn',e);
-                        cb();
-                    });
-                    return;
+            cmdFn(cliReference,(code,err)=>{
+                if(code===thisCliMgr._error_code){
+                    clUI.error('command',cmdName,'terminated with an error.');
+                    if(err) clUI.error(err);
                 }
                 ConfigMgr.printMessages();
                 cb();
@@ -174,7 +148,7 @@ class CliManager {
                     clUI.print(cv_output.uncovered_output_line);
                     if(cv_output.uncovered_smpobj.size()<11 || showuncovered===true /*|| C_coverage_options.allinfo*/){
                         cv_output.uncovered_smpobj.print();
-                        return cliNextCb(cv_output);
+                        return cliNextCb(this._success_code);
                     }
                     if(_.isNil(showuncovered)){
                         cliReference.prompt({
@@ -186,7 +160,7 @@ class CliManager {
                         });
                         return;
                     }
-                    return cliNextCb(cv_output);
+                    return cliNextCb(this._success_code);
                 };
 
                 showCoverageOutput(0);
@@ -235,29 +209,32 @@ class CliManager {
                 if(C_save_options.overwrite) _clUI.print('... and this path will be overwritten!');
                 clUI.print();
 
+                let _self = this;
                 cliReference.prompt({
                     type: 'input',
                     name: 'answer',
                     message: 'Do you want to proceed? [y/n] '
                 }, function (result) {
                     if(result.answer !== 'y'){
-                        return cliNextCb();
+                        return cliNextCb(_self._success_code);
                     }
-                    return cliNextCb(SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
+                    SamplesMgr.generateSamplesDir(smp_obj,C_save_options).then(function(smp_copied_obj){
                         if(!_.isObject(smp_copied_obj)){
                             _clUI.print("no file saved [error#1].");
-                            return;
+                            return cliNextCb(_self._error_code);
                         }
                         if(smp_copied_obj.size()===0){
                             _clUI.print("no file saved.");
-                            return;
+                            return cliNextCb(_self._error_code);
                         }
                         smp_copied_obj.print();
                         _clUI.print(""+smp_copied_obj.size()+"/"+smp_obj.size()+" files saved.");
+                        return cliNextCb(_self._success_code);
 
                     }).catch(()=>{
                         _clUI.print("no file saved [error#2].");
-                    }));
+                        return cliNextCb(_self._error_code);
+                    });
                 });
             }));
     }
@@ -318,17 +295,6 @@ class CliManager {
 
 
     C_Bookmarks(){
-        /*
-        bookm -a                // show all bookmarks
-        bookm                   // show and works latest lookup
-        bookm -t hihat          // show all bookmarks with this label (autocomplete)
-        bookm 1,4,7             // set bookmarks to default label
-        bookm 1,4,7 -t hihat    // set bookmarks to the specified label (autocomplete)
-        bookm 1,2,3 -r          // remove bookmarks
-        bookm -r -t hihat       // remove all bookmarks with the specified label (autocomplete)
-        bookm 1,2,3 -r -t hihat // remove bookmarks to the specified label (autocomplete)
-        bookm
-        */
         vorpal
             .command('bookm')
             .description("Prints the samples collection to work with in the next command 'bookm set'.")
@@ -400,18 +366,37 @@ class CliManager {
     }
 
 
-    C_Config_Set(){
+    C_Config(){
+
         vorpal
-            .command('config set <name> [values...]')
+            .command('config [name] [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
-            .description("Set the value of a configuration parameter." +
-                        "\n  $ config set Project /musicprojects/project1 / (or path)" +
-                        "\n  $ config set Tag tag-label query,tag+tag2,or,tag3" +
-                        "\n  $ config set ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
-                        "\n  $ config set ExcludedExtensionsForSamples ext / (or .ext)" +
-                        "\n  $ config set ExcludedExtensionsForSamples !ext / (or !.ext)")
+            .description("Get or set the value of a configuration parameter." +
+                        "\n  $ config   --> print the whole config and internal data" +
+                        "\n  $ config Project   --> print the value of the specified parameter" +
+                        "\n  $ config Project /musicprojects/project1 / (or path)" +
+                        "\n  $ config Tag tag-label query,tag+tag2,or,tag3" +
+                        "\n  $ config ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
+                        "\n  $ config ExcludedExtensionsForSamples ext / (or .ext)" +
+                        "\n  $ config ExcludedExtensionsForSamples !ext / (or !.ext)")
             .action(this._getActionFn('config', (cliReference,cliNextCb)=>{
-                let _clUI = clUI.newLocalUI('> config-set:');
+                let _clUI = clUI.newLocalUI('> config:');
+
+                if(_.isNil(this.cli_params.get('name'))){
+                    ConfigMgr.printInternals();
+                    clUI.print("\n");
+                    ConfigMgr.print();
+                    return cliNextCb(this._success_code);
+                }
+
+                if(_.isNil(this.cli_params.get('values'))){
+                    if(_.isNil(ConfigMgr.get(this.cli_params.get('name')))){
+                        _clUI.print('this parameter does not exitst.');
+                        return cliNextCb(this._error_code);
+                    }
+                    clUI.print(ConfigMgr.get(this.cli_params.get('name')));
+                    return cliNextCb(this._success_code);
+                }
 
                 if(ConfigMgr.setFromCliParams(this.cli_params.get('name'),this.cli_params.get('values'))===null){
                     _clUI.print("configuration not changed");
@@ -457,41 +442,23 @@ class CliManager {
                     return cliNextCb(this._error_code);
                 }
                 _clUI.print(""+smp_obj.size()+" samples found");
-                return cliNextCb(smp_obj);
+                return cliNextCb(this._success_code);
             }));
     }
 
 
     C_Show(){
         vorpal
-            .command('show <label>')
-            .description('Show internal data [values: config, samples].')
-            .autocomplete(['config','samples'])
-            .action(this._getActionFn('show', (cliReference,cliNextCb)=>{
-                //let _clUI = clUI.newLocalUI('> show:');
-                let label = this.cli_params.get('label');
-                if(label === 'config'){
-                    ConfigMgr.printInternals();
-                    clUI.print("\n");
-                    ConfigMgr.print();
-                    return cliNextCb(this._success_code);
-                }
-                if(label === 'samples'){
-                    SamplesMgr.printSamplesTree();
-                    return cliNextCb(this._success_code);
-                }
-                return cliNextCb(this._error_code);
+            .command('samples')
+            .description('Shows all the indexed samples.')
+            .action(this._getActionFn('samples', (cliReference,cliNextCb)=>{
+                SamplesMgr.printSamplesTree();
+                return cliNextCb(this._success_code);
             }));
     }
 
 
     C_Export(){
-        /*
-        // create config param ExportDir - warning if not set!
-
-        export project      // zip, tar, etc.
-        export bookm        // zip, tar, etc.
-        */
         vorpal
             .command('export <data>')
             .description("Export project or samples data in a compressed archive. " +

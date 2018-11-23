@@ -283,7 +283,7 @@ class ConfigManager {
             if(_.isArray(_this._config[v])) vprint=JSON.stringify(_this._config[v], null, '');
             else if(_.isObject(_this._config[v])){
                 vprint=JSON.stringify(_this._config[v], null, '  ');
-                if(vprint.length>3) vprint = "\n\t  "+Utils.replaceAll(vprint,"\n","\n\t  ");
+                if(vprint.length>3) vprint = "\n    "+Utils.replaceAll(vprint,"\n","\n     ");
             }
             else vprint=JSON.stringify(_this._config[v], null, '');
             clUI.print("  "+v+':'+" "+vprint);
