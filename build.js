@@ -81,6 +81,7 @@ let compileForPlatform = function(platform){
 
     return compile(poz.compile_options).then(() => {
         console.log("\n"+'['+platform+'] Build complete ::',poz.compile_options.output,"\n");
+        // TODO: create zip
     }).catch(() => {
         console.log("\n"+'['+platform+'] Build failed ::',poz.compile_options.output,"\n");
     });
