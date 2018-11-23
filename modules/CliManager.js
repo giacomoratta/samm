@@ -366,9 +366,6 @@ class CliManager {
                     return null;
                 };
 
-
-                let bookmWkSet = BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
-
                 let p1 = ()=>{
                     if(!BookmarksMgr.printWorkingSet(
                         C_bookm_options,
@@ -521,7 +518,10 @@ class CliManager {
                         return cliNextCb(this._error_code);
                     }
                     archFD_options.sourcePath = ConfigMgr.path('project_directory');
-                    ExportFn = function(opt){ return ExportMgr.exportProject(opt); };
+                    ExportFn = function(opt){
+                        _clUI.print("exporting the project "+ConfigMgr.path('project_directory')+"\n          to "+archFD_options.destPath+" ...");
+                        return ExportMgr.exportProject(opt);
+                    };
                 }
 
                 else if(C_export_options.param_data === 'bookm'){
@@ -529,14 +529,20 @@ class CliManager {
                         _clUI.print("your bookmarks collection is empty.");
                         return cliNextCb(this._error_code);
                     }
-                    ExportFn = function(opt){ return ExportMgr.exportBookmarks(opt); };
+                    ExportFn = function(opt){
+                        _clUI.print("exporting bookmarks to "+archFD_options.destPath+" ...");
+                        return ExportMgr.exportBookmarks(opt);
+                    };
                 }
 
                 if(!_.isFunction(ExportFn)) return cliNextCb(this._error_code);
 
-                ExportFn(archFD_options).then(()=>{
+                ExportFn(archFD_options).then((d)=>{
+                    _clUI.print("exported "+d.total_bytes+"B to "+d.archive_path);
                     return cliNextCb(this._success_code);
-                }).catch(()=>{
+                }).catch((e)=>{
+                    _clUI.warning("error while creating and exporting the archive");
+                    _clUI.warning(e.code,e.message);
                     return cliNextCb(this._error_code);
                 });
 

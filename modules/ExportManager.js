@@ -59,7 +59,7 @@ class ExportManager {
             }
 
             let archive = _self._ARCHIVER('zip', {
-                zlib: { level: o.compressionLevel } // Sets the compression level.
+                zlib: { level: options.compressionLevel } // Sets the compression level.
             });
 
             let config = configFn(archive, options);
@@ -69,7 +69,8 @@ class ExportManager {
 
             output.on('close', function() {
                 res({
-                    total_bytes:archive.pointer()
+                    archive_path: config.archive_path,
+                    total_bytes: archive.pointer()
                 });
             });
 
