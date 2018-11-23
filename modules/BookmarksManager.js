@@ -162,10 +162,12 @@ class BookmarksManager {
                     return bookmObj;
                 }
                 bookmObj.fromJson(fileData);
+                bookmObj.sort();
                 return bookmObj;
             },
 
             saveFn:(bookmObj)=>{
+                bookmObj.sort();
                 return bookmObj.toJson();
             }
         });

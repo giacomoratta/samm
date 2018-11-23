@@ -228,6 +228,24 @@ class Samples{
     }
 
 
+    sort(swapFn){
+        if(!_.isFunction(swapFn)){
+            swapFn = function(e1,e2){
+                return (e1.base > e2.base);
+            }
+        }
+        for(let i=0, ref=null; i<this._array.length-1; i++){
+            for(let j=1; j<this._array.length; j++){
+                if(swapFn(this._array[i],this._array[j])){
+                    ref = this._array[i];
+                    this._array[i] = this._array[j];
+                    this._array[j] = ref;
+                }
+            }
+        }
+    }
+
+
     print(prefix,processFn){
         let padding = (""+this.size()+"").length+2;
         if(!processFn) processFn=function(n){ return n; };

@@ -16,7 +16,7 @@ class ExportManager {
             archive.append(null, { name: archive_name+'/' }); // ROOT
 
             BookmarksMgr.forEach(function(value,index,label,diffLb){
-                if(label==='_') label='_misc';
+                if(label==='_') label='_unlabeled';
                 if(diffLb===true){
                     archive.append(null, { name: archive_name+'/'+label+'/' });
                 }

@@ -366,6 +366,9 @@ class CliManager {
                     return null;
                 };
 
+
+                BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
+
                 let p1 = ()=>{
                     if(!BookmarksMgr.printWorkingSet(
                         C_bookm_options,

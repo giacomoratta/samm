@@ -19,6 +19,14 @@ class Bookmarks {
         return this._size;
     }
 
+    sort(){
+        let bkeys = Object.keys(this._data);
+        let _self = this;
+        bkeys.forEach((label)=>{
+            _self._data[label].sort();
+        });
+    }
+
 
     getByIndex(index){
         let keys = Object.keys(this._data);
@@ -58,7 +66,7 @@ class Bookmarks {
                 else printFn(keys[i]+':');
             }
             this._data[keys[i]].forEach((v)=>{
-                printFn('  ' + (index+1) + ') ' + v.rel_path);
+                printFn('  ' + (index+1) + ') ' + v.base );//+ '  [ '+v.rel_path+' ] ');
                 index++;
             });
             printFn('');
