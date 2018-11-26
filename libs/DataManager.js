@@ -143,7 +143,8 @@ class DataManager {
         let filedata = this._loadFileData($cfg);
         if(filedata === false){
             $cfg.logErrorsFn('DataMgr.load ['+label+'] > the file does not exist:',$cfg.filePath);
-            return false;
+            //return false;
+            filedata = null;
         }
 
         if($cfg.loadFn){
@@ -275,10 +276,10 @@ class DataManager {
             let cpF = Utils.File.copyFileSync($cfg.cloneFrom,$cfg.filePath);
             if(cpF.err) $cfg.logErrorsFn('DataMgr > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
         }
-        if($cfg.fileType==this.ENUMS.fileType.json){
+        if($cfg.fileType===this.ENUMS.fileType.json){
             return Utils.File.readJsonFileSync($cfg.filePath);
 
-        }else if($cfg.fileType==this.ENUMS.fileType.text){
+        }else if($cfg.fileType===this.ENUMS.fileType.text){
             return Utils.File.readTextFileSync($cfg.filePath);
 
         }
@@ -286,13 +287,13 @@ class DataManager {
     }
 
     _saveFileData($cfg, content){
-        if($cfg.fileType==this.ENUMS.fileType.json){
+        if($cfg.fileType===this.ENUMS.fileType.json){
             return Utils.File.writeJsonFileSync($cfg.filePath,content);
 
-        }else if($cfg.fileType==this.ENUMS.fileType.json_compact){
+        }else if($cfg.fileType===this.ENUMS.fileType.json_compact){
             return Utils.File.writeJsonFileSync($cfg.filePath,content,false);
 
-        }else if($cfg.fileType==this.ENUMS.fileType.text){
+        }else if($cfg.fileType===this.ENUMS.fileType.text){
             return Utils.File.writeTextFileSync($cfg.filePath,content);
         }
         return null;

@@ -31,6 +31,22 @@ class ConfigManager {
         this._paths.samples_directory = null;
         this._paths.export_directory = null;
 
+
+        // Check first start
+        let __cfgsmplfile__ = Utils.File.setAsAbsPath('config.sample.json',true /*isFile*/);
+        if(Utils.File.fileExistsSync(__cfgsmplfile__) || !Utils.File.directoryExistsSync(this.path('working_dir'))){
+            clUI.print('First start settings...');
+            try{
+                Utils.File.ensureDirSync(this.path('working_dir'));
+                if(!Utils.File.fileExistsSync(this._paths.config_file_sample)) Utils.File.copyFileSync(__cfgsmplfile__,this._paths.config_file_sample);
+                Utils.File.removeFileSync(__cfgsmplfile__);
+                clUI.print('First start settings finished successfully.');
+            }catch(e){
+                clUI.error('First start: cannot set properly files and directory for user data.');
+                Utils.EXIT();
+            }
+        }
+
         // DataManager
         DataMgr.setHolder({
             label:'config_file',
@@ -40,7 +56,7 @@ class ConfigManager {
 
             preLoad:true,
             cloneFrom:this._paths.config_file_sample,
-            logErrorsFn:console.log
+            logErrorsFn:d$
         });
 
         // Open config.json
@@ -51,20 +67,18 @@ class ConfigManager {
 
         // Check and set paths [2]
        this._setInternals(true /*isInit*/);
-
-        // Create directories
-        Utils.File.ensureDirSync(this.path('working_dir'));
     }
 
     _parseExternalOptions(options){
+        let working_dir = 'userdata'+Utils.File.pathSeparator;
         options = _.merge({
-            config_file: 'config.json',
-            config_file_sample: 'config.sample.json',
-            working_dir: 'userdata/',
-            latest_lookup: 'userdata/latest_lookup',
-            samples_index: 'userdata/samples_index',
-            bookmarks: 'userdata/bookmarks.json',
-            qtags: 'userdata/qtags.json',
+            working_dir: working_dir,
+            config_file: working_dir+'config.json',
+            config_file_sample: working_dir+'config.sample.json',
+            latest_lookup: working_dir+'latest_lookup',
+            samples_index: working_dir+'samples_index',
+            bookmarks: working_dir+'bookmarks.json',
+            qtags: working_dir+'qtags.json',
         },options);
         return options;
     }
@@ -309,13 +323,12 @@ class ConfigManager {
     }
 
     printMessages(){
-        clUI.print("");
         if(this.getFlag('samples_index_scan_needed')===true){
-            clUI.print("\nWARNING: no samples index detected; perform 'scan' before using other commands.\n");
+            clUI.print("[ WARNING ] no samples index detected; perform 'scan' before using other commands.\n");
         }
         if(this.getFlag('samples_index_update_needed')===true){
-            clUI.print("\nWARNING: samples index not compliant with current configuration;");
-            clUI.print(  "         perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
+            clUI.print("[ WARNING ] samples index not compliant with current configuration;");
+            clUI.print(  "          perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
         }
     }
 }

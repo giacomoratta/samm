@@ -43,8 +43,8 @@ class CliManager {
             thisCliMgr.processParams(args,cmdName);
             cmdFn(cliReference,(code,err)=>{
                 if(code===thisCliMgr._error_code){
-                    clUI.error('command',cmdName,'terminated with an error.');
-                    if(err) clUI.error(err);
+                    d$('command',cmdName,'terminated with an error.');
+                    if(err) d$(err);
                 }
                 ConfigMgr.printMessages();
                 cb();

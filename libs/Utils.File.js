@@ -7,7 +7,7 @@ const _ = require('lodash');
 class Utils_Files {
 
     constructor(){
-        this._console = console.log;
+        this._console = d$;
         this._PATH = path;
         this._FS = fs;
         this._FS_EXTRA = fs_extra;
@@ -273,6 +273,10 @@ class Utils_Files {
 
 
     /* FileSystem R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    removeFileSync(path_string){
+        return this._FS.unlinkSync(path_string);
+    }
 
     copyFileSync(path_from, path_to, options){
         options = _.merge({

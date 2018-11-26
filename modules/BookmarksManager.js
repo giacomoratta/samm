@@ -144,7 +144,7 @@ class BookmarksManager {
             filePath:ConfigMgr.path('bookmarks'),
             fileType:'json',
             dataType:'object',
-            logErrorsFn:console.log,
+            logErrorsFn:d$,
             preLoad:true,
 
             // setFn:()=>{
@@ -156,7 +156,6 @@ class BookmarksManager {
             },
 
             loadFn:(fileData)=>{
-                d$('loading');
                 let bookmObj = new Bookmarks();
                 if(!_.isObject(fileData)){
                     return bookmObj;
