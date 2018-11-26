@@ -8,8 +8,6 @@ yarn-error.log*
 config.json
 temp/
 build/
-bookmarks.json
-qtags.json
 
 # Runtime data
 pids
