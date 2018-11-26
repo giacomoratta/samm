@@ -328,7 +328,7 @@ class ConfigManager {
         }
         if(this.getFlag('samples_index_update_needed')===true){
             clUI.print("[ WARNING ] samples index not compliant with current configuration;");
-            clUI.print(  "          perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
+            clUI.print("            perform 'scan -f' before using other commands otherwise you could get wrong results.\n");
         }
     }
 }
