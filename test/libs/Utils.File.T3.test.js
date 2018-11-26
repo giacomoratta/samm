@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
-let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('temp_dir'),'utils_file');
+let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('working_dir'),'utils_file');
 
 // describe('Utils.File.singleton - TEST for filesystem r/w operations', function() {
 //     describe("#readFileSync", function() {

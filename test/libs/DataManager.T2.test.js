@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
-let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('temp_dir'),'utils_file');
+let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('working_dir'),'utils_file');
 let my_file1_abspath = UF.pathJoin(tmp_dir_utils_file,'my_file1.txt');
 
 describe('DataManager.class - Tests for a file-only holder', function() {
