@@ -13,7 +13,9 @@ class ConfigManager {
             working_dir: options.working_dir,
             latest_lookup: options.latest_lookup,
             samples_index: options.samples_index,
-            bookmarks: options.bookmarks
+            bookmarks: options.bookmarks,
+            projects: options.projects,
+            qtags: options.qtags
         };
         this._labels = {
             'sample_dir':'mpl'

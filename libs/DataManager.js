@@ -276,7 +276,7 @@ class DataManager {
             let cpF = Utils.File.copyFileSync($cfg.cloneFrom,$cfg.filePath);
             if(cpF.err) $cfg.logErrorsFn('DataMgr > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
         }
-        if($cfg.fileType===this.ENUMS.fileType.json){
+        if($cfg.fileType===this.ENUMS.fileType.json || $cfg.fileType===this.ENUMS.fileType.json_compact){
             return Utils.File.readJsonFileSync($cfg.filePath);
 
         }else if($cfg.fileType===this.ENUMS.fileType.text){

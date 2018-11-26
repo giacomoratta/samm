@@ -3,8 +3,8 @@ let Projects = require('../libs/Projects.class');
 class ProjectsManager {
 
     constructor(){
-        this._createBookmarksHolder();
         this.projectsObj = null;
+        this._createBookmarksHolder();
     }
 
 
@@ -42,10 +42,6 @@ class ProjectsManager {
             dataType:'object',
             logErrorsFn:d$,
             preLoad:true,
-
-            initFn:()=>{
-                return new Projects();
-            },
 
             loadFn:(fileData)=>{
                 _self.projectsObj = new Projects();

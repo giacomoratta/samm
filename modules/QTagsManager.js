@@ -3,8 +3,8 @@ let QTags = require('../libs/QTags.class');
 class QTagsManager {
 
     constructor(){
-        this._createBookmarksHolder();
         this.qtagsObj = null;
+        this._createBookmarksHolder();
     }
 
 
@@ -40,12 +40,8 @@ class QTagsManager {
             logErrorsFn:d$,
             preLoad:true,
 
-            initFn:()=>{
-                return new Projects();
-            },
-
             loadFn:(fileData)=>{
-                _self.qtagsObj = new Projects();
+                _self.qtagsObj = new QTags();
                 if(!_.isObject(fileData)){
                     return _self.qtagsObj;
                 }

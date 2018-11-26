@@ -458,10 +458,13 @@ class CliManager {
 
                 if(_.isString(this.cli_params.get('path'))){
                     ProjectsMgr.setCurrent(this.cli_params.get('path'));
+                    ProjectsMgr.save();
                     return cliNextCb(this._success_code);
                 }
 
-                if(!ProjectsMgr.printIndexedList()){
+                if(!ProjectsMgr.printIndexedList(function(v){
+                    clUI.print(v);
+                })){
                     clUI.print('Projects history is empty.');
                     return cliNextCb(this._success_code);
                 }
