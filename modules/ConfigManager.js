@@ -11,7 +11,6 @@ class ConfigManager {
             config_file: options.config_file,
             config_file_sample: options.config_file_sample,
             working_dir: options.working_dir,
-            custom_indexes: options.custom_indexes,
             latest_lookup: options.latest_lookup,
             samples_index: options.samples_index,
             bookmarks: options.bookmarks
@@ -24,7 +23,6 @@ class ConfigManager {
         this._paths.config_file = Utils.File.setAsAbsPath(this._paths.config_file,true /*isFile*/);
         this._paths.config_file_sample = Utils.File.setAsAbsPath(this._paths.config_file_sample,true /*isFile*/);
         this._paths.working_dir = Utils.File.setAsAbsPath(this._paths.working_dir);
-        this._paths.custom_indexes = Utils.File.setAsAbsPath(this._paths.custom_indexes);
         this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
         this._paths.bookmarks = Utils.File.setAsAbsPath(this._paths.bookmarks,true /*isFile*/);
@@ -56,7 +54,6 @@ class ConfigManager {
 
         // Create directories
         Utils.File.ensureDirSync(this.path('working_dir'));
-        Utils.File.ensureDirSync(this.path('custom_indexes'));
     }
 
     _parseExternalOptions(options){
@@ -64,11 +61,10 @@ class ConfigManager {
             config_file: 'config.json',
             config_file_sample: 'config.sample.json',
             working_dir: 'userdata/',
-            custom_indexes: 'userdata/c_indexes/',
             latest_lookup: 'userdata/latest_lookup',
             samples_index: 'userdata/samples_index',
-            bookmarks: 'bookmarks.json',
-            qtags: 'qtags.json',
+            bookmarks: 'userdata/bookmarks.json',
+            qtags: 'userdata/qtags.json',
         },options);
         return options;
     }

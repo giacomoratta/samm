@@ -5,10 +5,9 @@ global.ConfigManagerOptions = {
     //config_file:'test/configs/config_osx_test1.json',
     config_file:'test/configs/config_osx_test1.json',
     working_dir: 'test/userdata/',
-    custom_indexes: 'test/userdata/c_indexes/',
     latest_lookup: 'test/userdata/latest_lookup',
     samples_index: 'test/userdata/samples_index.json'
-}
+};
 
 require('../globals.js');
 global.assert = require('assert');
