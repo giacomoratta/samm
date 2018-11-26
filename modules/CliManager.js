@@ -391,7 +391,7 @@ class CliManager {
 
                 if(_.isNil(this.cli_params.get('values'))){
                     if(_.isNil(ConfigMgr.get(this.cli_params.get('name')))){
-                        _clUI.print('this parameter does not exitst.');
+                        _clUI.print('this parameter does not exist.');
                         return cliNextCb(this._error_code);
                     }
                     clUI.print(ConfigMgr.get(this.cli_params.get('name')));
