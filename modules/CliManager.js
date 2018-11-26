@@ -372,9 +372,9 @@ class CliManager {
             .command('config [name] [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
             .description("Get or set the value of a configuration parameter." +
-                        "\n  $ config   --> print the whole config and internal data" +
-                        "\n  $ config Project   --> print the value of the specified parameter" +
-                        "\n  $ config Project /musicprojects/project1 / (or path)" +
+                        "\n  $ config         / print the whole config and internal data" +
+                        "\n  $ config Project / print the value of the specified parameter" +
+                        "\n  $ config Project /musicprojects/project1" +
                         "\n  $ config Tag tag-label query,tag+tag2,or,tag3" +
                         "\n  $ config ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
                         "\n  $ config ExcludedExtensionsForSamples ext / (or .ext)" +
@@ -406,8 +406,9 @@ class CliManager {
                     _clUI.print("error during file writing");
                     return cliNextCb(this._error_code);
                 }
-                _clUI.print("configuration saved successfully");
                 ConfigMgr.print();
+                clUI.print('');
+                _clUI.print("configuration saved successfully");
                 return cliNextCb(this._success_code);
             }));
     }
