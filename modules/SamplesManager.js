@@ -43,7 +43,7 @@ class SamplesManager {
         return DataMgr.setHolder({
             label:options.label,
             filePath:options.filePath,
-            fileType:'json',
+            fileType:'json-compact',
             dataType:'object',
             logErrorsFn:d$,
             preLoad:true,

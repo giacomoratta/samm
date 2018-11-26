@@ -1,0 +1,31 @@
+{
+	"xSamplesDirectory": "/XAMPP/xamppfiles/htdocs/mpltests/",
+	"SamplesDirectory": "/Users/ictmacbook/Documents/Adobe/",
+	"ExportDirectory": "/XAMPP/xamppfiles/htdocs",
+	"Project": "/XAMPP/xamppfiles/htdocs/mpltests/mpl/",
+	"RandomCount": 11,
+	"MaxOccurrencesSameDirectory": 1,
+	"Tags": {
+		"abstract": "abstract,complex",
+		"hihat": "hihat,hi-hat,hh,top",
+		"impact": "impact,boom,shot,crash,bomb,808,efx",
+		"kick": "techno,kick,deep,sub",
+		"t1": "la",
+		"t2": "ess",
+		"t3": "ess+la"
+	},
+	"ExtensionCheckForSamples": "E",
+	"IncludedExtensionsForSamples": [
+		".xml",
+		".log",
+		"essentialsound",
+		"olp"
+	],
+	"ExcludedExtensionsForSamples": [
+		"asd",
+		"DS_Store",
+		"cfg",
+		"txt",
+		"exe"
+	]
+}
