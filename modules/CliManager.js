@@ -29,7 +29,9 @@ class CliManager {
         this.C_Bookmarks();
         this.C_Coverage();
         this.C_Scan();
-        this.C_Show();
+        this.C_Project();
+        this.C_QTags();
+        this.C_Samples();
         this.C_Export();
         this.C_Dir();
         this.C_Config();
@@ -448,7 +450,70 @@ class CliManager {
     }
 
 
-    C_Show(){
+    C_Project(){
+        vorpal
+            .command('project [path]')
+            .description('Set or choose a project path')
+            .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
+
+                if(_.isString(this.cli_params.get('path'))){
+                    ProjectsMgr.setCurrent(this.cli_params.get('path'));
+                    return cliNextCb(this._success_code);
+                }
+
+                if(!ProjectsMgr.printIndexedList()){
+                    clUI.print('Projects history is empty.');
+                    return cliNextCb(this._success_code);
+                }
+
+                clUI.print("\n> current project: ",ProjectsMgr.getCurrent(),"\n");
+
+                cliReference.prompt({
+                    type: 'input',
+                    name: 'index',
+                    message: "['q' to quit] > "
+                }, (result)=>{
+                    if(result.index !== 'q'){
+                        ProjectsMgr.setCurrentByIndex(parseInt(result.index)-1);
+                        ProjectsMgr.save();
+                    }
+                    return cliNextCb(this._success_code);
+                });
+            }));
+    }
+
+
+    C_QTags(){
+        vorpal
+            .command('qtags [tag] [query]')
+            .description('Add, remove or view the tagged queries (used by lookup -t <qtag>)')
+            .action(this._getActionFn('qtags', (cliReference,cliNextCb)=>{
+
+                C_QTags_options = {
+                    tag:this.cli_params.get('tag'),
+                    query:this.cli_params.get('query')
+                };
+
+                if(!_.isString(C_QTags_options.tag)){
+                    // show list
+                    QTagsMgr.printList();
+                    return cliNextCb(this._success_code);
+                }
+
+                if(!_.isString(C_QTags_options.query)){
+                    // remove tag
+                    QTagsMgr.remove(C_QTags_options.tag);
+                    return cliNextCb(this._success_code);
+                }
+
+                //add tag
+                QTagsMgr.add(C_QTags_options.tag,C_QTags_options.query);
+                return cliNextCb(this._success_code);
+            }));
+    }
+
+
+    C_Samples(){
         vorpal
             .command('samples')
             .description('Shows all the indexed samples.')

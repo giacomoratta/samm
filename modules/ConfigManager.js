@@ -26,6 +26,7 @@ class ConfigManager {
         this._paths.latest_lookup = Utils.File.setAsAbsPath(this._paths.latest_lookup,true /*isFile*/);
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
         this._paths.bookmarks = Utils.File.setAsAbsPath(this._paths.bookmarks,true /*isFile*/);
+        this._paths.projects = Utils.File.setAsAbsPath(this._paths.projects,true /*isFile*/);
         this._paths.qtags = Utils.File.setAsAbsPath(this._paths.qtags,true /*isFile*/);
         this._paths.project_directory = null;
         this._paths.samples_directory = null;
@@ -78,7 +79,8 @@ class ConfigManager {
             latest_lookup: working_dir+'latest_lookup',
             samples_index: working_dir+'samples_index',
             bookmarks: working_dir+'bookmarks.json',
-            qtags: working_dir+'qtags.json',
+            projects: working_dir+'projects.json',
+            qtags: working_dir+'qtags.json'
         },options);
         return options;
     }
