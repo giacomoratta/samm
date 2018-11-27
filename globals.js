@@ -24,10 +24,12 @@ global.DataMgr = require('./libs/DataManager.js');
 
 /* Project Modules */
 global.ConfigMgr = require('./modules/ConfigManager.js');
-global.CliMgr = require('./modules/CliManager.js');
 global.SamplesMgr = require('./modules/SamplesManager.js');
 global.DirCommand = require('./modules/Dir.command.js');
 global.BookmarksMgr = require('./modules/BookmarksManager.js');
 global.ProjectsMgr = require('./modules/ProjectsManager.js');
 global.TQueryMgr = require('./modules/TQueryManager.js');
 global.ExportMgr = require('./modules/ExportManager.js');
+
+/* Latest module: Command Line Interface */
+global.CliMgr = require('./modules/CliManager.js');
