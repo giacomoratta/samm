@@ -446,8 +446,9 @@ class CliManager {
 
     C_Project(){
         /*
-        * -f abcde      // set from search > perform search > menu > set
+        * -p path       // absolute path
         * -h            // set from history > menu history > set
+        * -f abcde      // set from search > perform search > menu > set
         * -d            // show all default projects
         * -d abc        // set new default with name abc
         * -n pname      // new project from default > menu defaults (if 1 not shown) > menu parents > set and copy
@@ -460,34 +461,85 @@ class CliManager {
         vorpal
             .command('project')
             .description('Set or choose a project path'+"\n")
+            .option('-p, --path <path>', '...')
+            .option('-f, --find <find>', '...')
+            .option('-h, --history', '...')
+            .option('-d, --default [default]', '...')
+            .option('-n, --newname [name]', '...')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
+                clUI.print("\n> current project: ",ProjectsMgr.getCurrent(),"\n");
 
-                if(_.isString(this.cli_params.get('path'))){
-                    ProjectsMgr.setCurrent(this.cli_params.get('path'));
+                let C_Project_options = {
+                    path: this.cli_params.getOption('path'),
+                    find: this.cli_params.getOption('find'),
+                    history: this.cli_params.hasOption('history'),
+                    default_flag: this.cli_params.hasOption('default'),
+                    default_value: this.cli_params.getOption('default'),
+                    newname: this.cli_params.getOption('newname')
+                };
+
+                // Set current project from absolute path
+                if(_.isString(C_Project_options.path) && C_Project_options.path.length>1){
+                    ProjectsMgr.setCurrent(C_Project_options.path);
                     ProjectsMgr.save();
                     return cliNextCb(this._success_code);
                 }
 
-                if(!ProjectsMgr.history.printIndexedList(function(v){
-                    clUI.print(v);
-                })){
-                    clUI.print('Projects history is empty.');
+                // Set current project from history
+                if(C_Project_options.history === true){
+                    if(!ProjectsMgr.history.printIndexedList(function(v){
+                            clUI.print(v);
+                        })){
+                        clUI.print('Projects history is empty.');
+                        return cliNextCb(this._success_code);
+                    }
+                    cliReference.prompt({
+                        type: 'input',
+                        name: 'index',
+                        message: "['q' to quit] > "
+                    }, (result)=>{
+                        if(result.index !== 'q'){
+                            let phistory = ProjectsMgr.history.get(parseInt(result.index)-1);
+                            ProjectsMgr.setCurrent(phistory.path);
+                            ProjectsMgr.save();
+                        }
+                        return cliNextCb(this._success_code);
+                    });
+                    return;
+                }
+
+                // Set current project from search
+                if(_.isString(C_Project_options.find) && C_Project_options.find.length>1){
+                    // ProjectsMgr.find(C_Project_options.find);
+                    // prompt > choose index
+                    // setCurrent and save
                     return cliNextCb(this._success_code);
                 }
 
-                clUI.print("\n> current project: ",ProjectsMgr.getCurrent(),"\n");
+                // Default projects
+                if(C_Project_options.default_flag===true){
+                    // show all default project
 
-                cliReference.prompt({
-                    type: 'input',
-                    name: 'index',
-                    message: "['q' to quit] > "
-                }, (result)=>{
-                    if(result.index !== 'q'){
-                        //ProjectsMgr.setCurrentByIndex(parseInt(result.index)-1);
-                        ProjectsMgr.save();
+                    if(_.isString(C_Project_options.default_value) && C_Project_options.default_value.length>1){
+                        // prompt > choose index
+                        // setCurrent and save
+                        return cliNextCb(this._success_code);
                     }
                     return cliNextCb(this._success_code);
-                });
+                }
+
+                // New project from default
+                if(_.isString(C_Project_options.newname) && C_Project_options.newname.length>1){
+                    // show default projects
+                    // prompt > choose index
+                    //    show parents
+                    //    prompt > choose index
+                    //       copy directory
+                    //       setCurrent and save
+                    return cliNextCb(this._success_code);
+                }
+
+                return cliNextCb(this._success_code);
             }));
     }
 

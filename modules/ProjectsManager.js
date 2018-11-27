@@ -48,6 +48,7 @@ class ProjectsManager {
             },
 
             saveFn:(pData)=>{
+                console.log(pData);
                 return {
                     history:pData.history.toJson()
                 }

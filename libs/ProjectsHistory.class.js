@@ -31,17 +31,18 @@ class ProjectsHistory {
 
     add(project_path){
         let project_name = Utils.File.pathBasename(project_path);
-        if(!_.isString(project_name) && project_name.length<1) return false;
+        if(!_.isString(project_name) || project_name.length<1) return false;
         this.remove(project_path);
-        this._data.unshift(project_path,project_name);
-        if(this._sizeLimit>0) this._data = this._data.splice(this._sizeLimit);
+        this._data.unshift(this._newProjectNode(project_path,project_name));
+        if(this._sizeLimit>0 && this._data.length>this._sizeLimit) this._data = this._data.splice(this._sizeLimit);
         this._size = this._data.length;
         return true;
     }
 
     getIndex(project_path){
+        project_path = _.toLower(project_path);
         for(let i=0; i<this._data.length; i++){
-            if(this._data[i].path === project_path){
+            if(_.toLower(this._data[i].path) === project_path){
                 return i;
             }
         }
@@ -51,7 +52,7 @@ class ProjectsHistory {
     remove(project_path){
         let index = this.getIndex(project_path);
         if(index<0) return false;
-        this._data = this._data.splice(index,1);
+        this._data.splice(index,1);
         return true;
     }
 
