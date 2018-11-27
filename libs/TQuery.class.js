@@ -1,11 +1,11 @@
-class QTags {
+class TQuery {
 
     constructor(){
         this._data = {};
         this._size = 0;
     }
 
-    _newQTagsNode(tag,query){
+    _newTQueryNode(tag,query){
         return {
             tag:tag,
             query:query
@@ -21,20 +21,22 @@ class QTags {
     }
 
     get(tag){
-        let qtag = this._data[label];
-        if(!qtag) return;
-        return qtag.query;
+        let tquery = this._data[tag];
+        if(!tquery) return;
+        return tquery.query;
     }
 
     add(tag,query){
         if(!_.isString(tag) || !_.isString(query)) return false;
-        this._data[tag] = this._newQTagsNode(tag,query);
+        if(!this._data[tag]) this._size++;
+        this._data[tag] = this._newTQueryNode(tag,query);
         return true;
     }
 
     remove(tag){
         if(!_.isString(tag)) return false;
         delete this._data[tag];
+        this._size--;
         return true;
     }
 
@@ -52,7 +54,7 @@ class QTags {
         this._size = jsondata.size;
         let keys = Object.keys(jsondata.collection);
         for(let i=0; i<keys.length; i++){
-            this._data[keys[i]] = this._newQTagsNode(keys[i],jsondata.collection[keys[i]]);
+            this._data[keys[i]] = this._newTQueryNode(keys[i],jsondata.collection[keys[i]].query);
         }
         return true;
     }
@@ -66,4 +68,4 @@ class QTags {
     }
 }
 
-module.exports = QTags;
+module.exports = TQuery;

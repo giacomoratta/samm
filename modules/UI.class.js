@@ -8,6 +8,7 @@ class UI {
                 debugFn:function(){
                     let vv = Object.values(arguments);
                     vv.unshift('[DEBUG]');
+                    vv.push("\n");
                     console.log.apply(null,vv);
                 },
                 debugTimedFn:function(){

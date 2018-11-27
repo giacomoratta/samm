@@ -15,7 +15,7 @@ class ConfigManager {
             samples_index: options.samples_index,
             bookmarks: options.bookmarks,
             projects: options.projects,
-            qtags: options.qtags
+            tquery: options.tquery
         };
         this._labels = {
             'sample_dir':'mpl'
@@ -29,7 +29,7 @@ class ConfigManager {
         this._paths.samples_index = Utils.File.setAsAbsPath(this._paths.samples_index,true /*isFile*/);
         this._paths.bookmarks = Utils.File.setAsAbsPath(this._paths.bookmarks,true /*isFile*/);
         this._paths.projects = Utils.File.setAsAbsPath(this._paths.projects,true /*isFile*/);
-        this._paths.qtags = Utils.File.setAsAbsPath(this._paths.qtags,true /*isFile*/);
+        this._paths.tquery = Utils.File.setAsAbsPath(this._paths.tquery,true /*isFile*/);
         this._paths.project_directory = null;
         this._paths.samples_directory = null;
         this._paths.export_directory = null;
@@ -82,7 +82,7 @@ class ConfigManager {
             samples_index: working_dir+'samples_index',
             bookmarks: working_dir+'bookmarks.json',
             projects: working_dir+'projects.json',
-            qtags: working_dir+'qtags.json'
+            tquery: working_dir+'tqueries.json'
         },options);
         return options;
     }

@@ -30,7 +30,7 @@ class CliManager {
         this.C_Coverage();
         this.C_Scan();
         this.C_Project();
-        this.C_QTags();
+        this.C_TQuery();
         this.C_Samples();
         this.C_Export();
         this.C_Dir();
@@ -49,6 +49,7 @@ class CliManager {
                     if(err) d$(err);
                 }
                 ConfigMgr.printMessages();
+                clUI.print(' ');//new line before the prompt
                 cb();
             });
         };
@@ -62,7 +63,7 @@ class CliManager {
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
             .option('-p, --path <path>', 'Custom absolute path.')
             .option('-q, --query <query>', 'Custom query; e.g.\'tag1+tag2,tag3\'.')
-            .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
             .action(this._getActionFn('coverage', (cliReference,cliNextCb)=>{
@@ -105,7 +106,7 @@ class CliManager {
                         return cliNextCb(this._error_code);
                     }
                     if(_.isString(C_coverage_options.tag) && !ConfigMgr.get('Tags')[C_coverage_options.tag]){
-                        _clUI.print("tag with label '"+C_coverage_options.tag+"' not found.");
+                        _clUI.print("query with tag '"+C_coverage_options.tag+"' not found.");
                         return cliNextCb(this._error_code);
                     }
                 }
@@ -248,7 +249,7 @@ class CliManager {
             .command('lookup [query]')
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
-            .option('-t, --tag <label>', 'Tag label for a query inside the configuration (see config set Tags <label> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
             .action(this._getActionFn('lookup', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> lookup:');
 
@@ -262,12 +263,12 @@ class CliManager {
                 if(this.cli_params.hasOption('tag')){
                     tagString= this.cli_params.getOption('tag');
                     if(!tagString){
-                        _clUI.print("empty tag label");
+                        _clUI.print("empty tag");
                         return cliNextCb(this._error_code);
                     }
                     tagString = ConfigMgr.get('Tags')[tagString];
                     if(_.isNil(tagString)){
-                        _clUI.print("unknown tag label after");
+                        _clUI.print("unknown tag");
                         return cliNextCb(this._error_code);
                     }
                 }else{
@@ -302,7 +303,7 @@ class CliManager {
             .description("Prints the samples collection to work with in the next command 'bookm set'.")
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
-            .option('-t, --tag <label>', 'Shows the bookmarks under the specified custom label')
+            .option('-t, --tag <tag>', 'Shows the bookmarks under the specified custom tag')
             .option('-s, --save', 'Save bookmarks in the current project')
             .action(this._getActionFn('bookm show', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> bookm:');
@@ -369,7 +370,6 @@ class CliManager {
 
 
     C_Config(){
-
         vorpal
             .command('config [name] [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
@@ -451,8 +451,15 @@ class CliManager {
 
 
     C_Project(){
+        /*
+        * config set ProjectsDirectory
+        * set -f abcde      // set from search > perform search > menu > set
+        * set -h            // set from history > menu history > set
+        * default abc       // set new default with name abc
+        * new abc -n pname  // new project from abc default > menu parents > set and copy
+        */
         vorpal
-            .command('project [path]')
+            .command('project')
             .description('Set or choose a project path')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
 
@@ -486,31 +493,53 @@ class CliManager {
     }
 
 
-    C_QTags(){
+    C_TQuery(){
         vorpal
-            .command('qtags [tag] [query]')
-            .description('Add, remove or view the tagged queries (used by lookup -t <qtag>)')
-            .action(this._getActionFn('qtags', (cliReference,cliNextCb)=>{
+            .command('tquery [tag] [query]')
+            .description('Add, remove or view tagged queries (used by lookup -t <tag>)')
+            .option('-r, --remove', 'Remove the specified tag')
+            .action(this._getActionFn('tquery', (cliReference,cliNextCb)=>{
 
-                C_QTags_options = {
+                let C_TQuery_options = {
                     tag:this.cli_params.get('tag'),
-                    query:this.cli_params.get('query')
+                    query:this.cli_params.get('query'),
+                    remove:this.cli_params.hasOption('remove')
                 };
 
-                if(!_.isString(C_QTags_options.tag)){
-                    // show list
-                    QTagsMgr.printList();
+                if(C_TQuery_options.tag && C_TQuery_options.query){
+                    if(TQueryMgr.add(C_TQuery_options.tag,C_TQuery_options.query)){
+                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'added succesfully');
+                        TQueryMgr.save();
+                    }else{
+                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not added');
+                    }
                     return cliNextCb(this._success_code);
                 }
 
-                if(!_.isString(C_QTags_options.query)){
-                    // remove tag
-                    QTagsMgr.remove(C_QTags_options.tag);
+                if(C_TQuery_options.tag){
+
+                    // remove
+                    if(C_TQuery_options.remove===true){
+                        if(TQueryMgr.remove(C_TQuery_options.tag)){
+                            clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'removed succesfully');
+                            TQueryMgr.save();
+                        }else{
+                            clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not removed');
+                        }
+                        return cliNextCb(this._success_code);
+                    }
+
+                    // get one tagged query
+                    let tquery = TQueryMgr.get(C_TQuery_options.tag);
+                    if(!tquery){
+                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'does not exist');
+                    }else{
+                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'=',tquery);
+                    }
                     return cliNextCb(this._success_code);
                 }
 
-                //add tag
-                QTagsMgr.add(C_QTags_options.tag,C_QTags_options.query);
+                TQueryMgr.printList(function(v){ clUI.print(v); });
                 return cliNextCb(this._success_code);
             }));
     }
