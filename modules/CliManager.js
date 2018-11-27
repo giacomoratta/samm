@@ -333,7 +333,6 @@ class CliManager {
                     return null;
                 };
 
-
                 BookmarksMgr.workingSet(C_bookm_options); //get and set internal working set
 
                 let p1 = ()=>{
@@ -372,10 +371,7 @@ class CliManager {
             .command('config [name] [values...]')
             .autocomplete(ConfigMgr.getConfigParams())
             .description("Get or set the value of a configuration parameter." +
-                        "\n  $ config         / print the whole config and internal data" +
-                        "\n  $ config Project / print the value of the specified parameter" +
-                        "\n  $ config Project /musicprojects/project1" +
-                        "\n  $ config Tag tag-label query,tag+tag2,or,tag3" +
+                        "\n  $ config / print the whole config and internal data" +
                         "\n  $ config ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
                         "\n  $ config ExcludedExtensionsForSamples ext / (or .ext)" +
                         "\n  $ config ExcludedExtensionsForSamples !ext / (or !.ext)")
@@ -450,7 +446,6 @@ class CliManager {
 
     C_Project(){
         /*
-        * config set ProjectsDirectory
         * set -f abcde      // set from search > perform search > menu > set
         * set -h            // set from history > menu history > set
         * default abc       // set new default with name abc
