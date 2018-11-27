@@ -32,7 +32,6 @@ class ConfigManager {
         this._paths.projects = Utils.File.setAsAbsPath(this._paths.projects,true /*isFile*/);
         this._paths.tquery = Utils.File.setAsAbsPath(this._paths.tquery,true /*isFile*/);
         this._paths.default_projects = Utils.File.setAsAbsPath(this._paths.default_projects);
-        this._paths.project_directory = null;
         this._paths.samples_directory = null;
         this._paths.export_directory = null;
 
@@ -101,9 +100,6 @@ class ConfigManager {
     _setInternals(){
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) clUI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
-
-        this._paths.project_directory = Utils.File.checkAndSetPathSync(this._config.Project);
-        if(!this._paths.project_directory) clUI.warning("The project directory does not exist: ",this._config.Project);
 
         this._paths.export_directory = Utils.File.checkAndSetPathSync(this._config.ExportDirectory);
         clUI.print(); //new empty row

@@ -9,19 +9,10 @@ class ProjectsManager {
         this._createBookmarksHolder();
     }
 
+    get history() { return this._data.history; }
 
-    history(){
-        return this._data.history;
-    }
-
-
-    getCurrent(){
-        return this._data.history.get(0);
-    }
-
-    setCurrent(project_path){
-        return this._data.history.add(project_path);
-    }
+    get current() { return this._data.history.get(0); }
+    set current(project_path) { return this._data.history.add(project_path); }
 
 
     save(){
@@ -41,14 +32,13 @@ class ProjectsManager {
             loadFn:(fileData)=>{
                 _self._data.history = new ProjectsHistory();
                 if(!_.isObject(fileData)){
-                    return _self._data.history;
+                    return _self._data;
                 }
                 _self._data.history.fromJson(fileData.history);
                 return _self._data;
             },
 
             saveFn:(pData)=>{
-                console.log(pData);
                 return {
                     history:pData.history.toJson()
                 }

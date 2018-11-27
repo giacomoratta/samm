@@ -182,7 +182,7 @@ class CliManager {
             .action(_self._getActionFn('save', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> save:');
 
-                if(!ConfigMgr.path('project_directory')){
+                if(!ProjectsMgr.currentDirExists()){
                     _clUI.print("project directory is not set; check the configuration.");
                     return cliNextCb(this._error_code);
                 }
@@ -467,7 +467,8 @@ class CliManager {
             .option('-d, --default [default]', '...')
             .option('-n, --newname [name]', '...')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
-                clUI.print("\n> current project: ",ProjectsMgr.getCurrent(),"\n");
+                let _clUI = clUI.newLocalUI('> project:');
+                _clUI.print("current project: ",ProjectsMgr.current);
 
                 let C_Project_options = {
                     path: this.cli_params.getOption('path'),
@@ -480,7 +481,7 @@ class CliManager {
 
                 // Set current project from absolute path
                 if(_.isString(C_Project_options.path) && C_Project_options.path.length>1){
-                    ProjectsMgr.setCurrent(C_Project_options.path);
+                    ProjectsMgr.current = C_Project_options.path;
                     ProjectsMgr.save();
                     return cliNextCb(this._success_code);
                 }
@@ -490,7 +491,7 @@ class CliManager {
                     if(!ProjectsMgr.history.printIndexedList(function(v){
                             clUI.print(v);
                         })){
-                        clUI.print('Projects history is empty.');
+                        _clUI.print('Projects history is empty.');
                         return cliNextCb(this._success_code);
                     }
                     cliReference.prompt({
@@ -500,8 +501,13 @@ class CliManager {
                     }, (result)=>{
                         if(result.index !== 'q'){
                             let phistory = ProjectsMgr.history.get(parseInt(result.index)-1);
-                            ProjectsMgr.setCurrent(phistory.path);
-                            ProjectsMgr.save();
+                            if(!phistory){
+                                _clUI.print("index out of bounds");
+                            }else{
+                                ProjectsMgr.current = phistory;
+                                ProjectsMgr.save();
+                                _clUI.print("new current project: ",ProjectsMgr.current);
+                            }
                         }
                         return cliNextCb(this._success_code);
                     });
@@ -632,13 +638,13 @@ class CliManager {
                 };
 
                 if(C_export_options.param_data === 'project'){
-                    if(!ConfigMgr.path('project_directory')){
+                    if(ProjectsMgr.currentDirExists()){
                         _clUI.print("no valid project directory; set an existent project directory.");
                         return cliNextCb(this._error_code);
                     }
-                    archFD_options.sourcePath = ConfigMgr.path('project_directory');
+                    archFD_options.sourcePath = ProjectsMgr.current;
                     ExportFn = function(opt){
-                        _clUI.print("exporting the project "+ConfigMgr.path('project_directory')+"\n          to "+archFD_options.destPath+" ...");
+                        _clUI.print("exporting the project "+ProjectsMgr.current+"\n          to "+archFD_options.destPath+" ...");
                         return ExportMgr.exportProject(opt);
                     };
                 }

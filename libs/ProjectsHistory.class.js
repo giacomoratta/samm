@@ -23,9 +23,9 @@ class ProjectsHistory {
 
     get(index){
         if(this._size<1) return null;
-        if(!_.isInteger(index)) index=0;
+        if(!_.isInteger(index)) return null;
         else if(index===-1) index=this._size-1;
-        else if(index>this._size-1) index=0;
+        else if(index>this._size-1) return null;
         return this._data[index].path;
     }
 
@@ -59,10 +59,7 @@ class ProjectsHistory {
 
     printIndexedList(printFn){
         for(let i=0; i<this._data.length; i++){
-            printFn('  ' + (i+1) + ') ' + _.truncate(this._data.path,{
-                length:24,
-                omission:'...'
-            }));
+            printFn('  ' + (i+1) + ') ' + this._data[i].path);
         }
         printFn('');
         return this._data.length>0;
