@@ -1,4 +1,4 @@
-class Projects {
+class ProjectsHistory {
 
     constructor(){
         this._data = [];
@@ -95,4 +95,4 @@ class Projects {
     }
 }
 
-module.exports = Projects;
+module.exports = ProjectsHistory;

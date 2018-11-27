@@ -1,37 +1,32 @@
-let Projects = require('../libs/Projects.class');
+let ProjectsHistory = require('../libs/ProjectsHistory.class');
 
 class ProjectsManager {
 
     constructor(){
-        this.projectsObj = null;
+        this._data = {
+            history:null
+        };
         this._createBookmarksHolder();
     }
 
 
-    printIndexedList(printFn){
-        return this.projectsObj.printIndexedList(printFn);
+    history(){
+        return this._data.history;
     }
 
 
     getCurrent(){
-        return this.projectsObj.get(0);
+        return this._data.history.get(0);
     }
-
 
     setCurrent(project_path){
-        return this.projectsObj.add(project_path);
-    }
-
-
-    setCurrentByIndex(index){
-        return this.projectsObj.get(index);
+        return this._data.history.add(project_path);
     }
 
 
     save(){
         return DataMgr.save('projects');
     }
-
 
     _createBookmarksHolder(){
         let _self = this;
@@ -44,16 +39,18 @@ class ProjectsManager {
             preLoad:true,
 
             loadFn:(fileData)=>{
-                _self.projectsObj = new Projects();
+                _self._data.history = new ProjectsHistory();
                 if(!_.isObject(fileData)){
-                    return _self.projectsObj;
+                    return _self._data.history;
                 }
-                _self.projectsObj.fromJson(fileData);
-                return _self.projectsObj;
+                _self._data.history.fromJson(fileData.history);
+                return _self._data;
             },
 
-            saveFn:(projectsObj)=>{
-                return projectsObj.toJson();
+            saveFn:(pData)=>{
+                return {
+                    history:pData.history.toJson()
+                }
             }
         });
     }

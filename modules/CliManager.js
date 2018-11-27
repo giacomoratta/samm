@@ -462,7 +462,7 @@ class CliManager {
                     return cliNextCb(this._success_code);
                 }
 
-                if(!ProjectsMgr.printIndexedList(function(v){
+                if(!ProjectsMgr.history.printIndexedList(function(v){
                     clUI.print(v);
                 })){
                     clUI.print('Projects history is empty.');
@@ -477,7 +477,7 @@ class CliManager {
                     message: "['q' to quit] > "
                 }, (result)=>{
                     if(result.index !== 'q'){
-                        ProjectsMgr.setCurrentByIndex(parseInt(result.index)-1);
+                        //ProjectsMgr.setCurrentByIndex(parseInt(result.index)-1);
                         ProjectsMgr.save();
                     }
                     return cliNextCb(this._success_code);
