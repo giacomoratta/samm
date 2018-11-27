@@ -30,6 +30,11 @@ class TQueryManager {
     }
 
 
+    getTags(){
+        return this.tqueryObj.getTags();
+    }
+
+
     save(){
         return DataMgr.save('tquery');
     }

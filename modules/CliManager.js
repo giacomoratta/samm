@@ -57,13 +57,12 @@ class CliManager {
 
 
     C_Coverage(){
-        let config_tags = ConfigMgr.get('Tags');
         vorpal
             .command('coverage')
             .description('Check the coverage of samples in according to the tag labels present in the configuration.')
             .option('-p, --path <path>', 'Custom absolute path.')
             .option('-q, --query <query>', 'Custom query; e.g.\'tag1+tag2,tag3\'.')
-            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',TQueryMgr.getTags())
             .option('-a, --allinfo', 'Shows also the covered files.')
             .option('-g, --progressive', 'Shows the results step-by-step.')
             .action(this._getActionFn('coverage', (cliReference,cliNextCb)=>{
@@ -100,12 +99,12 @@ class CliManager {
                 C_coverage_options.query = this.cli_params.getOption('query');
                 C_coverage_options.tag = this.cli_params.getOption('tag');
                 if(!C_coverage_options.query){
-                    if(!ConfigMgr.get('Tags')){
-                        _clUI.print("no configured tags found.\n" +
-                            "Add one or more tags to the configuration or specify a custom query with -q option.");
+                    if(TQueryMgr.empty()){
+                        _clUI.print("no tagged queries found.\n" +
+                            "Add one or more tagged query to the configuration or specify a custom query with -q option.");
                         return cliNextCb(this._error_code);
                     }
-                    if(_.isString(C_coverage_options.tag) && !ConfigMgr.get('Tags')[C_coverage_options.tag]){
+                    if(_.isString(C_coverage_options.tag) && !TQueryMgr.get(C_coverage_options.tag)){
                         _clUI.print("query with tag '"+C_coverage_options.tag+"' not found.");
                         return cliNextCb(this._error_code);
                     }
@@ -244,12 +243,11 @@ class CliManager {
 
 
     C_Lookup(){
-        let config_tags = ConfigMgr.get('Tags');
         vorpal
             .command('lookup [query]')
             .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
-            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',(_.isObject(config_tags)?Object.keys(config_tags):null))
+            .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',TQueryMgr.getTags())
             .action(this._getActionFn('lookup', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> lookup:');
 
@@ -266,7 +264,7 @@ class CliManager {
                         _clUI.print("empty tag");
                         return cliNextCb(this._error_code);
                     }
-                    tagString = ConfigMgr.get('Tags')[tagString];
+                    tagString = TQueryMgr.get(tagString);
                     if(_.isNil(tagString)){
                         _clUI.print("unknown tag");
                         return cliNextCb(this._error_code);

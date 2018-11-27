@@ -281,11 +281,11 @@ class SamplesManager {
 
             }else if(_.isString(options.tag)){
                 d$("> coverage: query from string");
-                _data.tag_queries[options.tag]=ConfigMgr.get('Tags')[options.tag];
+                _data.tag_queries[options.tag]=TQueryMgr.get(options.tag);
 
-            }else if(_.isObject(ConfigMgr.get('Tags'))) {
-                d$("> coverage: query from config.Tags");
-                _data.tag_queries = ConfigMgr.get('Tags');
+            }else if(!TQueryMgr.empty()) {
+                d$("> coverage: query from tQuery");
+                _data.tag_queries = TQueryMgr.getAsPlainObject();
             }
             d$("> coverage: tag_queries are",_data.tag_queries,"\n");
             _data.tags = Object.keys(_data.tag_queries);
@@ -313,7 +313,7 @@ class SamplesManager {
                 enabled: true,
                 max_length_tag_string:3
             }
-        }
+        };
 
         /* Options */
         options = _.merge({

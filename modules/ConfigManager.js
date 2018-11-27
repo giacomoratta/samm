@@ -253,7 +253,6 @@ class ConfigManager {
         }
 
         else if(_outcome.type==='array'){
-
             if(this._config[n].length>0){
                 let _ot = this._set(this._config[n][0],v);
                 if(_ot.error===true){
@@ -309,21 +308,7 @@ class ConfigManager {
 
     setFromCliParams(name,values){
         if(!_.isString(name) || !_.isArray(values)) return null;
-        /* Custom action 'set' */
-        if(name==='Tags') return this.setTags(values);
         return this.set(name,values[0]);
-    }
-
-    setTags(values){
-        if(!_.isObject(this._config['Tags'])) this._config['Tags']={};
-        if(values.length===1){
-            if(!this._config['Tags'][values[0]]) return null;
-            delete this._config['Tags'][values[0]];
-        } else if(_.isString(values[1])) {
-            this._config['Tags'][values[0]] = values[1];
-            this._config['Tags'] = Utils.sortObjectByKey(this._config['Tags']);
-        }
-        return true;
     }
 
     printMessages(){

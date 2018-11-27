@@ -40,7 +40,6 @@ class TQuery {
         return true;
     }
 
-
     forEach(cb){
         let keys = Object.keys(this._data);
         for(let i=0; i<keys.length; i++){
@@ -48,6 +47,16 @@ class TQuery {
         }
     }
 
+    getTags(){
+        return Object.keys(this._data);
+    }
+
+    getAsPlainObject(){
+        let _obj = {};
+        this.forEach(function(k,v){
+            _obj[k]=v;
+        });
+    }
 
     fromJson(jsondata){
         this._data = {};
