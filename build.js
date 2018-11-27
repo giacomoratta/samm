@@ -18,30 +18,35 @@ let b$cfg = {
         */
         'mac_x64':{
             config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json',true),
             compile_options:{
                 target: 'mac-x64-10.13.0'
             }
         },
         'win_x64':{
             config_sample: Utils.File.setAsAbsPath('config.sample.win.json',true),
+            tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json',true),
             compile_options:{
                 target: 'windows-x64-10.13.0'
             }
         },
         'win_x86':{
             config_sample: Utils.File.setAsAbsPath('config.sample.win.json',true),
+            tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json',true),
             compile_options:{
                 target: 'windows-x86-10.13.0'
             }
         },
         'linux_x64':{
             config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json',true),
             compile_options:{
                 target: 'linux-x64-10.13.0'
             }
         },
         'linux_x86':{
             config_sample: Utils.File.setAsAbsPath('config.sample.unix.json',true),
+            tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json',true),
             compile_options:{
                 target: 'linux-x86-10.13.0'
             }
@@ -67,6 +72,7 @@ let compileForPlatform = function(platform){
     poz.build_dir = Utils.File.pathJoin(b$cfg.build_dir,poz.signature);
     poz.compile_options.output = Utils.File.pathJoin(poz.build_dir,'mpl');
     poz.config_sample_copy = Utils.File.pathJoin(poz.build_dir,'config.sample.json');
+    poz.tqueries_final = Utils.File.pathJoin(poz.build_dir,'tqueries.json');
 
     console.log("\n"+'['+platform+'] Delete directory for build ::',poz.build_dir);
     Utils.File.removeDirSync(poz.build_dir);
@@ -76,6 +82,9 @@ let compileForPlatform = function(platform){
 
     console.log("\n"+'['+platform+'] Copying sample config file ::',poz.config_sample_copy);
     Utils.File.copyFileSync(poz.config_sample, poz.config_sample_copy);
+
+    console.log("\n"+'['+platform+'] Copying sample tquery file ::',poz.tqueries_final);
+    Utils.File.copyFileSync(poz.tqueries_sample, poz.tqueries_final);
 
     console.log(poz.compile_options);
 

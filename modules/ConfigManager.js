@@ -37,12 +37,15 @@ class ConfigManager {
 
         // Check first start
         let __cfgsmplfile__ = Utils.File.setAsAbsPath('config.sample.json',true /*isFile*/);
-        if(Utils.File.fileExistsSync(__cfgsmplfile__) || !Utils.File.directoryExistsSync(this.path('working_dir'))){
+        let __tquerysmplfile__ = Utils.File.setAsAbsPath('config.sample.json',true /*isFile*/);
+        if(!Utils.File.directoryExistsSync(this.path('working_dir'))){
             clUI.print('First start settings...');
             try{
                 Utils.File.ensureDirSync(this.path('working_dir'));
                 if(!Utils.File.fileExistsSync(this._paths.config_file_sample)) Utils.File.copyFileSync(__cfgsmplfile__,this._paths.config_file_sample);
+                if(!Utils.File.fileExistsSync(this._paths.tquery)) Utils.File.copyFileSync(__tquerysmplfile__,this._paths.tquery);
                 Utils.File.removeFileSync(__cfgsmplfile__);
+                Utils.File.removeFileSync(__tquerysmplfile__);
                 clUI.print('First start settings finished successfully.');
             }catch(e){
                 clUI.error('First start: cannot set properly files and directory for user data.');
