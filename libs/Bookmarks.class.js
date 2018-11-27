@@ -62,11 +62,14 @@ class Bookmarks {
         for(let i=0; i<keys.length; i++){
             if(this._data[keys[i]].empty()) continue;
             if(printLabels){
-                if(keys[i]==='_') printFn('Unlabeled:');
+                if(keys[i]==='_') printFn('(unlabeled):');
                 else printFn(keys[i]+':');
             }
             this._data[keys[i]].forEach((v)=>{
-                printFn('  ' + (index+1) + ') ' + v.base );//+ '  [ '+v.rel_path+' ] ');
+                printFn(_.padEnd(' ' + _.padStart(index+1,3) + ') ' + v.base+' ',70,' .')  + _.truncateStart(v.dir,{
+                    length:50,
+                    omission:'...'
+                }));
                 index++;
             });
             printFn('');

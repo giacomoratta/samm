@@ -26,3 +26,13 @@ global._.mixin({ 'noDuplicatedValues':(array,value,cb)=>{
     }
     return null;
 }});
+
+
+global._.mixin({ 'truncateStart':(string,options)=>{
+    options = _.merge({
+        length:30,
+        omission:'...'
+    },options);
+    if(string.length<=options.length) return string;
+    return options.omission+string.substring(string.length-options.length+1);
+}});
