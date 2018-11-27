@@ -462,7 +462,7 @@ class CliManager {
             .command('project')
             .description('Set or choose a project path'+"\n")
             .option('-p, --path <path>', '...')
-            .option('-f, --find <find>', '...')
+            //.option('-f, --find <find>', '...')
             .option('-h, --history', '...')
             .option('-d, --default [default]', '...')
             .option('-n, --newname [name]', '...')
