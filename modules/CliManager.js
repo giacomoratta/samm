@@ -446,10 +446,16 @@ class CliManager {
 
     C_Project(){
         /*
-        * set -f abcde      // set from search > perform search > menu > set
-        * set -h            // set from history > menu history > set
-        * default abc       // set new default with name abc
-        * new abc -n pname  // new project from abc default > menu parents > set and copy
+        * -f abcde      // set from search > perform search > menu > set
+        * -h            // set from history > menu history > set
+        * -d            // show all default projects
+        * -d abc        // set new default with name abc
+        * -n pname      // new project from default > menu defaults (if 1 not shown) > menu parents > set and copy
+        */
+
+        /*
+        * ensure dir default_projects
+        * usage config.projectsdirectory
         */
         vorpal
             .command('project')
