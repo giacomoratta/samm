@@ -24,17 +24,17 @@ class CliManager {
     }
 
     _setCliCommandManagers(){
-        this.C_Lookup();
-        this.C_Save();
         this.C_Bookmarks();
-        this.C_Coverage();
-        this.C_Scan();
-        this.C_Project();
-        this.C_TQuery();
-        this.C_Samples();
-        this.C_Export();
-        this.C_Dir();
         this.C_Config();
+        this.C_Coverage();
+        this.C_Dir();
+        this.C_Export();
+        this.C_Lookup();
+        this.C_Project();
+        this.C_Samples();
+        this.C_Save();
+        this.C_Scan();
+        this.C_TQuery();
     }
 
     _getActionFn(cmdName, cmdFn){
@@ -59,7 +59,7 @@ class CliManager {
     C_Coverage(){
         vorpal
             .command('coverage')
-            .description('Check the coverage of samples in according to the tag labels present in the configuration.')
+            .description('Check the coverage of samples in according to the tag labels present in the configuration.'+"\n")
             .option('-p, --path <path>', 'Custom absolute path.')
             .option('-q, --query <query>', 'Custom query; e.g.\'tag1+tag2,tag3\'.')
             .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',TQueryMgr.getTags())
@@ -174,7 +174,7 @@ class CliManager {
         const _self = this;
         vorpal
             .command('save')
-            .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.')
+            .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.'+"\n")
             .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
             .option('-p, --path <path>', 'Absolute custom path.')
             .option('-o, --overwrite', 'Overwrite the existent directory.')
@@ -245,7 +245,7 @@ class CliManager {
     C_Lookup(){
         vorpal
             .command('lookup [query]')
-            .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and).")
+            .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and)."+"\n")
             .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
             .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',TQueryMgr.getTags())
             .action(this._getActionFn('lookup', (cliReference,cliNextCb)=>{
@@ -298,7 +298,7 @@ class CliManager {
     C_Bookmarks(){
         vorpal
             .command('bookm')
-            .description("Prints the samples collection to work with in the next command 'bookm set'.")
+            .description("Prints the samples collection to work with in the next command 'bookm set'."+"\n")
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
             .option('-t, --tag <tag>', 'Shows the bookmarks under the specified custom tag')
@@ -374,7 +374,7 @@ class CliManager {
                         "\n  $ config / print the whole config and internal data" +
                         "\n  $ config ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
                         "\n  $ config ExcludedExtensionsForSamples ext / (or .ext)" +
-                        "\n  $ config ExcludedExtensionsForSamples !ext / (or !.ext)")
+                        "\n  $ config ExcludedExtensionsForSamples !ext / (or !.ext)"+"\n")
             .action(this._getActionFn('config', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> config:');
 
@@ -414,7 +414,7 @@ class CliManager {
         vorpal
             .command('scan')
             .description("Perform a full scan of the samples directory. " +
-                "In order to avoid resource wasting, if the index is already present the scan does not start.")
+                "In order to avoid resource wasting, if the index is already present the scan does not start."+"\n")
             .option('-f, --force', 'Force the rescan.')
             .action(this._getActionFn('scan', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> scan:');
@@ -459,7 +459,7 @@ class CliManager {
         */
         vorpal
             .command('project')
-            .description('Set or choose a project path')
+            .description('Set or choose a project path'+"\n")
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
 
                 if(_.isString(this.cli_params.get('path'))){
@@ -495,7 +495,7 @@ class CliManager {
     C_TQuery(){
         vorpal
             .command('tquery [tag] [query]')
-            .description('Add, remove or view tagged queries (used by lookup -t <tag>)')
+            .description('Add, remove or view tagged queries (used by lookup -t <tag>)'+"\n")
             .option('-r, --remove', 'Remove the specified tag')
             .action(this._getActionFn('tquery', (cliReference,cliNextCb)=>{
 
@@ -547,7 +547,7 @@ class CliManager {
     C_Samples(){
         vorpal
             .command('samples')
-            .description('Shows all the indexed samples.')
+            .description('Shows all the indexed samples.'+"\n")
             .action(this._getActionFn('samples', (cliReference,cliNextCb)=>{
                 SamplesMgr.printSamplesTree();
                 return cliNextCb(this._success_code);
@@ -559,7 +559,7 @@ class CliManager {
         vorpal
             .command('export <data>')
             .description("Export project or samples data in a compressed archive. " +
-                "Allowed values: project (export the project) and bookm (export bookmarks collection).")
+                "Allowed values: project (export the project) and bookm (export bookmarks collection)."+"\n")
             .autocomplete(['bookm','project'])
             //.option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
             .action(this._getActionFn('export', (cliReference,cliNextCb)=>{
@@ -622,7 +622,7 @@ class CliManager {
             .command('dir <action>')
             .description('Some useful actions with the working directories (e.g. Samples, Project, etc.)'+
                 "\n  $ dir ext  / show the full list of extensions and useful stats"+
-                "\n  $ dir ext -e exe  / show the full list of file with the specified extension")
+                "\n  $ dir ext -e exe  / show the full list of file with the specified extension"+"\n")
             .option('-e, --extension <name>', 'Focus on the specified extension.')
             .option('-i, --index', 'Works with the internal samples index')
             .autocomplete(['ext'])
