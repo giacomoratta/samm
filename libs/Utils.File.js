@@ -7,12 +7,10 @@ const _ = require('lodash');
 class Utils_Files {
 
     constructor(){
-        this._console = d$;
         this._PATH = path;
         this._FS = fs;
         this._FS_EXTRA = fs_extra;
         this._RIMRAF = rimraf;
-        //this._console = function(){};
 
         this.pathBasename = path.basename;
         this.pathDirname = path.dirname;
@@ -293,7 +291,7 @@ class Utils_Files {
             this._FS_EXTRA.copySync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
-            _self._console(_ret_value);
+            d$(_ret_value);
         }
         return _ret_value;
     }
@@ -313,7 +311,7 @@ class Utils_Files {
             _self._FS_EXTRA.copy(path_from, path_to, options, function(err){
                 if(err){
                     _ret_value.err = err;
-                    _self._console(_ret_value);
+                    d$(_ret_value);
                     return reject(_ret_value);
                 }
                 return resolve(_ret_value);

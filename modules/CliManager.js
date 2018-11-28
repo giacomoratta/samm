@@ -468,7 +468,7 @@ class CliManager {
             .option('-n, --newname [name]', '...')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> project:');
-                _clUI.print("current project: ",ProjectsMgr.current);
+                _clUI.print("[current]",ProjectsMgr.current);
 
                 let C_Project_options = {
                     path: this.cli_params.getOption('path'),
@@ -481,8 +481,13 @@ class CliManager {
 
                 // Set current project from absolute path
                 if(_.isString(C_Project_options.path) && C_Project_options.path.length>1){
+                    if(!Utils.File.directoryExistsSync(C_Project_options.path)){
+                        _clUI.print("this project path does not exist!");
+                        return cliNextCb(this._error_code);
+                    }
                     ProjectsMgr.current = C_Project_options.path;
                     ProjectsMgr.save();
+                    _clUI.print("[new]",ProjectsMgr.current);
                     return cliNextCb(this._success_code);
                 }
 
@@ -506,7 +511,7 @@ class CliManager {
                             }else{
                                 ProjectsMgr.current = phistory;
                                 ProjectsMgr.save();
-                                _clUI.print("new current project: ",ProjectsMgr.current);
+                                _clUI.print("[new]",ProjectsMgr.current);
                             }
                         }
                         return cliNextCb(this._success_code);
@@ -519,6 +524,7 @@ class CliManager {
                     // ProjectsMgr.find(C_Project_options.find);
                     // prompt > choose index
                     // setCurrent and save
+                    _clUI.print("[new]",ProjectsMgr.current);
                     return cliNextCb(this._success_code);
                 }
 
@@ -529,6 +535,7 @@ class CliManager {
                     if(_.isString(C_Project_options.default_value) && C_Project_options.default_value.length>1){
                         // prompt > choose index
                         // setCurrent and save
+                        _clUI.print("[new]",ProjectsMgr.current);
                         return cliNextCb(this._success_code);
                     }
                     return cliNextCb(this._success_code);
@@ -542,6 +549,7 @@ class CliManager {
                     //    prompt > choose index
                     //       copy directory
                     //       setCurrent and save
+                    _clUI.print("[new]",ProjectsMgr.current);
                     return cliNextCb(this._success_code);
                 }
 
@@ -557,6 +565,7 @@ class CliManager {
             .option('-r, --remove', 'Remove the specified tag')
             .action(this._getActionFn('tquery', (cliReference,cliNextCb)=>{
 
+                let _clUI = clUI.newLocalUI('> tquery:');
                 let C_TQuery_options = {
                     tag:this.cli_params.get('tag'),
                     query:this.cli_params.get('query'),
@@ -565,10 +574,10 @@ class CliManager {
 
                 if(C_TQuery_options.tag && C_TQuery_options.query){
                     if(TQueryMgr.add(C_TQuery_options.tag,C_TQuery_options.query)){
-                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'added succesfully');
+                        _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'added succesfully');
                         TQueryMgr.save();
                     }else{
-                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not added');
+                        _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not added');
                     }
                     return cliNextCb(this._success_code);
                 }
@@ -578,10 +587,10 @@ class CliManager {
                     // remove
                     if(C_TQuery_options.remove===true){
                         if(TQueryMgr.remove(C_TQuery_options.tag)){
-                            clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'removed succesfully');
+                            _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'removed succesfully');
                             TQueryMgr.save();
                         }else{
-                            clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not removed');
+                            _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'not removed');
                         }
                         return cliNextCb(this._success_code);
                     }
@@ -589,14 +598,17 @@ class CliManager {
                     // get one tagged query
                     let tquery = TQueryMgr.get(C_TQuery_options.tag);
                     if(!tquery){
-                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'does not exist');
+                        _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'does not exist');
                     }else{
-                        clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'=',tquery);
+                        _clUI.print('Tag',"'"+C_TQuery_options.tag+"'",'=',tquery);
                     }
                     return cliNextCb(this._success_code);
                 }
 
-                TQueryMgr.printList(function(v){ clUI.print(v); });
+                TQueryMgr.printList(function(tag,query){ clUI.print("\n  ",tag+':',query); });
+                if(TQueryMgr.empty()){
+                    _clUI.print("No tagged queries");
+                }
                 return cliNextCb(this._success_code);
             }));
     }

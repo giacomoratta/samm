@@ -1,5 +1,4 @@
 const _ = require('lodash');
-// function d$(){ ...print debug msg... }
 
 class Utils {
 

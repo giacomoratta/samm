@@ -9,9 +9,12 @@ class TQueryManager {
 
 
     printList(printFn){
-        return this.tqueryObj.forEach(function(t,q){
-            printFn('  '+t+' : '+q);
-        });
+        return this.tqueryObj.forEach(printFn);
+    }
+
+
+    empty(){
+        return this.tqueryObj.empty();
     }
 
 
