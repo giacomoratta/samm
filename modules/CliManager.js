@@ -455,7 +455,7 @@ class CliManager {
         */
 
         /*
-        * ensure dir default_projects
+        * ensure dir templates_path
         * usage config.projectsdirectory
         */
         vorpal
@@ -530,27 +530,94 @@ class CliManager {
 
                 // Default projects
                 if(C_Project_options.default_flag===true){
-                    // show all default project
-
                     if(_.isString(C_Project_options.default_value) && C_Project_options.default_value.length>1){
-                        // prompt > choose index
-                        // setCurrent and save
-                        _clUI.print("[new]",ProjectsMgr.current);
-                        return cliNextCb(this._success_code);
+                        if(!ProjectsMgr.current){
+                            _clUI.print("No current project set");
+                            return cliNextCb(this._success_code);
+                        }
+                        _clUI.print("The current project","'"+ProjectsMgr.current+"'"," will be stored as template.");
+                        cliReference.prompt({
+                            type: 'input',
+                            name: 'answer',
+                            message: "Do you want to proceed? [y/n]"
+                        }, (result)=>{
+                            if(result.answer === 'y'){
+                                ProjectsMgr.template.add(C_Project_options.default_value, ProjectsMgr.current).then((template)=>{
+                                    _clUI.print("New default template: ",template.path);
+                                    return cliNextCb(this._success_code);
+                                }).catch((e)=>{
+                                    d$(e);
+                                    _clUI.print("Unexpected error",e.message);
+                                    return cliNextCb(this._error_code);
+                                });
+                            }
+                            return cliNextCb(this._success_code);
+                        });
+                        return;
+                    }
+                    if(!ProjectsMgr.template.printIndexedList(function(v){
+                            clUI.print(v);
+                        })){
+                        _clUI.print('No project templates available.');
                     }
                     return cliNextCb(this._success_code);
                 }
 
                 // New project from default
                 if(_.isString(C_Project_options.newname) && C_Project_options.newname.length>1){
-                    // show default projects
-                    // prompt > choose index
-                    //    show parents
-                    //    prompt > choose index
-                    //       copy directory
-                    //       setCurrent and save
-                    _clUI.print("[new]",ProjectsMgr.current);
-                    return cliNextCb(this._success_code);
+                    if(!ProjectsMgr.template.printIndexedList(function(v){
+                            clUI.print(v);
+                        })){
+                        _clUI.print('No project templates available.');
+                    }
+                    cliReference.prompt({
+                        type: 'input',
+                        name: 'index',
+                        message: "['q' to quit] > "
+                    }, (result)=>{
+                        if(result.index !== 'q'){
+                            let ptemplate = ProjectsMgr.template.get(parseInt(result.index)-1);
+                            if(!ptemplate){
+                                _clUI.print("index out of bounds");
+                                return cliNextCb(this._error_code);
+                            }
+
+                            /* Choose project path */
+                            let _projectPathList = ProjectsMgr.ppaths.printIndexedList(function(v){
+                                clUI.print(v);
+                            });
+                            cliReference.prompt({
+                                type: 'input',
+                                name: 'index',
+                                message: "Write "+(_projectPathList?"or choose":"")+" an absolute path ['q' to quit] > "
+                            }, (result)=>{
+                                if(result.index !== 'q') {
+                                    let project_path = ProjectsMgr.ppaths.get(parseInt(result.index) - 1);
+                                    if (!project_path) {
+                                        _clUI.print("index out of bounds");
+                                        return cliNextCb(this._error_code);
+                                    }
+
+                                    ProjectsMgr.template.newProject(ptemplate, project_path, C_Project_options.newname).then((data)=>{
+                                        ProjectsMgr.current = data.project_path;
+                                        ProjectsMgr.save();
+                                        _clUI.print("[new current project]",ProjectsMgr.current);
+                                        return cliNextCb(this._success_code);
+
+                                    }).catch((e)=>{
+                                        d$(e);
+                                        _clUI.print("Unexpected error",e.message);
+                                        return cliNextCb(this._error_code);
+                                    });
+                                    return;
+                                }
+                                return cliNextCb(this._success_code);
+                            });
+                            return;
+                        }
+                        return cliNextCb(this._success_code);
+                    });
+                    return;
                 }
 
                 return cliNextCb(this._success_code);

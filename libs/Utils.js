@@ -81,6 +81,10 @@ class Utils {
         return s.replace(/[^a-zA-Z0-9]/g,'');
     }
 
+    onlyValidPathName(s){
+        return s.replace(/[^a-zA-Z0-9\_\-\.]/g,'');
+    }
+
     printArrayOrderedList(array,prefix,processFn){
         let padding = (""+array.length+"").length+1;
         if(!processFn) processFn=function(n){ return n; };

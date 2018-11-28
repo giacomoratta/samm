@@ -123,6 +123,25 @@ class Utils_Files {
 
 
 
+    /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    fileExists(path_string){
+        let _self = this;
+        return new Promise(function(resolve,reject){
+            return resolve(_self.fileExistsSync(path_string));
+        });
+    }
+
+    directoryExists(path_string){
+        let _self = this;
+        return new Promise(function(resolve,reject){
+            return resolve(_self.directoryExistsSync(path_string));
+        });
+    }
+
+
+
+
     /* PATH R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     getPathStatsSync(path_string){
@@ -224,6 +243,33 @@ class Utils_Files {
             _self._FS.writeFile(path_to, text, 'utf8',function(err){
                 if(err){
                     _ret_value.err = err;
+                    return reject(_ret_value);
+                }
+                return resolve(_ret_value);
+            });
+        });
+    }
+
+
+
+    /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    copyDirectory(path_from, path_to, options){
+        options = _.merge({
+            overwrite:false,
+            errorOnExist:false
+        },options);
+        let _self = this;
+        return new Promise(function(resolve,reject){
+            let _ret_value = {
+                err:null,
+                path_from:path_from,
+                path_to:path_to
+            };
+            _self._FS_EXTRA.copy(path_from, path_to, options, function(err){
+                if(err){
+                    _ret_value.err = err;
+                    d$(_ret_value);
                     return reject(_ret_value);
                 }
                 return resolve(_ret_value);

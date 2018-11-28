@@ -16,7 +16,7 @@ class ConfigManager {
             bookmarks: options.bookmarks,
             projects: options.projects,
             tquery: options.tquery,
-            default_projects: options.default_projects
+            templates_path: options.templates_path
         };
         this._labels = {
             'sample_dir':'mpl'
@@ -31,7 +31,7 @@ class ConfigManager {
         this._paths.bookmarks = Utils.File.setAsAbsPath(this._paths.bookmarks,true /*isFile*/);
         this._paths.projects = Utils.File.setAsAbsPath(this._paths.projects,true /*isFile*/);
         this._paths.tquery = Utils.File.setAsAbsPath(this._paths.tquery,true /*isFile*/);
-        this._paths.default_projects = Utils.File.setAsAbsPath(this._paths.default_projects);
+        this._paths.templates_path = Utils.File.setAsAbsPath(this._paths.templates_path);
         this._paths.samples_directory = null;
         this._paths.export_directory = null;
 
@@ -55,7 +55,7 @@ class ConfigManager {
         }
 
         // Set directories
-        Utils.File.ensureDirSync(this.path('default_projects'));
+        Utils.File.ensureDirSync(this.path('templates_path'));
 
 
         // DataManager
@@ -91,7 +91,7 @@ class ConfigManager {
             bookmarks: working_dir+'bookmarks.json',
             projects: working_dir+'projects.json',
             tquery: working_dir+'tqueries.json',
-            default_projects: working_dir+'default_projects'
+            templates_path: working_dir+'templates_path'
         },options);
         return options;
     }

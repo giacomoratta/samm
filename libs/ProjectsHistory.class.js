@@ -34,7 +34,7 @@ class ProjectsHistory {
         if(!_.isString(project_name) || project_name.length<1) return false;
         this.remove(project_path);
         this._data.unshift(this._newProjectNode(project_path,project_name));
-        if(this._sizeLimit>0 && this._data.length>this._sizeLimit) this._data = this._data.splice(this._sizeLimit);
+        if(this._sizeLimit>0 && this._data.length>this._sizeLimit) this._data.splice(this._sizeLimit);
         this._size = this._data.length;
         return true;
     }
