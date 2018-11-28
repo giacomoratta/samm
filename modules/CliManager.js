@@ -509,6 +509,11 @@ class CliManager {
                             if(!phistory){
                                 _clUI.print("index out of bounds");
                             }else{
+                                if(!Utils.File.directoryExistsSync(phistory)){
+                                    _clUI.print("this project path does not exist!");
+                                    ProjectsMgr.history.remove(phistory);
+                                    return cliNextCb(this._error_code);
+                                }
                                 ProjectsMgr.current = phistory;
                                 ProjectsMgr.save();
                                 _clUI.print("[new]",ProjectsMgr.current);
