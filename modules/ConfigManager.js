@@ -32,6 +32,7 @@ class ConfigManager {
         this._paths.projects = Utils.File.setAsAbsPath(this._paths.projects,true /*isFile*/);
         this._paths.tquery = Utils.File.setAsAbsPath(this._paths.tquery,true /*isFile*/);
         this._paths.templates_path = Utils.File.setAsAbsPath(this._paths.templates_path);
+        this._paths.projects_directory = null;
         this._paths.samples_directory = null;
         this._paths.export_directory = null;
 
@@ -101,7 +102,11 @@ class ConfigManager {
         this._paths.samples_directory = Utils.File.checkAndSetPathSync(this._config.SamplesDirectory);
         if(!this._paths.samples_directory) clUI.warning("Sample directory does not exist: ",this._config.SamplesDirectory);
 
+        this._paths.projects_directory = Utils.File.checkAndSetPathSync(this._config.ProjectsDirectory);
+        if(!this._paths.projects_directory) clUI.warning("Projects directory does not exist: ",this._config.ProjectsDirectory);
+
         this._paths.export_directory = Utils.File.checkAndSetPathSync(this._config.ExportDirectory);
+        if(!this._paths.export_directory) clUI.warning("Export directory does not exist: ",this._config.ExportDirectory);
         clUI.print(); //new empty row
     }
 
@@ -225,7 +230,7 @@ class ConfigManager {
         let v = _outcome.value;
         let v_copy = v;
 
-        if(n==="Project"){
+        if(n==="ProjectsDirectory"){
             v = Utils.File.checkAndSetPathSync(v);
             if(!v){
                 clUI.print("The projects directory does not exist: "+v_copy);

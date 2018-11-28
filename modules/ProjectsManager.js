@@ -1,6 +1,6 @@
-let ProjectsHistory = require('../libs/ProjectsHistory.class');
-let ProjectsTemplate = require('../libs/ProjectsTemplate.class');
-let ProjectsPath = require('../libs/ProjectsPath.class');
+let ProjectsHistory = require('./submodules/ProjectsHistory.class');
+let ProjectsTemplate = require('./submodules/ProjectsTemplate.class');
+let ProjectsPath = require('./submodules/ProjectsPath.class');
 
 class ProjectsManager {
 
@@ -35,7 +35,7 @@ class ProjectsManager {
             preLoad:true,
 
             loadFn:(fileData)=>{
-                _self._data.ppaths = new ProjectsPath(_self);
+                _self._data.ppaths = new ProjectsPath();
                 _self._data.history = new ProjectsHistory();
                 _self._data.template = new ProjectsTemplate(ConfigMgr.path('templates_path'));
                 if(!_.isObject(fileData)){
