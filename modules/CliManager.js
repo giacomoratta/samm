@@ -465,7 +465,7 @@ class CliManager {
             //.option('-f, --find <find>', '...')
             .option('-h, --history', '...')
             .option('-d, --default [default]', '...')
-            .option('-n, --newname [name]', '...')
+            .option('-n, --newname <name>', '...')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> project:');
                 _clUI.print("[current]",ProjectsMgr.current);
@@ -482,7 +482,7 @@ class CliManager {
                 // Set current project from absolute path
                 if(_.isString(C_Project_options.path) && C_Project_options.path.length>1){
                     if(!Utils.File.directoryExistsSync(C_Project_options.path)){
-                        _clUI.print("this project path does not exist!");
+                        _clUI.print("this project path does not exist");
                         return cliNextCb(this._error_code);
                     }
                     ProjectsMgr.current = C_Project_options.path;
@@ -540,15 +540,16 @@ class CliManager {
                             _clUI.print("No current project set");
                             return cliNextCb(this._success_code);
                         }
-                        _clUI.print("The current project","'"+ProjectsMgr.current+"'"," will be stored as template.");
+                        _clUI.print("The current project","'"+ProjectsMgr.current+"'"," will be stored as template in",ProjectsMgr.template.dir);
                         cliReference.prompt({
                             type: 'input',
                             name: 'answer',
-                            message: "Do you want to proceed? [y/n]"
+                            message: "Do you want to proceed? [y/n] "
                         }, (result)=>{
                             if(result.answer === 'y'){
                                 ProjectsMgr.template.add(C_Project_options.default_value, ProjectsMgr.current).then((template)=>{
-                                    _clUI.print("New default template: ",template.path);
+                                    _clUI.print("New project template: ",template.template_path);
+                                    ProjectsMgr.save();
                                     return cliNextCb(this._success_code);
                                 }).catch((e)=>{
                                     d$(e);
@@ -560,6 +561,7 @@ class CliManager {
                         });
                         return;
                     }
+
                     if(!ProjectsMgr.template.printIndexedList(function(v){
                             clUI.print(v);
                         })){
@@ -574,6 +576,7 @@ class CliManager {
                             clUI.print(v);
                         })){
                         _clUI.print('No project templates available.');
+                        return cliNextCb(this._success_code);
                     }
                     cliReference.prompt({
                         type: 'input',
@@ -588,33 +591,57 @@ class CliManager {
                             }
 
                             /* Choose project path */
-                            let _projectPathList = ProjectsMgr.ppaths.printIndexedList(function(v){
+                            let _projectPathList = ProjectsMgr.ppaths.printIndexedList(ProjectsMgr.current,function(v){
                                 clUI.print(v);
                             });
                             cliReference.prompt({
                                 type: 'input',
                                 name: 'index',
-                                message: "Write "+(_projectPathList?"or choose":"")+" an absolute path ['q' to quit] > "
+                                message: "Write "+(_.isArray(_projectPathList)?"or choose":"")+" an absolute path ['q' to quit] > "
                             }, (result)=>{
                                 if(result.index !== 'q') {
-                                    let project_path = ProjectsMgr.ppaths.get(parseInt(result.index) - 1);
+                                    let project_path = null;
+                                    let _index = parseInt(result.index);
+
+                                    // Get by index
+                                    if(_.isNumber(_index) && _index<=_projectPathList.length && _index>0) project_path=_projectPathList[_index-1];
                                     if (!project_path) {
                                         _clUI.print("index out of bounds");
                                         return cliNextCb(this._error_code);
                                     }
 
-                                    ProjectsMgr.template.newProject(ptemplate, project_path, C_Project_options.newname).then((data)=>{
-                                        ProjectsMgr.current = data.project_path;
-                                        ProjectsMgr.save();
-                                        _clUI.print("[new current project]",ProjectsMgr.current);
-                                        return cliNextCb(this._success_code);
-
-                                    }).catch((e)=>{
-                                        d$(e);
-                                        _clUI.print("Unexpected error",e.message);
+                                    // Get by path
+                                    if(Utils.File.directoryExistsSync(result.index)) project_path=result.index;
+                                    if (!project_path) {
+                                        _clUI.print("path does not exist ",result.index);
                                         return cliNextCb(this._error_code);
+                                    }
+
+                                    _clUI.print("\nA new project in",Utils.File.pathJoin(project_path,C_Project_options.newname),
+                                        " will be created starting from the template",ptemplate);
+
+                                    // New project from template
+                                    cliReference.prompt({
+                                        type: 'input',
+                                        name: 'answer',
+                                        message: "Do you want to proceed? [y/n] "
+                                    }, (result)=>{
+                                        if(result.answer === 'y') {
+                                            ProjectsMgr.template.newProject(ptemplate, project_path, C_Project_options.newname).then((data)=>{
+                                                ProjectsMgr.current = data.project_path;
+                                                ProjectsMgr.save();
+                                                _clUI.print("[new current project]",ProjectsMgr.current);
+                                                return cliNextCb(this._success_code);
+
+                                            }).catch((e)=>{
+                                                d$(e);
+                                                _clUI.print("Unexpected error",e.message);
+                                                return cliNextCb(this._error_code);
+                                            });
+                                            return;
+                                        }
+                                        return cliNextCb(this._success_code);
                                     });
-                                    return;
                                 }
                                 return cliNextCb(this._success_code);
                             });

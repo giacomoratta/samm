@@ -1,18 +1,21 @@
 let ProjectsHistory = require('../libs/ProjectsHistory.class');
 let ProjectsTemplate = require('../libs/ProjectsTemplate.class');
+let ProjectsPath = require('../libs/ProjectsPath.class');
 
 class ProjectsManager {
 
     constructor(){
         this._data = {
             history:null,
-            template:null
+            template:null,
+            ppaths:null
         };
         this._createBookmarksHolder();
     }
 
     get history() { return this._data.history; }
     get template() { return this._data.template; }
+    get ppaths() { return this._data.ppaths; }
 
     get current() { if(this._data.history.empty()) return null; return this._data.history.get(0); }
     set current(project_path) { return this._data.history.add(project_path); }
@@ -32,8 +35,9 @@ class ProjectsManager {
             preLoad:true,
 
             loadFn:(fileData)=>{
+                _self._data.ppaths = new ProjectsPath(_self);
                 _self._data.history = new ProjectsHistory();
-                _self._data.template = new ProjectsTemplate(ConfigMgr.path('template_path'));
+                _self._data.template = new ProjectsTemplate(ConfigMgr.path('templates_path'));
                 if(!_.isObject(fileData)){
                     return _self._data;
                 }

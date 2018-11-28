@@ -127,7 +127,6 @@ class ConfigManager {
     printInternals(){
         clUI.print("Internal Configuration");
         let _self = this;
-        clUI.print("  # Work directories");
         Object.keys(this._paths).forEach(function(v){
             clUI.print("    "+v+" : "+_self._paths[v]);
         });

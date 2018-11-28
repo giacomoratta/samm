@@ -58,6 +58,8 @@ class ProjectsHistory {
 
 
     printIndexedList(printFn){
+        printFn('');
+        printFn('Available projects:');
         for(let i=0; i<this._data.length; i++){
             printFn('  ' + (i+1) + ') ' + this._data[i].path);
         }
@@ -74,12 +76,14 @@ class ProjectsHistory {
 
 
     fromJson(jsondata){
+        if(!_.isObject(jsondata)) return false;
         this._data = [];
-        this._size = jsondata.size;
         this._sizeLimit = jsondata.sizelimit;
         jsondata.collection.forEach((value,index)=>{
+            if(!Utils.File.directoryExistsSync(value.path)) return;
             this._data.push(this._newProjectNode(value.path,value.base));
         });
+        this._size = this._data.length;
         return true;
     }
 

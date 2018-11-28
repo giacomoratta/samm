@@ -8,6 +8,8 @@ class ProjectsTemplate {
         // TODO: try to fill
     }
 
+    get dir() { return this.templates_path; }
+
     _newTemplateNode(path,base){
         return {
             path:path,
@@ -50,6 +52,8 @@ class ProjectsTemplate {
 
 
     printIndexedList(printFn){
+        printFn('');
+        printFn('Available templates:');
         for(let i=0; i<this._data.length; i++){
             printFn('  ' + (i+1) + ') ' + this._data[i].path);
         }
@@ -66,6 +70,7 @@ class ProjectsTemplate {
 
 
     fromJson(jsondata){
+        if(!_.isObject(jsondata)) return false;
         this._data = [];
         this._size = jsondata.size;
         jsondata.collection.forEach((value,index)=>{
@@ -96,10 +101,10 @@ class ProjectsTemplate {
             template_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(template_path);
 
             template_name = Utils.File.pathBasename(template_path);
-            this.remove(template_path);
+            _self.remove(template_path);
             Utils.File.copyDirectory(origin_path,template_path).then(()=>{
-                this._data.unshift(this._newTemplateNode(template_path,template_name));
-                this._size = this._data.length;
+                _self._data.unshift(_self._newTemplateNode(template_path,template_name));
+                _self._size = _self._data.length;
                 resolve({
                     template_path: template_path
                 });
@@ -135,13 +140,18 @@ class ProjectsTemplate {
 
             /* COPY PROJECT */
             Utils.File.copyDirectory(template_path,project_path).then(()=>{
+                if(!Utils.File.directoryExistsSync(project_path)){
+                    reject({
+                        message:'Project not created '+template_path+' --> '+project_path
+                    });
+                }
                 resolve({
                     project_path: project_path
                 });
             }).catch((e)=>{
                 d$(e);
                 reject({
-                    message:'Cannot duplicate the template as new project '+project_path+' --> '+template_path
+                    message:'Cannot duplicate the template as new project '+template_path+' --> '+project_path
                 });
             })
         });
