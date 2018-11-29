@@ -8,7 +8,22 @@ class ProjectsTemplate {
     get dir() { return ConfigMgr.path('templates_path'); }
 
     _checkAndSetStructure(){
+        let _dirFound = [];
+        DirectoryTree.walkDirectory(ConfigMgr.path('templates_path'),{
+            maxLevel:2,
+            itemCb:function(data){
+                if(!data.item.isDirectory) return;
+                _dirFound.push(Utils.onlyLettersNumbers(data.item.path));
+            }
+        });
+        let _self = this;
+        this._data.forEach(function(v){
+            if(_dirFound.indexOf(Utils.onlyLettersNumbers(v))<0) _self.remove(v);
+        });
+        console.log(_dirFound);
         // TODO
+        // _self._data.unshift(_self._newTemplateNode(template_path,template_name));
+        // template_name = Utils.File.pathBasename(template_path);
         // if directory does not exist remove the object
         // if the object does not exist but directory yes, create the object
     }

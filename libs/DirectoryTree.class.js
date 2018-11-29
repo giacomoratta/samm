@@ -18,6 +18,7 @@ class DirectoryTree {
 
     static _parseOptions(options){
         return _.merge({
+            maxLevel:0,
             includedExtensions:[],
             excludedExtensions:[],
             excludedPaths:[],
@@ -363,7 +364,7 @@ class DirectoryTree {
             if(options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null;
 
             let p_info = new PathInfo(absPath);
-            if(p_info.error==true || (!p_info.isFile && !p_info.isDirectory)) return;
+            if(p_info.error===true || (!p_info.isFile && !p_info.isDirectory)) return;
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
@@ -383,6 +384,9 @@ class DirectoryTree {
                     Utils.sortFilesArray(a);
                 },(v,i,a)=>{
                     v = Utils.File.pathJoin(absPath,v);
+
+                    if(options.maxLevel>0 && options.maxLevel<=p_info.level) return;
+
                     let _pi = _wk(rootPath,v,options);
                     if(!_pi) return;
                     if(_pi.size) p_info.size += _pi.size;

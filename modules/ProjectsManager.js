@@ -43,7 +43,7 @@ class ProjectsManager {
                 }
                 _self._data.history.fromJson(fileData.history);
                 _self._data.template.fromJson(fileData.template);
-                ProjectsManager.save();
+                _self.save();
                 return _self._data;
             },
 
