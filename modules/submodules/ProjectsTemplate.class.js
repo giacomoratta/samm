@@ -172,6 +172,15 @@ class ProjectsTemplate {
     }
 
 
+    _newProjectName(project_name){
+        let project_np = Config.get('ProjectNamePattern');
+        if(project_np.length<=0) return project_name;
+        let new_project_name = Utils.replaceAll(project_np,'<name>',project_name);
+        if(new_project_name.length<=0) return project_name;
+        return new_project_name;
+    }
+
+
     newProject(template_path, project_parent_path, project_name){
         return new Promise(function(resolve,reject){
 
@@ -192,7 +201,7 @@ class ProjectsTemplate {
 
             /* PROJECT PATH - no duplication */
             let project_path = Utils.File.pathJoin(project_parent_path,project_name);
-            project_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(project_path);
+            project_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(project_path); // TODO renameFn
 
             /* COPY PROJECT */
             Utils.File.copyDirectory(template_path,project_path).then(()=>{
