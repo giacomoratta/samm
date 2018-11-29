@@ -173,7 +173,7 @@ class ProjectsTemplate {
 
 
     _newProjectName(project_name){
-        let project_np = Config.get('ProjectNamePattern');
+        let project_np = ConfigMgr.get('ProjectNamePattern');
         if(project_np.length<=0) return project_name;
         let new_project_name = Utils.replaceAll(project_np,'<name>',project_name);
         if(new_project_name.length<=0) return project_name;
@@ -183,7 +183,7 @@ class ProjectsTemplate {
     _newRenameFn(project_parent_path, project_name){
         let _self = this;
         return function(p_str,index){
-            return Utils.File.pathJoin(project_parent_path,self._newProjectName(project_name+(!_.isInteger(index)?'':'_'+index)));
+            return Utils.File.pathJoin(project_parent_path,_self._newProjectName(project_name+(!_.isInteger(index)?'':'_'+index)));
         };
     }
 

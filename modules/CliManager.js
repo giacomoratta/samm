@@ -656,6 +656,7 @@ class CliManager {
                                         }
                                         return cliNextCb(this._success_code);
                                     });
+                                    return;
                                 }
                                 return cliNextCb(this._success_code);
                             });
