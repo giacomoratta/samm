@@ -92,7 +92,7 @@ class ConfigManager {
             bookmarks: working_dir+'bookmarks.json',
             projects: working_dir+'projects.json',
             tquery: working_dir+'tqueries.json',
-            templates_path: working_dir+'templates_path'
+            templates_path: working_dir+'default_projects'
         },options);
         return options;
     }
