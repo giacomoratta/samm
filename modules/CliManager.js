@@ -182,7 +182,7 @@ class CliManager {
             .action(_self._getActionFn('save', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> save:');
 
-                if(!ProjectsMgr.currentDirExists()){
+                if(!ProjectsMgr.current){
                     _clUI.print("project directory is not set; check the configuration.");
                     return cliNextCb(this._error_code);
                 }
@@ -749,7 +749,7 @@ class CliManager {
                 };
 
                 if(C_export_options.param_data === 'project'){
-                    if(ProjectsMgr.currentDirExists()){
+                    if(ProjectsMgr.current){
                         _clUI.print("no valid project directory; set an existent project directory.");
                         return cliNextCb(this._error_code);
                     }
