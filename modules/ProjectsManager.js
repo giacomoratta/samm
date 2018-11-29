@@ -37,7 +37,7 @@ class ProjectsManager {
             loadFn:(fileData)=>{
                 _self._data.ppaths = new ProjectsPath();
                 _self._data.history = new ProjectsHistory();
-                _self._data.template = new ProjectsTemplate(ConfigMgr.path('templates_path'));
+                _self._data.template = new ProjectsTemplate();
                 if(!_.isObject(fileData)){
                     return _self._data;
                 }

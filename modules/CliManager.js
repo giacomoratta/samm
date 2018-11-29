@@ -445,34 +445,19 @@ class CliManager {
 
 
     C_Project(){
-        /*
-        * -p path       // absolute path
-        * -h            // set from history > menu history > set
-        * -f abcde      // set from search > perform search > menu > set
-        * -d            // show all default projects
-        * -d abc        // set new default with name abc
-        * -n pname      // new project from default > menu defaults (if 1 not shown) > menu parents > set and copy
-        */
-
-        /*
-        * ensure dir templates_path
-        * usage config.projectsdirectory
-        */
         vorpal
             .command('project')
             .description('Set or choose a project path'+"\n")
-            .option('-p, --path <path>', '...')
-            //.option('-f, --find <find>', '...')
-            .option('-h, --history', '...')
-            .option('-d, --default [default]', '...')
-            .option('-n, --newname <name>', '...')
+            .option('-p, --path <path>', 'Set current project from its absolute path')
+            .option('-h, --history', 'Set current project by choosing a project from history')
+            .option('-d, --default [default]', 'Store current project as default project')
+            .option('-n, --newname <name>', 'Create a new project from a default project')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> project:');
                 _clUI.print("[current]",ProjectsMgr.current);
 
                 let C_Project_options = {
                     path: this.cli_params.getOption('path'),
-                    find: this.cli_params.getOption('find'),
                     history: this.cli_params.hasOption('history'),
                     default_flag: this.cli_params.hasOption('default'),
                     default_value: this.cli_params.getOption('default'),
@@ -522,15 +507,6 @@ class CliManager {
                         return cliNextCb(this._success_code);
                     });
                     return;
-                }
-
-                // Set current project from search
-                if(_.isString(C_Project_options.find) && C_Project_options.find.length>1){
-                    // ProjectsMgr.find(C_Project_options.find);
-                    // prompt > choose index
-                    // setCurrent and save
-                    _clUI.print("[new]",ProjectsMgr.current);
-                    return cliNextCb(this._success_code);
                 }
 
                 // Default projects

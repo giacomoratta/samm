@@ -58,7 +58,10 @@ class SamplesManager {
             },
 
             printFn:(STree/*, $cfg, args*/)=>{
-                STree.T.print();
+                STree.T.print({
+                    skip_files:true,
+                    printFn:clUI.print
+                });
             },
 
             setFn:($cfg/*,args*/)=>{

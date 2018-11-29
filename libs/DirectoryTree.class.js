@@ -89,28 +89,22 @@ class DirectoryTree {
             itemCb:function(){}
         },options);
 
-        let level = -1;
-        let prev_index = 0;
         let isFirstChild, isLastChild;
-
         const iterator = _tree.treeIterator(_t_parent);
         let prev_level = 0;
-        let _item_path = null;
 
         for (const item of iterator) {
-            _item_path = item.path;
-            if(options.skip_empty==true && item.isDirectory && item.size<1){
+            if(options.skip_empty===true && item.isDirectory && item.size<1){
                 options.itemCb({
                     item:item,
                     parent:_t_parent,
-                    //level:level,
                     is_first_child:isFirstChild,
                     is_last_child:true /* also works with isLastChild */
                 });
                 continue;
             }
 
-            if(prev_level != item.level){
+            if(prev_level !== item.level){
                 _t_parent = _tree.parent(item);
                 prev_level = item.level;
             }
@@ -121,7 +115,6 @@ class DirectoryTree {
             options.itemCb({
                 item:item,
                 parent:_t_parent,
-                //level:level,
                 is_first_child:isFirstChild,
                 is_last_child:isLastChild
             });
@@ -148,7 +141,7 @@ class DirectoryTree {
 
 
     empty(){
-        return (this.nodeCount()==0);
+        return (this.nodeCount()===0);
     }
 
 
@@ -169,20 +162,12 @@ class DirectoryTree {
         return (this._data.directories_count);
     }
 
-
-    getRootPath(){
-        return this._data.root_path;
-    }
-
-
     toJson(){
         let exportObj = {};
         //exportObj._tree =  this._tree;
         //exportObj._root =  this._root;
         exportObj.data =  this._data;
         exportObj.struct = [];
-        let current_node = exportObj.struct;
-        let current_level = 0;
         this.walk({
             itemCb:(itemData)=>{
                 delete itemData.parent;
@@ -215,7 +200,7 @@ class DirectoryTree {
             _newpathinfo.fromJson(importObj.struct[i].item);
             //console.log(itemData.item);
 
-            if(_newpathinfo.level==prev_level){
+            if(_newpathinfo.level===prev_level){
                 //console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' = same level',itemData.level,prev_level);
 
             }else if(_newpathinfo.level>prev_level){
@@ -229,7 +214,6 @@ class DirectoryTree {
             }
             prev_level = _newpathinfo.level;
             //console.log(latest_item,_t_parent,_newpathinfo);
-            //Utils.EXIT('');
             latest_item = _tree.appendChild(_t_parent,_newpathinfo);
             //console.log(latest_item);
         }
@@ -242,10 +226,6 @@ class DirectoryTree {
         if(!this._tree || !this._root) return;
         let _tree1 = this._tree;
         let _tree2 = tree2._tree;
-
-        // options = _.merge({
-        //     itemCb:function(){}
-        // },options);
 
         const iterator1 = _tree1.treeIterator(this._root);
         const iterator2 = _tree2.treeIterator(tree2._root);
@@ -276,11 +256,16 @@ class DirectoryTree {
 
     print(options){
         options = _.merge({
+            skip_files:false,
             skip_empty:true,
-            itemCb:(data)=>{
-                console.log(preFn(data)+data.item.base+(data.item.isDirectory?'/':'')); //,data.item.level, data.is_first_child, data.is_last_child);
-            }
+            printFn:console.log
         },options);
+        if(!_.isFunction(options.itemCb)){
+            options.itemCb = function(data){
+                if(data.item.isFile) return;
+                options.printFn(preFn(data)+data.item.base+(data.item.isDirectory?'/':'')); //,data.item.level, data.is_first_child, data.is_last_child);
+            }
+        }
 
         let ppre = '';
         let def1 = '|    ';
@@ -288,9 +273,9 @@ class DirectoryTree {
 
         String.prototype.replaceAt=function(index, replacement) {
             return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
-        }
+        };
         String.prototype.replaceAll = function(search, replacement) {
-            var target = this;
+            let target = this;
             return target.replace(new RegExp(search, 'g'), replacement);
         };
 
@@ -300,7 +285,6 @@ class DirectoryTree {
             ppre = ppre.replaceAll('\u2500',' ');
 
             if(data.item.level<1) return '';
-            let p = '';
             let _level = data.item.level;
             if(_level<=1) return '';
 
@@ -320,8 +304,24 @@ class DirectoryTree {
 
             prev_level = _level;
             return ppre;
-        }
+        };
         this.walk(options);
+
+        options.printFn("\n Root path:",this.rootPath());
+        options.printFn("\n Directories#:",this.directoryCount());
+        options.printFn("\n Files#:",this.fileCount());
+        if(this._data.options.includedExtensions.length>0){
+            options.printFn("\n Included extensions:",this._data.options.includedExtensions.join(', '));
+        }
+        if(this._data.options.excludedExtensions.length>0){
+            options.printFn("\n Excluded extensions:",this._data.options.excludedExtensions.join(', '));
+        }
+        if(this._data.options.excludedPaths.length>0){
+            options.printFn("\n Excluded paths:");
+            this._data.options.excludedPaths.forEach(function(v){
+                options.printFn("  - ",v);
+            });
+        }
     }
 
 
@@ -330,18 +330,18 @@ class DirectoryTree {
 
         const _prepareExcludedPaths = function(excludedPaths){
             // /some_path_to_exclude/
-            if(!_.isArray(excludedPaths) || excludedPaths.length==0) return null;
+            if(!_.isArray(excludedPaths) || excludedPaths.length===0) return null;
             let exclArray = [];
             excludedPaths.forEach(function(v){
                 exclArray.push(_.escapeRegExp(v));
             });
-            if(excludedPaths.length==0) return null;
+            if(excludedPaths.length===0) return null;
             return exclArray;
         };
 
         const _prepareIncludedExtensions = function(includedExtensions){
             //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
-            if(!_.isArray(includedExtensions) || includedExtensions.length==0) return null;
+            if(!_.isArray(includedExtensions) || includedExtensions.length===0) return null;
             let _nw = [];
             includedExtensions.forEach(function(v){
                 _nw.push(_.escapeRegExp(v));
@@ -351,7 +351,7 @@ class DirectoryTree {
 
         const _prepareExcludedExtensions = function(excludedExtensions){
             //.*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
-            if(!_.isArray(excludedExtensions) || excludedExtensions.length==0) return null;
+            if(!_.isArray(excludedExtensions) || excludedExtensions.length===0) return null;
             let _nw = [];
             excludedExtensions.forEach(function(v){
                 _nw.push(_.escapeRegExp(v));
