@@ -63,8 +63,8 @@ class ProjectsTemplate {
     }
 
     _getByBase(base){
-        if(this._size<1) return null;
-        for(let i=0; i<this._data; i++){
+        if(this.empty()) return null;
+        for(let i=0; i<this._data.length; i++){
             if(this._data[i].base===base) return this._data[i].path;
         }
         return null;
@@ -90,7 +90,6 @@ class ProjectsTemplate {
     _remove(template_path){
         let index = this.getIndex(template_path);
         if(index>=0) {
-            console.log('remove',index,template_path);
             this._data.splice(index,1);
             this._size = this._data.length;
         }

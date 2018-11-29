@@ -540,6 +540,8 @@ class CliManager {
                                     if(ProjectsMgr.template.remove(defaultTemplate)!==true){
                                         _clUI.print("Cannot remove the default template");
                                         return cliNextCb(this._error_code);
+                                    }else{
+                                        ProjectsMgr.save();
                                     }
                                 }
                                 return cliNextCb(this._success_code);
