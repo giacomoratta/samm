@@ -180,8 +180,16 @@ class ProjectsTemplate {
         return new_project_name;
     }
 
+    _newRenameFn(project_parent_path, project_name){
+        let _self = this;
+        return function(p_str,index){
+            return Utils.File.pathJoin(project_parent_path,self._newProjectName(project_name+(!_.isInteger(index)?'':'_'+index)));
+        };
+    }
+
 
     newProject(template_path, project_parent_path, project_name){
+        let _self = this;
         return new Promise(function(resolve,reject){
 
             /* TEMPLATE PATH */
@@ -200,8 +208,9 @@ class ProjectsTemplate {
             }
 
             /* PROJECT PATH - no duplication */
-            let project_path = Utils.File.pathJoin(project_parent_path,project_name);
-            project_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(project_path); // TODO renameFn
+            let project_path_fn = _self._newRenameFn(project_parent_path,project_name);
+            let project_path = project_path_fn();
+            project_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(project_path,project_path_fn);
 
             /* COPY PROJECT */
             Utils.File.copyDirectory(template_path,project_path).then(()=>{
