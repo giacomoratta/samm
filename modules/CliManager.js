@@ -447,10 +447,17 @@ class CliManager {
     C_Project(){
         vorpal
             .command('project')
-            .description('Set or choose a project path'+"\n")
+            .description('Project manager (project path, default templates, history, etc.)'+
+                "\n  $ project                                  / shows current project"+
+                "\n  $ project -p \"/absolute/path/project/\"   / shows current project"+
+                "\n  $ project -d                               / shows default templates"+
+                "\n  $ project -d name                          / set new default template"+
+                "\n  $ project -d !name                         / remove a default template"+
+                "\n")
             .option('-p, --path <path>', 'Set current project from its absolute path')
             .option('-h, --history', 'Set current project by choosing a project from history')
-            .option('-d, --default [default]', 'View default projects or store the current project as default project')
+            .option('-d, --default [default]', "View default projects; if a name is specified, "+
+                                                "store the current project as default project or delete a default project")
             .option('-n, --new <default>', 'Create a new project from a default project')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> project:');
@@ -512,6 +519,35 @@ class CliManager {
                 // Default projects
                 if(C_Project_options.default_flag===true){
                     if(_.isString(C_Project_options.default_value) && C_Project_options.default_value.length>1){
+                        C_Project_options.default_value = _.trim(C_Project_options.default_value);
+
+                        /* Remove default template */
+                        if(C_Project_options.default_value.startsWith('!')){
+                            C_Project_options.default_value = C_Project_options.default_value.substring(1);
+                            let defaultTemplate = ProjectsMgr.template.get(C_Project_options.default_value);
+                            if(!defaultTemplate) {
+                                _clUI.print("Default template",C_Project_options.default_value,"not found");
+                                return cliNextCb(this._error_code);
+                            }
+
+                            _clUI.print("The template",C_Project_options.default_value,"inside the directory",defaultTemplate,"will be removed.");
+                            cliReference.prompt({
+                                type: 'input',
+                                name: 'answer',
+                                message: "Do you want to proceed? [y/n] "
+                            }, (result)=>{
+                                if(result.answer === 'y'){
+                                    if(ProjectsMgr.template.remove(defaultTemplate)!==true){
+                                        _clUI.print("Cannot remove the default template");
+                                        return cliNextCb(this._error_code);
+                                    }
+                                }
+                                return cliNextCb(this._success_code);
+                            });
+                            return;
+                        }
+
+                        /* New default template */
                         if(!ProjectsMgr.current){
                             _clUI.print("No current project set");
                             return cliNextCb(this._success_code);

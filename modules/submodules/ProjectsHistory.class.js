@@ -13,6 +13,12 @@ class ProjectsHistory {
         }
     }
 
+    _checkAndSetStructure(){
+        // TODO
+        // if directory does not exist remove the object
+        // if the object does not exist but directory yes, create the object
+    }
+
     empty(){
         return (this._size===0);
     }
@@ -77,10 +83,10 @@ class ProjectsHistory {
 
     fromJson(jsondata){
         if(!_.isObject(jsondata)) return false;
+        this._checkAndSetStructure();
         this._data = [];
         this._sizeLimit = jsondata.sizelimit;
-        jsondata.collection.forEach((value,index)=>{
-            if(!Utils.File.directoryExistsSync(value.path)) return;
+        jsondata.collection.forEach((value)=>{
             this._data.push(this._newProjectNode(value.path,value.base));
         });
         this._size = this._data.length;
@@ -89,6 +95,7 @@ class ProjectsHistory {
 
 
     toJson(){
+        this._checkAndSetStructure();
         return {
             size:this._size,
             sizelimit:this._sizeLimit,

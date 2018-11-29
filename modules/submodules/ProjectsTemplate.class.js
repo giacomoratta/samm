@@ -3,11 +3,15 @@ class ProjectsTemplate {
     constructor(){
         this._data = [];
         this._size = 0;
-
-        // TODO: try to fill
     }
 
     get dir() { return ConfigMgr.path('templates_path'); }
+
+    _checkAndSetStructure(){
+        // TODO
+        // if directory does not exist remove the object
+        // if the object does not exist but directory yes, create the object
+    }
 
     _newTemplateNode(path,base){
         return {
@@ -25,11 +29,20 @@ class ProjectsTemplate {
     }
 
     get(index){
+        if(_.isString(index)) return this._getByBase(index);
         if(this._size<1) return null;
         if(!_.isInteger(index)) return null;
         else if(index===-1) index=this._size-1;
         else if(index>this._size-1) return null;
         return this._data[index].path;
+    }
+
+    _getByBase(base){
+        if(this._size<1) return null;
+        for(let i=0; i<this._data; i++){
+            if(this._data[i].base===base) return this._data[i].path;
+        }
+        return null;
     }
 
     getIndex(template_path){
@@ -43,10 +56,16 @@ class ProjectsTemplate {
     }
 
     remove(template_path){
+        let flag=false;
         let index = this.getIndex(template_path);
-        if(index<0) return false;
-        this._data.splice(index,1);
-        return Utils.File.removeDirSync(template_path);
+        if(index>=0) {
+            flag = true;
+            this._data.splice(index,1);
+        }
+        if(Utils.File.removeDirSync(template_path)===true){
+            flag = true;
+        }
+        return flag;
     }
 
 
@@ -70,9 +89,10 @@ class ProjectsTemplate {
 
     fromJson(jsondata){
         if(!_.isObject(jsondata)) return false;
+        this._checkAndSetStructure();
         this._data = [];
         this._size = jsondata.size;
-        jsondata.collection.forEach((value,index)=>{
+        jsondata.collection.forEach((value)=>{
             this._data.push(this._newTemplateNode(value.path,value.base));
         });
         return true;
@@ -80,6 +100,7 @@ class ProjectsTemplate {
 
 
     toJson(){
+        this._checkAndSetStructure();
         return {
             size:this._size,
             collection:this._data
