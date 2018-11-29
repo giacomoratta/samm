@@ -33,6 +33,7 @@ class DataManager {
             autoLoad:false,     // calls loadFn if it has no data
             preSet:false,       // calls setFn after creating relationship
             autoSet:false,      // calls setFn if it has no data
+            autoSave:false,     // calls saveFn after loadFn or setFn
 
             /* Custom functions */
             checkFn:null,
@@ -168,6 +169,10 @@ class DataManager {
             }
             this._data[label]=filedata;
         }
+
+        if($cfg.autoSave === true){
+            this.save(label,args);
+        }
         return this._data[label];
     }
 
@@ -216,6 +221,10 @@ class DataManager {
                 $cfg.logErrorsFn('DataMgr.set > setFn callback failed!');
                 return null;
             }
+        }
+
+        if($cfg.autoSave === true){
+            this.save(label,args);
         }
         return this._data[label];
     }

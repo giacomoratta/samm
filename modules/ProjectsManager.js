@@ -33,6 +33,7 @@ class ProjectsManager {
             dataType:'object',
             logErrorsFn:d$,
             preLoad:true,
+            autoSave:true,
 
             loadFn:(fileData)=>{
                 _self._data.ppaths = new ProjectsPath();
@@ -42,15 +43,14 @@ class ProjectsManager {
                     return _self._data;
                 }
                 _self._data.history.fromJson(fileData.history);
-                _self._data.template.fromJson(fileData.template);
-                _self.save();
+                _self._data.template.fromJson(fileData.templates);
                 return _self._data;
             },
 
             saveFn:(pData)=>{
                 return {
                     history:pData.history.toJson(),
-                    template:pData.template.toJson()
+                    templates:pData.template.toJson()
                 }
             }
         });

@@ -43,6 +43,14 @@ class Utils_Files {
         return Utils.File.pathJoin(this.getAbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
+    equalPaths(p1,p2){
+        p1 = _.toLower(this.pathJoin(p1,this.pathSeparator));
+        p2 = _.toLower(this.pathJoin(p2,this.pathSeparator));
+        console.log("\n",p1,"\n",p2,p1.endsWith(p2),p2.endsWith(p1),p1===p2,"\n");
+        if(p1.length >  p2.length) return p1.endsWith(p2);
+        if(p1.length <= p2.length) return p2.endsWith(p1);
+    }
+
 
 
     /* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

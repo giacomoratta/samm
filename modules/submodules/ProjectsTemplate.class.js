@@ -13,19 +13,29 @@ class ProjectsTemplate {
             maxLevel:2,
             itemCb:function(data){
                 if(!data.item.isDirectory) return;
-                _dirFound.push(Utils.onlyLettersNumbers(data.item.path));
+                if(data.item.level!==2) return;
+                _dirFound.push(data.item.path);
             }
         });
         let _self = this;
-        this._data.forEach(function(v){
-            if(_dirFound.indexOf(Utils.onlyLettersNumbers(v))<0) _self.remove(v);
+        let _pathsToBeRemoved = [];
+
+        /* Checks if stored directories exist for real */
+        this._data.forEach(function(v1){
+            let flag=false;
+            _dirFound.forEach(function(v2){
+                if(Utils.File.equalPaths(v1.path,v2)) flag=true;
+            });
+            if(!flag) _pathsToBeRemoved.push(v1.path);
         });
-        console.log(_dirFound);
-        // TODO
-        // _self._data.unshift(_self._newTemplateNode(template_path,template_name));
-        // template_name = Utils.File.pathBasename(template_path);
-        // if directory does not exist remove the object
-        // if the object does not exist but directory yes, create the object
+        _pathsToBeRemoved.forEach(function(p){ _self._remove(p); });
+
+        /* Inserts real directories if they are not present in the json */
+        _dirFound.forEach(function(v){
+            let i = _self.getIndex(v);
+            if(i>=0) return;
+            _self._add(v,Utils.File.pathBasename(v));
+        });
     }
 
     _newTemplateNode(path,base){
@@ -63,20 +73,33 @@ class ProjectsTemplate {
     getIndex(template_path){
         template_path = _.toLower(template_path);
         for(let i=0; i<this._data.length; i++){
-            if(_.toLower(this._data[i].path) === template_path){
+            if(Utils.File.equalPaths(this._data[i].path,template_path)){
                 return i;
             }
         }
         return -1;
     }
 
-    remove(template_path){
-        let flag=false;
+
+    _add(template_path,template_name){
+        this._data.unshift(this._newTemplateNode(template_path,template_name));
+        this._size = this._data.length;
+    }
+
+
+    _remove(template_path){
         let index = this.getIndex(template_path);
         if(index>=0) {
-            flag = true;
+            console.log('remove',index,template_path);
             this._data.splice(index,1);
+            this._size = this._data.length;
         }
+        return index;
+    }
+
+
+    remove(template_path){
+        let flag = (this._remove(template_path)>=0);
         if(Utils.File.removeDirSync(template_path)===true){
             flag = true;
         }
@@ -138,8 +161,7 @@ class ProjectsTemplate {
             template_name = Utils.File.pathBasename(template_path);
             _self.remove(template_path);
             Utils.File.copyDirectory(origin_path,template_path).then(()=>{
-                _self._data.unshift(_self._newTemplateNode(template_path,template_name));
-                _self._size = _self._data.length;
+                _self._add(template_path,template_name);
                 resolve({
                     template_path: template_path
                 });
