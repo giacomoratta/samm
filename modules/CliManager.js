@@ -450,8 +450,8 @@ class CliManager {
             .description('Set or choose a project path'+"\n")
             .option('-p, --path <path>', 'Set current project from its absolute path')
             .option('-h, --history', 'Set current project by choosing a project from history')
-            .option('-d, --default [default]', 'Store current project as default project')
-            .option('-n, --newname <name>', 'Create a new project from a default project')
+            .option('-d, --default [default]', 'View default projects or store the current project as default project')
+            .option('-n, --new <default>', 'Create a new project from a default project')
             .action(this._getActionFn('project', (cliReference,cliNextCb)=>{
                 let _clUI = clUI.newLocalUI('> project:');
                 _clUI.print("[current]",ProjectsMgr.current);
@@ -461,7 +461,7 @@ class CliManager {
                     history: this.cli_params.hasOption('history'),
                     default_flag: this.cli_params.hasOption('default'),
                     default_value: this.cli_params.getOption('default'),
-                    newname: this.cli_params.getOption('newname')
+                    new: this.cli_params.getOption('new')
                 };
 
                 // Set current project from absolute path
@@ -547,7 +547,7 @@ class CliManager {
                 }
 
                 // New project from default
-                if(_.isString(C_Project_options.newname) && C_Project_options.newname.length>1){
+                if(_.isString(C_Project_options.new) && C_Project_options.new.length>1){
                     if(!ProjectsMgr.template.printIndexedList(function(v){
                             clUI.print(v);
                         })){
@@ -593,7 +593,7 @@ class CliManager {
                                         return cliNextCb(this._error_code);
                                     }
 
-                                    _clUI.print("\nA new project in",Utils.File.pathJoin(project_path,C_Project_options.newname),
+                                    _clUI.print("\nA new project in",Utils.File.pathJoin(project_path,C_Project_options.new),
                                         " will be created starting from the template",ptemplate);
 
                                     // New project from template
@@ -603,7 +603,7 @@ class CliManager {
                                         message: "Do you want to proceed? [y/n] "
                                     }, (result)=>{
                                         if(result.answer === 'y') {
-                                            ProjectsMgr.template.newProject(ptemplate, project_path, C_Project_options.newname).then((data)=>{
+                                            ProjectsMgr.template.newProject(ptemplate, project_path, C_Project_options.new).then((data)=>{
                                                 ProjectsMgr.current = data.project_path;
                                                 ProjectsMgr.save();
                                                 _clUI.print("[new current project]",ProjectsMgr.current);
