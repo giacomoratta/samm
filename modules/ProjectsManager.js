@@ -1,6 +1,6 @@
-let ProjectsHistory = require('./submodules/ProjectsHistory.class');
-let ProjectsTemplate = require('./submodules/ProjectsTemplate.class');
-let ProjectsPath = require('./submodules/ProjectsPath.class');
+let ProjectsHistory = require('./project.modules/ProjectsHistory.class');
+let ProjectsTemplate = require('./project.modules/ProjectsTemplate.class');
+let ProjectsPath = require('./project.modules/ProjectsPath.class');
 
 class ProjectsManager {
 
