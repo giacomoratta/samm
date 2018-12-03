@@ -1,3 +1,10 @@
+// TODO sample configuration
+// TODO detect OS or FS type
+// TODO exit on error config
+// TODO a checkFn for each single parameter (checks, messages, etc.)
+// TODO globalCheckFn
+
+
 class ConfigManager {
 
     constructor(options){
@@ -70,8 +77,6 @@ class ConfigManager {
             cloneFrom:this._paths.config_file_sample,
             logErrorsFn:d$
         });
-
-        // TODO loadFn with sanitizeCfg (check all values and restore good values if needed)
 
         // Open config.json
         this._config = DataMgr.get('config_file');
