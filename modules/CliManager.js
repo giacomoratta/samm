@@ -153,12 +153,14 @@ class CliManager {
                         return cliNextCb(this._success_code);
                     }
                     if(_.isNil(showuncovered)){
+                        clUI.print();
                         cliReference.prompt({
                             type: 'input',
                             name: 'show',
                             message: 'There are many uncovered samples. Do you want to show them? [y/n] '
-                        }, function (result) {
-                            showUncoverageOutput(result.show==='y');
+                        }, (result)=>{
+                            if(result.show==='y') showUncoverageOutput(true);
+                            return cliNextCb(this._success_code);
                         });
                         return;
                     }

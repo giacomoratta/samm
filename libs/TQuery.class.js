@@ -56,6 +56,7 @@ class TQuery {
         this.forEach(function(k,v){
             _obj[k]=v;
         });
+        return _obj;
     }
 
     fromJson(jsondata){

@@ -4,7 +4,7 @@ class TQueryManager {
 
     constructor(){
         this.tqueryObj = null;
-        this._createBookmarksHolder();
+        this._createTQueryHolder();
     }
 
 
@@ -43,7 +43,12 @@ class TQueryManager {
     }
 
 
-    _createBookmarksHolder(){
+    getAsPlainObject(){
+        return this.tqueryObj.getAsPlainObject();
+    }
+
+
+    _createTQueryHolder(){
         let _self = this;
         return DataMgr.setHolder({
             label:'tquery',

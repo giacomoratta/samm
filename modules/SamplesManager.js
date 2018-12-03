@@ -280,7 +280,7 @@ class SamplesManager {
         function __coverage_set_queries(){
             if(_.isString(options.query)){
                 d$("> coverage: query from string");
-                _data.tag_queries['default']=options.query;
+                _data.tag_queries['(custom)']=options.query;
 
             }else if(_.isString(options.tag)){
                 d$("> coverage: query from string");
@@ -412,15 +412,21 @@ class SamplesManager {
             if(!options.allinfo){
                 cv_obj.output_line = (_.padEnd(/*"    Q#"+(i1+1)+" "*/v,_data.output.max_length_tag_string+3) +
                     ' coverage: '+_.padEnd(_data.smpobj_by_tag[v].obj.size(),_max_len_size /*replace*/) +
-                    _.padEnd(' ('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',11) +
-                    ' q: '+_data.tag_queries[v]
+                    _.padEnd(' ('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)',14) +
+                    ' q: '+ _.truncate(_data.tag_queries[v],{
+                        length:30,
+                        omission:'...'
+                    })
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
             }else{
                 cv_obj.output_line = ( v +
                     ' coverage: '+_data.smpobj_by_tag[v].obj.size() +
                     ' ('+_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%)' +
-                    ' q: '+_data.tag_queries[v]
+                    ' q: '+ _.truncate(_data.tag_queries[v],{
+                        length:30,
+                        omission:'...'
+                    })
                     //+'('+_.padEnd(_.round((_data.smpobj_by_tag[v].obj.size()/_data.samples_count*100),2)+'%',8)+')'
                 );
                 cv_obj.output_line += "\n"+_big_separator;
