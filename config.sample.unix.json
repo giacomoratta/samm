@@ -2,6 +2,7 @@
 	"SamplesDirectory": "/Samples/",
 	"ExportDirectory": "/MPL_Export/",
 	"ProjectsDirectory": "/Ableton Projects/",
+	"DAW": "Ableton",
 	"RandomCount": 10,
 	"MaxOccurrencesSameDirectory": 1,
 	"ExtensionCheckForSamples": "X",

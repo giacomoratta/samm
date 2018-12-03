@@ -71,6 +71,8 @@ class ConfigManager {
             logErrorsFn:d$
         });
 
+        // TODO loadFn with sanitizeCfg (check all values and restore good values if needed)
+
         // Open config.json
         this._config = DataMgr.get('config_file');
         if(!this._config){
@@ -260,6 +262,14 @@ class ConfigManager {
                 return null;
             }
             this.setFlag('samples_index_update_needed',true);
+        }
+
+        else if(n==="DAW"){
+            let daw_adapters_list = Object.keys(DAW_Adapters);
+            if(_.indexOf(daw_adapters_list,v)<0){
+                clUI.print("Wrong value for DAW config parameter. Allowed values: "+daw_adapters_list.join(', ')+'. ');
+                return null;
+            }
         }
 
         else if(_outcome.type==='array'){

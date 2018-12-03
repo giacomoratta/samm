@@ -22,6 +22,12 @@ global.Samples = require('./libs/Samples.class.js');
 global.SamplesTree = require('./libs/SamplesTree.class.js');
 global.DataMgr = require('./libs/DataManager.js');
 
+/* DAW Adapters */
+global.DAW_Adapters = {};
+global.DAW_Adapters.Ableton = require('./modules/daw.adapters/AbletonProject.class.js');
+global.DAW_Adapters.Cubase = require('./modules/daw.adapters/CubaseProject.class.js');
+
+
 /* Project Modules */
 global.ConfigMgr = require('./modules/ConfigManager.js');
 global.SamplesMgr = require('./modules/SamplesManager.js');
