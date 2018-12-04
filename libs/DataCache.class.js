@@ -1,7 +1,7 @@
 class DataCache {
 
     constructor(){
-        this._array = new Array();
+        this._array = [];
         this._data = new Map();
     }
 
@@ -11,12 +11,12 @@ class DataCache {
 
 
     getFirst(){
-        if(this._data.length==0) return null;
+        if(this._data.length===0) return null;
         return this._data[0];
     }
 
     getLast(){
-        if(this._data.length==0) return null;
+        if(this._data.length===0) return null;
         return this._data[ this._data.length-1 ];
     }
 
