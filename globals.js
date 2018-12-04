@@ -38,4 +38,4 @@ global.TQueryMgr = require('./modules/TQueryManager.js');
 global.ExportMgr = require('./modules/ExportManager.js');
 
 /* Latest module: Command Line Interface */
-global.CliMgr = require('./modules/CliManager.js');
+global.CliMgr = require('./libs/CliManager.js');
