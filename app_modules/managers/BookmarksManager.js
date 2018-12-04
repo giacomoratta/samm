@@ -1,4 +1,4 @@
-let Bookmarks = require('../libs/Bookmarks.class');
+let Bookmarks = require('../micro/Bookmarks.class');
 
 class BookmarksManager {
 

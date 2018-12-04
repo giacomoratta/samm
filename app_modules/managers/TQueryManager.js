@@ -1,4 +1,4 @@
-let TQuery = require('../libs/TQuery.class');
+let TQuery = require('../micro/TQuery.class');
 
 class TQueryManager {
 

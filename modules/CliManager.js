@@ -1,4 +1,4 @@
-const CliParams = require('./CliParams.class.js');
+const CliParams = require('./micro/CliParams.class.js');
 const vorpal = require('vorpal')();
 
 class CliManager {
