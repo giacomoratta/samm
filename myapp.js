@@ -13,7 +13,7 @@ global.TQueryMgr = require('./app_modules/managers/TQueryManager.js');
 global.ExportMgr = require('./app_modules/managers/ExportManager.js');
 
 
-require('./app_config/config.js');
-require('./app_config/cli/config_cmd.js');
+require('./app_init/config.js');
+require('./app_init/cli/config_cmd.js');
 
 CliMgr.show('mpl');
