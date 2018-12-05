@@ -13,7 +13,7 @@ global.TQueryMgr = require('./managers/TQueryManager.js');
 global.ExportMgr = require('./managers/ExportManager.js');
 
 
-//require('./config.js');
+require('./config.js');
 
 require('./cli_sections/bookm_cmd.js');
 require('./cli_sections/config_cmd.js');
