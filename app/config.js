@@ -21,8 +21,8 @@ ConfigMgr.addUserDataFile('myfile.json');
 ConfigMgr.addUserDataDirectory('/newdir');
 ConfigMgr.addUserDataFile('/newdir/myfile.json');
 
-// ConfigMgr.upath
-// ConfigMgr.path
+// ConfigMgr.upath  //user path
+// ConfigMgr.path   //app path
 
 
 ConfigMgr.addFlag('abc123','My text abc 123');
