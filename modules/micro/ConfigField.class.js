@@ -18,25 +18,38 @@ class ConfigField {
         this._field_cfg = null;
 
         let fcfg = _.merge({
-            datatype:'integer', //abspath, relpath, number, boolean, string, array, char
-            arrayDatatype:'string', //ENUM!!!
-            defaultValue:'',
-            checkPathExists: true, //only for path
-            exitOnError: false,
-            checkFn:null,
-            checkArrayFn:null,
-            setSuccessFn:null, //setFlag, printMessages
-            setFailFn:null,
+            datatype: 'integer', //abspath, relpath, number, boolean, string, array, char
+            arrayDatatype: null, //ENUM!!!
+
+            checkFn: null,
+            checkArrayFn: null,
+            checkPathExists: false, //only for path
+
+            defaultValue: '',
+            errorFn:  function(){ return true; },
+            setSuccessFn: function(){ return true; },
+            setFailFn: function(){ return true; },
+
         },field_cfg);
 
-        fcfg._datatype = ENUMS.datatype[fcfg.datatype];
+        fcfg.checkFn = this._setCheckFn(fcfg.checkFn, fcfg.datatype);
+        fcfg.checkArrayFn = this._setCheckFn(fcfg.checkArrayFn, fcfg.arrayDatatype);
 
-        // CHECK_FN
-        if(!_.isFunction(fcfg.checkFn)){
-            if(fcfg._datatype === ENUMS.datatype.integer){
+        // set and check default value, checkpathexists
+
+
+    }
+
+
+    _setCheckFn(checkFn, datatype){
+
+        let datatype_code = (_.isString(datatype)?ENUMS.datatype[datatype]:null);
+
+        if(!_.isFunction(checkFn)){
+            if(datatype_code === ENUMS.datatype.integer){
 
             }
-            switch(fcfg._datatype) {
+            switch(datatype_code) {
                 case ENUMS.datatype.integer:
                     break;
                 case ENUMS.datatype.number:
@@ -54,7 +67,7 @@ class ConfigField {
                 case ENUMS.datatype.abspath:
                     break;
                 default:
-                    //errorFn
+                //errorFn
             }
         }
     }
