@@ -4,45 +4,10 @@
 // TODO a checkFn for each single parameter (checks, messages, etc.)
 // TODO globalCheckFn
 
-const ConfigField = require('./micro/ConfigField.class.js');
-
 
 class ConfigManager {
 
-    constructor(){
-        this._fields = {};
-        this._paths = {};
-        this._upaths = {};
-    }
-
-
-    addField(field_name, field_cfg){
-        this._fields[field_name] = new ConfigField(field_cfg);
-        // add field to global structure this.fields
-        // parse options - merge and check
-        // save field config ih this.fields
-    }
-
-    get(field_name){
-
-    }
-
-    set(field_name, value){
-
-    }
-
-
-    setUserDirectory(name){
-    }
-
-    addUserFile(label, rel_path){
-    }
-
-    addUserDirectory(label, rel_path){
-    }
-
-
-    __constructor(options){
+    constructor(options){
         this._flags = {
             samples_index_scan_needed:false,
             samples_index_update_needed:false,
@@ -382,4 +347,4 @@ class ConfigManager {
     }
 }
 
-module.exports = new ConfigManager();
+module.exports = new ConfigManager(global.ConfigManagerOptions);
