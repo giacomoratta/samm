@@ -13,6 +13,15 @@ const ENUMS = {
 
 };
 
+// set value
+// check value
+// check path exists
+// check others...
+//   if ok call setSuccessFn
+//   if no call setFailFn -> exitOnErrorFn
+// return true/false
+
+
 class ConfigField {
     constructor(field_cfg){
         this._field_cfg = null;
@@ -24,11 +33,12 @@ class ConfigField {
             checkFn: null,
             checkArrayFn: null,
             checkPathExists: false, //only for path
+            _exitOnErrorFn: null, //set by configmgr
+            exitOnError: false, //used by configmgr
 
             defaultValue: '',
-            errorFn:  function(){ return true; },
-            setSuccessFn: function(){ return true; },
-            setFailFn: function(){ return true; },
+            setSuccessFn: null,
+            setFailFn: null,
 
         },field_cfg);
 
@@ -36,8 +46,6 @@ class ConfigField {
         fcfg.checkArrayFn = this._setCheckFn(fcfg.checkArrayFn, fcfg.arrayDatatype);
 
         // set and check default value, checkpathexists
-
-
     }
 
 
