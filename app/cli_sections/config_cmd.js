@@ -1,21 +1,43 @@
-CliMgr.addCommand('config <action>');
+let cmd_name = 'config';
 
-CliMgr.addCommandHeader('config')
-    .description('Some useful actions with the working directories (e.g. Samples, Project, etc.)'+
-        "\n  $ dir ext  / show the full list of extensions and useful stats"+
-        "\n  $ dir ext -e exe  / show the full list of file with the specified extension"+"\n")
-    .option('-e, --extension <name>', 'Focus on the specified extension.')
-    .option('-i, --index', 'Works with the internal samples index')
-    .autocomplete(['ext']);
+CliMgr.addCommand(cmd_name+' [name] [values...]');
 
-CliMgr.addCommandBody('config',function(cliReference,cliNextCb,cliData){
-    let action = cliData.cli_params.get('action');
-    if(action === 'ext'){
-        DirCommand.listExtensionsStats({
-            extension:cliData.cli_params.getOption('extension'),
-            index:cliData.cli_params.hasOption('index')
-        });
+CliMgr.addCommandHeader(cmd_name)
+    .autocomplete(ConfigMgr.getConfigParams())
+    .description("Get or set the value of a configuration parameter." +
+        "\n  $ "+cmd_name+" / print the whole config and internal data" +
+        "\n  $ "+cmd_name+" ExtensionCheckForSamples I[, E, X] (included/excluded/disabled)" +
+        "\n  $ "+cmd_name+" ExcludedExtensionsForSamples ext / (or .ext)" +
+        "\n  $ "+cmd_name+" ExcludedExtensionsForSamples !ext / (or !.ext)"+"\n");
+
+CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+
+    if(_.isNil(cliData.cli_params.get('name'))){
+        ConfigMgr.printInternals();
+        clUI.print("\n");
+        ConfigMgr.print();
         return cliNextCb(cliData.success_code);
     }
-    return cliNextCb(cliData.error_code);
+
+    if(_.isNil(cliData.cli_params.get('values'))){
+        if(_.isNil(ConfigMgr.get(cliData.cli_params.get('name')))){
+            cliData.ui.print('this parameter does not exist.');
+            return cliNextCb(cliData.error_code);
+        }
+        clUI.print(ConfigMgr.get(cliData.cli_params.get('name')));
+        return cliNextCb(cliData.success_code);
+    }
+
+    if(ConfigMgr.setFromCliParams(cliData.cli_params.get('name'),cliData.cli_params.get('values'))===null){
+        cliData.ui.print("configuration not changed");
+        return cliNextCb(cliData.error_code);
+    }
+    if(ConfigMgr.save()!==true){
+        cliData.ui.print("error during file writing");
+        return cliNextCb(cliData.error_code);
+    }
+    ConfigMgr.print();
+    clUI.print('');
+    cliData.ui.print("configuration saved successfully");
+    return cliNextCb(cliData.success_code);
 });
