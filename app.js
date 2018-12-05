@@ -1,5 +1,10 @@
 
-require('./globals_dev.js');
+global.ENV_CONFIG = {
+    debug_enabled:true,
+    absolute_app_path:''
+};
+ENV_CONFIG.absolute_app_path = process.argv[1];
+
 require('./globals.js');
 
-require('./myapp.js');
+require('./app/init.js');
