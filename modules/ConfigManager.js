@@ -34,6 +34,14 @@ class ConfigManager {
         return this._fields[field_name].set(value, addt);
     }
 
+    print(){
+        let keys = Object.keys(this._fields);
+        for(let i=0; i<keys.length; i++){
+            clUI.print(' ',keys[i]+':',this._fields[keys[i]].get());
+        }
+        clUI.print();
+    }
+
 
     setUserDirectory(name){
     }

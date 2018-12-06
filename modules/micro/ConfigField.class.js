@@ -13,14 +13,7 @@ const ENUMS = {
     }
 };
 
-// set value
-// check value
-// check path exists
-// check others...
-//   if ok call setSuccessFn
-//   if no call setFailFn -> exitOnErrorFn
-// return true/false
-
+let x$ = d$;
 
 class ConfigField {
     constructor(field_cfg){
@@ -30,26 +23,30 @@ class ConfigField {
         let fcfg = _.merge({
             datatype: 'string',
             objectDatatype: null,
-            // datatypeCode - integer, set privately
-            // objectDatatypeCode  - integer, set privately
+            defaultValue: null,
+            allowedValues: [],
 
             checkFn: null,
             checkObjectFn: null,
             checkPathExists: false, //only for path
-            exitOnErrorFn: null, //set by configmgr
-            exitOnError: false, //used by configmgr
 
-            // setFn: null,  - function, set privately
-            defaultValue: null,
             setSuccessFn: null,
             setFailFn: null
 
+            // datatypeCode - integer, set privately
+            // objectDatatypeCode  - integer, set privately
+            // setFn: null,  - function, set privately
+
         },field_cfg);
+
+
 
         if(!this._setDatatype(fcfg.datatype, fcfg.objectDatatype, fcfg)) return;
 
         fcfg.checkObjectFn = this._setCheckFn(fcfg.checkObjectFn, fcfg.objectDatatypeCode, fcfg);
         fcfg.checkFn = this._setCheckFn(fcfg.checkFn, fcfg.datatypeCode, fcfg, fcfg.checkObjectFn);
+        if(!fcfg.checkFn) return;
+
         fcfg.setFn = this._setSetFn(fcfg.checkFn, fcfg.checkObjectFn, fcfg);
 
         this._field_cfg = fcfg;
@@ -57,9 +54,10 @@ class ConfigField {
             d$('ConfigField.constructor','invalid default value',fcfg.defaultValue);
             this._value = null;
             this._field_cfg = null;
+            //x$(fcfg);
             return;
         }
-
+        //x$(fcfg);
     }
 
 
@@ -73,7 +71,7 @@ class ConfigField {
     }
 
     set(v, addt){
-        let _return_value = this._field_cfg.setFn(v, addt, this._value);
+        let _return_value = this._field_cfg.setFn(v, addt, this._value, this._field_cfg.allowedValues);
         if(_.isNil(_return_value)){
             if(this._field_cfg.setFailFn) this._field_cfg.setFailFn();
             return false;
@@ -81,6 +79,12 @@ class ConfigField {
         this._value = _return_value;
         if(this._field_cfg.setSuccessFn) this._field_cfg.setSuccessFn();
         return true;
+    }
+
+
+    allowedValues(){
+        if(!_.isArray(this._field_cfg.allowedValues) || this._field_cfg.allowedValues.length<1) return null;
+        return this._field_cfg.allowedValues;
     }
 
 
@@ -96,7 +100,7 @@ class ConfigField {
                 d$('_setDatatype: no valid objectDatatype',objectDatatype);
                 return null;
             }
-            object_datatype_code = ENUMS.datatype[datatype];
+            object_datatype_code = ENUMS.datatype[objectDatatype];
             if(object_datatype_code === ENUMS.datatype.array) {
                 d$('_setDatatype: objectDatatype cannot be array!');
                 return null;
@@ -107,7 +111,7 @@ class ConfigField {
             _fcfg.objectDatatype = objectDatatype;
             _fcfg.datatypeCode = datatype_code;
             _fcfg.objectDatatypeCode = object_datatype_code;
-            return;
+            return true;
         }
         return {
             datatype:datatype,
@@ -138,25 +142,44 @@ class ConfigField {
                     checkFn = function(v){ return _.isString(v); };
                     break;
                 case ENUMS.datatype.array:
-                    if(_.isFunction(_checkObjectFn)) {
-                        checkFn = function(v){
-                            if(!_.isArray(v)) return false;
-                            for(let i=0; i<v.length; i++){
-                                if(!_checkObjectFn(v[i])) return false;
-                            }
-                        };
+                    if(!_.isFunction(_checkObjectFn)) {
+                        return null;
                     }
-                    else checkFn = function(v){ return _.isArray(v); };
+                    checkFn = function(v){
+                        if(!_.isArray(v)) return false;
+                        for(let i=0; i<v.length; i++){
+                            if(!_checkObjectFn(v[i])) return false;
+                        }
+                        return true;
+                    };
+                    break;
+                case ENUMS.datatype.object:
+                    if(!_.isFunction(_checkObjectFn)) {
+                        return null;
+                    }
+                    checkFn = function(v){
+                        if(!_.isObject(v)) return false;
+                        for(let i=0; i<v.length; i++){
+                            if(!_checkObjectFn(v[i])) return false;
+                        }
+                        return true;
+                    };
                     break;
                 case ENUMS.datatype.relpath:
-                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){ return Utils.File.isRelativePath(v); };
+                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return true;
+                        return Utils.File.isRelativePath(v);
+                    };
                     else checkFn = function(v){
                         if(_.isString(v) && v.length===0) return true;
                         return (Utils.File.isRelativePath(v) && Utils.File.directoryExistsSync(v));
                     };
                     break;
                 case ENUMS.datatype.abspath:
-                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){ return Utils.File.isAbsolutePath(v); };
+                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return true;
+                        return Utils.File.isAbsolutePath(v);
+                    };
                     else checkFn = function(v){
                         if(_.isString(v) && v.length===0) return true;
                         return (Utils.File.isAbsolutePath(v) && Utils.File.directoryExistsSync(v));
@@ -172,13 +195,20 @@ class ConfigField {
 
     _setSetFn(checkFn, checkObjectFn, _fcfg){
         // addt = 'i', 'd', object key
-        let setFn = function(v){
+        let allowedValuesFn = function(v, awv){
+            if(!awv) return true;
+            if(awv.indexOf(v)>=0) return true;
+            return false;
+        };
+        let setFn = function(v, awv){
             if(!checkFn(v)) return null;
+            //if(!allowedValuesFn(v, awv)) return null;
             return v;
         };
         if(_fcfg.datatypeCode === ENUMS.datatype.array){
-            setFn = function(v, addt, _ref){
+            setFn = function(v, addt, _ref, awv){
                 if(checkFn(v)){
+                    // TODO: check all values allowedValuesFn
                     if(_.isNil(addt)) return v;
                 }else{
                     v = [v];
@@ -186,6 +216,7 @@ class ConfigField {
                 if(addt==='i'){
                     for(let i=0; i<v.length; i++){
                         if(!checkObjectFn(v[i])) return null;
+                        if(!allowedValuesFn(v[i], awv)) return null;
                         _ref.push(v[i]);
                     }
                 }
@@ -198,9 +229,10 @@ class ConfigField {
                 return _ref;
             };
         }
-        else if(datatypeCode === ENUMS.datatype.object){
-            setFn = function(v, addt, _ref){
+        else if(_fcfg.datatypeCode === ENUMS.datatype.object){
+            setFn = function(v, addt, _ref, awv){
                 if(checkFn(v)){
+                    // TODO: check all values allowedValuesFn
                     return v;
                 }
                 if(!_.isString(addt)) return null;
@@ -209,6 +241,7 @@ class ConfigField {
                     return _ref;
                 }
                 if(!checkObjectFn(v)) return null;
+                if(!allowedValuesFn(v, awv)) return null;
                 _ref[addt] = v;
                 return _ref;
             };
