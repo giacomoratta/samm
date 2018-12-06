@@ -39,8 +39,6 @@ class ConfigField {
 
         },field_cfg);
 
-
-
         if(!this._setDatatype(fcfg.datatype, fcfg.objectDatatype, fcfg)) return;
 
         fcfg.checkObjectFn = this._setCheckFn(fcfg.checkObjectFn, fcfg.objectDatatypeCode, fcfg);
@@ -196,13 +194,13 @@ class ConfigField {
     _setSetFn(checkFn, checkObjectFn, _fcfg){
         // addt = 'i', 'd', object key
         let allowedValuesFn = function(v, awv){
-            if(!awv) return true;
+            if(!_.isArray(awv) || awv.length<=0) return true;
             if(awv.indexOf(v)>=0) return true;
             return false;
         };
-        let setFn = function(v, awv){
+        let setFn = function(v, addt, _ref, awv){
             if(!checkFn(v)) return null;
-            //if(!allowedValuesFn(v, awv)) return null;
+            if(!allowedValuesFn(v, awv)) return null;
             return v;
         };
         if(_fcfg.datatypeCode === ENUMS.datatype.array){

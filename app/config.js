@@ -68,20 +68,22 @@
 
 
 
+console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));
+console.log(ConfigMgr.set('MaxOccurrencesSameDirectory',3));
+console.log(ConfigMgr.set('MaxOccurrencesSameDirectory',true));
+console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));
+
+console.log();
+
+console.log(ConfigMgr.get('ExtensionCheckForSamples'));
+console.log(ConfigMgr.set('ExtensionCheckForSamples',true));
+console.log(ConfigMgr.set('ExtensionCheckForSamples','Fd'));
+console.log(ConfigMgr.set('ExtensionCheckForSamples','R'));
+//console.log(ConfigMgr.set('ExtensionCheckForSamples','E'));
+//console.log(ConfigMgr.set('ExtensionCheckForSamples',3));
+console.log(ConfigMgr.get('ExtensionCheckForSamples'));
+
 ConfigMgr.print();
-
-/*
-
-ConfigMgr.addField('fieldlabel', {
-    datatype: 'string',
-    objectDatatype: 'string',
-    defaultValue: 'abc'
-});
-
-
-
-
-*/
 
 // ConfigMgr.get('param');
 // ConfigMgr.set('param',value);
