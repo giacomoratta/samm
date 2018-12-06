@@ -71,6 +71,14 @@ class Utils_Files {
 
     /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    isRelativePath(p){
+        return !this.isAbsolutePath(p);
+    }
+
+    isAbsolutePath(p){
+        return this._PATH.normalize(p + '/') === this._PATH.normalize(this._PATH.resolve(p) + '/');
+    }
+
     isAbsoluteParentDirSync(path_string, check_exists){
         if(!_.isString(path_string)) return false;
         if(!this._PATH.isAbsolute(path_string)) return false;
