@@ -10,6 +10,14 @@ const ENUMS = {
         object:7,
         relpath:8,
         abspath:9
+    },
+    checks:{
+        success:21,
+        wrongValue:22,
+        wrongObjectValue:23,
+        valueNotAllowed:24,
+        pathNotExists:25,
+        labelNeeded:26
     }
 };
 
@@ -21,17 +29,18 @@ class ConfigField {
         this._value = null;
 
         let fcfg = _.merge({
+            fieldname:'',
             datatype: 'string',
             objectDatatype: null,
             defaultValue: null,
             allowedValues: [],
 
+            printErrorFn:null,
             checkFn: null,
             checkObjectFn: null,
             checkPathExists: false, //only for path
 
             setSuccessFn: null,
-            setFailFn: null
 
             // datatypeCode - integer, set privately
             // objectDatatypeCode  - integer, set privately
@@ -39,15 +48,19 @@ class ConfigField {
 
         },field_cfg);
 
+        let _self = this;
+
+        if(!_.isFunction(fcfg.printErrorFn)) fcfg.printErrorFn=console.log;
+
         if(!this._setDatatype(fcfg.datatype, fcfg.objectDatatype, fcfg)) return;
 
         fcfg.checkObjectFn = this._setCheckFn(fcfg.checkObjectFn, fcfg.objectDatatypeCode, fcfg);
         fcfg.checkFn = this._setCheckFn(fcfg.checkFn, fcfg.datatypeCode, fcfg, fcfg.checkObjectFn);
         if(!fcfg.checkFn) return;
 
+        this._field_cfg = fcfg;
         fcfg.setFn = this._setSetFn(fcfg.checkFn, fcfg.checkObjectFn, fcfg);
 
-        this._field_cfg = fcfg;
         if(!this.set(fcfg.defaultValue)){
             d$('ConfigField.constructor','invalid default value',fcfg.defaultValue);
             this._value = null;
@@ -69,12 +82,12 @@ class ConfigField {
     }
 
     set(v, addt){
-        let _return_value = this._field_cfg.setFn(v, addt, this._value, this._field_cfg.allowedValues);
-        if(_.isNil(_return_value)){
-            if(this._field_cfg.setFailFn) this._field_cfg.setFailFn();
+        let vObj = this._field_cfg.setFn(v, addt, this._value, this._field_cfg.allowedValues);
+        if(_.isNil(vObj.v) || vObj.check!==ENUMS.checks.success){
+            this._printError(this._field_cfg.fieldname, v, vObj.check);
             return false;
         }
-        this._value = _return_value;
+        this._value = vObj.v;
         if(this._field_cfg.setSuccessFn) this._field_cfg.setSuccessFn();
         return true;
     }
@@ -84,6 +97,30 @@ class ConfigField {
         if(!_.isArray(this._field_cfg.allowedValues) || this._field_cfg.allowedValues.length<1) return null;
         return this._field_cfg.allowedValues;
     }
+
+
+    _printError(fieldname, fieldvalue, checkResult){
+        switch(checkResult){
+            case ENUMS.checks.wrongValue:
+                this._field_cfg.printErrorFn(fieldname+': wrong value',fieldvalue);
+                break;
+            case ENUMS.checks.wrongObjectValue:
+                this._field_cfg.printErrorFn(fieldname+': wrong value for internal objects',fieldvalue);
+                break;
+            case ENUMS.checks.valueNotAllowed:
+                this._field_cfg.printErrorFn(fieldname+': value not allowed',fieldvalue);
+                this._field_cfg.printErrorFn('Allowed values:',this.allowedValues());
+                break;
+            case ENUMS.checks.pathNotExists:
+                this._field_cfg.printErrorFn(fieldname+': path does not exist',fieldvalue);
+                break;
+            case ENUMS.checks.labelNeeded:
+                this._field_cfg.printErrorFn(fieldname+': label needed for object parameter',fieldvalue);
+                break;
+            default:
+                this._field_cfg.printErrorFn(fieldname+': unknown error - '+checkResult,'value:',fieldvalue);
+        }
+    };
 
 
     _setDatatype(datatype, objectDatatype, _fcfg){
@@ -125,30 +162,30 @@ class ConfigField {
         if(!_.isFunction(checkFn)){
             switch(datatypeCode) {
                 case ENUMS.datatype.integer:
-                    checkFn = function(v){ return _.isInteger(v); };
+                    checkFn = function(v){ return (_.isInteger(v)===true?ENUMS.checks.success:ENUMS.checks.wrongValue); };
                     break;
                 case ENUMS.datatype.number:
-                    checkFn = function(v){ return _.isNumber(v); };
+                    checkFn = function(v){ return (_.isNumber(v)===true?ENUMS.checks.success:ENUMS.checks.wrongValue); };
                     break;
                 case ENUMS.datatype.boolean:
-                    checkFn = function(v){ return _.isBoolean(v); };
+                    checkFn = function(v){ return (_.isBoolean(v)===true?ENUMS.checks.success:ENUMS.checks.wrongValue); };
                     break;
                 case ENUMS.datatype.char:
-                    checkFn = function(v){ return (_.isString(v) && v.length<=1); };
+                    checkFn = function(v){ return ((_.isString(v) && v.length<=1)===true?ENUMS.checks.success:ENUMS.checks.wrongValue); };
                     break;
                 case ENUMS.datatype.string:
-                    checkFn = function(v){ return _.isString(v); };
+                    checkFn = function(v){ return (_.isString(v)===true?ENUMS.checks.success:ENUMS.checks.wrongValue); };
                     break;
                 case ENUMS.datatype.array:
                     if(!_.isFunction(_checkObjectFn)) {
                         return null;
                     }
                     checkFn = function(v){
-                        if(!_.isArray(v)) return false;
+                        if(!_.isArray(v)) return ENUMS.checks.wrongValue;
                         for(let i=0; i<v.length; i++){
-                            if(!_checkObjectFn(v[i])) return false;
+                            if(_checkObjectFn(v[i]) === ENUMS.checks.wrongValue) return ENUMS.checks.wrongObjectValue;
                         }
-                        return true;
+                        return ENUMS.checks.success;
                     };
                     break;
                 case ENUMS.datatype.object:
@@ -156,31 +193,37 @@ class ConfigField {
                         return null;
                     }
                     checkFn = function(v){
-                        if(!_.isObject(v)) return false;
+                        if(!_.isObject(v)) return ENUMS.checks.wrongValue;
                         for(let i=0; i<v.length; i++){
-                            if(!_checkObjectFn(v[i])) return false;
+                            if(_checkObjectFn(v[i]) === ENUMS.checks.wrongValue) return ENUMS.checks.wrongObjectValue;
                         }
-                        return true;
+                        return ENUMS.checks.success;
                     };
                     break;
                 case ENUMS.datatype.relpath:
                     if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
-                        if(_.isString(v) && v.length===0) return true;
-                        return Utils.File.isRelativePath(v);
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isRelativePath(v)!==true) return ENUMS.checks.wrongValue;
+                        return ENUMS.checks.success;
                     };
                     else checkFn = function(v){
-                        if(_.isString(v) && v.length===0) return true;
-                        return (Utils.File.isRelativePath(v) && Utils.File.directoryExistsSync(v));
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isRelativePath(v)!==true) return ENUMS.checks.wrongValue;
+                        if(Utils.File.directoryExistsSync(v)!==true) return ENUMS.checks.pathNotExists;
+                        return ENUMS.checks.success;
                     };
                     break;
                 case ENUMS.datatype.abspath:
                     if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
-                        if(_.isString(v) && v.length===0) return true;
-                        return Utils.File.isAbsolutePath(v);
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isAbsolutePath(v)!==true) return ENUMS.checks.wrongValue;
+                        return ENUMS.checks.success;
                     };
                     else checkFn = function(v){
-                        if(_.isString(v) && v.length===0) return true;
-                        return (Utils.File.isAbsolutePath(v) && Utils.File.directoryExistsSync(v));
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isAbsolutePath(v)!==true) return ENUMS.checks.wrongValue;
+                        if(Utils.File.directoryExistsSync(v)!==true) return ENUMS.checks.pathNotExists;
+                        return ENUMS.checks.success;
                     };
                     break;
                 default:
@@ -194,27 +237,45 @@ class ConfigField {
     _setSetFn(checkFn, checkObjectFn, _fcfg){
         // addt = 'i', 'd', object key
         let allowedValuesFn = function(v, awv){
-            if(!_.isArray(awv) || awv.length<=0) return true;
-            if(awv.indexOf(v)>=0) return true;
-            return false;
+            if(!_.isArray(awv) || awv.length<=0) return ENUMS.checks.success;
+            if(awv.indexOf(v)>=0) return ENUMS.checks.success;
+            return ENUMS.checks.valueNotAllowed;
         };
+
         let setFn = function(v, addt, _ref, awv){
-            if(!checkFn(v)) return null;
-            if(!allowedValuesFn(v, awv)) return null;
-            return v;
+            let vObj={ v:null, check:ENUMS.checks.success };
+
+            vObj.check = checkFn(v);
+            if(vObj.check !== ENUMS.checks.success) return vObj;
+
+            vObj.check = allowedValuesFn(v, awv);
+            if(vObj.check !== ENUMS.checks.success) return vObj;
+
+            vObj.v = v;
+            return vObj;
         };
+
         if(_fcfg.datatypeCode === ENUMS.datatype.array){
             setFn = function(v, addt, _ref, awv){
+                let vObj={ v:null, check:ENUMS.checks.success };
                 if(checkFn(v)){
                     // TODO: check all values allowedValuesFn
-                    if(_.isNil(addt)) return v;
+                    if(_.isNil(addt)){
+                        vObj.v = v;
+                        return vObj;
+                    }
                 }else{
                     v = [v];
                 }
                 if(addt==='i'){
                     for(let i=0; i<v.length; i++){
-                        if(!checkObjectFn(v[i])) return null;
-                        if(!allowedValuesFn(v[i], awv)) return null;
+                        vObj.check = checkObjectFn(v[i]);
+                        if(vObj.check !== ENUMS.checks.success){
+                            if(vObj.check === ENUMS.checks.wrongValue) vObj.check=ENUMS.checks.wrongObjectValue;
+                            return vObj;
+                        }
+                        vObj.check = allowedValuesFn(v[i], awv);
+                        if(vObj.check !== ENUMS.checks.success) return vObj;
                         _ref.push(v[i]);
                     }
                 }
@@ -224,24 +285,39 @@ class ConfigField {
                         _ref.splice(j,1);
                     }
                 }
-                return _ref;
+                vObj.v = _ref;
+                return vObj;
             };
         }
         else if(_fcfg.datatypeCode === ENUMS.datatype.object){
             setFn = function(v, addt, _ref, awv){
                 if(checkFn(v)){
                     // TODO: check all values allowedValuesFn
-                    return v;
+                    vObj.v = v;
+                    return vObj;
                 }
-                if(!_.isString(addt)) return null;
+                if(!_.isString(addt)){
+                    vObj.check = ENUMS.checks.labelNeeded;
+                    return vObj;
+                }
                 if(!_.isNil(v)){
                     delete _ref[addt];
-                    return _ref;
+                    vObj.v = _ref;
+                    return vObj;
                 }
-                if(!checkObjectFn(v)) return null;
-                if(!allowedValuesFn(v, awv)) return null;
+
+                vObj.check = checkObjectFn(v);
+                if(vObj.check !== ENUMS.checks.success){
+                    if(vObj.check === ENUMS.checks.wrongValue) vObj.check=ENUMS.checks.wrongObjectValue;
+                    return vObj;
+                }
+
+                vObj.check = allowedValuesFn(v, awv);
+                if(vObj.check !== ENUMS.checks.success) return vObj;
+
                 _ref[addt] = v;
-                return _ref;
+                vObj.v = _ref;
+                return vObj;
             };
         }
         return setFn;

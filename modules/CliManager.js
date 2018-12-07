@@ -44,7 +44,6 @@ class CliManager {
                     if(err) d$(err);
                 }
                 ConfigMgr.printMessages();
-                clUI.print(' ');//new line before the prompt
                 cb();
             },{
                 cli_params:new CliParams(args, cmdName),
