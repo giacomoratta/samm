@@ -30,6 +30,7 @@ class ConfigField {
 
         let fcfg = _.merge({
             fieldname:'',
+            description:'',
             datatype: 'string',
             objectDatatype: null,
             defaultValue: null,

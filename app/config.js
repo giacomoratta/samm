@@ -3,34 +3,40 @@
 (function(){
 
     ConfigMgr.addField('SamplesDirectory', {
+        description:'',
         datatype: 'abspath',
         defaultValue: '',
         checkPathExists: true
     });
 
     ConfigMgr.addField('ExportDirectory', {
+        description:'',
         datatype: 'abspath',
         defaultValue: ''
     });
 
     ConfigMgr.addField('ProjectsDirectory', {
+        description:'',
         datatype: 'abspath',
         defaultValue: '',
         checkPathExists: true
     });
 
     ConfigMgr.addField('DAW', {
+        description:'',
         datatype: 'string',
         defaultValue: 'Ableton',
         allowedValues: ['Ableton','Cubase']
     });
 
     ConfigMgr.addField('RandomCount', {
+        description:'',
         datatype: 'integer',
         defaultValue: 11
     });
 
     ConfigMgr.addField('MaxOccurrencesSameDirectory', {
+        description:'',
         datatype: 'integer',
         defaultValue: 1
     });
@@ -42,6 +48,7 @@
     });
 
     ConfigMgr.addField('IncludedExtensionsForSamples', {
+        description:'',
         datatype: 'array',
         objectDatatype: 'string',
         defaultValue: [
@@ -53,6 +60,7 @@
     });
 
     ConfigMgr.addField('ExcludedExtensionsForSamples', {
+        description:'',
         datatype: 'array',
         objectDatatype: 'string',
         defaultValue: [
@@ -63,6 +71,15 @@
             "exe"
         ]
     });
+
+    ConfigMgr.setUserdataDirectory('userdata');
+    ConfigMgr.setConfigFile('config.json');
+
+    ConfigMgr.addUserDirectory('default_projects','default_projects');
+    ConfigMgr.addUserFile('bookmarks','bookmarks.json');
+    ConfigMgr.addUserFile('projects','projects.json');
+    ConfigMgr.addUserFile('tquery','tqueries.json');
+    ConfigMgr.addUserFile('samples_index','samples_index');
 
 })();
 

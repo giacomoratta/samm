@@ -1,5 +1,6 @@
 // TODO sample configuration
 // TODO detect OS or FS type
+// TODO detect separator style
 // TODO exit on error config
 // TODO a checkFn for each single parameter (checks, messages, etc.)
 // TODO globalCheckFn
@@ -10,15 +11,56 @@ const ConfigField = require('./micro/ConfigField.class.js');
 class ConfigManager {
 
     constructor(){
-        this._clUI = clUI.newLocalUI('> config:');
+        this._clUI = clUI.newLocalUI('> config manager:');
         this._fields = {};
-        this._userdata_path = null;
-        this._paths = {};
 
-        this._paths.config_file = Utils.File.setAsAbsPath(this._paths.config_file,true /*isFile*/);
-        this._paths.userdata_dir = Utils.File.setAsAbsPath(this._paths.userdata_dir);
+        this._userdata_path = null;
+        this._configfile_path = null;
+
+        this._paths = {};
     }
 
+
+    init(){
+        const _self = this;
+        DataMgr.setHolder({
+            label:'config_file',
+            filePath:this._configfile_path,
+            fileType:'json',
+            dataType:'object',
+            preLoad:true,
+            logErrorsFn:d$,
+            loadFn:(fileData)=>{
+                _self.getConfigParams().forEach((k)=>{
+                    if(!fileData[k]){
+                        _self._clUI.warning('missing parameter from loaded configuration:',k);
+                        return;
+                    }
+                    if(_.isNil(_self.set(k,fileData[k]))){
+                        _self._clUI.warning('wrong value for parameter',k,' from loaded configuration:',fileData[k]);
+                        Utils.EXIT();
+                    }
+                });
+            }
+        });
+        //no save after load - eventuali errori cancellano config
+
+        // Open config.json
+        this._config = DataMgr.get('config_file');
+        if(!this._config){
+            if(DataMgr.set('config_file',this.toJSON())===null){
+                Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
+            }
+            DataMgr.save('config_file');
+        }
+
+        this.print();
+    }
+
+
+    path(label){
+        return this._paths[label];
+    }
 
     addField(field_name, field_cfg){
 
@@ -42,25 +84,27 @@ class ConfigManager {
         return this._fields[field_name].set(value, addt);
     }
 
-    print(){
-        let keys = Object.keys(this._fields);
-        for(let i=0; i<keys.length; i++){
-            clUI.print(' ',keys[i]+':',this._fields[keys[i]].get());
-        }
-        clUI.print(); //new line
+    setFlag(label){
+        this._flags[label].status = true;
+    }
+
+    unsetFlag(label){
+        this._flags[label].status = false;
     }
 
 
-    init(){
-
-        if(!this.path('config_json')) this.addUserPath('config_json');
-    }
-
-
-    setUserData(name){
-        this._userdata_path = Utils.File.setAsAbsPath(name + Utils.File.pathSeparator, false /*isFile*/);
+    setUserdataDirectory(name){
+        this._userdata_path = Utils.File.setAsAbsPath(name, false /*isFile*/);
         if(!Utils.File.ensureDirSync(this._userdata_path)){
             this._clUI.error('cannot ensure the user data directory or is not a valid path', this._userdata_path);
+            Utils.EXIT();
+        }
+    }
+
+    setConfigFile(name){
+        this._configfile_path = Utils.File.setAsAbsPath(this._userdata_path + Utils.File.pathSeparator + name, true /*isFile*/);
+        if(!Utils.File.isAbsoluteParentDirSync(this._configfile_path,true /*checkExists*/)){
+            this._clUI.error('the parent directory of config file does not exist or is not a valid path', this._configfile_path);
             Utils.EXIT();
         }
     }
@@ -89,20 +133,38 @@ class ConfigManager {
         }
     }
 
-    setFlag(label){
-        this._flags[label].status = true;
-    }
-
-    unsetFlag(label){
-        this._flags[label].status = false;
-    }
-
-    path(label){
-        return this._paths[label];
-    }
 
     getConfigParams(){
         return Object.keys(this._fields);
+    }
+
+
+    print(){
+        clUI.print("\n",'Current Configuration:');
+        let params = this.getConfigParams();
+        for(let i=0; i<params.length; i++){
+            clUI.print(' ',params[i]+':',this.get(params[i]));
+        }
+        clUI.print(); //new line
+    }
+
+
+    printInternals(){
+        clUI.print("\n","Internal Configuration");
+        let _self = this;
+        Object.keys(this._paths).forEach(function(v){
+            clUI.print("    "+v+" : "+_self._paths[v]);
+        });
+    }
+
+
+    toJSON(){
+        let params = this.getConfigParams();
+        let pobj = {};
+        for(let i=0; i<params.length; i++){
+            pobj[params[i]] = this.get(params[i]);
+        }
+        return pobj;
     }
 
     printMessages(){
