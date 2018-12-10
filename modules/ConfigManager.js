@@ -1,12 +1,4 @@
-// TODO sample configuration
-// TODO detect OS or FS type
-// TODO detect separator style
-// TODO exit on error config
-// TODO a checkFn for each single parameter (checks, messages, etc.)
-// TODO globalCheckFn
-
 const ConfigField = require('./micro/ConfigField.class.js');
-
 
 class ConfigManager {
 
