@@ -7,6 +7,7 @@ class ConfigManager {
         this._fields = {};
 
         this._userdata_path = null;
+        this._userdata_dirname = null;
         this._configfile_path = null;
 
         this._paths = {};
@@ -91,10 +92,11 @@ class ConfigManager {
             this._clUI.error('cannot ensure the user data directory or is not a valid path', this._userdata_path);
             Utils.EXIT();
         }
+        this._userdata_dirname = Utils.File.pathBasename(this._userdata_path);
     }
 
     setConfigFile(name){
-        this._configfile_path = Utils.File.setAsAbsPath(this._userdata_path + Utils.File.pathSeparator + name, true /*isFile*/);
+        this._configfile_path = Utils.File.setAsAbsPath(this._userdata_dirname + Utils.File.pathSeparator + name, true /*isFile*/);
         if(!Utils.File.isAbsoluteParentDirSync(this._configfile_path,true /*checkExists*/)){
             this._clUI.error('the parent directory of config file does not exist or is not a valid path', this._configfile_path);
             Utils.EXIT();
@@ -102,7 +104,7 @@ class ConfigManager {
     }
 
     addUserDirectory(label, rel_path){
-        this._paths[label] = Utils.File.setAsAbsPath(this._userdata_path + Utils.File.pathSeparator + rel_path, false /*isFile*/);
+        this._paths[label] = Utils.File.setAsAbsPath(this._userdata_dirname + Utils.File.pathSeparator + rel_path, false /*isFile*/);
         if(!Utils.File.ensureDirSync(this._paths[label])){
             this._clUI.error('cannot ensure the user directory or is not a valid path', this._paths[label]);
             Utils.EXIT();
@@ -110,7 +112,7 @@ class ConfigManager {
     }
 
     addUserFile(label, rel_path){
-        this._paths[label] = Utils.File.setAsAbsPath(this._userdata_path + Utils.File.pathSeparator + rel_path, true /*isFile*/);
+        this._paths[label] = Utils.File.setAsAbsPath(this._userdata_dirname + Utils.File.pathSeparator + rel_path, true /*isFile*/);
         if(!Utils.File.isAbsoluteParentDirSync(this._paths[label],true /*checkExists*/)){
             this._clUI.error('the parent directory does not exist or is not a valid path', this._paths[label]);
             Utils.EXIT();
@@ -135,18 +137,28 @@ class ConfigManager {
         clUI.print("\n",'Current Configuration:');
         let params = this.getConfigParams();
         for(let i=0; i<params.length; i++){
-            clUI.print(' ',params[i]+':',this.get(params[i]));
+            let pvalue = this.get(params[i]);
+            if(_.isNil(pvalue) || _.isNaN(pvalue) ||
+                (_.isString(pvalue) && pvalue.length===0) ||
+                (_.isArray(pvalue) && pvalue.length===0)
+            ) pvalue='<undefined>';
+            clUI.print('  ',params[i]+':',pvalue);
         }
         clUI.print(); //new line
     }
 
 
     printInternals(){
-        clUI.print("\n","Internal Configuration");
         let _self = this;
+        let pad_end1=22;
+        let pad_end2=16;
+        clUI.print("\n","Internal Configuration");
+        clUI.print(_.padEnd("   (private)",pad_end2),_.padEnd("userdata path: ",pad_end1),_self._userdata_path);
+        clUI.print(_.padEnd("   (private)",pad_end2),_.padEnd("config file path: ",pad_end1),_self._configfile_path);
         Object.keys(this._paths).forEach(function(v){
-            clUI.print("    "+v+" : "+_self._paths[v]);
+            clUI.print(_.padEnd("   (path)",pad_end2),_.padEnd(v+": ",pad_end1),_self._paths[v]);
         });
+        clUI.print(); //new line
     }
 
 

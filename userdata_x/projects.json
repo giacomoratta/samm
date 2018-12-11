@@ -1,0 +1,20 @@
+{
+	"history": {
+		"size": 2,
+		"sizelimit": 10,
+		"collection": [
+			{
+				"path": "/XAMPP/xamppfiles/htdocs/dsa",
+				"base": "dsa"
+			},
+			{
+				"path": "/XAMPP/xamppfiles/htdocs/mpltests/mpl/",
+				"base": "mpl"
+			}
+		]
+	},
+	"templates": {
+		"size": 0,
+		"collection": []
+	}
+}

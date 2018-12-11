@@ -1,0 +1,21 @@
+{
+	"size": 4,
+	"collection": {
+		"abstract": {
+			"tag": "abstract",
+			"query": "abstract,complex"
+		},
+		"hihat": {
+			"tag": "hihat",
+			"query": "hihat,hi-hat,hh,top"
+		},
+		"impact": {
+			"tag": "impact",
+			"query": "impact,boom,shot,crash,bomb,808,efx"
+		},
+		"kick": {
+			"tag": "kick",
+			"query": "techno,kick,deep,sub"
+		}
+	}
+}

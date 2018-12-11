@@ -1,0 +1,1784 @@
+{
+	"data": {
+		"options": {
+			"includedExtensions": [],
+			"excludedExtensions": [
+				"asd",
+				"DS_Store",
+				"cfg",
+				"txt",
+				"exe"
+			],
+			"excludedPaths": []
+		},
+		"root_path": "/Users/ictmacbook/Documents/Adobe/",
+		"files_count": 63,
+		"directories_count": 35
+	},
+	"struct": [
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents",
+				"base": "Adobe",
+				"ext": "",
+				"name": "Adobe",
+				"path": "/Users/ictmacbook/Documents/Adobe/",
+				"level": 1,
+				"size": 1468261,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": ""
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe",
+				"base": "Adobe Media Encoder",
+				"ext": "",
+				"name": "Adobe Media Encoder",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder",
+				"level": 2,
+				"size": 1345386,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder",
+				"base": "11.0",
+				"ext": ".0",
+				"name": "11",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"level": 3,
+				"size": 1343429,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Adobe Media Encoder Prefs",
+				"ext": "",
+				"name": "Adobe Media Encoder Prefs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Adobe Media Encoder Prefs",
+				"level": 4,
+				"size": 7655,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Adobe Media Encoder Prefs"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "AMEPrefs.xml",
+				"ext": ".xml",
+				"name": "AMEPrefs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/AMEPrefs.xml",
+				"level": 4,
+				"size": 3848,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/AMEPrefs.xml"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "AppPrefs.xml",
+				"ext": ".xml",
+				"name": "AppPrefs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/AppPrefs.xml",
+				"level": 4,
+				"size": 387,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/AppPrefs.xml"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "ArchivedWorkspaces",
+				"ext": "",
+				"name": "ArchivedWorkspaces",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/ArchivedWorkspaces",
+				"level": 4,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/ArchivedWorkspaces"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "batch.xml",
+				"ext": ".xml",
+				"name": "batch",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/batch.xml",
+				"level": 4,
+				"size": 166512,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/batch.xml"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "logs",
+				"ext": "",
+				"name": "logs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/logs",
+				"level": 4,
+				"size": 128,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/logs"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Media Browser Provider Exception",
+				"ext": "",
+				"name": "Media Browser Provider Exception",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Media Browser Provider Exception",
+				"level": 4,
+				"size": 194,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Media Browser Provider Exception"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Placeholder Preset.epr",
+				"ext": ".epr",
+				"name": "Placeholder Preset",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Placeholder Preset.epr",
+				"level": 4,
+				"size": 88990,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Placeholder Preset.epr"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "PresetCache.xml",
+				"ext": ".xml",
+				"name": "PresetCache",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/PresetCache.xml",
+				"level": 4,
+				"size": 328361,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/PresetCache.xml"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Presets",
+				"ext": "",
+				"name": "Presets",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Presets",
+				"level": 4,
+				"size": 731266,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Presets"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Presets",
+				"base": "PresetTree.xml",
+				"ext": ".xml",
+				"name": "PresetTree",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Presets/PresetTree.xml",
+				"level": 5,
+				"size": 731170,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Presets/PresetTree.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Recent Directories",
+				"ext": "",
+				"name": "Recent Directories",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Recent Directories",
+				"level": 4,
+				"size": 172,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Recent Directories"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "SavedWorkspaces",
+				"ext": "",
+				"name": "SavedWorkspaces",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/SavedWorkspaces",
+				"level": 4,
+				"size": 13070,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/SavedWorkspaces"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/SavedWorkspaces",
+				"base": "UserWorkspace1.xml",
+				"ext": ".xml",
+				"name": "UserWorkspace1",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/SavedWorkspaces/UserWorkspace1.xml",
+				"level": 5,
+				"size": 12974,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/SavedWorkspaces/UserWorkspace1.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "SharedView Column Settings",
+				"ext": "",
+				"name": "SharedView Column Settings",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/SharedView Column Settings",
+				"level": 4,
+				"size": 156,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/SharedView Column Settings"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "SyncBackup",
+				"ext": "",
+				"name": "SyncBackup",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/SyncBackup",
+				"level": 4,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/SyncBackup"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "Watch Folder Info.xml",
+				"ext": ".xml",
+				"name": "Watch Folder Info",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/Watch Folder Info.xml",
+				"level": 4,
+				"size": 82,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/Watch Folder Info.xml"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0",
+				"base": "WSMgrCfg",
+				"ext": "",
+				"name": "WSMgrCfg",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/11.0/WSMgrCfg",
+				"level": 4,
+				"size": 1744,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/11.0/WSMgrCfg"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder",
+				"base": "12.0",
+				"ext": ".0",
+				"name": "12",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/12.0",
+				"level": 3,
+				"size": 1797,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/12.0"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/12.0",
+				"base": "AMEPrefs.xml",
+				"ext": ".xml",
+				"name": "AMEPrefs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Adobe Media Encoder/12.0/AMEPrefs.xml",
+				"level": 4,
+				"size": 1701,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Adobe Media Encoder/12.0/AMEPrefs.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe",
+				"base": "After Effects CC 2018",
+				"ext": "",
+				"name": "After Effects CC 2018",
+				"path": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018",
+				"level": 2,
+				"size": 1096,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "After Effects CC 2018"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018",
+				"base": "User Libraries",
+				"ext": "",
+				"name": "User Libraries",
+				"path": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018/User Libraries",
+				"level": 3,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "After Effects CC 2018/User Libraries"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018",
+				"base": "User Presets",
+				"ext": "",
+				"name": "User Presets",
+				"path": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018/User Presets",
+				"level": 3,
+				"size": 808,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "After Effects CC 2018/User Presets"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018/User Presets",
+				"base": "(Adobe)",
+				"ext": "",
+				"name": "(Adobe)",
+				"path": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018/User Presets/(Adobe)",
+				"level": 4,
+				"size": 712,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "After Effects CC 2018/User Presets/(Adobe)"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018",
+				"base": "Video Libraries",
+				"ext": "",
+				"name": "Video Libraries",
+				"path": "/Users/ictmacbook/Documents/Adobe/After Effects CC 2018/Video Libraries",
+				"level": 3,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "After Effects CC 2018/Video Libraries"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe",
+				"base": "Lumetri",
+				"ext": "",
+				"name": "Lumetri",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri",
+				"level": 2,
+				"size": 1216,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Lumetri",
+				"base": "9.0",
+				"ext": ".0",
+				"name": "9",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0",
+				"level": 3,
+				"size": 1120,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri/9.0"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0",
+				"base": "logs",
+				"ext": "",
+				"name": "logs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/logs",
+				"level": 4,
+				"size": 872,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri/9.0/logs"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/logs",
+				"base": "Lumetri.log",
+				"ext": ".log",
+				"name": "Lumetri",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/logs/Lumetri.log",
+				"level": 5,
+				"size": 776,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri/9.0/logs/Lumetri.log"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0",
+				"base": "settings",
+				"ext": "",
+				"name": "settings",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/settings",
+				"level": 4,
+				"size": 120,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri/9.0/settings"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/settings",
+				"base": "User_Settings.xml",
+				"ext": ".xml",
+				"name": "User_Settings",
+				"path": "/Users/ictmacbook/Documents/Adobe/Lumetri/9.0/settings/User_Settings.xml",
+				"level": 5,
+				"size": 24,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Lumetri/9.0/settings/User_Settings.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe",
+				"base": "Premiere Pro",
+				"ext": "",
+				"name": "Premiere Pro",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro",
+				"level": 2,
+				"size": 120339,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro",
+				"base": "11.0",
+				"ext": ".0",
+				"name": "11",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
+				"level": 3,
+				"size": 66662,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/11.0"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
+				"base": "Extension Config.xml",
+				"ext": ".xml",
+				"name": "Extension Config",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0/Extension Config.xml",
+				"level": 4,
+				"size": 218,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/11.0/Extension Config.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0",
+				"base": "Plugin Loading.log",
+				"ext": ".log",
+				"name": "Plugin Loading",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/11.0/Plugin Loading.log",
+				"level": 4,
+				"size": 66316,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/11.0/Plugin Loading.log"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro",
+				"base": "12.0",
+				"ext": ".0",
+				"name": "12",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
+				"level": 3,
+				"size": 53517,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0",
+				"base": "Profile-ictmacbook",
+				"ext": "",
+				"name": "Profile-ictmacbook",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"level": 4,
+				"size": 53389,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": "Adobe Premiere Pro Prefs",
+				"ext": "",
+				"name": "Adobe Premiere Pro Prefs",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Adobe Premiere Pro Prefs",
+				"level": 5,
+				"size": 16862,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Adobe Premiere Pro Prefs"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": "ArchivedLayouts",
+				"ext": "",
+				"name": "ArchivedLayouts",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/ArchivedLayouts",
+				"level": 5,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/ArchivedLayouts"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": "Layouts",
+				"ext": "",
+				"name": "Layouts",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts",
+				"level": 5,
+				"size": 884,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Layouts"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts",
+				"base": "WorkspaceConfig.xml",
+				"ext": ".xml",
+				"name": "WorkspaceConfig",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Layouts/WorkspaceConfig.xml",
+				"level": 6,
+				"size": 788,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Layouts/WorkspaceConfig.xml"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": "Mac",
+				"ext": "",
+				"name": "Mac",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Mac",
+				"level": 5,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Mac"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook",
+				"base": "Settings",
+				"ext": "",
+				"name": "Settings",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"level": 5,
+				"size": 35259,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"base": "EssentialSound",
+				"ext": "",
+				"name": "EssentialSound",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound",
+				"level": 6,
+				"size": 32315,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound",
+				"base": "Default",
+				"ext": "",
+				"name": "Default",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"level": 7,
+				"size": 32187,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"base": "ambience",
+				"ext": "",
+				"name": "ambience",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"level": 8,
+				"size": 4058,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "(Config).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Config)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Config).essentialsound",
+				"level": 9,
+				"size": 1805,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Config).essentialsound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "(Default).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Default)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Default).essentialsound",
+				"level": 9,
+				"size": 378,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/(Default).essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "Focused.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Focused",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Focused.essentialsound",
+				"level": 9,
+				"size": 374,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Focused.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "From Outside.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From Outside",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/From Outside.essentialsound",
+				"level": 9,
+				"size": 417,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/From Outside.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "Room Tone.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Room Tone",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Room Tone.essentialsound",
+				"level": 9,
+				"size": 410,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Room Tone.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience",
+				"base": "Wide and Deep.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Wide and Deep",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Wide and Deep.essentialsound",
+				"level": 9,
+				"size": 418,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/ambience/Wide and Deep.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"base": "dialog",
+				"ext": "",
+				"name": "dialog",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"level": 8,
+				"size": 18914,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "(Config).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Config)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Config).essentialsound",
+				"level": 9,
+				"size": 9608,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Config).essentialsound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "(Default).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Default)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Default).essentialsound",
+				"level": 9,
+				"size": 426,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/(Default).essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Background Walla Walla.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Background Walla Walla",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Background Walla Walla.essentialsound",
+				"level": 9,
+				"size": 569,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Background Walla Walla.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Balanced Female Voice.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Balanced Female Voice",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Female Voice.essentialsound",
+				"level": 9,
+				"size": 549,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Female Voice.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Balanced Male Voice.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Balanced Male Voice",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Male Voice.essentialsound",
+				"level": 9,
+				"size": 563,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Balanced Male Voice.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Clean Up Noisy Dialogue.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Clean Up Noisy Dialogue",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Clean Up Noisy Dialogue.essentialsound",
+				"level": 9,
+				"size": 553,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Clean Up Noisy Dialogue.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "From Outside a Building.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From Outside a Building",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From Outside a Building.essentialsound",
+				"level": 9,
+				"size": 552,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From Outside a Building.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "From the Radio.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From the Radio",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Radio.essentialsound",
+				"level": 9,
+				"size": 537,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Radio.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "From the Telephone.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From the Telephone",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Telephone.essentialsound",
+				"level": 9,
+				"size": 546,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Telephone.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "From the Television.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From the Television",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Television.essentialsound",
+				"level": 9,
+				"size": 561,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/From the Television.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "In a Large Room.essentialsound",
+				"ext": ".essentialsound",
+				"name": "In a Large Room",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Large Room.essentialsound",
+				"level": 9,
+				"size": 554,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Large Room.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "In a Small Room.essentialsound",
+				"ext": ".essentialsound",
+				"name": "In a Small Room",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Small Room.essentialsound",
+				"level": 9,
+				"size": 533,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/In a Small Room.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Make Close Up.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Close Up",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Close Up.essentialsound",
+				"level": 9,
+				"size": 534,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Close Up.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Make Distant.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Distant",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Distant.essentialsound",
+				"level": 9,
+				"size": 569,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Distant.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Make Medium Shot.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Medium Shot",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Medium Shot.essentialsound",
+				"level": 9,
+				"size": 575,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Make Medium Shot.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Over the Intercom.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Over the Intercom",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Over the Intercom.essentialsound",
+				"level": 9,
+				"size": 542,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Over the Intercom.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog",
+				"base": "Podcast Voice.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Podcast Voice",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Podcast Voice.essentialsound",
+				"level": 9,
+				"size": 535,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/dialog/Podcast Voice.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"base": "generic",
+				"ext": "",
+				"name": "generic",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic",
+				"level": 8,
+				"size": 701,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic",
+				"base": "(Config).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Config)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Config).essentialsound",
+				"level": 9,
+				"size": 297,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Config).essentialsound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic",
+				"base": "(Default).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Default)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Default).essentialsound",
+				"level": 9,
+				"size": 276,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/generic/(Default).essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"base": "music",
+				"ext": "",
+				"name": "music",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"level": 8,
+				"size": 2740,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "(Config).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Config)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Config).essentialsound",
+				"level": 9,
+				"size": 540,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Config).essentialsound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "(Default).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Default)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Default).essentialsound",
+				"level": 9,
+				"size": 366,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/(Default).essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "Balanced Background Music.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Balanced Background Music",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Balanced Background Music.essentialsound",
+				"level": 9,
+				"size": 375,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Balanced Background Music.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "Remix to 30 Seconds.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Remix to 30 Seconds",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 30 Seconds.essentialsound",
+				"level": 9,
+				"size": 401,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 30 Seconds.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "Remix to 60 Seconds.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Remix to 60 Seconds",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 60 Seconds.essentialsound",
+				"level": 9,
+				"size": 401,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 60 Seconds.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music",
+				"base": "Remix to 90 Seconds.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Remix to 90 Seconds",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 90 Seconds.essentialsound",
+				"level": 9,
+				"size": 401,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/music/Remix to 90 Seconds.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default",
+				"base": "sfx",
+				"ext": "",
+				"name": "sfx",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"level": 8,
+				"size": 5518,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "(Config).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Config)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Config).essentialsound",
+				"level": 9,
+				"size": 1764,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Config).essentialsound"
+			},
+			"is_first_child": true,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "(Default).essentialsound",
+				"ext": ".essentialsound",
+				"name": "(Default)",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Default).essentialsound",
+				"level": 9,
+				"size": 346,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/(Default).essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "Explosion.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Explosion",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Explosion.essentialsound",
+				"level": 9,
+				"size": 380,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Explosion.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "From Outside.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From Outside",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From Outside.essentialsound",
+				"level": 9,
+				"size": 385,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From Outside.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "From the Left.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From the Left",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Left.essentialsound",
+				"level": 9,
+				"size": 370,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Left.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "From the Right.essentialsound",
+				"ext": ".essentialsound",
+				"name": "From the Right",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Right.essentialsound",
+				"level": 9,
+				"size": 371,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/From the Right.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "In a Large Room.essentialsound",
+				"ext": ".essentialsound",
+				"name": "In a Large Room",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/In a Large Room.essentialsound",
+				"level": 9,
+				"size": 389,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/In a Large Room.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "Make Close Up.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Close Up",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Close Up.essentialsound",
+				"level": 9,
+				"size": 369,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Close Up.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "Make Distant.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Distant",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Distant.essentialsound",
+				"level": 9,
+				"size": 368,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Distant.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx",
+				"base": "Make Medium Shot.essentialsound",
+				"ext": ".essentialsound",
+				"name": "Make Medium Shot",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Medium Shot.essentialsound",
+				"level": 9,
+				"size": 392,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/EssentialSound/Default/sfx/Make Medium Shot.essentialsound"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"base": "Overlay Presets",
+				"ext": "",
+				"name": "Overlay Presets",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/Overlay Presets",
+				"level": 6,
+				"size": 2592,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/Overlay Presets"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/Overlay Presets",
+				"base": "Custom Overlay.olp",
+				"ext": ".olp",
+				"name": "Custom Overlay",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/Overlay Presets/Custom Overlay.olp",
+				"level": 7,
+				"size": 2496,
+				"is_file": true,
+				"is_directory": false,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/Overlay Presets/Custom Overlay.olp"
+			},
+			"is_first_child": true,
+			"is_last_child": true
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"base": "Source Patcher Presets",
+				"ext": "",
+				"name": "Source Patcher Presets",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/Source Patcher Presets",
+				"level": 6,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/Source Patcher Presets"
+			},
+			"is_first_child": false,
+			"is_last_child": false
+		},
+		{
+			"item": {
+				"root": "/",
+				"dir": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings",
+				"base": "Track Height Presets",
+				"ext": "",
+				"name": "Track Height Presets",
+				"path": "/Users/ictmacbook/Documents/Adobe/Premiere Pro/12.0/Profile-ictmacbook/Settings/Track Height Presets",
+				"level": 6,
+				"size": 64,
+				"is_file": false,
+				"is_directory": true,
+				"rel_root": "/Users/ictmacbook/Documents/Adobe/",
+				"rel_path": "Premiere Pro/12.0/Profile-ictmacbook/Settings/Track Height Presets"
+			},
+			"is_first_child": false,
+			"is_last_child": true
+		}
+	]
+}

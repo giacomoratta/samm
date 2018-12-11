@@ -21,7 +21,7 @@ const ENUMS = {
     }
 };
 
-let x$ = d$;
+let x$ = function(){};
 
 class ConfigField {
     constructor(field_cfg){
@@ -66,10 +66,8 @@ class ConfigField {
             d$('ConfigField.constructor','invalid default value',fcfg.defaultValue);
             this._value = null;
             this._field_cfg = null;
-            //x$(fcfg);
             return;
         }
-        //x$(fcfg);
     }
 
 
@@ -234,14 +232,27 @@ class ConfigField {
         return checkFn;
     }
 
-
-    _setSetFn(checkFn, checkObjectFn, _fcfg){
-        // addt = 'i', 'd', object key
-        let allowedValuesFn = function(v, awv){
+    _getAllowedValuesFn(_fcfg){
+        if(_fcfg.datatypeCode === ENUMS.datatype.array){
+            return function(v, awv){
+                if(!_.isArray(awv) || awv.length<=0) return ENUMS.checks.success;
+                for(let i=0; i<v.length; i++){
+                    if(awv.indexOf(v)<0) return ENUMS.checks.valueNotAllowed;
+                }
+                return ENUMS.checks.success;
+            };
+        }
+        return function(v, awv){
             if(!_.isArray(awv) || awv.length<=0) return ENUMS.checks.success;
             if(awv.indexOf(v)>=0) return ENUMS.checks.success;
             return ENUMS.checks.valueNotAllowed;
         };
+    }
+
+
+    _setSetFn(checkFn, checkObjectFn, _fcfg){
+        // addt = 'i', 'd', object key
+        let allowedValuesFn = this._getAllowedValuesFn(_fcfg);
 
         let setFn = function(v, addt, _ref, awv){
             let vObj={ v:null, check:ENUMS.checks.success };
@@ -259,14 +270,17 @@ class ConfigField {
         if(_fcfg.datatypeCode === ENUMS.datatype.array){
             setFn = function(v, addt, _ref, awv){
                 let vObj={ v:null, check:ENUMS.checks.success };
-                if(checkFn(v)){
-                    // TODO: check all values allowedValuesFn
+                if(checkFn(v) === ENUMS.checks.success){
+                    vObj.check = allowedValuesFn(v, awv);
+                    if(vObj.check !== ENUMS.checks.success) return vObj;
                     if(_.isNil(addt)){
                         vObj.v = v;
                         return vObj;
                     }
                 }else{
                     v = [v];
+                    vObj.check = allowedValuesFn(v, awv);
+                    if(vObj.check !== ENUMS.checks.success) return vObj;
                 }
                 if(addt==='i'){
                     for(let i=0; i<v.length; i++){
@@ -275,15 +289,13 @@ class ConfigField {
                             if(vObj.check === ENUMS.checks.wrongValue) vObj.check=ENUMS.checks.wrongObjectValue;
                             return vObj;
                         }
-                        vObj.check = allowedValuesFn(v[i], awv);
-                        if(vObj.check !== ENUMS.checks.success) return vObj;
                         _ref.push(v[i]);
                     }
                 }
                 else if(addt==='d'){
                     for(let i=0; i<v.length; i++){
                         let j = _ref.indexOf(v[i]);
-                        _ref.splice(j,1);
+                        if(j>=0) _ref.splice(j,1);
                     }
                 }
                 vObj.v = _ref;
@@ -292,8 +304,7 @@ class ConfigField {
         }
         else if(_fcfg.datatypeCode === ENUMS.datatype.object){
             setFn = function(v, addt, _ref, awv){
-                if(checkFn(v)){
-                    // TODO: check all values allowedValuesFn
+                if(checkFn(v) === ENUMS.checks.success){
                     vObj.v = v;
                     return vObj;
                 }
@@ -312,9 +323,6 @@ class ConfigField {
                     if(vObj.check === ENUMS.checks.wrongValue) vObj.check=ENUMS.checks.wrongObjectValue;
                     return vObj;
                 }
-
-                vObj.check = allowedValuesFn(v, awv);
-                if(vObj.check !== ENUMS.checks.success) return vObj;
 
                 _ref[addt] = v;
                 vObj.v = _ref;
