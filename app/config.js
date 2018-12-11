@@ -6,7 +6,8 @@
         description:'',
         datatype: 'abspath',
         defaultValue: '',
-        checkPathExists: true
+        checkPathExists: true,
+        flagsOnChange: [ 'new_scan_needed' ]
     });
 
     ConfigMgr.addField('ExportDirectory', {
@@ -44,7 +45,8 @@
     ConfigMgr.addField('ExtensionCheckForSamples', {
         datatype: 'char',
         defaultValue: 'X',
-        allowedValues: ['X','E','I']
+        allowedValues: ['X','E','I'],
+        flagsOnChange: [ 'new_scan_needed_exts' ]
     });
 
     ConfigMgr.addField('IncludedExtensionsForSamples', {
@@ -56,7 +58,8 @@
             ".log",
             "essentialsound",
             "olp"
-        ]
+        ],
+        flagsOnChange: [ 'new_scan_needed_exts' ]
     });
 
     ConfigMgr.addField('ExcludedExtensionsForSamples', {
@@ -69,7 +72,8 @@
             "cfg",
             "txt",
             "exe"
-        ]
+        ],
+        flagsOnChange: [ 'new_scan_needed_exts' ]
     });
 
     ConfigMgr.setUserdataDirectory('userdata');
@@ -121,7 +125,9 @@ ConfigMgr.printInternals();
 // ConfigMgr.path   //app path
 
 
-//ConfigMgr.addFlag('abc123','My text abc 123');
+ConfigMgr.addFlag('new_scan_needed_sampledir','SamplesDirectory changed: new full scan needed.');
+ConfigMgr.addFlag('new_scan_needed_exts','Settings on extensions changed: new full scan needed.');
+
 //ConfigMgr.setFlag('abc123');
 //ConfigMgr.unsetFlag('abc123');
 

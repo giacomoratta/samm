@@ -35,6 +35,7 @@ class ConfigField {
             objectDatatype: null,
             defaultValue: null,
             allowedValues: [],
+            flagsOnChange: null,
 
             printErrorFn:null,
             checkFn: null,
@@ -95,6 +96,11 @@ class ConfigField {
     allowedValues(){
         if(!_.isArray(this._field_cfg.allowedValues) || this._field_cfg.allowedValues.length<1) return null;
         return this._field_cfg.allowedValues;
+    }
+
+    flagsOnChange(){
+        if(!_.isArray(this._field_cfg.flagsOnChange) || this._field_cfg.flagsOnChange.length<1) return null;
+        return this._field_cfg.flagsOnChange;
     }
 
 

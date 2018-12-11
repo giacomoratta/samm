@@ -73,8 +73,16 @@ class ConfigManager {
     }
 
     set(field_name, value, addt){
+        let _self = this;
         if(!this._fields[field_name]) return;
-        return this._fields[field_name].set(value, addt);
+        let set_outcome = this._fields[field_name].set(value, addt);
+        if(set_outcome === true){
+            if(!this._fields[field_name].flagsOnChange()) return;
+            this._fields[field_name].flagsOnChange().forEach((v)=>{
+                _self.setFlag(v);
+            });
+        }
+        return set_outcome;
     }
 
     setFlag(label){
