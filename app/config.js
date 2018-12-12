@@ -88,8 +88,11 @@
     ConfigMgr.addUserFile('tquery','tqueries.json');
     ConfigMgr.addUserFile('samples_index','samples_index');
 
+    ConfigMgr.init();
+
 })();
 
+//d$(ConfigMgr.set('DAW','Cubasex'));
 
 
 // console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));
@@ -111,8 +114,8 @@
 
 //console.log(ConfigMgr.set('ExcludedExtensionsForSamples',[3],'i'));
 
-ConfigMgr.print();
-ConfigMgr.printInternals();
+//ConfigMgr.print();
+//ConfigMgr.printInternals();
 
 // ConfigMgr.get('param');
 // ConfigMgr.set('param',value);

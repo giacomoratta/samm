@@ -14,9 +14,9 @@ class ConfigManager {
         this._paths = {};
     }
 
-
     init(){
         const _self = this;
+
         DataMgr.setHolder({
             label:'config_file',
             filePath:this._configfile_path,
@@ -25,9 +25,11 @@ class ConfigManager {
             preLoad:true,
             logErrorsFn:d$,
             loadFn:(fileData)=>{
+                d$(fileData);
+                if(!_.isObject(fileData)) return { emptydata:true };
                 _self.getConfigParams().forEach((k)=>{
                     if(!fileData[k]){
-                        _self._clUI.warning('missing parameter from loaded configuration:',k);
+                        _self._clUI.warning('missing parameter from loaded configuration:',k,typeof fileData[k]);
                         return null;
                     }
                     if(_.isNil(_self.set(k,fileData[k]))){
@@ -36,6 +38,7 @@ class ConfigManager {
                     }
                 });
                 _self._flagsStatusFromJSON(fileData._flags_status);
+                return fileData;
             },
             saveFn:()=>{
                 //do not save after load - it's not needed and there is a possible config file cancellation after some unexpected errors
@@ -44,16 +47,17 @@ class ConfigManager {
                     fileData[k] = _self.get(k);
                 });
                 fileData._flags_status = _self._flagsStatusToJSON();
+                d$(fileData._flags_status);
                 return fileData;
             }
         });
 
+
         // Open config.json
-        this._config = DataMgr.get('config_file');
-        if(!this._config){
+        if(!DataMgr.get('config_file') || DataMgr.get('config_file').emptydata===true){
             // generate the first config.json file
             if(this.save('config_file')===null){
-                Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
+                Utils.EXIT('Cannot create or read the configuration file '+this._configfile_path);
             }
         }
 
@@ -93,7 +97,7 @@ class ConfigManager {
         if(!this._fields[field_name]) return;
         let set_outcome = this._fields[field_name].set(value, addt);
         if(set_outcome === true){
-            if(!this._fields[field_name].flagsOnChange()) return;
+            if(!this._fields[field_name].flagsOnChange()) return true;
             this._fields[field_name].flagsOnChange().forEach((v)=>{
                 _self.setFlag(v);
             });
@@ -113,8 +117,8 @@ class ConfigManager {
         let keys = Object.keys(this._flags);
         let flagsobj = {};
         keys.forEach((v)=>{
-            flagsobj[v] = this._flags[v].status[v];
-        })
+            flagsobj[v] = this._flags[v].status;
+        });
         return flagsobj;
     }
 
