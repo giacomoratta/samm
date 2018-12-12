@@ -206,7 +206,7 @@ class ConfigManager {
             clUI.print(_.padEnd("   (path)",pad_end1),_.padEnd(v+": ",pad_end2),_self._paths[v]);
         });
         _flags_keys.forEach(function(v){
-            clUI.print(_.padEnd("   (flag)",pad_end1),_.padEnd(v+": ",pad_end2),'['+_self._flags[v].status+']',_self._flags[v].message);
+            clUI.print(_.padEnd("   (flag)",pad_end1),_.padEnd(v+": ",pad_end2),'[status:'+_self._flags[v].status+']',_self._flags[v].message);
         });
         clUI.print(); //new line
     }
