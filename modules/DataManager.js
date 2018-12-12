@@ -142,7 +142,7 @@ class DataManager {
         if(!$cfg || !$cfg.filePath) return null;
 
         let filedata = this._loadFileData($cfg);
-        if(filedata === false){
+        if(filedata === false || filedata === null){
             $cfg.logErrorsFn('DataMgr.load ['+label+'] > the file does not exist:',$cfg.filePath);
             //return false;
             filedata = null;
@@ -192,7 +192,9 @@ class DataManager {
             }
         }
         else filedata = this._data[label];
-        return this._saveFileData($cfg, filedata);
+        let saveoutcome = this._saveFileData($cfg, filedata);
+        if(saveoutcome===null || saveoutcome===false) return null;
+        return saveoutcome;
     }
 
 

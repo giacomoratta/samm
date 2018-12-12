@@ -51,14 +51,19 @@ class ConfigManager {
         // Open config.json
         this._config = DataMgr.get('config_file');
         if(!this._config){
-            if(DataMgr.set('config_file',this.toJSON())===null){
+            // generate the first config.json file
+            if(this.save('config_file')===null){
                 Utils.EXIT('Cannot create or read the configuration file '+this.path('config_file'));
             }
-            DataMgr.save('config_file');
         }
 
         this.printInternals();
         this.print();
+    }
+
+
+    save(){
+        return DataMgr.save('config_file');
     }
 
 
@@ -187,26 +192,25 @@ class ConfigManager {
     printInternals(){
         let _self = this;
         let _paths_keys = Object.keys(this._paths);
+        let _flags_keys = Object.keys(this._flags);
         let pad_end1=14;
-        let pad_end2=0; _paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; }); pad_end2+=3;
+        let pad_end2=0;
+        _paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
+        _flags_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
+        pad_end2+=3;
+
         clUI.print("\n","Internal Configuration");
         clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("userdata path: ",pad_end2),_self._userdata_path);
         clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("config file path: ",pad_end2),_self._configfile_path);
         _paths_keys.forEach(function(v){
             clUI.print(_.padEnd("   (path)",pad_end1),_.padEnd(v+": ",pad_end2),_self._paths[v]);
         });
+        _flags_keys.forEach(function(v){
+            clUI.print(_.padEnd("   (flag)",pad_end1),_.padEnd(v+": ",pad_end2),'['+_self._flags[v].status+']',_self._flags[v].message);
+        });
         clUI.print(); //new line
     }
 
-
-    toJSON(){
-        let params = this.getConfigParams();
-        let pobj = {};
-        for(let i=0; i<params.length; i++){
-            pobj[params[i]] = this.get(params[i]);
-        }
-        return pobj;
-    }
 
     printMessages(){
         clUI.print("\n");
