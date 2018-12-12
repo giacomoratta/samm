@@ -7,7 +7,7 @@
         datatype: 'abspath',
         defaultValue: '',
         checkPathExists: true,
-        flagsOnChange: [ 'new_scan_needed' ]
+        flagsOnChange: [ 'new_scan_needed_smpdir' ]
     });
 
     ConfigMgr.addField('ExportDirectory', {
@@ -75,6 +75,9 @@
         ],
         flagsOnChange: [ 'new_scan_needed_exts' ]
     });
+
+    ConfigMgr.addFlag('new_scan_needed_smpdir','New scan needed after changing the samples directory');
+    ConfigMgr.addFlag('new_scan_needed_exts','New scan needed after changing the configuration on file extensions');
 
     ConfigMgr.setUserdataDirectory('userdata');
     ConfigMgr.setConfigFile('config.json');

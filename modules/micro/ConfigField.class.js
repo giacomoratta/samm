@@ -104,30 +104,6 @@ class ConfigField {
     }
 
 
-    _printError(fieldname, fieldvalue, checkResult){
-        switch(checkResult){
-            case ENUMS.checks.wrongValue:
-                this._field_cfg.printErrorFn(fieldname+': wrong value',fieldvalue);
-                break;
-            case ENUMS.checks.wrongObjectValue:
-                this._field_cfg.printErrorFn(fieldname+': wrong value for internal objects',fieldvalue);
-                break;
-            case ENUMS.checks.valueNotAllowed:
-                this._field_cfg.printErrorFn(fieldname+': value not allowed',fieldvalue);
-                this._field_cfg.printErrorFn('Allowed values:',this.allowedValues());
-                break;
-            case ENUMS.checks.pathNotExists:
-                this._field_cfg.printErrorFn(fieldname+': path does not exist',fieldvalue);
-                break;
-            case ENUMS.checks.labelNeeded:
-                this._field_cfg.printErrorFn(fieldname+': label needed for object parameter',fieldvalue);
-                break;
-            default:
-                this._field_cfg.printErrorFn(fieldname+': unknown error - '+checkResult,'value:',fieldvalue);
-        }
-    };
-
-
     _setDatatype(datatype, objectDatatype, _fcfg){
         if(!ENUMS.datatype[datatype]){
             d$('_setDatatype: no valid datatype',datatype);
@@ -337,6 +313,32 @@ class ConfigField {
         }
         return setFn;
     }
+
+
+
+    _printError(fieldname, fieldvalue, checkResult){
+        switch(checkResult){
+            case ENUMS.checks.wrongValue:
+                this._field_cfg.printErrorFn(fieldname+': wrong value',fieldvalue);
+                break;
+            case ENUMS.checks.wrongObjectValue:
+                this._field_cfg.printErrorFn(fieldname+': wrong value for internal objects',fieldvalue);
+                break;
+            case ENUMS.checks.valueNotAllowed:
+                this._field_cfg.printErrorFn(fieldname+': value not allowed',fieldvalue);
+                this._field_cfg.printErrorFn('Allowed values:',this.allowedValues());
+                break;
+            case ENUMS.checks.pathNotExists:
+                this._field_cfg.printErrorFn(fieldname+': path does not exist',fieldvalue);
+                break;
+            case ENUMS.checks.labelNeeded:
+                this._field_cfg.printErrorFn(fieldname+': label needed for object parameter',fieldvalue);
+                break;
+            default:
+                this._field_cfg.printErrorFn(fieldname+': unknown error - '+checkResult,'value:',fieldvalue);
+        }
+    };
+
 
 
 }

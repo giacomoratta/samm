@@ -5,6 +5,7 @@ class ConfigManager {
     constructor(){
         this._clUI = clUI.newLocalUI('> config manager:');
         this._fields = {};
+        this._flags = {};
 
         this._userdata_path = null;
         this._userdata_dirname = null;
@@ -27,16 +28,25 @@ class ConfigManager {
                 _self.getConfigParams().forEach((k)=>{
                     if(!fileData[k]){
                         _self._clUI.warning('missing parameter from loaded configuration:',k);
-                        return;
+                        return null;
                     }
                     if(_.isNil(_self.set(k,fileData[k]))){
                         _self._clUI.warning('wrong value for parameter',k,' from loaded configuration:',fileData[k]);
                         Utils.EXIT();
                     }
                 });
+                _self._flagsStatusFromJSON(fileData._flags_status);
+            },
+            saveFn:()=>{
+                //do not save after load - it's not needed and there is a possible config file cancellation after some unexpected errors
+                let fileData = {};
+                _self.getConfigParams().forEach((k)=>{
+                    fileData[k] = _self.get(k);
+                });
+                fileData._flags_status = _self._flagsStatusToJSON();
+                return fileData;
             }
         });
-        //no save after load - eventuali errori cancellano config
 
         // Open config.json
         this._config = DataMgr.get('config_file');
@@ -47,6 +57,7 @@ class ConfigManager {
             DataMgr.save('config_file');
         }
 
+        this.printInternals();
         this.print();
     }
 
@@ -91,6 +102,22 @@ class ConfigManager {
 
     unsetFlag(label){
         this._flags[label].status = false;
+    }
+
+    _flagsStatusToJSON(){
+        let keys = Object.keys(this._flags);
+        let flagsobj = {};
+        keys.forEach((v)=>{
+            flagsobj[v] = this._flags[v].status[v];
+        })
+        return flagsobj;
+    }
+
+    _flagsStatusFromJSON(flags_status){
+        let keys = Object.keys(flags_status);
+        keys.forEach((v)=>{
+            this._flags[v].status = flags_status[v];
+        })
     }
 
 
@@ -144,13 +171,14 @@ class ConfigManager {
     print(){
         clUI.print("\n",'Current Configuration:');
         let params = this.getConfigParams();
+        let _mlen1 = 0; params.forEach((v)=>{ if(_mlen1<v.length) _mlen1=v.length; }); _mlen1+=7;
         for(let i=0; i<params.length; i++){
             let pvalue = this.get(params[i]);
             if(_.isNil(pvalue) || _.isNaN(pvalue) ||
                 (_.isString(pvalue) && pvalue.length===0) ||
                 (_.isArray(pvalue) && pvalue.length===0)
             ) pvalue='<undefined>';
-            clUI.print('  ',params[i]+':',pvalue);
+            clUI.print('  ',_.padEnd(params[i]+(params[i].length%2===0?' ':''),_mlen1,' .'),pvalue);
         }
         clUI.print(); //new line
     }
@@ -158,13 +186,14 @@ class ConfigManager {
 
     printInternals(){
         let _self = this;
-        let pad_end1=22;
-        let pad_end2=16;
+        let _paths_keys = Object.keys(this._paths);
+        let pad_end1=14;
+        let pad_end2=0; _paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; }); pad_end2+=3;
         clUI.print("\n","Internal Configuration");
-        clUI.print(_.padEnd("   (private)",pad_end2),_.padEnd("userdata path: ",pad_end1),_self._userdata_path);
-        clUI.print(_.padEnd("   (private)",pad_end2),_.padEnd("config file path: ",pad_end1),_self._configfile_path);
-        Object.keys(this._paths).forEach(function(v){
-            clUI.print(_.padEnd("   (path)",pad_end2),_.padEnd(v+": ",pad_end1),_self._paths[v]);
+        clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("userdata path: ",pad_end2),_self._userdata_path);
+        clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("config file path: ",pad_end2),_self._configfile_path);
+        _paths_keys.forEach(function(v){
+            clUI.print(_.padEnd("   (path)",pad_end1),_.padEnd(v+": ",pad_end2),_self._paths[v]);
         });
         clUI.print(); //new line
     }
