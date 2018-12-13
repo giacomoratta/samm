@@ -12,6 +12,7 @@ class ConfigManager {
         this._configfile_path = null;
 
         this._paths = {};
+        this._cfg_paths = {};
     }
 
     init(){
@@ -25,10 +26,9 @@ class ConfigManager {
             preLoad:true,
             logErrorsFn:d$,
             loadFn:(fileData)=>{
-                d$(fileData);
                 if(!_.isObject(fileData)) return { emptydata:true };
                 _self.getConfigParams().forEach((k)=>{
-                    if(!fileData[k]){
+                    if(_.isNil(fileData[k])){
                         _self._clUI.warning('missing parameter from loaded configuration:',k,typeof fileData[k]);
                         return null;
                     }
@@ -47,11 +47,9 @@ class ConfigManager {
                     fileData[k] = _self.get(k);
                 });
                 fileData._flags_status = _self._flagsStatusToJSON();
-                d$(fileData._flags_status);
                 return fileData;
             }
         });
-
 
         // Open config.json
         if(!DataMgr.get('config_file') || DataMgr.get('config_file').emptydata===true){
@@ -75,6 +73,34 @@ class ConfigManager {
         return this._paths[label];
     }
 
+
+    cfg_paths(label){
+        return this._cfg_paths[label];
+    }
+
+    _set_cfg_paths(field_name){
+        let raw_path = this._fields[field_name].get();
+        if(!_.isString(raw_path) || raw_path.length<2){
+            d$('_set_cfg_paths','not a valid string for path',raw_path);
+            return false;
+        }
+        if(this._fields[field_name].dataType.isAbsPath){
+            if(!Utils.File.isAbsolutePath(raw_path)) {
+                d$('_set_cfg_paths','not a valid absolute path',raw_path);
+                return false;
+            }
+        }else if(this._fields[field_name].dataType.isRelPath){
+            if(!Utils.File.isRelativePath(raw_path)) {
+                d$('_set_cfg_paths','not a valid relative path',raw_path);
+                return false;
+            }
+            raw_path = Utils.File.setAsAbsPath(raw_path + Utils.File.pathSeparator, (dataType.isRelFilePath));
+        }
+        this._cfg_paths[field_name] = raw_path;
+        return true;
+    }
+
+
     addField(field_name, field_cfg){
 
         field_cfg.fieldname = field_name;
@@ -83,20 +109,35 @@ class ConfigManager {
         this._fields[field_name] = new ConfigField(field_cfg);
         if(this._fields[field_name].error()){
             d$('ConfigManager.addField',field_name,'ERROR');
-            return;
+            return false;
         }
+
+        if(this._fields[field_name].dataType.isPath){
+            this._set_cfg_paths(field_name);
+        }
+        return true;
     }
 
-    get(field_name){
+
+    get(field_name, _origvalue){
         if(!this._fields[field_name]) return;
+        if(this._fields[field_name].dataType.isPath && _origvalue!==false){
+            return this.cfg_paths(field_name);
+        }
         return this._fields[field_name].get();
     }
+
 
     set(field_name, value, addt){
         let _self = this;
         if(!this._fields[field_name]) return;
         let set_outcome = this._fields[field_name].set(value, addt);
         if(set_outcome === true){
+
+            if(this._fields[field_name].dataType.isPath){
+                this._set_cfg_paths(field_name);
+            }
+
             if(!this._fields[field_name].flagsOnChange()) return true;
             this._fields[field_name].flagsOnChange().forEach((v)=>{
                 _self.setFlag(v);
@@ -104,6 +145,7 @@ class ConfigManager {
         }
         return set_outcome;
     }
+
 
     setFlag(label){
         this._flags[label].status = true;

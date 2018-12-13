@@ -8,8 +8,10 @@ const ENUMS = {
         string:5,
         array:6,
         object:7,
-        relpath:8,
-        abspath:9
+        reldirpath:8,
+        relfilepath:9,
+        absdirpath:10,
+        absfilepath:11
     },
     checks:{
         success:21,
@@ -21,10 +23,10 @@ const ENUMS = {
     }
 };
 
-let x$ = function(){};
 
 class ConfigField {
     constructor(field_cfg){
+
         this._field_cfg = null;
         this._value = null;
 
@@ -69,8 +71,30 @@ class ConfigField {
             this._field_cfg = null;
             return;
         }
+
+
+        this.dataType = this._setDataTypeCheck(fcfg.datatypeCode);
+        this.objectDatatype = this._setDataTypeCheck(fcfg.objectDatatypeCode);
     }
 
+    _setDataTypeCheck(dataTypeCode){
+        return {
+            isInteger: (dataTypeCode===ENUMS.integer),
+            isNumber: (dataTypeCode===ENUMS.number),
+            isBoolean: (dataTypeCode===ENUMS.boolean),
+            isChar: (dataTypeCode===ENUMS.char),
+            isString: (dataTypeCode===ENUMS.string),
+            isArray: (dataTypeCode===ENUMS.array),
+            isObject: (dataTypeCode===ENUMS.object),
+            isRelDirPath: (dataTypeCode===ENUMS.reldirpath),
+            isRelFilePath: (dataTypeCode===ENUMS.relfilepath),
+            isAbsDirPath: (dataTypeCode===ENUMS.absdirpath),
+            isAbsFilePath: (dataTypeCode===ENUMS.absfilepath),
+            isRelPath: ((dataTypeCode===ENUMS.reldirpath) || (dataTypeCode===ENUMS.relfilepath)),
+            isAbsPath: ((dataTypeCode===ENUMS.absdirpath) || (dataTypeCode===ENUMS.absfilepath)),
+            isPath: ((dataTypeCode===ENUMS.absdirpath) || (dataTypeCode===ENUMS.absfilepath) || (dataTypeCode===ENUMS.reldirpath) || (dataTypeCode===ENUMS.relfilepath)),
+        };
+    }
 
     error(){
         return (this._field_cfg===null || this._value===null);
@@ -181,7 +205,7 @@ class ConfigField {
                         return ENUMS.checks.success;
                     };
                     break;
-                case ENUMS.datatype.relpath:
+                case ENUMS.datatype.reldirpath:
                     if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
                         if(_.isString(v) && v.length===0) return ENUMS.checks.success;
                         if(Utils.File.isRelativePath(v)!==true) return ENUMS.checks.wrongValue;
@@ -194,7 +218,33 @@ class ConfigField {
                         return ENUMS.checks.success;
                     };
                     break;
-                case ENUMS.datatype.abspath:
+                case ENUMS.datatype.relfilepath:
+                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isRelativePath(v)!==true) return ENUMS.checks.wrongValue;
+                        return ENUMS.checks.success;
+                    };
+                    else checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isRelativePath(v)!==true) return ENUMS.checks.wrongValue;
+                        if(Utils.File.directoryExistsSync(v)!==true) return ENUMS.checks.pathNotExists;
+                        return ENUMS.checks.success;
+                    };
+                    break;
+                case ENUMS.datatype.absdirpath:
+                    if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isAbsolutePath(v)!==true) return ENUMS.checks.wrongValue;
+                        return ENUMS.checks.success;
+                    };
+                    else checkFn = function(v){
+                        if(_.isString(v) && v.length===0) return ENUMS.checks.success;
+                        if(Utils.File.isAbsolutePath(v)!==true) return ENUMS.checks.wrongValue;
+                        if(Utils.File.directoryExistsSync(v)!==true) return ENUMS.checks.pathNotExists;
+                        return ENUMS.checks.success;
+                    };
+                    break;
+                case ENUMS.datatype.absfilepath:
                     if(!_fcfg || !_fcfg.checkPathExists) checkFn = function(v){
                         if(_.isString(v) && v.length===0) return ENUMS.checks.success;
                         if(Utils.File.isAbsolutePath(v)!==true) return ENUMS.checks.wrongValue;
