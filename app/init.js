@@ -29,4 +29,4 @@ require('./cli_sections/config_cmd.js');
 
 
 
-//CliMgr.show('mpl');
+CliMgr.show('mpl');

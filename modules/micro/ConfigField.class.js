@@ -72,27 +72,27 @@ class ConfigField {
             return;
         }
 
-
         this.dataType = this._setDataTypeCheck(fcfg.datatypeCode);
         this.objectDatatype = this._setDataTypeCheck(fcfg.objectDatatypeCode);
     }
 
     _setDataTypeCheck(dataTypeCode){
         return {
-            isInteger: (dataTypeCode===ENUMS.integer),
-            isNumber: (dataTypeCode===ENUMS.number),
-            isBoolean: (dataTypeCode===ENUMS.boolean),
-            isChar: (dataTypeCode===ENUMS.char),
-            isString: (dataTypeCode===ENUMS.string),
-            isArray: (dataTypeCode===ENUMS.array),
-            isObject: (dataTypeCode===ENUMS.object),
-            isRelDirPath: (dataTypeCode===ENUMS.reldirpath),
-            isRelFilePath: (dataTypeCode===ENUMS.relfilepath),
-            isAbsDirPath: (dataTypeCode===ENUMS.absdirpath),
-            isAbsFilePath: (dataTypeCode===ENUMS.absfilepath),
-            isRelPath: ((dataTypeCode===ENUMS.reldirpath) || (dataTypeCode===ENUMS.relfilepath)),
-            isAbsPath: ((dataTypeCode===ENUMS.absdirpath) || (dataTypeCode===ENUMS.absfilepath)),
-            isPath: ((dataTypeCode===ENUMS.absdirpath) || (dataTypeCode===ENUMS.absfilepath) || (dataTypeCode===ENUMS.reldirpath) || (dataTypeCode===ENUMS.relfilepath)),
+            isInteger: (dataTypeCode===ENUMS.datatype.integer),
+            isNumber: (dataTypeCode===ENUMS.datatype.number),
+            isBoolean: (dataTypeCode===ENUMS.datatype.boolean),
+            isChar: (dataTypeCode===ENUMS.datatype.char),
+            isString: (dataTypeCode===ENUMS.datatype.string),
+            isArray: (dataTypeCode===ENUMS.datatype.array),
+            isObject: (dataTypeCode===ENUMS.datatype.object),
+            isRelDirPath: (dataTypeCode===ENUMS.datatype.reldirpath),
+            isRelFilePath: (dataTypeCode===ENUMS.datatype.relfilepath),
+            isAbsDirPath: (dataTypeCode===ENUMS.datatype.absdirpath),
+            isAbsFilePath: (dataTypeCode===ENUMS.datatype.absfilepath),
+            isRelPath: ((dataTypeCode===ENUMS.datatype.reldirpath) || (dataTypeCode===ENUMS.datatype.relfilepath)),
+            isAbsPath: ((dataTypeCode===ENUMS.datatype.absdirpath) || (dataTypeCode===ENUMS.datatype.absfilepath)),
+            isPath: (   (dataTypeCode===ENUMS.datatype.absdirpath) || (dataTypeCode===ENUMS.datatype.absfilepath) ||
+                        (dataTypeCode===ENUMS.datatype.reldirpath) || (dataTypeCode===ENUMS.datatype.relfilepath)),
         };
     }
 

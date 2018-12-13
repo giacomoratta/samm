@@ -4,7 +4,7 @@
 
     ConfigMgr.addField('SamplesDirectory', {
         description:'',
-        datatype: 'abspath',
+        datatype: 'absdirpath',
         defaultValue: '',
         checkPathExists: true,
         flagsOnChange: [ 'new_scan_needed_smpdir' ]
@@ -12,13 +12,13 @@
 
     ConfigMgr.addField('ExportDirectory', {
         description:'',
-        datatype: 'abspath',
+        datatype: 'absdirpath',
         defaultValue: ''
     });
 
     ConfigMgr.addField('ProjectsDirectory', {
         description:'',
-        datatype: 'abspath',
+        datatype: 'absdirpath',
         defaultValue: '',
         checkPathExists: true
     });
@@ -112,10 +112,10 @@
 
 
 
-//console.log(ConfigMgr.set('ExcludedExtensionsForSamples',[3],'i'));
+//console.log(ConfigMgr.set('SamplesDirectory','/Users'));
 
-//ConfigMgr.print();
-//ConfigMgr.printInternals();
+// ConfigMgr.print();
+// ConfigMgr.printInternals();
 
 // ConfigMgr.get('param');
 // ConfigMgr.set('param',value);

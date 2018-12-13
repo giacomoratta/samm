@@ -80,18 +80,19 @@ class ConfigManager {
 
     _set_cfg_paths(field_name){
         let raw_path = this._fields[field_name].get();
+        this._cfg_paths[field_name] = null;
         if(!_.isString(raw_path) || raw_path.length<2){
-            d$('_set_cfg_paths','not a valid string for path',raw_path);
+            d$('_set_cfg_paths:','not a valid string for path for'+field_name,raw_path);
             return false;
         }
         if(this._fields[field_name].dataType.isAbsPath){
             if(!Utils.File.isAbsolutePath(raw_path)) {
-                d$('_set_cfg_paths','not a valid absolute path',raw_path);
+                d$('_set_cfg_paths:','not a valid absolute path for'+field_name,raw_path);
                 return false;
             }
         }else if(this._fields[field_name].dataType.isRelPath){
             if(!Utils.File.isRelativePath(raw_path)) {
-                d$('_set_cfg_paths','not a valid relative path',raw_path);
+                d$('_set_cfg_paths:','not a valid relative path for'+field_name,raw_path);
                 return false;
             }
             raw_path = Utils.File.setAsAbsPath(raw_path + Utils.File.pathSeparator, (dataType.isRelFilePath));
@@ -127,10 +128,19 @@ class ConfigManager {
         return this._fields[field_name].get();
     }
 
+    setFromArray(field_name, value){
+        let _self = this;
+        if(!this._fields[field_name]) return;
+        // value is array
+        // split values in 'insert' e 'remove' or simple data or simple object
+        let set_outcome = _self._set(field_name, value, addt);
+        return set_outcome;
+    }
+
 
     set(field_name, value, addt){
         let _self = this;
-        if(!this._fields[field_name]) return;
+        f(!this._fields[field_name]) return;
         let set_outcome = this._fields[field_name].set(value, addt);
         if(set_outcome === true){
 
@@ -238,10 +248,12 @@ class ConfigManager {
     printInternals(){
         let _self = this;
         let _paths_keys = Object.keys(this._paths);
+        let _cfg_paths_keys = Object.keys(this._cfg_paths);
         let _flags_keys = Object.keys(this._flags);
-        let pad_end1=14;
+        let pad_end1=16;
         let pad_end2=0;
         _paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
+        _cfg_paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
         _flags_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
         pad_end2+=3;
 
@@ -249,7 +261,10 @@ class ConfigManager {
         clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("userdata path: ",pad_end2),_self._userdata_path);
         clUI.print(_.padEnd("   (private)",pad_end1),_.padEnd("config file path: ",pad_end2),_self._configfile_path);
         _paths_keys.forEach(function(v){
-            clUI.print(_.padEnd("   (path)",pad_end1),_.padEnd(v+": ",pad_end2),_self._paths[v]);
+            clUI.print(_.padEnd("   (path)",pad_end1),_.padEnd(v+": ",pad_end2),(_.isNil(_self._paths[v])?'<undefined>':_self._paths[v]));
+        });
+        _cfg_paths_keys.forEach(function(v){
+            clUI.print(_.padEnd("   (cfg-path)",pad_end1),_.padEnd(v+": ",pad_end2),(_.isNil(_self._cfg_paths[v])?'<undefined>':_self._cfg_paths[v]));
         });
         _flags_keys.forEach(function(v){
             clUI.print(_.padEnd("   (flag)",pad_end1),_.padEnd(v+": ",pad_end2),'[status:'+_self._flags[v].status+']',_self._flags[v].message);
