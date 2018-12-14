@@ -14,7 +14,6 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
 
     if(_.isNil(cliData.cli_params.get('name'))){
         ConfigMgr.printInternals();
-        clUI.print("\n");
         ConfigMgr.print();
         return cliNextCb(cliData.success_code);
     }
@@ -28,7 +27,7 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
         return cliNextCb(cliData.success_code);
     }
 
-    if(ConfigMgr.setFromCli(cliData.cli_params.get('name'),cliData.cli_params.get('values'))===null){
+    if(ConfigMgr.setFromCli(cliData.cli_params.get('name'),cliData.cli_params.get('values'))===false){
         cliData.ui.print("configuration not changed");
         return cliNextCb(cliData.error_code);
     }
@@ -37,7 +36,6 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
         return cliNextCb(cliData.error_code);
     }
     ConfigMgr.print();
-    clUI.print('');
     cliData.ui.print("configuration saved successfully");
     return cliNextCb(cliData.success_code);
 });

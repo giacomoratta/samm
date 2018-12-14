@@ -129,6 +129,7 @@ class ConfigManager {
     }
 
     setFromCli(field_name, values){
+        d$(field_name,values);
         if(!this._fields[field_name]) return;
         let set_outcome = true;
         if(this._fields[field_name].dataType.isArray===true){

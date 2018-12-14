@@ -157,8 +157,10 @@ class ConfigField {
 
 
     _parseSingleValue(strvalue, datatypeCode){
-        if(!_.isString(strvalue)) return null;
-        this._printError(strvalue, ENUMS.checks.parseValueNotString);
+        if(!_.isString(strvalue)){
+            this._printError(strvalue, ENUMS.checks.parseValueNotString);
+            return null;
+        }
         let outcome = null;
 
         if(datatypeCode === ENUMS.datatype.integer){
@@ -170,6 +172,8 @@ class ConfigField {
         }else if(datatypeCode === ENUMS.datatype.boolean){
             outcome = Utils.strToBoolean(strvalue);
 
+        }else{
+            outcome = strvalue;
         }
         if(_.isNil(outcome)){
             this._printError(strvalue, ENUMS.checks.parsingFailed);
