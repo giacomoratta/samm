@@ -130,10 +130,6 @@
 // ConfigMgr.upath  //user path
 // ConfigMgr.path   //app path
 
-
-ConfigMgr.addFlag('new_scan_needed_sampledir','SamplesDirectory changed: new full scan needed.');
-ConfigMgr.addFlag('new_scan_needed_exts','Settings on extensions changed: new full scan needed.');
-
 //ConfigMgr.setFlag('abc123');
 //ConfigMgr.unsetFlag('abc123');
 

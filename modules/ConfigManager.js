@@ -64,6 +64,11 @@ class ConfigManager {
     }
 
 
+    exists(field_name){
+        return _.isObject(this._fields[field_name]);
+    }
+
+
     save(){
         return DataMgr.save('config_file');
     }
@@ -139,23 +144,28 @@ class ConfigManager {
                 if(v.startsWith('!')) out_elmts.push(v.substring(1));
                 else in_elmts.push(v.substring(1));
             });
-            if(in_elmts.length>0) set_outcome = set_outcome & this._fields[field_name].set(in_elmts,'i',true /*parse*/);
-            if(out_elmts.length>0) set_outcome = set_outcome & this._fields[field_name].set(out_elmts,'d',true /*parse*/);
+            if(in_elmts.length>0) set_outcome = set_outcome & this._set(field_name, in_elmts,'i',true /*parse*/);
+            if(out_elmts.length>0) set_outcome = set_outcome & this._set(field_name, out_elmts,'d',true /*parse*/);
         }
         else if(this._fields[field_name].dataType.isObject===true){
             if(!_.isString(values[1]) || (_.trim(values[i])).length<1) values[1]=null;
-            set_outcome = set_outcome & this._fields[field_name].set(values[0], values[1], true /*parse*/);
+            set_outcome = set_outcome & this._set(field_name, values[0], values[1], true /*parse*/);
         }else{
-            set_outcome = set_outcome & this._fields[field_name].set(values[0], null, true /*parse*/);
+            set_outcome = set_outcome & this._set(field_name, values[0], null, true /*parse*/);
         }
         return set_outcome;
     }
 
 
     set(field_name, value, addt){
+        if(!this._fields[field_name]) return false;
+        return this._set(field_name, value, addt, false /*parse*/);
+    }
+
+
+    _set(field_name, value, addt, parse){
         let _self = this;
-        if(!this._fields[field_name]) return;
-        let set_outcome = this._fields[field_name].set(value, addt);
+        let set_outcome = this._fields[field_name].set(value, addt, parse);
         if(set_outcome === true){
 
             if(this._fields[field_name].dataType.isPath===true){
@@ -179,6 +189,7 @@ class ConfigManager {
         this._flags[label].status = false;
     }
 
+
     _flagsStatusToJSON(){
         let keys = Object.keys(this._flags);
         let flagsobj = {};
@@ -192,7 +203,7 @@ class ConfigManager {
         let keys = Object.keys(flags_status);
         keys.forEach((v)=>{
             this._flags[v].status = flags_status[v];
-        })
+        });
     }
 
 
@@ -288,15 +299,17 @@ class ConfigManager {
 
 
     printMessages(){
-        clUI.print("\n");
         let k = Object.keys(this._flags);
+        let str = '';
         for(let i=0; i<k.length; i++){
             if(this._flags[k[i]].status===true){
-                clUI.print(this._flags[k[i]].message);
+                str += this._flags[k[i]].message+"\n";
             }
         }
-        clUI.print("");
+        if(str.length===0) return;
+        clUI.print("\n",str);
     }
+
 }
 
 module.exports = new ConfigManager();

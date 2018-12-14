@@ -19,7 +19,7 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
     }
 
     if(_.isNil(cliData.cli_params.get('values'))){
-        if(_.isNil(ConfigMgr.get(cliData.cli_params.get('name')))){
+        if(ConfigMgr.exists(cliData.cli_params.get('name'))===true){
             cliData.ui.print('this parameter does not exist.');
             return cliNextCb(cliData.error_code);
         }
