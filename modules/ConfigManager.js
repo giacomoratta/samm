@@ -133,8 +133,7 @@ class ConfigManager {
         return this._fields[field_name].get();
     }
 
-    setFromCli(field_name, values){
-        d$(field_name,values);
+    setFromCli(field_name, values, parse_string){
         if(!this._fields[field_name]) return;
         let set_outcome = true;
         if(this._fields[field_name].dataType.isArray===true){
@@ -144,14 +143,14 @@ class ConfigManager {
                 if(v.startsWith('!')) out_elmts.push(v.substring(1));
                 else in_elmts.push(v.substring(1));
             });
-            if(in_elmts.length>0) set_outcome = set_outcome & this._set(field_name, in_elmts,'i',true /*parse*/);
-            if(out_elmts.length>0) set_outcome = set_outcome & this._set(field_name, out_elmts,'d',true /*parse*/);
+            if(in_elmts.length>0) set_outcome = set_outcome & this._set(field_name, in_elmts,'i',parse_string /*parse*/);
+            if(out_elmts.length>0) set_outcome = set_outcome & this._set(field_name, out_elmts,'d',parse_string /*parse*/);
         }
         else if(this._fields[field_name].dataType.isObject===true){
             if(!_.isString(values[1]) || (_.trim(values[i])).length<1) values[1]=null;
-            set_outcome = set_outcome & this._set(field_name, values[0], values[1], true /*parse*/);
+            set_outcome = set_outcome & this._set(field_name, values[0], values[1], parse_string /*parse*/);
         }else{
-            set_outcome = set_outcome & this._set(field_name, values[0], null, true /*parse*/);
+            set_outcome = set_outcome & this._set(field_name, values[0], null, parse_string /*parse*/);
         }
         return set_outcome;
     }
@@ -303,11 +302,12 @@ class ConfigManager {
         let str = '';
         for(let i=0; i<k.length; i++){
             if(this._flags[k[i]].status===true){
-                str += this._flags[k[i]].message+"\n";
+                str += 'Warning: '+this._flags[k[i]].message+"\n";
             }
         }
         if(str.length===0) return;
-        clUI.print("\n",str);
+        clUI.print("\n");
+        clUI.print(str);
     }
 
 }
