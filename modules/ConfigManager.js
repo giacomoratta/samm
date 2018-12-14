@@ -85,12 +85,12 @@ class ConfigManager {
             d$('_set_cfg_paths:','not a valid string for path for'+field_name,raw_path);
             return false;
         }
-        if(this._fields[field_name].dataType.isAbsPath){
+        if(this._fields[field_name].dataType.isAbsPath===true){
             if(!Utils.File.isAbsolutePath(raw_path)) {
                 d$('_set_cfg_paths:','not a valid absolute path for'+field_name,raw_path);
                 return false;
             }
-        }else if(this._fields[field_name].dataType.isRelPath){
+        }else if(this._fields[field_name].dataType.isRelPath===true){
             if(!Utils.File.isRelativePath(raw_path)) {
                 d$('_set_cfg_paths:','not a valid relative path for'+field_name,raw_path);
                 return false;
@@ -113,7 +113,7 @@ class ConfigManager {
             return false;
         }
 
-        if(this._fields[field_name].dataType.isPath){
+        if(this._fields[field_name].dataType.isPath===true){
             this._set_cfg_paths(field_name);
         }
         return true;
@@ -122,29 +122,42 @@ class ConfigManager {
 
     get(field_name, _origvalue){
         if(!this._fields[field_name]) return;
-        if(this._fields[field_name].dataType.isPath && _origvalue!==false){
+        if(this._fields[field_name].dataType.isPath===true && _origvalue!==false){
             return this.cfg_paths(field_name);
         }
         return this._fields[field_name].get();
     }
 
-    setFromArray(field_name, value){
-        let _self = this;
+    setFromCli(field_name, values){
         if(!this._fields[field_name]) return;
-        // value is array
-        // split values in 'insert' e 'remove' or simple data or simple object
-        let set_outcome = _self._set(field_name, value, addt);
+        let set_outcome = true;
+        if(this._fields[field_name].dataType.isArray===true){
+            let in_elmts=[], out_elmts=[];
+            values.forEach((v)=>{
+                v=_.trim(v);
+                if(v.startsWith('!')) out_elmts.push(v.substring(1));
+                else in_elmts.push(v.substring(1));
+            });
+            if(in_elmts.length>0) set_outcome = set_outcome & this._fields[field_name].set(in_elmts,'i',true /*parse*/);
+            if(out_elmts.length>0) set_outcome = set_outcome & this._fields[field_name].set(out_elmts,'d',true /*parse*/);
+        }
+        else if(this._fields[field_name].dataType.isObject===true){
+            if(!_.isString(values[1]) || (_.trim(values[i])).length<1) values[1]=null;
+            set_outcome = set_outcome & this._fields[field_name].set(values[0], values[1], true /*parse*/);
+        }else{
+            set_outcome = set_outcome & this._fields[field_name].set(values[0], null, true /*parse*/);
+        }
         return set_outcome;
     }
 
 
     set(field_name, value, addt){
         let _self = this;
-        f(!this._fields[field_name]) return;
+        if(!this._fields[field_name]) return;
         let set_outcome = this._fields[field_name].set(value, addt);
         if(set_outcome === true){
 
-            if(this._fields[field_name].dataType.isPath){
+            if(this._fields[field_name].dataType.isPath===true){
                 this._set_cfg_paths(field_name);
             }
 

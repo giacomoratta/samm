@@ -28,7 +28,7 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
         return cliNextCb(cliData.success_code);
     }
 
-    if(ConfigMgr.set(cliData.cli_params.get('name'),cliData.cli_params.get('values'))===null){
+    if(ConfigMgr.setFromCli(cliData.cli_params.get('name'),cliData.cli_params.get('values'))===null){
         cliData.ui.print("configuration not changed");
         return cliNextCb(cliData.error_code);
     }

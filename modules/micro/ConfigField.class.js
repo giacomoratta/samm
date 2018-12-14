@@ -19,7 +19,11 @@ const ENUMS = {
         wrongObjectValue:23,
         valueNotAllowed:24,
         pathNotExists:25,
-        labelNeeded:26
+        labelNeeded:26,
+        parseValueNotString:27,
+        parsingFailed:28,
+        parsingIncompleteEnd:29,
+        parsingDifferentDataField:30
     }
 };
 
@@ -76,23 +80,23 @@ class ConfigField {
         this.objectDatatype = this._setDataTypeCheck(fcfg.objectDatatypeCode);
     }
 
-    _setDataTypeCheck(dataTypeCode){
+    _setDataTypeCheck(datatypeCode){
         return {
-            isInteger: (dataTypeCode===ENUMS.datatype.integer),
-            isNumber: (dataTypeCode===ENUMS.datatype.number),
-            isBoolean: (dataTypeCode===ENUMS.datatype.boolean),
-            isChar: (dataTypeCode===ENUMS.datatype.char),
-            isString: (dataTypeCode===ENUMS.datatype.string),
-            isArray: (dataTypeCode===ENUMS.datatype.array),
-            isObject: (dataTypeCode===ENUMS.datatype.object),
-            isRelDirPath: (dataTypeCode===ENUMS.datatype.reldirpath),
-            isRelFilePath: (dataTypeCode===ENUMS.datatype.relfilepath),
-            isAbsDirPath: (dataTypeCode===ENUMS.datatype.absdirpath),
-            isAbsFilePath: (dataTypeCode===ENUMS.datatype.absfilepath),
-            isRelPath: ((dataTypeCode===ENUMS.datatype.reldirpath) || (dataTypeCode===ENUMS.datatype.relfilepath)),
-            isAbsPath: ((dataTypeCode===ENUMS.datatype.absdirpath) || (dataTypeCode===ENUMS.datatype.absfilepath)),
-            isPath: (   (dataTypeCode===ENUMS.datatype.absdirpath) || (dataTypeCode===ENUMS.datatype.absfilepath) ||
-                        (dataTypeCode===ENUMS.datatype.reldirpath) || (dataTypeCode===ENUMS.datatype.relfilepath)),
+            isInteger: (datatypeCode===ENUMS.datatype.integer),
+            isNumber: (datatypeCode===ENUMS.datatype.number),
+            isBoolean: (datatypeCode===ENUMS.datatype.boolean),
+            isChar: (datatypeCode===ENUMS.datatype.char),
+            isString: (datatypeCode===ENUMS.datatype.string),
+            isArray: (datatypeCode===ENUMS.datatype.array),
+            isObject: (datatypeCode===ENUMS.datatype.object),
+            isRelDirPath: (datatypeCode===ENUMS.datatype.reldirpath),
+            isRelFilePath: (datatypeCode===ENUMS.datatype.relfilepath),
+            isAbsDirPath: (datatypeCode===ENUMS.datatype.absdirpath),
+            isAbsFilePath: (datatypeCode===ENUMS.datatype.absfilepath),
+            isRelPath: ((datatypeCode===ENUMS.datatype.reldirpath) || (datatypeCode===ENUMS.datatype.relfilepath)),
+            isAbsPath: ((datatypeCode===ENUMS.datatype.absdirpath) || (datatypeCode===ENUMS.datatype.absfilepath)),
+            isPath: (   (datatypeCode===ENUMS.datatype.absdirpath) || (datatypeCode===ENUMS.datatype.absfilepath) ||
+                        (datatypeCode===ENUMS.datatype.reldirpath) || (datatypeCode===ENUMS.datatype.relfilepath)),
         };
     }
 
@@ -105,15 +109,72 @@ class ConfigField {
         return this._value;
     }
 
-    set(v, addt){
+    set(v, addt, parse){
+        if(parse===true){
+            let parsed_v =this._parseValue(v);
+            if(_.isNil(parsed_v)) return false;
+            v = parsed_v;
+        }
         let vObj = this._field_cfg.setFn(v, addt, this._value, this._field_cfg.allowedValues);
         if(_.isNil(vObj.v) || vObj.check!==ENUMS.checks.success){
-            this._printError(this._field_cfg.fieldname, v, vObj.check);
+            this._printError(v, vObj.check);
             return false;
         }
         this._value = vObj.v;
         if(this._field_cfg.setSuccessFn) this._field_cfg.setSuccessFn();
         return true;
+    }
+
+
+    _parseValue(strvalue){
+        if(_.isArray(strvalue)){
+            if(this.dataType.isArray===true){
+                let newarray = [];
+                strvalue.forEach((v)=>{
+                    let outcome_value = this._parseSingleValue(v, this._field_cfg.objectDatatypeCode);
+                    if(!_.isNil(outcome_value)){
+                        newarray.push(outcome_value);
+                    }
+                });
+                if(strvalue.length !== newarray.length){
+                    this._printError(strvalue, ENUMS.checks.parsingIncompleteEnd);
+                    return null;
+                }
+                return newarray;
+            }
+            this._printError(strvalue, ENUMS.checks.parsingDifferentDataField);
+            return null;
+        }
+
+        if(this.dataType.isObject===true || this.dataType.isArray===true){
+            // parse internal data type for complex field
+            return this._parseSingleValue(strvalue, this._field_cfg.objectDatatypeCode);
+        }
+
+        // parse simple data for simple field
+        return this._parseSingleValue(strvalue, this._field_cfg.datatypeCode);
+    }
+
+
+    _parseSingleValue(strvalue, datatypeCode){
+        if(!_.isString(strvalue)) return null;
+        this._printError(strvalue, ENUMS.checks.parseValueNotString);
+        let outcome = null;
+
+        if(datatypeCode === ENUMS.datatype.integer){
+            outcome = Utils.strToInteger(strvalue);
+
+        }else if(datatypeCode === ENUMS.datatype.number){
+            outcome = Utils.strToFloat(strvalue);
+
+        }else if(datatypeCode === ENUMS.datatype.boolean){
+            outcome = Utils.strToBoolean(strvalue);
+
+        }
+        if(_.isNil(outcome)){
+            this._printError(strvalue, ENUMS.checks.parsingFailed);
+        }
+        return outcome;
     }
 
 
@@ -344,7 +405,8 @@ class ConfigField {
                     vObj.check = ENUMS.checks.labelNeeded;
                     return vObj;
                 }
-                if(!_.isNil(v)){
+                if(_.isNil(v)){
+                    /* no value = delete key-value */
                     delete _ref[addt];
                     vObj.v = _ref;
                     return vObj;
@@ -366,26 +428,38 @@ class ConfigField {
 
 
 
-    _printError(fieldname, fieldvalue, checkResult){
+    _printError(fieldvalue, checkResult){
         switch(checkResult){
             case ENUMS.checks.wrongValue:
-                this._field_cfg.printErrorFn(fieldname+': wrong value',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': wrong value',fieldvalue);
                 break;
             case ENUMS.checks.wrongObjectValue:
-                this._field_cfg.printErrorFn(fieldname+': wrong value for internal objects',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': wrong value for internal objects',fieldvalue);
                 break;
             case ENUMS.checks.valueNotAllowed:
-                this._field_cfg.printErrorFn(fieldname+': value not allowed',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': value not allowed',fieldvalue);
                 this._field_cfg.printErrorFn('Allowed values:',this.allowedValues());
                 break;
             case ENUMS.checks.pathNotExists:
-                this._field_cfg.printErrorFn(fieldname+': path does not exist',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': path does not exist',fieldvalue);
                 break;
             case ENUMS.checks.labelNeeded:
-                this._field_cfg.printErrorFn(fieldname+': label needed for object parameter',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': label needed for object parameter',fieldvalue);
+                break;
+            case ENUMS.checks.parseValueNotString:
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': cannot parse a non-string value',fieldvalue);
+                break;
+            case ENUMS.checks.parsingFailed:
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': parsing failed',fieldvalue);
+                break;
+            case ENUMS.checks.parsingIncompleteEnd:
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': incomplete parsing - errors occurred on some fields',fieldvalue);
+                break;
+            case ENUMS.checks.parsingDifferentDataField:
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': parsing failed - data type does not match with field',fieldvalue);
                 break;
             default:
-                this._field_cfg.printErrorFn(fieldname+': unknown error - '+checkResult,'value:',fieldvalue);
+                this._field_cfg.printErrorFn(this._field_cfg.fieldname+': unknown error - '+checkResult,'value:',fieldvalue);
         }
     };
 
