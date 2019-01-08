@@ -73,7 +73,7 @@ class SamplesManager {
 
             loadFn:(fileData, $cfg/*,args*/)=>{
                 if(!_.isObject(fileData)){
-                    ConfigMgr.setFlag('samples_index_scan_needed',true);
+                    ConfigMgr.setFlag('samples_index_first_scan_needed',true);
                     return;
                 }
                 let STree = __new_SamplesTree();

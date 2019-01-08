@@ -3,6 +3,7 @@ const fs = require('fs');
 const fs_extra = require('fs-extra');
 const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
 const _ = require('lodash');
+const iconv = require('iconv-lite');
 
 class Utils_Files {
 
@@ -13,6 +14,7 @@ class Utils_Files {
         this._RIMRAF = rimraf;
 
         this.pathBasename = path.basename;
+        this.pathExtname = path.extname;
         this.pathDirname = path.dirname;
         this.pathParse = path.parse;
         this.pathJoin = path.join;
@@ -37,10 +39,11 @@ class Utils_Files {
         return this._abspath;
     }
 
-    setAsAbsPath(rel_path, isFile){
+    setAsAbsPath(rel_path, isFile, absPath){
         rel_path = _.trim(rel_path);
         if(isFile===true && _.endsWith(rel_path,Utils.File.pathSeparator)) rel_path=rel_path.substr(0,rel_path.length-1);
-        return Utils.File.pathJoin(this.getAbsPath(),rel_path,(isFile!==true?Utils.File.pathSeparator:''));
+        if(!absPath) absPath=this.getAbsPath();
+        return Utils.File.pathJoin(absPath,rel_path,(isFile!==true?Utils.File.pathSeparator:''));
     }
 
     equalPaths(p1,p2){
@@ -177,10 +180,18 @@ class Utils_Files {
         try{
             if(!encoding) encoding='utf8';
             if(!flag) flag='r';
-            return this._FS.readFileSync(path_string,{
-                encoding:encoding,
-                flag:flag
-            });
+            if(encoding==='iso88591'){
+                let fcont = fs.readFileSync(path_string,{
+                    encoding:'binary',
+                    flag:flag
+                }).toString();
+                return iconv.decode(fcont, 'iso88591');
+            }else{
+                return this._FS.readFileSync(path_string,{
+                    encoding:encoding,
+                    flag:flag
+                });
+            }
         }catch(e){
             d$(e);
             return false;
@@ -188,8 +199,8 @@ class Utils_Files {
     }
 
     readJsonFileSync(path_string){
-        let file_content = this.readFileSync(path_string,'utf8');
-        if(file_content === false) return false;
+        let file_content = this.readFileSync(path_string,'iso88591');
+        if(!_.isString(file_content)) return false;
         try{
             let json_obj = JSON.parse(file_content);
             if(!_.isObject(json_obj)) return null;
@@ -201,8 +212,8 @@ class Utils_Files {
     }
 
     readTextFileSync(path_string){
-        let file_content = this.readFileSync(path_string,'utf8');
-        if(file_content === false) return false;
+        let file_content = this.readFileSync(path_string,'iso88591');
+        if(file_content===false || _.isNil(file_content)) return false;
         return _.trim(file_content);
     }
 
@@ -211,11 +222,21 @@ class Utils_Files {
             if(!encoding) encoding='utf8';
             if(!flag) flag='w';
             if(!mode) mode=0o666;
-            this._FS.writeFileSync(path_string, file_content, {
-                encoding:encoding,
-                flag:flag,
-                mode:mode
-            });
+            if(encoding==='iso88591'){
+                file_content = iconv.decode(file_content, 'iso88591');
+                this._FS.writeFileSync(path_string, file_content, {
+                    encoding:"binary",
+                    flag:flag,
+                    mode:mode
+                });
+
+            }else{
+                this._FS.writeFileSync(path_string, file_content, {
+                    encoding:encoding,
+                    flag:flag,
+                    mode:mode
+                });
+            }
             return true;
         }catch(e){
             d$(e);
@@ -224,14 +245,14 @@ class Utils_Files {
     }
 
     writeTextFileSync(path_string, file_content){
-        return this.writeFileSync(path_string, file_content, 'utf8');
+        return this.writeFileSync(path_string, file_content, 'iso88591');
     }
 
     writeJsonFileSync(path_string, json_obj, space){
         if(!_.isObject(json_obj)) return false;
 
         if(space===false) space=null;
-        else space='\t';
+        else space="\t";
 
         let file_content = '';
         try{
@@ -240,7 +261,7 @@ class Utils_Files {
             d$(e);
             return false;
         }
-        return this.writeTextFileSync(path_string,file_content);
+        return this.writeTextFileSync(path_string, file_content);
     }
 
 
@@ -306,6 +327,54 @@ class Utils_Files {
         return true;
     }
 
+
+    copyDirectorySync(path_from, path_to, options){
+        options = _.merge({
+            overwrite:false,
+            errorOnExist:false
+        },options);
+        let _self = this;
+        let _ret_value = {
+            err:null,
+            path_from:path_from,
+            path_to:path_to
+        };
+        try {
+            this._FS_EXTRA.copySync(path_from, path_to, options)
+        } catch (err) {
+            _ret_value.err = err;
+            d$(_ret_value);
+        }
+        return _ret_value;
+    }
+
+
+    moveDirectorySync(path_from, path_to, options){
+        options = _.merge({
+            overwrite:false,
+            setDirName:false,
+            errorOnExist:false
+        },options);
+        if(options.setDirName===true){
+            path_to = this.pathJoin(path_to,this.pathBasename(path_from));
+        }
+        let _self = this;
+        let _ret_value = {
+            err:null,
+            path_from:path_from,
+            path_to:path_to
+        };
+
+        try {
+            this._FS_EXTRA.moveSync(path_from, path_to, options)
+        } catch (err) {
+            _ret_value.err = err;
+            d$(_ret_value);
+        }
+        return _ret_value;
+    }
+
+
     readDirectorySync(path_string,preFn,callback){
         if(!callback) callback=function(){};
         if(!preFn) preFn=function(){};
@@ -325,7 +394,11 @@ class Utils_Files {
     }
 
     removeDirSync(path_string){
-        return this._RIMRAF.sync(path_string);
+        try{
+            return this._RIMRAF.sync(path_string);
+        }catch(e){
+            d$(e.message);
+        }
     }
 
 
@@ -334,7 +407,11 @@ class Utils_Files {
     /* FileSystem R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     removeFileSync(path_string){
-        return this._FS.unlinkSync(path_string);
+        try{
+            return this._FS.unlinkSync(path_string);
+        }catch(e){
+            d$(e.message);
+        }
     }
 
     copyFileSync(path_from, path_to, options){

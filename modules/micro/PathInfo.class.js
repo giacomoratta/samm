@@ -85,6 +85,12 @@ class PathInfo {
         return Math.round(s/(1099511627776))+' TB';
     }
 
+    checkExt(ext){
+        if(this.ext===ext) return true;
+        if(ext[0]!=='.') ext='.'+ext;
+        return (this.ext===ext);
+    }
+
     toJson(){
         return this._info;
     }

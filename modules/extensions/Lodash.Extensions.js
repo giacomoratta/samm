@@ -36,3 +36,18 @@ global._.mixin({ 'truncateStart':(string,options)=>{
     if(string.length<=options.length) return string;
     return options.omission+string.substring(string.length-options.length+1);
 }});
+
+
+global._.mixin({ 'splitValues':(str,sep)=>{
+    let _sArray = [];
+    if(_.isNil(sep)) sep=',';
+    if(_.isString(str)){
+        str = _.trim(str);
+        let _tmp = str.split(sep);
+        _tmp.forEach((v)=>{
+            v=_.trim(v);
+            if(v.length>0) _sArray.push(v);
+        });
+    }
+    return _sArray;
+}});

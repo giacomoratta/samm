@@ -42,6 +42,9 @@ class ConfigField {
             defaultValue: null,
             allowedValues: [],
             flagsOnChange: null,
+            customFn:{
+                /* exampleFn:function(v,dt) v=current value, dt={} object for data - return undefined to avoid set*/
+            },
 
             printErrorFn:null,
             checkFn: null,
@@ -64,6 +67,10 @@ class ConfigField {
 
         fcfg.checkObjectFn = this._setCheckFn(fcfg.checkObjectFn, fcfg.objectDatatypeCode, fcfg);
         fcfg.checkFn = this._setCheckFn(fcfg.checkFn, fcfg.datatypeCode, fcfg, fcfg.checkObjectFn);
+
+        this.dataType = this._setDataTypeCheck(fcfg.datatypeCode);
+        this.objectDatatype = this._setDataTypeCheck(fcfg.objectDatatypeCode);
+
         if(!fcfg.checkFn) return;
 
         this._field_cfg = fcfg;
@@ -75,9 +82,6 @@ class ConfigField {
             this._field_cfg = null;
             return;
         }
-
-        this.dataType = this._setDataTypeCheck(fcfg.datatypeCode);
-        this.objectDatatype = this._setDataTypeCheck(fcfg.objectDatatypeCode);
     }
 
     _setDataTypeCheck(datatypeCode){
@@ -125,6 +129,13 @@ class ConfigField {
         return true;
     }
 
+    fnSet(){
+        return this._field_cfg.fnSet;
+    }
+
+    customFn(fnName){
+        return this._field_cfg.customFn[fnName];
+    }
 
     _parseValue(strvalue){
         if(_.isArray(strvalue)){

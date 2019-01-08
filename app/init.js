@@ -1,3 +1,5 @@
+require('./config.js');
+
 /* DAW Adapters */
 global.DAW_Adapters = {};
 global.DAW_Adapters.Ableton = require('./daw.adapters/AbletonProject.class.js');
@@ -13,8 +15,6 @@ global.TQueryMgr = require('./managers/TQueryManager.js');
 global.ExportMgr = require('./managers/ExportManager.js');
 
 
-require('./config.js');
-
 // require('./cli_sections/bookm_cmd.js');
 require('./cli_sections/config_cmd.js');
 // require('./cli_sections/coverage_cmd.js');
@@ -28,5 +28,5 @@ require('./cli_sections/config_cmd.js');
 // require('./cli_sections/tquery_cmd.js');
 
 
-
+/* Last command: start CLI! */
 CliMgr.show('mpl');

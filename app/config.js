@@ -7,7 +7,7 @@
         datatype: 'absdirpath',
         defaultValue: '',
         checkPathExists: true,
-        flagsOnChange: [ 'new_scan_needed_sampledir' ]
+        flagsOnChange: [ 'samples_index_first_scan_needed' ]
     });
 
     ConfigMgr.addField('ExportDirectory', {
@@ -46,7 +46,7 @@
         datatype: 'char',
         defaultValue: 'X',
         allowedValues: ['X','E','I'],
-        flagsOnChange: [ 'new_scan_needed_exts' ]
+        flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
     ConfigMgr.addField('IncludedExtensionsForSamples', {
@@ -59,7 +59,7 @@
             "essentialsound",
             "olp"
         ],
-        flagsOnChange: [ 'new_scan_needed_exts' ]
+        flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
     ConfigMgr.addField('ExcludedExtensionsForSamples', {
@@ -73,11 +73,11 @@
             "txt",
             "exe"
         ],
-        flagsOnChange: [ 'new_scan_needed_exts' ]
+        flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
-    ConfigMgr.addFlag('new_scan_needed_sampledir','New scan needed after changing the samples directory');
-    ConfigMgr.addFlag('new_scan_needed_exts','New scan needed after changing the configuration on file extensions');
+    ConfigMgr.addFlag('samples_index_first_scan_needed','First scan needed in the samples directory');
+    ConfigMgr.addFlag('samples_index_new_scan_needed','New scan needed after changing the configuration on file extensions');
 
     ConfigMgr.setUserdataDirectory('userdata');
     ConfigMgr.setConfigFile('config.json');

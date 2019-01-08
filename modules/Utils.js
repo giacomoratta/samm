@@ -4,7 +4,10 @@ class Utils {
 
     constructor(){
         this.File = require('./extensions/Utils.File');
+        this.Date = require('./extensions/Utils.Date');
+        this.String = require('./extensions/Utils.String');
         this.SystemInfo = require('./extensions/Utils.SystemInfo');
+        this.Network = require('./extensions/Utils.Network');
     }
 
     EXIT(message,data){
@@ -137,17 +140,19 @@ class Utils {
         return false;
     }
 
-    dateToYYYYMMDD(date) {
-        if(_.isNil(date)) date=Date.now();
-        let d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-
-        return [year, month, day].join('');
+    shuffleArray(array) {
+        let cindex = array.length, tempv, rindex;
+        // While there remain elements to shuffle...
+        while (0 !== cindex) {
+            // Pick a remaining element...
+            rindex = Math.floor(Math.random() * cindex);
+            cindex -= 1;
+            // And swap it with the current element.
+            tempv = array[cindex];
+            array[cindex] = array[rindex];
+            array[rindex] = tempv;
+        }
+        return array;
     }
 }
 
