@@ -7,7 +7,14 @@ class Utils {
         this.Date = require('./extensions/Utils.Date');
         this.String = require('./extensions/Utils.String');
         this.SystemInfo = require('./extensions/Utils.SystemInfo');
-        this.Network = require('./extensions/Utils.Network');
+    }
+
+    extend(key,data){
+        if(this[key]){
+            d$('Utils.extend',key,'already exists!');
+            return;
+        }
+        this[key]=data;
     }
 
     EXIT(message,data){
