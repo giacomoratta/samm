@@ -144,16 +144,16 @@ class ConfigManager {
             values.forEach((v)=>{
                 v=_.trim(v);
                 if(v.startsWith('!')) out_elmts.push(v.substring(1));
-                else in_elmts.push(v.substring(1));
+                else in_elmts.push(v);
             });
-            if(in_elmts.length>0) set_outcome = set_outcome & this._set(field_name, in_elmts,'i',parse_string /*parse*/);
-            if(out_elmts.length>0) set_outcome = set_outcome & this._set(field_name, out_elmts,'d',parse_string /*parse*/);
+            if(in_elmts.length>0) set_outcome = set_outcome && this._set(field_name, in_elmts,'i',parse_string /*parse*/);
+            if(out_elmts.length>0) set_outcome = set_outcome && this._set(field_name, out_elmts,'d',parse_string /*parse*/);
         }
         else if(this._fields[field_name].dataType.isObject===true){
             if(!_.isString(values[1]) || (_.trim(values[i])).length<1) values[1]=null;
-            set_outcome = set_outcome & this._set(field_name, values[0], values[1], parse_string /*parse*/);
+            set_outcome = set_outcome && this._set(field_name, values[0], values[1], parse_string /*parse*/);
         }else{
-            set_outcome = set_outcome & this._set(field_name, values[0], null, parse_string /*parse*/);
+            set_outcome = set_outcome && this._set(field_name, values[0], null, parse_string /*parse*/);
         }
         return set_outcome;
     }
