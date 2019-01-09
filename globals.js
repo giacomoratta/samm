@@ -18,8 +18,6 @@ global.Utils = require('./modules/Utils.js');
 global.DataCache = require('./modules/micro/DataCache.class.js');
 global.PathInfo = require('./modules/micro/PathInfo.class.js');
 global.DirectoryTree = require('./modules/DirectoryTree.class.js');
-global.Samples = require('./modules/micro/Samples.class.js');
-global.SamplesTree = require('./modules/SamplesTree.class.js');
 global.DataMgr = require('./modules/DataManager.js');
 global.ConfigMgr = require('./modules/ConfigManager.js');
 

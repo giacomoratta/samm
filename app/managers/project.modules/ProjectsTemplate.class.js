@@ -5,11 +5,11 @@ class ProjectsTemplate {
         this._size = 0;
     }
 
-    get dir() { return ConfigMgr.path('templates_path'); }
+    get dir() { return ConfigMgr.path('default_projects'); }
 
     _checkAndSetStructure(){
         let _dirFound = [];
-        DirectoryTree.walkDirectory(ConfigMgr.path('templates_path'),{
+        DirectoryTree.walkDirectory(ConfigMgr.path('default_projects'),{
             maxLevel:2,
             itemCb:function(data){
                 if(!data.item.isDirectory) return;
@@ -149,12 +149,12 @@ class ProjectsTemplate {
         let _self = this;
         return new Promise(function(resolve,reject){
             if(!_.isString(template_name)) return reject({ message:'wrong template name' });
-            if(!Utils.File.directoryExistsSync(ConfigMgr.path('templates_path'))) return reject({ message:'template path does not exist '+ConfigMgr.path('templates_path') });
+            if(!Utils.File.directoryExistsSync(ConfigMgr.path('default_projects'))) return reject({ message:'template path does not exist '+ConfigMgr.path('default_projects') });
             if(!Utils.File.directoryExistsSync(origin_path)) return reject({ message:'original project path does not exist '+origin_path });
             template_name = Utils.onlyValidPathName(template_name);
             if(template_name.length<1) return reject({ message:'wrong template name' });
 
-            let template_path = Utils.File.pathJoin(ConfigMgr.path('templates_path'),template_name);
+            let template_path = Utils.File.pathJoin(ConfigMgr.path('default_projects'),template_name);
             template_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(template_path);
 
             template_name = Utils.File.pathBasename(template_path);

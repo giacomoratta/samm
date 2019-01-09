@@ -5,6 +5,11 @@ global.DAW_Adapters = {};
 global.DAW_Adapters.Ableton = require('./daw.adapters/AbletonProject.class.js');
 global.DAW_Adapters.Cubase = require('./daw.adapters/CubaseProject.class.js');
 
+/* Singleton Objects */
+global.SamplesTree = require('./managers/SamplesTree.class.js');
+
+/* Data Types */
+global.Samples = require('./micro/Samples.class.js');
 
 /* Project Modules */
 global.SamplesMgr = require('./managers/SamplesManager.js');
