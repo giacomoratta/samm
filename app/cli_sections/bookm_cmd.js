@@ -54,7 +54,7 @@ CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
             name: 'clicmd',
             message: "['q' to quit] > "
         }, (result)=>{
-            let cliInput = new CliParams(result.clicmd, null, true);
+            let cliInput = cliData.cli_params(result.clicmd, null, true);
             let bookmLabel = cliInput.filterGet(0,matchLabel);
             let addIds = cliInput.filterValues(matchAddId);
             let removeIds = cliInput.filterValues(matchRemoveId);
