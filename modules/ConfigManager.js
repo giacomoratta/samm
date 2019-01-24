@@ -310,7 +310,8 @@ class ConfigManager {
         let params = this.getConfigParams();
 
         let _mlen1 = this._mixed_cache.print_mlen1;
-        if(!_mlen1){
+        if(_.isNil(_mlen1)){
+            _mlen1=0;
             params.forEach((v)=>{ if(_mlen1<v.length) _mlen1=v.length; }); _mlen1+=7;
             this._mixed_cache.print_mlen1 = _mlen1;
         }
@@ -319,6 +320,7 @@ class ConfigManager {
             let pvalue = this.get(params[i], true /*original value*/);
             if(_.isNil(pvalue) || _.isNaN(pvalue)) pvalue='<undefined>';
             if((_.isString(pvalue) && pvalue.length===0) || (_.isArray(pvalue) && pvalue.length===0)) pvalue='<empty>';
+            if(_.isArray(pvalue)) pvalue='[set] '+pvalue.join(', ');
             clUI.print('  ',_.padEnd(params[i]+(params[i].length%2===0?' ':''),_mlen1,' .'),pvalue);
         }
         clUI.print(); //new line
@@ -333,7 +335,8 @@ class ConfigManager {
 
         let pad_end1=16;
         let pad_end2 = this._mixed_cache.print_pad_end2;
-        if(!pad_end2){
+        if(_.isNil(pad_end2)){
+            pad_end2 = 1;
             _paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
             _cfg_paths_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
             _flags_keys.forEach((v)=>{ if(pad_end2<v.length) pad_end2=v.length; });
