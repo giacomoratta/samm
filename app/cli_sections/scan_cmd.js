@@ -1,6 +1,6 @@
 let cmd_name = 'scan';
 
-CliMgr.addCommand(cmd_name+' <action>');
+CliMgr.addCommand(cmd_name+'');
 
 CliMgr.addCommandHeader(cmd_name)
     .description("Perform a full scan of the samples directory. " +

@@ -10,6 +10,12 @@ class CliManager {
         this._delimiter = '';
         this._error_code = -1;
         this._success_code = 1;
+
+        this._vorpal.on('client_prompt_submit',function(command){
+            if(command==='exit'){
+                ConfigMgr.save();
+            }
+        });
     }
 
     show(delimiter){

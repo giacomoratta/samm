@@ -14,7 +14,7 @@ class SamplesManager {
         this._createIndexHolder({
                 label: this._LABEL_samples_index,
                 filePath: ConfigMgr.path('samples_index'),
-                directoryToScan: ConfigMgr.path('samples_directory')
+                directoryToScan: ConfigMgr.cfg_path('SamplesDirectory')
         });
     }
 
@@ -68,14 +68,18 @@ class SamplesManager {
                 let STree = __new_SamplesTree();
                 STree.T.read();
                 if(!$cfg.checkFn(STree)) return;
+                ConfigMgr.unsetFlag('samples_index_first_scan_needed');
+                ConfigMgr.unsetFlag('samples_index_new_scan_needed');
                 return STree;
             },
 
             loadFn:(fileData, $cfg/*,args*/)=>{
                 if(!_.isObject(fileData)){
-                    ConfigMgr.setFlag('samples_index_first_scan_needed',true);
+                    ConfigMgr.setFlag('samples_index_first_scan_needed');
                     return;
                 }
+                d$('loaded sample index');
+                ConfigMgr.unsetFlag('samples_index_first_scan_needed');
                 let STree = __new_SamplesTree();
                 STree.T.fromJson(fileData);
                 if(!$cfg.checkFn(STree)) return;

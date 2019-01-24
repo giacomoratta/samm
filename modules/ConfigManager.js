@@ -18,6 +18,10 @@ class ConfigManager {
         this._readonly_data = {};
     }
 
+    _sanitize(){
+        //TODO: update config.json with new fields with default values
+    }
+
     init(){
         const _self = this;
 
