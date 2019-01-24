@@ -200,7 +200,7 @@ class SamplesManager {
         // Set Path
         if(!_.isString(options.path)){
             if(!_.isString(options.dirname) || options.dirname.length<2) options.dirname=smp_obj.getTagShortLabel(); // DirName
-            options.path = Utils.File.pathJoin(ProjectsMgr.current,ConfigMgr._labels.sample_dir, options.dirname);
+            options.path = Utils.File.pathJoin(ProjectsMgr.current,'mpl', options.dirname);
         }
 
         // Set directory name
