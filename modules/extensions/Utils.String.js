@@ -1,7 +1,8 @@
 
 class Utils_String {
 
-    constructor(){
+    constructor(parent){
+        this.utils = parent;
     }
 
 
@@ -13,10 +14,11 @@ class Utils_String {
     }
 
 
-    html_query_string(v){
+    html_query_string(v,joinch){
         //TODO handle special characters
-        //v = Utils.onlyLettersNumbers(v);
-        return v.split(' ').splice(0,2).join('+');
+        let pph = v.indexOf('('); if(pph>0) v=v.substr(0,pph-1);
+        v = this.utils.onlyValidURL(v);
+        return _.trim(v).split(' ').splice(0,2).join(joinch);
     }
 
 
@@ -61,4 +63,4 @@ class Utils_String {
     }
 }
 
-module.exports = new Utils_String();
+module.exports = Utils_String;

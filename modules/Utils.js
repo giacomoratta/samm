@@ -3,10 +3,11 @@ const _ = require('lodash');
 class Utils {
 
     constructor(){
-        this.File = require('./extensions/Utils.File');
-        this.Date = require('./extensions/Utils.Date');
-        this.String = require('./extensions/Utils.String');
-        this.SystemInfo = require('./extensions/Utils.SystemInfo');
+        this.File = new (require('./extensions/Utils.File'))(this);
+        this.Date = new (require('./extensions/Utils.Date'))(this);
+        this.String = new (require('./extensions/Utils.String'))(this);
+        this.Links = new (require('./extensions/Utils.Links'))(this);
+        this.SystemInfo = new (require('./extensions/Utils.SystemInfo'))(this);
     }
 
     extend(key,data){
@@ -89,11 +90,15 @@ class Utils {
     }
 
     onlyLettersNumbers(s){
-        return s.replace(/[^a-zA-Z0-9]/g,'');
+        return _.deburr(s).replace(/[^a-zA-Z0-9]/g,'');
     }
 
     onlyValidPathName(s){
-        return s.replace(/[^a-zA-Z0-9\_\-\.]/g,'');
+        return _.deburr(s).replace(/[^a-zA-Z0-9\_\-\.]/g,'');
+    }
+
+    onlyValidURL(s){
+        return _.deburr(s).replace(/[^a-zA-Z0-9 ]/g,'');
     }
 
     printArrayOrderedList(array,prefix,processFn){

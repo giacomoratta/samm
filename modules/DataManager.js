@@ -29,6 +29,7 @@ class DataManager {
 
             /* Behaviour */
             cloneFrom:'',       // if filePath does not exist, clone from this path
+            backupTo:'',        // after save, copy the file in filePath to this path
             preLoad:false,      // calls loadFn after creating relationship
             autoLoad:false,     // calls loadFn if it has no data
             preSet:false,       // calls setFn after creating relationship
@@ -189,6 +190,12 @@ class DataManager {
                 $cfg.logErrorsFn(e);
                 $cfg.logErrorsFn('DataMgr.save > saveFn callback failed!');
                 return null;
+            }
+
+            if($cfg.backupTo.length>0){
+                if(Utils.File.copyFileSync($cfg.filePath,$cfg.backupTo).err!==null){
+                    $cfg.logErrorsFn('DataMgr.save > backup failed!');
+                }
             }
         }
         else filedata = this._data[label];

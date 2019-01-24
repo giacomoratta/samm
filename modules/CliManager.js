@@ -20,9 +20,9 @@ class CliManager {
             .show();
     }
 
-    addCommand(cmdstring){
-        let cmd_split = _.split(_.trim(cmdstring)," ");
-        this._commands[cmd_split[0]] = this._vorpal.command(cmdstring);
+    addCommand(cmd_string){
+        let cmd_split = _.split(_.trim(cmd_string)," ");
+        this._commands[cmd_split[0]] = this._vorpal.command(cmd_string);
     }
 
     addCommandHeader(cmd_label){
@@ -45,6 +45,7 @@ class CliManager {
                 }
                 ConfigMgr.printMessages();
                 cb();
+                clUI.print("\n");
             },{
                 cli_params:new CliParams(args, cmdName),
                 error_code:thisCliMgr._error_code,

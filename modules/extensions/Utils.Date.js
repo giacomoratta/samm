@@ -52,7 +52,8 @@ const MONTHS_LIST = [
 
 class Utils_Date {
 
-    constructor(){
+    constructor(parent){
+        this.utils = parent;
     }
 
     dateToStrObj(date){
@@ -91,12 +92,47 @@ class Utils_Date {
         return [dtobj.yyyy, dtobj.mm, dtobj.dd, dtobj.hh, dtobj.ii, dtobj.ss].join('');
     }
 
+    dayToTh(day){
+    	if(day===1) return '1st';
+    	if(day===2) return '2nd';
+    	if(day===3) return '3rd';
+    	return day+'th';
+	}
 
     monthToName(mt){
         if(!MONTHS_LIST[mt]) return '';
         return MONTHS_LIST[mt].name;
     }
 
+    dateToExtendedString(date){
+        /* expected strings similar to yyyy-mm-dd */
+        if(_.isNil(date)) date=Date.now();
+        let d = new Date(date);
+        return d.getDate()+' '+this.monthToName(d.getMonth())+' '+d.getFullYear();
+    }
+
+    weekIntervalToString(dt1,dt2,type){
+    	let intStr = '';
+
+    	/* type:2  =>  21th May and 3rd June 2019 */
+        if(type===2){
+            intStr+=this.dayToTh(dt1.getDate());
+            if(dt1.getMonth() !== dt2.getMonth()){
+                intStr+=' '+this.monthToName(dt1.getMonth());
+            }
+            intStr+=' and '+this.dayToTh(dt2.getDate());
+            intStr+=' '+this.monthToName(dt2.getMonth())+' '+dt2.getFullYear();
+
+        /* type:1  =>  21-28 April 2019 */
+        }else{
+            intStr+=dt1.getDate();
+            intStr+='-'+dt2.getDate();
+            intStr+=' '+this.monthToName(dt2.getMonth())+' '+dt2.getFullYear();
+        }
+
+        return intStr;
+	}
+
 }
 
-module.exports = new Utils_Date();
+module.exports = Utils_Date;
