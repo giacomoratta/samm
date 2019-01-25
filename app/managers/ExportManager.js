@@ -11,7 +11,7 @@ class ExportManager {
         options.sourcePath=null;
         return this.__export(function(archive, o /*parsed options*/){
             let archive_name = 'mpl_bookmarks';
-            let archive_path = Utils.File.checkAndSetDuplicatedFileNameSync( Utils.File.pathJoin( o.destPath, archive_name+'_'+Utils.dateToYYYYMMDD()+'.zip' ) );
+            let archive_path = Utils.File.checkAndSetDuplicatedFileNameSync( Utils.File.pathJoin( o.destPath, archive_name+'_'+Utils.Date.dateToYYYYMMDD()+'.zip' ) );
 
             archive.append(null, { name: archive_name+'/' }); // ROOT
 
@@ -32,7 +32,7 @@ class ExportManager {
     exportProject(options){
         return this.__export(function(archive, o /*parsed options*/){
             let archive_path = Utils.File.checkAndSetDuplicatedFileNameSync(
-                Utils.File.pathJoin( o.destPath, Utils.File.pathBasename(o.sourcePath)+'_'+Utils.dateToYYYYMMDD()+'.zip' )
+                Utils.File.pathJoin( o.destPath, Utils.File.pathBasename(o.sourcePath)+'_'+Utils.Date.dateToYYYYMMDD()+'.zip' )
             );
             archive.directory(o.sourcePath, Utils.File.pathBasename(o.sourcePath));
             return {

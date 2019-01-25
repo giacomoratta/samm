@@ -6,6 +6,15 @@ class Utils_String {
     }
 
 
+    filesizeToStr(fsize){
+        if(fsize<1024) return fsize+' B';
+        if(fsize<1048576) return Math.round(fsize/1024)+' KB';
+        if(fsize<1073741824) return Math.round(fsize/1048576)+' MB';
+        if(fsize<1099511627776) return Math.round(fsize/1073741824)+' GB';
+        return Math.round(fsize/(1099511627776))+' TB';
+    }
+
+
     cutByPreservingWords(v,max){
         if(v.length<max) return v;
         let i = this.php_stripos(v,' ',max*(-1));

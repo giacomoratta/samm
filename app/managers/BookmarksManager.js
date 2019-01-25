@@ -24,7 +24,7 @@ class BookmarksManager {
             if(!this._workingSet || this._workingSet.empty())  { printPrefixFn("no samples in the latest lookup."); return false; }
         }else if(options.tag){
             printPrefixFn('working with bookmarked samples under',options.tag);
-            if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples under'"+options.tag+"'."); return false; }
+            if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples under '"+options.tag+"'."); return false; }
         }else{
             printPrefixFn('working with all bookmarked samples');
             if(!this._workingSet || this._workingSet.empty()) { printPrefixFn("no bookmarked samples."); return false; }

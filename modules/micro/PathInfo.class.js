@@ -77,12 +77,7 @@ class PathInfo {
     get level() { return this._info.level; }
 
     get sizeString() {
-        let s = this._info.size;
-        if(s<1024) return s+' B';
-        if(s<1048576) return Math.round(s/1024)+' KB';
-        if(s<1073741824) return Math.round(s/1048576)+' MB';
-        if(s<1099511627776) return Math.round(s/1073741824)+' GB';
-        return Math.round(s/(1099511627776))+' TB';
+        return Utils.String.filesizeToStr(this._info.size);
     }
 
     checkExt(ext){

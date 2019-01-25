@@ -10,7 +10,7 @@ CliMgr.addCommandHeader(cmd_name)
 
 CliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
 
-    if(!ConfigMgr.path('export_directory')){
+    if(!ConfigMgr.cfg_path('ExportDirectory')){
         cliData.ui.print("no valid export directory; set an existent directory for data export.");
         return cliNextCb(cliData.error_code);
     }
@@ -21,11 +21,11 @@ CliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
     };
     let archFD_options = {
         sourcePath:null,
-        destPath:ConfigMgr.path('export_directory')
+        destPath:ConfigMgr.cfg_path('ExportDirectory')
     };
 
     if(C_export_options.param_data === 'project'){
-        if(ProjectsMgr.current){
+        if(!ProjectsMgr.current){
             cliData.ui.print("no valid project directory; set an existent project directory.");
             return cliNextCb(cliData.error_code);
         }
@@ -50,12 +50,13 @@ CliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
     if(!_.isFunction(ExportFn)) return cliNextCb(cliData.error_code);
 
     ExportFn(archFD_options).then((d)=>{
-        cliData.ui.print("exported "+d.total_bytes+"B to "+d.archive_path);
-        return cliNextCb(cliData.success_code);
+        cliData.ui.print("exported "+Utils.String.filesizeToStr(d.total_bytes)+" to "+d.archive_path);
+        setTimeout(function(){
+            return cliNextCb(cliData.success_code);
+        },2000)
     }).catch((e)=>{
         cliData.ui.warning("error while creating and exporting the archive");
         cliData.ui.warning(e.code,e.message);
         return cliNextCb(cliData.error_code);
     });
-
 });

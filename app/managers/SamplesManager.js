@@ -240,7 +240,7 @@ class SamplesManager {
                 });
             });
             fname_array.push(f_name);
-            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.get('SamplesDirectory').length),Utils.File.pathSeparator,'___');
+            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.cfg_path('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
             p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){

@@ -51,7 +51,6 @@ class CliManager {
                 }
                 ConfigMgr.printMessages();
                 cb();
-                clUI.print("\n");
             },{
                 cli_params:new CliParams(args, cmdName),
                 error_code:thisCliMgr._error_code,
