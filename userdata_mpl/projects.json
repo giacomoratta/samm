@@ -1,0 +1,49 @@
+{
+	"history": {
+		"size": 8,
+		"sizelimit": 10,
+		"collection": [
+			{
+				"path": "C:\\Ableton Projects\\jack801087\\k3 Project",
+				"base": "k3 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\jack801087\\k2 Project",
+				"base": "k2 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\jack801087\\k1 Project",
+				"base": "k1 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\techno_e2018\\t6 Project",
+				"base": "t6 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\techno_e2018\\exp\\te_5 Project",
+				"base": "te_5 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\techno_e2018\\t10 Project",
+				"base": "t10 Project"
+			},
+			{
+				"path": "C:\\Ableton Projects\\_default\\p1",
+				"base": "p1"
+			},
+			{
+				"path": "C:\\Ableton Projects\\techno_2018\\techno_2018_40 Project\\",
+				"base": "techno_2018_40 Project"
+			}
+		]
+	},
+	"templates": {
+		"size": 1,
+		"collection": [
+			{
+				"path": "L:\\Workspace\\mpl\\userdata\\default_projects\\empty1",
+				"base": "empty1"
+			}
+		]
+	}
+}
