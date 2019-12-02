@@ -1,5 +1,3 @@
-//ConfigMgr
-
 (function(){
 
     ConfigMgr.addField('SamplesDirectory', {
@@ -89,10 +87,7 @@
     ConfigMgr.addUserFile('samples_index','samples_index');
 
     ConfigMgr.init();
-
 })();
-
-
 
 
 // console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));

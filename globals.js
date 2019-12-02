@@ -1,3 +1,4 @@
+if(typeof ENV_CONFIG === 'undefined') ENV_CONFIG={ undefined:true };
 
 /* Standard Libraries */
 global._ =  require('lodash');

@@ -1,4 +1,5 @@
 class DataManager {
+    
     constructor(){
         this._cfg = {};
         this._data = {};

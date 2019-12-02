@@ -1,9 +1,4 @@
-require('./config.js');
-
-/* DAW Adapters */
-global.DAW_Adapters = {};
-global.DAW_Adapters.Ableton = require('./daw.adapters/AbletonProject.class.js');
-global.DAW_Adapters.Cubase = require('./daw.adapters/CubaseProject.class.js');
+require('./config_init.js');
 
 /* Singleton Objects */
 global.SamplesTree = require('./managers/SamplesTree.class.js');
