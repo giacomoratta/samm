@@ -14,6 +14,7 @@
     "fs-extra": "^7.0.0",
     "lodash": "^4.17.15",
     "rimraf": "^2.6.2",
+    "round-logger": "file:./modules/round-logger",
     "symbol-tree": "^3.2.2",
     "vorpal": "^1.12.0"
   },
@@ -22,8 +23,8 @@
     "nexe": "^2.0.0-rc.34"
   },
   "jest": {
-    "testPathIgnorePatterns" : [
-      "/testx" 
+    "testPathIgnorePatterns": [
+      "/testx"
     ]
   }
 }
