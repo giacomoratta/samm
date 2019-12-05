@@ -5,6 +5,8 @@ global.ENV_CONFIG = {
 };
 ENV_CONFIG.absolute_app_path = process.argv[1];
 
-require('./globals.js');
+console.log(ENV_CONFIG);
 
-require('./app/init.js');
+//require('./globals.js');
+
+//require('./app/init.js');
