@@ -15,6 +15,7 @@
     "iconv-lite": "^0.5.0",
     "lodash": "^4.17.15",
     "rimraf": "^2.6.2",
+    "round-logger": "file:./modules/round-logger",
     "symbol-tree": "^3.2.2",
     "vorpal": "^1.12.0"
   },
