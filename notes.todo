@@ -1,0 +1,20 @@
+- decoupling
+- test
+- singleton object
+- no more globals => require everywhere (clearer dependencies)
+- use await instead of 'sync' functions
+- remove globals.js
+
+- set a common logger file to be required everywhere
+- use pino
+- test logging on file
+- remove round-logger (as git submodule and project module)
+
+- test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
+- test on DataMgr (and clean code) - prepare tests and directories
+- test on ConfigMgr (and clean code)
+- test on UI (and clean code) - prepare tests and directories
+- test on CliMgr (and clean code)
+- first start CliMgr
+
+- test DirectoryTree and make it as NPM package
