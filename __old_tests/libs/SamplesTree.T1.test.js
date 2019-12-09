@@ -4,10 +4,10 @@ let UF = Utils.File;
 describe('DataManager.class - Tests for an holder of file-object', function() {
     describe("#setHolder('samples_index')", function() {
         it("1. set an holder of file-object", function() {
-            UF._FS_EXTRA.removeSync(ConfigMgr.path('samples_index'));
+            UF._FS_EXTRA.removeSync(configMgr.path('samples_index'));
 
             let options = {
-                directoryToScan: ConfigMgr.path('samples_directory')
+                directoryToScan: configMgr.path('samples_directory')
             };
 
             let __new_SamplesTree = function(){
@@ -15,14 +15,14 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     /* SampleTree options */
                 },{
                     /* directoryTree options */
-                    excludedExtensions:ConfigMgr.get('ExcludedExtensionsForSamples')
+                    excludedExtensions:configMgr.get('ExcludedExtensionsForSamples')
                 });
                 return STree;
             }
 
-            let setHolderOutcome = DataMgr.setHolder({
+            let setHolderOutcome = dataHolder.setHolder({
                 label:'samples_index_test',
-                filePath:ConfigMgr.path('samples_index'),
+                filePath:configMgr.path('samples_index'),
                 fileType:'json',
                 dataType:'object',
                 logErrorsFn:console.log,
@@ -61,46 +61,46 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     return STree.T.toJson();
                 }
             });
-            //tLog("\nsamples_directory:\n",ConfigMgr.path('samples_directory'));
-            //tLog("\n$cfg:\n",DataMgr.$cfg('samples_index_test'));
+            //tLog("\nsamples_directory:\n",configMgr.path('samples_directory'));
+            //tLog("\n$cfg:\n",dataHolder.$cfg('samples_index_test'));
             assert.equal(setHolderOutcome,true);
-            assert.equal(DataMgr.hasHolder('samples_index_test'),true);
+            assert.equal(dataHolder.hasHolder('samples_index_test'),true);
         });
 
         it("2. should not have data", function() {
-            assert.equal(DataMgr.hasData('samples_index_test'),false);
+            assert.equal(dataHolder.hasData('samples_index_test'),false);
         });
 
         it("3 .try to load data from non-existent file", function() {
-            assert.equal(DataMgr.load('samples_index_test'),false);
-            assert.notEqual(DataMgr.hasData('samples_index_test'),true);
-            //DataMgr.print('samples_index_test');
+            assert.equal(dataHolder.load('samples_index_test'),false);
+            assert.notEqual(dataHolder.hasData('samples_index_test'),true);
+            //dataHolder.print('samples_index_test');
         });
 
         it("4 .sets and check data", function() {
-            let smp_obj = DataMgr.set('samples_index_test');
+            let smp_obj = dataHolder.set('samples_index_test');
             assert.notEqual(smp_obj,null);
-            assert.equal(DataMgr.hasData('samples_index_test'),true);
-            //DataMgr.print('samples_index_test');
+            assert.equal(dataHolder.hasData('samples_index_test'),true);
+            //dataHolder.print('samples_index_test');
         });
 
         it("5. save data", function() {
-            let save_outcome = DataMgr.save('samples_index_test');
+            let save_outcome = dataHolder.save('samples_index_test');
             assert.notEqual(save_outcome,null);
             assert.notEqual(save_outcome,false);
-            assert.equal(UF.fileExistsSync(ConfigMgr.path('samples_index')),true);
+            assert.equal(UF.fileExistsSync(configMgr.path('samples_index')),true);
         });
 
         it("6. loads and check data", function() {
-            let load_outcome = DataMgr.save('samples_index_test');
+            let load_outcome = dataHolder.save('samples_index_test');
             assert.notEqual(load_outcome,null);
             assert.notEqual(load_outcome,false);
-            assert.equal(DataMgr.hasData('samples_index_test'),true);
-            //DataMgr.print('samples_index_test');
+            assert.equal(dataHolder.hasData('samples_index_test'),true);
+            //dataHolder.print('samples_index_test');
         });
 
         it("7. get data and calls a simple method", function() {
-            let ST = DataMgr.get('samples_index_test');
+            let ST = dataHolder.get('samples_index_test');
             assert.equal(_.isObject(ST),true);
             tLog('Node Count: ',ST.T.nodeCount());
             tLog('File Count: ',ST.T.fileCount());
@@ -111,8 +111,8 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
 
     describe("Samples manipulation",function(){
         it("2. filter all samples with some queries", function() {
-            let ST = DataMgr.get('samples_index_test');
-            tLog(ConfigMgr.get('ExcludedExtensionsForSamples'));
+            let ST = dataHolder.get('samples_index_test');
+            tLog(configMgr.get('ExcludedExtensionsForSamples'));
             //ST.T.print();
             let smp_obj1 = ST.filterByTags('ge');
             tLog("\n > smp_obj1\n",smp_obj1._array);
@@ -140,7 +140,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
 
         it("3. filter random samples with some queries", function() {
-            let ST = DataMgr.get('samples_index_test');
+            let ST = dataHolder.get('samples_index_test');
 
             let smp_obj2 = ST.filterByTags('la');
             //tLog("\n > smp_obj2\n",smp_obj2._array);

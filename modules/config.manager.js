@@ -1,6 +1,6 @@
 const configField = require('./atoms/configField.class.js');
 
-class ConfigManager {
+class configManager {
 
     constructor(){
         this._clUI = clUI.newLocalUI('> config manager:');
@@ -25,7 +25,7 @@ class ConfigManager {
     init(){
         const _self = this;
 
-        DataMgr.setHolder({
+        dataHolder.setHolder({
             label:'config_file',
             filePath:this._configfile_path,
             fileType:'json',
@@ -59,7 +59,7 @@ class ConfigManager {
         });
 
         // Open config.json
-        if(!DataMgr.get('config_file') || DataMgr.get('config_file').emptydata===true){
+        if(!dataHolder.get('config_file') || dataHolder.get('config_file').emptydata===true){
             // generate the first config.json file
             if(this.save('config_file')===null){
                 Utils.EXIT('Cannot create or read the configuration file '+this._configfile_path);
@@ -74,7 +74,7 @@ class ConfigManager {
 
 
     save(){
-        return DataMgr.save('config_file');
+        return dataHolder.save('config_file');
     }
 
 
@@ -379,4 +379,4 @@ class ConfigManager {
 
 }
 
-module.exports = new ConfigManager();
+module.exports = new configManager();

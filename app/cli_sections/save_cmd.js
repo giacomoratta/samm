@@ -1,14 +1,14 @@
 let cmd_name = 'save';
 
-CliMgr.addCommand(cmd_name+'');
+cliMgr.addCommand(cmd_name+'');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description('Create a directory with the samples previously found; the directory name is set automatically with some tag names.'+"\n")
     .option('-d, --dirname <dirname>', 'Save in a directory with a custom name.')
     .option('-p, --path <path>', 'Absolute custom path.')
     .option('-o, --overwrite', 'Overwrite the existent directory.');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
 
     if(!ProjectsMgr.current){
         cliData.ui.print("project directory is not set; check the configuration.");

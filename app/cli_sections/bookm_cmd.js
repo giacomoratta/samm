@@ -1,15 +1,15 @@
 let cmd_name = 'bookm';
 
-CliMgr.addCommand(cmd_name+'');
+cliMgr.addCommand(cmd_name+'');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description("Prints the samples collection to work with in the next command '"+cmd_name+" set'."+"\n")
     .option('-a, --all', 'Shows all the bookmarks')
     .option('-l, --lookup', 'Shows the latest lookup')
     .option('-t, --tag <tag>', 'Shows the bookmarks under the specified custom tag')
     .option('-s, --save', 'Save bookmarks in the current project');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
     let C_bookm_options = {
         all:cliData.cli_params.hasOption('all'),
         lookup:cliData.cli_params.hasOption('lookup'),

@@ -1,8 +1,8 @@
 let cmd_name = 'coverage';
 
-CliMgr.addCommand(cmd_name+'');
+cliMgr.addCommand(cmd_name+'');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description('Check the coverage of samples in according to the tag labels present in the configuration.'+"\n")
     .option('-p, --path <path>', 'Custom absolute path.')
     .option('-q, --query <query>', 'Custom query; e.g.\'tag1+tag2,tag3\'.')
@@ -10,7 +10,7 @@ CliMgr.addCommandHeader(cmd_name)
     .option('-a, --allinfo', 'Shows also the covered files.')
     .option('-g, --progressive', 'Shows the results step-by-step.');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
 
     // TODO
     // -lt -gt per selezionare samples poco o troppo coperti

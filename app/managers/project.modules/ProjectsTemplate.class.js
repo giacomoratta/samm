@@ -5,11 +5,11 @@ class ProjectsTemplate {
         this._size = 0;
     }
 
-    get dir() { return ConfigMgr.path('default_projects'); }
+    get dir() { return configMgr.path('default_projects'); }
 
     _checkAndSetStructure(){
         let _dirFound = [];
-        directoryTree.walkDirectory(ConfigMgr.path('default_projects'),{
+        directoryTree.walkDirectory(configMgr.path('default_projects'),{
             maxLevel:2,
             itemCb:function(data){
                 if(!data.item.isDirectory) return;
@@ -149,12 +149,12 @@ class ProjectsTemplate {
         let _self = this;
         return new Promise(function(resolve,reject){
             if(!_.isString(template_name)) return reject({ message:'wrong template name' });
-            if(!Utils.File.directoryExistsSync(ConfigMgr.path('default_projects'))) return reject({ message:'template path does not exist '+ConfigMgr.path('default_projects') });
+            if(!Utils.File.directoryExistsSync(configMgr.path('default_projects'))) return reject({ message:'template path does not exist '+configMgr.path('default_projects') });
             if(!Utils.File.directoryExistsSync(origin_path)) return reject({ message:'original project path does not exist '+origin_path });
             template_name = Utils.onlyValidPathName(template_name);
             if(template_name.length<1) return reject({ message:'wrong template name' });
 
-            let template_path = Utils.File.pathJoin(ConfigMgr.path('default_projects'),template_name);
+            let template_path = Utils.File.pathJoin(configMgr.path('default_projects'),template_name);
             template_path = Utils.File.checkAndSetDuplicatedDirectoryNameSync(template_path);
 
             template_name = Utils.File.pathBasename(template_path);
@@ -173,7 +173,7 @@ class ProjectsTemplate {
 
 
     _newProjectName(project_name){
-        let project_np = ConfigMgr.get('ProjectNamePattern');
+        let project_np = configMgr.get('ProjectNamePattern');
         if(project_np.length<=0) return project_name;
         let new_project_name = Utils.replaceAll(project_np,'<name>',project_name);
         if(new_project_name.length<=0) return project_name;

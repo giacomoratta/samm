@@ -1,12 +1,12 @@
 let cmd_name = 'tquery';
 
-CliMgr.addCommand(cmd_name+' [tag] [query]');
+cliMgr.addCommand(cmd_name+' [tag] [query]');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description('Add, remove or view tagged queries (used by lookup -t <tag>)'+"\n")
     .option('-r, --remove', 'Remove the specified tag');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
     let C_TQuery_options = {
         tag:cliData.cli_params.get('tag'),
         query:cliData.cli_params.get('query'),

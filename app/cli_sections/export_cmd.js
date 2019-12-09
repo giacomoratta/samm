@@ -1,16 +1,16 @@
 let cmd_name = 'export';
 
-CliMgr.addCommand(cmd_name+' <data>');
+cliMgr.addCommand(cmd_name+' <data>');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description("Export project or samples data in a compressed archive. " +
         "Allowed values: project (export the project) and bookm (export bookmarks collection)."+"\n")
     .autocomplete(['bookm','project']);
     //.option('-t, --type <type>', 'Archive type (zip, tar, gzip)')
 
-CliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
 
-    if(!ConfigMgr.cfg_path('ExportDirectory')){
+    if(!configMgr.cfg_path('ExportDirectory')){
         cliData.ui.print("no valid export directory; set an existent directory for data export.");
         return cliNextCb(cliData.error_code);
     }
@@ -21,7 +21,7 @@ CliMgr.addCommandBody(cmd_name, function(cliReference,cliNextCb,cliData){
     };
     let archFD_options = {
         sourcePath:null,
-        destPath:ConfigMgr.cfg_path('ExportDirectory')
+        destPath:configMgr.cfg_path('ExportDirectory')
     };
 
     if(C_export_options.param_data === 'project'){

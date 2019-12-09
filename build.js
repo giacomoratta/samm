@@ -1,7 +1,7 @@
 const { compile } = require('nexe');
 const package_json = require('./package.json');
 global._ =  require('lodash');
-global.Utils = require('./libs/Utils.js');
+global.Utils = require('./libs/utils.js');
 
 let b$cfg = {
     version:package_json.version,

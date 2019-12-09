@@ -10,17 +10,17 @@ if(!ENV_CONFIG.debug_enabled){
     UI_options.debugFn=function(){};
     UI_options.debugTimedFn=function(){};
 }
-global.clUI  = new (require('./modules/UI.class.js'))(UI_options);
+global.clUI  = new (require('./modules/ui.class.js'))(UI_options);
 global.d$ = clUI.debug;
 global.dt$ = clUI.debugTimed;
 
 /* Common Libraries */
-global.Utils = require('./modules/Utils.js');
+global.Utils = require('./modules/utils.js');
 global.DataCache = require('./modules/atoms/dataCache.class.js');
-global.pathInfo = require('./modules/atoms/pathInfo.class.js');
-global.directoryTree = require('./modules/libs/directoryTree.class.js');
-global.DataMgr = require('./modules/DataManager.js');
-global.ConfigMgr = require('./modules/ConfigManager.js');
+global.pathInfo = require('./modules/libs/directory-tree/pathInfo.class.js');
+global.directoryTree = require('./modules/libs/directory-tree/directoryTree.class.js');
+global.dataHolder = require('./modules/dataholder.class.js');
+global.configMgr = require('./modules/config.manager.js');
 
 /* Latest module: Command Line Interface */
-global.CliMgr = require('./modules/CliManager.js');
+global.cliMgr = require('./modules/cli.manager.js');

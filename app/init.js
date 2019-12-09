@@ -29,4 +29,4 @@ require('./cli_sections/tquery_cmd.js');
 
 
 /* Last command: start CLI! */
-CliMgr.show('mpl');
+cliMgr.show('mpl');

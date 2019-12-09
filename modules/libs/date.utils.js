@@ -52,10 +52,6 @@ const MONTHS_LIST = [
 
 class Utils_Date {
 
-    constructor(parent){
-        this.utils = parent;
-    }
-
     dateToStrObj(date){
         if(_.isNil(date)) date=Date.now();
         let dtobj = {};

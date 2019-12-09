@@ -19,8 +19,8 @@ describe('modules', () => {
 describe('configuration', function() {
     describe('printInternals', function() {
         it("show the current configuration", function() {
-            console.log('\n\nLoaded config\n',ConfigMgr._config,'\n');
-            ConfigMgr.printInternals();
+            console.log('\n\nLoaded config\n',configMgr._config,'\n');
+            configMgr.printInternals();
         });
     });
 });

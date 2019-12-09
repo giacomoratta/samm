@@ -13,8 +13,8 @@ class SamplesManager {
         /* DATA HOLDER */
         this._createIndexHolder({
                 label: this._LABEL_samples_index,
-                filePath: ConfigMgr.path('samples_index'),
-                directoryToScan: ConfigMgr.cfg_path('SamplesDirectory')
+                filePath: configMgr.path('samples_index'),
+                directoryToScan: configMgr.cfg_path('SamplesDirectory')
         });
     }
 
@@ -22,8 +22,8 @@ class SamplesManager {
         let dTreeOptions = {
             /* directoryTree options */
         };
-        if(ConfigMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
-        else if(ConfigMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
+        if(configMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = configMgr.get('IncludedExtensionsForSamples');
+        else if(configMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = configMgr.get('ExcludedExtensionsForSamples');
         else{
             dTreeOptions.includedExtensions = null;
             dTreeOptions.excludedExtensions = null;
@@ -40,7 +40,7 @@ class SamplesManager {
             return STree;
         };
 
-        return DataMgr.setHolder({
+        return dataHolder.setHolder({
             label:options.label,
             filePath:options.filePath,
             fileType:'json-compact',
@@ -68,18 +68,18 @@ class SamplesManager {
                 let STree = __new_SamplesTree();
                 STree.T.read();
                 if(!$cfg.checkFn(STree)) return;
-                ConfigMgr.unsetFlag('samples_index_first_scan_needed');
-                ConfigMgr.unsetFlag('samples_index_new_scan_needed');
+                configMgr.unsetFlag('samples_index_first_scan_needed');
+                configMgr.unsetFlag('samples_index_new_scan_needed');
                 return STree;
             },
 
             loadFn:(fileData, $cfg/*,args*/)=>{
                 if(!_.isObject(fileData)){
-                    ConfigMgr.setFlag('samples_index_first_scan_needed');
+                    configMgr.setFlag('samples_index_first_scan_needed');
                     return;
                 }
                 d$('loaded sample index');
-                ConfigMgr.unsetFlag('samples_index_first_scan_needed');
+                configMgr.unsetFlag('samples_index_first_scan_needed');
                 let STree = __new_SamplesTree();
                 STree.T.fromJson(fileData);
                 if(!$cfg.checkFn(STree)) return;
@@ -112,23 +112,23 @@ class SamplesManager {
      * @returns { boolean | null } true if exists, false if not exists, null if missing data
      */
     sampleIndexFileExistsSync(){
-        return DataMgr.fileExistsSync(this._LABEL_samples_index);
+        return dataHolder.fileExistsSync(this._LABEL_samples_index);
     }
 
 
     printSamplesTree(){
-        DataMgr.print(this._LABEL_samples_index)
+        dataHolder.print(this._LABEL_samples_index)
     }
 
 
     hasSamplesIndex(){
-        return DataMgr.hasData(this._LABEL_samples_index);
+        return dataHolder.hasData(this._LABEL_samples_index);
     }
 
 
     getSamplesIndex_directoryTree(){
-        if(DataMgr.check(this._LABEL_samples_index)!==true) return null;
-        return DataMgr.get(this._LABEL_samples_index).T;
+        if(dataHolder.check(this._LABEL_samples_index)!==true) return null;
+        return dataHolder.get(this._LABEL_samples_index).T;
     }
 
     setSamplesIndex(options){
@@ -138,11 +138,11 @@ class SamplesManager {
         },options);
 
         if(options.force === true){
-            let smp_obj = DataMgr.set(this._LABEL_samples_index);
-            if(!DataMgr.save(this._LABEL_samples_index)) return;
+            let smp_obj = dataHolder.set(this._LABEL_samples_index);
+            if(!dataHolder.save(this._LABEL_samples_index)) return;
             return smp_obj;
         }
-        return DataMgr.load(this._LABEL_samples_index);
+        return dataHolder.load(this._LABEL_samples_index);
     }
 
 
@@ -152,7 +152,7 @@ class SamplesManager {
         let _self = this;
         let smp_obj_search = this._CACHE_stqall.get(tagString /* label */,function(){
 
-            let ST = DataMgr.get(_self._LABEL_samples_index);
+            let ST = dataHolder.get(_self._LABEL_samples_index);
             if(!ST) return null;
 
             let smp_obj2 = ST.filterByTags(tagString);
@@ -169,7 +169,7 @@ class SamplesManager {
         this._CACHE_stqrnd.remove(tagString /* label */);
         let smp_obj_search_random = this._CACHE_stqrnd.get(tagString /* label */,function(){
 
-            let smp_rnd_obj2 = smp_obj_search.getRandom(ConfigMgr.get('RandomCount'),ConfigMgr.get('MaxOccurrencesSameDirectory'));
+            let smp_rnd_obj2 = smp_obj_search.getRandom(configMgr.get('RandomCount'),configMgr.get('MaxOccurrencesSameDirectory'));
             if(smp_rnd_obj2.error() || smp_rnd_obj2.size()==0) return null;
 
             return smp_rnd_obj2;
@@ -240,7 +240,7 @@ class SamplesManager {
                 });
             });
             fname_array.push(f_name);
-            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(ConfigMgr.cfg_path('SamplesDirectory').length),Utils.File.pathSeparator,'___');
+            let link_file_name = f_name+'___'+Utils.replaceAll(item.path.substring(configMgr.cfg_path('SamplesDirectory').length),Utils.File.pathSeparator,'___');
 
             /* Copy File */
             p_array.push(Utils.File.copyFile( item.path, Utils.File.pathJoin(options.path, f_name) ).then(function(data){
@@ -348,7 +348,7 @@ class SamplesManager {
 
         /* Get SamplesTree */
         let ST = null;
-        if(!options.path) ST=DataMgr.get(this._LABEL_samples_index);
+        if(!options.path) ST=dataHolder.get(this._LABEL_samples_index);
         else{
             ST=new SamplesTree(options.directoryToScan,{/* SampleTree options */},this._directoryTreeOptionsFromConfig());
             ST.read();

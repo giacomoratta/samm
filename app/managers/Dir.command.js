@@ -7,7 +7,7 @@ class DirCommand {
 
     _listExtensionsStats_getSearchObj(options){
         let _esobj = {
-            path:ConfigMgr.cfg_path('SamplesDirectory'),
+            path:configMgr.cfg_path('SamplesDirectory'),
             extensions:{},
             filepaths:{},
             filecount:0

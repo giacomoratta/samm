@@ -1,8 +1,8 @@
 /app
     Config, initialization, and files for this specific app.
     The global objects declared in init.js must not be used outside!
-    cli_sections.js > one file for each command (configured with CliMgr)
-    config.js > declare the structure of the configuration (by using the ConfigMgr)
+    cli_sections.js > one file for each command (configured with cliManager)
+    config.js > declare the structure of the configuration (by using the configManager)
     init.js > declare all the global objects for this app
 
 /modules

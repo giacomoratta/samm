@@ -1,7 +1,7 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
-let _temp_path_checkAndSetDuplicatedDirectoryNameSync= UF.pathJoin(ConfigMgr.path('working_dir'),'checkAndSetDuplicatedDirectoryNameSync');
-let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('working_dir'),'utils_file');
+let _temp_path_checkAndSetDuplicatedDirectoryNameSync= UF.pathJoin(configMgr.path('working_dir'),'checkAndSetDuplicatedDirectoryNameSync');
+let tmp_dir_utils_file = UF.pathJoin(configMgr.path('working_dir'),'utils_file');
 let ck_file1 = UF.pathJoin(tmp_dir_utils_file,'file1.txt');
 let ck_directory1 = UF.pathJoin(tmp_dir_utils_file,'directory1');
 let ck_directory1_file11 = UF.pathJoin(tmp_dir_utils_file,'directory1','file11.txt');
@@ -53,7 +53,7 @@ describe('Utils.File.singleton - TEST for existence, ensure directories, path fi
 
     describe("#checkAndSetPathSync", function() {
         it("check if the path exists", function() {
-            let base_dir = ConfigMgr.path('working_dir');
+            let base_dir = configMgr.path('working_dir');
             let base_dir_no_sep = base_dir.substring(0,base_dir.length-1);
             tLog('base_dir > ',base_dir);
             tLog('base_dir_no_sep > ',base_dir_no_sep);

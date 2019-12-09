@@ -1,8 +1,8 @@
 let cmd_name = 'project';
 
-CliMgr.addCommand(cmd_name+'');
+cliMgr.addCommand(cmd_name+'');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description('Project manager (project path, default templates, history, etc.)'+
         "\n  $ "+cmd_name+"                                  / shows current project"+
         "\n  $ "+cmd_name+" -p \"/absolute/path/project/\"   / shows current project"+
@@ -16,7 +16,7 @@ CliMgr.addCommandHeader(cmd_name)
         "store the current project as default project or delete a default project")
     .option('-n, --new <default>', 'Create a new project from a default project');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
     cliData.ui.print("[current]",ProjectsMgr.current);
 
     let C_Project_options = {

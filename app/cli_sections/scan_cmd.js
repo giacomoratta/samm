@@ -1,13 +1,13 @@
 let cmd_name = 'scan';
 
-CliMgr.addCommand(cmd_name+'');
+cliMgr.addCommand(cmd_name+'');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description("Perform a full scan of the samples directory. " +
         "If the index is already present the scan does not start, in order to avoid resource wasting."+"\n")
     .option('-f, --force', 'Force the rescan.');
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
 
     let C_scan_options = {
         printFn: function(s){ cliData.ui.print(s); },

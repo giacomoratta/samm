@@ -13,14 +13,6 @@ class Utils {
         this.SystemInfo = new (require('./libs/systemInfo.utils'))(this);
     }
 
-    extend(key,data){
-        if(this[key]){
-            d$('Utils.extend',key,'already exists!');
-            return;
-        }
-        this[key]=data;
-    }
-
     EXIT(message,data){
         if(message) console.log("\n"+message);
         if(data) console.log(data);
@@ -98,10 +90,6 @@ class Utils {
 
     onlyValidPathName(s){
         return _.deburr(s).replace(/[^a-zA-Z0-9\_\-\.]/g,'');
-    }
-
-    onlyValidURL(s){
-        return _.deburr(s).replace(/[^a-zA-Z0-9 ]/g,'');
     }
 
     printArrayOrderedList(array,prefix,processFn){

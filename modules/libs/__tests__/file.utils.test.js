@@ -1,7 +1,7 @@
 // const test_config = require('../require.js');
 // let fileUtils = Utils.File;
-// let _temp_path_checkAndSetDuplicatedDirectoryNameSync= fileUtils.pathJoin(ConfigMgr.path('working_dir'),'checkAndSetDuplicatedDirectoryNameSync');
-// let tmp_dir_utils_file = fileUtils.pathJoin(ConfigMgr.path('working_dir'),'utils_file');
+// let _temp_path_checkAndSetDuplicatedDirectoryNameSync= fileUtils.pathJoin(configMgr.path('working_dir'),'checkAndSetDuplicatedDirectoryNameSync');
+// let tmp_dir_utils_file = fileUtils.pathJoin(configMgr.path('working_dir'),'utils_file');
 // let ck_file1 = fileUtils.pathJoin(tmp_dir_utils_file,'file1.txt');
 // let ck_directory1 = fileUtils.pathJoin(tmp_dir_utils_file,'directory1');
 // let ck_directory1_file11 = fileUtils.pathJoin(tmp_dir_utils_file,'directory1','file11.txt');
@@ -64,7 +64,7 @@ describe('Utils.File.singleton', function() {
 
     describe("#checkAndSetPathSync", function() {
         it("check if the path exists", function() {
-            // let base_dir = ConfigMgr.path('working_dir');
+            // let base_dir = configMgr.path('working_dir');
             // let base_dir_no_sep = base_dir.substring(0,base_dir.length-1);
             // tLog('base_dir > ',base_dir);
             // tLog('base_dir_no_sep > ',base_dir_no_sep);

@@ -1,6 +1,6 @@
 (function(){
 
-    ConfigMgr.addField('SamplesDirectory', {
+    configMgr.addField('SamplesDirectory', {
         description:'',
         datatype: 'absdirpath',
         defaultValue: '',
@@ -8,46 +8,46 @@
         flagsOnChange: [ 'samples_index_first_scan_needed' ]
     });
 
-    ConfigMgr.addField('ExportDirectory', {
+    configMgr.addField('ExportDirectory', {
         description:'',
         datatype: 'absdirpath',
         defaultValue: ''
     });
 
-    ConfigMgr.addField('ProjectsDirectory', {
+    configMgr.addField('ProjectsDirectory', {
         description:'',
         datatype: 'absdirpath',
         defaultValue: '',
         checkPathExists: true
     });
 
-    ConfigMgr.addField('DAW', {
+    configMgr.addField('DAW', {
         description:'',
         datatype: 'string',
         defaultValue: 'Ableton',
         allowedValues: ['Ableton','Cubase']
     });
 
-    ConfigMgr.addField('RandomCount', {
+    configMgr.addField('RandomCount', {
         description:'',
         datatype: 'integer',
         defaultValue: 11
     });
 
-    ConfigMgr.addField('MaxOccurrencesSameDirectory', {
+    configMgr.addField('MaxOccurrencesSameDirectory', {
         description:'',
         datatype: 'integer',
         defaultValue: 1
     });
 
-    ConfigMgr.addField('ExtensionCheckForSamples', {
+    configMgr.addField('ExtensionCheckForSamples', {
         datatype: 'char',
         defaultValue: 'X',
         allowedValues: ['X','E','I'],
         flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
-    ConfigMgr.addField('IncludedExtensionsForSamples', {
+    configMgr.addField('IncludedExtensionsForSamples', {
         description:'',
         datatype: 'array',
         objectDatatype: 'string',
@@ -60,7 +60,7 @@
         flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
-    ConfigMgr.addField('ExcludedExtensionsForSamples', {
+    configMgr.addField('ExcludedExtensionsForSamples', {
         description:'',
         datatype: 'array',
         objectDatatype: 'string',
@@ -74,60 +74,60 @@
         flagsOnChange: [ 'samples_index_new_scan_needed' ]
     });
 
-    ConfigMgr.addFlag('samples_index_first_scan_needed','First scan needed in the samples directory');
-    ConfigMgr.addFlag('samples_index_new_scan_needed','New scan needed after changing the configuration on file libs');
+    configMgr.addFlag('samples_index_first_scan_needed','First scan needed in the samples directory');
+    configMgr.addFlag('samples_index_new_scan_needed','New scan needed after changing the configuration on file libs');
 
-    ConfigMgr.setUserdataDirectory('userdata');
-    ConfigMgr.setConfigFile('config.json');
+    configMgr.setUserdataDirectory('userdata');
+    configMgr.setConfigFile('config.json');
 
-    ConfigMgr.addUserDirectory('default_projects','default_projects');
-    ConfigMgr.addUserFile('bookmarks','bookmarks.json');
-    ConfigMgr.addUserFile('projects','projects.json');
-    ConfigMgr.addUserFile('tquery','tqueries.json');
-    ConfigMgr.addUserFile('samples_index','samples_index');
+    configMgr.addUserDirectory('default_projects','default_projects');
+    configMgr.addUserFile('bookmarks','bookmarks.json');
+    configMgr.addUserFile('projects','projects.json');
+    configMgr.addUserFile('tquery','tqueries.json');
+    configMgr.addUserFile('samples_index','samples_index');
 
-    ConfigMgr.init();
+    configMgr.init();
 })();
 
 
-// console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));
-// console.log(ConfigMgr.set('MaxOccurrencesSameDirectory',3));
-// console.log(ConfigMgr.set('MaxOccurrencesSameDirectory',true));
-// console.log(ConfigMgr.get('MaxOccurrencesSameDirectory'));
+// console.log(configMgr.get('MaxOccurrencesSameDirectory'));
+// console.log(configMgr.set('MaxOccurrencesSameDirectory',3));
+// console.log(configMgr.set('MaxOccurrencesSameDirectory',true));
+// console.log(configMgr.get('MaxOccurrencesSameDirectory'));
 //
 // console.log();
 //
-// console.log(ConfigMgr.get('ExtensionCheckForSamples'));
-// console.log(ConfigMgr.set('ExtensionCheckForSamples',true));
-// console.log(ConfigMgr.set('ExtensionCheckForSamples','Fd'));
-// console.log(ConfigMgr.set('ExtensionCheckForSamples','R'));
-// //console.log(ConfigMgr.set('ExtensionCheckForSamples','E'));
-// //console.log(ConfigMgr.set('ExtensionCheckForSamples',3));
-// console.log(ConfigMgr.get('ExtensionCheckForSamples'));
+// console.log(configMgr.get('ExtensionCheckForSamples'));
+// console.log(configMgr.set('ExtensionCheckForSamples',true));
+// console.log(configMgr.set('ExtensionCheckForSamples','Fd'));
+// console.log(configMgr.set('ExtensionCheckForSamples','R'));
+// //console.log(configMgr.set('ExtensionCheckForSamples','E'));
+// //console.log(configMgr.set('ExtensionCheckForSamples',3));
+// console.log(configMgr.get('ExtensionCheckForSamples'));
 
 
 
-//console.log(ConfigMgr.set('SamplesDirectory','/Users'));
+//console.log(configMgr.set('SamplesDirectory','/Users'));
 
-// ConfigMgr.print();
-// ConfigMgr.printInternals();
+// configMgr.print();
+// configMgr.printInternals();
 
-// ConfigMgr.get('param');
-// ConfigMgr.set('param',value);
+// configMgr.get('param');
+// configMgr.set('param',value);
 
 
-//ConfigMgr.setUserDirectory('userdata' /*dir name*/);
+//configMgr.setUserDirectory('userdata' /*dir name*/);
 
-//ConfigMgr.addUserFile('myfile.json');
-//ConfigMgr.addUserDirectory('/newdir');
-//ConfigMgr.addUserFile('/newdir/myfile.json');
+//configMgr.addUserFile('myfile.json');
+//configMgr.addUserDirectory('/newdir');
+//configMgr.addUserFile('/newdir/myfile.json');
 
-// ConfigMgr.upath  //user path
-// ConfigMgr.path   //app path
+// configMgr.upath  //user path
+// configMgr.path   //app path
 
-//ConfigMgr.setFlag('abc123');
-//ConfigMgr.unsetFlag('abc123');
+//configMgr.setFlag('abc123');
+//configMgr.unsetFlag('abc123');
 
-//ConfigMgr.firstStart(); //fn at first start > no need of configmgr...just type the code here
+//configMgr.firstStart(); //fn at first start > no need of configMgr...just type the code here
 
-//ConfigMgr.save();
+//configMgr.save();

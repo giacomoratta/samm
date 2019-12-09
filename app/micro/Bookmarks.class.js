@@ -8,7 +8,7 @@ class Bookmarks {
     }
 
     _newBookmNode(){
-        return new Samples(ConfigMgr.cfg_path('SamplesDirectory'));
+        return new Samples(configMgr.cfg_path('SamplesDirectory'));
     }
 
     empty(){

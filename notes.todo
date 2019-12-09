@@ -22,11 +22,11 @@ SHORT
 MID
 
 - test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
-- test on DataMgr (and clean code) - prepare tests and directories
-- test on ConfigMgr (and clean code)
+- test on dataHolder (and clean code) - prepare tests and directories
+- test on configManager (and clean code)
 - test on UI (and clean code) - prepare tests and directories
-- test on CliMgr (and clean code)
-- first start CliMgr
+- test on cliManager (and clean code)
+- first start cliManager
 
 
 LONG

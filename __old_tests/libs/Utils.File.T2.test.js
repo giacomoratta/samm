@@ -1,6 +1,6 @@
 const test_config = require('../require.js');
 let UF = Utils.File;
-let tmp_dir_utils_file = UF.pathJoin(ConfigMgr.path('working_dir'),'utils_file');
+let tmp_dir_utils_file = UF.pathJoin(configMgr.path('working_dir'),'utils_file');
 let ck_file1 = UF.pathJoin(tmp_dir_utils_file,'file1.txt');
 let ck_file2 = UF.pathJoin(tmp_dir_utils_file,'file2.txt');
 let ck_file1_json = UF.pathJoin(tmp_dir_utils_file,'file1.json');

@@ -1,8 +1,7 @@
 
 class Utils_String {
 
-    constructor(parent){
-        this.utils = parent;
+    constructor(){
     }
 
 
@@ -23,10 +22,15 @@ class Utils_String {
     }
 
 
+    onlyValidURL(s){
+        return _.deburr(s).replace(/[^a-zA-Z0-9 ]/g,'');
+    }
+
+
     html_query_string(v,joinch){
         //TODO handle special characters
         let pph = v.indexOf('('); if(pph>0) v=v.substr(0,pph-1);
-        v = this.utils.onlyValidURL(v);
+        v = this.onlyValidURL(v);
         return _.trim(v).split(' ').splice(0,2).join(joinch);
     }
 

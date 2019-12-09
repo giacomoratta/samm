@@ -1,13 +1,13 @@
 let cmd_name = 'lookup';
 
-CliMgr.addCommand(cmd_name+' [query]');
+cliMgr.addCommand(cmd_name+' [query]');
 
-CliMgr.addCommandHeader(cmd_name)
+cliMgr.addCommandHeader(cmd_name)
     .description("Perform a search for the tags and selects random samples; the tag query is an AND/OR query (','=or, '+'=and)."+"\n")
     .option('-a, --all', 'Show all samples which match the query (instead of the default random selection)')
     .option('-t, --tag <tag>', 'Tag for a query inside the configuration (see config set Tags <tag> <query>)',TQueryMgr.getTags());
 
-CliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
+cliMgr.addCommandBody(cmd_name,function(cliReference,cliNextCb,cliData){
 
     if(!SamplesMgr.hasSamplesIndex()){
         cliData.ui.print("no samples scan found; perform a scan before this command");

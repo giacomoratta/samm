@@ -1,7 +1,7 @@
 const cliParam = require('./atoms/cliParam.class.js');
 const vorpal = require('vorpal')();
 
-class CliManager {
+class cliManager {
 
     constructor(){
         //this.ui_log = vorpal.log;
@@ -13,14 +13,14 @@ class CliManager {
 
         this._vorpal.on('client_prompt_submit',function(command){
             if(command==='exit'){
-                ConfigMgr.save();
+                configMgr.save();
             }
         });
     }
 
     show(delimiter){
         if(delimiter) this._delimiter=delimiter;
-        ConfigMgr.printMessages();
+        configMgr.printMessages();
         this._vorpal
             .delimiter(this._delimiter+'$')
             .show();
@@ -40,21 +40,21 @@ class CliManager {
     }
 
     _getActionFn(cmdName, cmdFn){
-        const thisCliMgr = this;
+        const thiscliMgr = this;
         return function(args,cb){
             const cliReference = this;
 
             cmdFn(cliReference,(code,err)=>{
-                if(code===thisCliMgr._error_code){
+                if(code===thiscliMgr._error_code){
                     d$('command',cmdName,'terminated with an error.');
                     if(err) d$(err);
                 }
-                ConfigMgr.printMessages();
+                configMgr.printMessages();
                 cb();
             },{
                 cli_params:new cliParam(args, cmdName),
-                error_code:thisCliMgr._error_code,
-                success_code:thisCliMgr._success_code,
+                error_code:thiscliMgr._error_code,
+                success_code:thiscliMgr._success_code,
                 ui: clUI.newLocalUI('> '+cmdName+':')
             });
         };
@@ -62,4 +62,4 @@ class CliManager {
 
 }
 
-module.exports = new CliManager();
+module.exports = new cliManager();
