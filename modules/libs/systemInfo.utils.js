@@ -1,5 +1,6 @@
 const os = require('os')
-const path = require('path')
+
+const libUtils = {}
 
 // https://nodejs.org/dist/latest-v8.x/docs/api/os.html#os_os_platform
 /*
@@ -22,14 +23,12 @@ os.uptime()
 
 libUtils.EOL = os.EOL
 
-
 libUtils.isWindows = () => {
-    return os.platform()==='win32'
+  return os.platform() === 'win32'
 }
 
-
 libUtils.isMacOS = () => {
-    return os.platform()==='darwin'
+  return os.platform() === 'darwin'
 }
 
 module.exports = libUtils
