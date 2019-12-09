@@ -1,17 +1,22 @@
 const _ = require('./lodash')
 const path = require('path')
 const fs = require('fs')
-const fs_extra = require('fs-extra')
+const fsExtra = require('fs-extra')
 const rimraf = require('rimraf') //A "rm -rf" util for nodejs
 const iconv = require('iconv-lite')
 
 const libUtils = {}
 
 libUtils.pathBasename = path.basename
+
 libUtils.pathExtname = path.extname
+
 libUtils.pathDirname = path.dirname
+
 libUtils.pathParse = path.parse
+
 libUtils.pathJoin = path.join
+
 libUtils.pathSeparator = path.sep
 
 
@@ -29,6 +34,7 @@ libUtils.equalPaths = (p1,p2) => {
     if(p1.length >  p2.length) return p1.endsWith(p2);
     if(p1.length <= p2.length) return p2.endsWith(p1);
 }
+
 
 
 
@@ -68,9 +74,8 @@ libUtils.isAbsoluteParentDirSync = (path_string, check_exists) => {
 }
 
 libUtils.checkAndSetDuplicatedFileNameSync = (path_string, renameFn) => {
-    const _self = this;
     if(!_.isFunction(renameFn)) renameFn = function(p_str,index){
-        return _self.pathChangeFilename(p_str,function(old_name){
+        return libUtils.pathChangeFilename(p_str,function(old_name){
             return old_name+'_'+index;
         });
     };
@@ -83,9 +88,8 @@ libUtils.checkAndSetDuplicatedFileNameSync = (path_string, renameFn) => {
 }
 
 libUtils.checkAndSetDuplicatedDirectoryNameSync = (path_string, renameFn) => {
-    const _self = this;
     if(!_.isFunction(renameFn)) renameFn = function(p_str,index){
-        return _self.pathChangeDirname(p_str,function(old_name){
+        return libUtils.pathChangeDirname(p_str,function(old_name){
             return old_name+'_'+index;
         });
     };
@@ -100,7 +104,7 @@ libUtils.checkAndSetDuplicatedDirectoryNameSync = (path_string, renameFn) => {
 libUtils.checkAndSetPathSync = (path_string,callback) => {
     if(!_.isString(path_string)) return null;
     if(!fs.existsSync(path_string)) return null;
-    path_string = libUtils.pathResolve(path_string)+libUtils.pathSeparator;
+    path_string = path.resolve(path_string)+libUtils.pathSeparator;
     if(callback) callback(path_string);
     return path_string;
 }
@@ -121,16 +125,14 @@ libUtils.directoryExistsSync = (path_string) => {
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (path_string) => {
-    let _self = this;
-    return new Promise(function(resolve,reject){
-        return resolve(_self.fileExistsSync(path_string));
+    return new Promise(function(resolve){
+        return resolve(libUtils.fileExistsSync(path_string));
     });
 }
 
 libUtils.directoryExists = (path_string) => {
-    let _self = this;
-    return new Promise(function(resolve,reject){
-        return resolve(_self.directoryExistsSync(path_string));
+    return new Promise(function(resolve){
+        return resolve(libUtils.directoryExistsSync(path_string));
     });
 }
 
@@ -248,13 +250,12 @@ libUtils.writeJsonFileSync = (path_string, json_obj, space) => {
 /* FILE R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.writeTextFile = (path_to, text) => {
-    const _self = this;
     return new Promise(function(resolve,reject){
         let _ret_value = {
             err:null,
             path_to:path_to
         };
-        _self._FS.writeFile(path_to, text, 'utf8',function(err){
+        fs.writeFile(path_to, text, 'utf8',function(err){
             if(err){
                 _ret_value.err = err;
                 return reject(_ret_value);
@@ -273,14 +274,13 @@ libUtils.copyDirectory = (path_from, path_to, options) => {
         overwrite:false,
         errorOnExist:false
     },options);
-    let _self = this;
     return new Promise(function(resolve,reject){
         let _ret_value = {
             err:null,
             path_from:path_from,
             path_to:path_to
         };
-        _self._FS_EXTRA.copy(path_from, path_to, options, function(err){
+        fsExtra.copy(path_from, path_to, options, function(err){
             if(err){
                 _ret_value.err = err;
                 d$(_ret_value);
@@ -298,7 +298,7 @@ libUtils.copyDirectory = (path_from, path_to, options) => {
 
 libUtils.ensureDirSync = (path_string) => {
     try{
-        fs_extra.ensureDirSync(path_string);
+        fsExtra.ensureDirSync(path_string);
     }catch(e){
         return false;
     }
@@ -311,14 +311,13 @@ libUtils.copyDirectorySync = (path_from, path_to, options) => {
         overwrite:false,
         errorOnExist:false
     },options);
-    let _self = this;
     let _ret_value = {
         err:null,
         path_from:path_from,
         path_to:path_to
     };
     try {
-        fs_extra.copySync(path_from, path_to, options)
+        fsExtra.copySync(path_from, path_to, options)
     } catch (err) {
         _ret_value.err = err;
         d$(_ret_value);
@@ -336,7 +335,6 @@ libUtils.moveDirectorySync = (path_from, path_to, options) => {
     if(options.setDirName===true){
         path_to = libUtils.pathJoin(path_to,libUtils.pathBasename(path_from));
     }
-    let _self = this;
     let _ret_value = {
         err:null,
         path_from:path_from,
@@ -344,7 +342,7 @@ libUtils.moveDirectorySync = (path_from, path_to, options) => {
     };
 
     try {
-        fs_extra.moveSync(path_from, path_to, options)
+        fsExtra.moveSync(path_from, path_to, options)
     } catch (err) {
         _ret_value.err = err;
         d$(_ret_value);
@@ -399,14 +397,13 @@ libUtils.copyFileSync = (path_from, path_to, options) => {
         overwrite:true,
         errorOnExist:false
     },options);
-    let _self = this;
     let _ret_value = {
         err:null,
         path_from:path_from,
         path_to:path_to
     };
     try {
-        fs_extra.copySync(path_from, path_to, options)
+        fsExtra.copySync(path_from, path_to, options)
     } catch (err) {
         _ret_value.err = err;
         d$(_ret_value);
@@ -420,14 +417,13 @@ libUtils.copyFile = (path_from, path_to, options) => {
         overwrite:true,
         errorOnExist:false
     },options);
-    let _self = this;
     return new Promise(function(resolve,reject){
         let _ret_value = {
             err:null,
             path_from:path_from,
             path_to:path_to
         };
-        _self._FS_EXTRA.copy(path_from, path_to, options, function(err){
+        fsExtra.copy(path_from, path_to, options, function(err){
             if(err){
                 _ret_value.err = err;
                 d$(_ret_value);
