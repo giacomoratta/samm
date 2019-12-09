@@ -42,7 +42,7 @@ class DirectoryTree {
         let _t_parent = this._root;
 
         options = _.merge({
-            fileAcceptabilityFn:function(/*  {PathInfo} item  */){return true;}
+            fileAcceptabilityFn:function(/*  {pathInfo} item  */){return true;}
         },options);
 
         DirectoryTree.walkDirectory(this._data.root_path,{
@@ -197,7 +197,7 @@ class DirectoryTree {
 
         for(let i=0; i<importObj.struct.length; i++){
 
-            _newpathinfo = new PathInfo();
+            _newpathinfo = new pathInfo();
             _newpathinfo.fromJson(importObj.struct[i].item);
             //console.log(itemData.item);
 
@@ -312,10 +312,10 @@ class DirectoryTree {
         options.printFn("\n Directories#:",this.directoryCount());
         options.printFn("\n Files#:",this.fileCount());
         if(this._data.options.includedExtensions.length>0){
-            options.printFn("\n Included extensions:",this._data.options.includedExtensions.join(', '));
+            options.printFn("\n Included libs:",this._data.options.includedExtensions.join(', '));
         }
         if(this._data.options.excludedExtensions.length>0){
-            options.printFn("\n Excluded extensions:",this._data.options.excludedExtensions.join(', '));
+            options.printFn("\n Excluded libs:",this._data.options.excludedExtensions.join(', '));
         }
         if(this._data.options.excludedPaths.length>0){
             options.printFn("\n Excluded paths:");
@@ -363,12 +363,12 @@ class DirectoryTree {
         const _wk = function(rootPath, absPath, options) {
             if(options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null;
 
-            let p_info = new PathInfo(absPath);
+            let p_info = new pathInfo(absPath);
             if(p_info.error===true || (!p_info.isFile && !p_info.isDirectory)) return;
             p_info.rel_root = rootPath;
 
             if (p_info.isFile) {
-                if(options.includedExtensionsRegex){ /* included extensions have the priority */
+                if(options.includedExtensionsRegex){ /* included libs have the priority */
                     if ( !options.includedExtensionsRegex.test( _.toLower( (p_info.ext.length>1?p_info.ext:p_info.name) ) )) return null;
                 }
 

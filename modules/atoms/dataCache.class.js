@@ -1,4 +1,4 @@
-class DataCache {
+class dataCache {
 
     constructor(){
         this._array = [];
@@ -65,4 +65,4 @@ class DataCache {
 
 }
 
-module.exports = DataCache;
+module.exports = dataCache;

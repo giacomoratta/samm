@@ -1,4 +1,4 @@
-class PathInfo {
+class pathInfo {
     constructor(initdata){
         this.error = true;
         this._info = {};
@@ -18,7 +18,7 @@ class PathInfo {
             this._info.is_file = stats.isFile();
             this._info.is_directory = stats.isDirectory();
 
-        }else if(_.isObject(initdata) && initdata.constructor.name === 'PathInfo'){
+        }else if(_.isObject(initdata) && initdata.constructor.name === 'pathInfo'){
             this.error = false;
             this._info = initdata._info;
         }
@@ -96,4 +96,4 @@ class PathInfo {
     }
 }
 
-module.exports = PathInfo;
+module.exports = pathInfo;

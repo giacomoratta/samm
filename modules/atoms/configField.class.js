@@ -28,7 +28,7 @@ const ENUMS = {
 };
 
 
-class ConfigField {
+class configField {
     constructor(field_cfg){
 
         this._field_cfg = null;
@@ -77,7 +77,7 @@ class ConfigField {
         fcfg.setFn = this._setSetFn(fcfg.checkFn, fcfg.checkObjectFn, fcfg);
 
         if(!this.set(fcfg.defaultValue)){
-            d$('ConfigField.constructor','invalid default value',fcfg.defaultValue);
+            d$('configField.constructor','invalid default value',fcfg.defaultValue);
             this._value = null;
             this._field_cfg = null;
             return;
@@ -483,4 +483,4 @@ class ConfigField {
 }
 
 
-module.exports = ConfigField;
+module.exports = configField;

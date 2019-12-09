@@ -6,7 +6,7 @@
 // let ck_directory1 = fileUtils.pathJoin(tmp_dir_utils_file,'directory1');
 // let ck_directory1_file11 = fileUtils.pathJoin(tmp_dir_utils_file,'directory1','file11.txt');
 
-const fileUtils = require('../File.utils')
+const fileUtils = require('../file.utils')
 
 describe('Utils.File.singleton', function() {
 

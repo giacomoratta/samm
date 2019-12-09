@@ -1,4 +1,4 @@
-class CliParams {
+class cliParam {
 
     constructor(values, command, rawdata){
         this._error = true;
@@ -93,4 +93,4 @@ class CliParams {
     }
 }
 
-module.exports = CliParams;
+module.exports = cliParam;
