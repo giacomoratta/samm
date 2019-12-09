@@ -1,3 +1,6 @@
+const _ = require('./libs/lodash')
+const fileUtils = require('./libs/file.utils')
+
 class dataHolder {
 
     constructor(){
@@ -61,7 +64,7 @@ class dataHolder {
 
     fileExistsSync(label){
         if(_.isNil(this._cfg[label]) || _.isNil(this._cfg[label].filePath)) return null;
-        return Utils.File.fileExistsSync(this._cfg[label].filePath);
+        return fileUtils.fileExistsSync(this._cfg[label].filePath);
     }
 
 
@@ -194,7 +197,7 @@ class dataHolder {
             }
 
             if($cfg.backupTo.length>0){
-                if(Utils.File.copyFileSync($cfg.filePath,$cfg.backupTo).err!==null){
+                if(fileUtils.copyFileSync($cfg.filePath,$cfg.backupTo).err!==null){
                     $cfg.logErrorsFn('dataHolder.save > backup failed!');
                 }
             }
@@ -291,15 +294,15 @@ class dataHolder {
 
 
     _loadFileData($cfg){
-        if($cfg.cloneFrom.length>0 && !Utils.File.fileExistsSync($cfg.filePath)){
-            let cpF = Utils.File.copyFileSync($cfg.cloneFrom,$cfg.filePath);
+        if($cfg.cloneFrom.length>0 && !fileUtils.fileExistsSync($cfg.filePath)){
+            let cpF = fileUtils.copyFileSync($cfg.cloneFrom,$cfg.filePath);
             if(cpF.err) $cfg.logErrorsFn('dataHolder > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
         }
         if($cfg.fileType===this.ENUMS.fileType.json || $cfg.fileType===this.ENUMS.fileType.json_compact){
-            return Utils.File.readJsonFileSync($cfg.filePath);
+            return fileUtils.readJsonFileSync($cfg.filePath);
 
         }else if($cfg.fileType===this.ENUMS.fileType.text){
-            return Utils.File.readTextFileSync($cfg.filePath);
+            return fileUtils.readTextFileSync($cfg.filePath);
 
         }
         return null;
@@ -307,13 +310,13 @@ class dataHolder {
 
     _saveFileData($cfg, content){
         if($cfg.fileType===this.ENUMS.fileType.json){
-            return Utils.File.writeJsonFileSync($cfg.filePath,content);
+            return fileUtils.writeJsonFileSync($cfg.filePath,content);
 
         }else if($cfg.fileType===this.ENUMS.fileType.json_compact){
-            return Utils.File.writeJsonFileSync($cfg.filePath,content,false);
+            return fileUtils.writeJsonFileSync($cfg.filePath,content,false);
 
         }else if($cfg.fileType===this.ENUMS.fileType.text){
-            return Utils.File.writeTextFileSync($cfg.filePath,content);
+            return fileUtils.writeTextFileSync($cfg.filePath,content);
         }
         return null;
     }
