@@ -1,11 +1,12 @@
+const log = require('./modules/Logger').createLogger('app')
+log.info('Starting app...')
 
-global.ENV_CONFIG = {
-    debug_enabled:false,
-    absolute_app_path:''
-};
-ENV_CONFIG.absolute_app_path = process.argv[1];
+require('dotenv').config() /* Load .env file to process.env */
 
-console.log(ENV_CONFIG);
+
+process.env.ABSOLUTE_APP_PATH = process.argv[1]
+
+//console.log(ENV_CONFIG);
 
 //require('./globals.js');
 

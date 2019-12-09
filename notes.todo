@@ -1,3 +1,4 @@
+PRINCIPLES + LONG TERM GOALS
 - decoupling
 - test
 - singleton object
@@ -5,10 +6,12 @@
 - use await instead of 'sync' functions
 - remove globals.js
 
-- set a common logger file to be required everywhere
-- use pino
-- test logging on file
-- remove round-logger (as git submodule and project module)
+
+
+SHORT
+
+
+NEXT
 
 - test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
 - test on DataMgr (and clean code) - prepare tests and directories
