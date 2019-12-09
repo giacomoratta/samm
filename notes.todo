@@ -5,13 +5,23 @@ PRINCIPLES + LONG TERM GOALS
 - no more globals => require everywhere (clearer dependencies)
 - use await instead of 'sync' functions
 - remove globals.js
+- 1 lib = 1 day (dev, clean, test)
 
 
 
 SHORT
 
+- file.utils tests
+- remove utils.js
+- rename extensions to libs
+- rename micro to atoms
+- camelCase (use .class or .mgr)
+- move DirectoryTree to libs
+- move Logger to libs
+- lodash ext tests
 
-NEXT
+
+MID
 
 - test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
 - test on DataMgr (and clean code) - prepare tests and directories
@@ -20,4 +30,8 @@ NEXT
 - test on CliMgr (and clean code)
 - first start CliMgr
 
+
+LONG
+
 - test DirectoryTree and make it as NPM package
+- replace vorpal (not updated) with yarn

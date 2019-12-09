@@ -1,14 +1,16 @@
-global._.mixin({ 'isPromise':(obj)=>{
+const _ = require('lodash')
+
+_.mixin({ 'isPromise':(obj)=>{
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }});
 
 
-global._.mixin({ 'readyPromise':(data)=>{
+_.mixin({ 'readyPromise':(data)=>{
     return new Promise(function(res,rej){ res(data); return; });
 }});
 
 
-global._.mixin({ 'noDuplicatedValues':(array,value,cb)=>{
+_.mixin({ 'noDuplicatedValues':(array,value,cb)=>{
     if(!_.isFunction(cb)) cb=function(value, changed_value, index, array){
         if(_.indexOf(array,changed_value)<0) return true;
         return value+'_'+index;
@@ -28,7 +30,7 @@ global._.mixin({ 'noDuplicatedValues':(array,value,cb)=>{
 }});
 
 
-global._.mixin({ 'truncateStart':(string,options)=>{
+_.mixin({ 'truncateStart':(string,options)=>{
     options = _.merge({
         length:30,
         omission:'...'
@@ -38,7 +40,7 @@ global._.mixin({ 'truncateStart':(string,options)=>{
 }});
 
 
-global._.mixin({ 'splitValues':(str,sep)=>{
+_.mixin({ 'splitValues':(str,sep)=>{
     let _sArray = [];
     if(_.isNil(sep)) sep=',';
     if(_.isString(str)){
@@ -51,3 +53,5 @@ global._.mixin({ 'splitValues':(str,sep)=>{
     }
     return _sArray;
 }});
+
+module.exports = _

@@ -1,49 +1,26 @@
-const path = require('path');
-const fs = require('fs');
-const fs_extra = require('fs-extra');
-const rimraf = require('rimraf'); //A "rm -rf" util for nodejs
-const _ = require('lodash');
-const iconv = require('iconv-lite');
+const _ = require('lodash')
+const path = require('path')
+const fs = require('fs')
+const fs_extra = require('fs-extra')
+const rimraf = require('rimraf') //A "rm -rf" util for nodejs
+const iconv = require('iconv-lite')
 
 class Utils_Files {
 
     constructor(){
-        this._PATH = path;
-        this._FS = fs;
-        this._FS_EXTRA = fs_extra;
-        this._RIMRAF = rimraf;
-
-        this.pathBasename = path.basename;
-        this.pathExtname = path.extname;
-        this.pathDirname = path.dirname;
-        this.pathParse = path.parse;
-        this.pathJoin = path.join;
-        this.pathResolve = path.resolve;
-        this.pathSeparator = path.sep;
-        this._abspath = './';
-
-        if(typeof ENV_CONFIG === 'undefined') return; // Workaround: nexe does not find this global
-        this._abspath = this._setAbsPath();
-    }
-
-    _setAbsPath(){
-        let abspth = ENV_CONFIG.absolute_app_path;
-        if(this._FS.lstatSync(abspth).isFile()){
-            abspth = path.dirname(abspth);
-            ENV_CONFIG.absolute_app_path = abspth;
-        }
-        return this.pathJoin(abspth,this.pathSeparator);
-    }
-
-    getAbsPath(){
-        return this._abspath;
+        this.pathBasename = path.basename
+        this.pathExtname = path.extname
+        this.pathDirname = path.dirname
+        this.pathParse = path.parse
+        this.pathJoin = path.join
+        this.pathSeparator = path.sep
     }
 
     setAsAbsPath(rel_path, isFile, absPath){
-        rel_path = _.trim(rel_path);
-        if(isFile===true && _.endsWith(rel_path,this.pathSeparator)) rel_path=rel_path.substr(0,rel_path.length-1);
-        if(!absPath) absPath=this.getAbsPath();
-        return this.pathJoin(absPath,rel_path,(isFile!==true?this.pathSeparator:''));
+        rel_path = _.trim(rel_path)
+        //if(isFile===true && _.endsWith(rel_path,this.pathSeparator)) rel_path=rel_path.substr(0,rel_path.length-1)
+        if(!absPath) return path.resolve(rel_path)+(isFile!==true?this.pathSeparator:'')
+        return this.pathJoin(absPath,rel_path,(isFile!==true?this.pathSeparator:''))
     }
 
     equalPaths(p1,p2){
@@ -79,12 +56,12 @@ class Utils_Files {
     }
 
     isAbsolutePath(p){
-        return this._PATH.normalize(p + '/') === this._PATH.normalize(this._PATH.resolve(p) + '/');
+        return path.normalize(p + '/') === path.normalize(path.resolve(p) + '/');
     }
 
     isAbsoluteParentDirSync(path_string, check_exists){
         if(!_.isString(path_string)) return false;
-        if(!this._PATH.isAbsolute(path_string)) return false;
+        if(!path.isAbsolute(path_string)) return false;
         if(check_exists !== true) return true;
         let ps_dirname = this.pathDirname(path_string);
         return this.directoryExistsSync(ps_dirname);
@@ -98,7 +75,7 @@ class Utils_Files {
             });
         };
         return _.noDuplicatedValues(null,path_string,(v,cv,i /*,a*/)=>{
-            if(!this._FS.existsSync(cv)) return true; //found a free value
+            if(!fs.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
             //d$('checkAndSetDuplicatedFileNameSync ... changing '+v+' to '+cv);
             return cv;
@@ -113,7 +90,7 @@ class Utils_Files {
             });
         };
         return _.noDuplicatedValues(null,path_string,(v,cv,i /*,a*/)=>{
-            if(!this._FS.existsSync(cv)) return true; //found a free value
+            if(!fs.existsSync(cv)) return true; //found a free value
             cv = renameFn(v,i);
             //d$('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv);
             return cv;
@@ -122,7 +99,7 @@ class Utils_Files {
 
     checkAndSetPathSync(path_string,callback){
         if(!_.isString(path_string)) return null;
-        if(!this._FS.existsSync(path_string)) return null;
+        if(!fs.existsSync(path_string)) return null;
         path_string = this.pathResolve(path_string)+this.pathSeparator;
         if(callback) callback(path_string);
         return path_string;
@@ -130,12 +107,12 @@ class Utils_Files {
 
     fileExistsSync(path_string){
         if(!_.isString(path_string)) return false;
-        return this._FS.existsSync(path_string);
+        return fs.existsSync(path_string);
     }
 
     directoryExistsSync(path_string){
         if(!_.isString(path_string)) return false;
-        return this._FS.existsSync(path_string);
+        return fs.existsSync(path_string);
     }
 
 
@@ -165,7 +142,7 @@ class Utils_Files {
     getPathStatsSync(path_string){
         // usage: isDirectory, isFile
         try{
-            return this._FS.lstatSync(path_string);
+            return fs.lstatSync(path_string);
         }catch(e){
             d$(e);
         }
@@ -181,14 +158,14 @@ class Utils_Files {
             if(!encoding) encoding='utf8';
             if(!flag) flag='r';
             if(encoding==='iso88591'){
-                let fcont = this._FS.readFileSync(path_string,{
+                let fcont = fs.readFileSync(path_string,{
                     encoding:'binary',
                     flag:flag
                 }).toString();
                 return iconv.decode(fcont, 'iso88591');
 
             }else{
-                return this._FS.readFileSync(path_string,{
+                return fs.readFileSync(path_string,{
                     encoding:encoding,
                     flag:flag
                 });
@@ -225,14 +202,14 @@ class Utils_Files {
             if(!mode) mode=0o666;
             if(encoding==='iso88591'){
                 file_content = iconv.decode(file_content, 'iso88591');
-                this._FS.writeFileSync(path_string, file_content, {
+                fs.writeFileSync(path_string, file_content, {
                     encoding:"binary",
                     flag:flag,
                     mode:mode
                 });
 
             }else{
-                this._FS.writeFileSync(path_string, file_content, {
+                fs.writeFileSync(path_string, file_content, {
                     encoding:encoding,
                     flag:flag,
                     mode:mode
@@ -321,7 +298,7 @@ class Utils_Files {
 
     ensureDirSync(path_string){
         try{
-            this._FS_EXTRA.ensureDirSync(path_string);
+            fs_extra.ensureDirSync(path_string);
         }catch(e){
             return false;
         }
@@ -341,7 +318,7 @@ class Utils_Files {
             path_to:path_to
         };
         try {
-            this._FS_EXTRA.copySync(path_from, path_to, options)
+            fs_extra.copySync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
             d$(_ret_value);
@@ -367,7 +344,7 @@ class Utils_Files {
         };
 
         try {
-            this._FS_EXTRA.moveSync(path_from, path_to, options)
+            fs_extra.moveSync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
             d$(_ret_value);
@@ -381,7 +358,7 @@ class Utils_Files {
         if(!preFn) preFn=function(){};
         let items = null;
         try{
-            items = this._FS.readdirSync(path_string);
+            items = fs.readdirSync(path_string);
         }catch(e){
             d$(e);
             return null;
@@ -396,7 +373,7 @@ class Utils_Files {
 
     removeDirSync(path_string){
         try{
-            return this._RIMRAF.sync(path_string);
+            return rimraf.sync(path_string);
         }catch(e){
             d$(e.message);
         }
@@ -409,7 +386,7 @@ class Utils_Files {
 
     removeFileSync(path_string){
         try{
-            return this._FS.unlinkSync(path_string);
+            return fs.unlinkSync(path_string);
         }catch(e){
             d$(e.message);
         }
@@ -427,7 +404,7 @@ class Utils_Files {
             path_to:path_to
         };
         try {
-            this._FS_EXTRA.copySync(path_from, path_to, options)
+            fs_extra.copySync(path_from, path_to, options)
         } catch (err) {
             _ret_value.err = err;
             d$(_ret_value);
@@ -460,4 +437,4 @@ class Utils_Files {
 
 }
 
-module.exports = Utils_Files;
+module.exports = new Utils_Files()

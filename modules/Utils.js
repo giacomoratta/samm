@@ -1,9 +1,12 @@
-const _ = require('lodash');
+const _ = require('./extensions/lodash')
+const fileUtils = require('./extensions/File.utils')
 
 class Utils {
 
     constructor(){
-        this.File = new (require('./extensions/Utils.File'))(this);
+        this._ = this.Lodash = _
+        this.File = fileUtils
+
         this.Date = new (require('./extensions/Utils.Date'))(this);
         this.String = new (require('./extensions/Utils.String'))(this);
         this.Links = new (require('./extensions/Utils.Links'))(this);
