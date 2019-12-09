@@ -1,4 +1,4 @@
-const CliParams = require('./micro/CliParams.class.js');
+const cliParam = require('./atoms/cliParam.class.js');
 const vorpal = require('vorpal')();
 
 class CliManager {
@@ -43,7 +43,7 @@ class CliManager {
         const thisCliMgr = this;
         return function(args,cb){
             const cliReference = this;
-            
+
             cmdFn(cliReference,(code,err)=>{
                 if(code===thisCliMgr._error_code){
                     d$('command',cmdName,'terminated with an error.');
@@ -52,7 +52,7 @@ class CliManager {
                 ConfigMgr.printMessages();
                 cb();
             },{
-                cli_params:new CliParams(args, cmdName),
+                cli_params:new cliParam(args, cmdName),
                 error_code:thisCliMgr._error_code,
                 success_code:thisCliMgr._success_code,
                 ui: clUI.newLocalUI('> '+cmdName+':')

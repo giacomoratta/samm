@@ -2,7 +2,7 @@ if(typeof ENV_CONFIG === 'undefined') ENV_CONFIG={ undefined:true };
 
 /* Standard Libraries */
 global._ =  require('lodash');
-require('./modules/extensions/lodash.js');
+require('./modules/libs/lodash.js');
 
 /* Output */
 let UI_options = {};
@@ -16,9 +16,9 @@ global.dt$ = clUI.debugTimed;
 
 /* Common Libraries */
 global.Utils = require('./modules/Utils.js');
-global.DataCache = require('./modules/micro/DataCache.class.js');
-global.PathInfo = require('./modules/micro/PathInfo.class.js');
-global.DirectoryTree = require('./modules/DirectoryTree.class.js');
+global.DataCache = require('./modules/atoms/dataCache.class.js');
+global.pathInfo = require('./modules/atoms/pathInfo.class.js');
+global.directoryTree = require('./modules/libs/directoryTree.class.js');
 global.DataMgr = require('./modules/DataManager.js');
 global.ConfigMgr = require('./modules/ConfigManager.js');
 

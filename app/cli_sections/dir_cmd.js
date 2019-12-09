@@ -4,7 +4,7 @@ CliMgr.addCommand(cmd_name+' <action>');
 
 CliMgr.addCommandHeader(cmd_name)
     .description('Some useful actions with the working directories (e.g. Samples, Project, etc.)'+
-        "\n  $ "+cmd_name+" ext  / show the full list of extensions and useful stats"+
+        "\n  $ "+cmd_name+" ext  / show the full list of libs and useful stats"+
         "\n  $ "+cmd_name+" ext -e exe  / show the full list of file with the specified extension"+"\n")
     .option('-e, --extension <name>', 'Focus on the specified extension.')
     .option('-i, --index', 'Works with the internal samples index')

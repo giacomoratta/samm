@@ -19,7 +19,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 },
 
                 setFn:($cfg,args)=>{
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.read();
                     if(!tt.error()) {
                         return tt;
@@ -28,7 +28,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 },
                 loadFn:(fileData,$cfg,args)=>{
                     if(!_.isObject(fileData)) return null;
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.fromJson(fileData);
                     if(!tt.error()) return tt;
                 },
@@ -55,7 +55,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     return dataObj;
                 },
                 setFn:($cfg,args)=>{
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.read();
                     if(!tt.error()) {
                         return tt;
@@ -64,7 +64,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 },
                 loadFn:(fileData,$cfg,args)=>{
                     if(!_.isObject(fileData)) return null;
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.fromJson(fileData);
                     if(!tt.error()) return tt;
                 },
@@ -163,7 +163,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
         });
     });
 
-    describe("#compare 2 DirectoryTree", function() {
+    describe("#compare 2 directoryTree", function() {
         it("should call getFn 2 times and compare 2 directory tree", function() {
             let samples_tt = DataMgr.get('scan_index');
             let samples_tt_ref = DataMgr.get('scan_index_reference');
@@ -186,7 +186,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                     return dataObj;
                 },
                 setFn:($cfg,args)=>{
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.read();
                     if(!tt.error()) {
                         return tt;
@@ -195,7 +195,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 },
                 loadFn:(fileData,$cfg,args)=>{
                     if(!_.isObject(fileData)) return null;
-                    let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+                    let tt = new directoryTree(ConfigMgr.path('samples_directory'));
                     tt.fromJson(fileData);
                     if(!tt.error()) return tt;
                 },

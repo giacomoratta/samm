@@ -1,5 +1,5 @@
-const _ = require('./extensions/lodash')
-const fileUtils = require('./extensions/File.utils')
+const _ = require('./libs/lodash')
+const fileUtils = require('./libs/file.utils')
 
 class Utils {
 
@@ -7,10 +7,10 @@ class Utils {
         this._ = this.Lodash = _
         this.File = fileUtils
 
-        this.Date = new (require('./extensions/Utils.Date'))(this);
-        this.String = new (require('./extensions/Utils.String'))(this);
-        this.Links = new (require('./extensions/Utils.Links'))(this);
-        this.SystemInfo = new (require('./extensions/Utils.SystemInfo'))(this);
+        this.Date = new (require('./libs/date.utils'))(this);
+        this.String = new (require('./libs/string.utils'))(this);
+        this.Links = new (require('./libs/links.utils'))(this);
+        this.SystemInfo = new (require('./libs/systemInfo.utils'))(this);
     }
 
     extend(key,data){

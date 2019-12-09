@@ -7,8 +7,8 @@ class SamplesManager {
 
         /* CACHES */
         this._CACHE_latest_smp_obj_search = null; //latest lookup
-        this._CACHE_stqall = new DataCache(); //Sampleby_Tag_Query_ALL
-        this._CACHE_stqrnd = new DataCache(); //Sampleby_Tag_Query_RANDOM
+        this._CACHE_stqall = new dataCache(); //Sampleby_Tag_Query_ALL
+        this._CACHE_stqrnd = new dataCache(); //Sampleby_Tag_Query_RANDOM
 
         /* DATA HOLDER */
         this._createIndexHolder({
@@ -20,7 +20,7 @@ class SamplesManager {
 
     _directoryTreeOptionsFromConfig(){
         let dTreeOptions = {
-            /* DirectoryTree options */
+            /* directoryTree options */
         };
         if(ConfigMgr.get('ExtensionCheckForSamples')==='I') dTreeOptions.includedExtensions = ConfigMgr.get('IncludedExtensionsForSamples');
         else if(ConfigMgr.get('ExtensionCheckForSamples')==='E') dTreeOptions.excludedExtensions = ConfigMgr.get('ExcludedExtensionsForSamples');
@@ -126,7 +126,7 @@ class SamplesManager {
     }
 
 
-    getSamplesIndex_DirectoryTree(){
+    getSamplesIndex_directoryTree(){
         if(DataMgr.check(this._LABEL_samples_index)!==true) return null;
         return DataMgr.get(this._LABEL_samples_index).T;
     }

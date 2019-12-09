@@ -9,7 +9,7 @@ class ProjectsTemplate {
 
     _checkAndSetStructure(){
         let _dirFound = [];
-        DirectoryTree.walkDirectory(ConfigMgr.path('default_projects'),{
+        directoryTree.walkDirectory(ConfigMgr.path('default_projects'),{
             maxLevel:2,
             itemCb:function(data){
                 if(!data.item.isDirectory) return;

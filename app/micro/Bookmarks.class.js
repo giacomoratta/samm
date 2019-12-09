@@ -151,7 +151,7 @@ class Bookmarks {
         for(let i=0; i<keys.length; i++){
             if(jsondata.collection[keys[i]].length===0) continue;
             jsondata.collection[keys[i]].forEach((v)=>{
-                let phi = new PathInfo();
+                let phi = new pathInfo();
                 phi.fromJson(v);
                 this.add(phi,keys[i]);
             });

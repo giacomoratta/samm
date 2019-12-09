@@ -13,10 +13,8 @@ SHORT
 
 - file.utils tests
 - remove utils.js
-- rename extensions to libs
-- rename micro to atoms
 - camelCase (use .class or .mgr)
-- move DirectoryTree to libs
+- move directoryTree to libs
 - move Logger to libs
 - lodash ext tests
 
@@ -33,5 +31,5 @@ MID
 
 LONG
 
-- test DirectoryTree and make it as NPM package
+- test directoryTree and make it as NPM package
 - replace vorpal (not updated) with yarn

@@ -75,7 +75,7 @@
     });
 
     ConfigMgr.addFlag('samples_index_first_scan_needed','First scan needed in the samples directory');
-    ConfigMgr.addFlag('samples_index_new_scan_needed','New scan needed after changing the configuration on file extensions');
+    ConfigMgr.addFlag('samples_index_new_scan_needed','New scan needed after changing the configuration on file libs');
 
     ConfigMgr.setUserdataDirectory('userdata');
     ConfigMgr.setConfigFile('config.json');

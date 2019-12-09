@@ -32,7 +32,7 @@ class DirCommand {
             if( !_.isObject(this._cache_extsearch) ||
                 this._cache_extsearch.path != _esobj.path
             ){
-                DirectoryTree.walkDirectory(_esobj.path,_DT_walk_options);
+                directoryTree.walkDirectory(_esobj.path,_DT_walk_options);
                 _esobj.extensions = Utils.sortObjectByValue(_esobj.extensions);
                 this._cache_extsearch = _esobj;
             }
@@ -42,7 +42,7 @@ class DirCommand {
             if( !_.isObject(this._cache_extsearch_samplesindex) ||
                 this._cache_extsearch_samplesindex.path != _esobj.path
             ){
-                let _sidt = SamplesMgr.getSamplesIndex_DirectoryTree();
+                let _sidt = SamplesMgr.getSamplesIndex_directoryTree();
                 if(!_sidt) return null;
                 _sidt.forEach(_DT_walk_options);
                 _esobj.extensions = Utils.sortObjectByValue(_esobj.extensions);
@@ -78,7 +78,7 @@ class DirCommand {
 
         let k = _.keys(_esobj.extensions);
         if(k.length==0){
-            clUI.print("No extensions found in '"+_esobj.path+"' ");
+            clUI.print("No libs found in '"+_esobj.path+"' ");
             return;
         }
 

@@ -14,7 +14,7 @@ describe('DataManager.class - Tests for an holder of file-object', function() {
                 let STree = new SamplesTree(options.directoryToScan,{
                     /* SampleTree options */
                 },{
-                    /* DirectoryTree options */
+                    /* directoryTree options */
                     excludedExtensions:ConfigMgr.get('ExcludedExtensionsForSamples')
                 });
                 return STree;

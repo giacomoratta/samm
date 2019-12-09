@@ -1,7 +1,7 @@
 class SamplesTree {
 
     constructor(absPath, ST_options, DT_options){
-        this.T = new DirectoryTree(absPath,DT_options);
+        this.T = new directoryTree(absPath,DT_options);
     }
 
     empty(){
@@ -31,7 +31,7 @@ class SamplesTree {
 
         this.T.walk({
             itemCb:(itemData)=>{
-                smp_obj.add(new PathInfo(itemData.item) /* {PathInfo} */);
+                smp_obj.add(new pathInfo(itemData.item) /* {pathInfo} */);
             }
         });
         return smp_obj;

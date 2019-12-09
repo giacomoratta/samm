@@ -1,9 +1,9 @@
 const test_config = require('../require.js');
 
-describe('DirectoryTree.class - TEST the traversing of a DirectoryTree', function() {
+describe('directoryTree.class - TEST the traversing of a directoryTree', function() {
     describe('#walk()', function() {
         it("traverses the directory tree, showing more info", function() {
-            let tt = new DirectoryTree(ConfigMgr.path('samples_directory'));
+            let tt = new directoryTree(ConfigMgr.path('samples_directory'));
             tt.read();
             assert.equal(tt.error(),false);
             tt.walk({
@@ -18,21 +18,21 @@ describe('DirectoryTree.class - TEST the traversing of a DirectoryTree', functio
                     tLog(_.padStart(' ',(data.item.level+1)*3),' > Parent:',data.parent.path,"\n");
                 }
             });
-            tLog('DirectoryTree root path: '+tt.rootPath());
-            tLog('DirectoryTree files: '+tt.fileCount());
-            tLog('DirectoryTree directories: '+tt.directoryCount());
-            tLog('DirectoryTree nodes: '+tt.nodeCount());
+            tLog('directoryTree root path: '+tt.rootPath());
+            tLog('directoryTree files: '+tt.fileCount());
+            tLog('directoryTree directories: '+tt.directoryCount());
+            tLog('directoryTree nodes: '+tt.nodeCount());
         });
     });
     describe('#walk()', function() {
         it("traverses the directory tree, with wrong address", function() {
-            let tt = new DirectoryTree(ConfigMgr.path('samples_directory')+'_not_exists');
+            let tt = new directoryTree(ConfigMgr.path('samples_directory')+'_not_exists');
             tt.read();
             assert.equal(tt.error(),true);
-            tLog('DirectoryTree root path: '+tt.rootPath());
-            tLog('DirectoryTree files: '+tt.fileCount());
-            tLog('DirectoryTree directories: '+tt.directoryCount());
-            tLog('DirectoryTree nodes: '+tt.nodeCount());
+            tLog('directoryTree root path: '+tt.rootPath());
+            tLog('directoryTree files: '+tt.fileCount());
+            tLog('directoryTree directories: '+tt.directoryCount());
+            tLog('directoryTree nodes: '+tt.nodeCount());
         });
     });
 });

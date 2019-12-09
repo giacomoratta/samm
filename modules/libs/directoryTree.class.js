@@ -1,6 +1,6 @@
 const SymbolTree = require('symbol-tree');
 
-class DirectoryTree {
+class directoryTree {
 
     constructor(absPath,options){
 
@@ -8,7 +8,7 @@ class DirectoryTree {
         this._root = {}; //empty root
 
         this._data = {
-            options     : DirectoryTree._parseOptions(options),
+            options     : directoryTree._parseOptions(options),
             root_path   : absPath,
             files_count : 0,
             directories_count : 0
@@ -45,7 +45,7 @@ class DirectoryTree {
             fileAcceptabilityFn:function(/*  {pathInfo} item  */){return true;}
         },options);
 
-        DirectoryTree.walkDirectory(this._data.root_path,{
+        directoryTree.walkDirectory(this._data.root_path,{
             includedExtensions:this._data.options.includedExtensions,
             excludedExtensions:this._data.options.excludedExtensions,
             excludedPaths:this._data.options.excludedPaths,
@@ -327,7 +327,7 @@ class DirectoryTree {
 
 
     static walkDirectory(absPath, options){
-        options = DirectoryTree._parseOptions(options);
+        options = directoryTree._parseOptions(options);
 
         const _prepareExcludedPaths = function(excludedPaths){
             // /some_path_to_exclude/
@@ -406,4 +406,4 @@ class DirectoryTree {
 }
 
 
-module.exports = DirectoryTree;
+module.exports = directoryTree;

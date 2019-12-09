@@ -1,4 +1,4 @@
-const ConfigField = require('./micro/ConfigField.class.js');
+const configField = require('./atoms/configField.class.js');
 
 class ConfigManager {
 
@@ -116,7 +116,7 @@ class ConfigManager {
         field_cfg.fieldname = field_name;
         field_cfg.printErrorFn = clUI.error;
 
-        this._fields[field_name] = new ConfigField(field_cfg);
+        this._fields[field_name] = new configField(field_cfg);
         if(this._fields[field_name].error()){
             d$('ConfigManager.addField',field_name,'ERROR');
             return false;
