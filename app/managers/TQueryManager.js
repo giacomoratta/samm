@@ -39,7 +39,7 @@ class TQueryManager {
 
 
     save(){
-        return dataHolder.save('tquery');
+        return dataFileHolder.save('tquery');
     }
 
 
@@ -50,7 +50,7 @@ class TQueryManager {
 
     _createTQueryHolder(){
         let _self = this;
-        return dataHolder.setHolder({
+        return dataFileHolder.setHolder({
             label:'tquery',
             filePath:configMgr.path('tquery'),
             fileType:'json',

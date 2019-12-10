@@ -40,7 +40,7 @@ class SamplesManager {
             return STree;
         };
 
-        return dataHolder.setHolder({
+        return dataFileHolder.setHolder({
             label:options.label,
             filePath:options.filePath,
             fileType:'json-compact',
@@ -112,23 +112,23 @@ class SamplesManager {
      * @returns { boolean | null } true if exists, false if not exists, null if missing data
      */
     sampleIndexFileExistsSync(){
-        return dataHolder.fileExistsSync(this._LABEL_samples_index);
+        return dataFileHolder.fileExistsSync(this._LABEL_samples_index);
     }
 
 
     printSamplesTree(){
-        dataHolder.print(this._LABEL_samples_index)
+        dataFileHolder.print(this._LABEL_samples_index)
     }
 
 
     hasSamplesIndex(){
-        return dataHolder.hasData(this._LABEL_samples_index);
+        return dataFileHolder.hasData(this._LABEL_samples_index);
     }
 
 
     getSamplesIndex_directoryTree(){
-        if(dataHolder.check(this._LABEL_samples_index)!==true) return null;
-        return dataHolder.get(this._LABEL_samples_index).T;
+        if(dataFileHolder.check(this._LABEL_samples_index)!==true) return null;
+        return dataFileHolder.get(this._LABEL_samples_index).T;
     }
 
     setSamplesIndex(options){
@@ -138,11 +138,11 @@ class SamplesManager {
         },options);
 
         if(options.force === true){
-            let smp_obj = dataHolder.set(this._LABEL_samples_index);
-            if(!dataHolder.save(this._LABEL_samples_index)) return;
+            let smp_obj = dataFileHolder.set(this._LABEL_samples_index);
+            if(!dataFileHolder.save(this._LABEL_samples_index)) return;
             return smp_obj;
         }
-        return dataHolder.load(this._LABEL_samples_index);
+        return dataFileHolder.load(this._LABEL_samples_index);
     }
 
 
@@ -152,7 +152,7 @@ class SamplesManager {
         let _self = this;
         let smp_obj_search = this._CACHE_stqall.get(tagString /* label */,function(){
 
-            let ST = dataHolder.get(_self._LABEL_samples_index);
+            let ST = dataFileHolder.get(_self._LABEL_samples_index);
             if(!ST) return null;
 
             let smp_obj2 = ST.filterByTags(tagString);
@@ -348,7 +348,7 @@ class SamplesManager {
 
         /* Get SamplesTree */
         let ST = null;
-        if(!options.path) ST=dataHolder.get(this._LABEL_samples_index);
+        if(!options.path) ST=dataFileHolder.get(this._LABEL_samples_index);
         else{
             ST=new SamplesTree(options.directoryToScan,{/* SampleTree options */},this._directoryTreeOptionsFromConfig());
             ST.read();

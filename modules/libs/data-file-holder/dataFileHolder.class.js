@@ -1,12 +1,13 @@
-const _ = require('./libs/lodash')
-const fileUtils = require('./libs/file.utils')
+const _ = require('../lodash')
+const fileUtils = require('../file.utils') //todo: remove and create a separated file with few needed functions
 
-class dataHolder {
+class dataFileHolder {
 
     constructor(){
         this._cfg = {};
         this._data = {};
 
+        // todo: external
         this.ENUMS = {
             fileType: {
                 json:'json',
@@ -80,7 +81,7 @@ class dataHolder {
     setHolder($cfg){
         $cfg = this._parseConfiguration($cfg);
         if(!$cfg) {
-            $cfg.logErrorsFn('dataHolder.setHolder > configuration not valid');
+            $cfg.logErrorsFn('dataFileHolder.setHolder > configuration not valid');
             return null;
         }
 
@@ -119,7 +120,7 @@ class dataHolder {
                 return $cfg.checkFn(this._data[label],$cfg,args);
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.check > checkFn callback failed');
+                $cfg.logErrorsFn('dataFileHolder.check > checkFn callback failed');
                 return null;
             }
         }
@@ -134,7 +135,7 @@ class dataHolder {
                 this._data[label] = $cfg.initFn(this._data[label],$cfg,args);
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.init > initFn callback failed');
+                $cfg.logErrorsFn('dataFileHolder.init > initFn callback failed');
                 return null;
             }
         }
@@ -148,7 +149,7 @@ class dataHolder {
 
         let filedata = this._loadFileData($cfg);
         if(filedata === false || filedata === null){
-            $cfg.logErrorsFn('dataHolder.load ['+label+'] > the file does not exist:',$cfg.filePath);
+            $cfg.logErrorsFn('dataFileHolder.load ['+label+'] > the file does not exist:',$cfg.filePath);
             //return false;
             filedata = null;
         }
@@ -157,19 +158,19 @@ class dataHolder {
             try{
                 let data = $cfg.loadFn(filedata,$cfg,args);
                 if(!$cfg._checkDataType(data)){
-                    $cfg.logErrorsFn('dataHolder.load ['+label+'] > loaded data type is not '+$cfg.dataType);
+                    $cfg.logErrorsFn('dataFileHolder.load ['+label+'] > loaded data type is not '+$cfg.dataType);
                     return null;
                 }
                 this._data[label]=data;
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.load ['+label+'] > loadFn callback failed!');
+                $cfg.logErrorsFn('dataFileHolder.load ['+label+'] > loadFn callback failed!');
                 return null;
             }
         }
         else{
             if(!$cfg._checkDataType(filedata)){
-                $cfg.logErrorsFn('dataHolder.load ['+label+'] > loaded data type is not '+$cfg.dataType);
+                $cfg.logErrorsFn('dataFileHolder.load ['+label+'] > loaded data type is not '+$cfg.dataType);
                 return null;
             }
             this._data[label]=filedata;
@@ -192,13 +193,13 @@ class dataHolder {
                 filedata = $cfg.saveFn(this._data[label],$cfg,args);
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.save > saveFn callback failed!');
+                $cfg.logErrorsFn('dataFileHolder.save > saveFn callback failed!');
                 return null;
             }
 
             if($cfg.backupTo.length>0){
                 if(fileUtils.copyFileSync($cfg.filePath,$cfg.backupTo).err!==null){
-                    $cfg.logErrorsFn('dataHolder.save > backup failed!');
+                    $cfg.logErrorsFn('dataFileHolder.save > backup failed!');
                 }
             }
         }
@@ -216,7 +217,7 @@ class dataHolder {
         this._data[label]=null;
         if(data){
             if(!$cfg._checkDataType(data)){
-                $cfg.logErrorsFn('dataHolder.set > data type is not '+$cfg.dataType);
+                $cfg.logErrorsFn('dataFileHolder.set > data type is not '+$cfg.dataType);
                 return null;
             }
             this._data[label]=data;
@@ -225,13 +226,13 @@ class dataHolder {
             try{
                 data = $cfg.setFn($cfg,args);
                 if(!$cfg._checkDataType(data)){
-                    $cfg.logErrorsFn('dataHolder.set > data type is not '+$cfg.dataType);
+                    $cfg.logErrorsFn('dataFileHolder.set > data type is not '+$cfg.dataType);
                     return null;
                 }
                 this._data[label]=data;
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.set > setFn callback failed!');
+                $cfg.logErrorsFn('dataFileHolder.set > setFn callback failed!');
                 return null;
             }
         }
@@ -258,7 +259,7 @@ class dataHolder {
                 return $cfg.getFn(dataObj,$cfg,args);
             }catch(e){
                 $cfg.logErrorsFn(e);
-                $cfg.logErrorsFn('dataHolder.get > getFn callback failed');
+                $cfg.logErrorsFn('dataFileHolder.get > getFn callback failed');
                 return null;
             }
         }
@@ -296,7 +297,7 @@ class dataHolder {
     _loadFileData($cfg){
         if($cfg.cloneFrom.length>0 && !fileUtils.fileExistsSync($cfg.filePath)){
             let cpF = fileUtils.copyFileSync($cfg.cloneFrom,$cfg.filePath);
-            if(cpF.err) $cfg.logErrorsFn('dataHolder > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
+            if(cpF.err) $cfg.logErrorsFn('dataFileHolder > Cloning of file failed','src: '+$cfg.cloneFrom,'dst: '+$cfg.filePath);
         }
         if($cfg.fileType===this.ENUMS.fileType.json || $cfg.fileType===this.ENUMS.fileType.json_compact){
             return fileUtils.readJsonFileSync($cfg.filePath);
@@ -322,4 +323,4 @@ class dataHolder {
     }
 }
 
-module.exports = dataHolder;
+module.exports = dataFileHolder;

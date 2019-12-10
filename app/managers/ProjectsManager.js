@@ -21,12 +21,12 @@ class ProjectsManager {
     set current(project_path) { return this._data.history.add(project_path); }
 
     save(){
-        return dataHolder.save('projects');
+        return dataFileHolder.save('projects');
     }
 
     _createBookmarksHolder(){
         let _self = this;
-        return dataHolder.setHolder({
+        return dataFileHolder.setHolder({
             label:'projects',
             filePath:configMgr.path('projects'),
             fileType:'json',

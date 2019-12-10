@@ -19,7 +19,7 @@ global.Utils = require('./modules/utils.js');
 global.DataCache = require('./modules/atoms/dataCache.class.js');
 global.pathInfo = require('./modules/libs/directory-tree/pathInfo.class.js');
 global.directoryTree = require('./modules/libs/directory-tree/directoryTree.class.js');
-global.dataHolder = require('./modules/dataHolder.class.js');
+global.dataFileHolder = require('./modules/libs/data-file-holder/dataFileHolder.class.js');
 global.configMgr = require('./modules/config.manager.js');
 
 /* Latest module: Command Line Interface */

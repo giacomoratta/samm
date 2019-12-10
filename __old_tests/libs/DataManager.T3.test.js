@@ -10,7 +10,7 @@ describe('DataManager.class - Tests for special features', function() {
     describe("#setHolder('my_file_required1')", function() {
         it("set a file-only holder", function() {
             UF._FS_EXTRA.removeSync(my_file1_required_abspath);
-            dataHolder.setHolder({
+            dataFileHolder.setHolder({
                 label:'my_file_required1',
                 filePath:my_file1_required_abspath,
                 fileType:'text',
@@ -19,7 +19,7 @@ describe('DataManager.class - Tests for special features', function() {
             assert.equal(Utils.File.fileExistsSync(my_file1_required_abspath),false);
         });
         it("load the file-only holder", function() {
-            dataHolder.load('my_file_required1');
+            dataFileHolder.load('my_file_required1');
             assert.equal(Utils.File.fileExistsSync(my_file1_required_abspath),true);
             UF._FS_EXTRA.removeSync(my_file1_required_abspath);
         });
@@ -28,7 +28,7 @@ describe('DataManager.class - Tests for special features', function() {
     describe("#setHolder('my_file_required2')", function() {
         it("set a file-only holder with preLoad and cloneFrom", function() {
             UF._FS_EXTRA.removeSync(my_file2_required_abspath);
-            dataHolder.setHolder({
+            dataFileHolder.setHolder({
                 label:'my_file_required2',
                 filePath:my_file2_required_abspath,
                 fileType:'text',

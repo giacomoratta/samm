@@ -25,7 +25,7 @@ class configManager {
     init(){
         const _self = this;
 
-        dataHolder.setHolder({
+        dataFileHolder.setHolder({
             label:'config_file',
             filePath:this._configfile_path,
             fileType:'json',
@@ -59,7 +59,7 @@ class configManager {
         });
 
         // Open config.json
-        if(!dataHolder.get('config_file') || dataHolder.get('config_file').emptydata===true){
+        if(!dataFileHolder.get('config_file') || dataFileHolder.get('config_file').emptydata===true){
             // generate the first config.json file
             if(this.save('config_file')===null){
                 Utils.EXIT('Cannot create or read the configuration file '+this._configfile_path);
@@ -74,7 +74,7 @@ class configManager {
 
 
     save(){
-        return dataHolder.save('config_file');
+        return dataFileHolder.save('config_file');
     }
 
 

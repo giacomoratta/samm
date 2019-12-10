@@ -44,7 +44,7 @@ class BookmarksManager {
             lookup:false,
             tag:null
         },options);
-        let bookmObj = dataHolder.get('bookmarks');
+        let bookmObj = dataFileHolder.get('bookmarks');
 
         // LATEST LOOKUP
         if(options.lookup===true){
@@ -82,7 +82,7 @@ class BookmarksManager {
 
     set(addIds, removeIds, label, showingTag){
         let elmt;
-        let bookmObj = dataHolder.get('bookmarks');
+        let bookmObj = dataFileHolder.get('bookmarks');
         let addElmts = [];
         let removeElmts = [];
 
@@ -120,26 +120,26 @@ class BookmarksManager {
 
 
     hasBookmarks(){
-        let bookmObj = dataHolder.get('bookmarks');
+        let bookmObj = dataFileHolder.get('bookmarks');
         if(!_.isObject(bookmObj)) return false;
         return (!bookmObj.empty());
     }
 
 
     forEach(cb){
-        let bookmObj = dataHolder.get('bookmarks');
+        let bookmObj = dataFileHolder.get('bookmarks');
         if(!_.isObject(bookmObj) || bookmObj.empty()) return false;
         bookmObj.forEach(cb);
     }
 
 
     save(){
-        dataHolder.save('bookmarks');
+        dataFileHolder.save('bookmarks');
     }
 
 
     _createBookmarksHolder(){
-        return dataHolder.setHolder({
+        return dataFileHolder.setHolder({
             label:'bookmarks',
             filePath:configMgr.path('bookmarks'),
             fileType:'json',
