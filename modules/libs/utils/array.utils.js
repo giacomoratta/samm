@@ -3,45 +3,45 @@ const libUtils = {}
 
 libUtils.sortFilesArray = (array) => {
   array.sort(function (a, b) {
-    const a_name = _.toLower(a)
-    const b_name = _.toLower(b)
-    if (a_name < b_name) return -1
-    if (a_name > b_name) return 1
+    const aName = _.toLower(a)
+    const bName = _.toLower(b)
+    if (aName < bName) return -1
+    if (aName > bName) return 1
     return 0
   })
   return array
 }
 
-libUtils.sortParallelArrays = (array, compare_fn, swap_fn) => {
-  if (!compare_fn) compare_fn = function () {}
-  if (!swap_fn) swap_fn = function () {}
+libUtils.sortParallelArrays = (array, compareFN, swapFn) => {
+  if (!compareFN) compareFN = function () {}
+  if (!swapFn) swapFn = function () {}
   for (let i = 0, j = 0, tmp = null; i < array.length - 1; i++) {
     for (j = i + 1; j < array.length; j++) {
-      if (compare_fn(array[i], array[j]) > 0) {
+      if (compareFN(array[i], array[j]) > 0) {
         tmp = array[i]
         array[i] = array[j]
         array[j] = tmp
-        swap_fn(i /* old index */, j /* new index */, array[i], array[j])
+        swapFn(i /* old index */, j /* new index */, array[i], array[j])
       }
     }
   }
   return array
 }
 
-libUtils.sortParallelFileArrays = (array, swap_fn) => {
+libUtils.sortParallelFileArrays = (array, swapFn) => {
   this.sortParallelArrays(array, function (a, b) {
-    const a_name = _.toLower(a)
-    const b_name = _.toLower(b)
-    if (a_name < b_name) return -1
-    if (a_name > b_name) return 1
+    const aName = _.toLower(a)
+    const bName = _.toLower(b)
+    if (aName < bName) return -1
+    if (aName > bName) return 1
     return 0
-  }, swap_fn)
+  }, swapFn)
   return array
 }
 
 libUtils.searchInObjectArray = (array, key, value) => {
   for (let i = 0; i < array.length; i++) {
-    if (array[i][key] == value) return true
+    if (array[i][key] === value) return true
   }
   return false
 }

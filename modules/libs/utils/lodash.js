@@ -8,28 +8,28 @@ _.mixin({
 
 _.mixin({
   readyPromise: (data) => {
-    return new Promise(function (res, rej) { res(data) })
+    return new Promise(function (resolve, reject) { resolve(data) })
   }
 })
 
 _.mixin({
   noDuplicatedValues: (array, value, cb) => {
     if (!_.isFunction(cb)) {
-      cb = function (value, changed_value, index, array) {
-        if (_.indexOf(array, changed_value) < 0) return true
+      cb = function (value, changedValue, index, array) {
+        if (_.indexOf(array, changedValue) < 0) return true
         return value + '_' + index
       }
     }
     const _limit = 100000
     let index = 0
-    let new_value = value
-    let new_value_check = new_value
+    let newValue = value
+    let newValueCheck = newValue
 
     while (_limit > index) {
       index++
-      new_value_check = cb(value, new_value, index, array)
-      if (new_value_check === true) return new_value // found a free value
-      new_value = new_value_check
+      newValueCheck = cb(value, newValue, index, array)
+      if (newValueCheck === true) return newValue // found a free value
+      newValue = newValueCheck
     }
     return null
   }
