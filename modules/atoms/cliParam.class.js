@@ -1,54 +1,53 @@
 class cliParam {
+  constructor (values, command, rawdata) {
+    this._error = true
+    if (rawdata === true) {
+      this.initRawData(values, command)
+      return
+    }
+    this.init(values, command)
+  }
 
-    constructor(values, command, rawdata){
-        this._error = true;
-        if(rawdata===true){
-            this.initRawData(values,command);
-            return;
+  isError () {
+    return this._error
+  }
+
+  initRawData (values, command) {
+    this.command = command
+    this.options = {}
+    this.params = { _: [] }
+    if (!_.isString(values)) return
+    values = values.split(' ')
+    for (let i = 0; i < values.length; i++) {
+      if (values[i].startsWith('-')) {
+        this.options[values[i]] = true
+        if (values[i + 1] && !values[i + 1].startsWith('-')) {
+          this.options[values[i]] = values[i + 1]
+          i++
         }
-        this.init(values,command);
+      } else {
+        this.params._.push(values[i])
+      }
     }
+    // split with space
+    // check options and values
+    // single values
+    this._error = false
+  }
 
-    isError(){
-        return this._error;
-    }
+  init (values, command) {
+    this._error = true
+    this.command = null
+    this.params = { _: [] }
+    if (!_.isObject(values)) return
 
-    initRawData(values, command){
-        this.command = command;
-        this.options = {};
-        this.params =  { _:[] };
-        if(!_.isString(values)) return;
-        values = values.split(" ");
-        for(let i=0; i<values.length; i++){
-            if(values[i].startsWith('-')){
-                this.options[values[i]] = true;
-                if(values[i+1] && !values[i+1].startsWith('-')){
-                    this.options[values[i]] = values[i+1];
-                    i++;
-                }
-            }else{
-                this.params._.push(values[i]);
-            }
-        }
-        // split with space
-        // check options and values
-        // single values
-        this._error = false;
-    }
+    this.command = command
+    this.options = values.options
+    delete values.options
+    this.params = values
+    this._error = false
 
-    init(values, command){
-        this._error = true;
-        this.command = null;
-        this.params =  { _:[] };
-        if(!_.isObject(values)) return;
-
-        this.command = command;
-        this.options = values.options;
-        delete values.options;
-        this.params = values;
-        this._error = false;
-
-        /*
+    /*
         this.params has the same data-format returned by minimist library.
         {
             _: [ array of values ],
@@ -58,39 +57,38 @@ class cliParam {
             opt2: 123.21
         }
         */
-    }
+  }
 
-    hasOption(o){
-        return (!_.isNil(this.options[o]));
-    }
+  hasOption (o) {
+    return (!_.isNil(this.options[o]))
+  }
 
+  get (i) {
+    if (!_.isNil(this.params[i])) return this.params[i]
+    return null
+  }
 
-    get(i){
-        if(!_.isNil(this.params[i])) return this.params[i];
-        return null;
-    }
+  getOption (o) {
+    if (!_.isNil(this.options[o])) return this.options[o]
+    return null
+  }
 
-    getOption(o){
-        if(!_.isNil(this.options[o])) return this.options[o];
-        return null;
-    }
+  filterGet (index, cb) {
+    const value = this.params._[index]
+    if (!value) return null
+    return cb(value)
+  }
 
-    filterGet(index,cb){
-        let value = this.params._[index];
-        if(!value) return null;
-        return cb(value);
-    }
-
-    filterValues(cb){
-        let array = [];
-        let value;
-        this.params._.forEach(function(v){
-            value = cb(v);
-            if(!value) return;
-            array.push(value);
-        });
-        return array;
-    }
+  filterValues (cb) {
+    const array = []
+    let value
+    this.params._.forEach(function (v) {
+      value = cb(v)
+      if (!value) return
+      array.push(value)
+    })
+    return array
+  }
 }
 
-module.exports = cliParam;
+module.exports = cliParam

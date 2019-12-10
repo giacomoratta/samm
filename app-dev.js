@@ -9,9 +9,8 @@ log.info('Starting app...')
 log.debug(`(env) ABSOLUTE_APP_PATH: ${process.env.ABSOLUTE_APP_PATH}`)
 log.debug(`(env) ABSOLUTE_APP_FILEPATH: ${process.env.ABSOLUTE_APP_FILEPATH}`)
 
+// console.log(ENV_CONFIG);
 
-//console.log(ENV_CONFIG);
+// require('./globals.js');
 
-//require('./globals.js');
-
-//require('./app/init.js');
+// require('./app/init.js');
