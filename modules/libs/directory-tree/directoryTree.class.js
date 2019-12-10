@@ -1,4 +1,7 @@
-const SymbolTree = require('symbol-tree');
+const _ = require('lodash')
+const SymbolTree = require('symbol-tree')
+const pathInfo = require('./pathInfo.class')
+const utils = require('./utils')
 
 class directoryTree {
 

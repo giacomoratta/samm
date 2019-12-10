@@ -1,3 +1,6 @@
+const _ = require('lodash')
+const utils = require('./utils')
+
 class pathInfo {
     constructor(initdata){
         this.error = true;

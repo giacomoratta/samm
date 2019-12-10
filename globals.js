@@ -2,7 +2,7 @@ if(typeof ENV_CONFIG === 'undefined') ENV_CONFIG={ undefined:true };
 
 /* Standard Libraries */
 global._ =  require('lodash');
-require('./modules/libs/lodash.js');
+require('./modules/libs/utils/lodash.js');
 
 /* Output */
 let UI_options = {};
