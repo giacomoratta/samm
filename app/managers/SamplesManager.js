@@ -5,8 +5,8 @@ class SamplesManager {
 
     /* CACHES */
     this._CACHE_latest_smp_obj_search = null // latest lookup
-    this._CACHE_stqall = new dataCache() // Sampleby_Tag_Query_ALL
-    this._CACHE_stqrnd = new dataCache() // Sampleby_Tag_Query_RANDOM
+    this._CACHE_stqall = new bucketCache() // Sampleby_Tag_Query_ALL
+    this._CACHE_stqrnd = new bucketCache() // Sampleby_Tag_Query_RANDOM
 
     /* DATA HOLDER */
     this._createIndexHolder({

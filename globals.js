@@ -16,7 +16,7 @@ global.dt$ = clUI.debugTimed
 
 /* Common Libraries */
 global.Utils = require('./modules/utils.js')
-global.DataCache = require('./modules/libs/data-file-holder/dataHolder.class.js')
+global.DataCache = require('./modules/libs/bucket-cache/bucketCache.class.js')
 global.pathInfo = require('./modules/libs/directory-tree/pathInfo.class.js')
 global.directoryTree = require('./modules/libs/directory-tree/directoryTree.class.js')
 global.dataFileHolder = require('./modules/libs/data-file-holder/dataFileHolder.class.js')
