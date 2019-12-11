@@ -1,4 +1,4 @@
-const cliParam = require('./atoms/cliParam.class.js')
+const cliParam = require('./cliParam.class.js')
 const vorpal = require('vorpal')()
 
 class cliManager {

@@ -1,4 +1,4 @@
-const configField = require('./atoms/configField.class.js')
+const configField = require('./configField.class.js')
 
 class configManager {
   constructor () {

@@ -11,6 +11,7 @@ PRINCIPLES + LONG TERM GOALS
 
 SHORT
 
+- config manager
 - file.utils tests
 - camelCase (use .class or .mgr)
 - lodash ext tests
