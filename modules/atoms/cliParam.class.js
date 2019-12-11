@@ -1,15 +1,17 @@
+const _ = require('lodash')
+
 class cliParam {
-  constructor (values, command, rawdata) {
+  constructor (values, command, isRawData) {
     this._error = true
-    if (rawdata === true) {
+    if (isRawData === true) {
       this.initRawData(values, command)
       return
     }
     this.init(values, command)
   }
 
-  isError () {
-    return this._error
+  isValid () {
+    return !this._error
   }
 
   initRawData (values, command) {
@@ -56,7 +58,7 @@ class cliParam {
             opt2: 12321, (already converted)
             opt2: 123.21
         }
-        */
+     */
   }
 
   hasOption (o) {

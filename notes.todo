@@ -4,7 +4,7 @@ PRINCIPLES + LONG TERM GOALS
 - singleton object
 - no more globals => require everywhere (clearer dependencies, remove globals.js)
 - use await instead of 'sync' functions
-- black-box for external GUI
+- black-box with STATEFUL API (in order to have as few as possible work in the caller)
 - 1 lib = 1 day (dev, clean, test)
 
 
@@ -12,10 +12,7 @@ PRINCIPLES + LONG TERM GOALS
 SHORT
 
 - file.utils tests
-- remove utils.js
 - camelCase (use .class or .mgr)
-- move directoryTree to libs
-- move Logger to libs
 - lodash ext tests
 
 
