@@ -11,7 +11,7 @@ PRINCIPLES + LONG TERM GOALS
 
 SHORT
 
-- config manager
+- config (basic public methods)
 - file.utils tests
 - camelCase (use .class or .mgr)
 - lodash ext tests
@@ -21,10 +21,10 @@ MID
 
 - test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
 - test on dataFileHolder (and clean code) - prepare tests and directories
-- test on configManager (and clean code)
+- test on configClass (and clean code)
 - test on UI (and clean code) - prepare tests and directories
-- test on cliManager (and clean code)
-- first start cliManager
+- test on cliClass (and clean code)
+- first start cliClass
 
 
 LONG

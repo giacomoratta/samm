@@ -1,7 +1,7 @@
 const cliParam = require('./cliParam.class.js')
 const vorpal = require('vorpal')()
 
-class cliManager {
+class cliClass {
   constructor () {
     // this.ui_log = vorpal.log;
     this._commands = {}
@@ -60,4 +60,4 @@ class cliManager {
   }
 }
 
-module.exports = new cliManager()
+module.exports = new cliClass()

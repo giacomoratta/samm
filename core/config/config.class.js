@@ -1,6 +1,7 @@
 const configField = require('./configField.class.js')
 
-class configManager {
+class config {
+
   constructor () {
     this._clUI = clUI.newLocalUI('> config manager:')
     this._fields = {}
@@ -354,4 +355,4 @@ class configManager {
   }
 }
 
-module.exports = new configManager()
+module.exports = new config()
