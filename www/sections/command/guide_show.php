@@ -4,12 +4,12 @@
             <section class="text">
                 <p class="code">
                     mpl$ save &lt;label&gt;
-                    <br/>mpl$ save config
+                    <br/>mpl$ save configClass
                     <br/>mpl$ save samples
                 </p>
                 <p>
                     Shows some internal data, like configuration and samples index.
-                    Allowed values for label: config, samples.
+                    Allowed values for label: configClass, samples.
                 </p>
             </section>
         </section>

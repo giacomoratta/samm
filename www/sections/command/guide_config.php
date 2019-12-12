@@ -1,19 +1,19 @@
 
-<section class="command" <?php $TemplateMgr->printCommandID('config'); ?>>
-    <h3>config</h3>
+<section class="command" <?php $TemplateMgr->printCommandID('configClass'); ?>>
+    <h3>configClass</h3>
     <section class="text">
         <p class="code">
-            mpl$ config &lt;command&gt; [&lt;name&gt;] [values...]
+            mpl$ configClass &lt;command&gt; [&lt;name&gt;] [values...]
         </p>
         <p>
             Manage the configuration of the whole application.
         </p>
 
-        <?php $TemplateMgr->printCommandOption('set parameters','$ config set <name> [values...]'); ?>
+        <?php $TemplateMgr->printCommandOption('set parameters','$ configClass set <name> [values...]'); ?>
         <p class="code">
-            mpl$ config &lt;name&gt; [values...]
-            <br/>mpl$ config set Project /musicprojects/project1
-            <br/>mpl$ config set Tag tag-label query,tag+tag2,or,tag3
+            mpl$ configClass &lt;name&gt; [values...]
+            <br/>mpl$ configClass set Project /musicprojects/project1
+            <br/>mpl$ configClass set Tag tag-label query,tag+tag2,or,tag3
         </p>
         <section class="text">
             <p>
@@ -49,9 +49,9 @@
                     <label>Tags: </label>
                     <span>Set or unset a tagged query.</span>
                     <span>To store a tagged query the command needs of the label and the query</span>
-                    <span class="code">mpl$ config set Tag housekick kick+house,kick+808,kick+old</span>.
+                    <span class="code">mpl$ configClass set Tag housekick kick+house,kick+808,kick+old</span>.
                     <span>To delete a tagged query the command needs of the label only</span>
-                    <span class="code">mpl$ config set Tag housekick</span>.
+                    <span class="code">mpl$ configClass set Tag housekick</span>.
                 </p>
                 <p <?php $TemplateMgr->printCfgParamID('includedextensionsforsamples'); ?>>
                     <label>IncludedExtensionsForSamples: </label>
@@ -63,9 +63,9 @@
                         <?php $TemplateMgr->printCfgParamLink('extensioncheckforsamples','ExtensionCheckForSamples'); ?>.
                             </span>
                     <br/>
-                    <span>Add extension:</span> <span class="code">mpl$ config set IncludedExtensionsForSamples wav (or .wav)</span>
+                    <span>Add extension:</span> <span class="code">mpl$ configClass set IncludedExtensionsForSamples wav (or .wav)</span>
                     <br/>
-                    <span>Remove extension:</span> <span class="code">mpl$ config set IncludedExtensionsForSamples !wav (or !.wav)</span>
+                    <span>Remove extension:</span> <span class="code">mpl$ configClass set IncludedExtensionsForSamples !wav (or !.wav)</span>
                 </p>
                 <p <?php $TemplateMgr->printCfgParamID('excludedextensionsforsamples'); ?>>
                     <label>ExcludedExtensionsForSamples: </label>
@@ -77,9 +77,9 @@
                         <?php $TemplateMgr->printCfgParamLink('extensioncheckforsamples','ExtensionCheckForSamples'); ?>.
                             </span>
                     <br/>
-                    <span>Add extension:</span> <span class="code">mpl$ config set ExcludedExtensionsForSamples txt (or .txt)</span>
+                    <span>Add extension:</span> <span class="code">mpl$ configClass set ExcludedExtensionsForSamples txt (or .txt)</span>
                     <br/>
-                    <span>Remove extension:</span> <span class="code">mpl$ config set ExcludedExtensionsForSamples !txt (or !.txt)</span>
+                    <span>Remove extension:</span> <span class="code">mpl$ configClass set ExcludedExtensionsForSamples !txt (or !.txt)</span>
                 </p>
                 <p <?php $TemplateMgr->printCfgParamID('extensioncheckforsamples'); ?>>
                     <label>ExtensionCheckForSamples: </label>

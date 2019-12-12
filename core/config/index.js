@@ -1,3 +1,5 @@
+const config = new (require('./config.class'))()
+
 module.exports = {
-    config: require('./config.class')
+    config
 }

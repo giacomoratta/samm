@@ -11,7 +11,7 @@ PRINCIPLES + LONG TERM GOALS
 
 SHORT
 
-- config (basic public methods)
+- configClass (basic public methods)
 - file.utils tests
 - camelCase (use .class or .mgr)
 - lodash ext tests

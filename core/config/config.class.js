@@ -355,4 +355,4 @@ class config {
   }
 }
 
-module.exports = new config()
+module.exports = config

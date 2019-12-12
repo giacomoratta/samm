@@ -15,5 +15,5 @@ npm test
 Run one single:
 ```bash
 cd ./modules/__tests__/ 
-npm test -- config.test.js
+npm test -- configClass.test.js
 ```

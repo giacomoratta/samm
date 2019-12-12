@@ -76,11 +76,11 @@ $TemplateMgr = new TemplateManager();
         <section class="text">
             <p>Start the application</p>
             <p>--help and cmd -h</p>
-            <p>show config</p>
-            <p>config set sampledirectory</p>
-            <p>config set projectdirectory</p>
-            <p>config set maxoccurdir</p>
-            <p>config set maxrandom</p>
+            <p>show configClass</p>
+            <p>configClass set sampledirectory</p>
+            <p>configClass set projectdirectory</p>
+            <p>configClass set maxoccurdir</p>
+            <p>configClass set maxrandom</p>
         </section>
 
         <h4>Scan your samples directory</h4>
