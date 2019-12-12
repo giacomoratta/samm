@@ -1,5 +1,7 @@
-const appCore = require('./core')
+const { config } = require('./core/config')
 
-appCore.config.init()
+//NO! config.setCli()
+//config.setLogger()
+config.init()
 
-appCore.samples.searchByTag()
+//samples.searchByTag()
