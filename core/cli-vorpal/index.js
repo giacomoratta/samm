@@ -1,5 +1,5 @@
-const cli = new (require('./cli-vorpal.class'))()
+const cliVorpal = new (require('./cliVorpal.class'))()
 
 module.exports = {
-    cli
+    cliVorpal
 }

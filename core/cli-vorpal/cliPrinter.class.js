@@ -1,4 +1,4 @@
-class UI {
+class cliPrinter {
   constructor (options, _sk) {
     if (_sk !== true) {
       options = _.merge({
@@ -61,4 +61,4 @@ class UI {
   }
 }
 
-module.exports = UI
+module.exports = cliPrinter
