@@ -1,11 +1,11 @@
 const cliParam = require('./cliParam.class.js')
-const vorpal = require('vorpal')()
+const vorpal = require('vorpal')
 
 class cli {
   constructor () {
     // this.ui_log = vorpal.log;
     this._commands = {}
-    this._vorpal = vorpal
+    this._vorpal = vorpal()
     this._delimiter = ''
     this._error_code = -1
     this._success_code = 1
