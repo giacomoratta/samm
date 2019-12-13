@@ -29,7 +29,11 @@ describe('cli interface with vorpal library', function() {
             /* callback code */
         })).toEqual(true)
 
-        expect(myCli.on('beforeNext',()=>{
+        expect(myCli.on('beforeCommand',()=>{
+            /* callback code */
+        })).toEqual(true)
+
+        expect(myCli.on('afterCommand',()=>{
             /* callback code */
         })).toEqual(true)
 
