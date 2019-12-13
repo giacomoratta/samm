@@ -82,4 +82,8 @@ class cliVorpal {
   }
 }
 
-module.exports = cliVorpal
+module.exports = {
+  cliVorpal,
+  ERROR_CODE,
+  SUCCESS_CODE
+}

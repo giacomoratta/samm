@@ -1,15 +1,16 @@
-const cliVorpal = new (require('../cliVorpal.class'))()
+const { cliVorpal } = require('../cliVorpal.class')
+const myCli = new cliVorpal()
 
 describe('cli interface with vorpal library', function() {
 
     it("should add a command", function() {
-        expect(cliVorpal.addCommand('cmdname1 <action> [query]')).toEqual('cmdname1')
-        expect(cliVorpal.addCommand('cmdname2 ')).toEqual('cmdname2')
+        expect(myCli.addCommand('cmdname1 <action> [query]')).toEqual('cmdname1')
+        expect(myCli.addCommand('cmdname2 ')).toEqual('cmdname2')
 
-        expect(cliVorpal.addCommandHeader('cmdname2')).toHaveProperty('description')
-        expect(cliVorpal.addCommandHeader('cmdname2')).toHaveProperty('option')
+        expect(myCli.addCommandHeader('cmdname2')).toHaveProperty('description')
+        expect(myCli.addCommandHeader('cmdname2')).toHaveProperty('option')
 
-        cliVorpal.addCommandHeader('cmdname2')
+        myCli.addCommandHeader('cmdname2')
             .description("Prints the samples collection" + '\n')
             .option('-a, --all', 'Shows all the bookmarks')
             .option('-l, --lookup', 'Shows the latest lookup')
@@ -20,19 +21,19 @@ describe('cli interface with vorpal library', function() {
 
     it("should set listener on events", function() {
 
-        expect(cliVorpal.on('show',()=>{
+        expect(myCli.on('show',()=>{
             /* callback code */
         })).toEqual(true)
 
-        expect(cliVorpal.on('exit',()=>{
+        expect(myCli.on('exit',()=>{
             /* callback code */
         })).toEqual(true)
 
-        expect(cliVorpal.on('beforeNext',()=>{
+        expect(myCli.on('beforeNext',()=>{
             /* callback code */
         })).toEqual(true)
 
-        expect(cliVorpal.on('show-wrong',()=>{
+        expect(myCli.on('show-wrong',()=>{
             /* callback code */
         })).toEqual(false)
     })
@@ -40,7 +41,7 @@ describe('cli interface with vorpal library', function() {
 
     it("should set a custom logger", function() {
 
-        expect(cliVorpal.setLogger({
+        expect(myCli.setLogger({
             debug: ()=>{},
             info: ()=>{},
             warn: ()=>{},
@@ -48,7 +49,7 @@ describe('cli interface with vorpal library', function() {
             extra: ()=>{}
         })).toEqual(true)
 
-        expect(cliVorpal.setLogger({
+        expect(myCli.setLogger({
             debug: ()=>{},
             info: ()=>{},
             warn: ()=>{},

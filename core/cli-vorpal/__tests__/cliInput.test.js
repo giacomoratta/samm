@@ -25,8 +25,6 @@ describe('cliInput class and object', function() {
         expect(function() { cliInput1.filterParams('invalid-function') } ).not.toThrow()
         expect(cliInput1.filterParams(() => { return 'abc' } )).toBeInstanceOf(Array)
         expect(cliInput1.filterParams(() => { return 'abc' } )).toHaveLength(0)
-
-        //expect(cliInput1.isValid()).toEqual(false)
     })
 
     it("should create a complex cliInput", function() {
