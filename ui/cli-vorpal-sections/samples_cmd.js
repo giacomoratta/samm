@@ -7,5 +7,5 @@ cliMgr.addCommandHeader(cmd_name)
 
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   SamplesMgr.printSamplesTree()
-  return cliNextCb(cliData.success_code)
+  return cliNextCb(cliData.successCode)
 })

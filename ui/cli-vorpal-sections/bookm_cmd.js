@@ -11,15 +11,15 @@ cliMgr.addCommandHeader(cmd_name)
 
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   const C_bookm_options = {
-    all: cliData.cli_params.hasOption('all'),
-    lookup: cliData.cli_params.hasOption('lookup'),
-    save: cliData.cli_params.hasOption('save'),
-    tag: cliData.cli_params.getOption('tag')
+    all: cliData.cliInput.hasOption('all'),
+    lookup: cliData.cliInput.hasOption('lookup'),
+    save: cliData.cliInput.hasOption('save'),
+    tag: cliData.cliInput.getOption('tag')
   }
 
   if (C_bookm_options.save === true) {
     // generateSamplesDir
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
   const matchAddId = function (v) {
@@ -46,7 +46,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       function (msg) { cliData.ui.print(msg) },
       function (msg) { clUI.print(msg) }
     )) {
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     }
 
     cliReference.prompt({
@@ -54,13 +54,13 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       name: 'clicmd',
       message: "['q' to quit] > "
     }, (result) => {
-      const cliInput = cliData.cli_params(result.clicmd, null, true)
+      const cliInput = cliData.cliInput(result.clicmd, null, true)
       const bookmLabel = cliInput.filterGet(0, matchLabel)
       const addIds = cliInput.filterValues(matchAddId)
       const removeIds = cliInput.filterValues(matchRemoveId)
       if (result.clicmd === 'q') {
         BookmarksMgr.save()
-        return cliNextCb(cliData.success_code)
+        return cliNextCb(cliData.successCode)
       }
       BookmarksMgr.set(addIds, removeIds, bookmLabel, C_bookm_options.tag)
       return p1()

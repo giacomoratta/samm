@@ -11,13 +11,13 @@ cliMgr.addCommandHeader(cmd_name)
   .autocomplete(['ext'])
 
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
-  const action = cliData.cli_params.get('action')
+  const action = cliData.cliInput.get('action')
   if (action === 'ext') {
     DirCommand.listExtensionsStats({
-      extension: cliData.cli_params.getOption('extension'),
-      index: cliData.cli_params.hasOption('index')
+      extension: cliData.cliInput.getOption('extension'),
+      index: cliData.cliInput.hasOption('index')
     })
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
-  return cliNextCb(cliData.error_code)
+  return cliNextCb(cliData.errorCode)
 })

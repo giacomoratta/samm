@@ -11,25 +11,25 @@ cliMgr.addCommandHeader(cmd_name)
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   if (!ProjectsMgr.current) {
     cliData.ui.print('project directory is not set; check the configuration.')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
 
   const smp_obj = SamplesMgr.getLatestLookup()
   if (!_.isObject(smp_obj)) {
     cliData.ui.print('latest lookup missing.')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
 
   let C_save_options = {
-    dirname: cliData.cli_params.getOption('dirname'), // custom name
-    overwrite: cliData.cli_params.getOption('overwrite'), // force overwrite
-    path: cliData.cli_params.getOption('path') // absolute path
+    dirname: cliData.cliInput.getOption('dirname'), // custom name
+    overwrite: cliData.cliInput.getOption('overwrite'), // force overwrite
+    path: cliData.cliInput.getOption('path') // absolute path
   }
 
   // check path if is a good absolute path and exists
   if (_.isString(C_save_options.path) && !Utils.File.isAbsoluteParentDirSync(C_save_options.path, true)) {
     cliData.ui.print('path is not an absolute path or it does not exists.')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
 
   C_save_options = SamplesMgr.generateSamplesDir_setOptions(smp_obj, C_save_options)
@@ -45,23 +45,23 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
     message: 'Do you want to proceed? [y/n] '
   }, function (result) {
     if (result.answer !== 'y') {
-      return cliNextCb(_self._success_code)
+      return cliNextCb(_self._successCode)
     }
     SamplesMgr.generateSamplesDir(smp_obj, C_save_options).then(function (smp_copied_obj) {
       if (!_.isObject(smp_copied_obj)) {
         cliData.ui.print('no file saved [error#1].')
-        return cliNextCb(_self._error_code)
+        return cliNextCb(_self._errorCode)
       }
       if (smp_copied_obj.size() === 0) {
         cliData.ui.print('no file saved.')
-        return cliNextCb(_self._error_code)
+        return cliNextCb(_self._errorCode)
       }
       smp_copied_obj.print()
       cliData.ui.print('' + smp_copied_obj.size() + '/' + smp_obj.size() + ' files saved.')
-      return cliNextCb(_self._success_code)
+      return cliNextCb(_self._successCode)
     }).catch(() => {
       cliData.ui.print('no file saved [error#2].')
-      return cliNextCb(_self._error_code)
+      return cliNextCb(_self._errorCode)
     })
   })
 })

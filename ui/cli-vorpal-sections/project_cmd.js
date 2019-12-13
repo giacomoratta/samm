@@ -20,23 +20,23 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   cliData.ui.print('[current]', ProjectsMgr.current)
 
   const C_Project_options = {
-    path: cliData.cli_params.getOption('path'),
-    history: cliData.cli_params.hasOption('history'),
-    default_flag: cliData.cli_params.hasOption('default'),
-    default_value: cliData.cli_params.getOption('default'),
-    new: cliData.cli_params.getOption('new')
+    path: cliData.cliInput.getOption('path'),
+    history: cliData.cliInput.hasOption('history'),
+    default_flag: cliData.cliInput.hasOption('default'),
+    default_value: cliData.cliInput.getOption('default'),
+    new: cliData.cliInput.getOption('new')
   }
 
   // Set current project from absolute path
   if (_.isString(C_Project_options.path) && C_Project_options.path.length > 1) {
     if (!Utils.File.directoryExistsSync(C_Project_options.path)) {
       cliData.ui.print('this project path does not exist')
-      return cliNextCb(cliData.error_code)
+      return cliNextCb(cliData.errorCode)
     }
     ProjectsMgr.current = C_Project_options.path
     ProjectsMgr.save()
     cliData.ui.print('[new]', ProjectsMgr.current)
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
   // Set current project from history
@@ -45,7 +45,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       clUI.print(v)
     })) {
       cliData.ui.print('Projects history is empty.')
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     }
     cliReference.prompt({
       type: 'input',
@@ -60,14 +60,14 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
           if (!Utils.File.directoryExistsSync(phistory)) {
             cliData.ui.print('this project path does not exist!')
             ProjectsMgr.history.remove(phistory)
-            return cliNextCb(cliData.error_code)
+            return cliNextCb(cliData.errorCode)
           }
           ProjectsMgr.current = phistory
           ProjectsMgr.save()
           cliData.ui.print('[new]', ProjectsMgr.current)
         }
       }
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     })
     return
   }
@@ -83,7 +83,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
         const defaultTemplate = ProjectsMgr.template.get(C_Project_options.default_value)
         if (!defaultTemplate) {
           cliData.ui.print('Default template', C_Project_options.default_value, 'not found')
-          return cliNextCb(cliData.error_code)
+          return cliNextCb(cliData.errorCode)
         }
 
         cliData.ui.print('The template', C_Project_options.default_value, 'inside the directory', defaultTemplate, 'will be removed.')
@@ -95,12 +95,12 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
           if (result.answer === 'y') {
             if (ProjectsMgr.template.remove(defaultTemplate) !== true) {
               cliData.ui.print('Cannot remove the default template')
-              return cliNextCb(cliData.error_code)
+              return cliNextCb(cliData.errorCode)
             } else {
               ProjectsMgr.save()
             }
           }
-          return cliNextCb(cliData.success_code)
+          return cliNextCb(cliData.successCode)
         })
         return
       }
@@ -108,7 +108,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       /* New default template */
       if (!ProjectsMgr.current) {
         cliData.ui.print('No current project set')
-        return cliNextCb(cliData.success_code)
+        return cliNextCb(cliData.successCode)
       }
       cliData.ui.print('The current project', "'" + ProjectsMgr.current + "'", ' will be stored as template in', ProjectsMgr.template.dir)
       cliReference.prompt({
@@ -120,14 +120,14 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
           ProjectsMgr.template.add(C_Project_options.default_value, ProjectsMgr.current).then((template) => {
             cliData.ui.print('New project template: ', template.template_path)
             ProjectsMgr.save()
-            return cliNextCb(cliData.success_code)
+            return cliNextCb(cliData.successCode)
           }).catch((e) => {
             d$(e)
             cliData.ui.print('Unexpected error', e.message)
-            return cliNextCb(cliData.error_code)
+            return cliNextCb(cliData.errorCode)
           })
         }
-        return cliNextCb(cliData.success_code)
+        return cliNextCb(cliData.successCode)
       })
       return
     }
@@ -137,7 +137,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
     })) {
       cliData.ui.print('No project templates available.')
     }
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
   // New project from default
@@ -146,7 +146,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       clUI.print(v)
     })) {
       cliData.ui.print('No project templates available.')
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     }
     cliReference.prompt({
       type: 'input',
@@ -157,7 +157,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
         const ptemplate = ProjectsMgr.template.get(parseInt(result.index) - 1)
         if (!ptemplate) {
           cliData.ui.print('index out of bounds')
-          return cliNextCb(cliData.error_code)
+          return cliNextCb(cliData.errorCode)
         }
 
         /* Choose project path */
@@ -177,14 +177,14 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
             if (_.isNumber(_index) && _index <= _projectPathList.length && _index > 0) project_path = _projectPathList[_index - 1]
             if (!project_path) {
               cliData.ui.print('index out of bounds')
-              return cliNextCb(cliData.error_code)
+              return cliNextCb(cliData.errorCode)
             }
 
             // Get by path
             if (Utils.File.directoryExistsSync(result.index)) project_path = result.index
             if (!project_path) {
               cliData.ui.print('path does not exist ', result.index)
-              return cliNextCb(cliData.error_code)
+              return cliNextCb(cliData.errorCode)
             }
 
             cliData.ui.print('\nA new project in', Utils.File.pathJoin(project_path, C_Project_options.new),
@@ -201,26 +201,26 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
                   ProjectsMgr.current = data.project_path
                   ProjectsMgr.save()
                   cliData.ui.print('[new current project]', ProjectsMgr.current)
-                  return cliNextCb(cliData.success_code)
+                  return cliNextCb(cliData.successCode)
                 }).catch((e) => {
                   d$(e)
                   cliData.ui.print('Unexpected error', e.message)
-                  return cliNextCb(cliData.error_code)
+                  return cliNextCb(cliData.errorCode)
                 })
                 return
               }
-              return cliNextCb(cliData.success_code)
+              return cliNextCb(cliData.successCode)
             })
             return
           }
-          return cliNextCb(cliData.success_code)
+          return cliNextCb(cliData.successCode)
         })
         return
       }
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     })
     return
   }
 
-  return cliNextCb(cliData.success_code)
+  return cliNextCb(cliData.successCode)
 })

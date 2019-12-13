@@ -10,13 +10,13 @@ cliMgr.addCommandHeader(cmd_name)
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   const C_scan_options = {
     printFn: function (s) { cliData.ui.print(s) },
-    force: cliData.cli_params.hasOption('force') // force scan
+    force: cliData.cliInput.hasOption('force') // force scan
   }
 
-  if (!cliData.cli_params.hasOption('force')) {
+  if (!cliData.cliInput.hasOption('force')) {
     if (SamplesMgr.sampleIndexFileExistsSync()) {
       cliData.ui.print('the index file already exists. Use -f to force a rescan.')
-      return cliNextCb(cliData.error_code)
+      return cliNextCb(cliData.errorCode)
     }
     C_scan_options.force = true
   }
@@ -25,8 +25,8 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   const smp_obj = SamplesMgr.setSamplesIndex(C_scan_options)
   if (!_.isObject(smp_obj) || smp_obj.empty()) {
     cliData.ui.print('job failed')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
   cliData.ui.print('' + smp_obj.size() + ' samples found')
-  return cliNextCb(cliData.success_code)
+  return cliNextCb(cliData.successCode)
 })

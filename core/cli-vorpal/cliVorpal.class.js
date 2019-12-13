@@ -1,6 +1,6 @@
 const events = require('events')
 const vorpal = require('vorpal')
-const cliParam = require('./cliParam.class.js')
+const cliInput = require('./cliInput.class.js')
 const cliPrinter = require('./cliPrinter.class.js')
 
 const ERROR_CODE = -1
@@ -53,9 +53,9 @@ class cliVorpal {
         // todo: cb configMgr.printMessages()
         cb()
       }, {
-        cli_params: new cliParam(args, cmdName),
-        error_code: ERROR_CODE,
-        success_code: SUCCESS_CODE,
+        cliInput: new cliInput(args, cmdName),
+        errorCode: ERROR_CODE,
+        successCode: SUCCESS_CODE,
         //ui: clUI.newLocalUI('> ' + cmdName + ':')
       })
     })

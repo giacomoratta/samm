@@ -11,30 +11,30 @@ cliMgr.addCommandHeader(cmd_name)
         '\n  $ ' + cmd_name + ' ExcludedExtensionsForSamples !ext / (or !.ext)' + '\n')
 
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
-  if (_.isNil(cliData.cli_params.get('name'))) {
+  if (_.isNil(cliData.cliInput.get('name'))) {
     configMgr.printInternals()
     configMgr.print()
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
-  if (_.isNil(cliData.cli_params.get('values'))) {
-    if (configMgr.exists(cliData.cli_params.get('name')) === true) {
+  if (_.isNil(cliData.cliInput.get('values'))) {
+    if (configMgr.exists(cliData.cliInput.get('name')) === true) {
       cliData.ui.print('this parameter does not exist.')
-      return cliNextCb(cliData.error_code)
+      return cliNextCb(cliData.errorCode)
     }
-    clUI.print(configMgr.get(cliData.cli_params.get('name')))
-    return cliNextCb(cliData.success_code)
+    clUI.print(configMgr.get(cliData.cliInput.get('name')))
+    return cliNextCb(cliData.successCode)
   }
 
-  if (configMgr.setFromCli(cliData.cli_params.get('name'), cliData.cli_params.get('values')) === false) {
+  if (configMgr.setFromCli(cliData.cliInput.get('name'), cliData.cliInput.get('values')) === false) {
     cliData.ui.print('configuration not changed')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
   if (configMgr.save() !== true) {
     cliData.ui.print('error during file writing')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
   configMgr.print()
   cliData.ui.print('configuration saved successfully')
-  return cliNextCb(cliData.success_code)
+  return cliNextCb(cliData.successCode)
 })

@@ -1,11 +1,11 @@
-const cliParam = require('../cliParam.class')
+const cliInput = require('../cliInput.class')
 
-describe('cliParam class and object', function() {
+describe('cliInput class and object', function() {
 
-    it("should create an empty cliParam", function() {
-        const cliParam1 = new cliParam()
+    it("should create an empty cliInput", function() {
+        const cliInput1 = new cliInput()
 
-        expect(cliParam1.isValid()).toEqual(false)
+        expect(cliInput1.isValid()).toEqual(false)
     })
 
 })

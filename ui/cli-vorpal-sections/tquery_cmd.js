@@ -8,9 +8,9 @@ cliMgr.addCommandHeader(cmd_name)
 
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   const C_TQuery_options = {
-    tag: cliData.cli_params.get('tag'),
-    query: cliData.cli_params.get('query'),
-    remove: cliData.cli_params.hasOption('remove')
+    tag: cliData.cliInput.get('tag'),
+    query: cliData.cliInput.get('query'),
+    remove: cliData.cliInput.hasOption('remove')
   }
 
   if (C_TQuery_options.tag && C_TQuery_options.query) {
@@ -20,7 +20,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
     } else {
       cliData.ui.print('Tag', "'" + C_TQuery_options.tag + "'", 'not added')
     }
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
   if (C_TQuery_options.tag) {
@@ -32,7 +32,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
       } else {
         cliData.ui.print('Tag', "'" + C_TQuery_options.tag + "'", 'not removed')
       }
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     }
 
     // get one tagged query
@@ -42,12 +42,12 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
     } else {
       cliData.ui.print('Tag', "'" + C_TQuery_options.tag + "'", '=', tquery)
     }
-    return cliNextCb(cliData.success_code)
+    return cliNextCb(cliData.successCode)
   }
 
   TQueryMgr.printList(function (tag, query) { clUI.print('\n  ', tag + ':', query) })
   if (TQueryMgr.empty()) {
     cliData.ui.print('No tagged queries')
   }
-  return cliNextCb(cliData.success_code)
+  return cliNextCb(cliData.successCode)
 })

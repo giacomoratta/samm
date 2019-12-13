@@ -11,12 +11,12 @@ cliMgr.addCommandHeader(cmd_name)
 cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   if (!configMgr.cfg_path('ExportDirectory')) {
     cliData.ui.print('no valid export directory; set an existent directory for data export.')
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   }
 
   let ExportFn = null
   const C_export_options = {
-    param_data: cliData.cli_params.get('data')
+    param_data: cliData.cliInput.get('data')
   }
   const archFD_options = {
     sourcePath: null,
@@ -26,7 +26,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   if (C_export_options.param_data === 'project') {
     if (!ProjectsMgr.current) {
       cliData.ui.print('no valid project directory; set an existent project directory.')
-      return cliNextCb(cliData.error_code)
+      return cliNextCb(cliData.errorCode)
     }
     archFD_options.sourcePath = ProjectsMgr.current
     ExportFn = function (opt) {
@@ -36,7 +36,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   } else if (C_export_options.param_data === 'bookm') {
     if (!BookmarksMgr.hasBookmarks()) {
       cliData.ui.print('your bookmarks collection is empty.')
-      return cliNextCb(cliData.error_code)
+      return cliNextCb(cliData.errorCode)
     }
     ExportFn = function (opt) {
       cliData.ui.print('exporting bookmarks to ' + archFD_options.destPath + ' ...')
@@ -44,16 +44,16 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
     }
   }
 
-  if (!_.isFunction(ExportFn)) return cliNextCb(cliData.error_code)
+  if (!_.isFunction(ExportFn)) return cliNextCb(cliData.errorCode)
 
   ExportFn(archFD_options).then((d) => {
     cliData.ui.print('exported ' + Utils.String.filesizeToStr(d.total_bytes) + ' to ' + d.archive_path)
     setTimeout(function () {
-      return cliNextCb(cliData.success_code)
+      return cliNextCb(cliData.successCode)
     }, 2000)
   }).catch((e) => {
     cliData.ui.warning('error while creating and exporting the archive')
     cliData.ui.warning(e.code, e.message)
-    return cliNextCb(cliData.error_code)
+    return cliNextCb(cliData.errorCode)
   })
 })
