@@ -1,4 +1,4 @@
-const _ = require('./lodash')
+const _ = require('./lodash.extended')
 const libUtils = {}
 
 libUtils.sortObjectByValue = (obj) => {

@@ -49,7 +49,7 @@ const MONTHS_LIST = [
   }
 ]
 
-const _ = require('./lodash')
+const _ = require('./lodash.extended')
 const libUtils = {}
 
 libUtils.dateToStrObj = (date) => {

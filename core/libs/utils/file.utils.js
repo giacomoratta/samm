@@ -1,4 +1,4 @@
-const _ = require('./lodash')
+const _ = require('./lodash.extended')
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')

@@ -31,24 +31,24 @@ vCli.addCommandBody('simple', async function (cliReference, cliNextCb, cliData) 
 
   await cliReference.prompt({
     type: 'input',
-    name: 'cliCmd',
+    name: 'inputValue',
     message: "['q' to quit] > "
   }, (result) => {
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.cliCmd === 'q') return cliNextCb(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNextCb(CLI_SUCCESS)
   console.log('111', resultExternal)
 
   await cliReference.prompt({
     type: 'input',
-    name: 'cliCmd',
+    name: 'inputValue',
     message: "['q' to quit] > "
   }, (result) => {
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.cliCmd === 'q') return cliNextCb(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNextCb(CLI_SUCCESS)
   console.log('222', resultExternal)
 
   return cliNextCb(CLI_SUCCESS)
