@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const utils = require('./utils')
 
-class dataFileHolder {
+class DataFileHolder {
   constructor () {
     this._cfg = {}
     this._data = {}
@@ -301,4 +301,4 @@ class dataFileHolder {
   }
 }
 
-module.exports = dataFileHolder
+module.exports = DataFileHolder

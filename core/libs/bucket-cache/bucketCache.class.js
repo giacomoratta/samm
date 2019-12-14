@@ -1,4 +1,4 @@
-class dataCache {
+class BucketCache {
   constructor () {
     this._array = []
     this._data = new Map()
@@ -59,4 +59,4 @@ class dataCache {
   }
 }
 
-module.exports = dataCache
+module.exports = BucketCache

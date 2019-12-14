@@ -1,3 +1,5 @@
+const DataFileHolder = require('./dataFileHolder.class')
+
 module.exports = {
-    dataFileHolder: require('./dataFileHolder.class')
+    DataFileHolder
 }

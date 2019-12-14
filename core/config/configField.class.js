@@ -1,3 +1,6 @@
+const _ = require('../libs/utils/lodash')
+const fileUtils = require('../libs/utils/file.utils')
+const stringUtils = require('../libs/utils/string.utils')
 
 const ENUMS = {
   datatype: {
@@ -27,9 +30,9 @@ const ENUMS = {
   }
 }
 
-class configField {
-  constructor (field_cfg) {
-    this._field_cfg = null
+class ConfigField {
+  constructor (fieldCfg) {
+    this._fieldCfg = null
     this._value = null
 
     const fcfg = _.merge({
@@ -55,9 +58,7 @@ class configField {
       // objectDatatypeCode  - integer, set privately
       // setFn: null,  - function, set privately
 
-    }, field_cfg)
-
-    const _self = this
+    }, fieldCfg)
 
     if (!_.isFunction(fcfg.printErrorFn)) fcfg.printErrorFn = console.log
 
@@ -71,13 +72,13 @@ class configField {
 
     if (!fcfg.checkFn) return
 
-    this._field_cfg = fcfg
+    this._fieldCfg = fcfg
     fcfg.setFn = this._setSetFn(fcfg.checkFn, fcfg.checkObjectFn, fcfg)
 
     if (!this.set(fcfg.defaultValue)) {
-      d$('configField.constructor', 'invalid default value', fcfg.defaultValue)
+      console.warn('configField.constructor', 'invalid default value', fcfg.defaultValue)
       this._value = null
-      this._field_cfg = null
+      this._fieldCfg = null
     }
   }
 
@@ -102,7 +103,7 @@ class configField {
   }
 
   error () {
-    return (this._field_cfg === null || this._value === null)
+    return (this._fieldCfg === null || this._value === null)
   }
 
   get () {
@@ -111,26 +112,26 @@ class configField {
 
   set (v, addt, parse) {
     if (parse === true) {
-      const parsed_v = this._parseValue(v)
-      if (_.isNil(parsed_v)) return false
-      v = parsed_v
+      const parsedValue = this._parseValue(v)
+      if (_.isNil(parsedValue)) return false
+      v = parsedValue
     }
-    const vObj = this._field_cfg.setFn(v, addt, this._value, this._field_cfg.allowedValues)
+    const vObj = this._fieldCfg.setFn(v, addt, this._value, this._fieldCfg.allowedValues)
     if (_.isNil(vObj.v) || vObj.check !== ENUMS.checks.success) {
       this._printError(v, vObj.check)
       return false
     }
     this._value = vObj.v
-    if (this._field_cfg.setSuccessFn) this._field_cfg.setSuccessFn()
+    if (this._fieldCfg.setSuccessFn) this._fieldCfg.setSuccessFn()
     return true
   }
 
   fnSet () {
-    return this._field_cfg.fnSet
+    return this._fieldCfg.fnSet
   }
 
   customFn (fnName) {
-    return this._field_cfg.customFn[fnName]
+    return this._fieldCfg.customFn[fnName]
   }
 
   _parseValue (strvalue) {
@@ -138,9 +139,9 @@ class configField {
       if (this.dataType.isArray === true) {
         const newarray = []
         strvalue.forEach((v) => {
-          const outcome_value = this._parseSingleValue(v, this._field_cfg.objectDatatypeCode)
-          if (!_.isNil(outcome_value)) {
-            newarray.push(outcome_value)
+          const outcomeValue = this._parseSingleValue(v, this._fieldCfg.objectDatatypeCode)
+          if (!_.isNil(outcomeValue)) {
+            newarray.push(outcomeValue)
           }
         })
         if (strvalue.length !== newarray.length) {
@@ -155,11 +156,11 @@ class configField {
 
     if (this.dataType.isObject === true || this.dataType.isArray === true) {
       // parse internal data type for complex field
-      return this._parseSingleValue(strvalue, this._field_cfg.objectDatatypeCode)
+      return this._parseSingleValue(strvalue, this._fieldCfg.objectDatatypeCode)
     }
 
     // parse simple data for simple field
-    return this._parseSingleValue(strvalue, this._field_cfg.datatypeCode)
+    return this._parseSingleValue(strvalue, this._fieldCfg.datatypeCode)
   }
 
   _parseSingleValue (strvalue, datatypeCode) {
@@ -170,11 +171,11 @@ class configField {
     let outcome = null
 
     if (datatypeCode === ENUMS.datatype.integer) {
-      outcome = Utils.strToInteger(strvalue)
+      outcome = stringUtils.strToInteger(strvalue)
     } else if (datatypeCode === ENUMS.datatype.number) {
-      outcome = Utils.strToFloat(strvalue)
+      outcome = stringUtils.strToFloat(strvalue)
     } else if (datatypeCode === ENUMS.datatype.boolean) {
-      outcome = Utils.strToBoolean(strvalue)
+      outcome = stringUtils.strToBoolean(strvalue)
     } else {
       outcome = strvalue
     }
@@ -185,45 +186,45 @@ class configField {
   }
 
   allowedValues () {
-    if (!_.isArray(this._field_cfg.allowedValues) || this._field_cfg.allowedValues.length < 1) return null
-    return this._field_cfg.allowedValues
+    if (!_.isArray(this._fieldCfg.allowedValues) || this._fieldCfg.allowedValues.length < 1) return null
+    return this._fieldCfg.allowedValues
   }
 
   flagsOnChange () {
-    if (!_.isArray(this._field_cfg.flagsOnChange) || this._field_cfg.flagsOnChange.length < 1) return null
-    return this._field_cfg.flagsOnChange
+    if (!_.isArray(this._fieldCfg.flagsOnChange) || this._fieldCfg.flagsOnChange.length < 1) return null
+    return this._fieldCfg.flagsOnChange
   }
 
   _setDatatype (datatype, objectDatatype, _fcfg) {
     if (!ENUMS.datatype[datatype]) {
-      d$('_setDatatype: no valid datatype', datatype)
+      console.warn('_setDatatype: no valid datatype', datatype)
       return null
     }
-    let object_datatype_code = null
-    const datatype_code = ENUMS.datatype[datatype]
-    if (datatype_code === ENUMS.datatype.array) {
+    let objectDatatypeCode = null
+    const datatypeCode = ENUMS.datatype[datatype]
+    if (datatypeCode === ENUMS.datatype.array) {
       if (!ENUMS.datatype[objectDatatype]) {
-        d$('_setDatatype: no valid objectDatatype', objectDatatype)
+        console.warn('_setDatatype: no valid objectDatatype', objectDatatype)
         return null
       }
-      object_datatype_code = ENUMS.datatype[objectDatatype]
-      if (object_datatype_code === ENUMS.datatype.array) {
-        d$('_setDatatype: objectDatatype cannot be array!')
+      objectDatatypeCode = ENUMS.datatype[objectDatatype]
+      if (objectDatatypeCode === ENUMS.datatype.array) {
+        console.warn('_setDatatype: objectDatatype cannot be array!')
         return null
       }
     }
     if (_fcfg) {
       _fcfg.datatype = datatype
       _fcfg.objectDatatype = objectDatatype
-      _fcfg.datatypeCode = datatype_code
-      _fcfg.objectDatatypeCode = object_datatype_code
+      _fcfg.datatypeCode = datatypeCode
+      _fcfg.objectDatatypeCode = objectDatatypeCode
       return true
     }
     return {
       datatype: datatype,
       objectDatatype: objectDatatype,
-      datatypeCode: datatype_code,
-      objectDatatypeCode: object_datatype_code
+      datatypeCode: datatypeCode,
+      objectDatatypeCode: objectDatatypeCode
     }
   }
 
@@ -274,14 +275,14 @@ class configField {
           if (!_fcfg || !_fcfg.checkPathExists) {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
               return ENUMS.checks.success
             }
           } else {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
-              if (Utils.File.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
+              if (fileUtils.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
               return ENUMS.checks.success
             }
           }
@@ -290,14 +291,14 @@ class configField {
           if (!_fcfg || !_fcfg.checkPathExists) {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
               return ENUMS.checks.success
             }
           } else {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
-              if (Utils.File.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
+              if (fileUtils.isRelativePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
               return ENUMS.checks.success
             }
           }
@@ -306,14 +307,14 @@ class configField {
           if (!_fcfg || !_fcfg.checkPathExists) {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
               return ENUMS.checks.success
             }
           } else {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
-              if (Utils.File.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
+              if (fileUtils.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
               return ENUMS.checks.success
             }
           }
@@ -322,14 +323,14 @@ class configField {
           if (!_fcfg || !_fcfg.checkPathExists) {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
               return ENUMS.checks.success
             }
           } else {
             checkFn = function (v) {
               if (_.isString(v) && v.length === 0) return ENUMS.checks.success
-              if (Utils.File.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
-              if (Utils.File.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
+              if (fileUtils.isAbsolutePath(v) !== true) return ENUMS.checks.wrongValue
+              if (fileUtils.directoryExistsSync(v) !== true) return ENUMS.checks.pathNotExists
               return ENUMS.checks.success
             }
           }
@@ -410,6 +411,7 @@ class configField {
       }
     } else if (_fcfg.datatypeCode === ENUMS.datatype.object) {
       setFn = function (v, addt, _ref, awv) {
+        const vObj = { v: null, check: ENUMS.checks.success }
         if (checkFn(v) === ENUMS.checks.success) {
           vObj.v = v
           return vObj
@@ -442,37 +444,37 @@ class configField {
   _printError (fieldvalue, checkResult) {
     switch (checkResult) {
       case ENUMS.checks.wrongValue:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': wrong value', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': wrong value', fieldvalue)
         break
       case ENUMS.checks.wrongObjectValue:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': wrong value for internal objects', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': wrong value for internal objects', fieldvalue)
         break
       case ENUMS.checks.valueNotAllowed:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': value not allowed', fieldvalue)
-        this._field_cfg.printErrorFn('Allowed values:', this.allowedValues())
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': value not allowed', fieldvalue)
+        this._fieldCfg.printErrorFn('Allowed values:', this.allowedValues())
         break
       case ENUMS.checks.pathNotExists:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': path does not exist', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': path does not exist', fieldvalue)
         break
       case ENUMS.checks.labelNeeded:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': label needed for object parameter', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': label needed for object parameter', fieldvalue)
         break
       case ENUMS.checks.parseValueNotString:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': cannot parse a non-string value', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': cannot parse a non-string value', fieldvalue)
         break
       case ENUMS.checks.parsingFailed:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': parsing failed', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': parsing failed', fieldvalue)
         break
       case ENUMS.checks.parsingIncompleteEnd:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': incomplete parsing - errors occurred on some fields', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': incomplete parsing - errors occurred on some fields', fieldvalue)
         break
       case ENUMS.checks.parsingDifferentDataField:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': parsing failed - data type does not match with field', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': parsing failed - data type does not match with field', fieldvalue)
         break
       default:
-        this._field_cfg.printErrorFn(this._field_cfg.fieldname + ': unknown error - ' + checkResult, 'value:', fieldvalue)
+        this._fieldCfg.printErrorFn(this._fieldCfg.fieldname + ': unknown error - ' + checkResult, 'value:', fieldvalue)
     }
   };
 }
 
-module.exports = configField
+module.exports = ConfigField
