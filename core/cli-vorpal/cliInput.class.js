@@ -1,12 +1,12 @@
-const isNil = function(v) { return v===null || v===undefined || typeof v === 'undefined'}
+const isNil = function (v) { return v === null || v === undefined || typeof v === 'undefined' }
 
 class cliInput {
   constructor (values, command) {
-    if(!values || typeof values !== 'object'){
-      throw new Error(`invalid 'value' argument: expected object`)
+    if (!values || typeof values !== 'object') {
+      throw new Error('invalid \'value\' argument: expected object')
     }
-    if(!command || typeof command !== 'string'){
-      throw new Error(`invalid 'command' argument: expected string`)
+    if (!command || typeof command !== 'string') {
+      throw new Error('invalid \'command\' argument: expected string')
     }
     this.command = command
     this.options = { ...values.options }

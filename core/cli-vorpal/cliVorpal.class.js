@@ -1,19 +1,18 @@
-const events = require('events')
+const Events = require('events')
 const vorpal = require('vorpal')
-const cliInput = require('./cliInput.class.js')
-const cliPrinter = require('./cliPrinter.class.js')
+const CliInput = require('./cliInput.class.js')
 
-const ERROR_CODE = -1
-const SUCCESS_CODE = 1
-const ACCEPTED_EVENTS = ['show','exit','beforeCommand','afterCommand']
+const CLI_ERROR = -1
+const CLI_SUCCESS = 1
+const ACCEPTED_EVENTS = ['show', 'exit', 'beforeCommand', 'afterCommand']
 
-class cliVorpal {
+class CliVorpal {
   constructor () {
     this.commands = {}
     this.vorpal = vorpal()
     this.delimiter = ''
     this.logger = console
-    this.eventEmitter = new events()
+    this.eventEmitter = new Events()
 
     this.vorpal.on('client_prompt_submit', (command) => {
       if (command === 'exit') {
@@ -27,7 +26,7 @@ class cliVorpal {
   show (delimiter) {
     if (delimiter) this.delimiter = delimiter
     this.eventEmitter.emit('show', { logger: this.logger })
-    //todo: cb - configMgr.printMessages()
+    // todo: cb - configMgr.printMessages()
     this.vorpal
       .delimiter(this.delimiter + '$')
       .show()
@@ -44,37 +43,37 @@ class cliVorpal {
   }
 
   addCommandBody (command, cmdFn) {
-    this.commands[command].action((args, cb) => {
+    const self = this
+    this.commands[command].action(function (args, cb) {
+      /* this function has to be a normal function not lambda or something else;
+       * the keyword 'this' will be cliReference and its needed, for instance, to call prompt method */
 
       /* args: cliReference, cliNextCb, cliData */
       cmdFn(this, (code, err) => {
-        if (code === ERROR_CODE) {
-          this.logger.info('command', command, 'terminated with an error.')
-          if (err) this.logger.info(err)
+        if (code === CLI_ERROR) {
+          self.logger.error(`command '${command}' terminated with an error.`)
+          if (err) self.logger.error(err)
         }
-        this.eventEmitter.emit('afterCommand', { logger: this.logger, command })
+        self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
         // todo: cb configMgr.printMessages()
         cb()
       }, {
-        cliInput: new cliInput(args, command),
-        errorCode: ERROR_CODE,
-        successCode: SUCCESS_CODE,
-        //ui: clUI.newLocalUI('> ' + command + ':')
+        CliInput: new CliInput(args, command)
       })
     })
   }
 
-  setLogger(logger) {
-    if( !logger.debug ||
+  setLogger (logger) {
+    if (!logger.debug ||
         !logger.info ||
         !logger.warn ||
-        !logger.error ) return false
+        !logger.error) return false
     this.logger = logger
     return true
   }
 
   on (eventName, cb) {
-    if(!ACCEPTED_EVENTS.includes(eventName)) {
+    if (!ACCEPTED_EVENTS.includes(eventName)) {
       this.logger.warn(`Invalid event '${eventName}'`)
       return false
     }
@@ -84,7 +83,7 @@ class cliVorpal {
 }
 
 module.exports = {
-  cliVorpal,
-  ERROR_CODE,
-  SUCCESS_CODE
+  CliVorpal,
+  CLI_ERROR,
+  CLI_SUCCESS
 }

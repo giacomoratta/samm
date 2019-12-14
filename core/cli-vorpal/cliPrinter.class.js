@@ -1,36 +1,62 @@
 const INDENT = '  '
+const NL = '\n'
 
-class cliPrinter {
-  constructor ({ command }) {
+class CliPrinter {
+  constructor ({ command , indentLevel=1 }) {
     this.command = command
+    this.indent = INDENT.repeat(indentLevel)
   }
 
   info (message) {
-    console.info(`${INDENT}${message}`)
+    console.info(`${this.indent}${message} ${NL}`)
   }
 
   warn (message) {
-    console.info(`${INDENT}WARNING: ${message}`)
+    console.info(`${this.indent}WARNING: ${message} ${NL}`)
   }
 
   error (message) {
-    console.info(`${INDENT}ERROR: ${message}`)
+    console.info(`${this.indent}ERROR: ${message} ${NL}`)
   }
 
-  orderedList () {
-
+  title (message) {
+    console.info(`${NL}${this.indent}${message}`)
   }
 
-  unorderedList () {
-
+  orderedList (array) {
+    if(!array) return
+    let i=1
+    array.forEach((e) => {
+      console.info(`${this.indent}${i++} ${e}`)
+    })
+    console.info(``)
   }
 
-  simpleMap () {
+  unorderedList (array) {
+    if(!array) return
+    array.forEach((e) => {
+      console.info(`${this.indent}- ${e}`)
+    })
+    console.info(``)
+  }
 
+  simpleMap (object) {
+    if(!object) return
+    Object.keys(object).forEach((k) => {
+      console.info(`${this.indent}  ${k}: ${object[k]}`)
+    })
+    console.info(``)
+  }
+
+  simpleMapByKey (object) {
+    if(!object) return
+    Object.keys(object).sort().forEach((k) => {
+      console.info(`${this.indent}  ${k}: ${object[k]}`)
+    })
+    console.info(``)
   }
 }
 
-
 module.exports = {
-  cliPrinter
+  CliPrinter
 }
