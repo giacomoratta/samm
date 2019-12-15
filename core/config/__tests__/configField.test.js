@@ -31,10 +31,10 @@ describe('configField class and object', function() {
             dataType:'object'
         }) }).toThrowError(`objectDatatype cannot be 'empty'`)
 
-        const configField1 = new ConfigField('myfield1',{})
+        //const configField1 = new ConfigField('myfield1',{})
 
 
-        console.log(configField1.error())
+        //console.log(configField1.error())
 
         //expect(configField.isValid()).toEqual(false)
     })

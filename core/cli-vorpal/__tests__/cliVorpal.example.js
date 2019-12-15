@@ -1,12 +1,21 @@
 const { CliVorpal, CLI_ERROR, CLI_SUCCESS } = require('../cliVorpal.class')
 const vCli = new CliVorpal()
+const vCl2 = new CliVorpal()
 
 vCli.on('beforeCommand', (e) => {
   console.info('test beforeCommand event message', e.command)
 })
 
 vCli.on('afterCommand', (e) => {
-  console.info('test beforeCommand event message', e.command)
+  console.info('test afterCommand event message', e.command)
+})
+
+vCl2.on('beforeCommand', (e) => {
+  console.info('test beforeCommand2 event message', e.command)
+})
+
+vCl2.on('afterCommand', (e) => {
+  console.info('test afterCommand2 event message', e.command)
 })
 
 vCli.addCommand('projects <reqA> <reqB> [optA] [optB]')

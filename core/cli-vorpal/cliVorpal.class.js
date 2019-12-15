@@ -74,11 +74,9 @@ class CliVorpal {
 
   on (eventName, cb) {
     if (!ACCEPTED_EVENTS.includes(eventName)) {
-      this.logger.warn(`Invalid event '${eventName}'`)
-      return false
+      throw new Error(`Invalid event '${eventName}'`)
     }
     this.eventEmitter.on(eventName, cb)
-    return true
   }
 }
 

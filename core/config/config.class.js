@@ -113,10 +113,6 @@ class config {
     fieldCfg.printErrorFn = console.error
 
     this.fields[fieldName] = new ConfigField(fieldCfg)
-    if (this.fields[fieldName].error()) {
-      console.warn('ConfigManager.addField', fieldName, 'ERROR')
-      return false
-    }
 
     if (this.fields[fieldName].dataType.isPath === true) {
       this._setCfgPaths(fieldName)
