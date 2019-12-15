@@ -54,12 +54,10 @@ class ConfigField {
         /* exampleFn:function(v,dt) v=current value, dt={} object for data - return undefined to avoid set */
       },
 
-      printErrorFn: console.info,
+      printErrorFn: console.info, // todo: remove
       checkFn: null,
       checkObjectFn: null,
       checkPathExists: false, // only for path
-
-      setSuccessFn: null,
 
       // dataTypeCode - integer, set privately
       // objectDatatypeCode  - integer, set privately
@@ -83,9 +81,7 @@ class ConfigField {
     fieldOptions.setFn = this._setSetFn(fieldOptions.checkFn, fieldOptions.checkObjectFn, fieldOptions)
 
     if (!this.set(fieldOptions.defaultValue)) {
-      console.warn('configField.constructor', 'invalid default value', fieldOptions.defaultValue)
-      this.value = null
-      this.options = null
+      throw new Error(`invalid defaultValue '${fieldOptions.defaultValue}' [field: '${this.name}']`)
     }
   }
   
@@ -100,7 +96,7 @@ class ConfigField {
     const dataTypeCode = ENUMS.dataType[fieldOptions.dataType]
     const objectDatatypeCode = ENUMS.dataType[fieldOptions.objectDatatype]
 
-    if (objectDatatypeCode === ENUMS.dataType.array || objectDatatypeCode === ENUMS.dataType.object) {      
+    if (objectDatatypeCode === ENUMS.dataType.array || objectDatatypeCode === ENUMS.dataType.object) {
       throw new Error(`objectDatatype cannot be '${fieldOptions.objectDatatype}' [field: '${this.name}']`)
     }
 
@@ -154,7 +150,6 @@ class ConfigField {
       return false
     }
     this.value = vObj.v
-    if (this.options.setSuccessFn) this.options.setSuccessFn()
     return true
   }
 

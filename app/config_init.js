@@ -59,6 +59,10 @@
     flagsOnChange: ['samples_index_new_scan_needed']
   })
 
+  configMgr.on('IncludedExtensionsForSamples','change',()=>{
+    // set flag
+  })
+
   configMgr.addField('ExcludedExtensionsForSamples', {
     description: '',
     datatype: 'array',
