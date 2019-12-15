@@ -4,17 +4,18 @@ const stringUtils = require('../libs/utils/string.utils')
 
 const ENUMS = {
   dataType: {
-    integer: 1,
-    number: 2,
-    boolean: 3,
-    char: 4,
-    string: 5,
-    array: 6,
-    object: 7,
-    relDirPath: 8,
-    relFilePath: 9,
-    absDirPath: 10,
-    absFilePath: 11
+    empty: 1,
+    integer: 2,
+    number: 3,
+    boolean: 4,
+    char: 5,
+    string: 6,
+    array: 7,
+    object: 8,
+    relDirPath: 11,
+    relFilePath: 12,
+    absDirPath: 13,
+    absFilePath: 14
   },
   checks: {
     success: 21,
@@ -33,10 +34,10 @@ const ENUMS = {
 class ConfigField {
   constructor (name, options) {
     if (!name) {
-      throw new TypeError(`no field name ${name}; expected string`)
+      throw new TypeError(`no field name '${name}'; expected string`)
     }
     if (!options) {
-      throw new TypeError(`no options; expected object`)
+      throw new TypeError(`no options for field '${name}'; expected object`)
     }
     this.name = name
     this.options = null
@@ -45,7 +46,7 @@ class ConfigField {
     const fieldOptions = {
       description: '',
       dataType: 'string',
-      objectDatatype: 0,
+      objectDatatype: 'empty',
       defaultValue: null,
       allowedValues: [],
       flagsOnChange: null,
@@ -53,7 +54,7 @@ class ConfigField {
         /* exampleFn:function(v,dt) v=current value, dt={} object for data - return undefined to avoid set */
       },
 
-      printErrorFn: null,
+      printErrorFn: console.info,
       checkFn: null,
       checkObjectFn: null,
       checkPathExists: false, // only for path
@@ -68,9 +69,7 @@ class ConfigField {
 
     }
 
-    if (!_.isFunction(fieldOptions.printErrorFn)) fieldOptions.printErrorFn = console.info
-
-    if (!this._setDatatype(fieldOptions.dataType, fieldOptions.objectDatatype, fieldOptions)) return
+    this._setDataTypes(fieldOptions)
 
     fieldOptions.checkObjectFn = this._setCheckFn(fieldOptions.checkObjectFn, fieldOptions.objectDatatypeCode, fieldOptions)
     fieldOptions.checkFn = this._setCheckFn(fieldOptions.checkFn, fieldOptions.dataTypeCode, fieldOptions, fieldOptions.checkObjectFn)
@@ -89,6 +88,31 @@ class ConfigField {
       this.options = null
     }
   }
+  
+  _setDataTypes (fieldOptions) {
+    if (!ENUMS.dataType[fieldOptions.dataType]) {
+      throw new Error(`invalid dataType '${fieldOptions.dataType}' [field: '${this.name}']`)
+    }
+    if (!ENUMS.dataType[fieldOptions.objectDatatype]) {
+      throw new Error(`invalid objectDatatype '${fieldOptions.objectDatatype}' [field: '${this.name}']`)
+    }
+
+    const dataTypeCode = ENUMS.dataType[fieldOptions.dataType]
+    const objectDatatypeCode = ENUMS.dataType[fieldOptions.objectDatatype]
+
+    if (objectDatatypeCode === ENUMS.dataType.array || objectDatatypeCode === ENUMS.dataType.object) {      
+      throw new Error(`objectDatatype cannot be '${fieldOptions.objectDatatype}' [field: '${this.name}']`)
+    }
+
+    if (dataTypeCode === ENUMS.dataType.array || dataTypeCode === ENUMS.dataType.object) {      
+      if (objectDatatypeCode === ENUMS.dataType.empty) {
+        throw new Error(`objectDatatype cannot be '${fieldOptions.objectDatatype}' as '${fieldOptions.dataType}' element [field: '${this.name}']`)
+      }
+    }
+    fieldOptions.dataTypeCode = dataTypeCode
+    fieldOptions.objectDatatypeCode = objectDatatypeCode
+  }
+
 
   _setDataTypeCheck (dataTypeCode) {
     return {
@@ -201,39 +225,6 @@ class ConfigField {
   flagsOnChange () {
     if (!_.isArray(this.options.flagsOnChange) || this.options.flagsOnChange.length < 1) return null
     return this.options.flagsOnChange
-  }
-
-  _setDatatype (dataType, objectDatatype, fieldOptions) {
-    if (!ENUMS.dataType[dataType]) {
-      console.warn('_setDatatype: no valid dataType', dataType)
-      return null
-    }
-    let objectDatatypeCode = null
-    const dataTypeCode = ENUMS.dataType[dataType]
-    if (dataTypeCode === ENUMS.dataType.array) {
-      if (!ENUMS.dataType[objectDatatype]) {
-        console.warn('_setDatatype: no valid objectDatatype', objectDatatype)
-        return null
-      }
-      objectDatatypeCode = ENUMS.dataType[objectDatatype]
-      if (objectDatatypeCode === ENUMS.dataType.array) {
-        console.warn('_setDatatype: objectDatatype cannot be array!')
-        return null
-      }
-    }
-    if (fieldOptions) {
-      fieldOptions.dataType = dataType
-      fieldOptions.objectDatatype = objectDatatype
-      fieldOptions.dataTypeCode = dataTypeCode
-      fieldOptions.objectDatatypeCode = objectDatatypeCode
-      return true
-    }
-    return {
-      dataType: dataType,
-      objectDatatype: objectDatatype,
-      dataTypeCode: dataTypeCode,
-      objectDatatypeCode: objectDatatypeCode
-    }
   }
 
   _setCheckFn (checkFn, dataTypeCode, fieldOptions, _checkObjectFn) {
