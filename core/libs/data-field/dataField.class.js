@@ -5,14 +5,39 @@ const ACCEPTED_EVENTS = [ 'change' ]
 
 /* schema docs: https://www.npmjs.com/package/fastest-validator */
 
+class DataFieldError extends Error {
+    constructor(errors) {
+        super();
+        this.errors = errors
+        this.message = ''
+        errors.forEach((e) => {
+            this.message += `[${e.type}] ${e.message} - Invalid value: ${e.expected}\n`
+        })
+    }
+
+    getByType(type) {
+        this.errors.some(function(e) {
+            if(e.type === type) return e
+        })
+    }
+
+    getByField(field) {
+        this.errors.some(function(e) {
+            if(e.field.endsWith(`.${field}`)) return e
+        })
+    }
+}
+
+
 class DataField {
-    constructor({ name, schema, value, strict }) {
+
+    constructor ({ name, schema, value, strict }) {
         this.name = name
         this.eventEmitter = new Events()
 
         this.schema = { [name]: schema }
         if(strict !== false) {
-            this.schema['$$strict'] = true /* no additional properties allowed */
+            this.schema.$$strict = true /* no additional properties allowed */
         }
 
         this.check = validator.compile(this.schema)
@@ -20,13 +45,12 @@ class DataField {
         this.set(value)
     }
 
-    validate(value) {
+    validate (value) {
         value = { [this.name]: value }
-        const errors = this.check(value)
-        return errors
+        return this.check(value)
     }
 
-    set(value) {
+    set (value) {
         const errors = this.validate(value)
         if(errors === true) {
             const oldValue = this.get()
@@ -35,11 +59,10 @@ class DataField {
             this.eventEmitter.emit('change',{ fieldName: this.name, newValue, oldValue })
             return true
         }
-        throw new TypeError(`[${errors[0].type}] ${errors[0].message}\nInvalid value: ${errors[0].expected}`)
-        return errors
+        throw new DataFieldError(errors)
     }
 
-    get() {
+    get () {
         return this.value[this.name]
     }
 

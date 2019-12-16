@@ -65,10 +65,29 @@ describe('dataField class and object', function() {
                     }
                 }
             },
-            value: defaultValue
+            value: defaultValue,
+            strict: false
         })
 
         expect(dataField1.get()).toEqual(defaultValue)
+
+        expect(function(){ dataField1.set({ invalid:'value' }) }).toThrow()
+
+        const defaultValue1 = { ...defaultValue }
+        defaultValue1.nested.listing = false
+        expect(function(){ dataField1.set(defaultValue1) }).toThrow()
+
+        try {
+            dataField1.set({})
+        } catch(e) {
+            console.log(e.message)
+        }
+
+        // const defaultValue2 = { ...defaultValue }
+        // console.log(defaultValue)
+        // defaultValue1.nested.listing = [ 'abc' ]
+        // defaultValue2.extraProp = 'text'
+        // expect(function(){ dataField1.set(defaultValue2) }).not.toThrow()
 
     })
 })
