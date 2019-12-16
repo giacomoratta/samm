@@ -99,7 +99,7 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
         throw new Error(`no checkObjectFn for '${fieldOptions.objectDatatype}' [field: '${fieldOptions.name}']`)
       }
       checkFn = function (value) {
-        if (!_.isObject(value)) return ENUMS.checks.wrongValue
+        if (!_.isStrictObject(value)) return ENUMS.checks.wrongValue
         for (let i = 0; i < value.length; i++) {
           if (fieldOptions.checkObjectFn(value[i]) === ENUMS.checks.wrongValue) return ENUMS.checks.wrongObjectValue
         }

@@ -1,6 +1,12 @@
 const _ = require('lodash')
 
 _.mixin({
+  isStrictObject: (obj) => {
+    return ( _.isObject(obj) && obj.constructor === Object)
+  }
+})
+
+_.mixin({
   isPromise: (obj) => {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
   }
