@@ -142,6 +142,17 @@ describe('configField class and object', function() {
             defaultValue: []
         })}).not.toThrow()
 
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            objectDatatype: 'integer',
+            defaultValue: [ 12 ]
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            objectDatatype: 'integer',
+            defaultValue: [ 12.345 ]
+        })}).toThrow()
 
         expect(function(){ new ConfigField('field-name'+(index++), {
             dataType: 'object',
@@ -160,23 +171,23 @@ describe('configField class and object', function() {
             defaultValue: []
         })}).toThrowError(`objectDatatype cannot be 'object'`)
 
-        let x = new ConfigField('field-name'+(index++), {
+        expect(function(){ new ConfigField('field-name'+(index++), {
             dataType: 'object',
             objectDatatype: 'integer',
-            defaultValue: [] // should fail!!!
-        })
+            defaultValue: []
+        })}).toThrow()
 
         expect(function(){ new ConfigField('field-name'+(index++), {
             dataType: 'object',
             objectDatatype: 'integer',
-            defaultValue: [] // should fail!!!
-        })}).not.toThrow()
+            defaultValue: { key: 12.34 }
+        })}).toThrow()
 
         expect(function(){ new ConfigField('field-name'+(index++), {
             dataType: 'object',
             objectDatatype: 'absDirPath',
             defaultValue: []
-        })}).not.toThrow()
+        })}).toThrow()
 
     })
 

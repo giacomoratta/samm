@@ -2,6 +2,7 @@ const Events = require('events')
 const _ = require('../libs/utils/lodash.extended')
 const fileUtils = require('../libs/utils/file.utils')
 const stringUtils = require('../libs/utils/string.utils')
+const dataField = require('./data-field')
 
 const ENUMS = {
   dataType: {
@@ -13,6 +14,7 @@ const ENUMS = {
     string: 6,
     array: 7,
     object: 8,
+    mixed: 9,
     relDirPath: 11,
     relFilePath: 12,
     absDirPath: 13,
@@ -180,7 +182,7 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
 }
 
 
-const setDataTypeCheck = (dataTypeCode) => {
+const setDataTypeIs = (dataTypeCode) => {
   return {
     isInteger: (dataTypeCode === ENUMS.dataType.integer),
     isNumber: (dataTypeCode === ENUMS.dataType.number),
@@ -329,7 +331,7 @@ class ConfigField {
       //   /* exampleFn:function(value,dt) v=current value, dt={} object for data - return undefined to avoid set */
       // },
 
-      printErrorFn: console.info, // todo: remove
+      printErrorFn: function () { },
       checkFn: null,
       checkObjectFn: null,
       checkPathExists: false, // only for path
@@ -346,8 +348,8 @@ class ConfigField {
     fieldOptions.checkObjectFn = setCheckFn(fieldOptions, 'objectDatatypeCode')
     fieldOptions.checkFn = setCheckFn(fieldOptions, 'dataTypeCode')
 
-    this.dataType = setDataTypeCheck(fieldOptions.dataTypeCode)
-    this.objectDatatype = setDataTypeCheck(fieldOptions.objectDatatypeCode)
+    this.dataType = setDataTypeIs(fieldOptions.dataTypeCode)
+    this.objectDatatype = setDataTypeIs(fieldOptions.objectDatatypeCode)
     fieldOptions.setFn = setSetFn(fieldOptions)
 
     this.options = fieldOptions
