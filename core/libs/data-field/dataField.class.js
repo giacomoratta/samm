@@ -3,6 +3,8 @@ const validator = require('./validator')
 
 const ACCEPTED_EVENTS = [ 'change' ]
 
+/* schema docs: https://www.npmjs.com/package/fastest-validator */
+
 class DataField {
     constructor({ name, schema, value, strict }) {
         this.name = name

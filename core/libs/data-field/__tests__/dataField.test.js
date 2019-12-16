@@ -38,7 +38,11 @@ describe('dataField class and object', function() {
             nested: {
                 id: 42,
                 name: 'fghil67890',
-                status: false
+                status: false,
+                listing: [
+                    'elm1',
+                    'elm2'
+                ]
             }
         }
 
@@ -56,13 +60,14 @@ describe('dataField class and object', function() {
                             id: { type: "number", positive: true, integer: true },
                             name: { type: "string", min: 3, max: 255 },
                             status: "boolean",
+                            listing: { type: "array" }
                         }
                     }
                 }
             },
             value: defaultValue
         })
-        console.log(dataField1.get())
+
         expect(dataField1.get()).toEqual(defaultValue)
 
     })
