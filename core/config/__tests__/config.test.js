@@ -1,4 +1,4 @@
-const configField = require('../configField.class')
+const configField = require('../../libs/data-field/configField.class')
 
 describe('configField class and object', function() {
 

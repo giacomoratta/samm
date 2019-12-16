@@ -20,7 +20,6 @@
     "pino": "^5.14.0",
     "rimraf": "^2.6.2",
     "symbol-tree": "^3.2.2",
-    "validate": "^5.1.0",
     "vorpal": "^1.12.0"
   },
   "devDependencies": {
