@@ -1,3 +1,4 @@
+const Events = require('events')
 const _ = require('../libs/utils/lodash.extended')
 const fileUtils = require('../libs/utils/file.utils')
 const stringUtils = require('../libs/utils/string.utils')
@@ -105,6 +106,22 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
         return ENUMS.checks.success
       }
       break
+    case ENUMS.dataType.relDirPath:
+      if (!fieldOptions || !fieldOptions.checkPathExists) {
+        checkFn = function (value) {
+          if (_.isString(value) && value.length === 0) return ENUMS.checks.success
+          if (fileUtils.isRelativePath(value) !== true) return ENUMS.checks.wrongValue
+          return ENUMS.checks.success
+        }
+      } else {
+        checkFn = function (value) {
+          if (_.isString(value) && value.length === 0) return ENUMS.checks.success
+          if (fileUtils.isRelativePath(value) !== true) return ENUMS.checks.wrongValue
+          if (fileUtils.directoryExistsSync(value) !== true) return ENUMS.checks.pathNotExists
+          return ENUMS.checks.success
+        }
+      }
+      break
     case ENUMS.dataType.relFilePath:
       if (!fieldOptions || !fieldOptions.checkPathExists) {
         checkFn = function (value) {
@@ -116,6 +133,22 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
         checkFn = function (value) {
           if (_.isString(value) && value.length === 0) return ENUMS.checks.success
           if (fileUtils.isRelativePath(value) !== true) return ENUMS.checks.wrongValue
+          if (fileUtils.fileExistsSync(value) !== true) return ENUMS.checks.pathNotExists
+          return ENUMS.checks.success
+        }
+      }
+      break
+    case ENUMS.dataType.absDirPath:
+      if (!fieldOptions || !fieldOptions.checkPathExists) {
+        checkFn = function (value) {
+          if (_.isString(value) && value.length === 0) return ENUMS.checks.success
+          if (fileUtils.isAbsolutePath(value) !== true) return ENUMS.checks.wrongValue
+          return ENUMS.checks.success
+        }
+      } else {
+        checkFn = function (value) {
+          if (_.isString(value) && value.length === 0) return ENUMS.checks.success
+          if (fileUtils.isAbsolutePath(value) !== true) return ENUMS.checks.wrongValue
           if (fileUtils.directoryExistsSync(value) !== true) return ENUMS.checks.pathNotExists
           return ENUMS.checks.success
         }
@@ -132,7 +165,7 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
         checkFn = function (value) {
           if (_.isString(value) && value.length === 0) return ENUMS.checks.success
           if (fileUtils.isAbsolutePath(value) !== true) return ENUMS.checks.wrongValue
-          if (fileUtils.directoryExistsSync(value) !== true) return ENUMS.checks.pathNotExists
+          if (fileUtils.fileExistsSync(value) !== true) return ENUMS.checks.pathNotExists
           return ENUMS.checks.success
         }
       }
@@ -140,7 +173,7 @@ const setCheckFn = (fieldOptions, dataTypeField) => {
     default:
       // should never happens
   }
-  if (checkFn) {
+  if (!checkFn) {
     throw new Error(`no checkFn found for '${dataTypeField}' = ${fieldOptions[dataTypeField]} [field: '${fieldOptions.name}']`)
   }
   return checkFn
@@ -320,7 +353,7 @@ class ConfigField {
     this.options = fieldOptions
 
     if (!this.set(fieldOptions.defaultValue)) {
-      throw new Error(`invalid defaultValue '${fieldOptions.defaultValue}' [field: '${this.name}']`)
+      throw new Error(`invalid defaultValue '${fieldOptions.defaultValue}' as ${fieldOptions.dataType} [field: '${this.name}']`)
     }
   }
 

@@ -2,7 +2,7 @@ const { ConfigField, dataType } = require('../configField.class')
 
 describe('configField class and object', function() {
 
-    it("should create a standard configField", function() {
+    it("should catch errors on configField", function() {
 
         expect(function(){ new ConfigField() }).toThrowError('field name')
         expect(function(){ new ConfigField('field-name') }).toThrowError('options')
@@ -37,6 +37,147 @@ describe('configField class and object', function() {
         //console.log(configField1.error())
 
         //expect(configField.isValid()).toEqual(false)
+    })
+
+    it("should create standard configFields", function() {
+
+        let index = 1
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'empty',
+            defaultValue: ''
+        })}).toThrowError('invalid defaultValue')
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'integer',
+            defaultValue: 12
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'integer',
+            defaultValue: 12.2345
+        })}).toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'number',
+            defaultValue: 12
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'number',
+            defaultValue: 12.2345
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'boolean',
+            defaultValue: false
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'boolean',
+            defaultValue: true
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'boolean',
+            defaultValue: 'false'
+        })}).toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'char',
+            defaultValue: ''
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'char',
+            defaultValue: 'a'
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'char',
+            defaultValue: 'abc'
+        })}).toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'string',
+            defaultValue: ''
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'string',
+            defaultValue: 'qwertyuio'
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'string',
+            defaultValue: 123
+        })}).toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'string',
+            defaultValue: true
+        })}).toThrow()
+
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'empty'`)
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            objectDatatype: 'array',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'array'`)
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            objectDatatype: 'object',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'object'`)
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'array',
+            objectDatatype: 'integer',
+            defaultValue: []
+        })}).not.toThrow()
+
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'empty'`)
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            objectDatatype: 'array',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'array'`)
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            objectDatatype: 'object',
+            defaultValue: []
+        })}).toThrowError(`objectDatatype cannot be 'object'`)
+
+        let x = new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            objectDatatype: 'integer',
+            defaultValue: [] // should fail!!!
+        })
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            objectDatatype: 'integer',
+            defaultValue: [] // should fail!!!
+        })}).not.toThrow()
+
+        expect(function(){ new ConfigField('field-name'+(index++), {
+            dataType: 'object',
+            objectDatatype: 'absDirPath',
+            defaultValue: []
+        })}).not.toThrow()
+
     })
 
 })
