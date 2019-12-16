@@ -80,14 +80,114 @@ describe('dataField class and object', function() {
         try {
             dataField1.set({})
         } catch(e) {
-            console.log(e.message)
+            expect(e).toHaveProperty('errors')
+            expect(e).toHaveProperty('message')
+            expect(e.getByType('required') instanceof Array).toEqual(true)
+            expect(e.getByType('required')[0].fieldName).toEqual('id')
+            expect(e.getByField('id')[0].fieldName).toEqual('id')
         }
 
+        // Test strict (not working at the moment)
         // const defaultValue2 = { ...defaultValue }
         // console.log(defaultValue)
         // defaultValue1.nested.listing = [ 'abc' ]
         // defaultValue2.extraProp = 'text'
         // expect(function(){ dataField1.set(defaultValue2) }).not.toThrow()
 
+    })
+
+
+    it("should manage relDirPath fields", function() {
+
+        let dataField1 = null
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: 423
+            })
+        }).toThrow()
+        
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" }
+            })
+        }).not.toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" }
+            })
+            df1.set(432)
+        }).toThrow()
+
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: './test_dir'
+            })
+        }).not.toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath", exists: true },
+                value: './test_dir'
+            })
+        }).not.toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath", exists: true },
+                value: './test_dir-not'
+            })
+        }).toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath", exists: true },
+                value: './test_dir/'
+            })
+        }).not.toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: './test_dir/'
+            })
+        }).not.toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: '/test_dir'
+            })
+        }).toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: '/test_dir'
+            })
+        }).toThrow()
+
+        expect(function(){
+            const df1 = new DataField({
+                name:'fieldname1',
+                schema: { type: "relDirPath" },
+                value: 'test_dir'
+            })
+        }).toThrow()
+        
     })
 })

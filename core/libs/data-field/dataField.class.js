@@ -16,14 +16,14 @@ class DataFieldError extends Error {
     }
 
     getByType(type) {
-        this.errors.some(function(e) {
-            if(e.type === type) return e
+        return this.errors.filter(function(e) {
+            return e.type === type
         })
     }
 
     getByField(field) {
-        this.errors.some(function(e) {
-            if(e.field.endsWith(`.${field}`)) return e
+        return this.errors.filter(function(e) {
+            return e.field.endsWith(`.${field}`)
         })
     }
 }
