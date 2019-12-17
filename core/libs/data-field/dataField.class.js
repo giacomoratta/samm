@@ -1,48 +1,21 @@
 const Events = require('events')
 const validator = require('./validator')
+const DataFieldError = require('./dataField.error')
 
 const ACCEPTED_EVENTS = [ 'change' ]
 
 /* schema docs: https://www.npmjs.com/package/fastest-validator */
 
-class DataFieldError extends Error {
-    constructor(errors) {
-        super();
-        this.errors = errors
-        this.message = ''
-        errors.forEach((e) => {
-            this.message += `[${e.type}] ${e.message} - Invalid value: ${e.expected}\n`
-        })
-    }
-
-    getByType(type) {
-        return this.errors.filter(function(e) {
-            return e.type === type
-        })
-    }
-
-    getByField(field) {
-        return this.errors.filter(function(e) {
-            return e.field.endsWith(`.${field}`)
-        })
-    }
-}
-
 
 class DataField {
 
-    constructor ({ name, schema, value, strict }) {
+    constructor ({ name, schema, value }) {
         this.name = name
         this.eventEmitter = new Events()
-
         this.schema = { [name]: schema }
-        if(strict !== false) {
-            this.schema.$$strict = true /* no additional properties allowed */
-        }
-
         this.check = validator.compile(this.schema)
         this.value = { [this.name]: null }
-        this.set(value)
+        if(value) this.set(value)
     }
 
     validate (value) {
