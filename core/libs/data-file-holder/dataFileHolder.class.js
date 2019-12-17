@@ -1,10 +1,12 @@
 const _ = require('lodash')
 const utils = require('./utils')
 
+// todo: replace custom function with events (check event finished and get returned data)
+
 class DataFileHolder {
   constructor () {
-    this._cfg = {}
-    this._data = {}
+    this.fileConfig = { }
+    this.fileData = { }
 
     // todo: external
     this.ENUMS = {
@@ -21,11 +23,11 @@ class DataFileHolder {
     }
   }
 
-  _parseConfiguration ($cfg) {
-    if (!$cfg) return null
-    if (!$cfg.label) return null
+  _parseConfiguration (fileConfig) {
+    if (!fileConfig) return null
+    if (!fileConfig.label) return null
     // if(!options.filePath) return null; //???
-    const _default$cfg = {
+    const defaultFileConfig = {
       label: null,
       filePath: null,
       fileType: 'json',
@@ -54,67 +56,67 @@ class DataFileHolder {
       _checkDataType: null
     }
 
-    const _$cfg = _.merge(_default$cfg, $cfg)
-    _$cfg.fileType = this._checkEnumValue('fileType', _$cfg.fileType, this.ENUMS.fileType.json)
-    _$cfg.dataType = this._checkEnumValue('dataType', _$cfg.dataType, this.ENUMS.dataType.object)
-    _$cfg._checkDataType = this._setcheckDataTypeFn(_$cfg.dataType)
-    return _$cfg
+    const _fileConfig = _.merge(defaultFileConfig, fileConfig)
+    _fileConfig.fileType = this._checkEnumValue('fileType', _fileConfig.fileType, this.ENUMS.fileType.json)
+    _fileConfig.dataType = this._checkEnumValue('dataType', _fileConfig.dataType, this.ENUMS.dataType.object)
+    _fileConfig._checkDataType = this._setcheckDataTypeFn(_fileConfig.dataType)
+    return _fileConfig
   }
 
   fileExistsSync (label) {
-    if (_.isNil(this._cfg[label]) || _.isNil(this._cfg[label].filePath)) return null
-    return utils.fileExistsSync(this._cfg[label].filePath)
+    if (_.isNil(this.fileConfig[label]) || _.isNil(this.fileConfig[label].filePath)) return null
+    return utils.fileExistsSync(this.fileConfig[label].filePath)
   }
 
   hasData (label) {
-    return !_.isNil(this._data[label])
+    return !_.isNil(this.fileData[label])
   }
 
   hasHolder (label) {
-    return _.isObject(this._cfg[label])
+    return _.isObject(this.fileConfig[label])
   }
 
-  setHolder ($cfg) {
-    $cfg = this._parseConfiguration($cfg)
-    if (!$cfg) {
-      $cfg.logErrorsFn('dataFileHolder.setHolder > configuration not valid')
+  setHolder (fileConfig) {
+    fileConfig = this._parseConfiguration(fileConfig)
+    if (!fileConfig) {
+      fileConfig.logErrorsFn('dataFileHolder.setHolder > configuration not valid')
       return null
     }
 
-    this._cfg[$cfg.label] = $cfg
-    this._data[$cfg.label] = null
+    this.fileConfig[fileConfig.label] = fileConfig
+    this.fileData[fileConfig.label] = null
 
     let _outcomeLoadSet = null
-    if ($cfg.preLoad === true) {
-      _outcomeLoadSet = this.load($cfg.label)
-      if (!this.hasData($cfg.label)) this.init($cfg.label)
+    if (fileConfig.preLoad === true) {
+      _outcomeLoadSet = this.load(fileConfig.label)
+      if (!this.hasData(fileConfig.label)) this.init(fileConfig.label)
       return _outcomeLoadSet
     }
-    if ($cfg.preSet === true) {
-      _outcomeLoadSet = this.set($cfg.label)
-      if (!this.hasData($cfg.label)) this.init($cfg.label)
+    if (fileConfig.preSet === true) {
+      _outcomeLoadSet = this.set(fileConfig.label)
+      if (!this.hasData(fileConfig.label)) this.init(fileConfig.label)
       return _outcomeLoadSet
     }
 
-    this.init($cfg.label)
+    this.init(fileConfig.label)
     return true
   }
 
-  $cfg (label) {
-    return this._cfg[label]
+  fileConfig (label) {
+    return this.fileConfig[label]
   }
 
   check (label, args) {
-    const $cfg = this._cfg[label]
-    if (!$cfg || !$cfg.filePath) return null
+    const fileConfig = this.fileConfig[label]
+    if (!fileConfig || !fileConfig.filePath) return null
 
     if (!this.hasData(label)) return false
-    if ($cfg.checkFn) {
+    if (fileConfig.checkFn) {
       try {
-        return $cfg.checkFn(this._data[label], $cfg, args)
+        return fileConfig.checkFn(this.fileData[label], fileConfig, args)
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.check > checkFn callback failed')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.check > checkFn callback failed')
         return null
       }
     }
@@ -122,13 +124,13 @@ class DataFileHolder {
   }
 
   init (label, args) {
-    const $cfg = this._cfg[label]
-    if ($cfg.initFn) {
+    const fileConfig = this.fileConfig[label]
+    if (fileConfig.initFn) {
       try {
-        this._data[label] = $cfg.initFn(this._data[label], $cfg, args)
+        this.fileData[label] = fileConfig.initFn(this.fileData[label], fileConfig, args)
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.init > initFn callback failed')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.init > initFn callback failed')
         return null
       }
     }
@@ -136,116 +138,116 @@ class DataFileHolder {
   }
 
   load (label, args) {
-    const $cfg = this._cfg[label]
-    if (!$cfg || !$cfg.filePath) return null
+    const fileConfig = this.fileConfig[label]
+    if (!fileConfig || !fileConfig.filePath) return null
 
-    let filedata = this._loadFileData($cfg)
+    let filedata = this._loadFileData(fileConfig)
     if (filedata === false || filedata === null) {
-      $cfg.logErrorsFn('dataFileHolder.load [' + label + '] > the file does not exist:', $cfg.filePath)
+      fileConfig.logErrorsFn('dataFileHolder.load [' + label + '] > the file does not exist:', fileConfig.filePath)
       // return false;
       filedata = null
     }
 
-    if ($cfg.loadFn) {
+    if (fileConfig.loadFn) {
       try {
-        const data = $cfg.loadFn(filedata, $cfg, args)
-        if (!$cfg._checkDataType(data)) {
-          $cfg.logErrorsFn('dataFileHolder.load [' + label + '] > loaded data type is not ' + $cfg.dataType)
+        const data = fileConfig.loadFn(filedata, fileConfig, args)
+        if (!fileConfig._checkDataType(data)) {
+          fileConfig.logErrorsFn('dataFileHolder.load [' + label + '] > loaded data type is not ' + fileConfig.dataType)
           return null
         }
-        this._data[label] = data
+        this.fileData[label] = data
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.load [' + label + '] > loadFn callback failed!')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.load [' + label + '] > loadFn callback failed!')
         return null
       }
     } else {
-      if (!$cfg._checkDataType(filedata)) {
-        $cfg.logErrorsFn('dataFileHolder.load [' + label + '] > loaded data type is not ' + $cfg.dataType)
+      if (!fileConfig._checkDataType(filedata)) {
+        fileConfig.logErrorsFn('dataFileHolder.load [' + label + '] > loaded data type is not ' + fileConfig.dataType)
         return null
       }
-      this._data[label] = filedata
+      this.fileData[label] = filedata
     }
 
-    if ($cfg.autoSave === true) {
+    if (fileConfig.autoSave === true) {
       this.save(label, args)
     }
-    return this._data[label]
+    return this.fileData[label]
   }
 
   save (label, args) {
-    const $cfg = this._cfg[label]
-    if (!$cfg || !$cfg.filePath || !this._data[label]) return null
+    const fileConfig = this.fileConfig[label]
+    if (!fileConfig || !fileConfig.filePath || !this.fileData[label]) return null
     let filedata = null
 
-    if ($cfg.saveFn) {
+    if (fileConfig.saveFn) {
       try {
-        filedata = $cfg.saveFn(this._data[label], $cfg, args)
+        filedata = fileConfig.saveFn(this.fileData[label], fileConfig, args)
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.save > saveFn callback failed!')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.save > saveFn callback failed!')
         return null
       }
 
-      if ($cfg.backupTo.length > 0) {
-        if (utils.copyFileSync($cfg.filePath, $cfg.backupTo).err !== null) {
-          $cfg.logErrorsFn('dataFileHolder.save > backup failed!')
+      if (fileConfig.backupTo.length > 0) {
+        if (utils.copyFileSync(fileConfig.filePath, fileConfig.backupTo).err !== null) {
+          fileConfig.logErrorsFn('dataFileHolder.save > backup failed!')
         }
       }
-    } else filedata = this._data[label]
-    const saveoutcome = this._saveFileData($cfg, filedata)
+    } else filedata = this.fileData[label]
+    const saveoutcome = this._saveFileData(fileConfig, filedata)
     if (saveoutcome === null || saveoutcome === false) return null
     return saveoutcome
   }
 
   set (label, data, args) {
-    const $cfg = this._cfg[label]
-    if (!$cfg || !$cfg.filePath) return null
+    const fileConfig = this.fileConfig[label]
+    if (!fileConfig || !fileConfig.filePath) return null
 
-    this._data[label] = null
+    this.fileData[label] = null
     if (data) {
-      if (!$cfg._checkDataType(data)) {
-        $cfg.logErrorsFn('dataFileHolder.set > data type is not ' + $cfg.dataType)
+      if (!fileConfig._checkDataType(data)) {
+        fileConfig.logErrorsFn('dataFileHolder.set > data type is not ' + fileConfig.dataType)
         return null
       }
-      this._data[label] = data
-    } else if ($cfg.setFn) {
+      this.fileData[label] = data
+    } else if (fileConfig.setFn) {
       try {
-        data = $cfg.setFn($cfg, args)
-        if (!$cfg._checkDataType(data)) {
-          $cfg.logErrorsFn('dataFileHolder.set > data type is not ' + $cfg.dataType)
+        data = fileConfig.setFn(fileConfig, args)
+        if (!fileConfig._checkDataType(data)) {
+          fileConfig.logErrorsFn('dataFileHolder.set > data type is not ' + fileConfig.dataType)
           return null
         }
-        this._data[label] = data
+        this.fileData[label] = data
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.set > setFn callback failed!')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.set > setFn callback failed!')
         return null
       }
     }
 
-    if ($cfg.autoSave === true) {
+    if (fileConfig.autoSave === true) {
       this.save(label, args)
     }
-    return this._data[label]
+    return this.fileData[label]
   }
 
   get (label, args) {
-    const $cfg = this._cfg[label]; if (!$cfg) return null
-    let dataObj = this._data[label]
+    const fileConfig = this.fileConfig[label]; if (!fileConfig) return null
+    let dataObj = this.fileData[label]
     if (!dataObj) {
-      if ($cfg.autoLoad === true) {
-        dataObj = this.load($cfg.label, args)
-      } else if ($cfg.autoSet === true) {
-        dataObj = this.set($cfg.label, args)
+      if (fileConfig.autoLoad === true) {
+        dataObj = this.load(fileConfig.label, args)
+      } else if (fileConfig.autoSet === true) {
+        dataObj = this.set(fileConfig.label, args)
       }
     }
-    if ($cfg.getFn) {
+    if (fileConfig.getFn) {
       try {
-        return $cfg.getFn(dataObj, $cfg, args)
+        return fileConfig.getFn(dataObj, fileConfig, args)
       } catch (e) {
-        $cfg.logErrorsFn(e)
-        $cfg.logErrorsFn('dataFileHolder.get > getFn callback failed')
+        fileConfig.logErrorsFn(e)
+        fileConfig.logErrorsFn('dataFileHolder.get > getFn callback failed')
         return null
       }
     }
@@ -253,10 +255,10 @@ class DataFileHolder {
   }
 
   print (label, args) {
-    const $cfg = this._cfg[label]; if (!$cfg) return null
+    const fileConfig = this.fileConfig[label]; if (!fileConfig) return null
     const dataObj = this.get(label, args)
-    if ($cfg.printFn) {
-      return $cfg.printFn(dataObj, $cfg, args)
+    if (fileConfig.printFn) {
+      return fileConfig.printFn(dataObj, fileConfig, args)
     }
   }
 
@@ -276,26 +278,26 @@ class DataFileHolder {
     return _.isObject
   }
 
-  _loadFileData ($cfg) {
-    if ($cfg.cloneFrom.length > 0 && !utils.fileExistsSync($cfg.filePath)) {
-      const cpF = utils.copyFileSync($cfg.cloneFrom, $cfg.filePath)
-      if (cpF.err) $cfg.logErrorsFn('dataFileHolder > Cloning of file failed', 'src: ' + $cfg.cloneFrom, 'dst: ' + $cfg.filePath)
+  _loadFileData (fileConfig) {
+    if (fileConfig.cloneFrom.length > 0 && !utils.fileExistsSync(fileConfig.filePath)) {
+      const cpF = utils.copyFileSync(fileConfig.cloneFrom, fileConfig.filePath)
+      if (cpF.err) fileConfig.logErrorsFn('dataFileHolder > Cloning of file failed', 'src: ' + fileConfig.cloneFrom, 'dst: ' + fileConfig.filePath)
     }
-    if ($cfg.fileType === this.ENUMS.fileType.json || $cfg.fileType === this.ENUMS.fileType.json_compact) {
-      return utils.readJsonFileSync($cfg.filePath)
-    } else if ($cfg.fileType === this.ENUMS.fileType.text) {
-      return utils.readTextFileSync($cfg.filePath)
+    if (fileConfig.fileType === this.ENUMS.fileType.json || fileConfig.fileType === this.ENUMS.fileType.json_compact) {
+      return utils.readJsonFileSync(fileConfig.filePath)
+    } else if (fileConfig.fileType === this.ENUMS.fileType.text) {
+      return utils.readTextFileSync(fileConfig.filePath)
     }
     return null
   }
 
-  _saveFileData ($cfg, content) {
-    if ($cfg.fileType === this.ENUMS.fileType.json) {
-      return utils.writeJsonFileSync($cfg.filePath, content)
-    } else if ($cfg.fileType === this.ENUMS.fileType.json_compact) {
-      return utils.writeJsonFileSync($cfg.filePath, content, false)
-    } else if ($cfg.fileType === this.ENUMS.fileType.text) {
-      return utils.writeTextFileSync($cfg.filePath, content)
+  _saveFileData (fileConfig, content) {
+    if (fileConfig.fileType === this.ENUMS.fileType.json) {
+      return utils.writeJsonFileSync(fileConfig.filePath, content)
+    } else if (fileConfig.fileType === this.ENUMS.fileType.json_compact) {
+      return utils.writeJsonFileSync(fileConfig.filePath, content, false)
+    } else if (fileConfig.fileType === this.ENUMS.fileType.text) {
+      return utils.writeTextFileSync(fileConfig.filePath, content)
     }
     return null
   }
