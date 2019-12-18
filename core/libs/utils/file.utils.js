@@ -33,6 +33,7 @@ libUtils.equalPaths = (p1, p2) => {
   if (p1.length <= p2.length) return p2.endsWith(p1)
 }
 
+
 /* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.pathChangeFilename = (pathString, changeFn) => {
@@ -46,6 +47,7 @@ libUtils.pathChangeDirname = (pathString, changeFn) => {
   const _pInfoBase = changeFn(_pInfo.base, _pInfo)
   return libUtils.pathJoin(_pInfo.dir, _pInfoBase)
 }
+
 
 /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -97,7 +99,7 @@ libUtils.checkAndSetDuplicatedDirectoryNameSync = (pathString, renameFn) => {
   })
 }
 
-libUtils.checkAndSetPathSync = (pathString, callback) => {
+libUtils.checkAndSetPathSync = (pathString, callback) => { //todo ???
   if (!_.isString(pathString)) return null
   if (!fs.existsSync(pathString)) return null
   pathString = path.resolve(pathString) + libUtils.pathSeparator
@@ -115,19 +117,22 @@ libUtils.directoryExistsSync = (pathString) => {
   return fs.existsSync(pathString)
 }
 
+
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (pathString) => {
   return new Promise(function (resolve) {
-    return resolve(libUtils.fileExistsSync(pathString))
+    fs.access(pathString, fs.constants.F_OK, (err) => {
+      resolve({
+          exists: !err,
+          error: err
+      })
+    })
   })
 }
 
-libUtils.directoryExists = (pathString) => {
-  return new Promise(function (resolve) {
-    return resolve(libUtils.directoryExistsSync(pathString))
-  })
-}
+libUtils.directoryExists = libUtils.fileExists
+
 
 /* PATH R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -345,9 +350,11 @@ libUtils.readDirectorySync = (pathString, preFn, callback) => {
 
 libUtils.removeDirSync = (pathString) => {
   try {
-    return rimraf.sync(pathString)
+    rimraf.sync(pathString)
+    return true
   } catch (e) {
-    // console.error(e.message)
+    //console.error(e)
+    return false
   }
 }
 
@@ -355,9 +362,11 @@ libUtils.removeDirSync = (pathString) => {
 
 libUtils.removeFileSync = (pathString) => {
   try {
-    return fs.unlinkSync(pathString)
+    fs.unlinkSync(pathString)
+    return true
   } catch (e) {
     // console.error(e.message)
+    return false
   }
 }
 
