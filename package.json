@@ -31,5 +31,12 @@
     "testPathIgnorePatterns": [
       "/__old_tests"
     ]
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "expect",
+      "it"
+    ]
   }
 }

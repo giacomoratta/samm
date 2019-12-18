@@ -238,16 +238,16 @@ libUtils.writeJsonFileSync = (pathString, jsonObj, space) => {
 
 libUtils.writeTextFile = (pathTo, text) => {
   return new Promise(function (resolve, reject) {
-    const _retValue = {
+    const result = {
       err: null,
       pathTo: pathTo
     }
     fs.writeFile(pathTo, text, 'utf8', function (err) {
       if (err) {
-        _retValue.err = err
-        return reject(_retValue)
+        result.err = err
+        return reject(result)
       }
-      return resolve(_retValue)
+      return resolve(result)
     })
   })
 }
@@ -260,18 +260,18 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
     errorOnExist: false
   }, options)
   return new Promise(function (resolve, reject) {
-    const _retValue = {
+    const result = {
       err: null,
       pathFrom: pathFrom,
       pathTo: pathTo
     }
     fsExtra.copy(pathFrom, pathTo, options, function (err) {
       if (err) {
-        _retValue.err = err
-        // console.log(_retValue)
-        return reject(_retValue)
+        result.err = err
+        // console.log(result)
+        return reject(result)
       }
-      return resolve(_retValue)
+      return resolve(result)
     })
   })
 }
@@ -292,7 +292,7 @@ libUtils.copyDirectorySync = (pathFrom, pathTo, options) => {
     overwrite: false,
     errorOnExist: false
   }, options)
-  const _retValue = {
+  const result = {
     err: null,
     pathFrom: pathFrom,
     pathTo: pathTo
@@ -300,10 +300,10 @@ libUtils.copyDirectorySync = (pathFrom, pathTo, options) => {
   try {
     fsExtra.copySync(pathFrom, pathTo, options)
   } catch (err) {
-    _retValue.err = err
-    // console.error(_retValue)
+    result.err = err
+    // console.error(result)
   }
-  return _retValue
+  return result
 }
 
 libUtils.moveDirectorySync = (pathFrom, pathTo, options) => {
@@ -315,7 +315,7 @@ libUtils.moveDirectorySync = (pathFrom, pathTo, options) => {
   if (options.setDirName === true) {
     pathTo = libUtils.pathJoin(pathTo, libUtils.pathBasename(pathFrom))
   }
-  const _retValue = {
+  const result = {
     err: null,
     pathFrom: pathFrom,
     pathTo: pathTo
@@ -324,10 +324,10 @@ libUtils.moveDirectorySync = (pathFrom, pathTo, options) => {
   try {
     fsExtra.moveSync(pathFrom, pathTo, options)
   } catch (err) {
-    _retValue.err = err
-    // console.error(_retValue)
+    result.err = err
+    // console.error(result)
   }
-  return _retValue
+  return result
 }
 
 libUtils.readDirectorySync = (pathString, preFn, callback) => {
@@ -375,7 +375,7 @@ libUtils.copyFileSync = (pathFrom, pathTo, options) => {
     overwrite: true,
     errorOnExist: false
   }, options)
-  const _retValue = {
+  const result = {
     err: null,
     pathFrom: pathFrom,
     pathTo: pathTo
@@ -383,10 +383,10 @@ libUtils.copyFileSync = (pathFrom, pathTo, options) => {
   try {
     fsExtra.copySync(pathFrom, pathTo, options)
   } catch (err) {
-    _retValue.err = err
-    // console.error(_retValue)
+    result.err = err
+    // console.error(result)
   }
-  return _retValue
+  return result
 }
 
 libUtils.copyFile = (pathFrom, pathTo, options) => {
@@ -395,18 +395,18 @@ libUtils.copyFile = (pathFrom, pathTo, options) => {
     errorOnExist: false
   }, options)
   return new Promise(function (resolve, reject) {
-    const _retValue = {
+    const result = {
       err: null,
       pathFrom: pathFrom,
       pathTo: pathTo
     }
     fsExtra.copy(pathFrom, pathTo, options, function (err) {
       if (err) {
-        _retValue.err = err
-        // console.error(_retValue)
-        return reject(_retValue)
+        result.err = err
+        // console.error(result)
+        return reject(result)
       }
-      return resolve(_retValue)
+      return resolve(result)
     })
   })
 }
