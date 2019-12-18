@@ -1,8 +1,8 @@
 const Events = require('events')
-const _ = require('../utils/lodash.extended')
-const fileUtils = require('../utils/file.utils')
-const stringUtils = require('../utils/string.utils')
-const dataField = require('./dataField.class')
+const _ = require('../core/utils/lodash.extended')
+const fileUtils = require('../core/utils/file.utils')
+const stringUtils = require('../core/utils/string.utils')
+const dataField = require('../core/data-field/dataField.class')
 
 const ENUMS = {
   dataType: {

@@ -1,8 +1,8 @@
-const _ = require('../libs/utils/lodash.extended')
-const fileUtils = require('../libs/utils/file.utils')
-const processUtils = require('../libs/utils/process.utils')
+const _ = require('../utils/lodash.extended')
+const fileUtils = require('../utils/file.utils')
+const processUtils = require('../utils/process.utils')
 const { DataFileHolder } = require('../libs/data-file-holder')
-const ConfigField = require('../libs/data-field/configField.class.js')
+const ConfigField = require('../../__trash__/configField.class.js')
 
 class config {
   constructor () {

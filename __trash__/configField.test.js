@@ -1,4 +1,4 @@
-const { ConfigField, dataType } = require('../configField.class')
+const { ConfigField, dataType } = require('./configField.class')
 
 describe('configField class and object', function() {
 
