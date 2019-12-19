@@ -31,13 +31,10 @@ const setCheckDataTypeFn = function (dataType) {
 }
 
 
-const parseConfiguration = function(fileConfig) {
-    if (!fileConfig ||
-        !fileConfig.label ||
-        !options.filePath ) return null
+const parseOption = function(options) {
+    if (!options || !options.filePath ) return null
 
-    fileConfig = {
-        label: null,
+    options = {
         filePath: null,
         fileType: 'json',
         dataType: 'object',
@@ -64,17 +61,17 @@ const parseConfiguration = function(fileConfig) {
         /* Private functions */
         _checkDataType: null,
 
-        ...fileConfig
+        ...options
     }
 
-    fileConfig.fileType = checkEnumValue('fileType', fileConfig.fileType, ENUMS.fileType.json)
-    fileConfig.dataType = checkEnumValue('dataType', fileConfig.dataType, ENUMS.dataType.object)
-    fileConfig._checkDataType = setCheckDataTypeFn(fileConfig.dataType)
-    return fileConfig
+    options.fileType = checkEnumValue('fileType', options.fileType, ENUMS.fileType.json)
+    options.dataType = checkEnumValue('dataType', options.dataType, ENUMS.dataType.object)
+    options._checkDataType = setCheckDataTypeFn(options.dataType)
+    return options
 }
 
 
 module.exports = {
     ENUMS,
-    parseConfiguration
+    parseOption
 }
