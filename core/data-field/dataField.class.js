@@ -1,10 +1,12 @@
 const Events = require('events')
 const validator = require('./validator')
 const DataFieldError = require('./dataField.error')
+const transform = require('./transform')
 
 const ACCEPTED_EVENTS = ['change']
 
 /* schema docs: https://www.npmjs.com/package/fastest-validator */
+
 
 class DataField {
   constructor ({ name, schema, value }) {
@@ -13,6 +15,7 @@ class DataField {
     this.schema = { [name]: schema }
     this.check = validator.compile(this.schema)
     this.value = { [this.name]: null }
+    this.tranformFn = transform.getFieldTransformFn(schema)
     if (value) this.set(value)
   }
 
@@ -24,7 +27,7 @@ class DataField {
   set (value) {
     const errors = this.validate(value)
     if (errors === true) {
-      const oldValue = this.get()
+      const oldValue = this.get(false)
       const newValue = value
       this.value = { [this.name]: value }
       this.eventEmitter.emit('change', { fieldName: this.name, newValue, oldValue })
@@ -33,7 +36,8 @@ class DataField {
     throw new DataFieldError(errors)
   }
 
-  get () {
+  get ( finalValue = true ) {
+    if(finalValue!==false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])
     return this.value[this.name]
   }
 

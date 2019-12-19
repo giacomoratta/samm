@@ -7,28 +7,16 @@ const iconv = require('iconv-lite')
 
 const libUtils = {}
 
-libUtils.pathBasename = path.basename
-
-libUtils.pathExtname = path.extname
-
-libUtils.pathDirname = path.dirname
-
-libUtils.pathParse = path.parse
-
-libUtils.pathJoin = path.join
-
-libUtils.pathSeparator = path.sep
-
 libUtils.setAsAbsPath = (relPath, isFile, absPath) => {
   relPath = _.trim(relPath)
-  // if(isFile===true && _.endsWith(relPath,libUtils.pathSeparator)) relPath=relPath.substr(0,relPath.length-1)
-  if (!absPath) return path.resolve(relPath) + (isFile !== true ? libUtils.pathSeparator : '')
-  return libUtils.pathJoin(absPath, relPath, (isFile !== true ? libUtils.pathSeparator : ''))
+  // if(isFile===true && _.endsWith(relPath,path.sep)) relPath=relPath.substr(0,relPath.length-1)
+  if (!absPath) return path.resolve(relPath) + (isFile !== true ? path.sep : '')
+  return path.join(absPath, relPath, (isFile !== true ? path.sep : ''))
 }
 
 libUtils.equalPaths = (p1, p2) => {
-  p1 = _.toLower(libUtils.pathJoin(p1, libUtils.pathSeparator))
-  p2 = _.toLower(libUtils.pathJoin(p2, libUtils.pathSeparator))
+  p1 = _.toLower(path.join(p1, path.sep))
+  p2 = _.toLower(path.join(p2, path.sep))
   if (p1.length > p2.length) return p1.endsWith(p2)
   if (p1.length <= p2.length) return p2.endsWith(p1)
 }
@@ -37,15 +25,15 @@ libUtils.equalPaths = (p1, p2) => {
 /* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.pathChangeFilename = (pathString, changeFn) => {
-  const _pInfo = libUtils.pathParse(pathString)
+  const _pInfo = path.parse(pathString)
   const _pInfoName = changeFn(_pInfo.name, _pInfo)
-  return libUtils.pathJoin(_pInfo.dir, _pInfoName + _pInfo.ext)
+  return path.join(_pInfo.dir, _pInfoName + _pInfo.ext)
 }
 
 libUtils.pathChangeDirname = (pathString, changeFn) => {
-  const _pInfo = libUtils.pathParse(pathString)
+  const _pInfo = path.parse(pathString)
   const _pInfoBase = changeFn(_pInfo.base, _pInfo)
-  return libUtils.pathJoin(_pInfo.dir, _pInfoBase)
+  return path.join(_pInfo.dir, _pInfoBase)
 }
 
 
@@ -63,7 +51,7 @@ libUtils.isAbsoluteParentDirSync = (pathString, checkExists) => {
   if (!_.isString(pathString)) return false
   if (!path.isAbsolute(pathString)) return false
   if (checkExists !== true) return true
-  const psDirname = libUtils.pathDirname(pathString)
+  const psDirname = path.dirname(pathString)
   return libUtils.directoryExistsSync(psDirname)
 }
 
@@ -102,7 +90,7 @@ libUtils.checkAndSetDuplicatedDirectoryNameSync = (pathString, renameFn) => {
 libUtils.checkAndSetPathSync = (pathString, callback) => { //todo ???
   if (!_.isString(pathString)) return null
   if (!fs.existsSync(pathString)) return null
-  pathString = path.resolve(pathString) + libUtils.pathSeparator
+  pathString = path.resolve(pathString) + path.sep
   if (callback) callback(pathString)
   return pathString
 }
@@ -313,7 +301,7 @@ libUtils.moveDirectorySync = (pathFrom, pathTo, options) => {
     errorOnExist: false
   }, options)
   if (options.setDirName === true) {
-    pathTo = libUtils.pathJoin(pathTo, libUtils.pathBasename(pathFrom))
+    pathTo = path.join(pathTo, path.basename(pathFrom))
   }
   const result = {
     err: null,
