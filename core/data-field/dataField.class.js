@@ -28,7 +28,7 @@ class DataField {
     if (errors === true) {
       const oldValue = this.get(false)
 
-      let newValue = value
+      const newValue = value
       // if( this.schema === 'object' ) newValue = deepCopy(value) todo
       // if( this.schema === 'array' ) newValue = deepCopy(value) todo
 
