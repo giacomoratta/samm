@@ -7,7 +7,6 @@ const ACCEPTED_EVENTS = ['change']
 
 /* schema docs: https://www.npmjs.com/package/fastest-validator */
 
-
 class DataField {
   constructor ({ name, schema, value }) {
     this.name = name
@@ -36,8 +35,8 @@ class DataField {
     throw new DataFieldError(errors)
   }
 
-  get ( finalValue = true ) {
-    if(finalValue!==false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])
+  get (finalValue = true) {
+    if (finalValue !== false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])
     return this.value[this.name]
   }
 
