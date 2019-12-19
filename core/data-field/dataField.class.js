@@ -27,8 +27,12 @@ class DataField {
     const errors = this.validate(value)
     if (errors === true) {
       const oldValue = this.get(false)
-      const newValue = value
-      this.value = { [this.name]: value }
+
+      let newValue = value
+      // if( this.schema === 'object' ) newValue = deepCopy(value) todo
+      // if( this.schema === 'array' ) newValue = deepCopy(value) todo
+
+      this.value = { [this.name]: newValue }
       this.eventEmitter.emit('change', { fieldName: this.name, newValue, oldValue })
       return true
     }

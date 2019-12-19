@@ -64,7 +64,8 @@ describe('dataField class and object', function () {
       value: defaultValue
     })
 
-    expect(dataField1.get()).toEqual(defaultValue)
+    //defaultValue.id = 1234
+    //expect(dataField1.get()).not.toMatchObject(defaultValue)
 
     expect(function () { dataField1.set({ invalid: 'value' }) }).toThrow()
 

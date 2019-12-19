@@ -1,5 +1,7 @@
-const config = new (require('./config.class'))()
+const JsonizedFile = require('./jsonizedFile.class')
+const JsonizedFileError = require('./jsonizedFileError.class')
 
 module.exports = {
-    config
+  JsonizedFile,
+  JsonizedFileError
 }
