@@ -5,6 +5,8 @@ const fsExtra = require('fs-extra')
 const rimraf = require('rimraf') /* A "rm -rf" util for nodejs */
 const iconv = require('iconv-lite')
 
+const stringToBuffer = (string) => { return Buffer.from("" + (string || ""), "binary") }
+
 const libUtils = {}
 
 libUtils.setAsAbsPath = (relPath, isFile, absPath) => {
@@ -144,7 +146,7 @@ libUtils.readFileSync = (pathString, encoding, flag) => {
         encoding: 'binary',
         flag: flag
       }).toString()
-      return iconv.decode(fcont, 'iso88591')
+      return iconv.decode(stringToBuffer(fcont), 'iso88591')
     } else {
       return fs.readFileSync(pathString, {
         encoding: encoding,
@@ -182,7 +184,8 @@ libUtils.writeFileSync = (pathString, fileContent, encoding, flag, mode) => {
     if (!flag) flag = 'w'
     if (!mode) mode = 0o666
     if (encoding === 'iso88591') {
-      fileContent = iconv.decode(fileContent, 'iso88591')
+      if(_.isNil(fileContent)) fileContent=''
+      fileContent = iconv.decode(stringToBuffer(fileContent), 'iso88591')
       fs.writeFileSync(pathString, fileContent, {
         encoding: 'binary',
         flag: flag,

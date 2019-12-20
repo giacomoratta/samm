@@ -1,7 +1,5 @@
 const _ = require('lodash')
-const { ENUMS, parseConfiguration } = require('./utils')
-
-
+const { ENUMS, parseConfiguration } = require('../core/file-butler/fileButler.utils')
 
 // todo: replace custom function with events (check event finished and get returned data)
 
@@ -209,7 +207,6 @@ class FileButler {
       return fileConfig.printFn(dataObj, fileConfig, args)
     }
   }
-
 
   _loadFileData (fileConfig) {
     if (fileConfig.cloneFrom.length > 0 && !utils.fileExistsSync(fileConfig.filePath)) {
