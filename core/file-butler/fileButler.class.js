@@ -4,7 +4,7 @@ const FileButlerError = require('./fileButlerError.class')
 const Events = require('events')
 const fileUtils = require('../utils/file.utils')
 
-const ACCEPTED_EVENTS = ['change']
+const ACCEPTED_EVENTS = ['save','load']
 
 // todo: replace custom function with events (check event finished and get returned data)
 
@@ -23,7 +23,6 @@ class FileButler {
   set (data) {
     if (this.config.fn.validityCheck(data) !== true) return false
     this.data = data
-    this.eventEmitter.emit('set', { data: this.data })
     return true
   }
 
