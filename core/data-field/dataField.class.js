@@ -46,7 +46,7 @@ class DataField {
 
   on (eventName, cb) {
     if (!ACCEPTED_EVENTS.includes(eventName)) {
-      throw new Error(`Unrecognized event '${eventName}' for ${this.constructor.name} '${this.name}'`)
+      throw new DataFieldError(`Unrecognized event '${eventName}' for ${this.constructor.name} '${this.name}'`)
     }
     this.eventEmitter.on(eventName, cb)
   }

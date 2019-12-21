@@ -92,7 +92,64 @@ describe('FileButler actions with data and files', function () {
         cloneFrom: path.join(__dirname, 'dir_test/file1.clone.json'),
         backupTo: 'invalid/path'
       })
-    }).toThrow('\'backupTo\' option must be an absolute path')
+    }).toThrow(`'backupTo' option must be an absolute path`)
+
+    const fb1 = newFileButler({
+      filePath: path.join(__dirname, 'dir_test/file1-new.json'),
+      fileType: 'json',
+      cloneFrom: path.join(__dirname, 'dir_test/file1.clone.json'),
+    })
+    expect(fileUtils.fileExistsSync(fb1.config.filePath)).toEqual(true)
+    expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ abc: 123 })
+    fileUtils.removeFileSync(fb1.config.filePath)
+
+    const fb2 = newFileButler({
+      filePath: path.join(__dirname, 'dir_test/file2-new.json'),
+      fileType: 'json',
+      backupTo: path.join(__dirname, 'dir_test/file1.backup.json'),
+    })
+    fb2.set({ fgh: 756 })
+    fb2.save()
+    expect(fileUtils.fileExistsSync(fb2.config.backupTo)).toEqual(true)
+    expect(fileUtils.readJsonFileSync(fb2.config.backupTo)).toMatchObject({ fgh: 756 })
+    fileUtils.removeFileSync(fb2.config.filePath)
+    fileUtils.removeFileSync(fb2.config.backupTo)
+  })
+
+  it('should use loadFn and saveFn', function () {
+    class MyClass {
+      constructor() {
+        this.myData = {
+          abc: 123,
+          fgh: 654
+        }
+      }
+      toFileContent() {
+        return this.myData.wrap
+      }
+      setFromFile(d) {
+        this.myData = { wrap: d }
+      }
+    }
+
+    const mc1 = new MyClass()
+
+    const fb1 = new FileButler({
+      filePath: path.join(__dirname, 'dir_test/file33.json'),
+      fileType: 'json',
+      loadFn: function(data){
+        mc1.setFromFile(data)
+        return mc1.myData
+      },
+      saveFn: function(data){
+        const c = mc1.toFileContent(data)
+        expect(c).toMatchObject({ aaaaa: 432432 })
+      }
+    })
+    expect(fb1.get()).toMatchObject({ wrap: { aaaaa: 432432 }})
+
+    fb1.save()
+    expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ aaaaa: 432432 })
   })
 
   it('should create a FileButler with correct options related to fileType = json', function () {

@@ -95,17 +95,13 @@ const parseOption = function (options) {
     cloneFrom: '', // if filePath does not exist, clone from this path
     backupTo: '', // after save, copy the file in filePath to this path
 
-    preLoad: false, // calls loadFn after creating relationship
-    autoLoad: false, // calls loadFn if it has no data
-    preSet: false, // calls setFn after creating relationship
-    autoSet: false, // calls setFn if it has no data
-    autoSave: false, // calls saveFn after loadFn or setFn
+    //preLoad: false, // calls loadFn after creating relationship
+    //autoLoad: false, // calls loadFn if it has no data
+    //preSet: false, // calls setFn after creating relationship
+    //autoSet: false, // calls setFn if it has no data
+    //autoSave: false, // calls saveFn after loadFn or setFn
 
     /* Custom functions */
-    checkFn: null,
-    initFn: null,
-    getFn: null,
-    setFn: null,
     loadFn: null,
     saveFn: null,
 
