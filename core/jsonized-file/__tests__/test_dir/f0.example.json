@@ -1,0 +1,13 @@
+{
+	"field1": 32,
+	"field2": {
+		"id": 32,
+		"name": "namefield2",
+		"status": false
+	},
+	"field31": "/home/giacomo/Workspace/mpl/core/jsonized-file/__tests__/test_dir/field31.json",
+	"field32": "field32.json",
+	"field51": "/home/giacomo/Workspace/mpl/core/jsonized-file/__tests__/test_dir/field51",
+	"field52": "field52/field52sub",
+	"field7": -1111111
+}
