@@ -45,7 +45,7 @@ class JsonizedFile {
 
   fromObject (data) {
     Object.keys(data).forEach((k) => {
-      this.fields[k].set(k, data[k])
+      this.fields[k].set(data[k])
     })
   }
 
@@ -61,6 +61,7 @@ class JsonizedFile {
     options.saveFn = () => {
       return this.toObject()
     }
+
     try {
       this.fileHolder = new FileButler(options)
     } catch (e) {
