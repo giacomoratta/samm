@@ -3,7 +3,9 @@ const { DataField } = require('../data-field')
 const { FileButler } = require('../file-butler')
 
 class JsonizedFile {
-  constructor () {
+  constructor ({ filePath = '', prettyJson = false }) {
+    this.filePath = filePath
+    this.prettyJson = prettyJson
     this.fields = {}
     this.fileHolder = null
   }
@@ -41,13 +43,33 @@ class JsonizedFile {
     return finalObject
   }
 
-  setFileHolder (options) {
+  fromObject (data) {
+    Object.keys(data).forEach((k) => {
+      this.fields[k].set(k, data[k])
+    })
+  }
 
+  load () {
+    const options = {}
+    options.filePath = this.filePath
+    options.fileType = (this.prettyJson ? 'json' : 'json-compact')
+    options.loadFn = (data) => {
+      if (!data) return
+      this.fromObject(data)
+    }
+
+    options.saveFn = () => {
+      return this.toObject()
+    }
+    try {
+      this.fileHolder = new FileButler(options)
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
   }
 
   save () {
-    // const f = this.toObject
-    // this.fileButler.save...
+    return this.fileHolder.save()
   }
 }
 

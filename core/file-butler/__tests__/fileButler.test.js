@@ -1,16 +1,6 @@
 const { FileButler } = require('../index')
 const path = require('path')
 const fileUtils = require('../../utils/file.utils')
-// const fileBt1 = new FileButler()
-
-/*
-* load amd save 3 types
-*
-* set get
-*
-* callbacks + events (sync and async)
-*
-* */
 
 describe('FileButler actions with data and files', function () {
   it('should throw some errors because of missing or invalid options', function () {
@@ -92,12 +82,12 @@ describe('FileButler actions with data and files', function () {
         cloneFrom: path.join(__dirname, 'dir_test/file1.clone.json'),
         backupTo: 'invalid/path'
       })
-    }).toThrow(`'backupTo' option must be an absolute path`)
+    }).toThrow('\'backupTo\' option must be an absolute path')
 
     const fb1 = newFileButler({
       filePath: path.join(__dirname, 'dir_test/file1-new.json'),
       fileType: 'json',
-      cloneFrom: path.join(__dirname, 'dir_test/file1.clone.json'),
+      cloneFrom: path.join(__dirname, 'dir_test/file1.clone.json')
     })
     expect(fileUtils.fileExistsSync(fb1.config.filePath)).toEqual(true)
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ abc: 123 })
@@ -106,7 +96,7 @@ describe('FileButler actions with data and files', function () {
     const fb2 = newFileButler({
       filePath: path.join(__dirname, 'dir_test/file2-new.json'),
       fileType: 'json',
-      backupTo: path.join(__dirname, 'dir_test/file1.backup.json'),
+      backupTo: path.join(__dirname, 'dir_test/file1.backup.json')
     })
     fb2.set({ fgh: 756 })
     fb2.save()
@@ -118,16 +108,18 @@ describe('FileButler actions with data and files', function () {
 
   it('should use loadFn and saveFn', function () {
     class MyClass {
-      constructor() {
+      constructor () {
         this.myData = {
           abc: 123,
           fgh: 654
         }
       }
-      toFileContent() {
+
+      toFileContent () {
         return this.myData.wrap
       }
-      setFromFile(d) {
+
+      setFromFile (d) {
         this.myData = { wrap: d }
       }
     }
@@ -137,16 +129,16 @@ describe('FileButler actions with data and files', function () {
     const fb1 = new FileButler({
       filePath: path.join(__dirname, 'dir_test/file33.json'),
       fileType: 'json',
-      loadFn: function(data){
+      loadFn: function (data) {
         mc1.setFromFile(data)
         return mc1.myData
       },
-      saveFn: function(data){
+      saveFn: function (data) {
         const c = mc1.toFileContent(data)
         expect(c).toMatchObject({ aaaaa: 432432 })
       }
     })
-    expect(fb1.get()).toMatchObject({ wrap: { aaaaa: 432432 }})
+    expect(fb1.get()).toMatchObject({ wrap: { aaaaa: 432432 } })
 
     fb1.save()
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ aaaaa: 432432 })
@@ -236,5 +228,20 @@ describe('FileButler actions with data and files', function () {
     expect(fb2.get()).toEqual('')
     fileUtils.removeFileSync(fb1.config.filePath)
     fileUtils.removeFileSync(fb2.config.filePath)
+  })
+
+  it('should make a deep copy of value', function () {
+    const fb22 = new FileButler({
+      filePath: path.join(__dirname, 'dir_test/file2.json'),
+      fileType: 'json'
+    })
+
+    const x = { a: 1, b: { c: { d: 4 } } }
+    fb22.set(x)
+
+    x.b.c.d = 10
+    expect(fb22.get()).toMatchObject({ a: 1, b: { c: { d: 4 } } })
+
+    fileUtils.removeFileSync(fb22.config.filePath)
   })
 })

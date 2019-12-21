@@ -1,4 +1,5 @@
-
+const path = require('path')
+const fileUtils = require('../../utils/file.utils')
 /*
 * T2
 *
@@ -15,14 +16,24 @@
 * */
 
 const { JsonizedFile } = require('../index')
-const jszFile1 = new JsonizedFile()
 
-describe('JsonizedFile set file holder', function() {
+describe('JsonizedFile set file holder', function () {
+  it('should set a file holder and load empty file', function () {
+    const newJsonizedFile = function (filePath, prettyJson) { return new JsonizedFile({ filePath, prettyJson }) }
 
-    it("should set a file holder", function() {
+    expect(function () { return new JsonizedFile() }).toThrow('Cannot read')
 
-        jszFile1.setFileHolder()
+    const f1 = newJsonizedFile()
+    expect(function () { f1.load() }).toThrow('Missing \'filePath\'')
 
-    })
+    const f2 = newJsonizedFile(path.join(__dirname, 'f1.json'))
+    expect(function () { f2.load() }).not.toThrow('Missing \'filePath\'')
+    expect(f2.fileHolder.config.fileType).toEqual('json-compact')
 
+    const f3 = newJsonizedFile(path.join(__dirname, 'f1.json'), true)
+    expect(function () { f3.load() }).not.toThrow('Missing \'filePath\'')
+    expect(f3.fileHolder.config.fileType).toEqual('json')
+
+    fileUtils.removeFileSync(path.join(__dirname, 'f1.json'))
+  })
 })
