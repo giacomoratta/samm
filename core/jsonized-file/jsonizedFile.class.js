@@ -45,6 +45,7 @@ class JsonizedFile {
 
   fromObject (data) {
     Object.keys(data).forEach((k) => {
+      if(!this.fields[k]) return
       this.fields[k].set(data[k])
     })
   }

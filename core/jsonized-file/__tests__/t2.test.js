@@ -1,5 +1,6 @@
 const path = require('path')
 const fileUtils = require('../../utils/file.utils')
+
 /*
 * T2
 *
@@ -37,7 +38,8 @@ describe('JsonizedFile set file holder', function () {
     fileUtils.removeFileSync(path.join(__dirname, 'f1.json'))
   })
   it('should create a JsonizedFile and save on file', function () {
-    const f1 = new JsonizedFile({ filePath: path.join(__dirname, 'f1.example.json') })
+    fileUtils.copyFileSync(path.join(__dirname, 'f0.example.json'),path.join(__dirname, 'f1.example.json'))
+    const f1 = new JsonizedFile({ filePath: path.join(__dirname, 'f1.example.json'), prettyJson:true })
 
     f1.addField({
       name: 'field1',
@@ -64,8 +66,45 @@ describe('JsonizedFile set file holder', function () {
       }
     })
 
-    f1.load()
-    expect(f1.toObject()).toMatchObject({ field1: 32, field2: { id: 32, name: 'namefield2', status: false } })
+    f1.addField({
+      name: 'field31',
+      schema: { type: 'absFilePath', checkExists: true, createIfNotExists: false, deleteIfExists: false },
+      value: path.join(__dirname,'field31.json')
+    })
+
+    f1.addField({
+      name: 'field32',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: 'field32.json'
+    })
+
+    f1.addField({
+      name: 'field51',
+      schema: { type: 'absDirPath', checkExists: true, createIfNotExists: false, deleteIfExists: false },
+      value: path.join(__dirname,'field51')
+    })
+
+    f1.addField({
+      name: 'field52',
+      schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: 'field52/field52sub'
+    })
+
+    // extra field
+    f1.addField({
+      name: 'field6',
+      schema: {
+        type: 'number',
+      },
+      value: -32.24524246
+    })
+
+    expect(function(){ f1.load() }).not.toThrow()
+    expect(function(){ f1.save() }).not.toThrow()
+
+    const jsonFile1 = fileUtils.readJsonFileSync(f1.filePath)
+    expect(jsonFile1).toHaveProperty('field6')
+    expect(jsonFile1).not.toHaveProperty('field7')
 
     f1.set('field1',42)
     const field2 = f1.get('field2')
@@ -73,14 +112,18 @@ describe('JsonizedFile set file holder', function () {
     field2.name = 'namefield2mod'
     field2.status = true
     f1.set('field2',field2)
-
     expect(f1.save()).toEqual(true)
-    expect(fileUtils.readJsonFileSync(f1.filePath)).toMatchObject({ field1: 42, field2: { id: 52, name: 'namefield2mod', status: true } })
+
+    const jsonFile3 = fileUtils.readJsonFileSync(f1.filePath)
+    expect(jsonFile3.field1).toEqual(42)
+    expect(jsonFile3.field2).toMatchObject({ id: 52, name: 'namefield2mod', status: true })
 
     f1.set('field1',32)
     f1.set('field2',{ id: 32, name: 'namefield2', status: false })
-
     expect(f1.save()).toEqual(true)
-    expect(f1.toObject()).toMatchObject({ field1: 32, field2: { id: 32, name: 'namefield2', status: false } })
+
+    const jsonFile2 = fileUtils.readJsonFileSync(f1.filePath)
+    expect(jsonFile2.field1).toEqual(32)
+    expect(jsonFile2.field2).toMatchObject({ id: 32, name: 'namefield2', status: false })
   })
 })
