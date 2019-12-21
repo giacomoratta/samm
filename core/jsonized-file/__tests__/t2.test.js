@@ -74,14 +74,13 @@ describe('JsonizedFile set file holder', function () {
     field2.status = true
     f1.set('field2',field2)
 
-    f1.save()
+    expect(f1.save()).toEqual(true)
     expect(fileUtils.readJsonFileSync(f1.filePath)).toMatchObject({ field1: 42, field2: { id: 52, name: 'namefield2mod', status: true } })
-
 
     f1.set('field1',32)
     f1.set('field2',{ id: 32, name: 'namefield2', status: false })
 
-    f1.save()
+    expect(f1.save()).toEqual(true)
     expect(f1.toObject()).toMatchObject({ field1: 32, field2: { id: 32, name: 'namefield2', status: false } })
   })
 })
