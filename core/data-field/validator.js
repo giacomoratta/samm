@@ -35,7 +35,7 @@ validator.add('circularArray', (value, schema) => {
 })
 
 const checkAbsDirPath = (value, schema) => {
-  if(schema.default) return true
+  if (schema.default) return true
   const dirExists = fileUtils.directoryExistsSync(value)
   if (schema.checkExists === true && dirExists === false) {
     return validator.makeError('dirNotExists', null, value)
@@ -50,7 +50,7 @@ const checkAbsDirPath = (value, schema) => {
 }
 
 const checkAbsFilePath = (value, schema) => {
-  if(schema.default) return true
+  if (schema.default) return true
   const fileExists = fileUtils.fileExistsSync(value)
   if (schema.checkExists === true && fileExists === false) {
     return validator.makeError('fileNotExists', null, value)

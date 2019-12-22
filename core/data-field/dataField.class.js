@@ -48,7 +48,7 @@ class DataField {
       const newValue = _.cloneDeep(value)
       this.value = { [this.name]: newValue }
       this.defaultValue = false
-      //console.log('change >> ',{ fieldName: this.name, newValue, oldValue })
+      // console.log('change >> ',{ fieldName: this.name, newValue, oldValue })
       this.eventEmitter.emit('change', { fieldName: this.name, newValue, oldValue })
       return true
     }
@@ -56,7 +56,7 @@ class DataField {
   }
 
   get (finalValue = true) {
-    //console.log('check1',this.name,this.defaultValue)
+    // console.log('check1',this.name,this.defaultValue)
     if (this.defaultValue === true) {
       return null
     }
@@ -71,30 +71,28 @@ class DataField {
     this.eventEmitter.on(eventName, cb)
   }
 
-  add (key,value) {
+  add (key, value) {
     let newValue
-    if( this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray' ) {
-      if(!value) value=key
-      newValue = dataFieldUtils.addToArray(this.get(),value,this.schema[this.name])
-    } else if ( this.schema[this.name].type === 'object' ) {
-      newValue = dataFieldUtils.addToObject(this.get(),key,value,this.schema[this.name])
+    if (this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray') {
+      if (!value) value = key
+      newValue = dataFieldUtils.addToArray(this.get(), value, this.schema[this.name])
+    } else if (this.schema[this.name].type === 'object') {
+      newValue = dataFieldUtils.addToObject(this.get(), key, value, this.schema[this.name])
     }
-    if(newValue === null) return false
+    if (newValue === null) return false
     return this.set(newValue)
   }
 
-  remove (key,value) {
+  remove (key, value) {
     let newValue
-    if( this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray' ) {
-      newValue = dataFieldUtils.removeFromArray(this.get(),this.schema[this.name])
-    } else if ( this.schema[this.name].type === 'object' ) {
-      newValue = dataFieldUtils.removeFromObject(this.get(),key,this.schema[this.name])
+    if (this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray') {
+      newValue = dataFieldUtils.removeFromArray(this.get(), this.schema[this.name])
+    } else if (this.schema[this.name].type === 'object') {
+      newValue = dataFieldUtils.removeFromObject(this.get(), key, this.schema[this.name])
     }
-    if(newValue === null) return false
+    if (newValue === null) return false
     return this.set(newValue)
   }
 }
-
-
 
 module.exports = DataField

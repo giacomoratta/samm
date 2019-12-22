@@ -17,7 +17,7 @@ describe('dataField class and object', function () {
       eventFired = true
     })
 
-    expect(function(){
+    expect(function () {
       dataField1.on('invalid-event', (e) => {
         eventFiredData = e
         eventFired = true
@@ -34,58 +34,55 @@ describe('dataField class and object', function () {
   })
 
   it('should manage default attribute for schema', function () {
-
     const df1 = new DataField({
       name: 'array1',
       schema: {
         type: 'array',
         items: 'string'
       },
-      value: [ 'a', 'b', 'c' ]
+      value: ['a', 'b', 'c']
     })
 
-    expect(df1.get()).toMatchObject([ 'a', 'b', 'c' ])
-    df1.set(['dd','ff'])
-    expect(df1.get()).toEqual(['dd','ff'])
-    expect(df1.get(false)).toEqual(['dd','ff'])
+    expect(df1.get()).toMatchObject(['a', 'b', 'c'])
+    df1.set(['dd', 'ff'])
+    expect(df1.get()).toEqual(['dd', 'ff'])
+    expect(df1.get(false)).toEqual(['dd', 'ff'])
 
     const df2 = new DataField({
       name: 'array2',
       schema: {
         type: 'array',
         items: 'string',
-        default: [ 'a', 'b', 'c' ]
+        default: ['a', 'b', 'c']
       }
     })
 
-    //console.warn(df2.get())
-    //console.warn(df2.get(false))
+    // console.warn(df2.get())
+    // console.warn(df2.get(false))
 
     expect(df2.get()).toEqual(null)
     expect(df2.get(false)).toEqual(null)
 
-    df2.set(['dd','ff'])
-    expect(df2.get()).toEqual(['dd','ff'])
-    expect(df2.get(false)).toEqual(['dd','ff'])
-
+    df2.set(['dd', 'ff'])
+    expect(df2.get()).toEqual(['dd', 'ff'])
+    expect(df2.get(false)).toEqual(['dd', 'ff'])
   })
 
   it('should manage array with add/remove', function () {
-
     const df2 = new DataField({
       name: 'stdArray3',
       schema: {
         type: 'array',
         max: 3
       },
-      value: [ 1, 2 ]
+      value: [1, 2]
     })
 
     expect(df2.add(5)).toEqual(true)
-    expect(df2.get()).toMatchObject([1,2,5])
+    expect(df2.get()).toMatchObject([1, 2, 5])
 
     expect(df2.remove()).toEqual(true)
-    expect(df2.get()).toMatchObject([1,2])
+    expect(df2.get()).toMatchObject([1, 2])
 
     expect(df2.remove()).toEqual(true)
     expect(df2.get()).toMatchObject([1])
@@ -103,14 +100,14 @@ describe('dataField class and object', function () {
         arrayDirection: 'top',
         max: 3
       },
-      value: [ 1, 2 ]
+      value: [1, 2]
     })
 
     expect(df3.add(5)).toEqual(true)
-    expect(df3.get()).toMatchObject([5,1,2])
+    expect(df3.get()).toMatchObject([5, 1, 2])
 
     expect(df3.remove()).toEqual(true)
-    expect(df3.get()).toMatchObject([1,2])
+    expect(df3.get()).toMatchObject([1, 2])
 
     expect(df3.remove()).toEqual(true)
     expect(df3.get()).toMatchObject([2])
@@ -123,7 +120,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage object with add/remove', function () {
-
     const df2 = new DataField({
       name: 'stdArray3',
       schema: {
@@ -133,11 +129,11 @@ describe('dataField class and object', function () {
       value: {
         key1: 'v1',
         key2: 'v2',
-        key3: 'v3',
+        key3: 'v3'
       }
     })
 
-    expect(df2.add('key4','v4')).toEqual(true)
+    expect(df2.add('key4', 'v4')).toEqual(true)
     expect(df2.get()).toMatchObject({
       key1: 'v1',
       key2: 'v2',
@@ -176,7 +172,6 @@ describe('dataField class and object', function () {
   })
 
   it('should create a circularArray dataField', function () {
-
     expect(function () {
       return new DataField({
         name: 'cyArray',
@@ -201,7 +196,7 @@ describe('dataField class and object', function () {
         name: 'cyArray',
         schema: {
           type: 'circularArray',
-          default: [ '' ]
+          default: ['']
         }
       })
     }).toThrow('noMaxAttribute')
@@ -224,7 +219,7 @@ describe('dataField class and object', function () {
           type: 'circularArray',
           max: 3
         },
-        value: [ 1, 2, 3, 4 ]
+        value: [1, 2, 3, 4]
       })
     }).toThrow('arrayMax')
 
@@ -234,14 +229,14 @@ describe('dataField class and object', function () {
         type: 'circularArray',
         max: 3
       },
-      value: [ 1, 2 ]
+      value: [1, 2]
     })
 
     expect(df2.add(5)).toEqual(true)
-    expect(df2.get()).toMatchObject([1,2,5])
+    expect(df2.get()).toMatchObject([1, 2, 5])
 
     expect(df2.remove()).toEqual(true)
-    expect(df2.get()).toMatchObject([2,5])
+    expect(df2.get()).toMatchObject([2, 5])
 
     expect(df2.remove()).toEqual(true)
     expect(df2.get()).toMatchObject([5])
@@ -259,17 +254,17 @@ describe('dataField class and object', function () {
         arrayDirection: 'top',
         max: 3
       },
-      value: [ 1, 2 ]
+      value: [1, 2]
     })
 
     expect(df3.add(5)).toEqual(true)
-    expect(df3.get()).toMatchObject([5,1,2])
+    expect(df3.get()).toMatchObject([5, 1, 2])
 
     expect(df3.add(7)).toEqual(true)
-    expect(df3.get()).toMatchObject([7,5,1])
+    expect(df3.get()).toMatchObject([7, 5, 1])
 
     expect(df3.add(9)).toEqual(true)
-    expect(df3.get()).toMatchObject([9,7,5])
+    expect(df3.get()).toMatchObject([9, 7, 5])
   })
 
   it('should create a complex dataField', function () {
@@ -520,7 +515,7 @@ describe('dataField class and object', function () {
           createIfNotExists: false,
           deleteIfExists: true,
           default: './abc'
-        },
+        }
       })
 
       dataField1.get()
