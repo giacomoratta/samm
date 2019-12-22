@@ -2,6 +2,11 @@ class DataFieldError extends Error {
   constructor (errors) {
     super()
     this.name = 'DataFieldError'
+    if (typeof errors === 'string') {
+      this.errors = []
+      this.message = errors
+      return
+    }
     this.errors = errors
     this.message = ''
     errors.forEach((e) => {

@@ -10,15 +10,19 @@ const path = require('path')
 const { JsonizedFile } = require('../core/jsonized-file')
 const basePath = process.env.ABSOLUTE_APP_PATH || path.join(__dirname, '__tests__')
 
-class ConfigFile extends JsonizedFile {
+class AppConfig extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
   }
+
+  set(name, value) {
+
+  }
 }
 
-const config = new ConfigFile(path.join(basePath, 'config.json'))
+const appConfig = new AppConfig(path.join(basePath, 'config.json'))
 
-config.addField({
+appConfig.addField({
   name: 'SamplesDirectory',
   schema: {
     type: 'absDirPath',
@@ -27,7 +31,7 @@ config.addField({
   value: basePath
 })
 
-config.addField({
+appConfig.addField({
   name: 'CurrentProject',
   schema: {
     type: 'absDirPath',
@@ -36,7 +40,7 @@ config.addField({
   value: basePath
 })
 
-config.addField({
+appConfig.addField({
   name: 'RandomCount',
   schema: {
     type: 'number',
@@ -46,7 +50,7 @@ config.addField({
   value: 15
 })
 
-config.addField({
+appConfig.addField({
   name: 'MaxOccurrencesSameDirectory',
   schema: {
     type: 'number',
@@ -56,8 +60,31 @@ config.addField({
   value: 2
 })
 
-config.addField({
+appConfig.addField({
   name: 'ExcludedExtensionsForSamples',
+  schema: {
+    type: 'array',
+    items: 'string',
+    default: ['']
+  }
+})
+
+appConfig.addField({
+  name: 'Tags',
+  schema: {
+    type: 'object',
+    props: { },
+    default: {
+      kick: 'techno,kick,deep,sub',
+      impact: 'impact,boom,shot,crash,bomb,808,efx',
+      hihat: 'hihat,hi-hat,hh,top',
+      abstract: 'abstract,complex'
+    }
+  }
+})
+
+appConfig.addField({
+  name: 'ProjectHistory',
   schema: {
     type: 'array',
     items: 'string'
@@ -65,29 +92,15 @@ config.addField({
   value: ['']
 })
 
-config.addField({
-  name: 'Tags',
-  schema: {
-    type: 'object',
-    props: { }
-  },
-  value: {
-    kick: 'techno,kick,deep,sub',
-    impact: 'impact,boom,shot,crash,bomb,808,efx',
-    hihat: 'hihat,hi-hat,hh,top',
-    abstract: 'abstract,complex'
-  }
-})
+appConfig.load()
+appConfig.save()
 
-config.load()
-config.save()
-
-const tags = config.get('Tags')
-
-tags.kick = 'sdafs'
-tags.asfasfas = 'fsafsafsa'
-config.save()
+const tags = appConfig.set('laskjf',234)
+//
+// tags.kick = 'sdafs'
+// tags.asfasfas = 'fsafsafsa'
+appConfig.save()
 
 module.exports = {
-  ConfigFile: config
+  appConfig: appConfig
 }

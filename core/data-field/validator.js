@@ -1,11 +1,12 @@
+const _ = require('../utils/lodash.extended')
 const FastestValidator = require('fastest-validator')
 const fileUtils = require('../utils/file.utils')
 const transform = require('./transform')
 
 const validator = new FastestValidator({
   messages: {
-    // Register our new error message text
-    notPath: 'The \'{field}\' field must be an even number! Actual: {actual}',
+    notAnArray: 'The \'{field}\' field must be an array! Actual: {actual}',
+    noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute! Actual: {actual}',
     invalidBasePath: 'The \'{field}\' field must have an absolute path as basePath! Actual: {actual}',
     dirNotExists: 'Directory \'{field}\' does not exists! Actual: {actual}',
     fileNotExists: 'File \'{field}\' does not exists! Actual: {actual}',
@@ -20,7 +21,21 @@ const validator = new FastestValidator({
   }
 })
 
+validator.add('circularArray', (value, schema) => {
+  if (!_.isNull(value) && !_.isArray(value)) {
+    return validator.makeError('notAnArray', null, value)
+  }
+  if (!schema.max || schema.max < 1 || !_.isInteger(schema.max)) {
+    return validator.makeError('noMaxAttribute', null, value)
+  }
+  if (value.length > schema.max) {
+    return validator.makeError('arrayMax', null, value)
+  }
+  return true
+})
+
 const checkAbsDirPath = (value, schema) => {
+  if(schema.default) return true
   const dirExists = fileUtils.directoryExistsSync(value)
   if (schema.checkExists === true && dirExists === false) {
     return validator.makeError('dirNotExists', null, value)
@@ -35,6 +50,7 @@ const checkAbsDirPath = (value, schema) => {
 }
 
 const checkAbsFilePath = (value, schema) => {
+  if(schema.default) return true
   const fileExists = fileUtils.fileExistsSync(value)
   if (schema.checkExists === true && fileExists === false) {
     return validator.makeError('fileNotExists', null, value)

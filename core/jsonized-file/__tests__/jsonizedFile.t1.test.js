@@ -1,5 +1,5 @@
 const { JsonizedFile } = require('../index')
-const jszFile1 = new JsonizedFile()
+const jszFile1 = new JsonizedFile({ filePath:'/fake/dir' })
 
 describe('JsonizedFile class and object', function () {
   it('should create an basic JsonizedFile with simple fields', function () {
