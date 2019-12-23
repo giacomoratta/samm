@@ -1,10 +1,10 @@
 {
 	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/__tests__",
 	"CurrentProject": "/home/giacomo/Workspace/mpl/app/__tests__",
-	"RandomCount": 15,
+	"RandomCount": 111222,
 	"MaxOccurrencesSameDirectory": 2,
 	"Status": {
-		"first-scan-needed": true,
+		"first-scan-needed": false,
 		"new-scan-needed": true
 	}
 }

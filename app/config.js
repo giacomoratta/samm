@@ -14,10 +14,6 @@ class Config extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
   }
-
-  set(name, value) {
-
-  }
 }
 
 const config = new Config(path.join(basePath, 'config.json'))
@@ -108,13 +104,14 @@ config.addField({
 })
 
 config.load()
-config.save()
 
-const tags = config.set('laskjf',234)
-//
-// tags.kick = 'sdafs'
-// tags.asfasfas = 'fsafsafsa'
-config.save()
+config.getField('SamplesDirectory').on('change',() => {
+  config.getField('Status').add('new-scan-needed',false)
+})
+
+config.getField('ExcludedExtensionsForSamples').on('change',() => {
+  config.getField('Status').add('new-scan-needed',false)
+})
 
 module.exports = {
   config
