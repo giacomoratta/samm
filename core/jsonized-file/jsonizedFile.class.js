@@ -43,6 +43,7 @@ class JsonizedFile {
     const finalObject = {}
     Object.keys(this.fields).forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
+      if (finalObject[k] === null) delete finalObject[k]
     })
     return finalObject
   }

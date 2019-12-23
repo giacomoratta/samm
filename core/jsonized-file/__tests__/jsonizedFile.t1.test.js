@@ -1,5 +1,5 @@
 const { JsonizedFile } = require('../index')
-const jszFile1 = new JsonizedFile({ filePath:'/fake/dir' })
+const jszFile1 = new JsonizedFile({ filePath: '/fake/dir' })
 
 describe('JsonizedFile class and object', function () {
   it('should create an basic JsonizedFile with simple fields', function () {
@@ -161,13 +161,12 @@ describe('JsonizedFile class and object', function () {
   })
 
   it('should get fields list and export a complete json object', function () {
-
     jszFile1.addField({
       name: 'null-field',
       schema: {
         type: 'array',
         items: 'number',
-        default: [ 61, 53, 96 ]
+        default: [61, 53, 96]
       }
     })
 

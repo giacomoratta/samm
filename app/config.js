@@ -10,7 +10,7 @@ const path = require('path')
 const { JsonizedFile } = require('../core/jsonized-file')
 const basePath = process.env.ABSOLUTE_APP_PATH || path.join(__dirname, '__tests__')
 
-class AppConfig extends JsonizedFile {
+class Config extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
   }
@@ -20,9 +20,9 @@ class AppConfig extends JsonizedFile {
   }
 }
 
-const appConfig = new AppConfig(path.join(basePath, 'config.json'))
+const config = new Config(path.join(basePath, 'config.json'))
 
-appConfig.addField({
+config.addField({
   name: 'SamplesDirectory',
   schema: {
     type: 'absDirPath',
@@ -31,7 +31,7 @@ appConfig.addField({
   value: basePath
 })
 
-appConfig.addField({
+config.addField({
   name: 'CurrentProject',
   schema: {
     type: 'absDirPath',
@@ -40,7 +40,7 @@ appConfig.addField({
   value: basePath
 })
 
-appConfig.addField({
+config.addField({
   name: 'RandomCount',
   schema: {
     type: 'number',
@@ -50,7 +50,7 @@ appConfig.addField({
   value: 15
 })
 
-appConfig.addField({
+config.addField({
   name: 'MaxOccurrencesSameDirectory',
   schema: {
     type: 'number',
@@ -60,7 +60,7 @@ appConfig.addField({
   value: 2
 })
 
-appConfig.addField({
+config.addField({
   name: 'ExcludedExtensionsForSamples',
   schema: {
     type: 'array',
@@ -69,7 +69,7 @@ appConfig.addField({
   }
 })
 
-appConfig.addField({
+config.addField({
   name: 'Tags',
   schema: {
     type: 'object',
@@ -83,24 +83,39 @@ appConfig.addField({
   }
 })
 
-appConfig.addField({
+config.addField({
   name: 'ProjectHistory',
   schema: {
     type: 'array',
-    items: 'string'
-  },
-  value: ['']
+    items: 'string',
+    default: ['']
+  }
 })
 
-appConfig.load()
-appConfig.save()
+config.addField({
+  name: 'Status',
+  schema: {
+    type: 'object',
+    props: {
+      'first-scan-needed': { type: 'boolean' },
+      'new-scan-needed': { type: 'boolean' },
+    }
+  },
+  value: {
+    'first-scan-needed': true,
+    'new-scan-needed': true
+  }
+})
 
-const tags = appConfig.set('laskjf',234)
+config.load()
+config.save()
+
+const tags = config.set('laskjf',234)
 //
 // tags.kick = 'sdafs'
 // tags.asfasfas = 'fsafsafsa'
-appConfig.save()
+config.save()
 
 module.exports = {
-  appConfig: appConfig
+  config
 }
