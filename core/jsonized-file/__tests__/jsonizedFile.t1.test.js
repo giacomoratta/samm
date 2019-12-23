@@ -160,7 +160,17 @@ describe('JsonizedFile class and object', function () {
     fileUtils.removeDirSync(jszFile1.get('relDir1'))
   })
 
-  it('should export a complete json object', function () {
+  it('should get fields list and export a complete json object', function () {
+
+    jszFile1.addField({
+      name: 'null-field',
+      schema: {
+        type: 'array',
+        items: 'number',
+        default: [ 61, 53, 96 ]
+      }
+    })
+
     const exportObject = jszFile1.toObject()
 
     expect(exportObject).toMatchObject({
@@ -176,5 +186,18 @@ describe('JsonizedFile class and object', function () {
       relDir1: 'file_utils_test_dir2',
       relFile1: 'file_utils_test_dir2/file2.json'
     })
+
+    const fieldList = jszFile1.getFieldList()
+
+    expect(fieldList).toBeInstanceOf(Array)
+    expect(fieldList).toMatchObject([
+      'counter1',
+      'person1',
+      'absDir1',
+      'absFile1',
+      'relDir1',
+      'relFile1',
+      'null-field'
+    ])
   })
 })

@@ -21,6 +21,10 @@ class JsonizedFile {
     return this.fields[name]
   }
 
+  getFieldList () {
+    return Object.keys(this.fields)
+  }
+
   removeField (name) {
     delete this.fields[name]
   }
