@@ -4,6 +4,18 @@ const path = require('path')
 describe('PathInfo class and object', function () {
 
     it('should create a PathInfo object from an absolute directory path', function () {
+        expect(function(){
+            return new PathInfo('asf/safsaf')
+        }).toThrow('is not an absolute path')
+
+        expect(function(){
+            return new PathInfo('/x/')
+        }).toThrow('path stats of')
+
+        expect(function(){
+            return new PathInfo({})
+        }).toThrow('Invalid initData')
+
         const absDirPath1 = path.join(__dirname,'test_dir','directory6')
         const pInfo1 = new PathInfo(absDirPath1)
 
