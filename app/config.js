@@ -113,6 +113,15 @@ config.getField('ExcludedExtensionsForSamples').on('change',() => {
   config.getField('Status').add('new-scan-needed',false)
 })
 
+// todo
+// configMgr.setUserdataDirectory('userdata')
+// configMgr.setConfigFile('config.json')
+// configMgr.addUserDirectory('default_projects', 'default_projects')
+// configMgr.addUserFile('bookmarks', 'bookmarks.json')
+// configMgr.addUserFile('projects', 'projects.json')
+// configMgr.addUserFile('tquery', 'tqueries.json')
+// configMgr.addUserFile('samples_index', 'samples_index')
+
 module.exports = {
   config
 }

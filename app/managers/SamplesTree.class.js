@@ -29,7 +29,7 @@ class SamplesTree {
 
     this.T.walk({
       itemCb: (itemData) => {
-        smp_obj.add(new pathInfo(itemData.item) /* {pathInfo} */)
+        smp_obj.add(new PathInfo(itemData.item) /* {pathInfo} */)
       }
     })
     return smp_obj

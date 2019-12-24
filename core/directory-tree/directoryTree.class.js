@@ -1,116 +1,107 @@
-const _ = require('lodash')
+// const _ = require('lodash')
 const SymbolTree = require('symbol-tree')
-const pathInfo = require('./pathInfo.class')
+const PathInfo = require('./pathInfo.class')
 const utils = require('./utils')
 
-class directoryTree {
+class DirectoryTree {
   constructor (absPath, options) {
-    this._tree = null /* Directory Tree */
-    this._root = {} // empty root
+    this.tree = null /* Directory Tree */
+    this.root = {} // empty root
 
-    this._data = {
-      options: directoryTree._parseOptions(options),
-      root_path: absPath,
-      files_count: 0,
-      directories_count: 0
+    this.data = {
+      options: utils.parseOptions(options),
+      rootPath: absPath,
+      filesCount: 0,
+      directoriesCount: 0
     }
   }
 
-  static _parseOptions (options) {
-    return _.merge({
-      maxLevel: 0,
-      includedExtensions: [],
-      excludedExtensions: [],
-      excludedPaths: [],
-      itemCb: function () {},
-      afterDirectoryCb: function () {}
-    }, options)
-  }
-
   init () {
-    this._tree = null /* Directory Tree */
-    this._root = {} // empty root
-    this._data.files_count = 0
-    this._data.directories_count = 0
+    this.tree = null /* Directory Tree */
+    this.root = {} // empty root
+    this.data.filesCount = 0
+    this.data.directoriesCount = 0
   }
 
   read (options) {
     this.init()
-    const _tree = new SymbolTree()
-    let _t_parent = this._root
+    const tree = new SymbolTree()
+    let tParent = this.root
 
-    options = _.merge({
-      fileAcceptabilityFn: function (/*  {pathInfo} item  */) { return true }
-    }, options)
+    options = {
+      fileAcceptabilityFn: function (/*  {pathInfo} item  */) { return true },
+      ...options
+    }
 
-    directoryTree.walkDirectory(this._data.root_path, {
-      includedExtensions: this._data.options.includedExtensions,
-      excludedExtensions: this._data.options.excludedExtensions,
-      excludedPaths: this._data.options.excludedPaths,
+    utils.walkDirectory(this.data.rootPath, {
+      includedExtensions: this.data.options.includedExtensions,
+      excludedExtensions: this.data.options.excludedExtensions,
+      excludedPaths: this.data.options.excludedPaths,
       itemCb: (data) => {
         // callback for each item
         if (data.item.isFile === true && options.fileAcceptabilityFn(data.item) === true) {
-          _tree.appendChild(_t_parent, data.item)
-          this._data.files_count++
+          tree.appendChild(tParent, data.item)
+          this.data.filesCount++
         } else if (data.item.isDirectory === true) {
-          _t_parent = _tree.appendChild(_t_parent, data.item)
-          this._data.directories_count++
+          tParent = tree.appendChild(tParent, data.item)
+          this.data.directoriesCount++
         }
-        this._data.options.itemCb(data)
+        this.data.options.itemCb(data)
       },
       afterDirectoryCb: (data) => {
         // callback after reading directory
-        _t_parent = _tree.parent(data.item)
-        this._data.options.afterDirectoryCb(data)
+        tParent = tree.parent(data.item)
+        this.data.options.afterDirectoryCb(data)
       }
     })
 
-    if (_tree.childrenCount(this._root) > 0) {
-      this._tree = _tree
+    if (tree.childrenCount(this.root) > 0) {
+      this.tree = tree
     }
   }
 
   error () {
-    return (this._tree == null)
+    return (this.tree == null)
   }
 
   walk (options) {
-    if (!this._tree || !this._root) return
-    const _tree = this._tree
-    let _t_parent = _tree.firstChild(this._root)
-    if (!_t_parent) return
+    if (!this.tree || !this.root) return
+    const tree = this.tree
+    let tParent = tree.firstChild(this.root)
+    if (!tParent) return
 
-    options = _.merge({
+    options = {
       skip_empty: false,
-      itemCb: function () {}
-    }, options)
+      itemCb: function () {},
+      ...options
+    }
 
     let isFirstChild, isLastChild
-    const iterator = _tree.treeIterator(_t_parent)
-    let prev_level = 0
+    const iterator = tree.treeIterator(tParent)
+    let prevLevel = 0
 
     for (const item of iterator) {
       if (options.skip_empty === true && item.isDirectory && item.size < 1) {
         options.itemCb({
           item: item,
-          parent: _t_parent,
+          parent: tParent,
           is_first_child: isFirstChild,
           is_last_child: true /* also works with isLastChild */
         })
         continue
       }
 
-      if (prev_level !== item.level) {
-        _t_parent = _tree.parent(item)
-        prev_level = item.level
+      if (prevLevel !== item.level) {
+        tParent = tree.parent(item)
+        prevLevel = item.level
       }
 
-      isFirstChild = (_tree.firstChild(_t_parent) === item)
-      isLastChild = (_tree.lastChild(_t_parent) === item)
+      isFirstChild = (tree.firstChild(tParent) === item)
+      isLastChild = (tree.lastChild(tParent) === item)
 
       options.itemCb({
         item: item,
-        parent: _t_parent,
+        parent: tParent,
         is_first_child: isFirstChild,
         is_last_child: isLastChild
       })
@@ -118,18 +109,19 @@ class directoryTree {
   }
 
   forEach (options) {
-    if (!this._tree || !this._root) return
-    const _tree = this._tree
+    if (!this.tree || !this.root) return
+    const tree = this.tree
 
-    options = _.merge({
-      itemCb: function () {}
-    }, options)
+    options = {
+      itemCb: function () {},
+      ...options
+    }
 
-    const iterator = _tree.treeIterator(this._root)
+    const iterator = tree.treeIterator(this.root)
     for (const item of iterator) {
-      // console.log(level,' - ',isFirstChild,isLastChild,_tree.index(item),item.path);
+      // console.log(level,' - ',isFirstChild,isLastChild,tree.index(item),item.path);
       options.itemCb({
-        item: item
+        item
       })
     }
   }
@@ -139,26 +131,26 @@ class directoryTree {
   }
 
   rootPath () {
-    return (this._data.root_path)
+    return (this.data.rootPath)
   }
 
   nodeCount () {
-    return (this._data.files_count + this._data.directories_count)
+    return (this.data.filesCount + this.data.directoriesCount)
   }
 
   fileCount () {
-    return (this._data.files_count)
+    return (this.data.filesCount)
   }
 
   directoryCount () {
-    return (this._data.directories_count)
+    return (this.data.directoriesCount)
   }
 
   toJson () {
     const exportObj = {}
-    // exportObj._tree =  this._tree;
-    // exportObj._root =  this._root;
-    exportObj.data = this._data
+    // exportObj.tree =  this.tree;
+    // exportObj.root =  this.root;
+    exportObj.data = this.data
     exportObj.struct = []
     this.walk({
       itemCb: (itemData) => {
@@ -172,51 +164,52 @@ class directoryTree {
 
   fromJson (importObj) {
     this.init()
-    const _tree = new SymbolTree()
-    let _t_parent = this._root
+    const tree = new SymbolTree()
+    let tParent = this.root
 
-    this._data.options.includedExtensions = importObj.data.options.includedExtensions
-    this._data.options.excludedExtensions = importObj.data.options.excludedExtensions
-    this._data.options.excludedPaths = importObj.data.options.excludedPaths
-    this._data.root_path = importObj.data.root_path
-    this._data.files_count = importObj.data.files_count
-    this._data.directories_count = importObj.data.directories_count
+    this.data.options.includedExtensions = importObj.data.options.includedExtensions
+    this.data.options.excludedExtensions = importObj.data.options.excludedExtensions
+    this.data.options.excludedPaths = importObj.data.options.excludedPaths
+    this.data.rootPath = importObj.data.rootPath
+    this.data.filesCount = importObj.data.filesCount
+    this.data.directoriesCount = importObj.data.directoriesCount
 
-    let prev_level = 1
-    let latest_item; let _newpathinfo = null
+    let prevLevel = 1
+    let latestItem
+    let newPathInfo = null
 
     for (let i = 0; i < importObj.struct.length; i++) {
-      _newpathinfo = new pathInfo()
-      _newpathinfo.fromJson(importObj.struct[i].item)
+      newPathInfo = new PathInfo()
+      newPathInfo.fromJson(importObj.struct[i].item)
       // console.log(itemData.item);
 
-      if (_newpathinfo.level === prev_level) {
-        // console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' = same level',itemData.level,prev_level);
+      if (newPathInfo.level === prevLevel) {
+        // console.log(_.padStart(' ',itemData.level*3),tParent.name,' # ',newPathInfo.base,' = same level',itemData.level,prevLevel);
 
-      } else if (_newpathinfo.level > prev_level) {
-        _t_parent = latest_item
-        // console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' > previous',itemData.level,prev_level);
+      } else if (newPathInfo.level > prevLevel) {
+        tParent = latestItem
+        // console.log(_.padStart(' ',itemData.level*3),tParent.name,' # ',newPathInfo.base,' > previous',itemData.level,prevLevel);
       } else {
-        for (let j = _newpathinfo.level; j < prev_level; j++) _t_parent = _tree.parent(_t_parent)
-        // console.log(_.padStart(' ',itemData.level*3),_t_parent.name,' # ',_newpathinfo.base,' < previous',itemData.level,prev_level);
-        // console.log(_.padStart(' ',itemData.level*3),'>> ',_t_parent.base);
+        for (let j = newPathInfo.level; j < prevLevel; j++) tParent = tree.parent(tParent)
+        // console.log(_.padStart(' ',itemData.level*3),tParent.name,' # ',newPathInfo.base,' < previous',itemData.level,prevLevel);
+        // console.log(_.padStart(' ',itemData.level*3),'>> ',tParent.base);
       }
-      prev_level = _newpathinfo.level
-      // console.log(latest_item,_t_parent,_newpathinfo);
-      latest_item = _tree.appendChild(_t_parent, _newpathinfo)
-      // console.log(latest_item);
+      prevLevel = newPathInfo.level
+      // console.log(latestItem,tParent,newPathInfo);
+      latestItem = tree.appendChild(tParent, newPathInfo)
+      // console.log(latestItem);
     }
-    this._tree = _tree
+    this.tree = tree
   }
 
   isEqualTo (tree2) {
-    if (!tree2._tree || !tree2._root) return
-    if (!this._tree || !this._root) return
-    const _tree1 = this._tree
-    const _tree2 = tree2._tree
+    if (!tree2.tree || !tree2.root) return
+    if (!this.tree || !this.root) return
+    const tree1 = this.tree
+    tree2 = tree2.tree
 
-    const iterator1 = _tree1.treeIterator(this._root)
-    const iterator2 = _tree2.treeIterator(tree2._root)
+    const iterator1 = tree1.treeIterator(this.root)
+    const iterator2 = tree2.treeIterator(tree2.root)
     let item1, item2
     item1 = iterator1.next() // discard the empty root
     item2 = iterator2.next() // discard the empty root
@@ -241,12 +234,13 @@ class directoryTree {
   }
 
   print (options) {
-    options = _.merge({
+    options = {
       skip_files: false,
       skip_empty: true,
-      printFn: console.log
-    }, options)
-    if (!_.isFunction(options.itemCb)) {
+      printFn: console.log,
+      ...options
+    }
+    if (!options.itemCb) {
       options.itemCb = function (data) {
         if (data.item.isFile) return
         options.printFn(preFn(data) + data.item.base + (data.item.isDirectory ? '/' : '')) //, data.item.level, data.is_first_child, data.is_last_child);
@@ -255,7 +249,7 @@ class directoryTree {
 
     let ppre = ''
     const def1 = '|    '
-    let prev_level = 0
+    let prevLevel = 0
 
     String.prototype.replaceAt = function (index, replacement) {
       return this.substr(0, index) + replacement + this.substr(index + replacement.length)
@@ -276,7 +270,7 @@ class directoryTree {
 
       _level -= 2
       if (ppre.length < (5 * (_level + 1))) ppre += def1
-      if (ppre.length > (5 * (_level + 1))) ppre = ppre.substr(0, ppre.length - 5 * (prev_level - _level))
+      if (ppre.length > (5 * (_level + 1))) ppre = ppre.substr(0, ppre.length - 5 * (prevLevel - _level))
 
       if (data.is_last_child === true) {
         // unique + last
@@ -287,7 +281,7 @@ class directoryTree {
       }
       ppre = ppre.replaceAt(_level * 5 + 1, '\u2500\u2500')
 
-      prev_level = _level
+      prevLevel = _level
       return ppre
     }
     this.walk(options)
@@ -295,94 +289,19 @@ class directoryTree {
     options.printFn('\n Root path:', this.rootPath())
     options.printFn('\n Directories#:', this.directoryCount())
     options.printFn('\n Files#:', this.fileCount())
-    if (this._data.options.includedExtensions.length > 0) {
-      options.printFn('\n Included libs:', this._data.options.includedExtensions.join(', '))
+    if (this.data.options.includedExtensions.length > 0) {
+      options.printFn('\n Included libs:', this.data.options.includedExtensions.join(', '))
     }
-    if (this._data.options.excludedExtensions.length > 0) {
-      options.printFn('\n Excluded libs:', this._data.options.excludedExtensions.join(', '))
+    if (this.data.options.excludedExtensions.length > 0) {
+      options.printFn('\n Excluded libs:', this.data.options.excludedExtensions.join(', '))
     }
-    if (this._data.options.excludedPaths.length > 0) {
+    if (this.data.options.excludedPaths.length > 0) {
       options.printFn('\n Excluded paths:')
-      this._data.options.excludedPaths.forEach(function (v) {
+      this.data.options.excludedPaths.forEach(function (v) {
         options.printFn('  - ', v)
       })
     }
   }
-
-  static walkDirectory (absPath, options) {
-    options = directoryTree._parseOptions(options)
-
-    const _prepareExcludedPaths = function (excludedPaths) {
-      // /some_path_to_exclude/
-      if (!_.isArray(excludedPaths) || excludedPaths.length === 0) return null
-      const exclArray = []
-      excludedPaths.forEach(function (v) {
-        exclArray.push(_.escapeRegExp(v))
-      })
-      if (excludedPaths.length === 0) return null
-      return exclArray
-    }
-
-    const _prepareIncludedExtensions = function (includedExtensions) {
-      // .*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
-      if (!_.isArray(includedExtensions) || includedExtensions.length === 0) return null
-      const _nw = []
-      includedExtensions.forEach(function (v) {
-        _nw.push(_.escapeRegExp(v))
-      })
-      return new RegExp('^\\.?(' + _.join(_nw, '|') + ')$', 'i')
-    }
-
-    const _prepareExcludedExtensions = function (excludedExtensions) {
-      // .*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
-      if (!_.isArray(excludedExtensions) || excludedExtensions.length === 0) return null
-      const _nw = []
-      excludedExtensions.forEach(function (v) {
-        _nw.push(_.escapeRegExp(v))
-      })
-      return new RegExp('^\\.?(' + _.join(_nw, '|') + ')$', 'i')
-    }
-
-    const _wk = function (rootPath, absPath, options) {
-      if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null
-
-      const p_info = new pathInfo(absPath)
-      if (p_info.error === true || (!p_info.isFile && !p_info.isDirectory)) return
-      p_info.rel_root = rootPath
-
-      if (p_info.isFile) {
-        if (options.includedExtensionsRegex) { /* included libs have the priority */
-          if (!options.includedExtensionsRegex.test(_.toLower((p_info.ext.length > 1 ? p_info.ext : p_info.name)))) return null
-        } else if (options.excludedExtensionsRegex && options.excludedExtensionsRegex.test(_.toLower((p_info.ext.length > 1 ? p_info.ext : p_info.name)))) return null
-
-        options.itemCb({ item: p_info })
-        return p_info
-      } else if (p_info.isDirectory) {
-        options.itemCb({ item: p_info })
-
-        Utils.File.readDirectorySync(absPath, (a) => {
-          Utils.sortFilesArray(a)
-        }, (v, i, a) => {
-          v = Utils.File.pathJoin(absPath, v)
-
-          if (options.maxLevel > 0 && options.maxLevel <= p_info.level) return
-
-          const _pi = _wk(rootPath, v, options)
-          if (!_pi) return
-          if (_pi.size) p_info.size += _pi.size
-        })
-
-        options.afterDirectoryCb({ item: p_info })
-        return p_info
-      }
-    }
-
-    absPath = Utils.File.pathResolve(absPath) + Utils.File.pathSeparator
-    options.excludedPaths = _prepareExcludedPaths(options.excludedPaths)
-    options.includedExtensionsRegex = _prepareIncludedExtensions(options.includedExtensions)
-    options.excludedExtensionsRegex = _prepareExcludedExtensions(options.excludedExtensions)
-    _wk(absPath, absPath, options)
-  }
 }
 
-module.exports = directoryTree
+module.exports = DirectoryTree

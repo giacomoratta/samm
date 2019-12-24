@@ -82,7 +82,6 @@
 
   configMgr.setUserdataDirectory('userdata')
   configMgr.setConfigFile('config.json')
-
   configMgr.addUserDirectory('default_projects', 'default_projects')
   configMgr.addUserFile('bookmarks', 'bookmarks.json')
   configMgr.addUserFile('projects', 'projects.json')

@@ -1,4 +1,7 @@
+const DirectoryTree = require('./directoryTree.class')
+const PathInfo = require('./pathInfo.class')
+
 module.exports = {
-    directoryTree: require('./directoryTree.class'),
-    pathInfo: require('./pathInfo.class')
+  DirectoryTree,
+  PathInfo
 }
