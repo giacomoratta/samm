@@ -20,14 +20,17 @@ class PathInfo {
       if (!stats) {
         throw new Error(`PathInfo - error while getting path stats of ${absPath}`)
       }
+
       this.info = pInfo
       this.info.path = absPath
       this.info.level = 1
       this.info.size = (stats.size ? stats.size : 0)
       this.info.isFile = stats.isFile()
       this.info.isDirectory = stats.isDirectory()
+
     } else if (_.isObject(initData) && initData.constructor.name === 'PathInfo') {
       this.info = _.cloneDeep(initData.info)
+
     } else {
       throw new Error(`Invalid initData: ${initData}`)
     }
@@ -51,25 +54,25 @@ class PathInfo {
   }
 
   get root () { return this.info.root }
-  set root (root) { this.info.root = root }
+  //set root (root) { this.info.root = root }
 
   get dir () { return this.info.dir }
-  set dir (dir) { this.info.dir = dir }
+  //set dir (dir) { this.info.dir = dir }
 
   get base () { return this.info.base }
-  set base (base) { this.info.base = base }
+  //set base (base) { this.info.base = base }
 
   get ext () { return this.info.ext }
-  set ext (ext) { this.info.ext = ext }
+  //set ext (ext) { this.info.ext = ext }
 
   get name () { return this.info.name }
-  set name (name) { this.info.name = name }
+  //set name (name) { this.info.name = name }
 
   get path () { return this.info.path }
-  set path (path) { this.info.path = path }
+  //set path (path) { this.info.path = path }
 
   get size () { return this.info.size }
-  set size (size) { this.info.size = size }
+  //set size (size) { this.info.size = size }
 
   get isFile () { return this.info.isFile }
   get isDirectory () { return this.info.isDirectory }
@@ -97,7 +100,7 @@ class PathInfo {
   // }
 
   toJson () {
-    return this.info
+    return _.cloneDeep(this.info)
   }
 
   fromJson (data) {

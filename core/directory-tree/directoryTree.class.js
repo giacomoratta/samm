@@ -71,22 +71,22 @@ class DirectoryTree {
     if (!tParent) return
 
     options = {
-      skip_empty: false,
+      skipEmpty: false,
       itemCb: function () {},
       ...options
     }
 
     let isFirstChild, isLastChild
-    const iterator = tree.treeIterator(tParent)
+    const iterator = tree.treeIterator(tParent,{})
     let prevLevel = 0
 
     for (const item of iterator) {
-      if (options.skip_empty === true && item.isDirectory && item.size < 1) {
+      if (options.skipEmpty === true && item.isDirectory && item.size < 1) {
         options.itemCb({
           item: item,
           parent: tParent,
-          is_first_child: isFirstChild,
-          is_last_child: true /* also works with isLastChild */
+          isFirstChild: isFirstChild,
+          isLastChild: true /* also works with isLastChild */
         })
         continue
       }
@@ -102,8 +102,8 @@ class DirectoryTree {
       options.itemCb({
         item: item,
         parent: tParent,
-        is_first_child: isFirstChild,
-        is_last_child: isLastChild
+        isFirstChild: isFirstChild,
+        isLastChild: isLastChild
       })
     }
   }
@@ -117,7 +117,7 @@ class DirectoryTree {
       ...options
     }
 
-    const iterator = tree.treeIterator(this.root)
+    const iterator = tree.treeIterator(this.root,{})
     for (const item of iterator) {
       // console.log(level,' - ',isFirstChild,isLastChild,tree.index(item),item.path);
       options.itemCb({
@@ -208,8 +208,8 @@ class DirectoryTree {
     const tree1 = this.tree
     tree2 = tree2.tree
 
-    const iterator1 = tree1.treeIterator(this.root)
-    const iterator2 = tree2.treeIterator(tree2.root)
+    const iterator1 = tree1.treeIterator(this.root,{})
+    const iterator2 = tree2.treeIterator(tree2.root,{})
     let item1, item2
     item1 = iterator1.next() // discard the empty root
     item2 = iterator2.next() // discard the empty root
@@ -236,14 +236,14 @@ class DirectoryTree {
   print (options) {
     options = {
       skip_files: false,
-      skip_empty: true,
+      skipEmpty: true,
       printFn: console.log,
       ...options
     }
     if (!options.itemCb) {
       options.itemCb = function (data) {
         if (data.item.isFile) return
-        options.printFn(preFn(data) + data.item.base + (data.item.isDirectory ? '/' : '')) //, data.item.level, data.is_first_child, data.is_last_child);
+        options.printFn(preFn(data) + data.item.base + (data.item.isDirectory ? '/' : '')) //, data.item.level, data.isFirstChild, data.isLastChild);
       }
     }
 
@@ -251,18 +251,10 @@ class DirectoryTree {
     const def1 = '|    '
     let prevLevel = 0
 
-    String.prototype.replaceAt = function (index, replacement) {
-      return this.substr(0, index) + replacement + this.substr(index + replacement.length)
-    }
-    String.prototype.replaceAll = function (search, replacement) {
-      const target = this
-      return target.replace(new RegExp(search, 'g'), replacement)
-    }
-
     const preFn = function (data) {
-      ppre = ppre.replaceAll('\u2514', ' ')
-      ppre = ppre.replaceAll('\u251C', '\u2502')
-      ppre = ppre.replaceAll('\u2500', ' ')
+      ppre = utils.stringReplaceAll(ppre, '\u2514', ' ')
+      ppre = utils.stringReplaceAll(ppre, '\u251C', '\u2502')
+      ppre = utils.stringReplaceAll(ppre, '\u2500', ' ')
 
       if (data.item.level < 1) return ''
       let _level = data.item.level
@@ -272,14 +264,14 @@ class DirectoryTree {
       if (ppre.length < (5 * (_level + 1))) ppre += def1
       if (ppre.length > (5 * (_level + 1))) ppre = ppre.substr(0, ppre.length - 5 * (prevLevel - _level))
 
-      if (data.is_last_child === true) {
+      if (data.isLastChild === true) {
         // unique + last
-        ppre = ppre.replaceAt(_level * 5, '\u2514')
+        ppre = utils.stringReplaceAt(ppre, _level * 5, '\u2514')
       } else {
         // first + between
-        ppre = ppre.replaceAt(_level * 5, '\u251C')
+        ppre = utils.stringReplaceAt(ppre, _level * 5, '\u251C')
       }
-      ppre = ppre.replaceAt(_level * 5 + 1, '\u2500\u2500')
+      ppre = utils.stringReplaceAt(ppre, _level * 5 + 1, '\u2500\u2500')
 
       prevLevel = _level
       return ppre

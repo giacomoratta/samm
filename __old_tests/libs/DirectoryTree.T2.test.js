@@ -11,10 +11,10 @@ describe('directoryTree.class - TEST the traversing of a directoryTree', functio
                     assert.equal(_.isInteger(data.item.level),true);
                     assert.equal(_.isString(data.item.rel_root),true);
                     assert.equal(_.isString(data.item.rel_path),true);
-                    assert.equal(_.isBoolean(data.is_first_child),true);
-                    assert.equal(_.isBoolean(data.is_last_child),true);
+                    assert.equal(_.isBoolean(data.isFirstChild),true);
+                    assert.equal(_.isBoolean(data.isLastChild),true);
                     assert.equal(_.isObject(data.parent),true);
-                    tLog(_.padStart(' ',(data.item.level+1)*3),'',data.item.level, data.is_first_child, data.is_last_child, "'"+data.item.rel_path+"'",data.item.sizeString);
+                    tLog(_.padStart(' ',(data.item.level+1)*3),'',data.item.level, data.isFirstChild, data.isLastChild, "'"+data.item.rel_path+"'",data.item.sizeString);
                     tLog(_.padStart(' ',(data.item.level+1)*3),' > Parent:',data.parent.path,"\n");
                 }
             });

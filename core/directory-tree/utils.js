@@ -44,8 +44,8 @@ const walkAction = function (rootPath, absPath, options) {
   if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null
 
   const pInfo = new PathInfo(absPath)
-  if (pInfo.error === true || (!pInfo.isFile && !pInfo.isDirectory)) return
-  pInfo.rel_root = path.sep // rootPathUtils.File.pathSeparator
+  if (!pInfo.isFile && !pInfo.isDirectory) return
+  pInfo.relRoot = path.sep // rootPathUtils.File.pathSeparator
 
   if (pInfo.isFile) {
     if (options.includedExtensionsRegex) { /* included libs have the priority */
@@ -83,7 +83,17 @@ const walkDirectory = (absPath, options) => {
   walkAction(absPath, absPath, options)
 }
 
+const stringReplaceAt = function (str, index, replacement) {
+  return str.substr(0, index) + replacement + str.substr(index + replacement.length)
+}
+
+const stringReplaceAll = function (str, search, replacement) {
+  return str.replace(new RegExp(search, 'g'), replacement)
+}
+
 module.exports = {
   parseOptions,
-  walkDirectory
+  walkDirectory,
+  stringReplaceAt,
+  stringReplaceAll
 }
