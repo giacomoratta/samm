@@ -1,12 +1,12 @@
-// const _ = require('lodash')
+const _ = require('lodash')
 const SymbolTree = require('symbol-tree')
 const PathInfo = require('./pathInfo.class')
 const utils = require('./utils')
 
 class DirectoryTree {
   constructor (absPath, options) {
-    this.tree = null /* Directory Tree */
-    this.root = {} // empty root
+    this.tree = null /* the real tree */
+    this.root = {}
 
     this.data = {
       options: utils.parseOptions(options),
@@ -16,22 +16,26 @@ class DirectoryTree {
     }
   }
 
-  init () {
+  // error () {
+  //   return this.tree == null
+  // }
+
+  reset () {
     this.tree = null /* Directory Tree */
-    this.root = {} // empty root
+    this.root = {} // empty rootrootrootroot
     this.data.filesCount = 0
     this.data.directoriesCount = 0
   }
 
   read (options) {
-    this.init()
-    const tree = new SymbolTree()
-    let tParent = this.root
-
     options = {
-      fileAcceptabilityFn: function (/*  {pathInfo} item  */) { return true },
+      fileAcceptabilityFn: function (/* {pathInfo} item */) { return true },
       ...options
     }
+
+    this.reset()
+    const tree = new SymbolTree()
+    let tParent = this.root
 
     utils.walkDirectory(this.data.rootPath, {
       includedExtensions: this.data.options.includedExtensions,
@@ -60,10 +64,6 @@ class DirectoryTree {
     }
   }
 
-  error () {
-    return (this.tree == null)
-  }
-
   walk (options) {
     if (!this.tree || !this.root) return
     const tree = this.tree
@@ -77,7 +77,7 @@ class DirectoryTree {
     }
 
     let isFirstChild, isLastChild
-    const iterator = tree.treeIterator(tParent,{})
+    const iterator = tree.treeIterator(tParent, {})
     let prevLevel = 0
 
     for (const item of iterator) {
@@ -117,7 +117,8 @@ class DirectoryTree {
       ...options
     }
 
-    const iterator = tree.treeIterator(this.root,{})
+    // dT1.print()
+    const iterator = tree.treeIterator(this.root, {})
     for (const item of iterator) {
       // console.log(level,' - ',isFirstChild,isLastChild,tree.index(item),item.path);
       options.itemCb({
@@ -127,30 +128,30 @@ class DirectoryTree {
   }
 
   empty () {
-    return (this.nodeCount() === 0)
+    return this.tree == null || this.nodeCount() === 0
   }
 
   rootPath () {
-    return (this.data.rootPath)
+    return this.data.rootPath
   }
 
   nodeCount () {
-    return (this.data.filesCount + this.data.directoriesCount)
+    return this.data.filesCount + this.data.directoriesCount
   }
 
   fileCount () {
-    return (this.data.filesCount)
+    return this.data.filesCount
   }
 
   directoryCount () {
-    return (this.data.directoriesCount)
+    return this.data.directoriesCount
   }
 
   toJson () {
     const exportObj = {}
     // exportObj.tree =  this.tree;
     // exportObj.root =  this.root;
-    exportObj.data = this.data
+    exportObj.data = _.cloneDeep(this.data)
     exportObj.struct = []
     this.walk({
       itemCb: (itemData) => {
@@ -163,7 +164,7 @@ class DirectoryTree {
   }
 
   fromJson (importObj) {
-    this.init()
+    this.reset()
     const tree = new SymbolTree()
     let tParent = this.root
 
@@ -208,8 +209,8 @@ class DirectoryTree {
     const tree1 = this.tree
     tree2 = tree2.tree
 
-    const iterator1 = tree1.treeIterator(this.root,{})
-    const iterator2 = tree2.treeIterator(tree2.root,{})
+    const iterator1 = tree1.treeIterator(this.root, {})
+    const iterator2 = tree2.treeIterator(tree2.root, {})
     let item1, item2
     item1 = iterator1.next() // discard the empty root
     item2 = iterator2.next() // discard the empty root

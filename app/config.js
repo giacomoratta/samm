@@ -66,6 +66,24 @@ config.addField({
 })
 
 config.addField({
+  name: 'IncludedExtensionsForSamples',
+  schema: {
+    type: 'array',
+    items: 'string',
+    default: ['']
+  }
+})
+
+config.addField({
+  name: 'ExtensionsPolicy',
+  schema: {
+    type: 'enum',
+    values: [ 'X', 'I', 'E' ]
+  },
+  value: 'X'
+})
+
+config.addField({
   name: 'Tags',
   schema: {
     type: 'object',
@@ -112,6 +130,8 @@ config.getField('SamplesDirectory').on('change',() => {
 config.getField('ExcludedExtensionsForSamples').on('change',() => {
   config.getField('Status').add('new-scan-needed',false)
 })
+
+config.save()
 
 // todo
 // configMgr.setUserdataDirectory('userdata')

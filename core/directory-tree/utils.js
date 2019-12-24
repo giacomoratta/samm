@@ -10,8 +10,8 @@ const parseOptions = (options) => {
     includedExtensions: [],
     excludedExtensions: [],
     excludedPaths: [],
-    itemCb: function () {},
-    afterDirectoryCb: function () {},
+    itemCb: function ({ item }) {},
+    afterDirectoryCb: function ({ item }) {},
     ...options
   }
   return options
