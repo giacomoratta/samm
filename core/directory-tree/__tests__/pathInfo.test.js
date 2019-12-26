@@ -42,17 +42,17 @@ describe('PathInfo class and object', function () {
     expect(pInfo1.relPath).toEqual('')
     expect(pInfo1.level).toEqual(1)
 
-    const absFilePath1 = path.join(__dirname, 'test_dir', 'directory1', 'directory2', 'file26.txt')
+    const absFilePath1 = path.join(__dirname, 'test_dir', 'directory1', 'directory2', 'file26.json')
     pInfo1 = new PathInfo(absFilePath1)
     pInfo1.relRoot = path.join(__dirname, 'test_dir', 'directory1', 'directory2')
     expect(pInfo1.relRoot).toEqual(path.join(__dirname, 'test_dir', 'directory1', 'directory2'))
-    expect(pInfo1.relPath).toEqual('file26.txt')
+    expect(pInfo1.relPath).toEqual('file26.json')
     expect(pInfo1.level).toEqual(2)
 
     pInfo1 = new PathInfo(absFilePath1)
     pInfo1.relRoot = path.join(__dirname, 'test_dir')
     expect(pInfo1.relRoot).toEqual(path.join(__dirname, 'test_dir'))
-    expect(pInfo1.relPath).toEqual(path.join('directory1', 'directory2', 'file26.txt'))
+    expect(pInfo1.relPath).toEqual(path.join('directory1', 'directory2', 'file26.json'))
     expect(pInfo1.level).toEqual(4)
   })
 
@@ -65,7 +65,7 @@ describe('PathInfo class and object', function () {
     expect(pInfo1.path).toEqual(absFilePath1)
     expect(pInfo1.base).toEqual('file61.txt')
     expect(pInfo1.name).toEqual('file61')
-    expect(pInfo1.ext).toEqual('.txt')
+    expect(pInfo1.ext).toEqual('txt')
     expect(pInfo1.level).toEqual(1)
     expect(pInfo1.size > 1).toEqual(true)
     expect(pInfo1.isFile).toEqual(true)
@@ -92,7 +92,7 @@ describe('PathInfo class and object', function () {
     expect(pInfo1.path).toEqual(absFilePath1)
     expect(pInfo1.base).toEqual('file61.txt')
     expect(pInfo1.name).toEqual('file61')
-    expect(pInfo1.ext).toEqual('.txt')
+    expect(pInfo1.ext).toEqual('txt')
     expect(pInfo1.level).toEqual(1)
     expect(pInfo1.size > 1).toEqual(true)
     expect(pInfo1.isFile).toEqual(true)
@@ -114,7 +114,7 @@ describe('PathInfo class and object', function () {
     expect(pInfo1.path).toEqual(absFilePath1)
     expect(pInfo1.base).toEqual('file61.txt')
     expect(pInfo1.name).toEqual('file61')
-    expect(pInfo1.ext).toEqual('.txt')
+    expect(pInfo1.ext).toEqual('txt')
     expect(pInfo1.level).toEqual(1)
     expect(pInfo1.size > 1).toEqual(true)
     expect(pInfo1.isFile).toEqual(true)
@@ -133,7 +133,7 @@ describe('PathInfo class and object', function () {
       root: '/bla/bla',
       dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
       base: 'file61.txt',
-      ext: '.txt',
+      ext: 'txt',
       name: 'file61',
       path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
       level: 1,
@@ -146,7 +146,7 @@ describe('PathInfo class and object', function () {
       root: '/',
       dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
       base: 'file61.txt',
-      ext: '.txt',
+      ext: 'txt',
       name: 'file61',
       path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
       level: 1,
@@ -160,7 +160,7 @@ describe('PathInfo class and object', function () {
       root: '/bla/bla',
       dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
       base: 'file61.txt',
-      ext: '.txt',
+      ext: 'txt',
       name: 'file61',
       path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
       level: 1,

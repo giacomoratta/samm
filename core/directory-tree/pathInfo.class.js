@@ -22,6 +22,7 @@ class PathInfo {
       }
 
       this.info = pInfo
+      if(this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
       this.info.path = absPath
       this.info.level = 1
       this.info.size = (stats.size ? stats.size : 0)
