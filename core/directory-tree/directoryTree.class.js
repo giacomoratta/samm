@@ -120,6 +120,7 @@ class DirectoryTree {
     // dT1.print()
     const iterator = tree.treeIterator(this.root, {})
     for (const item of iterator) {
+      if(!(item instanceof PathInfo)) continue
       // console.log(level,' - ',isFirstChild,isLastChild,tree.index(item),item.path);
       options.itemCb({
         item
@@ -206,12 +207,12 @@ class DirectoryTree {
   isEqualTo (tree2) {
     if (!tree2.tree || !tree2.root) return
     if (!this.tree || !this.root) return
-    const tree1 = this.tree
-    tree2 = tree2.tree
+    const treeA = this.tree
+    const treeB = tree2.tree
 
-    const iterator1 = tree1.treeIterator(this.root, {})
-    const iterator2 = tree2.treeIterator(tree2.root, {})
     let item1, item2
+    const iterator1 = treeA.treeIterator(this.root, {})
+    const iterator2 = treeB.treeIterator(tree2.root, {})
     item1 = iterator1.next() // discard the empty root
     item2 = iterator2.next() // discard the empty root
     item1 = iterator1.next()
@@ -222,14 +223,10 @@ class DirectoryTree {
       item1 = item1.value
       item2 = item2.value
       flag = item1.isEqualTo(item2)
-      // console.log(flag,item1,item2);
-
       if (!flag) return null
-
       item1 = iterator1.next()
       item2 = iterator2.next()
     }
-
     flag = (item1.done === item2.done)
     return flag
   }

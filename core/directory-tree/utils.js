@@ -45,7 +45,7 @@ const walkAction = function (rootPath, absPath, options) {
 
   const pInfo = new PathInfo(absPath)
   if (!pInfo.isFile && !pInfo.isDirectory) return
-  pInfo.relRoot = path.sep // rootPathUtils.File.pathSeparator
+  pInfo.relRoot = rootPath //path.sep // rootPathUtils.File.pathSeparator
 
   if (pInfo.isFile) {
     if (options.includedExtensionsRegex) { /* included libs have the priority */
@@ -76,7 +76,7 @@ const walkAction = function (rootPath, absPath, options) {
 
 const walkDirectory = (absPath, options) => {
   options = parseOptions(options)
-  absPath = path.resolve(absPath) + path.sep
+  absPath = path.resolve(absPath) //+ path.sep
   options.excludedPaths = prepareExcludedPaths(options.excludedPaths)
   options.includedExtensionsRegex = prepareIncludedExtensions(options.includedExtensions)
   options.excludedExtensionsRegex = prepareExcludedExtensions(options.excludedExtensions)

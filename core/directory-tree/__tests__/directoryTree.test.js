@@ -13,6 +13,7 @@ describe('DirectoryTree class and object', function () {
     expect(typeof dT1.toJson() === 'object').toEqual(true)
 
     const dT2 = new DirectoryTree()
+    //console.log(dT1.toJson())
     dT2.fromJson(dT1.toJson())
     expect(dT2.empty()).toEqual(true)
     expect(dT2.rootPath()).toEqual(absPath1)
@@ -30,8 +31,18 @@ describe('DirectoryTree class and object', function () {
     expect(typeof dT1.toJson() === 'object').toEqual(true)
 
     const dT3 = new DirectoryTree()
-    console.log(dT1.toJson())
     dT3.fromJson(dT1.toJson())
     expect(dT3.isEqualTo(dT1)).toEqual(true)
+
   })
+
+
+  it('test1', function () {
+    const absPath1 = path.join(__dirname, 'test_dir', 'directory6')
+    const dT1 = new DirectoryTree(absPath1)
+    dT1.read()
+
+    console.log(dT1)
+  })
+
 })
