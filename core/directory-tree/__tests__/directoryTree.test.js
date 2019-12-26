@@ -46,3 +46,6 @@ describe('DirectoryTree class and object', function () {
   })
 
 })
+
+// static value tests for dt and utils
+// check methods and props working

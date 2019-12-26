@@ -70,7 +70,7 @@ class PathInfo {
   // set path (path) { this.info.path = path }
 
   get size () { return this.info.size }
-  // set size (size) { this.info.size = size }
+  set size (size) { this.info.size = size }
 
   get isFile () { return this.info.isFile }
   get isDirectory () { return this.info.isDirectory }

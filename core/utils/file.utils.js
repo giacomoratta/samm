@@ -321,9 +321,9 @@ libUtils.moveDirectorySync = (pathFrom, pathTo, options) => {
   return result
 }
 
-libUtils.readDirectorySync = (pathString, preFn, callback) => {
-  if (!callback) callback = function () {}
-  if (!preFn) preFn = function () {}
+libUtils.readDirectorySync = (pathString, preProcessItemsFn, itemFn) => {
+  if (!itemFn) itemFn = function () {}
+  if (!preProcessItemsFn) preProcessItemsFn = function () {}
   let items = null
   try {
     items = fs.readdirSync(pathString)
@@ -332,9 +332,9 @@ libUtils.readDirectorySync = (pathString, preFn, callback) => {
     return null
   }
   if (!items) return null
-  preFn(items)
+  preProcessItemsFn(items)
   for (let i = 0; i < items.length; i++) {
-    callback(items[i], i, items)
+    itemFn(items[i], i, items)
   }
   return items
 }

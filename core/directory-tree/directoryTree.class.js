@@ -38,6 +38,7 @@ class DirectoryTree {
     let tParent = this.root
 
     utils.walkDirectory(this.data.rootPath, {
+      maxLevel: this.data.options.maxLevel,
       includedExtensions: this.data.options.includedExtensions,
       excludedExtensions: this.data.options.excludedExtensions,
       excludedPaths: this.data.options.excludedPaths,

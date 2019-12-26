@@ -1,20 +1,23 @@
 const path = require('path')
 const utils = require('../utils')
 
-function walkDirectory() {
+function walkDirectory(options) {
     const absPath = path.join(__dirname,'test_dir')
-
     const simpleTree = { parent: null, children:[] }
+    const simpleArray = []
     let currentNode = simpleTree
 
-    let options = {
+    options = {
+        ...options,
         itemCb: ({ item }) => {
             if(item.isFile) {
                 const newNode = { item, parent: currentNode }
                 currentNode.children.push(newNode)
+                simpleArray.push(newNode)
             } else if(item.isDirectory) {
                 const newNode = { item, children: [], parent: currentNode }
                 currentNode.children.push(newNode)
+                simpleArray.push(newNode)
                 currentNode = newNode
             }
         },
@@ -23,7 +26,7 @@ function walkDirectory() {
         }
     }
     utils.walkDirectory(absPath,options)
-    return simpleTree
+    return { simpleTree, simpleArray }
 }
 
 function printSimpleTree({ simpleTree, indent=0 }) {
@@ -39,4 +42,6 @@ function printSimpleTree({ simpleTree, indent=0 }) {
     })
 }
 
-printSimpleTree({ simpleTree:walkDirectory() })
+//printSimpleTree({ simpleTree:walkDirectory() })
+
+console.log(walkDirectory().simpleArray)

@@ -61,7 +61,7 @@ config.addField({
   schema: {
     type: 'array',
     items: 'string',
-    default: ['']
+    default: ['exe','DS_Store','info']
   }
 })
 
@@ -70,7 +70,7 @@ config.addField({
   schema: {
     type: 'array',
     items: 'string',
-    default: ['']
+    default: ['wav','mp3']
   }
 })
 

@@ -47,4 +47,22 @@ function walkDirectory1() {
     })
 }
 
-walkDirectory1()
+
+function readDirectory2() {
+    const absPath = path.join(__dirname,'test_dir')
+    const dT1 = new DirectoryTree(absPath,{
+        //includedExtensions: [ 'json' , 'wav' ]
+        // excludedPaths: [
+        //     'test_dir/directory1/directory3',
+        //     '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6'
+        // ]
+    })
+    dT1.read()
+    dT1.forEach({
+        itemCb: ({ item }) => {
+            console.log(item.base, item.level)
+        }
+    })
+}
+
+readDirectory2()
