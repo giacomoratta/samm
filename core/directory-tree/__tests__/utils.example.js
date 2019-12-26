@@ -3,7 +3,7 @@ const utils = require('../utils')
 
 function walkDirectory(options) {
     const absPath = path.join(__dirname,'test_dir')
-    const simpleTree = { parent: null, children:[] }
+    let simpleTree = { parent: null, children:[] }
     const simpleArray = []
     let currentNode = simpleTree
 
@@ -26,6 +26,8 @@ function walkDirectory(options) {
         }
     }
     utils.walkDirectory(absPath,options)
+    simpleTree = simpleTree.children[0]
+    simpleTree.parent = null
     return { simpleTree, simpleArray }
 }
 
