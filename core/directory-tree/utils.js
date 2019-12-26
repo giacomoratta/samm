@@ -22,8 +22,8 @@ const prepareExcludedPaths = function (excludedPaths) {
   if (!_.isArray(excludedPaths) || excludedPaths.length === 0) return null
   const exclArray = []
   excludedPaths.forEach(function (v) {
-    //if(v.endsWith(path.sep)) v=v.slice(0,-1)
-    exclArray.push(new RegExp(`(${_.escapeRegExp(v)})$`,'i'))
+    // if(v.endsWith(path.sep)) v=v.slice(0,-1)
+    exclArray.push(new RegExp(`(${_.escapeRegExp(v)})$`, 'i'))
   })
   if (exclArray.length === 0) return null
   return exclArray
@@ -47,17 +47,15 @@ const walkAction = function (rootPath, absPath, options) {
   pInfo.relRoot = rootPath /* set relative root, relative path and level */
 
   if (pInfo.isFile) {
-    /* Check included extensions (final tree will have these file only) */
     if (options.includedExtensionsRegex) {
-      if(!options.includedExtensionsRegex.test(_.toLower((pInfo.ext.length > 1 ? pInfo.ext : pInfo.name)))) return null
-    }
-    /* Check excluded extensions */
-    else if (options.excludedExtensionsRegex) {
-      if(options.excludedExtensionsRegex.test(_.toLower((pInfo.ext.length > 1 ? pInfo.ext : pInfo.name)))) return null
+      /* Check included extensions (final tree will have these file only) */
+      if (!options.includedExtensionsRegex.test(_.toLower((pInfo.ext.length > 1 ? pInfo.ext : pInfo.name)))) { return null }
+    } else if (options.excludedExtensionsRegex) {
+      /* Check excluded extensions */
+      if (options.excludedExtensionsRegex.test(_.toLower((pInfo.ext.length > 1 ? pInfo.ext : pInfo.name)))) return null
     }
     options.itemCb({ item: pInfo })
     return pInfo
-
   } else if (pInfo.isDirectory) {
     options.itemCb({ item: pInfo })
 
@@ -78,7 +76,7 @@ const walkAction = function (rootPath, absPath, options) {
 
 const walkDirectory = (absPath, options) => {
   options = parseOptions(options)
-  absPath = path.resolve(absPath) //+ path.sep
+  absPath = path.resolve(absPath) // + path.sep
   options.excludedPaths = prepareExcludedPaths(options.excludedPaths)
   options.includedExtensionsRegex = prepareExtensionsRegex(options.includedExtensions)
   options.excludedExtensionsRegex = prepareExtensionsRegex(options.excludedExtensions)

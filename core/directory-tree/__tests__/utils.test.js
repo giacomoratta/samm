@@ -1,20 +1,20 @@
 const path = require('path')
 const utils = require('../utils')
 
-function walkDirectory(options) {
-  const absPath = path.join(__dirname,'test_dir')
-  let simpleTree = { parent: null, children:[] }
+function walkDirectory (options) {
+  const absPath = path.join(__dirname, 'test_dir')
+  let simpleTree = { parent: null, children: [] }
   const simpleArray = []
   let currentNode = simpleTree
 
   options = {
     ...options,
     itemCb: ({ item }) => {
-      if(item.isFile) {
+      if (item.isFile) {
         const newNode = { item, parent: currentNode }
         currentNode.children.push(newNode)
         simpleArray.push(newNode)
-      } else if(item.isDirectory) {
+      } else if (item.isDirectory) {
         const newNode = { item, children: [], parent: currentNode }
         currentNode.children.push(newNode)
         simpleArray.push(newNode)
@@ -25,7 +25,7 @@ function walkDirectory(options) {
       currentNode = currentNode.parent
     }
   }
-  utils.walkDirectory(absPath,options)
+  utils.walkDirectory(absPath, options)
   simpleTree = simpleTree.children[0]
   simpleTree.parent = null
   return { simpleTree, simpleArray }
@@ -68,10 +68,10 @@ describe('Static utils for DirectoryTree', function () {
 
     expect(simpleArray.length).toEqual(18)
 
-    let i=0
+    let i = 0
     expect(simpleArray[i].item.base).toEqual('test_dir')
     expect(simpleArray[i].item.relPath).toEqual('')
-    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleArray[i].item.level).toEqual(1)
     expect(simpleArray[i].item.ext).toEqual('')
     expect(simpleArray[i].item.isDirectory).toEqual(true)
@@ -86,8 +86,8 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('directory2')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory2'))
-    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory2'))
+    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.ext).toEqual('')
     expect(simpleArray[i].item.isDirectory).toEqual(true)
@@ -95,43 +95,43 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('file22.txt')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory2','file22.txt'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory2', 'file22.txt'))
     expect(simpleArray[i].item.level).toEqual(4)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file26.json')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory2','file26.json'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory2', 'file26.json'))
     expect(simpleArray[i].item.level).toEqual(4)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('directory3')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory3'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory3'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.isDirectory).toEqual(true)
     expect(simpleArray[i].item.isFile).toEqual(false)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file33.txt')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory3','file33.txt'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory3', 'file33.txt'))
     expect(simpleArray[i].item.level).toEqual(4)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file35.txt')
-    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname,'test_dir'))
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','directory3','file35.txt'))
+    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'directory3', 'file35.txt'))
     expect(simpleArray[i].item.level).toEqual(4)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file11.txt')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','file11.txt'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'file11.txt'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.ext).toEqual('txt')
     expect(simpleArray[i].item.isDirectory).toEqual(false)
@@ -139,14 +139,14 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('file14.json')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','file14.json'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'file14.json'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file18.wav')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1','file18.wav'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory1', 'file18.wav'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.ext).toEqual('wav')
     expect(simpleArray[i].item.isDirectory).toEqual(false)
@@ -154,7 +154,7 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('directory6')
-    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleArray[i].item.relPath).toEqual('directory6')
     expect(simpleArray[i].item.level).toEqual(2)
     expect(simpleArray[i].item.isDirectory).toEqual(true)
@@ -162,14 +162,14 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('file61.txt')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6','file61.txt'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6', 'file61.txt'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file64.json')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6','file64.json'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6', 'file64.json'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.ext).toEqual('json')
     expect(simpleArray[i].item.isDirectory).toEqual(false)
@@ -177,14 +177,14 @@ describe('Static utils for DirectoryTree', function () {
 
     i++
     expect(simpleArray[i].item.base).toEqual('file68.txt')
-    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6','file68.txt'))
+    expect(simpleArray[i].item.relPath).toEqual(path.join('directory6', 'file68.txt'))
     expect(simpleArray[i].item.level).toEqual(3)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
     expect(simpleArray[i].item.isFile).toEqual(true)
 
     i++
     expect(simpleArray[i].item.base).toEqual('file1.txt')
-    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleArray[i].item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleArray[i].item.relPath).toEqual('file1.txt')
     expect(simpleArray[i].item.level).toEqual(2)
     expect(simpleArray[i].item.isDirectory).toEqual(false)
@@ -213,7 +213,7 @@ describe('Static utils for DirectoryTree', function () {
     expect(simpleTree.children.length).toEqual(5)
     expect(simpleTree.item.base).toEqual('test_dir')
     expect(simpleTree.item.relPath).toEqual('')
-    expect(simpleTree.item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleTree.item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleTree.item.level).toEqual(1)
     expect(simpleTree.item.ext).toEqual('')
     expect(simpleTree.item.isDirectory).toEqual(true)
@@ -227,7 +227,7 @@ describe('Static utils for DirectoryTree', function () {
     expect(simpleTree.children[0].parent.children.length).toEqual(5)
     expect(simpleTree.children[0].parent.item.base).toEqual('test_dir')
     expect(simpleTree.children[0].parent.item.relPath).toEqual('')
-    expect(simpleTree.children[0].parent.item.relRoot).toEqual(path.join(__dirname,'test_dir'))
+    expect(simpleTree.children[0].parent.item.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(simpleTree.children[0].parent.item.level).toEqual(1)
     expect(simpleTree.children[0].parent.item.ext).toEqual('')
     expect(simpleTree.children[0].parent.item.isDirectory).toEqual(true)
@@ -240,7 +240,7 @@ describe('Static utils for DirectoryTree', function () {
     expect(simpleTree.children[4].item.isFile).toEqual(true)
 
     expect(simpleTree.children[0].children[1].children[0].item.base).toEqual('file33.txt')
-    expect(simpleTree.children[0].children[1].children[0].item.relPath).toEqual(path.join('directory1','directory3','file33.txt'))
+    expect(simpleTree.children[0].children[1].children[0].item.relPath).toEqual(path.join('directory1', 'directory3', 'file33.txt'))
     expect(simpleTree.children[0].children[1].children[0].item.level).toEqual(4)
     expect(simpleTree.children[0].children[1].children[0].item.isDirectory).toEqual(false)
     expect(simpleTree.children[0].children[1].children[0].item.isFile).toEqual(true)

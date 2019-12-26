@@ -22,7 +22,7 @@ class PathInfo {
       }
 
       this.info = pInfo
-      if(this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
+      if (this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
       this.info.path = absPath
       this.info.level = 1
       this.info.size = (stats.size ? stats.size : 0)
@@ -79,10 +79,10 @@ class PathInfo {
   get relRoot () { return this.info.relRoot }
   set relRoot (root) {
     this.info.relRoot = root
-    this.info.relPath = this.info.path.substring(this.info.relRoot.length+1)
-    //if (this.info.relPath.length === 0) this.info.relPath = path.sep
-    //if (this.info.relPath.endsWith(path.sep)) this.info.relPath = this.info.relPath.substr(0, this.info.relPath.length - 2) // remove final path.sep
-    if (this.info.relPath.length > 0) this.info.level = _.split(this.info.relPath, path.sep).length+1
+    this.info.relPath = this.info.path.substring(this.info.relRoot.length + 1)
+    // if (this.info.relPath.length === 0) this.info.relPath = path.sep
+    // if (this.info.relPath.endsWith(path.sep)) this.info.relPath = this.info.relPath.substr(0, this.info.relPath.length - 2) // remove final path.sep
+    if (this.info.relPath.length > 0) this.info.level = _.split(this.info.relPath, path.sep).length + 1
   }
 
   get relPath () { return this.info.relPath }

@@ -32,9 +32,7 @@ describe('PathInfo class and object', function () {
     expect(pInfo1.relPath).toEqual(undefined)
   })
 
-
   it('should manage relRoot and relPath', function () {
-
     const absDirPath1 = path.join(__dirname, 'test_dir', 'directory1')
     let pInfo1 = new PathInfo(absDirPath1)
     pInfo1.relRoot = absDirPath1

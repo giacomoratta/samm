@@ -121,7 +121,7 @@ class DirectoryTree {
     // dT1.print()
     const iterator = tree.treeIterator(this.root, {})
     for (const item of iterator) {
-      if(!(item instanceof PathInfo)) continue
+      if (!(item instanceof PathInfo)) continue
       // console.log(level,' - ',isFirstChild,isLastChild,tree.index(item),item.path);
       options.itemCb({
         item
