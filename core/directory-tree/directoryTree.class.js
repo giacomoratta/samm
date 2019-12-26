@@ -16,10 +16,6 @@ class DirectoryTree {
     }
   }
 
-  // error () {
-  //   return this.tree == null
-  // }
-
   reset () {
     this.tree = null /* Directory Tree */
     this.root = {} // empty rootrootrootroot

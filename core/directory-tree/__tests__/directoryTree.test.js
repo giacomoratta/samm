@@ -35,7 +35,7 @@ describe('DirectoryTree class and object', function () {
     expect(dT3.isEqualTo(dT1)).toEqual(true)
   })
 
-  it('test1', function () {
+  it('should walk the directory tree with node stats', function () {
     const absPath1 = path.join(__dirname, 'test_dir')
     const dT1 = new DirectoryTree(absPath1)
     dT1.read()
@@ -43,6 +43,3 @@ describe('DirectoryTree class and object', function () {
     console.log(dT1)
   })
 })
-
-// static value tests for dt and utils
-// check methods and props working
