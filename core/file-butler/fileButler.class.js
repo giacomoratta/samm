@@ -6,8 +6,6 @@ const fileUtils = require('../utils/file.utils')
 
 const ACCEPTED_EVENTS = ['save', 'load']
 
-// todo: replace custom function with events (check event finished and get returned data)
-
 class FileButler {
   constructor (options) {
     this.eventEmitter = new Events()
