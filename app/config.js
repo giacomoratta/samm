@@ -10,15 +10,19 @@ const path = require('path')
 const { JsonizedFile } = require('../core/jsonized-file')
 const basePath = process.env.ABSOLUTE_APP_PATH || path.join(__dirname, '__tests__')
 
-class Config extends JsonizedFile {
+class ConfigFile extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
   }
+
+  printStatusMessages() {
+
+  }
 }
 
-const config = new Config(path.join(basePath, 'config.json'))
+const Config = new ConfigFile(path.join(basePath, 'config.json'))
 
-config.addField({
+Config.addField({
   name: 'SamplesDirectory',
   schema: {
     type: 'absDirPath',
@@ -27,7 +31,7 @@ config.addField({
   value: basePath
 })
 
-config.addField({
+Config.addField({
   name: 'CurrentProject',
   schema: {
     type: 'absDirPath',
@@ -36,7 +40,7 @@ config.addField({
   value: basePath
 })
 
-config.addField({
+Config.addField({
   name: 'RandomCount',
   schema: {
     type: 'number',
@@ -46,7 +50,7 @@ config.addField({
   value: 15
 })
 
-config.addField({
+Config.addField({
   name: 'MaxOccurrencesSameDirectory',
   schema: {
     type: 'number',
@@ -56,7 +60,7 @@ config.addField({
   value: 2
 })
 
-config.addField({
+Config.addField({
   name: 'ExcludedExtensionsForSamples',
   schema: {
     type: 'array',
@@ -65,7 +69,7 @@ config.addField({
   }
 })
 
-config.addField({
+Config.addField({
   name: 'IncludedExtensionsForSamples',
   schema: {
     type: 'array',
@@ -74,7 +78,7 @@ config.addField({
   }
 })
 
-config.addField({
+Config.addField({
   name: 'ExtensionsPolicy',
   schema: {
     type: 'enum',
@@ -83,7 +87,7 @@ config.addField({
   value: 'X'
 })
 
-config.addField({
+Config.addField({
   name: 'Tags',
   schema: {
     type: 'object',
@@ -97,7 +101,7 @@ config.addField({
   }
 })
 
-config.addField({
+Config.addField({
   name: 'ProjectHistory',
   schema: {
     type: 'array',
@@ -106,7 +110,7 @@ config.addField({
   }
 })
 
-config.addField({
+Config.addField({
   name: 'Status',
   schema: {
     type: 'object',
@@ -121,17 +125,17 @@ config.addField({
   }
 })
 
-config.load()
+Config.load()
 
-config.getField('SamplesDirectory').on('change',() => {
-  config.getField('Status').add('new-scan-needed',false)
+Config.getField('SamplesDirectory').on('change',() => {
+  Config.getField('Status').add('new-scan-needed',false)
 })
 
-config.getField('ExcludedExtensionsForSamples').on('change',() => {
-  config.getField('Status').add('new-scan-needed',false)
+Config.getField('ExcludedExtensionsForSamples').on('change',() => {
+  Config.getField('Status').add('new-scan-needed',false)
 })
 
-config.save()
+Config.save()
 
 // todo
 // configMgr.setUserdataDirectory('userdata')
@@ -143,5 +147,5 @@ config.save()
 // configMgr.addUserFile('samples_index', 'samples_index')
 
 module.exports = {
-  config
+  Config
 }

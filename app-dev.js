@@ -3,7 +3,7 @@ require('dotenv').config() /* Load .env file to process.env */
 process.env.ABSOLUTE_APP_FILEPATH = process.argv[1]
 process.env.ABSOLUTE_APP_PATH = path.dirname(process.env.ABSOLUTE_APP_FILEPATH)
 
-const log = require('./modules/logger/pino.logger').createLogger('app')
+const log = require('./core/logger/pino.logger').createLogger('app')
 
 log.info('Starting app...')
 log.debug(`(env) ABSOLUTE_APP_PATH: ${process.env.ABSOLUTE_APP_PATH}`)
