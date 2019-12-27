@@ -1,10 +1,10 @@
-const { DirectoryTree } = require('../index')
+const { SequoiaPath } = require('../index')
 const path = require('path')
 
-describe('DirectoryTree class and object', function () {
-  it('should create a basic DirectoryTree', async function () {
+describe('SequoiaPath class and object', function () {
+  it('should create a basic SequoiaPath', async function () {
     const absPath1 = path.join(__dirname, 'test_dir', 'directory6')
-    const dT1 = new DirectoryTree(absPath1)
+    const dT1 = new SequoiaPath(absPath1)
     expect(dT1.empty()).toEqual(true)
     expect(dT1.rootPath()).toEqual(absPath1)
     expect(dT1.nodeCount()).toEqual(0)
@@ -12,7 +12,7 @@ describe('DirectoryTree class and object', function () {
     expect(dT1.directoryCount()).toEqual(0)
     expect(typeof dT1.toJson() === 'object').toEqual(true)
 
-    const dT2 = new DirectoryTree()
+    const dT2 = new SequoiaPath()
     dT2.fromJson(dT1.toJson())
     expect(dT2.empty()).toEqual(true)
     expect(dT2.rootPath()).toEqual(absPath1)
@@ -29,14 +29,14 @@ describe('DirectoryTree class and object', function () {
     expect(dT1.directoryCount()).toEqual(1)
     expect(typeof dT1.toJson() === 'object').toEqual(true)
 
-    const dT3 = new DirectoryTree()
+    const dT3 = new SequoiaPath()
     dT3.fromJson(dT1.toJson())
     expect(dT3.isEqualTo(dT1)).toEqual(true)
   })
 
   it('should loop and walk the directory tree', async function () {
     const absPath1 = path.join(__dirname, 'test_dir')
-    const dT1 = new DirectoryTree(absPath1)
+    const dT1 = new SequoiaPath(absPath1)
 
     await dT1.read()
     expect(dT1.empty()).toEqual(false)

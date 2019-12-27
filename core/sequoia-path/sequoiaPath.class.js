@@ -1,9 +1,9 @@
 const _ = require('lodash')
 const SymbolTree = require('symbol-tree')
-const PathInfo = require('./pathInfo.class')
+const { PathInfo } = require('../path-info')
 const utils = require('./utils')
 
-class DirectoryTree {
+class SequoiaPath {
   constructor (absPath, options) {
     this.tree = null /* the real tree */
     this.root = {}
@@ -276,4 +276,4 @@ class DirectoryTree {
   }
 }
 
-module.exports = DirectoryTree
+module.exports = SequoiaPath

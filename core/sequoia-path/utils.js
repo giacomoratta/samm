@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
-const PathInfo = require('./pathInfo.class')
+const PathInfo = require('../path-info/pathInfo.class')
 
 const parseOptions = function (options) {
   options = {

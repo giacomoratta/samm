@@ -129,11 +129,11 @@ describe('PathInfo class and object', function () {
     expJson1.root = '/bla/bla'
     expect(expJson1).toMatchObject({
       root: '/bla/bla',
-      dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
+      dir: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6',
       base: 'file61.txt',
       ext: 'txt',
       name: 'file61',
-      path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
+      path: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6/file61.txt',
       level: 1,
       size: 42,
       isFile: true,
@@ -142,11 +142,11 @@ describe('PathInfo class and object', function () {
 
     expect(pInfo1.toJson()).toMatchObject({
       root: '/',
-      dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
+      dir: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6',
       base: 'file61.txt',
       ext: 'txt',
       name: 'file61',
-      path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
+      path: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6/file61.txt',
       level: 1,
       size: 42,
       isFile: true,
@@ -156,11 +156,11 @@ describe('PathInfo class and object', function () {
     pInfo1.fromJson(expJson1)
     expect(pInfo1.toJson()).toMatchObject({
       root: '/bla/bla',
-      dir: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6',
+      dir: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6',
       base: 'file61.txt',
       ext: 'txt',
       name: 'file61',
-      path: '/home/giacomo/Workspace/mpl/core/directory-tree/__tests__/test_dir/directory6/file61.txt',
+      path: '/home/giacomo/Workspace/mpl/core/path-info/__tests__/test_dir/directory6/file61.txt',
       level: 1,
       size: 42,
       isFile: true,
