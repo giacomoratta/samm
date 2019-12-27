@@ -18,25 +18,35 @@ describe('cli interface with vorpal library', function () {
   })
 
   it('should set listener on events', function () {
-    expect(myCli.on('show', () => {
-      /* callback code */
-    })).toEqual(true)
+    expect(function(){
+      myCli.on('show', () => {
+        /* callback code */
+      })
+    }).not.toThrow()
 
-    expect(myCli.on('exit', () => {
-      /* callback code */
-    })).toEqual(true)
+    expect(function(){
+      myCli.on('exit', () => {
+        /* callback code */
+      })
+    }).not.toThrow()
 
-    expect(myCli.on('beforeCommand', () => {
-      /* callback code */
-    })).toEqual(true)
+    expect(function(){
+      myCli.on('beforeCommand', () => {
+        /* callback code */
+      })
+    }).not.toThrow()
 
-    expect(myCli.on('afterCommand', () => {
-      /* callback code */
-    })).toEqual(true)
+    expect(function(){
+      myCli.on('afterCommand', () => {
+        /* callback code */
+      })
+    }).not.toThrow()
 
-    expect(myCli.on('show-wrong', () => {
-      /* callback code */
-    })).toEqual(false)
+    expect(function(){
+      myCli.on('show-wrong', () => {
+        /* callback code */
+      })
+    }).toThrow('Invalid')
   })
 
   it('should set a custom logger', function () {

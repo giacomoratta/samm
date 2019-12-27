@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { ENUMS, parseConfiguration } = require('../core/file-butler/fileButler.utils')
+const { ENUMS, parseConfiguration } = require('../../core/file-butler/fileButler.utils')
 
 // todo: replace custom function with events (check event finished and get returned data)
 

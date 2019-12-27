@@ -47,7 +47,7 @@ cliMgr.addCommandBody(cmd_name, function (cliReference, cliNextCb, cliData) {
   if (!_.isFunction(ExportFn)) return cliNextCb(cliData.errorCode)
 
   ExportFn(archFD_options).then((d) => {
-    cliData.ui.print('exported ' + Utils.String.filesizeToStr(d.total_bytes) + ' to ' + d.archive_path)
+    cliData.ui.print('exported ' + Utils.String.fileSizeToStr(d.total_bytes) + ' to ' + d.archive_path)
     setTimeout(function () {
       return cliNextCb(cliData.successCode)
     }, 2000)

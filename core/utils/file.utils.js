@@ -46,7 +46,7 @@ libUtils.isRelativePath = (p) => {
 }
 
 libUtils.isAbsolutePath = (p) => {
-  return path.normalize(p + '/') === path.normalize(path.resolve(p) + '/')
+  return path.normalize(p + path.sep) === path.normalize(path.resolve(p) + path.sep)
 }
 
 libUtils.isAbsoluteParentDirSync = (pathString, checkExists) => {

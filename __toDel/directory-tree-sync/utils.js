@@ -1,9 +1,10 @@
-const fs = require('fs')
 const path = require('path')
-const _ = require('lodash')
+const _ = require('../../core/utils/lodash.extended')
+const fileUtils = require('../../core/utils/file.utils')
+const arrayUtils = require('../../core/utils/array.utils')
 const PathInfo = require('./pathInfo.class')
 
-const parseOptions = function (options) {
+const parseOptions = (options) => {
   options = {
     maxLevel: 0,
     includedExtensions: [],
@@ -38,7 +39,7 @@ const prepareExtensionsRegex = function (includedExtensions) {
   return new RegExp(`^\\.?(${_.join(extList, '|')})$`, 'i')
 }
 
-const walkAction = async function (rootPath, absPath, options) {
+const walkAction = function (rootPath, absPath, options) {
   if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null
 
   const pInfo = new PathInfo(absPath)
@@ -53,33 +54,33 @@ const walkAction = async function (rootPath, absPath, options) {
       /* Check excluded extensions */
       if (options.excludedExtensionsRegex.test(_.toLower((pInfo.ext.length > 1 ? pInfo.ext : pInfo.name)))) return null
     }
-    await options.itemFn({ item: pInfo })
+    options.itemFn({ item: pInfo })
     return pInfo
   } else if (pInfo.isDirectory) {
-    await options.itemFn({ item: pInfo })
+    options.itemFn({ item: pInfo })
 
-    await readDirectory(absPath, sortFilesArray, async (item) => {
+    fileUtils.readDirectorySync(absPath, arrayUtils.sortFilesArray, (item) => {
       item = path.join(absPath, item)
 
       if (options.maxLevel > 0 && options.maxLevel <= pInfo.level) return
 
-      const pi = await walkAction(rootPath, item, options)
+      const pi = walkAction(rootPath, item, options)
       if (!pi) return
       if (pi.size) pInfo.size += pi.size
     })
 
-    await options.afterDirectoryFn({ item: pInfo })
+    options.afterDirectoryFn({ item: pInfo })
     return pInfo
   }
 }
 
-const walkDirectory = async function (absPath, options) {
+const walkDirectory = (absPath, options) => {
   options = parseOptions(options)
   absPath = path.resolve(absPath) // + path.sep
   options.excludedPaths = prepareExcludedPaths(options.excludedPaths)
   options.includedExtensionsRegex = prepareExtensionsRegex(options.includedExtensions)
   options.excludedExtensionsRegex = prepareExtensionsRegex(options.excludedExtensions)
-  await walkAction(absPath, absPath, options)
+  walkAction(absPath, absPath, options)
 }
 
 const stringReplaceAt = function (str, index, replacement) {
@@ -88,35 +89,6 @@ const stringReplaceAt = function (str, index, replacement) {
 
 const stringReplaceAll = function (str, search, replacement) {
   return str.replace(new RegExp(search, 'g'), replacement)
-}
-
-const sortFilesArray = function (array) {
-  array.sort(function (a, b) {
-    const aName = _.toLower(a)
-    const bName = _.toLower(b)
-    if (aName < bName) return -1
-    if (aName > bName) return 1
-    return 0
-  })
-  return array
-}
-
-const readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
-  return new Promise((resolve) => {
-    if (!itemFn) itemFn = async function () {}
-    if (!preProcessItemsFn) preProcessItemsFn = function () {}
-    fs.readdir(pathString, async (err, items) => {
-      if (err || !items) {
-        resolve(null)
-        return
-      }
-      preProcessItemsFn(items)
-      for (let i = 0; i < items.length; i++) {
-        await itemFn(items[i], i, items)
-      }
-      resolve(items)
-    })
-  })
 }
 
 module.exports = {

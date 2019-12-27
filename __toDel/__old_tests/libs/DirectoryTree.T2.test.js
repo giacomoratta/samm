@@ -7,7 +7,7 @@ describe('directoryTree.class - TEST the traversing of a directoryTree', functio
             tt.read();
             assert.equal(tt.error(),false);
             tt.walk({
-                itemCb:(data)=>{
+                itemFn:(data)=>{
                     assert.equal(_.isInteger(data.item.level),true);
                     assert.equal(_.isString(data.item.rel_root),true);
                     assert.equal(_.isString(data.item.rel_path),true);

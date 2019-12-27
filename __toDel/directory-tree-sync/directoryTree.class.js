@@ -23,9 +23,9 @@ class DirectoryTree {
     this.data.directoriesCount = 0
   }
 
-  async read (options) {
+  read (options) {
     options = {
-      filterFn: null,
+      fileAcceptabilityFn: function (/* {pathInfo} item */) { return true },
       ...options
     }
 
@@ -33,15 +33,14 @@ class DirectoryTree {
     const tree = new SymbolTree()
     let tParent = this.root
 
-    await utils.walkDirectory(this.data.rootPath, {
+    utils.walkDirectory(this.data.rootPath, {
       maxLevel: this.data.options.maxLevel,
       includedExtensions: this.data.options.includedExtensions,
       excludedExtensions: this.data.options.excludedExtensions,
       excludedPaths: this.data.options.excludedPaths,
       itemFn: (data) => {
         // callback for each item
-        if (options.filterFn && options.filterFn(data.item) !== true) return
-        if (data.item.isFile === true) {
+        if (data.item.isFile === true && options.fileAcceptabilityFn(data.item) === true) {
           tree.appendChild(tParent, data.item)
           this.data.filesCount++
         } else if (data.item.isDirectory === true) {

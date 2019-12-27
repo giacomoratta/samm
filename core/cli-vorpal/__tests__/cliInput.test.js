@@ -1,17 +1,21 @@
 const CliInput = require('../cliInput.class')
 
+const newCliInput = function (options) {
+  return new CliInput(options)
+}
+
 describe('CliInput class and object', function () {
   it('should throw errors for invalid arguments in constructor', function () {
-    expect(function () { new CliInput() }).toThrowError('value')
-    expect(function () { new CliInput(null) }).toThrowError('value')
-    expect(function () { new CliInput({}) }).toThrowError('command')
-    expect(function () { new CliInput({}, new String('mycommand')) }).toThrowError('command')
-    expect(function () { new CliInput(new Object(), 'mycommand') }).not.toThrowError('value')
-    expect(function () { new CliInput({}, 'simple-command') }).not.toThrow()
+    expect(function () { newCliInput() }).toThrowError('value')
+    expect(function () { newCliInput(null) }).toThrowError('value')
+    expect(function () { newCliInput({}) }).toThrowError('command')
+    expect(function () { newCliInput({}, new String('mycommand')) }).toThrowError('command')
+    expect(function () { newCliInput(new Object(), 'mycommand') }).not.toThrowError('value')
+    expect(function () { newCliInput({}, 'simple-command') }).not.toThrow()
   })
 
   it('should create a simple CliInput', function () {
-    const CliInput1 = new CliInput({}, 'cmd')
+    const CliInput1 = newCliInput({}, 'cmd')
 
     expect(CliInput1.hasParam('param1')).toEqual(false)
     expect(CliInput1.hasOption('opt1')).toEqual(false)
@@ -34,7 +38,7 @@ describe('CliInput class and object', function () {
       optB: 'rOB'
     }
 
-    const CliInput1 = new CliInput(vorpalArgs1, 'cmd')
+    const CliInput1 = newCliInput(vorpalArgs1, 'cmd')
     expect(CliInput1.hasParam('reqA')).toEqual(true)
     expect(CliInput1.hasParam('reqB')).toEqual(true)
     expect(CliInput1.hasParam('optA')).toEqual(true)

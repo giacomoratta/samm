@@ -9,7 +9,7 @@ global.ConfigManagerOptions = {
     samples_index: 'test/userdata/samples_index.json'
 };
 
-require('../globals.js');
+require('../../globals.js');
 global.assert = require('assert');
 //global.d = function(){}; // To disable debug messages
 global.tLog = function(){

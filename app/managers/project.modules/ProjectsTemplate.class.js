@@ -10,7 +10,7 @@ class ProjectsTemplate {
     const _dirFound = []
     directoryTree.walkDirectory(configMgr.path('default_projects'), {
       maxLevel: 2,
-      itemCb: function (data) {
+      itemFn: function (data) {
         if (!data.item.isDirectory) return
         if (data.item.level !== 2) return
         _dirFound.push(data.item.path)

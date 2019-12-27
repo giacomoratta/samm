@@ -28,7 +28,7 @@ class SamplesTree {
     if (smp_obj.error()) return smp_obj
 
     this.T.walk({
-      itemCb: (itemData) => {
+      itemFn: (itemData) => {
         smp_obj.add(new PathInfo(itemData.item) /* {pathInfo} */)
       }
     })

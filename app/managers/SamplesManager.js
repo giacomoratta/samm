@@ -356,7 +356,7 @@ class SamplesManager {
 
     /* Loop on each file */
     ST.T.forEach({
-      itemCb: (data) => {
+      itemFn: (data) => {
         let smp_excluded = true
         _data.tags.forEach((v, i, a) => {
           if (_data.smpobj_by_tag[v].obj.add(data.item) === true) {

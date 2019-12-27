@@ -2,7 +2,7 @@ const { DirectoryTree } = require('../index')
 const path = require('path')
 
 describe('DirectoryTree class and object', function () {
-  it('should create a basic DirectoryTree', async function () {
+  it('should create a basic DirectoryTree', function () {
     const absPath1 = path.join(__dirname, 'test_dir', 'directory6')
     const dT1 = new DirectoryTree(absPath1)
     expect(dT1.empty()).toEqual(true)
@@ -21,7 +21,7 @@ describe('DirectoryTree class and object', function () {
     expect(dT2.directoryCount()).toEqual(0)
     expect(typeof dT2.toJson() === 'object').toEqual(true)
 
-    await dT1.read()
+    dT1.read()
     expect(dT1.empty()).toEqual(false)
     expect(dT1.rootPath()).toEqual(absPath1)
     expect(dT1.nodeCount()).toEqual(4)
@@ -34,11 +34,11 @@ describe('DirectoryTree class and object', function () {
     expect(dT3.isEqualTo(dT1)).toEqual(true)
   })
 
-  it('should loop and walk the directory tree', async function () {
+  it('should loop and walk the directory tree', function () {
     const absPath1 = path.join(__dirname, 'test_dir')
     const dT1 = new DirectoryTree(absPath1)
 
-    await dT1.read()
+    dT1.read()
     expect(dT1.empty()).toEqual(false)
 
     const filesArray1 = []

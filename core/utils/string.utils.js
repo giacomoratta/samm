@@ -17,12 +17,12 @@ libUtils.replaceAll = (str, str1, str2, ignore) => {
   return str.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, '\\$&'), (ignore ? 'gi' : 'g')), (typeof (str2) === 'string') ? str2.replace(/\$/g, '$$$$') : str2)
 }
 
-libUtils.filesizeToStr = (fsize) => {
-  if (fsize < 1024) return fsize + ' B'
-  if (fsize < 1048576) return Math.round(fsize / 1024) + ' KB'
-  if (fsize < 1073741824) return Math.round(fsize / 1048576) + ' MB'
-  if (fsize < 1099511627776) return Math.round(fsize / 1073741824) + ' GB'
-  return Math.round(fsize / (1099511627776)) + ' TB'
+libUtils.fileSizeToStr = (fileSize) => {
+  if (fileSize < 1024) return fileSize + ' B'
+  if (fileSize < 1048576) return Math.round(fileSize / 1024) + ' KB'
+  if (fileSize < 1073741824) return Math.round(fileSize / 1048576) + ' MB'
+  if (fileSize < 1099511627776) return Math.round(fileSize / 1073741824) + ' GB'
+  return Math.round(fileSize / (1099511627776)) + ' TB'
 }
 
 libUtils.cutByPreservingWords = (v, max) => {

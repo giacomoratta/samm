@@ -12,7 +12,7 @@ class DirCommand {
       filecount: 0
     }
     const _DT_walk_options = {
-      itemCb: (data) => {
+      itemFn: (data) => {
         if (!data.item.isFile) return
         // let _ext = (item.ext.length>0?item.ext:item.base);
         const _ext = data.item.ext

@@ -1,25 +1,14 @@
-const fs = require('fs')
+const _ = require('../../core/utils/lodash.extended')
 const path = require('path')
-const _ = require('lodash')
-
-const isAbsolutePath = function (p) {
-  return path.normalize(p + path.sep) === path.normalize(path.resolve(p) + path.sep)
-}
-
-const fileSizeToStr = function (fileSize) {
-  if (fileSize < 1024) return fileSize + ' B'
-  if (fileSize < 1048576) return Math.round(fileSize / 1024) + ' KB'
-  if (fileSize < 1073741824) return Math.round(fileSize / 1048576) + ' MB'
-  if (fileSize < 1099511627776) return Math.round(fileSize / 1073741824) + ' GB'
-  return Math.round(fileSize / (1099511627776)) + ' TB'
-}
+const fileUtils = require('../../core/utils/file.utils')
+const stringUtils = require('../../core/utils/string.utils')
 
 class PathInfo {
   constructor (initData) {
     this.info = {}
 
     if (_.isString(initData)) {
-      if (!isAbsolutePath(initData)) {
+      if (!fileUtils.isAbsolutePath(initData)) {
         throw new Error(`PathInfo - ${initData} is not an absolute path`)
       }
       const absPath = initData
@@ -27,11 +16,8 @@ class PathInfo {
       if (!pInfo) {
         throw new Error(`PathInfo - error while parsing ${absPath}`)
       }
-
-      let stats = null
-      try {
-        stats = fs.lstatSync(absPath)
-      } catch (e) {
+      const stats = fileUtils.getPathStatsSync(absPath)
+      if (!stats) {
         throw new Error(`PathInfo - error while getting path stats of ${absPath}`)
       }
 
@@ -83,7 +69,7 @@ class PathInfo {
   get relRoot () { return this.info.relRoot }
   get relPath () { return this.info.relPath }
   get level () { return this.info.level }
-  get sizeString () { return fileSizeToStr(this.info.size) }
+  get sizeString () { return stringUtils.fileSizeToStr(this.info.size) }
 
   /* Setters */
   set size (size) { this.info.size = size }

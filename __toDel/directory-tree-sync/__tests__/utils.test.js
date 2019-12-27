@@ -1,7 +1,7 @@
 const path = require('path')
 const utils = require('../utils')
 
-async function walkDirectory (options) {
+function walkDirectory (options) {
   const absPath = path.join(__dirname, 'test_dir')
   let simpleTree = { parent: null, children: [] }
   const simpleArray = []
@@ -9,7 +9,7 @@ async function walkDirectory (options) {
 
   options = {
     ...options,
-    itemFn: async ({ item }) => {
+    itemFn: ({ item }) => {
       if (item.isFile) {
         const newNode = { item, parent: currentNode }
         currentNode.children.push(newNode)
@@ -21,11 +21,11 @@ async function walkDirectory (options) {
         currentNode = newNode
       }
     },
-    afterDirectoryFn: async ({ item }) => {
+    afterDirectoryFn: ({ item }) => {
       currentNode = currentNode.parent
     }
   }
-  await utils.walkDirectory(absPath, options)
+  utils.walkDirectory(absPath, options)
   simpleTree = simpleTree.children[0]
   simpleTree.parent = null
   return { simpleTree, simpleArray }
@@ -63,8 +63,8 @@ describe('Static utils for DirectoryTree', function () {
     expect(typeof options2.itemFn === 'function').toEqual(true)
   })
 
-  it('should walk a directory correctly and return an ordered array', async function () {
-    const { simpleArray } = await walkDirectory()
+  it('should walk a directory correctly and return an ordered array', function () {
+    const { simpleArray } = walkDirectory()
 
     expect(simpleArray.length).toEqual(18)
 
@@ -205,8 +205,8 @@ describe('Static utils for DirectoryTree', function () {
     expect(simpleArray[i].item.isFile).toEqual(true)
   })
 
-  it('should walk a directory correctly and return a simple tree', async function () {
-    const { simpleTree, simpleArray } = await walkDirectory()
+  it('should walk a directory correctly and return a simple tree', function () {
+    const { simpleTree, simpleArray } = walkDirectory()
     expect(simpleArray.length).toEqual(18)
 
     expect(simpleTree.parent).toEqual(null)
