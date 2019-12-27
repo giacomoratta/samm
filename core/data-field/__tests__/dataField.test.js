@@ -453,6 +453,15 @@ describe('dataField class and object', function () {
     }).toThrow('fileNotExists')
 
     expect(function () {
+      const df1 = newDataField({
+        name: 'fieldname1',
+        schema: { type: 'number', readOnly: true },
+        value: 32
+      })
+      df1.set(42)
+    }).toThrow('is read-only')
+
+    expect(function () {
       fileUtils.copyFileSync(path.join(__dirname, 'file_utils_test_dir/file1.json'), path.join(__dirname, 'file_utils_test_dir/file1_2.json'))
       newDataField({
         name: 'fieldname1',

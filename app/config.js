@@ -6,21 +6,88 @@
 *
 * */
 
+const basePath = process.env.ABSOLUTE_APP_PATH
+
 const path = require('path')
 const { JsonizedFile } = require('../core/jsonized-file')
-const basePath = process.env.ABSOLUTE_APP_PATH || path.join(__dirname, '__tests__')
 
 class ConfigFile extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
   }
 
-  printStatusMessages() {
-
+  statusMessages() {
+    const statusFlags = this.get('Status')
+    let statusMessages = ''
+    if(statusFlags['first-scan-needed'] === true) {
+      statusMessages += `First samples scan needed before start using the app. \n`
+    }
+    else if(statusFlags['new-scan-needed'] === true) {
+      statusMessages += `New samples scan needed to keep using the app. \n`
+    }
+    return statusMessages
   }
 }
 
 const Config = new ConfigFile(path.join(basePath, 'config.json'))
+
+Config.addField({
+  name: 'UserdataDirectory',
+  schema: {
+    type: 'relDirPath',
+    basePath: basePath,
+    createIfNotExists: true,
+    readOnly: true
+  },
+  value: 'userdata'
+})
+
+console.log(Config.getField('UserdataDirectory').describe())
+
+
+Config.addField({
+  name: 'SamplesIndexFile',
+  schema: {
+    type: 'relFilePath',
+    basePath: Config.getField('UserdataDirectory').get(),
+    createIfNotExists: true,
+    readOnly: true
+  },
+  value: 'samples_index'
+})
+
+Config.addField({
+  name: 'ProjectHistoryFile',
+  schema: {
+    type: 'relFilePath',
+    basePath: Config.getField('UserdataDirectory').get(),
+    createIfNotExists: true,
+    readOnly: true
+  },
+  value: 'project_history'
+})
+
+Config.addField({
+  name: 'BookmarksFile',
+  schema: {
+    type: 'relFilePath',
+    basePath: Config.getField('UserdataDirectory').get(),
+    createIfNotExists: true,
+    readOnly: true
+  },
+  value: 'bookmarks'
+})
+
+Config.addField({
+  name: 'QueriesFile',
+  schema: {
+    type: 'relFilePath',
+    basePath: Config.getField('UserdataDirectory').get(),
+    createIfNotExists: true,
+    readOnly: true
+  },
+  value: 'queries'
+})
 
 Config.addField({
   name: 'SamplesDirectory',
@@ -136,15 +203,6 @@ Config.getField('ExcludedExtensionsForSamples').on('change',() => {
 })
 
 Config.save()
-
-// todo
-// configMgr.setUserdataDirectory('userdata')
-// configMgr.setConfigFile('config.json')
-// configMgr.addUserDirectory('default_projects', 'default_projects')
-// configMgr.addUserFile('bookmarks', 'bookmarks.json')
-// configMgr.addUserFile('projects', 'projects.json')
-// configMgr.addUserFile('tquery', 'tqueries.json')
-// configMgr.addUserFile('samples_index', 'samples_index')
 
 module.exports = {
   Config

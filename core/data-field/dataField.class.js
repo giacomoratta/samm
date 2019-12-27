@@ -10,8 +10,9 @@ const ACCEPTED_EVENTS = ['change']
 /* schema docs: https://www.npmjs.com/package/fastest-validator */
 
 class DataField {
-  constructor ({ name, schema, value }) {
+  constructor ({ name, schema, value, description }) {
     this.name = name
+    this.description = ( description ? description : '' )
     this.eventEmitter = new Events()
     schema = dataFieldUtils.fixSchema(schema)
 
@@ -28,12 +29,20 @@ class DataField {
     this.tranformFn = transform.getFieldTransformFn(schema)
 
     if (this.defaultValue === true) {
-      this.set(value)
+      this.set(value, { overwrite:true })
       this.defaultValue = true
       delete schema.default
       return
     }
-    this.set(value)
+    this.set(value, { overwrite:true })
+  }
+
+  getSchema () {
+    return this.schema[this.name]
+  }
+
+  describe () {
+    return `${this.description}. [ ${JSON.stringify(this.schema[this.name]).slice(1,-1) } ]`
   }
 
   validate (value) {
@@ -41,7 +50,10 @@ class DataField {
     return this.check(value)
   }
 
-  set (value) {
+  set (value, { overwrite=false }={}) {
+    if(overwrite !== true && this.schema[this.name].readOnly === true) {
+      throw new DataFieldError(`Field '${this.name}' is read-only!`)
+    }
     const errors = this.validate(value)
     if (errors === true) {
       const oldValue = this.get(false)
