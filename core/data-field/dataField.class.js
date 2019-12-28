@@ -2,8 +2,8 @@ const Events = require('events')
 const validator = require('./validator')
 const DataFieldError = require('./dataField.error')
 const transform = require('./transform')
-const _ = require('../utils/lodash.extended')
 const dataFieldUtils = require('./utils')
+const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
 

@@ -6,5 +6,9 @@ describe('configFile class and object', function () {
 
         //console.log(process.env.ABSOLUTE_APP_PATH)
 
+        // check dir presence ?
+        // check config.json structure
+        // check new config.json when value/default change (and a new field appears)
+
     })
 })
