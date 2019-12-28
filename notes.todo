@@ -5,30 +5,30 @@ PRINCIPLES + LONG TERM GOALS
 - no more globals => require everywhere (clearer dependencies, remove globals.js)
 - use await instead of 'sync' functions
 - black-box with STATEFUL API (in order to have as few as possible work in the caller)
-- 1 lib = 1 day (dev, clean, test)
+- each file should declare the usage or use process.env at the beginning (for clarity)
 
+
+APP TESTING
+- declare and fill process.env variables
 
 
 SHORT
-
-- configClass (basic public methods)
-- file.utils tests
-- camelCase (use .class or .mgr)
-- lodash ext tests
+- manage config with cli
+  - with special methods in vorpalCli and printerCli
 
 
 MID
-
-- test on Utils (and clean code) - prepare tests and directories / skip tests and write them only if needed (by this app)
-- test on dataFileHolder (and clean code) - prepare tests and directories
-- test on configClass (and clean code)
-- test on UI (and clean code) - prepare tests and directories
-- test on cliClass (and clean code)
-- first start cliClass
+- samples manager (index, lookup, NO save!)
+  - manage samples index: scan and save
+- lookup and save with query hash in temp cache (max 3)
+- projects manager (history, current, add, remove, list, save)
+- bookmarks manager (add, remove, list, save)
+- queries manager (add, remove, validate, list, save)
+- export manager => save samples to mpl/abc
 
 
 LONG
 
-- test directoryTree and make it as NPM package
+- make NPM packages
 - replace vorpal (not updated) with yarn
 - E2E tests for CLI apps

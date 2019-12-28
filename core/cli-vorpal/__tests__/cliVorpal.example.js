@@ -26,19 +26,16 @@ vCli.addCommandHeader('projects')
   .option('--save', 'Save bookmarks in the current project')
   .option('-d, --dirname <dirname>', 'Set directory name.')
 
-vCli.addCommandBody('projects', function (cliReference, cliNextCb, cliData) {
-  console.log(cliData)
-  return cliNextCb(cliData.successCode)
+vCli.addCommandBody('projects', function ({ thisCli, cliNext }) {
+  return cliNext(CLI_SUCCESS)
 })
 
 vCli.addCommand('simple')
 
-vCli.addCommandBody('simple', async function (cliReference, cliNextCb, cliData) {
-  console.log(cliData)
-
+vCli.addCommandBody('simple', async function ({ thisCli, cliNext }) {
   let resultExternal
 
-  await cliReference.prompt({
+  await thisCli.prompt({
     type: 'input',
     name: 'inputValue',
     message: "['q' to quit] > "
@@ -46,10 +43,10 @@ vCli.addCommandBody('simple', async function (cliReference, cliNextCb, cliData) 
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.inputValue === 'q') return cliNextCb(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNext(CLI_SUCCESS)
   console.log('111', resultExternal)
 
-  await cliReference.prompt({
+  await thisCli.prompt({
     type: 'input',
     name: 'inputValue',
     message: "['q' to quit] > "
@@ -57,10 +54,10 @@ vCli.addCommandBody('simple', async function (cliReference, cliNextCb, cliData) 
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.inputValue === 'q') return cliNextCb(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNext(CLI_SUCCESS)
   console.log('222', resultExternal)
 
-  return cliNextCb(CLI_SUCCESS)
+  return cliNext(CLI_SUCCESS)
 })
 
 vCli.show('abc')

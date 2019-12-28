@@ -7,6 +7,10 @@ class CliPrinter {
     this.indent = INDENT.repeat(indentLevel)
   }
 
+  createChild ({ command }) {
+    return new this.constructor({ command, indentLevel:this.indent+1 })
+  }
+
   info (message) {
     console.info(`${this.indent}${message} ${NL}`)
   }

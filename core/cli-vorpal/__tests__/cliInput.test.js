@@ -1,7 +1,7 @@
 const CliInput = require('../cliInput.class')
 
 const newCliInput = function (values, command) {
-  return new CliInput(values, command)
+  return new CliInput({ values, command })
 }
 
 describe('CliInput class and object', function () {

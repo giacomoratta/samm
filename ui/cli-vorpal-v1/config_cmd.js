@@ -1,15 +1,14 @@
-const { vCli } = require('./cliVorpal')
-const App = require('../../app')
+const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
 
-vCli.addCommand('projects <reqA> <reqB> [optA] [optB]')
+Cli.addCommand('projects <reqA> <reqB> [optA] [optB]')
 
-vCli.addCommandHeader('projects')
+Cli.addCommandHeader('projects')
   .description('Manage all projects' + '\n')
   .option('-a, --all', 'Shows all projects')
   .option('--save', 'Save bookmarks in the current project')
   .option('-d, --dirname <dirname>', 'Set directory name.')
 
-vCli.addCommandBody('projects', function (cliReference, cliNextCb, cliData) {
-  console.log(cliData)
-  return cliNextCb(cliData.successCode)
+Cli.addCommandBody('projects', function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+  //console.log(cliData)
+  return cliNext(CLI_SUCCESS)
 })

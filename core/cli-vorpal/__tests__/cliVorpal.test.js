@@ -1,4 +1,4 @@
-const { CliVorpal } = require('../cliVorpal.class')
+const { CliVorpal } = require('../index')
 const myCli = new CliVorpal()
 
 describe('cli interface with vorpal library', function () {

@@ -1,13 +1,4 @@
-/*
-* set flags from outside
-* set flags (in 'on' method of a field)
-* check flags
-* print flags
-*
-* */
-
 const basePath = process.env.ABSOLUTE_APP_PATH
-
 const path = require('path')
 const { JsonizedFile } = require('../core/jsonized-file')
 
@@ -151,29 +142,29 @@ Config.addField({
   },
   value: 'X'
 })
+//
+// Config.addField({
+//   name: 'Tags',
+//   schema: {
+//     type: 'object',
+//     props: { },
+//     default: {
+//       kick: 'techno,kick,deep,sub',
+//       impact: 'impact,boom,shot,crash,bomb,808,efx',
+//       hihat: 'hihat,hi-hat,hh,top',
+//       abstract: 'abstract,complex'
+//     }
+//   }
+// })
 
-Config.addField({
-  name: 'Tags',
-  schema: {
-    type: 'object',
-    props: { },
-    default: {
-      kick: 'techno,kick,deep,sub',
-      impact: 'impact,boom,shot,crash,bomb,808,efx',
-      hihat: 'hihat,hi-hat,hh,top',
-      abstract: 'abstract,complex'
-    }
-  }
-})
-
-Config.addField({
-  name: 'ProjectHistory',
-  schema: {
-    type: 'array',
-    items: 'string',
-    default: ['']
-  }
-})
+// Config.addField({
+//   name: 'ProjectHistory',
+//   schema: {
+//     type: 'array',
+//     items: 'string',
+//     default: ['']
+//   }
+// })
 
 Config.addField({
   name: 'Status',

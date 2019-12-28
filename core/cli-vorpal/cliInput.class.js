@@ -1,7 +1,7 @@
 const isNil = function (v) { return v === null || v === undefined || typeof v === 'undefined' }
 
 class cliInput {
-  constructor (values, command) {
+  constructor ({ values, command }) {
     if (!values || typeof values !== 'object') {
       throw new Error('invalid \'value\' argument: expected object')
     }

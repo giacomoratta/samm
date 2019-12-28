@@ -1,6 +1,7 @@
 const Events = require('events')
 const vorpal = require('vorpal')
 const CliInput = require('./cliInput.class.js')
+const { CliPrinter } = require('./cliPrinter.class')
 
 const CLI_ERROR = -1
 const CLI_SUCCESS = 1
@@ -44,21 +45,23 @@ class CliVorpal {
 
   addCommandBody (command, cmdFn) {
     const self = this
-    this.commands[command].action(function (args, cb) {
+    this.commands[command].action(function (values, cb) {
       /* this function has to be a normal function not lambda or something else;
        * the keyword 'this' will be cliReference and its needed, for instance, to call prompt method */
 
-      /* args: cliReference, cliNextCb, cliData */
-      cmdFn(this, (code, err) => {
-        if (code === CLI_ERROR) {
-          self.logger.error(`command '${command}' terminated with an error.`)
-          if (err) self.logger.error(err)
-        }
-        self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
-        // todo: cb configMgr.printMessages()
-        cb()
-      }, {
-        CliInput: new CliInput(args, command)
+      cmdFn({
+        thisCli: this,
+        cliNext: (code, err) => {
+          if (code === CLI_ERROR) {
+            self.logger.error(`command '${command}' terminated with an error.`)
+            if (err) self.logger.error(err)
+          }
+          self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
+          // todo: cb configMgr.printMessages()
+          cb()
+        },
+        cliInput: new CliInput({ values, command }),
+        cliPrinter: new CliPrinter({ command })
       })
     })
   }

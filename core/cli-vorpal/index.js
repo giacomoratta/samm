@@ -1,5 +1,7 @@
-const cliVorpal = new (require('./cliVorpal.class'))()
+const { CliVorpal, CLI_ERROR, CLI_SUCCESS } = require('./cliVorpal.class')
 
 module.exports = {
-  cliVorpal
+  CliVorpal,
+  CLI_ERROR,
+  CLI_SUCCESS
 }

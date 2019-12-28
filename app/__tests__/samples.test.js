@@ -1,7 +1,8 @@
 process.env.ABSOLUTE_APP_PATH = __dirname
 const { config } = require('../config')
+const { samples } = require('../samples')
 
-describe('config endpoints', function () {
+describe('samples endpoints', function () {
     it('should create and handle a config file', function () {
 
         //console.log(process.env.ABSOLUTE_APP_PATH)
