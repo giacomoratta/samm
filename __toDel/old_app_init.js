@@ -1,18 +1,18 @@
 require('./config_init.js')
 
 /* Singleton Objects */
-global.SamplesTree = require('./managers/SamplesTree.class.js')
+global.SamplesTree = require('../app/managers/SamplesTree.class.js')
 
 /* Data Types */
-global.Samples = require('./atoms/Samples.class.js')
+global.Samples = require('../app/atoms/Samples.class.js')
 
 /* Project Modules */
-global.SamplesMgr = require('./managers/SamplesManager.js')
-global.DirCommand = require('./managers/Dir.command.js')
-global.BookmarksMgr = require('./managers/BookmarksManager.js')
-global.ProjectsMgr = require('./managers/ProjectsManager.js')
-global.TQueryMgr = require('./managers/TQueryManager.js')
-global.ExportMgr = require('./managers/ExportManager.js')
+global.SamplesMgr = require('../app/managers/SamplesManager.js')
+global.DirCommand = require('../app/managers/Dir.command.js')
+global.BookmarksMgr = require('../app/managers/BookmarksManager.js')
+global.ProjectsMgr = require('../app/managers/ProjectsManager.js')
+global.TQueryMgr = require('../app/managers/TQueryManager.js')
+global.ExportMgr = require('../app/managers/ExportManager.js')
 
 require('../interfaces/cli_sections/bookm_cmd.js')
 require('../interfaces/cli_sections/config_cmd.js')

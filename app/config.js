@@ -39,11 +39,9 @@ Config.addField({
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'userdata'
+  value: 'userdata',
+  description: 'Directory for storing all the user data'
 })
-
-console.log(Config.getField('UserdataDirectory').describe())
-
 
 Config.addField({
   name: 'SamplesIndexFile',

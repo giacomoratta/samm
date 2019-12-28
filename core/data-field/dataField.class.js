@@ -7,12 +7,16 @@ const dataFieldUtils = require('./utils')
 
 const ACCEPTED_EVENTS = ['change']
 
-/* schema docs: https://www.npmjs.com/package/fastest-validator */
+/* Extra properties
+ *   - schema docs: https://www.npmjs.com/package/fastest-validator
+ *   - see validator.js
+ *   - schema.readOnly (boolean)
+ */
 
 class DataField {
-  constructor ({ name, schema, value, description }) {
+  constructor ({ name, schema, value, description='' }) {
     this.name = name
-    this.description = ( description ? description : '' )
+    this.description = description
     this.eventEmitter = new Events()
     schema = dataFieldUtils.fixSchema(schema)
 
@@ -27,6 +31,7 @@ class DataField {
     this.check = validator.compile(this.schema)
     this.value = { [this.name]: null }
     this.tranformFn = transform.getFieldTransformFn(schema)
+    this.setDescription()
 
     if (this.defaultValue === true) {
       this.set(value, { overwrite:true })
@@ -42,7 +47,14 @@ class DataField {
   }
 
   describe () {
-    return `${this.description}. [ ${JSON.stringify(this.schema[this.name]).slice(1,-1) } ]`
+    return this.description
+  }
+
+  setDescription () {
+    if(this.description) this.description += `. \n`
+    Object.keys(this.schema[this.name]).forEach((k) => {
+      this.description += ` - ${k}: ${this.schema[this.name][k]} \n`
+    })
   }
 
   validate (value) {

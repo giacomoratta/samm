@@ -1,14 +1,14 @@
 const CliInput = require('../cliInput.class')
 
-const newCliInput = function (options) {
-  return new CliInput(options)
+const newCliInput = function (values, command) {
+  return new CliInput(values, command)
 }
 
 describe('CliInput class and object', function () {
   it('should throw errors for invalid arguments in constructor', function () {
     expect(function () { newCliInput() }).toThrowError('value')
-    expect(function () { newCliInput(null) }).toThrowError('value')
-    expect(function () { newCliInput({}) }).toThrowError('command')
+    expect(function () { newCliInput(null) }).toThrow('value')
+    expect(function () { newCliInput({}) }).toThrow('command')
     expect(function () { newCliInput({}, new String('mycommand')) }).toThrowError('command')
     expect(function () { newCliInput(new Object(), 'mycommand') }).not.toThrowError('value')
     expect(function () { newCliInput({}, 'simple-command') }).not.toThrow()

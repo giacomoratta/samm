@@ -1,3 +1,4 @@
+const path = require('path')
 const fileUtils = require('../file.utils')
 
 describe('Utils.File.singleton', function() {
@@ -19,25 +20,24 @@ describe('Utils.File.singleton', function() {
         expect(path_dir_custom_dir.startsWith(__dirname.substr(0,8))).toEqual(false)
         expect(path_dir_custom_dir.startsWith('/custom/dir')).toEqual(true)
 
-        expect(path_file11_std.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_file11_std.endsWith(fileUtils.pathSeparator)).toEqual(false)
-        expect(path_file11_local.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_file11_local.endsWith(fileUtils.pathSeparator)).toEqual(false)
-        expect(path_dir2_std.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_dir2_std.endsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_dir2_local.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_dir2_local.endsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_file_custom_dir.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_file_custom_dir.endsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_dir_custom_dir.startsWith(fileUtils.pathSeparator)).toEqual(true)
-        expect(path_dir_custom_dir.endsWith(fileUtils.pathSeparator)).toEqual(true)
+        expect(path_file11_std.startsWith(path.sep)).toEqual(true)
+        expect(path_file11_std.endsWith(path.sep)).toEqual(false)
+        expect(path_file11_local.startsWith(path.sep)).toEqual(true)
+        expect(path_file11_local.endsWith(path.sep)).toEqual(false)
+        expect(path_dir2_std.startsWith(path.sep)).toEqual(true)
+        expect(path_dir2_std.endsWith(path.sep)).toEqual(true)
+        expect(path_dir2_local.startsWith(path.sep)).toEqual(true)
+        expect(path_dir2_local.endsWith(path.sep)).toEqual(true)
+        expect(path_file_custom_dir.startsWith(path.sep)).toEqual(true)
+        expect(path_file_custom_dir.endsWith(path.sep)).toEqual(true)
+        expect(path_dir_custom_dir.startsWith(path.sep)).toEqual(true)
+        expect(path_dir_custom_dir.endsWith(path.sep)).toEqual(true)
 
     })
 
     it("should check, create and remove a file", async function() {
 
         const { exists } = await fileUtils.fileExists(__dirname+'/file_utils_test_dir')
-        console.log('ok', exists)
     })
 
 })

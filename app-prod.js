@@ -7,4 +7,4 @@ ENV_CONFIG.absolute_app_path = process.argv[0] // nexe has the path as first par
 
 require('./globals.js')
 
-require('./app/init.js')
+require('./__toDel/old_app_init.js')

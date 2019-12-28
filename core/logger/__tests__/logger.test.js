@@ -1,11 +1,11 @@
-const cliInput = require('../cliInput.class')
+const basicLogger = require('../basic.logger')
+const pinoLogger = require('../pino.logger')
 
-describe('cliInput class and object', function() {
+describe('logger(s) class and object', function() {
 
-    it("should create an empty cliInput", function() {
-        const cliInput1 = new cliInput()
-
-        expect(cliInput1.isValid()).toEqual(false)
+    it("should create a basic logger", function() {
     })
 
+    it("should create a pino logger", function() {
+    })
 })

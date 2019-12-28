@@ -10,11 +10,11 @@ class JsonizedFile {
     this.fileHolder = null
   }
 
-  addField ({ name, schema, value }) {
+  addField ({ name, schema, value, description }) {
     if (this.fields[name]) {
       throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
-    this.fields[name] = new DataField({ name, schema, value })
+    this.fields[name] = new DataField({ name, schema, value, description })
   }
 
   getField (name) {
