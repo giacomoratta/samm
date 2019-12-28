@@ -21,11 +21,11 @@ class JsonizedFile {
     return this.fields[name]
   }
 
-  getFieldList ( { writableOnly=false }={} ) {
-    if(writableOnly === true) {
+  getFieldList ({ writableOnly = false } = {}) {
+    if (writableOnly === true) {
       const fieldList = []
       Object.keys(this.fields).forEach((k) => {
-        if(this.fields[k].getSchema().readOnly === true) return
+        if (this.fields[k].getSchema().readOnly === true) return
         fieldList.push(k)
       })
       return fieldList
@@ -59,7 +59,7 @@ class JsonizedFile {
   fromObject (data) {
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
-      this.fields[k].set(data[k], { overwrite:true })
+      this.fields[k].set(data[k], { overwrite: true })
     })
   }
 

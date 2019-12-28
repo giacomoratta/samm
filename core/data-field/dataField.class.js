@@ -14,7 +14,7 @@ const ACCEPTED_EVENTS = ['change']
  */
 
 class DataField {
-  constructor ({ name, schema, value, description='' }) {
+  constructor ({ name, schema, value, description = '' }) {
     this.name = name
     this.description = description
     this.eventEmitter = new Events()
@@ -34,12 +34,12 @@ class DataField {
     this.setDescription()
 
     if (this.defaultValue === true) {
-      this.set(value, { overwrite:true })
+      this.set(value, { overwrite: true })
       this.defaultValue = true
       delete schema.default
       return
     }
-    this.set(value, { overwrite:true })
+    this.set(value, { overwrite: true })
   }
 
   getSchema () {
@@ -51,8 +51,9 @@ class DataField {
   }
 
   setDescription () {
-    if(this.description) this.description += `. \n`
+    if (this.description) this.description += '. \n'
     Object.keys(this.schema[this.name]).forEach((k) => {
+      if (k === 'default') return
       this.description += ` - ${k}: ${this.schema[this.name][k]} \n`
     })
   }
@@ -62,8 +63,8 @@ class DataField {
     return this.check(value)
   }
 
-  set (value, { overwrite=false }={}) {
-    if(overwrite !== true && this.schema[this.name].readOnly === true) {
+  set (value, { overwrite = false } = {}) {
+    if (overwrite !== true && this.schema[this.name].readOnly === true) {
       throw new DataFieldError(`Field '${this.name}' is read-only!`)
     }
     const errors = this.validate(value)

@@ -18,31 +18,31 @@ describe('cli interface with vorpal library', function () {
   })
 
   it('should set listener on events', function () {
-    expect(function(){
+    expect(function () {
       myCli.on('show', () => {
         /* callback code */
       })
     }).not.toThrow()
 
-    expect(function(){
+    expect(function () {
       myCli.on('exit', () => {
         /* callback code */
       })
     }).not.toThrow()
 
-    expect(function(){
+    expect(function () {
       myCli.on('beforeCommand', () => {
         /* callback code */
       })
     }).not.toThrow()
 
-    expect(function(){
+    expect(function () {
       myCli.on('afterCommand', () => {
         /* callback code */
       })
     }).not.toThrow()
 
-    expect(function(){
+    expect(function () {
       myCli.on('show-wrong', () => {
         /* callback code */
       })
