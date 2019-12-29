@@ -1,5 +1,6 @@
 const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
 
+
 Cli.addCommand('projects <reqA> <reqB> [optA] [optB]')
 
 Cli.addCommandHeader('projects')
@@ -10,5 +11,5 @@ Cli.addCommandHeader('projects')
 
 Cli.addCommandBody('projects', function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   //console.log(cliData)
-  return cliNext(CLI_SUCCESS)
+  cliNext(CLI_SUCCESS)
 })

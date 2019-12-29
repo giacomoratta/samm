@@ -20,7 +20,11 @@ class CliVorpal {
         this.eventEmitter.emit('exit', { logger: this.logger })
         // todo: cb configMgr.save()
       }
-      this.eventEmitter.emit('beforeCommand', { logger: this.logger, command })
+
+      /* prevent event emit when enter is pressed with no command */
+      if(command) {
+        this.eventEmitter.emit('beforeCommand', { logger: this.logger, command })
+      }
     })
   }
 
@@ -40,10 +44,16 @@ class CliVorpal {
   }
 
   addCommandHeader (command) {
+    if(!this.commands[command]) {
+      throw new Error(`Command ${command} not defined. Use addCommand().`)
+    }
     return this.commands[command]
   }
 
   addCommandBody (command, cmdFn) {
+    if(!this.commands[command]) {
+      throw new Error(`Command ${command} not defined. Use addCommand().`)
+    }
     const self = this
     this.commands[command].action(function (values, cb) {
       /* this function has to be a normal function not lambda or something else;
