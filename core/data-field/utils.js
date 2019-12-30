@@ -49,10 +49,22 @@ const removeFromObject = function (object, key, schema) {
   return null
 }
 
+const setDescription = function (mainText, schema) {
+  const description = []
+  if(!mainText) mainText=' '
+  description.push(mainText)
+  Object.keys(schema).forEach((k) => {
+    if (k === 'default') return
+    description.push(`- ${k}: ${schema[k]} `)
+  })
+  return description
+}
+
 module.exports = {
   fixSchema,
   addToArray,
   removeFromArray,
   addToObject,
-  removeFromObject
+  removeFromObject,
+  setDescription
 }

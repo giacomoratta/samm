@@ -16,7 +16,6 @@ const ACCEPTED_EVENTS = ['change']
 class DataField {
   constructor ({ name, schema, value, description = '' }) {
     this.name = name
-    this.description = description
     this.eventEmitter = new Events()
     schema = dataFieldUtils.fixSchema(schema)
 
@@ -31,7 +30,7 @@ class DataField {
     this.check = validator.compile(this.schema)
     this.value = { [this.name]: null }
     this.tranformFn = transform.getFieldTransformFn(schema)
-    this.setDescription()
+    this.description = dataFieldUtils.setDescription(description, schema)
 
     if (this.defaultValue === true) {
       this.set(value, { overwrite: true })
@@ -46,16 +45,9 @@ class DataField {
     return this.schema[this.name]
   }
 
-  describe () {
-    return this.description
-  }
-
-  setDescription () {
-    if (this.description) this.description += '. \n'
-    Object.keys(this.schema[this.name]).forEach((k) => {
-      if (k === 'default') return
-      this.description += ` - ${k}: ${this.schema[this.name][k]} \n`
-    })
+  describe (text=false, indent='') {
+    if(text === false) return this.description
+    return `${indent}${this.description.join(`\n${indent}`)}`
   }
 
   validate (value) {

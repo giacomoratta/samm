@@ -11,16 +11,20 @@ class CliPrinter {
     return new this.constructor({ command, indentLevel:this.indent+1 })
   }
 
+  newLine (count=0) {
+    console.info(`${NL.repeat(count)}`)
+  }
+
   info (message) {
-    console.info(`${this.indent}${message} ${NL}`)
+    console.info(`${this.indent}${message}`)
   }
 
   warn (message) {
-    console.info(`${this.indent}WARNING: ${message} ${NL}`)
+    console.info(`${this.indent}WARNING: ${message}`)
   }
 
   error (message) {
-    console.info(`${this.indent}ERROR: ${message} ${NL}`)
+    console.info(`${this.indent}ERROR: ${message}`)
   }
 
   title (message) {

@@ -84,7 +84,8 @@ Config.addField({
     type: 'absDirPath',
     checkExists: true
   },
-  value: basePath
+  value: basePath,
+  description: 'safasfassfa'
 })
 
 Config.addField({
