@@ -60,7 +60,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
   /* Print all parameters */
   configDescribeParameters({ cliPrinter })
-  cliNext(CLI_SUCCESS)
+  return cliNext(CLI_SUCCESS)
 })
 
 const ExtensionsForSamplesEditor = ({ currentValue, newValue, thisCli, cliInput, cliPrinter }) => {
