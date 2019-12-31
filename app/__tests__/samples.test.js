@@ -1,9 +1,9 @@
 process.env.ABSOLUTE_APP_PATH = __dirname
-const { config } = require('../config')
-const { samples } = require('../samples')
+//const { config } = require('../config')
+const { samples } = require('../samples/samplesIndex.class')
 
 describe('samples endpoints', function () {
-    it('should create and handle a config file', function () {
+    it('should create a sample index', function () {
 
         //console.log(process.env.ABSOLUTE_APP_PATH)
 

@@ -25,6 +25,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     cliPrinter.error('Indexing process failed!')
     return cliNext(CLI_ERROR)
   }
+
   cliPrinter.info(`Indexing process completed successfully.`)
   cliPrinter.info(`${Samples.size()} samples found`)
   return cliNext(CLI_SUCCESS)
