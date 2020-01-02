@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const queryInfoCache = new Map()
 
 function F (args) {
   return Function.apply(this, args)
@@ -25,7 +26,14 @@ const createQueryStringCheck = function(body) {
   return createFunctionFromBody('s', body)
 }
 
+const createQueryStringHash = function(queryString) {
+  return queryString.replace(/[^a-zA-Z0-9]/g, '_')
+}
+
 const processQueryString = function (queryString) {
+  const queryStringHash = createQueryStringHash(queryString)
+  if(queryInfoCache.has(queryStringHash)) return queryInfoCache.get(queryStringHash)
+
   queryString = queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 
   const queryInfo = {
@@ -66,6 +74,7 @@ const processQueryString = function (queryString) {
   delete queryInfo._linesOR
   delete queryInfo._functionLinesOR
 
+  queryInfoCache.set(queryStringHash,queryInfo)
   return queryInfo
 }
 
