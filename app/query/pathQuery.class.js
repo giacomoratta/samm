@@ -71,10 +71,11 @@ class PathQuery {
   }
 
   static queryStringHash(queryString) {
-    return ''
+    return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
   }
 
   get label() { return this._label }
+  set label(label) { this._label = label }
   get queryString() { return this._queryString }
 
   clone() {
