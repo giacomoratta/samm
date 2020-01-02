@@ -1,20 +1,6 @@
 const _ = require('lodash')
 const queryInfoCache = new Map()
 
-function F (args) {
-  return Function.apply(this, args)
-}
-
-createFunctionFromBody = function () {
-  try {
-    F.prototype = Function.prototype
-    return new F(arguments)
-  } catch (e) {
-    //console.error(e)
-    return null
-  }
-}
-
 const removeEmptyArrayStringItems = function(array) {
   for(let i=array.length-1; i>=0; i--){
     array[i] = array[i].trim()
@@ -22,15 +8,11 @@ const removeEmptyArrayStringItems = function(array) {
   }
 }
 
-const createQueryStringCheck = function(body) {
-  return createFunctionFromBody('s', body)
-}
-
 const createQueryStringHash = function(queryString) {
-  return queryString.replace(/[^a-zA-Z0-9]/g, '_')
+  return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 }
 
-const processQueryString = function (queryString) {
+const createPathQuery = function (queryString) {
   const queryStringHash = createQueryStringHash(queryString)
   if(queryInfoCache.has(queryStringHash)) return queryInfoCache.get(queryStringHash)
 
@@ -79,6 +61,5 @@ const processQueryString = function (queryString) {
 }
 
 module.exports = {
-  processQueryString,
-  createQueryStringCheck
+  createPathQuery
 }
