@@ -12,6 +12,6 @@
  *
  * list queries
  *
- * expose method: processQueryString
+ * expose method: processQueryString and use a cache
  *
  */

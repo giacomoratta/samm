@@ -21,9 +21,9 @@ class QueryJsonFile {
         },
         default: [
           {
-            label:'asd1',
-            functionBody:'asd2',
-            queryString:'asd3'
+            label:'query_label',
+            functionBody:'if(...) return true; return false;',
+            queryString:'abc+def,ghj,qwerty'
           }
         ]
       }
@@ -47,6 +47,7 @@ class QueryJsonFile {
 
   load() {
     this.jsonFile.load()
+    this.QueryCollectionTemp = {}
     const queryCollection = this.jsonFile.get('QueryCollection')
     if(!(queryCollection instanceof Array) || queryCollection.length === 0) return
     queryCollection.forEach((item) => {
@@ -84,9 +85,9 @@ class QueryJsonFile {
 
 }
 
-const QueryFile = new QueryJsonFile(Config.get('QueryFile'))
-QueryFile.load()
+//const QueryFile = new QueryJsonFile(Config.get('QueryFile'))
+//QueryFile.load()
 
 module.exports = {
-  QueryFile
+  QueryJsonFile
 }
