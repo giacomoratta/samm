@@ -15,3 +15,6 @@
  * expose method: processQueryString and use a cache
  *
  */
+
+//const QueryFile = new QueryJsonFile(Config.get('QueryFile'))
+//QueryFile.load()

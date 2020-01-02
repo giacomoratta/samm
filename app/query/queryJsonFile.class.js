@@ -1,6 +1,5 @@
-const { Config } = require('../config')
 const { JsonizedFile } = require('../../core/jsonized-file')
-const utils = require('./utils')
+const { PathQuery } = require('./pathQuery.class')
 
 class QueryJsonFile {
   constructor (filePath) {
@@ -32,15 +31,12 @@ class QueryJsonFile {
 
   save() {
     const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
-    if(queryCollectionKeys.length === 0) return false
     const queryCollection = []
-    queryCollectionKeys.forEach((k) => {
-      queryCollection.push({
-        label: this.QueryCollectionTemp[k].label,
-        functionBody: this.QueryCollectionTemp[k].functionBody,
-        queryString: this.QueryCollectionTemp[k].queryString
+    if(queryCollectionKeys.length > 0) {
+      queryCollectionKeys.forEach((k) => {
+        queryCollection.push(this.QueryCollectionTemp[k].toJson())
       })
-    })
+    }
     this.jsonFile.set('QueryCollection',queryCollection)
     return this.jsonFile.save()
   }
@@ -51,9 +47,13 @@ class QueryJsonFile {
     const queryCollection = this.jsonFile.get('QueryCollection')
     if(!(queryCollection instanceof Array) || queryCollection.length === 0) return
     queryCollection.forEach((item) => {
-      item.check = utils.createQueryStringCheck(item.functionBody)
-      this.QueryCollectionTemp[item.label] = item
+      this.QueryCollectionTemp[item.label] = new PathQuery()
+      this.QueryCollectionTemp[item.label].fromJson(item)
     })
+  }
+
+  has(label) {
+    return this.QueryCollectionTemp[label] !== undefined
   }
 
   get(label) {
@@ -65,18 +65,18 @@ class QueryJsonFile {
   }
 
   add({ label, queryString }) {
-    const queryInfo = utils.processQueryString(queryString)
-    if(!queryInfo) return false
-    queryInfo.label = label
-    this.QueryCollectionTemp[label] = queryInfo
+    const newPathQuery = new PathQuery(queryString)
+    if(!newPathQuery.label) return false
+    newPathQuery.label = label
+    this.QueryCollectionTemp[label] = newPathQuery
+    return true
   }
 
   forEach(fn) {
     const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
     if(queryCollectionKeys.length > 0) {
-      const queryCollection = []
       queryCollectionKeys.forEach((k) => {
-        fn({ label:this.QueryCollectionTemp[k].label, queryString:this.QueryCollectionTemp[k].queryString })
+        fn(this.QueryCollectionTemp[k])
       })
       return true
     }
@@ -84,9 +84,6 @@ class QueryJsonFile {
   }
 
 }
-
-//const QueryFile = new QueryJsonFile(Config.get('QueryFile'))
-//QueryFile.load()
 
 module.exports = {
   QueryJsonFile

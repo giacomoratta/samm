@@ -12,7 +12,7 @@ const processQueryString = function (queryString) {
   queryString = queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 
   const queryInfo = {
-    label: '',
+    label: PathQuery.queryStringLabel(queryString),
     functionBody: '',
     queryString: '',
     checkFn: null,
@@ -42,8 +42,6 @@ const processQueryString = function (queryString) {
   if(queryInfo.queryString.length < 2) return null
 
   queryInfo.functionBody = queryInfo._functionLinesOR.join(' ')
-  queryInfo.label = queryInfo.queryString.replace(/[^a-zA-Z0-9]/g, '_').substr(0,36)
-
   queryInfo.checkFn = codeUtils.createFunction('s', queryInfo.functionBody)
 
   delete queryInfo._linesOR
@@ -70,7 +68,7 @@ class PathQuery {
     }
   }
 
-  static queryStringHash(queryString) {
+  static queryStringLabel(queryString) {
     return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
   }
 
