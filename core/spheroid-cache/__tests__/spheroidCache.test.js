@@ -10,6 +10,9 @@ describe('SpheroidCache standard features', function () {
     expect(cache1.size).toEqual(1)
 
     expect(cache1.add('lb2', 456)).toEqual(true)
+    expect(function () {
+      cache1.add('lb2', 111)
+    }).toThrow('Duplicated')
     expect(cache1.size).toEqual(2)
 
     expect(cache1.add('lb3', 789)).toEqual(true)
@@ -34,11 +37,11 @@ describe('SpheroidCache standard features', function () {
     expect(cache1.add(686)).toEqual(true)
     expect(cache1.size).toEqual(3)
 
-    expect(cache1.add('lb4', 797)).toEqual(true)
+    expect(cache1.add('lb5', 797)).toEqual(true)
     expect(cache1.size).toEqual(3)
 
     expect(cache1.get(0)).toEqual(797)
-    expect(cache1.get('lb4')).toEqual(797)
+    expect(cache1.get('lb5')).toEqual(797)
     expect(cache1.get(1)).toEqual(686)
     expect(cache1.get(2)).toEqual(575)
     expect(cache1.get(3)).toEqual(undefined)

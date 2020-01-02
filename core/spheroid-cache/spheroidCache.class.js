@@ -1,5 +1,5 @@
 const autoLabel = function (index) {
-  return `item_${index}`
+  return `_item_${index}`
 }
 
 class SpheroidCache {
@@ -29,6 +29,9 @@ class SpheroidCache {
       value = label
       label = autoLabel(++this._itemCounter)
     }
+    if (this.map.has(label)) {
+      throw new Error(`Duplicated label: ${label}`)
+    }
     if (this.size === this.maxItems) this.remove()
     this.array.unshift({ label, value })
     this.map.set(label, value)
@@ -47,7 +50,7 @@ class SpheroidCache {
         }
         return false
       })
-      if (foundIndex > -1) this.array.splice(foundIndex, 1)
+      this.array.splice(foundIndex, 1)
       this.map.delete(label)
       return true
     }
