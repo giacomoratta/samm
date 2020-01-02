@@ -1,8 +1,8 @@
 process.env.ABSOLUTE_APP_PATH = __dirname
-const { Config } = require('../config')
+const { QueryFile } = require('../query/queryFile.class')
 
-describe('config endpoints', function () {
-    it('should create and handle a config file', function () {
+describe('query endpoints', function () {
+    it('should create and handle a query file', function () {
 
         //console.log(process.env.ABSOLUTE_APP_PATH)
 

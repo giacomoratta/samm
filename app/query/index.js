@@ -1,7 +1,4 @@
 /*
- * load file
- *    eval functions
- *    store by
  *
  * add new query
  *    process and save function
@@ -13,6 +10,8 @@
  * update query
  *    by queryName
  *
- * expose method: processQuery
+ * list queries
+ *
+ * expose method: processQueryString
  *
  */

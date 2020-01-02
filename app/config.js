@@ -35,7 +35,7 @@ Config.addField({
 })
 
 Config.addField({
-  name: 'SamplesIndexFile',
+  name: 'SampleIndexFile',
   schema: {
     type: 'relFilePath',
     basePath: Config.getField('UserdataDirectory').get(),
@@ -57,7 +57,7 @@ Config.addField({
 })
 
 Config.addField({
-  name: 'BookmarksFile',
+  name: 'BookmarkFile',
   schema: {
     type: 'relFilePath',
     basePath: Config.getField('UserdataDirectory').get(),
@@ -68,7 +68,7 @@ Config.addField({
 })
 
 Config.addField({
-  name: 'QueriesFile',
+  name: 'QueryFile',
   schema: {
     type: 'relFilePath',
     basePath: Config.getField('UserdataDirectory').get(),
