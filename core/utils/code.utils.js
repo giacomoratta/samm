@@ -4,7 +4,7 @@ function F (args) {
   return Function.apply(this, args)
 }
 
-libUtils.newFunction = () => {
+libUtils.createFunction = function () {
   try {
     F.prototype = Function.prototype
     return new F(arguments)

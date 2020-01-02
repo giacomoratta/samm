@@ -1,18 +1,5 @@
 const _ = require('lodash')
-
-function F (args) {
-  return Function.apply(this, args)
-}
-
-createFunctionFromBody = function () {
-  try {
-    F.prototype = Function.prototype
-    return new F(arguments)
-  } catch (e) {
-    //console.error(e)
-    return null
-  }
-}
+const codeUtils = require('../../core/utils/code.utils')
 
 const removeEmptyArrayStringItems = function(array) {
   for(let i=array.length-1; i>=0; i--){
@@ -57,7 +44,7 @@ const processQueryString = function (queryString) {
   queryInfo.functionBody = queryInfo._functionLinesOR.join(' ')
   queryInfo.label = queryInfo.queryString.replace(/[^a-zA-Z0-9]/g, '_').substr(0,36)
 
-  queryInfo.checkFn = createFunctionFromBody('s', queryInfo.functionBody)
+  queryInfo.checkFn = codeUtils.createFunction('s', queryInfo.functionBody)
 
   delete queryInfo._linesOR
   delete queryInfo._functionLinesOR
@@ -95,7 +82,7 @@ class PathQuery {
     clonedPathQuery._label = this._label
     clonedPathQuery._functionBody = this._functionBody
     clonedPathQuery._queryString = this._queryString
-    clonedPathQuery.check = createFunctionFromBody('s', this._functionBody)
+    clonedPathQuery.check = codeUtils.createFunction('s', this._functionBody)
     return clonedPathQuery
   }
 
@@ -103,7 +90,7 @@ class PathQuery {
     this._label = jsonData.label
     this._functionBody = jsonData.functionBody
     this._queryString = jsonData.queryString
-    this.check = createFunctionFromBody('s', jsonData.functionBody)
+    this.check = codeUtils.createFunction('s', jsonData.functionBody)
   }
 
   toJson() {
