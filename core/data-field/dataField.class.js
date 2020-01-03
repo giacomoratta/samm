@@ -17,7 +17,20 @@ class DataField {
   constructor ({ name, schema, value, description = '' }) {
     this.name = name
     this.eventEmitter = new Events()
-    schema = dataFieldUtils.fixSchema(schema)
+    this.init({ schema, value, description })
+  }
+
+  changeSchema(schemaDiff) {
+    const schema = _.cloneDeep(_.merge(this.schema[this.name],schemaDiff))
+    const defaultValue = this.defaultValue
+    const value = this.value[this.name]
+    const description = this.description[0]
+    this.init({ schema, value, description })
+    this.defaultValue = defaultValue
+  }
+
+  init({ schema, value, description = '' }) {
+    schema = dataFieldUtils.fixSchema(_.cloneDeep(schema))
 
     /* work-around */
     this.defaultValue = false
@@ -26,7 +39,7 @@ class DataField {
       this.defaultValue = true
     }
 
-    this.schema = { [name]: schema }
+    this.schema = { [this.name]: schema }
     this.check = validator.compile(this.schema)
     this.value = { [this.name]: null }
     this.tranformFn = transform.getFieldTransformFn(schema)
@@ -72,7 +85,6 @@ class DataField {
   }
 
   get (finalValue = true) {
-    // console.log('check1',this.name,this.defaultValue)
     if (this.defaultValue === true) {
       return null
     }

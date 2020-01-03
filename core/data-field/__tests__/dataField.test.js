@@ -1,3 +1,5 @@
+const fileUtils = require('../../utils/file.utils')
+const path = require('path')
 const { DataField } = require('../index')
 
 describe('dataField class and object', function () {
@@ -384,9 +386,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage absDirPath fields', function () {
-    const fileUtils = require('../../utils/file.utils')
-    const path = require('path')
-
     const newDataField = function (args) {
       return new DataField(args)
     }
@@ -429,9 +428,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage absFilePath fields', function () {
-    const fileUtils = require('../../utils/file.utils')
-    const path = require('path')
-
     const newDataField = function (args) {
       return new DataField(args)
     }
@@ -483,9 +479,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage relDirPath fields', function () {
-    const fileUtils = require('../../utils/file.utils')
-    const path = require('path')
-
     const newDataField = function (args) {
       return new DataField(args)
     }
@@ -571,9 +564,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage relFilePath fields', function () {
-    const fileUtils = require('../../utils/file.utils')
-    const path = require('path')
-
     const newDataField = function (args) {
       return new DataField(args)
     }

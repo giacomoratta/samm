@@ -4,12 +4,13 @@ const Config = App.Config
 
 const ConfigParameters = [
   'SamplesDirectory',
+  'SamplesDirectoryExclusions',
   'CurrentProject',
   'RandomCount',
-  'MaxOccurrencesSameDirectory',
+  'MaxSamplesSameDirectory',
   'ExcludedExtensionsForSamples',
   'IncludedExtensionsForSamples',
-  'ExtensionsPolicy'
+  'ExtensionsPolicyForSamples'
 ]
 
 const commandName = 'config'

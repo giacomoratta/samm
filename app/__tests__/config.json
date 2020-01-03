@@ -5,10 +5,13 @@
 	"BookmarkFile": "bookmarks",
 	"PathQueryFile": "path_queries",
 	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/__tests__",
-	"CurrentProject": "/home/giacomo/Workspace/mpl/app/__tests__",
+	"SamplesDirectoryExclusions": [
+		"samplePack1",
+		"samplePack2"
+	],
 	"RandomCount": 15,
-	"MaxOccurrencesSameDirectory": 2,
-	"ExtensionsPolicy": "X",
+	"MaxSamplesSameDirectory": 2,
+	"ExtensionsPolicyForSamples": "X",
 	"Status": {
 		"first-scan-needed": true,
 		"new-scan-needed": true

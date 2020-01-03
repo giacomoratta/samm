@@ -24,7 +24,8 @@ Config.addField({
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'samples_index'
+  value: 'samples_index',
+  description: 'Index generated after a full samples directory scan'
 })
 
 Config.addField({
@@ -35,7 +36,8 @@ Config.addField({
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'project_history'
+  value: 'project_history',
+  description: 'List of opened projects, current one, etc.'
 })
 
 Config.addField({
@@ -46,7 +48,8 @@ Config.addField({
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'bookmarks'
+  value: 'bookmarks',
+  description: 'List of bookmarked samples'
 })
 
 Config.addField({
@@ -57,7 +60,8 @@ Config.addField({
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'path_queries'
+  value: 'path_queries',
+  description: 'File with queries for sample paths'
 })
 
 Config.addField({
@@ -67,16 +71,23 @@ Config.addField({
     checkExists: true
   },
   value: basePath,
-  description: 'text text'
+  description: 'Directory with samples to scan and search in'
 })
 
 Config.addField({
-  name: 'CurrentProject',
+  name: 'SamplesDirectoryExclusions',
   schema: {
-    type: 'absDirPath',
-    checkExists: true
+    type: 'array',
+    items: {
+      type: 'relDirPath',
+      basePath: Config.getField('SamplesDirectory').get()
+    },
+    default: [
+      'samplePack1',
+      'samplePack2'
+    ]
   },
-  value: basePath
+  description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
 })
 
 Config.addField({
@@ -86,17 +97,19 @@ Config.addField({
     positive: true,
     integer: true
   },
-  value: 15
+  value: 15,
+  description: 'Maximum number of random samples selected after a search'
 })
 
 Config.addField({
-  name: 'MaxOccurrencesSameDirectory',
+  name: 'MaxSamplesSameDirectory',
   schema: {
     type: 'number',
     positive: true,
     integer: true
   },
-  value: 2
+  value: 2,
+  description: 'Maximum number of samples from the same directory, to avoid too many samples from the same family'
 })
 
 Config.addField({
@@ -105,7 +118,8 @@ Config.addField({
     type: 'array',
     items: 'string',
     default: ['exe', 'DS_Store', 'info']
-  }
+  },
+  description: 'The list of extensions which the samples must NOT have'
 })
 
 Config.addField({
@@ -114,16 +128,18 @@ Config.addField({
     type: 'array',
     items: 'string',
     default: ['wav', 'mp3']
-  }
+  },
+  description: 'The list of extensions which the samples must have'
 })
 
 Config.addField({
-  name: 'ExtensionsPolicy',
+  name: 'ExtensionsPolicyForSamples',
   schema: {
     type: 'enum',
     values: ['X', 'I', 'E']
   },
-  value: 'X'
+  value: 'X',
+  description: 'I to get files with declared extensions only, E to exclude file with some extensions, and X to disable the extension filter'
 })
 
 Config.addField({
@@ -138,7 +154,8 @@ Config.addField({
   value: {
     'first-scan-needed': true,
     'new-scan-needed': true
-  }
+  },
+  description: 'Application status data, flags, etc.'
 })
 
 Config.load()
