@@ -3,20 +3,20 @@ process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '_
 const fileUtils = require('../../../core/utils/file.utils')
 
 const { Config } = require('../../config')
-const Query = require('../index')
+const { PathQuery } = require('../index')
 
 describe('query endpoints', function () {
   it('should perform basic operations', function () {
     fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
 
-    Query.add('my_label1', 'file1,file3')
-    Query.add('my_label2', 'file2,file4')
+    PathQuery.add('my_label1', 'file1,file3')
+    PathQuery.add('my_label2', 'file2,file4')
 
-    const pathQuery1 = Query.get('my_label1')
+    const pathQuery1 = PathQuery.get('my_label1')
     expect(pathQuery1.label).toEqual('my_label1')
     expect(pathQuery1.queryString).toEqual('file1,file3')
 
-    Query.save()
+    PathQuery.save()
     expect(fileUtils.readJsonFileSync(Config.get('PathQueryFile'))).toMatchObject({
       QueryCollection: [
         {
@@ -32,19 +32,19 @@ describe('query endpoints', function () {
       ]
     })
 
-    Query.create('file1,file3')
-    Query.create('file1,file3')
-    Query.create('file1,file3')
+    PathQuery.create('file1,file3')
+    PathQuery.create('file1,file3')
+    PathQuery.create('file1,file3')
 
-    const pqArray = Query.list()
+    const pqArray = PathQuery.list()
     expect(pqArray[0].label).toEqual('my_label1')
     expect(pqArray[1].label).toEqual('my_label2')
     expect(pqArray.length).toEqual(2)
 
-    Query.remove('my_label1')
-    expect(Query.get('my_label1')).toEqual(undefined)
+    PathQuery.remove('my_label1')
+    expect(PathQuery.get('my_label1')).toEqual(undefined)
 
-    Query.save()
+    PathQuery.save()
     expect(fileUtils.readJsonFileSync(Config.get('PathQueryFile'))).toMatchObject({
       QueryCollection: [
         {

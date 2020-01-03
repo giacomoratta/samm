@@ -42,10 +42,12 @@ const create = (queryString) => {
 }
 
 module.exports = {
-  add,
-  remove,
-  get,
-  list,
-  save,
-  create
+  PathQuery: {
+    add,
+    remove,
+    get,
+    list,
+    save,
+    create
+  }
 }
