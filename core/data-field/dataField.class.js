@@ -65,7 +65,6 @@ class DataField {
       const newValue = _.cloneDeep(value)
       this.value = { [this.name]: newValue }
       this.defaultValue = false
-      // console.log('change >> ',{ fieldName: this.name, newValue, oldValue })
       this.eventEmitter.emit('change', { fieldName: this.name, newValue, oldValue })
       return true
     }

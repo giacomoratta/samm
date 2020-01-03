@@ -43,11 +43,22 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     /* Change parameters and save */
     try {
       if(paramName === 'ExcludedExtensionsForSamples') {
+        Config.set(cliInput.getParam('name'), ExtensionsForSamplesEditor({
+          currentArray: Config.get('ExcludedExtensionsForSamples'),
+          newValues: cliInput.getParam('values'),
+          cliInput
+        }))
 
       } else if(paramName === 'IncludedExtensionsForSamples') {
+        Config.set(cliInput.getParam('name'), ExtensionsForSamplesEditor({
+          currentArray: Config.get('IncludedExtensionsForSamples'),
+          newValues: cliInput.getParam('values'),
+          cliInput
+        }))
 
       } else {
         Config.set(cliInput.getParam('name'), cliInput.getParam('values')[0])
+
       }
     } catch(e) {
       cliPrinter.error(e.message)
@@ -63,24 +74,25 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
   return cliNext(CLI_SUCCESS)
 })
 
-const ExtensionsForSamplesEditor = ({ currentValue, newValue, thisCli, cliInput, cliPrinter }) => {
-  let nextValue = []
+const ExtensionsForSamplesEditor = ({ currentArray, newValues, cliInput }) => {
+  if(!currentArray) currentArray=[]
+  if(!newValues) return []
   if(cliInput.hasOption('remove')) {
-    // todo: difference
-    // nextValue = ...
+    return currentArray.filter(item => !newValues.includes(item))
   } else {
-    // todo: union with no duplicates
-    // nextValue = new Set(currentValue, newValue)
+    return [ ...new Set(currentArray.concat(newValues))]
   }
 }
 
 const configDescribeParameters = ({ cliPrinter }) => {
+  let currentValue = null
   ConfigParameters.forEach(( configParam ) => {
     cliPrinter.title(configParam)
     let description = Config.getField(configParam).describe()
     if(description.length>0){
+      currentValue = Config.get(configParam)
       cliPrinter.info(`  ${description[0]}`)
-      cliPrinter.info(`  > current: ${Config.get(configParam)}`)
+      cliPrinter.info(`  > current: ${(currentValue===null ? '': currentValue )}`)
     }
   })
   cliPrinter.newLine()

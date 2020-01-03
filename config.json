@@ -1,16 +1,17 @@
 {
 	"UserdataDirectory": "userdata",
-	"SamplesIndexFile": "samples_index",
+	"SampleIndexFile": "samples_index",
 	"ProjectHistoryFile": "project_history",
-	"BookmarksFile": "bookmarks",
-	"QueriesFile": "queries",
+	"BookmarkFile": "bookmarks",
+	"PathQueryFile": "path_queries",
 	"SamplesDirectory": "/home/giacomo/Workspace/mpl",
 	"CurrentProject": "/home/giacomo/Workspace/mpl",
 	"RandomCount": 15,
 	"MaxOccurrencesSameDirectory": 2,
+	"ExcludedExtensionsForSamples": [],
 	"ExtensionsPolicy": "X",
 	"Status": {
 		"first-scan-needed": true,
-		"new-scan-needed": true
+		"new-scan-needed": false
 	}
 }
