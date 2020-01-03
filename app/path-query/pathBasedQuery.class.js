@@ -12,7 +12,7 @@ const processQueryString = function (queryString) {
   queryString = queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 
   const queryInfo = {
-    label: PathQuery.queryStringLabel(queryString),
+    label: PathBasedQuery.queryStringLabel(queryString),
     functionBody: '',
     queryString: '',
     checkFn: null,
@@ -48,7 +48,7 @@ const processQueryString = function (queryString) {
   return queryInfo
 }
 
-class PathQuery {
+class PathBasedQuery {
   constructor (queryString) {
     this.check = null
 
@@ -75,12 +75,12 @@ class PathQuery {
   get queryString () { return this._queryString }
 
   clone () {
-    const clonedPathQuery = new this.constructor()
-    clonedPathQuery._label = this._label
-    clonedPathQuery._functionBody = this._functionBody
-    clonedPathQuery._queryString = this._queryString
-    clonedPathQuery.check = codeUtils.createFunction('s', this._functionBody)
-    return clonedPathQuery
+    const clonedPathBasedQuery = new this.constructor()
+    clonedPathBasedQuery._label = this._label
+    clonedPathBasedQuery._functionBody = this._functionBody
+    clonedPathBasedQuery._queryString = this._queryString
+    clonedPathBasedQuery.check = codeUtils.createFunction('s', this._functionBody)
+    return clonedPathBasedQuery
   }
 
   fromJson (jsonData) {
@@ -100,5 +100,5 @@ class PathQuery {
 }
 
 module.exports = {
-  PathQuery
+  PathBasedQuery
 }

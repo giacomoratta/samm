@@ -1,7 +1,7 @@
 const { JsonizedFile } = require('../../core/jsonized-file')
-const { PathQuery } = require('./pathQuery.class')
+const { PathBasedQuery } = require('./pathBasedQuery.class')
 
-class QueryJsonFile {
+class PathQueryJsonFile {
   constructor (filePath) {
     this.QueryCollectionTemp = {}
 
@@ -47,7 +47,7 @@ class QueryJsonFile {
     const queryCollection = this.jsonFile.get('QueryCollection')
     if (!(queryCollection instanceof Array) || queryCollection.length === 0) return
     queryCollection.forEach((item) => {
-      this.QueryCollectionTemp[item.label] = new PathQuery()
+      this.QueryCollectionTemp[item.label] = new PathBasedQuery()
       this.QueryCollectionTemp[item.label].fromJson(item)
     })
   }
@@ -65,10 +65,10 @@ class QueryJsonFile {
   }
 
   add ({ label, queryString }) {
-    const newPathQuery = new PathQuery(queryString)
-    if (!newPathQuery.label) return false
-    newPathQuery.label = label
-    this.QueryCollectionTemp[label] = newPathQuery
+    const newPathBasedQuery = new PathBasedQuery(queryString)
+    if (!newPathBasedQuery.label) return false
+    newPathBasedQuery.label = label
+    this.QueryCollectionTemp[label] = newPathBasedQuery
     return true
   }
 
@@ -85,5 +85,5 @@ class QueryJsonFile {
 }
 
 module.exports = {
-  QueryJsonFile
+  PathQueryJsonFile
 }

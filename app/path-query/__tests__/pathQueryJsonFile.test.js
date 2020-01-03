@@ -2,8 +2,8 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 
 const { Config } = require('../../config')
-const { QueryJsonFile } = require('../queryJsonFile.class')
-const { PathQuery } = require('../pathQuery.class')
+const { PathQueryJsonFile } = require('../pathQueryJsonFile.class')
+const { PathBasedQuery } = require('../pathBasedQuery.class')
 const fileUtils = require('../../../core/utils/file.utils')
 
 describe('query endpoints', function () {
@@ -11,7 +11,7 @@ describe('query endpoints', function () {
     // reset file
     fileUtils.writeJsonFileSync(Config.get('QueryFile'), {})
 
-    const QueryFile1 = new QueryJsonFile(Config.get('QueryFile'))
+    const QueryFile1 = new PathQueryJsonFile(Config.get('QueryFile'))
     QueryFile1.load()
     expect(QueryFile1.QueryCollectionTemp).toMatchObject({})
 
@@ -74,12 +74,12 @@ describe('query endpoints', function () {
     expect(qf1Json.QueryCollection.length).toEqual(3)
     expect(qf1Json.QueryCollection[2].queryString).toEqual('le61+file1,file3')
 
-    const QueryFile2 = new QueryJsonFile(Config.get('QueryFile'))
+    const QueryFile2 = new PathQueryJsonFile(Config.get('QueryFile'))
     QueryFile2.load()
 
-    expect(QueryFile2.get('my_label_21')).toBeInstanceOf(PathQuery)
-    expect(QueryFile2.get('my_label_31')).toBeInstanceOf(PathQuery)
-    expect(QueryFile2.get('my_label_41')).toBeInstanceOf(PathQuery)
+    expect(QueryFile2.get('my_label_21')).toBeInstanceOf(PathBasedQuery)
+    expect(QueryFile2.get('my_label_31')).toBeInstanceOf(PathBasedQuery)
+    expect(QueryFile2.get('my_label_41')).toBeInstanceOf(PathBasedQuery)
 
     QueryFile2.forEach((pathQuery) => {
       expect(pathQuery.queryString).toEqual('le61+file1,file3')

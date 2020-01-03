@@ -1,16 +1,16 @@
-const { PathQuery } = require('../pathQuery.class')
+const { PathBasedQuery } = require('../pathBasedQuery.class')
 
 describe('Query utility functions', function () {
   it('should process query strings', function () {
     const queryString1 = ',+ +,+, '
-    const pathQuery1 = new PathQuery(queryString1)
+    const pathQuery1 = new PathBasedQuery(queryString1)
     expect(pathQuery1.label).toEqual(null)
     expect(pathQuery1.queryString).toEqual(null)
 
     const queryString2 = 'le61+file1,+fi le3,+, '
-    const pathQuery2 = new PathQuery(queryString2)
+    const pathQuery2 = new PathBasedQuery(queryString2)
 
-    expect(PathQuery.queryStringLabel(queryString2)).toEqual('le61+file1,+file3,+,')
+    expect(PathBasedQuery.queryStringLabel(queryString2)).toEqual('le61+file1,+file3,+,')
     expect(pathQuery2.label).toEqual('le61+file1,+file3,+,')
     pathQuery2.label = 'my_label_222'
     expect(pathQuery2.label).toEqual('my_label_222')
@@ -37,7 +37,7 @@ describe('Query utility functions', function () {
     expect(pathQuery2B.check('/drd/file1/dle61sf')).toEqual(true)
     expect(pathQuery2B.check('/drd/file1/dled61sf')).toEqual(false)
 
-    const pathQuery3 = new PathQuery()
+    const pathQuery3 = new PathBasedQuery()
     pathQuery3.fromJson({
       functionBody: 'if ( s.indexOf(\'le61\')>=0 && s.indexOf(\'file1\')>=0 ) return true; if ( s.indexOf(\'file3\')>=0 ) return true; return false;',
       label: 'my_label_222',

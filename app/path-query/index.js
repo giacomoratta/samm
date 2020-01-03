@@ -1,10 +1,10 @@
 const { Config } = require('../config')
-const { QueryJsonFile } = require('./queryJsonFile.class')
-const { PathQuery } = require('./pathQuery.class')
+const { PathQueryJsonFile } = require('./pathQueryJsonFile.class')
+const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
-const PathQueryCache = new SpheroidCache({ maxItems: 30 })
-const QueryFile = new QueryJsonFile(Config.get('QueryFile'))
+const PathBasedQueryCache = new SpheroidCache({ maxItems: 30 })
+const QueryFile = new PathQueryJsonFile(Config.get('QueryFile'))
 QueryFile.load()
 
 const add = (label, queryString) => {
@@ -32,13 +32,13 @@ const save = () => {
 }
 
 const create = (queryString) => {
-  const queryStringLabel = PathQuery.queryStringLabel(queryString)
-  if (PathQueryCache.has(queryStringLabel)) {
-    return PathQueryCache.get(queryStringLabel)
+  const queryStringLabel = PathBasedQuery.queryStringLabel(queryString)
+  if (PathBasedQueryCache.has(queryStringLabel)) {
+    return PathBasedQueryCache.get(queryStringLabel)
   }
-  const newPathQuery = new PathQuery(queryString)
-  PathQueryCache.add(queryStringLabel, newPathQuery)
-  return newPathQuery
+  const newPathBasedQuery = new PathBasedQuery(queryString)
+  PathBasedQueryCache.add(queryStringLabel, newPathBasedQuery)
+  return newPathBasedQuery
 }
 
 module.exports = {
