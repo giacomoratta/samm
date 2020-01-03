@@ -45,8 +45,8 @@ class DataField {
     return this.schema[this.name]
   }
 
-  describe (text=false, indent='') {
-    if(text === false) return this.description
+  describe (text = false, indent = '') {
+    if (text === false) return this.description
     return `${indent}${this.description.join(`\n${indent}`)}`
   }
 

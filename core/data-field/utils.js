@@ -51,7 +51,7 @@ const removeFromObject = function (object, key, schema) {
 
 const setDescription = function (mainText, schema) {
   const description = []
-  if(!mainText) mainText=' '
+  if (!mainText) mainText = ' '
   description.push(mainText)
   Object.keys(schema).forEach((k) => {
     if (k === 'default') return

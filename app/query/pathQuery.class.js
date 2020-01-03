@@ -1,10 +1,10 @@
 const _ = require('lodash')
 const codeUtils = require('../../core/utils/code.utils')
 
-const removeEmptyArrayStringItems = function(array) {
-  for(let i=array.length-1; i>=0; i--){
+const removeEmptyArrayStringItems = function (array) {
+  for (let i = array.length - 1; i >= 0; i--) {
     array[i] = array[i].trim()
-    if(array[i].length===0) array.splice(i,1)
+    if (array[i].length === 0) array.splice(i, 1)
   }
 }
 
@@ -17,29 +17,28 @@ const processQueryString = function (queryString) {
     queryString: '',
     checkFn: null,
     _linesOR: [],
-    _functionLinesOR: [],
+    _functionLinesOR: []
   }
 
   /* Split OR conditions */
   const queryOR = _.split(queryString, ',')
   if (!(queryOR instanceof Array) || queryOR.length === 0) return null
   removeEmptyArrayStringItems(queryOR)
-  if(queryOR.length === 0) return null
+  if (queryOR.length === 0) return null
 
   /* Composing function code */
   queryOR.forEach(function (lineOR, i1, a1) {
-
     const queryAND = lineOR.split('+')
     removeEmptyArrayStringItems(queryAND)
-    if(queryAND.length === 0) return null
+    if (queryAND.length === 0) return null
 
     queryInfo._linesOR.push(queryAND.join('+'))
     queryInfo._functionLinesOR.push(`if ( s.indexOf('${queryAND.join('\')>=0 && s.indexOf(\'')}')>=0 ) return true;`)
   })
-  queryInfo._functionLinesOR.push(`return false;`)
+  queryInfo._functionLinesOR.push('return false;')
 
   queryInfo.queryString = queryInfo._linesOR.join(',')
-  if(queryInfo.queryString.length < 2) return null
+  if (queryInfo.queryString.length < 2) return null
 
   queryInfo.functionBody = queryInfo._functionLinesOR.join(' ')
   queryInfo.checkFn = codeUtils.createFunction('s', queryInfo.functionBody)
@@ -49,7 +48,6 @@ const processQueryString = function (queryString) {
   return queryInfo
 }
 
-
 class PathQuery {
   constructor (queryString) {
     this.check = null
@@ -58,9 +56,9 @@ class PathQuery {
     this._functionBody = null
     this._queryString = null
 
-    if(queryString) {
+    if (queryString) {
       const queryInfo = processQueryString(queryString)
-      if(!queryInfo) return
+      if (!queryInfo) return
       this._label = queryInfo.label
       this._functionBody = queryInfo.functionBody
       this._queryString = queryInfo.queryString
@@ -68,15 +66,15 @@ class PathQuery {
     }
   }
 
-  static queryStringLabel(queryString) {
+  static queryStringLabel (queryString) {
     return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
   }
 
-  get label() { return this._label }
-  set label(label) { this._label = label }
-  get queryString() { return this._queryString }
+  get label () { return this._label }
+  set label (label) { this._label = label }
+  get queryString () { return this._queryString }
 
-  clone() {
+  clone () {
     const clonedPathQuery = new this.constructor()
     clonedPathQuery._label = this._label
     clonedPathQuery._functionBody = this._functionBody
@@ -85,14 +83,14 @@ class PathQuery {
     return clonedPathQuery
   }
 
-  fromJson(jsonData) {
+  fromJson (jsonData) {
     this._label = jsonData.label
     this._functionBody = jsonData.functionBody
     this._queryString = jsonData.queryString
     this.check = codeUtils.createFunction('s', jsonData.functionBody)
   }
 
-  toJson() {
+  toJson () {
     const jsonData = {}
     jsonData.label = this._label
     jsonData.functionBody = this._functionBody

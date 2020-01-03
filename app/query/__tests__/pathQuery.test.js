@@ -1,9 +1,7 @@
 const { PathQuery } = require('../pathQuery.class')
 
-describe('Query utility functions', function() {
-
-  it("should process query strings", function() {
-
+describe('Query utility functions', function () {
+  it('should process query strings', function () {
     const queryString1 = ',+ +,+, '
     const pathQuery1 = new PathQuery(queryString1)
     expect(pathQuery1.label).toEqual(null)

@@ -9,10 +9,10 @@ class CliPrinter {
   }
 
   createChild ({ command }) {
-    return new this.constructor({ command, indentLevel:this.indent+1 })
+    return new this.constructor({ command, indentLevel: this.indent + 1 })
   }
 
-  newLine (count=0) {
+  newLine (count = 0) {
     console.info(`${NL.repeat(count)}`)
   }
 
@@ -34,9 +34,9 @@ class CliPrinter {
 
   value (value, message) {
     let text = `${message}: `
-    if(_.isArray(value)) {
+    if (_.isArray(value)) {
       text = `${text}${value.join(',')}`
-    } else if(_.isObject(value)) {
+    } else if (_.isObject(value)) {
       Object.keys(value).forEach((k) => {
         text = `${text}${NL}${this.indent}  ${k}: ${value[k]}`
       })

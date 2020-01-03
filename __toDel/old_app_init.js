@@ -4,7 +4,7 @@ require('./config_init.js')
 global.SamplesTree = require('../app/managers/SamplesTree.class.js')
 
 /* Data Types */
-global.Samples = require('../app/atoms/Samples.class.js')
+global.Samples = require('../app/managers/atoms/Samples.class.js')
 
 /* Project Modules */
 global.SamplesMgr = require('../app/managers/SamplesManager.js')

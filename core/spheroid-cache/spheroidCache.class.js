@@ -68,6 +68,13 @@ class SpheroidCache {
     }
     return this.map.get(label)
   }
+
+  has (label) {
+    if (typeof label === 'number') {
+      return (this.array[label] !== undefined || this.array[label] !== null)
+    }
+    return this.map.has(label)
+  }
 }
 
 module.exports = SpheroidCache

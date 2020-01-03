@@ -1,4 +1,4 @@
-const Bookmarks = require('../atoms/Bookmarks.class')
+const Bookmarks = require('./atoms/Bookmarks.class')
 
 class BookmarksManager {
   constructor () {

@@ -1,4 +1,4 @@
-const TQuery = require('../atoms/TQuery.class')
+const TQuery = require('./atoms/TQuery.class')
 
 class TQueryManager {
   constructor () {

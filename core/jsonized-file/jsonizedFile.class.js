@@ -17,8 +17,8 @@ class JsonizedFile {
     this.fields[name] = new DataField({ name, schema, value, description })
   }
 
-  hasField(name) {
-    return ( this.fields.hasOwnProperty(name) && this.fields[name] !== null && this.fields[name] !== undefined )
+  hasField (name) {
+    return (this.fields[name] !== null && this.fields[name] !== undefined)
   }
 
   getField (name) {

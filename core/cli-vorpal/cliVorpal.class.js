@@ -22,7 +22,7 @@ class CliVorpal {
       }
 
       /* prevent event emit when enter is pressed with no command */
-      if(command) {
+      if (command) {
         this.eventEmitter.emit('beforeCommand', { logger: this.logger, command })
       }
     })
@@ -44,14 +44,14 @@ class CliVorpal {
   }
 
   addCommandHeader (command) {
-    if(!this.commands[command]) {
+    if (!this.commands[command]) {
       throw new Error(`Command ${command} not defined. Use addCommand().`)
     }
     return this.commands[command]
   }
 
   addCommandBody (command, cmdFn) {
-    if(!this.commands[command]) {
+    if (!this.commands[command]) {
       throw new Error(`Command ${command} not defined. Use addCommand().`)
     }
     const self = this
