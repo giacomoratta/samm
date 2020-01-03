@@ -239,6 +239,23 @@ libUtils.writeTextFile = (pathTo, text) => {
   })
 }
 
+libUtils.writeJsonFile = (pathTo, jsonObj, space) => {
+  const negativePromise = new Promise(function (resolve, reject) { resolve(false) })
+  if (!_.isObject(jsonObj)) return negativePromise
+
+  if (space === false) space = null
+  else space = '\t'
+
+  let fileContent = ''
+  try {
+    fileContent = JSON.stringify(jsonObj, null, space)
+  } catch (e) {
+    // console.error(e)
+    return negativePromise
+  }
+  return libUtils.writeTextFile(pathTo, fileContent)
+}
+
 /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.copyDirectory = (pathFrom, pathTo, options) => {

@@ -17,8 +17,8 @@ class SequoiaPath {
   }
 
   reset () {
-    this.tree = null /* Directory Tree */
-    this.root = {} // empty rootrootrootroot
+    this.tree = null
+    this.root = {}
     this.data.filesCount = 0
     this.data.directoriesCount = 0
   }
