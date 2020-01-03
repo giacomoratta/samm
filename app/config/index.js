@@ -50,14 +50,14 @@ Config.addField({
 })
 
 Config.addField({
-  name: 'QueryFile',
+  name: 'PathQueryFile',
   schema: {
     type: 'relFilePath',
     basePath: Config.getField('UserdataDirectory').get(),
     createIfNotExists: true,
     readOnly: true
   },
-  value: 'queries'
+  value: 'path_queries'
 })
 
 Config.addField({
@@ -67,7 +67,7 @@ Config.addField({
     checkExists: true
   },
   value: basePath,
-  description: 'safasfassfa'
+  description: 'text text'
 })
 
 Config.addField({

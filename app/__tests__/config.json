@@ -3,7 +3,7 @@
 	"SampleIndexFile": "samples_index",
 	"ProjectHistoryFile": "project_history",
 	"BookmarkFile": "bookmarks",
-	"QueryFile": "queries",
+	"PathQueryFile": "path_queries",
 	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/__tests__",
 	"CurrentProject": "/home/giacomo/Workspace/mpl/app/__tests__",
 	"RandomCount": 15,

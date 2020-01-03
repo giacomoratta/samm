@@ -7,7 +7,7 @@ const Query = require('../index')
 
 describe('query endpoints', function () {
   it('should perform basic operations', function () {
-    fileUtils.writeTextFileSync(Config.get('QueryFile'), '')
+    fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
 
     Query.add('my_label1', 'file1,file3')
     Query.add('my_label2', 'file2,file4')
@@ -17,7 +17,7 @@ describe('query endpoints', function () {
     expect(pathQuery1.queryString).toEqual('file1,file3')
 
     Query.save()
-    expect(fileUtils.readJsonFileSync(Config.get('QueryFile'))).toMatchObject({
+    expect(fileUtils.readJsonFileSync(Config.get('PathQueryFile'))).toMatchObject({
       QueryCollection: [
         {
           label: 'my_label1',
@@ -45,7 +45,7 @@ describe('query endpoints', function () {
     expect(Query.get('my_label1')).toEqual(undefined)
 
     Query.save()
-    expect(fileUtils.readJsonFileSync(Config.get('QueryFile'))).toMatchObject({
+    expect(fileUtils.readJsonFileSync(Config.get('PathQueryFile'))).toMatchObject({
       QueryCollection: [
         {
           label: 'my_label2',
@@ -55,6 +55,6 @@ describe('query endpoints', function () {
       ]
     })
 
-    fileUtils.writeTextFileSync(Config.get('QueryFile'), '')
+    fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
   })
 })

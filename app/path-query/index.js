@@ -4,31 +4,31 @@ const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
 const PathBasedQueryCache = new SpheroidCache({ maxItems: 30 })
-const QueryFile = new PathQueryJsonFile(Config.get('QueryFile'))
-QueryFile.load()
+const PathQueryFile = new PathQueryJsonFile(Config.get('PathQueryFile'))
+PathQueryFile.load()
 
 const add = (label, queryString) => {
-  return QueryFile.add({ label, queryString })
+  return PathQueryFile.add({ label, queryString })
 }
 
 const remove = (label) => {
-  return QueryFile.remove(label)
+  return PathQueryFile.remove(label)
 }
 
 const get = (label) => {
-  return QueryFile.get(label)
+  return PathQueryFile.get(label)
 }
 
 const list = () => {
   const array = []
-  QueryFile.forEach((pathQuery) => {
+  PathQueryFile.forEach((pathQuery) => {
     array.push(pathQuery)
   })
   return array
 }
 
 const save = () => {
-  return QueryFile.save()
+  return PathQueryFile.save()
 }
 
 const create = (queryString) => {
