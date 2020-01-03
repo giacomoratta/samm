@@ -2,7 +2,7 @@ const _ = require('lodash')
 
 _.mixin({
   isStrictObject: (obj) => {
-    return ( _.isObject(obj) && obj.constructor === Object)
+    return (_.isObject(obj) && obj.constructor === Object)
   }
 })
 

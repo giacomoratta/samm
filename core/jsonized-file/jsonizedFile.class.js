@@ -90,6 +90,10 @@ class JsonizedFile {
   save () {
     return this.fileHolder.save()
   }
+
+  deleteFile () {
+    return this.fileHolder.delete()
+  }
 }
 
 module.exports = JsonizedFile

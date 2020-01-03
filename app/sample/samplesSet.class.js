@@ -19,12 +19,10 @@ class SamplesSet {
     // validityCheck
   }
 
-  remove(item) {
+  remove (item) {
 
   }
 
   size () {
   }
-
-
 }

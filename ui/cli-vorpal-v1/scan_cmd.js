@@ -1,11 +1,11 @@
 const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
 
-//const Config = App.Config
+// const Config = App.Config
 const Samples = App.Samples
 
 const commandName = 'scan'
 
-Cli.addCommand( `${commandName}`)
+Cli.addCommand(`${commandName}`)
 
 Cli.addCommandHeader(commandName)
   .description('Perform a full scan of the samples directory and create the index. ' +
@@ -13,8 +13,7 @@ Cli.addCommandHeader(commandName)
   .option('-f, --force', 'Force the rescan.')
 
 Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
-
-  if(Samples.hasIndex() && cliInput.hasOption('force')) {
+  if (Samples.hasIndex() && cliInput.hasOption('force')) {
     cliPrinter.warn('Samples already indexed. Use -f to force a rescan.')
     return cliNext(CLI_SUCCESS)
   }
@@ -26,7 +25,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     return cliNext(CLI_ERROR)
   }
 
-  cliPrinter.info(`Indexing process completed successfully.`)
+  cliPrinter.info('Indexing process completed successfully.')
   cliPrinter.info(`${Samples.size()} samples found`)
   return cliNext(CLI_SUCCESS)
 })

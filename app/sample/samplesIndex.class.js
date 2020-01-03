@@ -13,13 +13,13 @@ class SamplesIndexError extends Error {
 
 class SamplesIndex {
   constructor ({ indexPath, samplesPath }) {
-    if(!fileUtils.isAbsolutePath(indexPath)) {
+    if (!fileUtils.isAbsolutePath(indexPath)) {
       throw new SamplesIndexError(`indexPath must be an absolute path: ${indexPath}`)
     }
-    if(!fileUtils.isAbsolutePath(samplesPath)) {
+    if (!fileUtils.isAbsolutePath(samplesPath)) {
       throw new SamplesIndexError(`samplesPath must be an absolute path: ${samplesPath}`)
     }
-    if(!fileUtils.directoryExistsSync(samplesPath)) {
+    if (!fileUtils.directoryExistsSync(samplesPath)) {
       throw new SamplesIndexError(`samplesPath does not exist: ${samplesPath}`)
     }
     this.indexPath = indexPath
@@ -34,6 +34,4 @@ class SamplesIndex {
   size () {
     // sequoiaPath size
   }
-
-
 }

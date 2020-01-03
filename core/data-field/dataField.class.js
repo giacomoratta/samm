@@ -20,8 +20,8 @@ class DataField {
     this.init({ schema, value, description })
   }
 
-  changeSchema(schemaDiff) {
-    const schema = _.cloneDeep(_.merge(this.schema[this.name],schemaDiff))
+  changeSchema (schemaDiff) {
+    const schema = _.cloneDeep(_.merge(this.schema[this.name], schemaDiff))
     const defaultValue = this.defaultValue
     const value = this.value[this.name]
     const description = this.description[0]
@@ -29,7 +29,7 @@ class DataField {
     this.defaultValue = defaultValue
   }
 
-  init({ schema, value, description = '' }) {
+  init ({ schema, value, description = '' }) {
     schema = dataFieldUtils.fixSchema(_.cloneDeep(schema))
 
     /* work-around */

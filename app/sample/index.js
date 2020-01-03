@@ -2,13 +2,13 @@ const { Config } = require('../config/configFile.class')
 const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
 const SampleLookups = new Map() // todo: buckedCache circular
-let LatestLookup = null
+const LatestLookup = null
 
 // set logger
 const mainSamplesIndex = new SampleIndex()
 
 // set logger
-const mainSampleSet =  new SampleSet(mainSamplesIndex)
+const mainSampleSet = new SampleSet(mainSamplesIndex)
 
 /* samples endpoints */
 

@@ -24,6 +24,10 @@ class FileButler {
     return true
   }
 
+  delete () {
+    return fileUtils.removeFileSync(this.config.filePath)
+  }
+
   save () {
     let savedData = this.data
     if (this.config.saveFn) savedData = this.config.saveFn(this.data)

@@ -4,7 +4,7 @@ const Config = App.Config
 
 const commandName = 'abcde'
 
-Cli.addCommand( `${commandName} [name] [values...]`)
+Cli.addCommand(`${commandName} [name] [values...]`)
 
 Cli.addCommandHeader(commandName)
   .description('Text. \n')

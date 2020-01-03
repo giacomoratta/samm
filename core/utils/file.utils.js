@@ -5,7 +5,7 @@ const fsExtra = require('fs-extra')
 const rimraf = require('rimraf') /* A "rm -rf" util for nodejs */
 const iconv = require('iconv-lite')
 
-const stringToBuffer = (string) => { return Buffer.from("" + (string || ""), "binary") }
+const stringToBuffer = (string) => { return Buffer.from('' + (string || ''), 'binary') }
 
 const libUtils = {}
 
@@ -23,7 +23,6 @@ libUtils.equalPaths = (p1, p2) => {
   if (p1.length <= p2.length) return p2.endsWith(p1)
 }
 
-
 /* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.pathChangeFilename = (pathString, changeFn) => {
@@ -37,7 +36,6 @@ libUtils.pathChangeDirname = (pathString, changeFn) => {
   const _pInfoBase = changeFn(_pInfo.base, _pInfo)
   return path.join(_pInfo.dir, _pInfoBase)
 }
-
 
 /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -89,7 +87,7 @@ libUtils.checkAndSetDuplicatedDirectoryNameSync = (pathString, renameFn) => {
   })
 }
 
-libUtils.checkAndSetPathSync = (pathString, callback) => { //todo ???
+libUtils.checkAndSetPathSync = (pathString, callback) => { // todo ???
   if (!_.isString(pathString)) return null
   if (!fs.existsSync(pathString)) return null
   pathString = path.resolve(pathString) + path.sep
@@ -107,22 +105,20 @@ libUtils.directoryExistsSync = (pathString) => {
   return fs.existsSync(pathString)
 }
 
-
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (pathString) => {
   return new Promise(function (resolve) {
     fs.access(pathString, fs.constants.F_OK, (err) => {
       resolve({
-          exists: !err,
-          error: err
+        exists: !err,
+        error: err
       })
     })
   })
 }
 
 libUtils.directoryExists = libUtils.fileExists
-
 
 /* PATH R/W - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -184,7 +180,7 @@ libUtils.writeFileSync = (pathString, fileContent, encoding, flag, mode) => {
     if (!flag) flag = 'w'
     if (!mode) mode = 0o666
     if (encoding === 'iso88591') {
-      if(_.isNil(fileContent)) fileContent=''
+      if (_.isNil(fileContent)) fileContent = ''
       fileContent = iconv.decode(stringToBuffer(fileContent), 'iso88591')
       fs.writeFileSync(pathString, fileContent, {
         encoding: 'binary',
@@ -344,7 +340,7 @@ libUtils.removeDirSync = (pathString) => {
     rimraf.sync(pathString)
     return true
   } catch (e) {
-    //console.error(e)
+    // console.error(e)
     return false
   }
 }

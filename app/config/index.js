@@ -1,8 +1,20 @@
 const basePath = process.env.ABSOLUTE_APP_PATH
 const path = require('path')
+const os = require('os')
 const { ConfigFile } = require('./configFile.class')
 
 const Config = new ConfigFile(path.join(basePath, 'config.json'))
+const PlatformString = `${os.platform()}-${os.release()}`
+
+Config.addField({
+  name: 'Platform',
+  schema: {
+    type: 'string',
+    readOnly: true
+  },
+  value: PlatformString,
+  description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
+})
 
 Config.addField({
   name: 'UserdataDirectory',
@@ -160,6 +172,11 @@ Config.addField({
 
 Config.load()
 
+if (Config.get('Platform') !== PlatformString) {
+  Config.deleteFile()
+  Config.load()
+}
+
 Config.getField('SamplesDirectory').on('change', ({ newValue }) => {
   Config.getField('Status').add('new-scan-needed', true)
   Config.getField('SamplesDirectoryExclusions').changeSchema({
@@ -178,13 +195,13 @@ Config.getField('ExtensionsPolicyForSamples').on('change', () => {
 })
 
 Config.getField('ExcludedExtensionsForSamples').on('change', () => {
-  if(Config.get('ExtensionsPolicyForSamples') === 'E') {
+  if (Config.get('ExtensionsPolicyForSamples') === 'E') {
     Config.getField('Status').add('new-scan-needed', true)
   }
 })
 
 Config.getField('IncludedExtensionsForSamples').on('change', () => {
-  if(Config.get('ExtensionsPolicyForSamples') === 'I') {
+  if (Config.get('ExtensionsPolicyForSamples') === 'I') {
     Config.getField('Status').add('new-scan-needed', true)
   }
 })

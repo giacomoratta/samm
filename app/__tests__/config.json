@@ -1,4 +1,5 @@
 {
+	"Platform": "linux-5.0.0-37-genericccc",
 	"UserdataDirectory": "userdata",
 	"SampleIndexFile": "samples_index",
 	"ProjectHistoryFile": "project_history",
