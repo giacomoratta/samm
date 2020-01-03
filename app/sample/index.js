@@ -1,4 +1,4 @@
-const { Config } = require('../config/config')
+const { Config } = require('../config/configFile.class')
 const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
 const SampleLookups = new Map() // todo: buckedCache circular

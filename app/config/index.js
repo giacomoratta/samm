@@ -1,6 +1,6 @@
 const basePath = process.env.ABSOLUTE_APP_PATH
 const path = require('path')
-const { ConfigFile } = require('./config')
+const { ConfigFile } = require('./configFile.class')
 
 const Config = new ConfigFile(path.join(basePath, 'config.json'))
 
@@ -80,7 +80,7 @@ Config.addField({
     type: 'array',
     items: {
       type: 'relDirPath',
-      basePath: Config.getField('SamplesDirectory').get()
+      basePath: Config.get('SamplesDirectory')
     },
     default: [
       'samplePack1',
@@ -160,12 +160,33 @@ Config.addField({
 
 Config.load()
 
-Config.getField('SamplesDirectory').on('change', () => {
-  Config.getField('Status').add('new-scan-needed', false)
+Config.getField('SamplesDirectory').on('change', ({ newValue }) => {
+  Config.getField('Status').add('new-scan-needed', true)
+  Config.getField('SamplesDirectoryExclusions').changeSchema({
+    items: {
+      basePath: newValue
+    }
+  })
+})
+
+Config.getField('SamplesDirectoryExclusions').on('change', () => {
+  Config.getField('Status').add('new-scan-needed', true)
+})
+
+Config.getField('ExtensionsPolicyForSamples').on('change', () => {
+  Config.getField('Status').add('new-scan-needed', true)
 })
 
 Config.getField('ExcludedExtensionsForSamples').on('change', () => {
-  Config.getField('Status').add('new-scan-needed', false)
+  if(Config.get('ExtensionsPolicyForSamples') === 'E') {
+    Config.getField('Status').add('new-scan-needed', true)
+  }
+})
+
+Config.getField('IncludedExtensionsForSamples').on('change', () => {
+  if(Config.get('ExtensionsPolicyForSamples') === 'I') {
+    Config.getField('Status').add('new-scan-needed', true)
+  }
 })
 
 Config.save()
