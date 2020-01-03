@@ -5,7 +5,6 @@ const Config = App.Config
 const ConfigParameters = [
   'SamplesDirectory',
   'SamplesDirectoryExclusions',
-  'CurrentProject',
   'RandomCount',
   'MaxSamplesSameDirectory',
   'ExcludedExtensionsForSamples',
@@ -42,14 +41,20 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     /* Change parameters and save */
     try {
       if (paramName === 'ExcludedExtensionsForSamples') {
-        Config.set(cliInput.getParam('name'), ExtensionsForSamplesEditor({
+        Config.set('ExcludedExtensionsForSamples', BasicArrayFieldEditor({
           currentArray: Config.get('ExcludedExtensionsForSamples'),
           newValues: cliInput.getParam('values'),
           cliInput
         }))
       } else if (paramName === 'IncludedExtensionsForSamples') {
-        Config.set(cliInput.getParam('name'), ExtensionsForSamplesEditor({
+        Config.set('IncludedExtensionsForSamples', BasicArrayFieldEditor({
           currentArray: Config.get('IncludedExtensionsForSamples'),
+          newValues: cliInput.getParam('values'),
+          cliInput
+        }))
+      } else if (paramName === 'SamplesDirectoryExclusions') {
+        Config.set('SamplesDirectoryExclusions', BasicArrayFieldEditor({
+          currentArray: Config.getField('SamplesDirectoryExclusions').get(false),
           newValues: cliInput.getParam('values'),
           cliInput
         }))
@@ -70,7 +75,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
   return cliNext(CLI_SUCCESS)
 })
 
-const ExtensionsForSamplesEditor = ({ currentArray, newValues, cliInput }) => {
+const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
   if (!currentArray) currentArray = []
   if (!newValues) return []
   if (cliInput.hasOption('remove')) {
@@ -86,9 +91,24 @@ const configDescribeParameters = ({ cliPrinter }) => {
     cliPrinter.title(configParam)
     const description = Config.getField(configParam).describe()
     if (description.length > 0) {
-      currentValue = Config.get(configParam)
+      currentValue = Config.getField(configParam).get(false)
       cliPrinter.info(`  ${description[0]}`)
-      cliPrinter.info(`  > current: ${(currentValue === null ? '' : currentValue)}`)
+
+      if(currentValue instanceof Array) {
+        cliPrinter.info(`  > current value:`)
+        currentValue.forEach((item, index) => {
+          cliPrinter.info(`    ${index+1}) ${item}`)
+        })
+
+      } else if (currentValue instanceof Object) {
+        cliPrinter.info(`  > current value:`)
+        Object.keys(currentValue).forEach((k) => {
+          cliPrinter.info(`    ${k}: ${currentValue[k]}`)
+        })
+
+      } else {
+        cliPrinter.info(`  > current value: ${(currentValue === null ? '' : currentValue)}`)
+      }
     }
   })
   cliPrinter.newLine()

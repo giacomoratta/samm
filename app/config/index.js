@@ -151,7 +151,7 @@ Config.addField({
     values: ['X', 'I', 'E']
   },
   value: 'X',
-  description: 'I to get files with declared extensions only, E to exclude file with some extensions, and X to disable the extension filter'
+  description: '\'I\' to get files with declared extensions only, \'E\' to exclude file with some extensions, and \'X\' to disable the extension filter'
 })
 
 Config.addField({
