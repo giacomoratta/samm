@@ -94,18 +94,16 @@ const configDescribeParameters = ({ cliPrinter }) => {
       currentValue = Config.getField(configParam).get(false)
       cliPrinter.info(`  ${description[0]}`)
 
-      if(currentValue instanceof Array) {
-        cliPrinter.info(`  > current value:`)
+      if (currentValue instanceof Array) {
+        cliPrinter.info('  > current value:')
         currentValue.forEach((item, index) => {
-          cliPrinter.info(`    ${index+1}) ${item}`)
+          cliPrinter.info(`    ${index + 1}) ${item}`)
         })
-
       } else if (currentValue instanceof Object) {
-        cliPrinter.info(`  > current value:`)
+        cliPrinter.info('  > current value:')
         Object.keys(currentValue).forEach((k) => {
           cliPrinter.info(`    ${k}: ${currentValue[k]}`)
         })
-
       } else {
         cliPrinter.info(`  > current value: ${(currentValue === null ? '' : currentValue)}`)
       }
