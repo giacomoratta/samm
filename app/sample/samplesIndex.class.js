@@ -27,8 +27,10 @@ class SamplesIndex {
     this.sampleTree = null
   }
 
-  async createIndex ({ includedExtensions, excludedExtensions, excludedPaths }) {
-    await fileUtils.writeTextFile(this.indexFilePath, '')
+  async create ({ includedExtensions = [], excludedExtensions = [], excludedPaths = [] } = {}) {
+    this.sampleTree = null
+    let writeResult = await fileUtils.writeTextFile(this.indexFilePath, '')
+    if (writeResult !== true) return false
     this.sampleTree = new SequoiaPath(this.samplePath, {
       includedExtensions,
       excludedExtensions,
@@ -36,13 +38,17 @@ class SamplesIndex {
     })
     await this.sampleTree.read()
     if (this.sampleTree.fileCount() === 1) return false
-    await fileUtils.writeJsonFile(this.indexFilePath, this.sampleTree.toJson())
+    writeResult = await fileUtils.writeJsonFile(this.indexFilePath, this.sampleTree.toJson())
+    return writeResult
   }
 
-  async loadIndex () {
-    if (!fileUtils.fileExistsSync(this.indexFilePath)) return false
-    this.sampleTree = new SequoiaPath(this.samplePath)
+  async load () {
+    this.sampleTree = null
+    const fExists = await fileUtils.fileExists(this.indexFilePath)
+    if (fExists !== true) return false
     const jsonSampleTree = await fileUtils.readJsonFile(this.indexFilePath)
+    if (!jsonSampleTree) return false
+    this.sampleTree = new SequoiaPath(this.samplePath)
     this.sampleTree.fromJson(jsonSampleTree)
     return true
   }
@@ -56,10 +62,14 @@ class SamplesIndex {
     })
   }
 
-  size () {
+  get size () {
     if (!this.sampleTree) {
       throw new SamplesIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
-    return this.sampleTree.nodeCount()
+    return this.sampleTree.fileCount()
   }
+}
+
+module.exports = {
+  SamplesIndex
 }

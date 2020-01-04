@@ -34,6 +34,6 @@ describe('Utils.File.singleton', function () {
   })
 
   it('should check, create and remove a file', async function () {
-    const { exists } = await fileUtils.fileExists(__dirname + '/file_utils_test_dir')
+    const exists = await fileUtils.fileExists(__dirname + '/file_utils_test_dir')
   })
 })

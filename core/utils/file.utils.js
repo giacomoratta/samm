@@ -108,12 +108,10 @@ libUtils.directoryExistsSync = (pathString) => {
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (pathString) => {
-  return new Promise(function (resolve) {
-    fs.access(pathString, fs.constants.F_OK, (err) => {
-      resolve({
-        exists: !err,
-        error: err
-      })
+  return new Promise((resolve, reject) => {
+    fs.access(pathString, fs.constants.F_OK, (error) => {
+      if (!error) return resolve(true)
+      return resolve(false)
     })
   })
 }
@@ -138,11 +136,11 @@ libUtils.readFileSync = (pathString, encoding, flag) => {
     if (!encoding) encoding = 'utf8'
     if (!flag) flag = 'r'
     if (encoding === 'iso88591') {
-      const fcont = fs.readFileSync(pathString, {
+      const fileContent = fs.readFileSync(pathString, {
         encoding: 'binary',
         flag: flag
       }).toString()
-      return iconv.decode(stringToBuffer(fcont), 'iso88591')
+      return iconv.decode(stringToBuffer(fileContent), 'iso88591')
     } else {
       return fs.readFileSync(pathString, {
         encoding: encoding,
@@ -223,29 +221,95 @@ libUtils.writeJsonFileSync = (pathString, jsonObj, space) => {
 
 /* FILE R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-libUtils.writeTextFile = (pathTo, text) => {
-  return new Promise(function (resolve, reject) {
-    const result = {
-      err: null,
-      pathTo: pathTo
-    }
-    fs.writeFile(pathTo, text, 'utf8', function (err) {
-      if (err) {
-        result.err = err
-        return reject(result)
+libUtils.readFile = (pathString, encoding, flag) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!encoding) encoding = 'utf8'
+      if (!flag) flag = 'r'
+      if (encoding === 'iso88591') {
+        fs.readFile(pathString, {
+          encoding: 'binary',
+          flag: flag
+        }, (error, fileContent) => {
+          if (error) return reject(error)
+          return resolve(iconv.decode(stringToBuffer(fileContent), 'iso88591'))
+        })
+      } else {
+        fs.readFile(pathString, {
+          encoding: encoding,
+          flag: flag
+        }, (error, fileContent) => {
+          if (error) return reject(error)
+          return resolve(fileContent)
+        })
       }
-      return resolve(result)
-    })
+    } catch (e) {
+      return reject(e)
+    }
+  })
+}
+
+libUtils.readJsonFile = (pathString) => {
+  return libUtils.readFile(pathString, 'iso88591').then((fileContent) => {
+    if (!_.isString(fileContent)) return false
+    try {
+      const jsonObj = JSON.parse(fileContent)
+      if (!_.isObject(jsonObj)) return null
+      return jsonObj
+    } catch (e) {
+      // console.error(e)
+      return null
+    }
+  })
+}
+
+libUtils.readTextFile = (pathString) => {
+  return libUtils.readFile(pathString, 'iso88591').then((fileContent) => {
+    if (fileContent === false || _.isNil(fileContent)) return false
+    return _.trim(fileContent)
+  })
+}
+
+libUtils.writeFile = (pathString, fileContent, encoding, flag, mode) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!encoding) encoding = 'utf8'
+      if (!flag) flag = 'w'
+      if (!mode) mode = 0o666
+      if (encoding === 'iso88591') {
+        if (_.isNil(fileContent)) fileContent = ''
+        fileContent = iconv.decode(stringToBuffer(fileContent), 'iso88591')
+        fs.writeFile(pathString, fileContent, {
+          encoding: 'binary',
+          flag: flag,
+          mode: mode
+        }, (error) => {
+          if (error) return reject(error)
+          return resolve(true)
+        })
+      } else {
+        fs.writeFile(pathString, fileContent, {
+          encoding: encoding,
+          flag: flag,
+          mode: mode
+        }, (error) => {
+          if (error) return reject(error)
+          return resolve(true)
+        })
+      }
+      return true
+    } catch (e) {
+      // console.error(e)
+      reject(e)
+    }
   })
 }
 
 libUtils.writeJsonFile = (pathTo, jsonObj, space) => {
   const negativePromise = new Promise(function (resolve, reject) { resolve(false) })
   if (!_.isObject(jsonObj)) return negativePromise
-
   if (space === false) space = null
   else space = '\t'
-
   let fileContent = ''
   try {
     fileContent = JSON.stringify(jsonObj, null, space)
@@ -254,6 +318,10 @@ libUtils.writeJsonFile = (pathTo, jsonObj, space) => {
     return negativePromise
   }
   return libUtils.writeTextFile(pathTo, fileContent)
+}
+
+libUtils.writeTextFile = (pathTo, text) => {
+  return libUtils.writeFile(pathTo, text, 'iso88591')
 }
 
 /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
