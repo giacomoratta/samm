@@ -19,9 +19,6 @@ const mainSampleSet = new SampleSet(mainSamplesIndex)
  * reIndex
  *    remove file, new sequoiaTree and save
  *
- * processQueryString
- *    check query string, recompose cleaned and return { null|string, err|processed }
- *
  * lookupByQuery(query = { string:'', processed:{} }, max=[-1,100])
  *    return a (sub) sampleSet
  *
@@ -31,6 +28,11 @@ const mainSampleSet = new SampleSet(mainSamplesIndex)
  * save(samplesSet, dirAbsPath)
  *
  */
+
+const lookupByPathQuery = (queryString) => {
+
+}
+
 module.exports = {
 
 }

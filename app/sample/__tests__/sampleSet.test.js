@@ -41,41 +41,60 @@ describe('SampleSet functions', function () {
     /* Test sampleSet from here... */
 
     expect(set1.size).toEqual(5)
-    // expect(set1.).toEqual(5)
 
-    const x1 = set1.toArray()
-    x1.forEach((item) => {
-      // console.log(`${item.name}\n${item.dir}\n`)
-    })
-
-    console.log('- - - - - - - - - -')
-
-    let i = 100
-    let x2
-    while (i > 0) {
-      x2 = (set1.random({
+    let randomArray1
+    let testCounter1 = 20
+    while(testCounter1 > 0) {
+      randomArray1 = (set1.random({
         max: 2,
         maxFromSameDirectory: 1
       }))
-
-      if (x2.length < 2) {
-        console.log('less than 2!')
-        x2.forEach((item) => {
-          console.log(`${item.name}\n${item.dir}\n`)
-        })
-      } else if (x2[0].dir === x2[1].dir) {
-        console.log('same dir!', x2)
-      }
-
-      i--
+      expect(randomArray1.length).toEqual(2)
+      expect(randomArray1[0].dir).not.toEqual(randomArray1[1].dir)
+      testCounter1--
     }
 
-    /*
-     * create pathBasedQuery
-     * new sampleSet
-     *    set validateFn
-     * sampleIndex
-     *    foreach sampleSet.add ( validate... )
-     */
+    /* Create criteria for validate function (2) */
+    const pathBQ2 = PathQuery.create('fil')
+    expect(pathBQ2).not.toEqual(null)
+
+    /* Create a new SampleSet */
+    const set2 = new SamplesSet({
+      validate: function (sample) {
+        return sample.isFile === true && pathBQ2.check(sample.relPath)
+      }
+    })
+
+    /* Fill sample set */
+    sIndex1.forEach(({ item }) => {
+      set2.add(item)
+    })
+
+    /* Test sampleSet from here... */
+
+    expect(set2.size).toEqual(13)
+    set2.toArray()
+
+    let randomArray2
+    let testCounter2 = 20
+    while(testCounter2 > 0) {
+      randomArray2 = (set2.random({
+        max: 50,
+        maxFromSameDirectory: 2
+      }))
+      expect(randomArray2.length).toEqual(10)
+      testCounter2--
+    }
+
+    testCounter2 = 20
+    while(testCounter2 > 0) {
+      randomArray2 = (set2.random({
+        max: 3,
+        maxFromSameDirectory: 1
+      }))
+      expect(randomArray2.length).toEqual(3)
+      testCounter2--
+    }
+
   })
 })

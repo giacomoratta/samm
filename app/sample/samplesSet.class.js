@@ -52,16 +52,29 @@ class SamplesSet {
   }
 
   random ({ max = 10, maxFromSameDirectory = 0 }) {
-    const randomSet = []
+    const randomArray = []
     const collection = this.toArray()
     const collectionSize = collection.length
+    max = Math.min(max, collectionSize)
 
     const addedIndexes = []
     const addedDirectories = {}
 
-    for (let randomIndex, retry = 10, i = 0; randomSet.length < max; i++) {
-      randomIndex = ((_.random(0, collectionSize)) % collectionSize)
+    for (let randomIndex, retry = 10, i = 0; randomArray.length < max; i++) {
+
+      if (i === collectionSize) {
+        if (randomArray.length < max && retry > 0) {
+          i = -1
+          retry--
+          continue
+        } else {
+          break
+        }
+      }
+
+      randomIndex = (_.random(0, collectionSize) % collectionSize)
       if (addedIndexes.indexOf(randomIndex) >= 0) continue
+      addedIndexes.push(randomIndex)
 
       if (maxFromSameDirectory > 0) {
         if (!addedDirectories[collection[randomIndex].dir]) addedDirectories[collection[randomIndex].dir] = 0
@@ -69,17 +82,10 @@ class SamplesSet {
         addedDirectories[collection[randomIndex].dir]++
       }
 
-      addedIndexes.push(randomIndex)
-      randomSet.push(collection[randomIndex])
-
-      if (i === collectionSize - 1 && randomSet.length < max && retry > 0) {
-        i = 0
-        retry--
-      }
-      if (i === collectionSize - 1) break
+      randomArray.push(collection[randomIndex])
     }
 
-    return randomSet
+    return randomArray
   }
 }
 
