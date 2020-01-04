@@ -66,6 +66,10 @@ class PathBasedQuery {
     }
   }
 
+  isValid() {
+    return this._label !== null
+  }
+
   static queryStringLabel (queryString) {
     return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
   }

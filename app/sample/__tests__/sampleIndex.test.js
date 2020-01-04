@@ -104,5 +104,7 @@ describe('SampleIndex functions', function () {
     expect(result).toEqual(true)
     expect(function () { sIndex3.forEach(() => {}) }).not.toThrow()
     expect(sIndex3.size).toEqual(5)
+
+    fileUtils.writeTextFileSync(SampleIndexFile, '')
   })
 })

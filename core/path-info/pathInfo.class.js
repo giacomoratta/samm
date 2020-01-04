@@ -53,18 +53,18 @@ class PathInfo {
 
   isEqualTo (obj2) {
     return (
-      (this.info.path === obj2.info.path) &&
-            (this.info.root === obj2.info.root) &&
-            (this.info.dir === obj2.info.dir) &&
-            (this.info.base === obj2.info.base) &&
-            (this.info.ext === obj2.info.ext) &&
-            (this.info.name === obj2.info.name) &&
-            (this.info.level === obj2.info.level) &&
-            (this.info.relRoot === obj2.info.relRoot) &&
-            (this.info.relPath === obj2.info.relPath) &&
-            (this.info.size === obj2.info.size) &&
-            (this.info.isFile === obj2.info.isFile) &&
-            (this.info.isDirectory === obj2.info.isDirectory)
+      this.info.path === obj2.info.path
+      // && this.info.root === obj2.info.root
+      // && this.info.dir === obj2.info.dir
+      // && this.info.base === obj2.info.base
+      // && this.info.ext === obj2.info.ext
+      // && this.info.name === obj2.info.name
+      // && this.info.level === obj2.info.level
+      // && this.info.relRoot === obj2.info.relRoot
+      // && this.info.relPath === obj2.info.relPath
+      // && this.info.size === obj2.info.size
+      // && this.info.isFile === obj2.info.isFile
+      // && this.info.isDirectory === obj2.info.isDirectory
     )
   }
 

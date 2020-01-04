@@ -32,6 +32,8 @@ describe('query endpoints', function () {
       ]
     })
 
+    expect(PathQuery.create(',+ +,+, ')).toEqual(null)
+
     PathQuery.create('file1,file3')
     PathQuery.create('file1,file3')
     PathQuery.create('file1,file3')
