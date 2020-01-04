@@ -66,7 +66,7 @@ class PathBasedQuery {
     }
   }
 
-  isValid() {
+  isValid () {
     return this._label !== null
   }
 

@@ -10,9 +10,8 @@ const { SamplesSet } = require('../samplesSet.class')
 
 describe('SampleSet functions', function () {
   it('should create a sample set', async function () {
-
     let result
-    const SampleIndexFile = path.join(__dirname,'fixed_samples_index')
+    const SampleIndexFile = path.join(__dirname, 'fixed_samples_index')
     const SamplesDirectory = Config.get('SamplesDirectory')
 
     const sIndex1 = new SamplesIndex({
@@ -29,37 +28,47 @@ describe('SampleSet functions', function () {
 
     /* Create a new SampleSet */
     const set1 = new SamplesSet({
-      validate: function(sample) {
+      validate: function (sample) {
         return sample.isFile === true && pathBQ1.check(sample.relPath)
       }
     })
 
     /* Fill sample set */
-    sIndex1.forEach(({item}) => {
+    sIndex1.forEach(({ item }) => {
       set1.add(item)
     })
 
     /* Test sampleSet from here... */
 
     expect(set1.size).toEqual(5)
-    //expect(set1.).toEqual(5)
+    // expect(set1.).toEqual(5)
 
     const x1 = set1.toArray()
     x1.forEach((item) => {
-      //console.log(`${item.name}\n${item.dir}\n`)
+      // console.log(`${item.name}\n${item.dir}\n`)
     })
 
     console.log('- - - - - - - - - -')
 
-    const x2 = (set1.random({
-      max:2,
-      maxFromSameDirectory:1
-    }))
+    let i = 100
+    let x2
+    while (i > 0) {
+      x2 = (set1.random({
+        max: 2,
+        maxFromSameDirectory: 1
+      }))
 
+      if (x2.length < 2) {
+        console.log('less than 2!')
+        x2.forEach((item) => {
+          console.log(`${item.name}\n${item.dir}\n`)
+        })
+      } else if (x2[0].dir === x2[1].dir) {
+        console.log('same dir!', x2)
+      }
 
-    x2.forEach((item) => {
-      console.log(`${item.name}\n${item.dir}\n`)
-    })
+      i--
+    }
 
     /*
      * create pathBasedQuery
@@ -68,6 +77,5 @@ describe('SampleSet functions', function () {
      * sampleIndex
      *    foreach sampleSet.add ( validate... )
      */
-
   })
 })

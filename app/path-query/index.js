@@ -37,7 +37,7 @@ const create = (queryString) => {
     return PathBasedQueryCache.get(queryStringLabel)
   }
   const newPathBasedQuery = new PathBasedQuery(queryString)
-  if(!newPathBasedQuery.isValid()) return null
+  if (!newPathBasedQuery.isValid()) return null
   PathBasedQueryCache.add(queryStringLabel, newPathBasedQuery)
   return newPathBasedQuery
 }

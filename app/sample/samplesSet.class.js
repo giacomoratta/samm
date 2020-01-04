@@ -12,8 +12,8 @@ class SamplesSet {
   }
 
   add (sample) {
-    if(this.validate && this.validate(sample) === false) return false
-    if(!this.table[sample.name]) this.table[sample.name]=[]
+    if (this.validate && this.validate(sample) === false) return false
+    if (!this.table[sample.name]) this.table[sample.name] = []
     this.table[sample.name].push(sample)
     this._size++
     return true
@@ -21,10 +21,10 @@ class SamplesSet {
 
   remove (sample) {
     let removedSamples = 0
-    if(!this.table[sample.name]) return removedSamples
-    for(let i=this.table[sample.name].length-1; i>=0; i--) {
-      if(!this.table[sample.name][i].isEqualTo(sample)) continue
-      this.table[sample.name].splice(i,1)
+    if (!this.table[sample.name]) return removedSamples
+    for (let i = this.table[sample.name].length - 1; i >= 0; i--) {
+      if (!this.table[sample.name][i].isEqualTo(sample)) continue
+      this.table[sample.name].splice(i, 1)
       removedSamples++
     }
     this._size -= removedSamples
@@ -51,7 +51,7 @@ class SamplesSet {
     })
   }
 
-  random ({ max=10, maxFromSameDirectory=0 }) {
+  random ({ max = 10, maxFromSameDirectory = 0 }) {
     const randomSet = []
     const collection = this.toArray()
     const collectionSize = collection.length
@@ -59,18 +59,24 @@ class SamplesSet {
     const addedIndexes = []
     const addedDirectories = {}
 
-    for(let randomIndex, i=0; randomSet.length<max && i<collectionSize; i++) {
+    for (let randomIndex, retry = 10, i = 0; randomSet.length < max; i++) {
       randomIndex = ((_.random(0, collectionSize)) % collectionSize)
-      if(addedIndexes.indexOf(randomIndex) >= 0) continue
+      if (addedIndexes.indexOf(randomIndex) >= 0) continue
 
-      if(maxFromSameDirectory>0) {
-        if(!addedDirectories[collection[randomIndex].dir]) addedDirectories[collection[randomIndex].dir]=0
-        if(addedDirectories[collection[randomIndex].dir] === maxFromSameDirectory) continue
+      if (maxFromSameDirectory > 0) {
+        if (!addedDirectories[collection[randomIndex].dir]) addedDirectories[collection[randomIndex].dir] = 0
+        if (addedDirectories[collection[randomIndex].dir] === maxFromSameDirectory) continue
         addedDirectories[collection[randomIndex].dir]++
       }
 
       addedIndexes.push(randomIndex)
       randomSet.push(collection[randomIndex])
+
+      if (i === collectionSize - 1 && randomSet.length < max && retry > 0) {
+        i = 0
+        retry--
+      }
+      if (i === collectionSize - 1) break
     }
 
     return randomSet
