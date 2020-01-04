@@ -3,7 +3,7 @@ process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '_
 const fileUtils = require('./../../../core/utils/file.utils')
 
 const { Config } = require('../../config')
-const { SamplesIndex } = require('../samplesIndex.class')
+const { SampleIndex } = require('../sampleIndex.class')
 
 Config.set('SamplesDirectory', path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir'))
 
@@ -15,13 +15,13 @@ describe('SampleIndex functions', function () {
     fileUtils.removeFileSync(SampleIndexFile)
 
     expect(function () {
-      const sIndex1 = new SamplesIndex({
+      const sIndex1 = new SampleIndex({
         indexFilePath: SampleIndexFile,
         samplesPath: SamplesDirectory + 'wrong'
       })
     }).toThrow()
 
-    const sIndex1 = new SamplesIndex({
+    const sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile + 'wrong',
       samplesPath: SamplesDirectory
     })
@@ -30,7 +30,7 @@ describe('SampleIndex functions', function () {
     expect(function () { sIndex1.forEach(() => {}) }).toThrow()
     expect(function () { sIndex1.size }).toThrow()
 
-    const sIndex2 = new SamplesIndex({
+    const sIndex2 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
@@ -50,7 +50,7 @@ describe('SampleIndex functions', function () {
     expect(function () { sIndex2.forEach(() => {}) }).not.toThrow()
     expect(sIndex2.size).toEqual(13)
 
-    const sIndex3 = new SamplesIndex({
+    const sIndex3 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })

@@ -1,26 +1,24 @@
-const path = require('path')
-const { JsonizedFile } = require('../../core/jsonized-file')
 const { SequoiaPath } = require('../../core/sequoia-path')
 const fileUtils = require('../../core/utils/file.utils')
 
-class SamplesIndexError extends Error {
+class SampleIndexError extends Error {
   constructor (message) {
     super()
-    this.name = 'SamplesIndexError'
+    this.name = 'SampleIndexError'
     this.message = message
   }
 }
 
-class SamplesIndex {
+class SampleIndex {
   constructor ({ indexFilePath, samplesPath }) {
     if (!fileUtils.isAbsolutePath(indexFilePath)) {
-      throw new SamplesIndexError(`indexFilePath must be an absolute path: ${indexFilePath}`)
+      throw new SampleIndexError(`indexFilePath must be an absolute path: ${indexFilePath}`)
     }
     if (!fileUtils.isAbsolutePath(samplesPath)) {
-      throw new SamplesIndexError(`samplesPath must be an absolute path: ${samplesPath}`)
+      throw new SampleIndexError(`samplesPath must be an absolute path: ${samplesPath}`)
     }
     if (!fileUtils.directoryExistsSync(samplesPath)) {
-      throw new SamplesIndexError(`samplesPath does not exist: ${samplesPath}`)
+      throw new SampleIndexError(`samplesPath does not exist: ${samplesPath}`)
     }
     this.indexFilePath = indexFilePath
     this.samplePath = samplesPath
@@ -55,7 +53,7 @@ class SamplesIndex {
 
   forEach (fn) {
     if (!this.sampleTree) {
-      throw new SamplesIndexError('Sample index is still not initialized; run \'createIndex\' method first')
+      throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
     this.sampleTree.forEach({
       itemFn: fn
@@ -64,12 +62,12 @@ class SamplesIndex {
 
   get size () {
     if (!this.sampleTree) {
-      throw new SamplesIndexError('Sample index is still not initialized; run \'createIndex\' method first')
+      throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
     return this.sampleTree.fileCount()
   }
 }
 
 module.exports = {
-  SamplesIndex
+  SampleIndex
 }

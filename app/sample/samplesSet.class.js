@@ -61,7 +61,6 @@ class SamplesSet {
     const addedDirectories = {}
 
     for (let randomIndex, retry = 10, i = 0; randomArray.length < max; i++) {
-
       if (i === collectionSize) {
         if (randomArray.length < max && retry > 0) {
           i = -1

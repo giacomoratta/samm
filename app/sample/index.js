@@ -5,33 +5,56 @@ const SampleLookups = new Map() // todo: buckedCache circular
 const LatestLookup = null
 
 // set logger
-const mainSamplesIndex = new SampleIndex()
 
-// set logger
-const mainSampleSet = new SampleSet(mainSamplesIndex)
+let mainSamplesIndex = null
+
+const loadIndex = async () => {
+  if (!Config.get('SamplesDirectory')) return false
+  mainSamplesIndex = new SampleIndex({
+    indexFilePath: Config.get('SampleIndexFile'),
+    samplesPath: Config.get('SamplesDirectory')
+  })
+  return await mainSamplesIndex.load()
+}
+
+const createIndex = async () => {
+  if (!Config.get('SamplesDirectory')) return false
+  mainSamplesIndex = new SampleIndex({
+    indexFilePath: Config.get('SampleIndexFile'),
+    samplesPath: Config.get('SamplesDirectory')
+  })
+  const options = {
+    excludedPaths: Config.get('SamplesDirectoryExclusions')
+  }
+  if (Config.get('ExtensionsPolicyForSamples') === 'E') {
+    options.excludedExtensions = Config.get('ExcludedExtensionsForSamples')
+  } else if (Config.get('ExtensionsPolicyForSamples') === 'I') {
+    options.includedExtensions = Config.get('IncludedExtensionsForSamples')
+  }
+  return await mainSamplesIndex.create(options)
+}
+
+const hasIndex = () => {
+  return mainSamplesIndex !== null
+}
+
+const indexSize = () => {
+  if (mainSamplesIndex !== null) {
+    return mainSamplesIndex.size
+  }
+}
 
 /* samples endpoints */
-
-/*
- * hasIndex
- *    try to open (json.parse -> error or not)
- *
- * reIndex
- *    remove file, new sequoiaTree and save
- *
- * lookupByQuery(query = { string:'', processed:{} }, max=[-1,100])
- *    return a (sub) sampleSet
- *
- * coverageByQuery(queryString)
- * uncoveredSamples
- *
- * save(samplesSet, dirAbsPath)
- *
- */
 
 const lookupByPathQuery = (queryString) => {
 
 }
+
+loadIndex().then((loadResult) => {
+  if (loadResult !== true) {
+    Config.getField('Status').add('first-scan-needed', true)
+  }
+})
 
 module.exports = {
 

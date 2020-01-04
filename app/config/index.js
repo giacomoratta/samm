@@ -80,9 +80,9 @@ Config.addField({
   name: 'SamplesDirectory',
   schema: {
     type: 'absDirPath',
-    checkExists: true
+    checkExists: true,
+    default: basePath
   },
-  value: basePath,
   description: 'Directory with samples to scan and search in'
 })
 
@@ -92,7 +92,7 @@ Config.addField({
     type: 'array',
     items: {
       type: 'relDirPath',
-      basePath: Config.get('SamplesDirectory')
+      basePath: Config.get('SamplesDirectory') || basePath
     },
     default: [
       'samplePack1',
@@ -164,8 +164,8 @@ Config.addField({
     }
   },
   value: {
-    'first-scan-needed': true,
-    'new-scan-needed': true
+    'first-scan-needed': false,
+    'new-scan-needed': false
   },
   description: 'Application status data, flags, etc.'
 })

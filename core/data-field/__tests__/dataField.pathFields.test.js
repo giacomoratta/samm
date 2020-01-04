@@ -5,6 +5,27 @@ const { DataField } = require('../index')
 // todo
 
 describe('dataField class and object', function () {
+  it('should change basePath for relDirPath field6', function () {
+    const newDataField = function (args) {
+      return new DataField(args)
+    }
+
+    const x1_props = {
+      name: 'fieldname1',
+      schema: {
+        type: 'absDirPath',
+        checkExists: true,
+        createIfNotExists: false,
+        deleteIfExists: false,
+        default: '/abc/file_utils_test_dirx'
+      }
+    }
+
+    const x1 = newDataField(x1_props)
+
+    expect(x1.get()).toEqual(null)
+  })
+
   it('should change basePath for relDirPath field5', function () {
     const newDataField = function (args) {
       return new DataField(args)

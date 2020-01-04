@@ -5,16 +5,16 @@ const fileUtils = require('./../../../core/utils/file.utils')
 const { Config } = require('../../config')
 const { PathQuery } = require('../../path-query')
 
-const { SamplesIndex } = require('../samplesIndex.class')
+const { SampleIndex } = require('../sampleIndex.class')
 const { SamplesSet } = require('../samplesSet.class')
 
 describe('SampleSet functions', function () {
   it('should create a sample set', async function () {
     let result
     const SampleIndexFile = path.join(__dirname, 'fixed_samples_index')
-    const SamplesDirectory = Config.get('SamplesDirectory')
+    const SamplesDirectory = Config.get('SamplesDirectory') || path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
 
-    const sIndex1 = new SamplesIndex({
+    const sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
@@ -44,7 +44,7 @@ describe('SampleSet functions', function () {
 
     let randomArray1
     let testCounter1 = 20
-    while(testCounter1 > 0) {
+    while (testCounter1 > 0) {
       randomArray1 = (set1.random({
         max: 2,
         maxFromSameDirectory: 1
@@ -77,7 +77,7 @@ describe('SampleSet functions', function () {
 
     let randomArray2
     let testCounter2 = 20
-    while(testCounter2 > 0) {
+    while (testCounter2 > 0) {
       randomArray2 = (set2.random({
         max: 50,
         maxFromSameDirectory: 2
@@ -87,7 +87,7 @@ describe('SampleSet functions', function () {
     }
 
     testCounter2 = 20
-    while(testCounter2 > 0) {
+    while (testCounter2 > 0) {
       randomArray2 = (set2.random({
         max: 3,
         maxFromSameDirectory: 1
@@ -95,6 +95,5 @@ describe('SampleSet functions', function () {
       expect(randomArray2.length).toEqual(3)
       testCounter2--
     }
-
   })
 })
