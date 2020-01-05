@@ -49,6 +49,7 @@ module.exports = {
     get,
     list,
     save,
-    create
+    create,
+    queryStringLabel: PathBasedQuery.queryStringLabel
   }
 }

@@ -6,7 +6,7 @@ const { Config } = require('../../config')
 const { PathQuery } = require('../../path-query')
 
 const { SampleIndex } = require('../sampleIndex.class')
-const { SamplesSet } = require('../samplesSet.class')
+const { SampleSet } = require('../sampleSet.class')
 
 describe('SampleSet functions', function () {
   it('should create a sample set', async function () {
@@ -27,7 +27,7 @@ describe('SampleSet functions', function () {
     expect(pathBQ1).not.toEqual(null)
 
     /* Create a new SampleSet */
-    const set1 = new SamplesSet({
+    const set1 = new SampleSet({
       validate: function (sample) {
         return sample.isFile === true && pathBQ1.check(sample.relPath)
       }
@@ -59,7 +59,7 @@ describe('SampleSet functions', function () {
     expect(pathBQ2).not.toEqual(null)
 
     /* Create a new SampleSet */
-    const set2 = new SamplesSet({
+    const set2 = new SampleSet({
       validate: function (sample) {
         return sample.isFile === true && pathBQ2.check(sample.relPath)
       }

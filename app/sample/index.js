@@ -1,8 +1,10 @@
-const { Config } = require('../config/configFile.class')
+const { Config } = require('../config')
+const { PathQuery } = require('../path-query')
 const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
-const SampleLookups = new Map() // todo: buckedCache circular
-const LatestLookup = null
+const { SpheroidCache } = require('../../core/spheroid-cache')
+
+const SampleSetCache = new SpheroidCache({ maxItems: 30 })
 
 // set logger
 
@@ -39,15 +41,48 @@ const hasIndex = () => {
 }
 
 const indexSize = () => {
-  if (mainSamplesIndex !== null) {
-    return mainSamplesIndex.size
-  }
+  if (mainSamplesIndex === null) return 0
+  return mainSamplesIndex.size
 }
 
-/* samples endpoints */
+const sampleSetByPathQuery = ({ queryString, queryLabel }) => {
+  if (mainSamplesIndex === null) return
+  let pathBQ1
 
-const lookupByPathQuery = (queryString) => {
+  if (queryLabel) {
+    pathBQ1 = PathQuery.get(queryLabel)
+    if (!pathBQ1) return
+    if (SampleSetCache.has(pathBQ1.label)) return SampleSetCache.get(pathBQ1.label)
+  } else if (queryString) {
+    const tempLabel = PathQuery.queryStringLabel(queryString)
+    if (SampleSetCache.has(tempLabel)) return SampleSetCache.get(tempLabel)
+    pathBQ1 = PathQuery.create(queryString)
+  }
 
+  if (!pathBQ1 || !pathBQ1.isValid()) return
+
+  const sampleSet1 = new SampleSet({
+    validate: function (sample) {
+      return sample.isFile === true && pathBQ1.check(sample.relPath)
+    }
+  })
+
+  mainSamplesIndex.forEach(({ item }) => {
+    sampleSet1.add(item)
+  })
+
+  if (sampleSet1.size === 0) return
+  SampleSetCache.add(pathBQ1.label, sampleSet1)
+  return sampleSet1
+}
+
+const lookupByPathQuery = ({ queryString, queryLabel }) => {
+  const sampleSet1 = sampleSetByPathQuery({ queryString, queryLabel })
+  if (!sampleSet1) return []
+  return sampleSet1.random({
+    max: Config.get('RandomCount'),
+    maxFromSameDirectory: Config.get('MaxSamplesSameDirectory')
+  })
 }
 
 loadIndex().then((loadResult) => {
@@ -57,5 +92,12 @@ loadIndex().then((loadResult) => {
 })
 
 module.exports = {
-
+  Sample: {
+    hasIndex,
+    indexSize,
+    createIndex,
+    loadIndex,
+    sampleSetByPathQuery,
+    lookupByPathQuery
+  }
 }

@@ -4,7 +4,7 @@ const { JsonizedFile } = require('../../core/jsonized-file')
 const { SequoiaPath } = require('../../core/sequoia-path')
 const fileUtils = require('../../core/utils/file.utils')
 
-class SamplesSet {
+class SampleSet {
   constructor ({ validate } = {}) {
     this.validate = validate
     this.table = { }
@@ -89,5 +89,5 @@ class SamplesSet {
 }
 
 module.exports = {
-  SamplesSet
+  SampleSet
 }

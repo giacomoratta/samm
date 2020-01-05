@@ -2,52 +2,93 @@ const fileUtils = require('../../utils/file.utils')
 const path = require('path')
 const { DataField } = require('../index')
 
-// todo
+const newDataField = function (args) {
+  return new DataField(args)
+}
 
-describe('dataField class and object', function () {
-  it('should change basePath for relDirPath field6', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
-    const x1_props = {
-      name: 'fieldname1',
+describe('dataField path fields', function () {
+  it('should support a path as default value', function () {
+    const field1Attr = {
+      name: 'fieldName1',
       schema: {
         type: 'absDirPath',
         checkExists: true,
         createIfNotExists: false,
         deleteIfExists: false,
-        default: '/abc/file_utils_test_dirx'
+        default: '/abc/file_utils_test_dir'
       }
     }
+    const field1 = newDataField(field1Attr)
+    expect(field1.get()).toEqual(null)
+    field1.set(path.join(__dirname, 'file_utils_test_dir'))
+    expect(field1.get()).toEqual(path.join(__dirname, 'file_utils_test_dir'))
 
-    const x1 = newDataField(x1_props)
+    const field2Attr = {
+      name: 'fieldName2',
+      schema: {
+        type: 'absFilePath',
+        checkExists: true,
+        createIfNotExists: false,
+        deleteIfExists: false,
+        default: '/abc/file_utils_test_file'
+      }
+    }
+    const field2 = newDataField(field2Attr)
+    expect(field2.get()).toEqual(null)
+    field2.set(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
+    expect(field2.get()).toEqual(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
 
-    expect(x1.get()).toEqual(null)
+    const field3Attr = {
+      name: 'fieldName3',
+      schema: {
+        type: 'relDirPath',
+        checkExists: true,
+        createIfNotExists: false,
+        deleteIfExists: false,
+        basePath: __dirname,
+        default: 'abc/file_utils_test_dir'
+      }
+    }
+    const field3 = newDataField(field3Attr)
+    expect(field3.get()).toEqual(null)
+    field3.set('file_utils_test_dir')
+    expect(field3.get()).toEqual(path.join(__dirname, 'file_utils_test_dir'))
+
+    const field4Attr = {
+      name: 'fieldName4',
+      schema: {
+        type: 'relFilePath',
+        checkExists: true,
+        createIfNotExists: false,
+        deleteIfExists: false,
+        basePath: __dirname,
+        default: 'abc/file_utils_test_file'
+      }
+    }
+    const field4 = newDataField(field4Attr)
+    expect(field4.get()).toEqual(null)
+    field4.set(path.join('file_utils_test_dir', 'file1.json'))
+    expect(field4.get()).toEqual(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
   })
 
-  it('should change basePath for relDirPath field5', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
-    const x1_props = {
-      name: 'fieldname1',
+  it('should change schema.basePath of a relDirPath field', function () {
+    const field1Attr = {
+      name: 'fieldName1',
       schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: false, deleteIfExists: false },
-      value: 'abc/file_utils_test_dirx'
+      value: path.join('abc', 'file_utils_test_dir')
     }
-    const x1_props_ch1 = {
+    const field1AttrChange1 = {
       basePath: path.join(__dirname, 'NEW')
     }
 
-    const x1 = newDataField(x1_props)
-    console.log(x1.get())
+    const field1 = newDataField(field1Attr)
+    expect(field1.get()).toEqual(path.join(__dirname, 'abc', 'file_utils_test_dir'))
 
-    x1.changeSchema(x1_props_ch1)
-    console.log(x1.get())
+    field1.changeSchema(field1AttrChange1)
+    expect(field1.get()).toEqual(path.join(__dirname, 'NEW', 'abc', 'file_utils_test_dir'))
 
-    const x2_props = {
-      name: 'fieldname1',
+    const field2Attr = {
+      name: 'fieldName1',
       schema: {
         type: 'array',
         items: {
@@ -60,26 +101,26 @@ describe('dataField class and object', function () {
         'samplePack2'
       ]
     }
-    const x2_props_ch1 = {
+    const field2AttrChange1 = {
       items: {
         basePath: path.join(__dirname, 'NEW')
       }
     }
 
-    const x2 = newDataField(x2_props)
-    console.log(x2.get())
+    const field2 = newDataField(field2Attr)
+    expect(field2.get()).toMatchObject([
+      path.join(__dirname, 'samplePack1'),
+      path.join(__dirname, 'samplePack2')
+    ])
 
-    x2.changeSchema(x2_props_ch1)
-    console.log(x2.get())
-  })
+    field2.changeSchema(field2AttrChange1)
+    expect(field2.get()).toMatchObject([
+      path.join(__dirname, 'NEW', 'samplePack1'),
+      path.join(__dirname, 'NEW', 'samplePack2')
+    ])
 
-  it('should change basePath for relDirPath field4', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
-    const x2_props = {
-      name: 'fieldname1',
+    const field3Attr = {
+      name: 'fieldName1',
       schema: {
         type: 'object',
         props: {
@@ -105,156 +146,146 @@ describe('dataField class and object', function () {
         ]
       }
     }
-    const x2_props_ch1 = {
-      schema: {
-        items: {
+    const field3AttrChange1 = {
+      props: {
+        path123: {
           basePath: path.join(__dirname, 'NEW')
-        }
-      }
-    }
-
-    const x2 = newDataField(x2_props)
-
-    console.log(x2.get())
-  })
-
-  it('should change basePath for relDirPath field3', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
-    const x2_props = {
-      name: 'fieldname1',
-      schema: {
-        type: 'object',
-        props: {
-          path123: {
-            type: 'relDirPath',
-            basePath: __dirname
-          },
-          path456: {
-            type: 'relDirPath',
-            basePath: __dirname
+        },
+        path456: {
+          items: {
+            basePath: path.join(__dirname, 'NEW')
           }
         }
-      },
-      value: {
-        path123: 'samplePack1',
-        path456: 'samplePack2'
-      }
-    }
-    const x2_props_ch1 = {
-      schema: {
-        items: {
-          basePath: path.join(__dirname, 'NEW')
-        }
       }
     }
 
-    const x2 = newDataField(x2_props)
+    const field3 = newDataField(field3Attr)
+    expect(field3.get()).toMatchObject({
+      path123: path.join(__dirname, 'samplePack1'),
+      path456: [
+        path.join(__dirname, 'samplePack42'),
+        path.join(__dirname, 'samplePack43'),
+        path.join(__dirname, 'samplePack44')
+      ]
+    })
 
-    console.log(x2.get())
+    field3.changeSchema(field3AttrChange1)
+    expect(field3.get()).toMatchObject({
+      path123: path.join(__dirname, 'NEW', 'samplePack1'),
+      path456: [
+        path.join(__dirname, 'NEW', 'samplePack42'),
+        path.join(__dirname, 'NEW', 'samplePack43'),
+        path.join(__dirname, 'NEW', 'samplePack44')
+      ]
+    })
   })
 
-  it('should change basePath for relDirPath field2', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
+  it('should change schema.basePath of a relFilePath field', function () {
+    const field1Attr = {
+      name: 'fieldName1',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: false, deleteIfExists: false },
+      value: path.join('abc', 'file_utils_test_dir', 'file1.json')
+    }
+    const field1AttrChange1 = {
+      basePath: path.join(__dirname, 'NEW')
     }
 
-    const x2_props = {
-      name: 'fieldname1',
+    const field1 = newDataField(field1Attr)
+    expect(field1.get()).toEqual(path.join(__dirname, 'abc', 'file_utils_test_dir', 'file1.json'))
+
+    field1.changeSchema(field1AttrChange1)
+    expect(field1.get()).toEqual(path.join(__dirname, 'NEW', 'abc', 'file_utils_test_dir', 'file1.json'))
+
+    const field2Attr = {
+      name: 'fieldName1',
       schema: {
         type: 'array',
         items: {
-          type: 'relDirPath',
+          type: 'relFilePath',
           basePath: __dirname
         }
       },
       value: [
-        'samplePack1',
-        'samplePack2'
+        path.join('samplePack1', 'file1.json'),
+        path.join('samplePack2', 'file1.json')
       ]
     }
-    const x2_props_ch1 = {
-      schema: {
-        items: {
-          basePath: path.join(__dirname, 'NEW')
-        }
-      }
-    }
-
-    const x2 = newDataField(x2_props)
-
-    console.log(x2.get())
-  })
-
-  it('should change basePath for relDirPath field', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
-    const x1_props = {
-      name: 'fieldname1',
-      schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: false, deleteIfExists: false },
-      value: 'abc/file_utils_test_dirx'
-    }
-    const x1_props_ch1 = {
-      schema: {
+    const field2AttrChange1 = {
+      items: {
         basePath: path.join(__dirname, 'NEW')
       }
     }
 
-    // console.log(x1_props.schema)
-    // console.log({ ...x1_props.schema, ...x1_props_ch1.schema })
+    const field2 = newDataField(field2Attr)
+    expect(field2.get()).toMatchObject([
+      path.join(__dirname, 'samplePack1', 'file1.json'),
+      path.join(__dirname, 'samplePack2', 'file1.json')
+    ])
 
-    // return
-    // let x1 = newDataField(x1_props)
+    field2.changeSchema(field2AttrChange1)
+    expect(field2.get()).toMatchObject([
+      path.join(__dirname, 'NEW', 'samplePack1', 'file1.json'),
+      path.join(__dirname, 'NEW', 'samplePack2', 'file1.json')
+    ])
 
-    // x1.changeSchema({
-    //   basePath: path.join(__dirname,'NEW')
-    // })
-    //
-    // console.log(x1.get())
-
-    const x2_props = {
-      name: 'fieldname1',
+    const field3Attr = {
+      name: 'fieldName1',
       schema: {
-        type: 'array',
-        items: {
-          type: 'relDirPath',
-          basePath: __dirname
-        },
-        default: [
-          'samplePack1',
-          'samplePack2'
+        type: 'object',
+        props: {
+          path123: {
+            type: 'relFilePath',
+            basePath: __dirname
+          },
+          path456: {
+            type: 'array',
+            items: {
+              type: 'relFilePath',
+              basePath: __dirname
+            }
+          }
+        }
+      },
+      value: {
+        path123: path.join('samplePack1', 'file1.json'),
+        path456: [
+          path.join('samplePack42', 'file1.json'),
+          path.join('samplePack43', 'file1.json'),
+          path.join('samplePack44', 'file1.json')
         ]
       }
     }
-    const x2_props_ch1 = {
-      schema: {
-        items: {
+    const field3AttrChange1 = {
+      props: {
+        path123: {
           basePath: path.join(__dirname, 'NEW')
+        },
+        path456: {
+          items: {
+            basePath: path.join(__dirname, 'NEW')
+          }
         }
       }
     }
-    // console.log(x2_props.schema)
-    // console.log({ ...x2_props.schema, ...x2_props_ch1.schema })
 
-    const _ = require('lodash')
-    const m1 = _.cloneDeep(_.merge(x2_props.schema, x2_props_ch1.schema))
-    m1.default = []
-    console.log(m1)
-    console.log(x2_props.schema)
+    const field3 = newDataField(field3Attr)
+    expect(field3.get()).toMatchObject({
+      path123: path.join(__dirname, 'samplePack1', 'file1.json'),
+      path456: [
+        path.join(__dirname, 'samplePack42', 'file1.json'),
+        path.join(__dirname, 'samplePack43', 'file1.json'),
+        path.join(__dirname, 'samplePack44', 'file1.json')
+      ]
+    })
 
-    return
-    const x2 = newDataField(x2_props)
-
-    x2.changeSchema()
-
-    console.log(x2.get())
-  })
-
-  it('should change basePath for relFilePath field', function () {
-
+    field3.changeSchema(field3AttrChange1)
+    expect(field3.get()).toMatchObject({
+      path123: path.join(__dirname, 'NEW', 'samplePack1', 'file1.json'),
+      path456: [
+        path.join(__dirname, 'NEW', 'samplePack42', 'file1.json'),
+        path.join(__dirname, 'NEW', 'samplePack43', 'file1.json'),
+        path.join(__dirname, 'NEW', 'samplePack44', 'file1.json')
+      ]
+    })
   })
 })
