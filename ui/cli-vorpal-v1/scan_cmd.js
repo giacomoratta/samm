@@ -1,7 +1,7 @@
 const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
 
 // const Config = App.Config
-const Samples = App.Samples
+const Sample = App.Sample
 
 const commandName = 'scan'
 

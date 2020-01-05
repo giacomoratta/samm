@@ -1,8 +1,9 @@
 const { Config } = require('./config')
 const { PathQuery } = require('./path-query')
+const { Sample } = require('./sample')
 
-/* App Endpoints */
 module.exports = {
   Config,
-  PathQuery
+  PathQuery,
+  Sample
 }
