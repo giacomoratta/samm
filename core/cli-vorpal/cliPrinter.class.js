@@ -35,9 +35,9 @@ class CliPrinter {
   boxed (message, title='') {
     let centerString = ''
     let topLineLength = 0
-    const lines = message.split(NL)
 
-    if(lines.length > 1) {
+    if(message instanceof Array) {
+      const lines = message
       let finalLine
       lines.forEach((line) => {
         topLineLength = Math.max(topLineLength, line.length)

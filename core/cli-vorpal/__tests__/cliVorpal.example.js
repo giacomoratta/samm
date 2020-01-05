@@ -32,7 +32,7 @@ vCli.addCommandBody('projects', function ({ thisCli, cliNext, cliInput }) {
   console.log(cliInput.options)
   console.log(cliInput.getParam('reqA'))
   console.log(cliInput.getOption('save'))
-  return cliNext(CLI_SUCCESS)
+  return cliNext()
 })
 
 vCli.addCommand('simple')
@@ -48,7 +48,7 @@ vCli.addCommandBody('simple', async function ({ thisCli, cliNext }) {
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.inputValue === 'q') return cliNext(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNext()
   console.log('111', resultExternal)
 
   await thisCli.prompt({
@@ -59,10 +59,10 @@ vCli.addCommandBody('simple', async function ({ thisCli, cliNext }) {
     console.log('result prompt:', result)
     resultExternal = result
   })
-  if (resultExternal.inputValue === 'q') return cliNext(CLI_SUCCESS)
+  if (resultExternal.inputValue === 'q') return cliNext()
   console.log('222', resultExternal)
 
-  return cliNext(CLI_SUCCESS)
+  return cliNext()
 })
 
 function wait1 (label, time) {
@@ -86,7 +86,7 @@ vCli.addCommandBody('wait', async function ({ thisCli, cliNext }) {
   console.log(4, data)
   data = await wait1('label5', 2000)
   console.log(5, data)
-  cliNext(CLI_SUCCESS)
+  cliNext()
 })
 
 vCli.addCommand('wait2')
@@ -109,10 +109,10 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
     cliP1.info('result prompt:', result.inputValue)
     data = result
   })
-  if (data.inputValue === 'q') return cliNext(CLI_SUCCESS)
+  if (data.inputValue === 'q') return cliNext()
   console.log('222', data)
 
-  cliNext(CLI_SUCCESS)
+  cliNext()
 })
 
 vCli.show('abc')

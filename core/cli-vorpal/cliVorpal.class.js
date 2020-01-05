@@ -58,6 +58,7 @@ class CliVorpal {
     this.commands[command].action(function (values, cb) {
       /* this function has to be a normal function not lambda or something else;
        * the keyword 'this' will be cliReference and its needed, for instance, to call prompt method */
+      self.printer.newLine()
 
       cmdFn({
         thisCli: this,

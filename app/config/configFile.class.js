@@ -7,11 +7,11 @@ class ConfigFile extends JsonizedFile {
 
   statusMessages () {
     const statusFlags = this.get('Status')
-    let statusMessages = ''
+    let statusMessages = []
     if (statusFlags['first-scan-needed'] === true) {
-      statusMessages += 'First samples scan needed before start using the app. \n'
+      statusMessages.push('First samples scan needed before start using the app')
     } else if (statusFlags['new-scan-needed'] === true) {
-      statusMessages += 'New samples scan needed to keep using the app. \n'
+      statusMessages.push('New samples scan needed to keep using the app')
     }
     return statusMessages
   }

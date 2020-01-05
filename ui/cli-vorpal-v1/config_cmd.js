@@ -28,14 +28,14 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     /* Invalid parameter */
     if (!Config.hasField(paramName)) {
       cliPrinter.warn(`Config parameter ${paramName} does not exist.`)
-      return cliNext(CLI_SUCCESS)
+      return cliNext()
     }
 
     /* Print single parameter */
     if (!cliInput.getParam('values')) {
       cliPrinter.info(Config.getField(paramName).describe()[0])
       cliPrinter.value(Config.get(paramName), '> current')
-      return cliNext(CLI_SUCCESS)
+      return cliNext()
     }
 
     /* Change parameters and save */
@@ -67,12 +67,12 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     }
 
     Config.save()
-    return cliNext(CLI_SUCCESS)
+    return cliNext()
   }
 
   /* Print all parameters */
   configDescribeParameters({ cliPrinter })
-  return cliNext(CLI_SUCCESS)
+  return cliNext()
 })
 
 const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {

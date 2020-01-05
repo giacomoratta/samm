@@ -5,8 +5,13 @@ const Config = App.Config
 
 const printWarnings = () => {
   const messages = Config.statusMessages()
-  if(messages.length < 1) return
-  Cli.printer.boxed(messages,'WARNING')
+  if(messages.length === 0) return
+  messages.forEach( (line) => {
+    Cli.printer.newLine()
+    Cli.printer.warn(`${line}`)
+  })
+  Cli.printer.newLine()
+  //Cli.printer.boxed(messages,'WARNING')
 }
 
 Cli.on('show',printWarnings)
