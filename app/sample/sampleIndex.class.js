@@ -1,5 +1,5 @@
 const { SequoiaPath } = require('../../core/sequoia-path')
-const fileUtils = require('../../core/utils/file.utils')
+const { fileUtils } = require('../../core/utils/file.utils')
 
 class SampleIndexError extends Error {
   constructor (message) {

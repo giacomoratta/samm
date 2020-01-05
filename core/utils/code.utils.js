@@ -14,4 +14,6 @@ libUtils.createFunction = function () {
   }
 }
 
-module.exports = libUtils
+module.exports = {
+  codeUtils: libUtils
+}

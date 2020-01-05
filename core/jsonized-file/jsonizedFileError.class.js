@@ -6,4 +6,6 @@ class JsonizedFileError extends Error {
   }
 }
 
-module.exports = JsonizedFileError
+module.exports = {
+  JsonizedFileError
+}

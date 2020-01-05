@@ -1,4 +1,4 @@
-const SpheroidCache = require('../spheroidCache.class')
+const { SpheroidCache } = require('../spheroidCache.class')
 const maxCacheItems = 3
 const cache1 = new SpheroidCache({ maxItems: maxCacheItems })
 

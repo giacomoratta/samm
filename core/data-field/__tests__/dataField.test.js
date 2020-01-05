@@ -1,4 +1,4 @@
-const fileUtils = require('../../utils/file.utils')
+const { fileUtils } = require('../../utils/file.utils')
 const path = require('path')
 const { DataField } = require('../index')
 

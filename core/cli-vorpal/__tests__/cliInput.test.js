@@ -1,4 +1,4 @@
-const CliInput = require('../cliInput.class')
+const { CliInput } = require('../cliInput.class')
 
 const newCliInput = function (values, command) {
   return new CliInput({ values, command })

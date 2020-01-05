@@ -68,4 +68,6 @@ _.mixin({
   }
 })
 
-module.exports = _
+module.exports = {
+  _
+}

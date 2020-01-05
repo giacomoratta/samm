@@ -2,7 +2,7 @@ const path = require('path')
 const _ = require('lodash')
 const { JsonizedFile } = require('../../core/jsonized-file')
 const { SequoiaPath } = require('../../core/sequoia-path')
-const fileUtils = require('../../core/utils/file.utils')
+const { fileUtils } = require('../../core/utils/file.utils')
 
 class SampleSet {
   constructor ({ validate } = {}) {

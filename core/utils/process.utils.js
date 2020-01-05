@@ -7,4 +7,6 @@ libUtils.EXIT = (message, data) => {
   process.exit(0)
 }
 
-module.exports = libUtils
+module.exports = {
+  processUtils: libUtils
+}

@@ -77,4 +77,6 @@ class SpheroidCache {
   }
 }
 
-module.exports = SpheroidCache
+module.exports = {
+  SpheroidCache
+}

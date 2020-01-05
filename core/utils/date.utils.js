@@ -49,7 +49,7 @@ const MONTHS_LIST = [
   }
 ]
 
-const _ = require('./lodash.extended')
+const { _ } = require('./lodash.extended')
 const libUtils = {}
 
 libUtils.dateToStrObj = (date) => {
@@ -128,4 +128,6 @@ libUtils.weekIntervalToString = (dt1, dt2, type) => {
   return intStr
 }
 
-module.exports = libUtils
+module.exports = {
+  dateUtils: libUtils
+}

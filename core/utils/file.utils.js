@@ -1,4 +1,4 @@
-const _ = require('./lodash.extended')
+const { _ } = require('./lodash.extended')
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
@@ -483,4 +483,6 @@ libUtils.copyFile = (pathFrom, pathTo, options) => {
   })
 }
 
-module.exports = libUtils
+module.exports = {
+  fileUtils: libUtils
+}

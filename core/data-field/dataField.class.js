@@ -1,6 +1,6 @@
 const Events = require('events')
 const validator = require('./validator')
-const DataFieldError = require('./dataField.error')
+const { DataFieldError } = require('./dataField.error')
 const transform = require('./transform')
 const dataFieldUtils = require('./utils')
 const _ = require('lodash')
@@ -123,4 +123,6 @@ class DataField {
   }
 }
 
-module.exports = DataField
+module.exports = {
+  DataField
+}

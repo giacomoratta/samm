@@ -1,4 +1,4 @@
-const FileButler = require('./fileButler.class')
+const { FileButler } = require('./fileButler.class')
 
 module.exports = {
   FileButler

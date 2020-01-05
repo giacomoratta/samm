@@ -31,4 +31,6 @@ libUtils.isMacOS = () => {
   return os.platform() === 'darwin'
 }
 
-module.exports = libUtils
+module.exports = {
+  systemUtils: libUtils
+}

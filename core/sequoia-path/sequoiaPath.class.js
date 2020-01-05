@@ -276,4 +276,6 @@ class SequoiaPath {
   }
 }
 
-module.exports = SequoiaPath
+module.exports = {
+  SequoiaPath
+}

@@ -1,8 +1,8 @@
-const _ = require('../utils/lodash.extended')
+const { _ } = require('../utils/lodash.extended')
 const { parseOption } = require('./fileButler.utils')
-const FileButlerError = require('./fileButlerError.class')
+const { FileButlerError } = require('./fileButlerError.class')
 const Events = require('events')
-const fileUtils = require('../utils/file.utils')
+const { fileUtils } = require('../utils/file.utils')
 
 const ACCEPTED_EVENTS = ['save', 'load']
 
@@ -66,4 +66,6 @@ class FileButler {
   }
 }
 
-module.exports = FileButler
+module.exports = {
+  FileButler
+}

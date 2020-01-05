@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const codeUtils = require('../../core/utils/code.utils')
+const { codeUtils } = require('../../core/utils/code.utils')
 
 const removeEmptyArrayStringItems = function (array) {
   for (let i = array.length - 1; i >= 0; i--) {

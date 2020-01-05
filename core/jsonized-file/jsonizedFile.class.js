@@ -1,4 +1,4 @@
-const JsonizedFileError = require('./jsonizedFileError.class')
+const { JsonizedFileError } = require('./jsonizedFileError.class')
 const { DataField } = require('../data-field')
 const { FileButler } = require('../file-butler')
 
@@ -96,4 +96,6 @@ class JsonizedFile {
   }
 }
 
-module.exports = JsonizedFile
+module.exports = {
+  JsonizedFile
+}

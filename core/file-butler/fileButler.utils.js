@@ -1,6 +1,6 @@
-const _ = require('../utils/lodash.extended')
-const fileUtils = require('../utils/file.utils')
-const FileButlerError = require('./fileButlerError.class')
+const { _ } = require('../utils/lodash.extended')
+const { fileUtils } = require('../utils/file.utils')
+const { FileButlerError } = require('./fileButlerError.class')
 
 const ENUMS = {
   fileType: {

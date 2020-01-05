@@ -1,4 +1,4 @@
-const _ = require('./lodash.extended')
+const { _ } = require('./lodash.extended')
 const libUtils = {}
 
 const regexp = {
@@ -136,4 +136,6 @@ libUtils.getSitename = (url) => {
   return urlPieces[1]
 }
 
-module.exports = libUtils
+module.exports = {
+  stringUtils: libUtils
+}

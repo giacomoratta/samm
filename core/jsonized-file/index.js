@@ -1,5 +1,5 @@
-const JsonizedFile = require('./jsonizedFile.class')
-const JsonizedFileError = require('./jsonizedFileError.class')
+const { JsonizedFile } = require('./jsonizedFile.class')
+const { JsonizedFileError } = require('./jsonizedFileError.class')
 
 module.exports = {
   JsonizedFile,

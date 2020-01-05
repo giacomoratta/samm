@@ -1,4 +1,4 @@
-const _ = require('./lodash.extended')
+const { _ } = require('./lodash.extended')
 const libUtils = {}
 
 libUtils.sortObjectByValue = (obj) => {
@@ -9,4 +9,6 @@ libUtils.sortObjectByKey = (obj) => {
   return _(obj).toPairs().sortBy(0).fromPairs().value()
 }
 
-module.exports = libUtils
+module.exports = {
+  objectUtils: libUtils
+}

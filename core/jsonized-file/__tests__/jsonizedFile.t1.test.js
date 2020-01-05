@@ -109,7 +109,7 @@ describe('JsonizedFile class and object', function () {
 
   it('should create an basic JsonizedFile with absPath fields', function () {
     const path = require('path')
-    const fileUtils = require('../../utils/file.utils')
+    const { fileUtils } = require('../../utils/file.utils')
 
     expect(function () {
       jszFile1.addField({
@@ -135,7 +135,7 @@ describe('JsonizedFile class and object', function () {
   })
 
   it('should create an basic JsonizedFile with relPath fields', function () {
-    const fileUtils = require('../../utils/file.utils')
+    const { fileUtils } = require('../../utils/file.utils')
 
     expect(function () {
       jszFile1.addField({

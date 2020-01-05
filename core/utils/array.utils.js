@@ -1,4 +1,4 @@
-const _ = require('./lodash.extended')
+const { _ } = require('./lodash.extended')
 const libUtils = {}
 
 libUtils.sortFilesArray = (array) => {
@@ -70,4 +70,6 @@ libUtils.printArrayOrderedList = (array, prefix, processFn) => {
   })
 }
 
-module.exports = libUtils
+module.exports = {
+  arrayUtils: libUtils
+}

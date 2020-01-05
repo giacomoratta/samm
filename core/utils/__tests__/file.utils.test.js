@@ -1,5 +1,5 @@
 const path = require('path')
-const fileUtils = require('../file.utils')
+const { fileUtils } = require('../file.utils')
 
 describe('Utils.File.singleton', function () {
   it('should create standard cross-os absolute paths', function () {

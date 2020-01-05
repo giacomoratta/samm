@@ -1,5 +1,5 @@
 const path = require('path')
-const fileUtils = require('../../utils/file.utils')
+const { fileUtils } = require('../../utils/file.utils')
 
 const { JsonizedFile } = require('../index')
 

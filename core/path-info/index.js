@@ -1,3 +1,3 @@
-const PathInfo = require('./pathInfo.class')
+const { PathInfo } = require('./pathInfo.class')
 
 module.exports = { PathInfo }

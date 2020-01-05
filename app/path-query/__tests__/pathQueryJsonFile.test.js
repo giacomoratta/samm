@@ -4,7 +4,7 @@ process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '_
 const { Config } = require('../../config')
 const { PathQueryJsonFile } = require('../pathQueryJsonFile.class')
 const { PathBasedQuery } = require('../pathBasedQuery.class')
-const fileUtils = require('../../../core/utils/file.utils')
+const { fileUtils } = require('../../../core/utils/file.utils')
 
 describe('query endpoints', function () {
   it('should create and handle a query file', function () {

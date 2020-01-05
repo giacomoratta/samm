@@ -1,6 +1,6 @@
 const { FileButler } = require('../index')
 const path = require('path')
-const fileUtils = require('../../utils/file.utils')
+const { fileUtils } = require('../../utils/file.utils')
 
 describe('FileButler actions with data and files', function () {
   it('should throw some errors because of missing or invalid options', function () {

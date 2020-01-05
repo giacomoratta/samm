@@ -35,4 +35,6 @@ class DataFieldError extends Error {
   }
 }
 
-module.exports = DataFieldError
+module.exports = {
+  DataFieldError
+}

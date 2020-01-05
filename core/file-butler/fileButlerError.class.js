@@ -6,4 +6,6 @@ class FileButlerError extends Error {
   }
 }
 
-module.exports = FileButlerError
+module.exports = {
+  FileButlerError
+}

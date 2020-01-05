@@ -1,6 +1,6 @@
 const Events = require('events')
 const vorpal = require('vorpal')
-const CliInput = require('./cliInput.class.js')
+const { CliInput } = require('./cliInput.class.js')
 const { CliPrinter } = require('./cliPrinter.class')
 
 const CLI_ERROR = -1
