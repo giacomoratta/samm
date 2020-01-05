@@ -31,7 +31,6 @@ class CliVorpal {
   show (delimiter) {
     if (delimiter) this.delimiter = delimiter
     this.eventEmitter.emit('show', { logger: this.logger })
-    // todo: cb - configMgr.printMessages()
     this.vorpal
       .delimiter(this.delimiter + '$')
       .show()
@@ -68,7 +67,6 @@ class CliVorpal {
             if (err) self.logger.error(err)
           }
           self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
-          // todo: cb configMgr.printMessages()
           cb()
         },
         cliInput: new CliInput({ values, command }),
