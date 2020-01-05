@@ -1,4 +1,4 @@
-const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
+const { App, Cli, CLI_ERROR } = require('./common')
 
 const Config = App.Config
 
@@ -39,34 +39,36 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     }
 
     /* Change parameters and save */
+    let newConfigValue
+    if (paramName === 'ExcludedExtensionsForSamples') {
+      newConfigValue = BasicArrayFieldEditor({
+        currentArray: Config.get('ExcludedExtensionsForSamples'),
+        newValues: cliInput.getParam('values'),
+        cliInput
+      })
+    } else if (paramName === 'IncludedExtensionsForSamples') {
+      newConfigValue = BasicArrayFieldEditor({
+        currentArray: Config.get('IncludedExtensionsForSamples'),
+        newValues: cliInput.getParam('values'),
+        cliInput
+      })
+    } else if (paramName === 'SamplesDirectoryExclusions') {
+      newConfigValue = BasicArrayFieldEditor({
+        currentArray: Config.getField('SamplesDirectoryExclusions').get(false),
+        newValues: cliInput.getParam('values'),
+        cliInput
+      })
+    } else {
+      newConfigValue = cliInput.getParam('values')[0]
+    }
+    if (!newConfigValue) return cliNext()
     try {
-      if (paramName === 'ExcludedExtensionsForSamples') {
-        Config.set('ExcludedExtensionsForSamples', BasicArrayFieldEditor({
-          currentArray: Config.get('ExcludedExtensionsForSamples'),
-          newValues: cliInput.getParam('values'),
-          cliInput
-        }))
-      } else if (paramName === 'IncludedExtensionsForSamples') {
-        Config.set('IncludedExtensionsForSamples', BasicArrayFieldEditor({
-          currentArray: Config.get('IncludedExtensionsForSamples'),
-          newValues: cliInput.getParam('values'),
-          cliInput
-        }))
-      } else if (paramName === 'SamplesDirectoryExclusions') {
-        Config.set('SamplesDirectoryExclusions', BasicArrayFieldEditor({
-          currentArray: Config.getField('SamplesDirectoryExclusions').get(false),
-          newValues: cliInput.getParam('values'),
-          cliInput
-        }))
-      } else {
-        Config.set(cliInput.getParam('name'), cliInput.getParam('values')[0])
-      }
+      Config.set(paramName, newConfigValue)
+      Config.save()
     } catch (e) {
       cliPrinter.error(e.message)
       return cliNext(CLI_ERROR, e)
     }
-
-    Config.save()
     return cliNext()
   }
 

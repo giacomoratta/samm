@@ -14,7 +14,7 @@ class CliVorpal {
     this.delimiter = ''
     this.logger = console
     this.eventEmitter = new Events()
-    this.printer = new CliPrinter({ command:null })
+    this.printer = new CliPrinter({ command: null })
 
     this.vorpal.on('client_prompt_submit', (command) => {
       if (command === 'exit') {
@@ -67,6 +67,7 @@ class CliVorpal {
             if (err) self.logger.error(err)
           }
           self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
+          self.printer.newLine()
           cb()
         },
         cliInput: new CliInput({ values, command }),

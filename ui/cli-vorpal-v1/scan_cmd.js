@@ -1,4 +1,4 @@
-const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
+const { App, Cli } = require('./common')
 
 const Config = App.Config
 const Sample = App.Sample
@@ -14,10 +14,10 @@ Cli.addCommandHeader(commandName)
 
 Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   if (!Config.get('SamplesDirectory')) {
-    cliPrinter.warn(`No samples directory set; see 'config SamplesDirectory' `)
+    cliPrinter.warn('No samples directory set; see \'config SamplesDirectory\' ')
     return cliNext()
   }
-  if (Sample.hasIndex() && cliInput.hasOption('force')) {
+  if (Sample.hasIndex() && !cliInput.hasOption('force')) {
     cliPrinter.warn('Samples already indexed. Use -f to force a rescan.')
     return cliNext()
   }
@@ -29,7 +29,6 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
     return cliNext()
   }
 
-  cliPrinter.info('Indexing process completed successfully.')
-  cliPrinter.info(`${Sample.indexSize()} samples found`)
+  cliPrinter.info(`Indexing process completed successfully: ${Sample.indexSize()} samples found.`)
   return cliNext()
 })

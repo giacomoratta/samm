@@ -50,6 +50,7 @@ module.exports = {
     list,
     save,
     create,
+    queryFile: Config.get('PathQueryFile'),
     queryStringLabel: PathBasedQuery.queryStringLabel
   }
 }

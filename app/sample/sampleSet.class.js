@@ -44,9 +44,11 @@ class SampleSet {
   }
 
   forEach (fn) {
+    let index = 0
     Object.keys(this.table).forEach((k) => {
       this.table[k].forEach((sample) => {
-        fn(sample)
+        fn(sample, index)
+        index++
       })
     })
   }

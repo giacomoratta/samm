@@ -32,38 +32,37 @@ class CliPrinter {
     console.info(`${NL}${this.indent}${message}`)
   }
 
-  boxed (message, title='') {
+  boxed (message, title = '') {
     let centerString = ''
     let topLineLength = 0
 
-    if(message instanceof Array) {
+    if (message instanceof Array) {
       const lines = message
       let finalLine
       lines.forEach((line) => {
         topLineLength = Math.max(topLineLength, line.length)
       })
       lines.forEach((line) => {
-        if(line.length < 1) return
-        finalLine = ` \u2502  ${line}${(' ').repeat(topLineLength-line.length)}  \u2502`
+        if (line.length < 1) return
+        finalLine = ` \u2502  ${line}${(' ').repeat(topLineLength - line.length)}  \u2502`
         centerString += `${finalLine}${NL}`
       })
       topLineLength += 7
-
     } else {
       centerString = ` \u2502 ${message} \u2502`
       topLineLength = centerString.length
       centerString = `${centerString}${NL}`
     }
 
-    const topLine = `${('\u2500').repeat(topLineLength-3)}`
-    const middleLine = ` \u2502 ${(' ').repeat(topLineLength-5)} \u2502`
+    const topLine = `${('\u2500').repeat(topLineLength - 3)}`
+    const middleLine = ` \u2502 ${(' ').repeat(topLineLength - 5)} \u2502`
 
-    if(title.length > 1) {
-      let repeatCount = Math.floor((topLineLength-title.length)/2)-3
-      let space = (' ').repeat(repeatCount)
+    if (title.length > 1) {
+      const repeatCount = Math.floor((topLineLength - title.length) / 2) - 3
+      const space = (' ').repeat(repeatCount)
       let centerStringLine = ` \u2502 ${space}${title}${space}  `
-      if(centerStringLine.length+1 < topLineLength) {
-        centerStringLine = `${centerStringLine}${(' ').repeat(topLineLength-centerStringLine.length-1)}`
+      if (centerStringLine.length + 1 < topLineLength) {
+        centerStringLine = `${centerStringLine}${(' ').repeat(topLineLength - centerStringLine.length - 1)}`
       }
       centerString = `${centerStringLine}\u2502${NL}${middleLine}${NL}${centerString}`
     }

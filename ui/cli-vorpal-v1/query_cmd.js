@@ -1,4 +1,4 @@
-const { App, Cli, CLI_SUCCESS, CLI_ERROR } = require('./common')
+const { App, Cli } = require('./common')
 
 const PathQuery = App.PathQuery
 
@@ -6,15 +6,55 @@ const commandName = 'query'
 
 Cli.addCommand(`${commandName} [label] [query]`)
 
-/*
- * add      > query label1 abc+cde > save
- * remove   > query label1 -r > save
- * list     > query
- */
-
 Cli.addCommandHeader(commandName)
-  .description('Text. \n')
+  .description('Manage queries for sample, for matching sample directories and files. \n')
+  .option('-r, --remove', 'Remove a query.')
 
 Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+  const queryLabel = cliInput.getParam('label')
+  const queryString = cliInput.getParam('query')
+
+  /* Add new query */
+  if (queryLabel && queryString) {
+    if (PathQuery.add(queryLabel, queryString) !== true) {
+      cliPrinter.error('Cannot add the query')
+    } else {
+      cliPrinter.info('Query added successfully')
+    }
+    if (PathQuery.save() !== true) {
+      cliPrinter.error(`Cannot save the query file: ${PathQuery.queryFile}`)
+    }
+    return cliNext()
+  }
+
+  /* Get single query or remove it */
+  if (queryLabel) {
+    const pathBasedQuery = PathQuery.get(queryLabel)
+    if (!pathBasedQuery) {
+      cliPrinter.warn(`Query '${queryLabel}' not found!`)
+      return cliNext()
+    }
+    if (cliInput.hasOption('remove')) {
+      PathQuery.remove(queryLabel)
+      cliPrinter.info(`Query '${queryLabel}' removed successfully`)
+      if (PathQuery.save() !== true) {
+        cliPrinter.error(`Cannot save the query file: ${PathQuery.queryFile}`)
+      }
+      return cliNext()
+    }
+    cliPrinter.info(`Query '${queryLabel}': ${pathBasedQuery.queryString}`)
+    return cliNext()
+  }
+
+  /* List all queries */
+  const pathBasedQueryList = PathQuery.list()
+  if (!pathBasedQueryList || pathBasedQueryList.length === 0) {
+    cliPrinter.warn('No queries found!')
+    return cliNext()
+  }
+  pathBasedQueryList.forEach((q) => {
+    cliPrinter.info(`  ${q.label}: ${q.queryString}`)
+  })
+
   return cliNext()
 })

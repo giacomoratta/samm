@@ -5,17 +5,17 @@ const Config = App.Config
 
 const printWarnings = () => {
   const messages = Config.statusMessages()
-  if(messages.length === 0) return
-  messages.forEach( (line) => {
+  if (messages.length === 0) return
+  messages.forEach((line) => {
     Cli.printer.newLine()
     Cli.printer.warn(`${line}`)
   })
   Cli.printer.newLine()
-  //Cli.printer.boxed(messages,'WARNING')
+  // Cli.printer.boxed(messages,'WARNING')
 }
 
-Cli.on('show',printWarnings)
-Cli.on('afterCommand',printWarnings)
+Cli.on('show', printWarnings)
+Cli.on('afterCommand', printWarnings)
 
 // set logger
 
