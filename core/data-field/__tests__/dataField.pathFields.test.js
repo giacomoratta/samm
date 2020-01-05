@@ -1,10 +1,5 @@
-const fileUtils = require('../../utils/file.utils')
 const path = require('path')
 const { DataField } = require('../index')
-
-const newDataField = function (args) {
-  return new DataField(args)
-}
 
 describe('dataField path fields', function () {
   it('should support a path as default value', function () {
@@ -18,7 +13,7 @@ describe('dataField path fields', function () {
         default: '/abc/file_utils_test_dir'
       }
     }
-    const field1 = newDataField(field1Attr)
+    const field1 = new DataField(field1Attr)
     expect(field1.get()).toEqual(null)
     field1.set(path.join(__dirname, 'file_utils_test_dir'))
     expect(field1.get()).toEqual(path.join(__dirname, 'file_utils_test_dir'))
@@ -33,7 +28,7 @@ describe('dataField path fields', function () {
         default: '/abc/file_utils_test_file'
       }
     }
-    const field2 = newDataField(field2Attr)
+    const field2 = new DataField(field2Attr)
     expect(field2.get()).toEqual(null)
     field2.set(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
     expect(field2.get()).toEqual(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
@@ -49,7 +44,7 @@ describe('dataField path fields', function () {
         default: 'abc/file_utils_test_dir'
       }
     }
-    const field3 = newDataField(field3Attr)
+    const field3 = new DataField(field3Attr)
     expect(field3.get()).toEqual(null)
     field3.set('file_utils_test_dir')
     expect(field3.get()).toEqual(path.join(__dirname, 'file_utils_test_dir'))
@@ -65,7 +60,7 @@ describe('dataField path fields', function () {
         default: 'abc/file_utils_test_file'
       }
     }
-    const field4 = newDataField(field4Attr)
+    const field4 = new DataField(field4Attr)
     expect(field4.get()).toEqual(null)
     field4.set(path.join('file_utils_test_dir', 'file1.json'))
     expect(field4.get()).toEqual(path.join(__dirname, 'file_utils_test_dir', 'file1.json'))
@@ -81,7 +76,7 @@ describe('dataField path fields', function () {
       basePath: path.join(__dirname, 'NEW')
     }
 
-    const field1 = newDataField(field1Attr)
+    const field1 = new DataField(field1Attr)
     expect(field1.get()).toEqual(path.join(__dirname, 'abc', 'file_utils_test_dir'))
 
     field1.changeSchema(field1AttrChange1)
@@ -107,7 +102,7 @@ describe('dataField path fields', function () {
       }
     }
 
-    const field2 = newDataField(field2Attr)
+    const field2 = new DataField(field2Attr)
     expect(field2.get()).toMatchObject([
       path.join(__dirname, 'samplePack1'),
       path.join(__dirname, 'samplePack2')
@@ -159,7 +154,7 @@ describe('dataField path fields', function () {
       }
     }
 
-    const field3 = newDataField(field3Attr)
+    const field3 = new DataField(field3Attr)
     expect(field3.get()).toMatchObject({
       path123: path.join(__dirname, 'samplePack1'),
       path456: [
@@ -190,7 +185,7 @@ describe('dataField path fields', function () {
       basePath: path.join(__dirname, 'NEW')
     }
 
-    const field1 = newDataField(field1Attr)
+    const field1 = new DataField(field1Attr)
     expect(field1.get()).toEqual(path.join(__dirname, 'abc', 'file_utils_test_dir', 'file1.json'))
 
     field1.changeSchema(field1AttrChange1)
@@ -216,7 +211,7 @@ describe('dataField path fields', function () {
       }
     }
 
-    const field2 = newDataField(field2Attr)
+    const field2 = new DataField(field2Attr)
     expect(field2.get()).toMatchObject([
       path.join(__dirname, 'samplePack1', 'file1.json'),
       path.join(__dirname, 'samplePack2', 'file1.json')
@@ -268,7 +263,7 @@ describe('dataField path fields', function () {
       }
     }
 
-    const field3 = newDataField(field3Attr)
+    const field3 = new DataField(field3Attr)
     expect(field3.get()).toMatchObject({
       path123: path.join(__dirname, 'samplePack1', 'file1.json'),
       path456: [
