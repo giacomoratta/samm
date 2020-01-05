@@ -14,11 +14,11 @@ class CliVorpal {
     this.delimiter = ''
     this.logger = console
     this.eventEmitter = new Events()
+    this.printer = new CliPrinter({ command:null })
 
     this.vorpal.on('client_prompt_submit', (command) => {
       if (command === 'exit') {
         this.eventEmitter.emit('exit', { logger: this.logger })
-        // todo: cb configMgr.save()
       }
 
       /* prevent event emit when enter is pressed with no command */

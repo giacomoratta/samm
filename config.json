@@ -5,8 +5,6 @@
 	"ProjectHistoryFile": "project_history",
 	"BookmarkFile": "bookmarks",
 	"PathQueryFile": "path_queries",
-	"SamplesDirectory": "/home/giacomo/Workspace/mpl",
-	"SamplesDirectoryExclusions": [],
 	"RandomCount": 15,
 	"MaxSamplesSameDirectory": 2,
 	"ExtensionsPolicyForSamples": "X",
