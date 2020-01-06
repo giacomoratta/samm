@@ -6,6 +6,7 @@ const dataFieldUtils = require('./utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
+const UNSET_FIELD_VALUE = null
 
 /* Extra properties
  *   - schema docs: https://www.npmjs.com/package/fastest-validator
@@ -22,32 +23,33 @@ class DataField {
 
   changeSchema (schemaDiff) {
     const schema = _.cloneDeep(_.merge(this.schema[this.name], schemaDiff))
-    const defaultValue = this.defaultValue
+    const isDefaultValue = this.isDefaultValue
     const value = this.value[this.name]
     const description = this.description[0]
     this.init({ schema, value, description })
-    this.defaultValue = defaultValue
+    this.isDefaultValue = isDefaultValue
   }
 
   init ({ schema, value, description = '' }) {
     schema = dataFieldUtils.fixSchema(_.cloneDeep(schema))
 
-    /* work-around */
-    this.defaultValue = false
+    this.isDefaultValue = false
+    this.defaultValue = UNSET_FIELD_VALUE
     if (!_.isNil(schema.default) && _.isNil(value)) {
       value = schema.default
-      this.defaultValue = true
+      this.defaultValue = _.cloneDeep(value)
+      this.isDefaultValue = true
     }
 
     this.schema = { [this.name]: schema }
     this.check = validator.compile(this.schema)
-    this.value = { [this.name]: null }
+    this.value = { [this.name]: UNSET_FIELD_VALUE }
     this.tranformFn = transform.getFieldTransformFn(schema)
     this.description = dataFieldUtils.setDescription(description, schema)
 
-    if (this.defaultValue === true) {
+    if (this.isDefaultValue === true) {
       this.set(value, { overwrite: true })
-      this.defaultValue = true
+      this.isDefaultValue = true
       delete schema.default
       return
     }
@@ -68,6 +70,10 @@ class DataField {
     return this.check(value)
   }
 
+  unset () {
+    this.value = { [this.name]: UNSET_FIELD_VALUE }
+  }
+
   set (value, { overwrite = false } = {}) {
     if (overwrite !== true && this.schema[this.name].readOnly === true) {
       throw new DataFieldError(`Field '${this.name}' is read-only!`)
@@ -77,7 +83,7 @@ class DataField {
       const oldValue = this.get(false)
       const newValue = _.cloneDeep(value)
       this.value = { [this.name]: newValue }
-      this.defaultValue = false
+      this.isDefaultValue = false
       this.eventEmitter.emit('change', { fieldName: this.name, newValue, oldValue })
       return true
     }
@@ -85,8 +91,8 @@ class DataField {
   }
 
   get (finalValue = true) {
-    if (this.defaultValue === true) {
-      return null
+    if (this.isDefaultValue === true) {
+      return UNSET_FIELD_VALUE
     }
     if (finalValue !== false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])
     return this.value[this.name]
@@ -107,7 +113,7 @@ class DataField {
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.addToObject(this.get(), key, value, this.schema[this.name])
     }
-    if (newValue === null) return false
+    if (newValue === UNSET_FIELD_VALUE) return false
     return this.set(newValue)
   }
 
@@ -118,7 +124,7 @@ class DataField {
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.removeFromObject(this.get(), key, this.schema[this.name])
     }
-    if (newValue === null) return false
+    if (newValue === UNSET_FIELD_VALUE) return false
     return this.set(newValue)
   }
 }

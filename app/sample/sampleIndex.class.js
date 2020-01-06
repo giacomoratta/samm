@@ -66,6 +66,10 @@ class SampleIndex {
     }
     return this.sampleTree.fileCount()
   }
+
+  get loaded () {
+    return this.sampleTree !== null && this.sampleTree !== undefined
+  }
 }
 
 module.exports = {

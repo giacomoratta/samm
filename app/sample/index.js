@@ -53,7 +53,7 @@ const createIndex = async () => {
 }
 
 const hasIndex = () => {
-  return mainSamplesIndex !== null
+  return mainSamplesIndex !== null && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
 }
 
 const indexSize = () => {

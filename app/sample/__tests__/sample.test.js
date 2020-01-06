@@ -10,11 +10,13 @@ const SampleIndexFile = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
 
 describe('sample endpoints', function () {
   it('should perform basic operations', async function () {
-    fileUtils.removeFileSync(SampleIndexFile)
+    fileUtils.removeFileSync(SampleIndexFile, '')
+    Config.getField('SamplesDirectory').unset()
+
     let result
 
     expect(Sample.hasIndex()).toEqual(false)
-    expect(Sample.indexSize()).toEqual(0)
+    expect(function () { Sample.indexSize() }).toThrow()
 
     result = await Sample.loadIndex()
     expect(result).toEqual(false)
