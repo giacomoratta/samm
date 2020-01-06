@@ -91,7 +91,7 @@ class DataField {
   }
 
   get (finalValue = true) {
-    if (this.isDefaultValue === true) {
+    if (this.isDefaultValue === true || this.value[this.name] === UNSET_FIELD_VALUE) {
       return UNSET_FIELD_VALUE
     }
     if (finalValue !== false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])

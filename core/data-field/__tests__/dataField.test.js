@@ -1,6 +1,11 @@
 const { fileUtils } = require('../../utils/file.utils')
 const path = require('path')
+const _ = require('lodash')
 const { DataField } = require('../index')
+
+const newDataField = function (args) {
+  return new DataField(args)
+}
 
 describe('dataField class and object', function () {
   it('should create a simple dataField with events', function () {
@@ -33,6 +38,13 @@ describe('dataField class and object', function () {
     expect(eventFiredData.fieldName).toEqual('fieldname1')
     expect(eventFiredData.oldValue).toEqual(32)
     expect(eventFiredData.newValue).toEqual(42)
+
+    dataField1.unset()
+    expect(dataField1.get()).toEqual(null)
+    expect(dataField1.get()).not.toEqual(undefined)
+
+    dataField1.set(52)
+    expect(dataField1.get()).toEqual(52)
   })
 
   it('should manage default attribute for schema', function () {
@@ -68,6 +80,13 @@ describe('dataField class and object', function () {
     df2.set(['dd', 'ff'])
     expect(df2.get()).toEqual(['dd', 'ff'])
     expect(df2.get(false)).toEqual(['dd', 'ff'])
+
+    df2.unset()
+    expect(df2.get()).toEqual(null)
+    expect(df2.get()).not.toEqual(undefined)
+
+    df2.set(['dd', 'ff'])
+    expect(df2.get()).toEqual(['dd', 'ff'])
   })
 
   it('should manage array with add/remove', function () {
@@ -171,6 +190,15 @@ describe('dataField class and object', function () {
 
     expect(df2.remove('key41')).toEqual(true)
     expect(df2.get()).toMatchObject({})
+
+    df2.unset()
+    expect(df2.get()).toEqual(null)
+    expect(df2.get()).not.toEqual(undefined)
+
+    expect(df2.add('key4', 'v4')).toEqual(true)
+    expect(df2.get()).toMatchObject({
+      key4: 'v4'
+    })
   })
 
   it('should create a circularArray dataField', function () {
@@ -267,6 +295,13 @@ describe('dataField class and object', function () {
 
     expect(df3.add(9)).toEqual(true)
     expect(df3.get()).toMatchObject([9, 7, 5])
+
+    df3.unset()
+    expect(df3.get()).toEqual(null)
+    expect(df3.get()).not.toEqual(undefined)
+
+    expect(df3.add(9)).toEqual(true)
+    expect(df3.get()).toMatchObject([9])
   })
 
   it('should create a complex dataField', function () {
@@ -312,9 +347,16 @@ describe('dataField class and object', function () {
 
     expect(function () { dataField1.set({ invalid: 'value' }) }).toThrow()
 
-    const defaultValue1 = { ...defaultValue }
+    const defaultValue1 = _.cloneDeep(defaultValue)
     defaultValue1.nested.listing = false
     expect(function () { dataField1.set(defaultValue1) }).toThrow()
+
+    dataField1.unset()
+    expect(dataField1.get()).toEqual(null)
+    expect(dataField1.get()).not.toEqual(undefined)
+
+    dataField1.set(defaultValue)
+    expect(dataField1.get()).toMatchObject(defaultValue)
 
     try {
       dataField1.set({})
@@ -386,10 +428,6 @@ describe('dataField class and object', function () {
   })
 
   it('should manage absDirPath fields', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
     expect(function () {
       newDataField({
         name: 'fieldname1',
@@ -416,22 +454,23 @@ describe('dataField class and object', function () {
     }).not.toThrow()
     expect(fileUtils.directoryExistsSync(path.join(__dirname, 'file_utils_test_dir2'))).toEqual(false)
 
-    expect(function () {
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'absDirPath', checkExists: false, createIfNotExists: true, deleteIfExists: true },
-        value: path.join(__dirname, 'file_utils_test_dir3')
-      })
-    }).not.toThrow()
+    const field2 = newDataField({
+      name: 'fieldname1',
+      schema: { type: 'absDirPath', checkExists: false, createIfNotExists: true, deleteIfExists: true },
+      value: path.join(__dirname, 'file_utils_test_dir3')
+    })
     expect(fileUtils.directoryExistsSync(path.join(__dirname, 'file_utils_test_dir3'))).toEqual(true)
     expect(fileUtils.removeDirSync(path.join(__dirname, 'file_utils_test_dir3'))).toEqual(true)
+
+    field2.unset()
+    expect(field2.get()).toEqual(null)
+    expect(field2.get()).not.toEqual(undefined)
+
+    field2.set(path.join(__dirname, 'file_utils_test_dir3'))
+    expect(field2.get()).toEqual(path.join(__dirname, 'file_utils_test_dir3'))
   })
 
   it('should manage absFilePath fields', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
     expect(function () {
       newDataField({
         name: 'fieldname1',
@@ -467,22 +506,23 @@ describe('dataField class and object', function () {
     }).not.toThrow()
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'file_utils_test_dir/file1_2.json'))).toEqual(false)
 
-    expect(function () {
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'absFilePath', checkExists: false, createIfNotExists: true, deleteIfExists: true },
-        value: path.join(__dirname, 'file_utils_test_dir/file1_3.json')
-      })
-    }).not.toThrow()
+    const field2 = newDataField({
+      name: 'fieldname1',
+      schema: { type: 'absFilePath', checkExists: false, createIfNotExists: true, deleteIfExists: true },
+      value: path.join(__dirname, 'file_utils_test_dir/file1_3.json')
+    })
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))).toEqual(true)
     expect(fileUtils.removeFileSync(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))).toEqual(true)
+
+    field2.unset()
+    expect(field2.get()).toEqual(null)
+    expect(field2.get()).not.toEqual(undefined)
+
+    field2.set(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))
+    expect(field2.get()).toEqual(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))
   })
 
   it('should manage relDirPath fields', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
     expect(function () {
       newDataField({
         name: 'fieldname1',
@@ -523,23 +563,19 @@ describe('dataField class and object', function () {
       dataField1.get()
     }).not.toThrow()
 
-    expect(function () {
-      fileUtils.copyDirectorySync(path.join(__dirname, 'file_utils_test_dir'), path.join(__dirname, 'file_utils_test_dir2'))
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'relDirPath', basePath: __dirname, checkExists: true, createIfNotExists: false, deleteIfExists: true },
-        value: './file_utils_test_dir2'
-      })
-    }).not.toThrow()
+    fileUtils.copyDirectorySync(path.join(__dirname, 'file_utils_test_dir'), path.join(__dirname, 'file_utils_test_dir2'))
+    newDataField({
+      name: 'fieldname1',
+      schema: { type: 'relDirPath', basePath: __dirname, checkExists: true, createIfNotExists: false, deleteIfExists: true },
+      value: './file_utils_test_dir2'
+    })
     expect(fileUtils.directoryExistsSync(path.join(__dirname, 'file_utils_test_dir2'))).toEqual(false)
 
-    expect(function () {
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: true },
-        value: './file_utils_test_dir3'
-      })
-    }).not.toThrow()
+    newDataField({
+      name: 'fieldname1',
+      schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: true },
+      value: './file_utils_test_dir3'
+    })
     expect(fileUtils.directoryExistsSync(path.join(__dirname, 'file_utils_test_dir3'))).toEqual(true)
     expect(fileUtils.removeDirSync(path.join(__dirname, 'file_utils_test_dir3'))).toEqual(true)
 
@@ -561,13 +597,16 @@ describe('dataField class and object', function () {
     })
     expect(field2.get()).toEqual(path.join(__dirname, './file_utils_test_dir'))
     expect(field2.get(false)).toEqual('file_utils_test_dir')
+
+    field2.unset()
+    expect(field2.get()).toEqual(null)
+    expect(field2.get()).not.toEqual(undefined)
+
+    field2.set('file_utils_test_dir')
+    expect(field2.get()).toEqual(path.join(__dirname, './file_utils_test_dir'))
   })
 
   it('should manage relFilePath fields', function () {
-    const newDataField = function (args) {
-      return new DataField(args)
-    }
-
     expect(function () {
       newDataField({
         name: 'fieldname1',
@@ -599,23 +638,19 @@ describe('dataField class and object', function () {
     expect(dataField1.get()).toEqual(null)
     expect(dataField1.get(false)).toEqual(null)
 
-    expect(function () {
-      fileUtils.copyFileSync(path.join(__dirname, 'file_utils_test_dir/file1.json'), path.join(__dirname, 'file_utils_test_dir/file1_2.json'))
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'relFilePath', basePath: __dirname, checkExists: true, createIfNotExists: false, deleteIfExists: true },
-        value: './file_utils_test_dir/file1_2.json'
-      })
-    }).not.toThrow()
+    fileUtils.copyFileSync(path.join(__dirname, 'file_utils_test_dir/file1.json'), path.join(__dirname, 'file_utils_test_dir/file1_2.json'))
+    newDataField({
+      name: 'fieldname1',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: true, createIfNotExists: false, deleteIfExists: true },
+      value: './file_utils_test_dir/file1_2.json'
+    })
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'file_utils_test_dir/file1_2.json'))).toEqual(false)
 
-    expect(function () {
-      newDataField({
-        name: 'fieldname1',
-        schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: true },
-        value: './file_utils_test_dir/file1_3.json'
-      })
-    }).not.toThrow()
+    newDataField({
+      name: 'fieldname1',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: true },
+      value: './file_utils_test_dir/file1_3.json'
+    })
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))).toEqual(true)
     expect(fileUtils.removeFileSync(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))).toEqual(true)
 
@@ -637,5 +672,12 @@ describe('dataField class and object', function () {
     })
     expect(field2.get()).toEqual(path.join(__dirname, './file_utils_test_dir/file1.json'))
     expect(field2.get(false)).toEqual('file_utils_test_dir/file1.json')
+
+    field2.unset()
+    expect(field2.get()).toEqual(null)
+    expect(field2.get()).not.toEqual(undefined)
+
+    field2.set('file_utils_test_dir/file1.json')
+    expect(field2.get()).toEqual(path.join(__dirname, './file_utils_test_dir/file1.json'))
   })
 })
