@@ -6,7 +6,7 @@ const { SpheroidCache } = require('../../core/spheroid-cache')
 
 /* todo: store better data { latest set, latest query } */
 const SampleSetCache = new SpheroidCache({ maxItems: 20 })
-const LookupCache = new SpheroidCache({ maxItems: 30 })
+const LookupCache = new SpheroidCache({ maxItems: 40 })
 
 const latestSampleSet = null
 const latestSampleSetQuery = null

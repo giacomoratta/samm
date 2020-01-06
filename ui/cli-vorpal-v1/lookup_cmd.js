@@ -18,11 +18,12 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
   /* Print latest lookup */
   if (!queryString && !queryLabel) {
-    const lookupInfo = Sample.getLatestLookup()
-    if (!lookupInfo) {
-      cliPrinter.warn('Latest lookup is empty!')
+    if (cliInput.hasOption('all')) {
+      const sampleSetInfo = Sample.getLatestSampleSet()
+      printSampleSet(sampleSetInfo, cliPrinter, 'Latest search is empty!')
     } else {
-      printLookup(lookupInfo, cliPrinter)
+      const lookupInfo = Sample.getLatestLookup()
+      printLookup(lookupInfo, cliPrinter, 'Latest search is empty!')
     }
     return cliNext()
   }
@@ -33,33 +34,33 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
   if (cliInput.hasOption('all')) {
     const sampleSetInfo = Sample.sampleSetByPathQuery(options)
-    if (!sampleSetInfo || sampleSetInfo.sampleSet.size === 0) {
-      cliPrinter.warn('No samples found!')
-    } else {
-      printSampleSet(sampleSetInfo, cliPrinter)
-    }
+    printSampleSet(sampleSetInfo, cliPrinter, 'No samples found!')
     return cliNext()
   } else {
     const lookupInfo = Sample.lookupByPathQuery(options)
-    if (!lookupInfo) {
-      cliPrinter.warn('No samples found!')
-    } else {
-      printLookup(lookupInfo, cliPrinter)
-    }
+    printLookup(lookupInfo, cliPrinter, 'No samples found!')
     return cliNext()
   }
 })
 
-const printLookup = (lookupInfo, cliPrinter) => {
+const printLookup = (lookupInfo, cliPrinter, emptyMessage) => {
+  if (!lookupInfo) {
+    cliPrinter.warn(emptyMessage)
+    return
+  }
   cliPrinter.info(`Lookup query: ${lookupInfo.query.queryString}`)
-  cliPrinter.info(`Found samples: ${lookupInfo.sampleSet.size}`)
+  cliPrinter.info(`Samples found: ${lookupInfo.sampleSet.size}`)
   cliPrinter.newLine()
   lookupInfo.lookup.forEach((sample, index) => {
     cliPrinter.info(`${index + 1}) ${sample.relPath}`)
   })
 }
 
-const printSampleSet = (sampleSetInfo, cliPrinter) => {
+const printSampleSet = (sampleSetInfo, cliPrinter, emptyMessage) => {
+  if (!sampleSetInfo) {
+    cliPrinter.warn(emptyMessage)
+    return
+  }
   cliPrinter.info(`Lookup query: ${sampleSetInfo.query.queryString}`)
   cliPrinter.newLine()
   sampleSetInfo.sampleSet.forEach((sample, index) => {
