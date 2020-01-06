@@ -468,6 +468,7 @@ describe('dataField class and object', function () {
 
     field2.set(path.join(__dirname, 'file_utils_test_dir3'))
     expect(field2.get()).toEqual(path.join(__dirname, 'file_utils_test_dir3'))
+    expect(fileUtils.removeDirSync(path.join(__dirname, 'file_utils_test_dir3'))).toEqual(true)
   })
 
   it('should manage absFilePath fields', function () {
@@ -646,6 +647,7 @@ describe('dataField class and object', function () {
     })
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'file_utils_test_dir/file1_2.json'))).toEqual(false)
 
+    expect(fileUtils.removeFileSync(path.join(__dirname, 'file_utils_test_dir/file1_3.json'))).toEqual(true)
     newDataField({
       name: 'fieldname1',
       schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: true },
