@@ -12,7 +12,7 @@ const processQueryString = function (queryString) {
   queryString = queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 
   const queryInfo = {
-    label: PathBasedQuery.queryStringLabel(queryString),
+    label: '',
     functionBody: '',
     queryString: '',
     checkFn: null,
@@ -45,6 +45,8 @@ const processQueryString = function (queryString) {
 
   delete queryInfo._linesOR
   delete queryInfo._functionLinesOR
+
+  queryInfo.label = PathBasedQuery.queryStringLabel(queryInfo.queryString)
   return queryInfo
 }
 
@@ -71,7 +73,11 @@ class PathBasedQuery {
   }
 
   static queryStringLabel (queryString) {
-    return queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
+    return queryString.toLowerCase()
+      .replace(/[^a-zA-Z0-9+,]/g, '')
+      .replace(/[^a-zA-Z0-9]/g, ' ')
+      .trim()
+      .replace(/[ ]{1,}/g, '_')
   }
 
   get label () { return this._label }

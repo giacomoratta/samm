@@ -32,8 +32,8 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
   if (historyIndex === true || (!isNaN(hIndex) && hIndex > 0)) {
     const historyList = ProjectHistory.list()
 
-    /* List project history */
     if (historyIndex === true) {
+      /* List project history */
       if (historyList.length === 0) {
         cliPrinter.warn('Project history is empty.')
       } else {
@@ -44,10 +44,9 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
           i++
         })
       }
-    }
-
-    /* Set project by history index */
-    else {
+      return cliNext()
+    } else {
+      /* Set project by history index */
       if (!historyList[hIndex - 1]) {
         cliPrinter.warn(`Wrong index; use a value between 1 and ${historyList.length}`)
       } else {
@@ -59,8 +58,8 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
           cliPrinter.error(e.message)
         }
       }
+      return cliNext()
     }
-    return cliNext()
   }
 
   /* Show current project */

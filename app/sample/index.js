@@ -4,14 +4,8 @@ const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
-/* todo: store better data { latest set, latest query } */
 const SampleSetCache = new SpheroidCache({ maxSize: 20 })
 const LookupCache = new SpheroidCache({ maxSize: 40 })
-
-const latestSampleSet = null
-const latestSampleSetQuery = null
-const latestLookup = []
-const latestLookupQuery = null
 
 // set logger
 

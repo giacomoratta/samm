@@ -10,8 +10,8 @@ describe('Query utility functions', function () {
     const queryString2 = 'le61+file1,+fi le3,+, '
     const pathQuery2 = new PathBasedQuery(queryString2)
 
-    expect(PathBasedQuery.queryStringLabel(queryString2)).toEqual('le61+file1,+file3,+,')
-    expect(pathQuery2.label).toEqual('le61+file1,+file3,+,')
+    expect(PathBasedQuery.queryStringLabel(queryString2)).toEqual('le61_file1_file3')
+    expect(pathQuery2.label).toEqual('le61_file1_file3')
     pathQuery2.label = 'my_label_222'
     expect(pathQuery2.label).toEqual('my_label_222')
 

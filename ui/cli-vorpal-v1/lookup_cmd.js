@@ -1,6 +1,5 @@
 const { App, Cli } = require('./common')
 
-const Config = App.Config
 const Sample = App.Sample
 
 const commandName = 'lookup'
