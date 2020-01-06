@@ -5,8 +5,8 @@ const { SampleSet } = require('./sampleSet.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
 /* todo: store better data { latest set, latest query } */
-const SampleSetCache = new SpheroidCache({ maxItems: 20 })
-const LookupCache = new SpheroidCache({ maxItems: 40 })
+const SampleSetCache = new SpheroidCache({ maxSize: 20 })
+const LookupCache = new SpheroidCache({ maxSize: 40 })
 
 const latestSampleSet = null
 const latestSampleSetQuery = null
@@ -142,7 +142,7 @@ module.exports = {
     sampleSetByPathQuery,
     lookupByPathQuery,
 
-    getLatestSampleSet: () => { return SampleSetCache.first },
-    getLatestLookup: () => { return LookupCache.first }
+    getLatestSampleSet: () => { return SampleSetCache.latest },
+    getLatestLookup: () => { return LookupCache.latest }
   }
 }

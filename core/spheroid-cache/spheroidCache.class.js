@@ -3,23 +3,31 @@ const autoLabel = function (index) {
 }
 
 class SpheroidCache {
-  constructor ({ maxItems = 10 }) {
+  constructor ({ maxSize = 10 }) {
+    this._maxSize = maxSize
+    this.reset()
+  }
+
+  reset () {
     this._itemCounter = 0
     this.array = []
     this.map = new Map()
-    this.maxItems = maxItems
   }
 
   get size () {
     return this.array.length
   }
 
-  get first () {
+  get maxSize () {
+    return this._maxSize
+  }
+
+  get latest () {
     if (this.size === 0) return
     return this.array[0].value
   }
 
-  get last () {
+  get oldest () {
     if (this.size === 0) return
     return this.array[this.size - 1].value
   }
@@ -32,7 +40,7 @@ class SpheroidCache {
     if (this.map.has(label)) {
       throw new Error(`Duplicated label: ${label}`)
     }
-    if (this.size === this.maxItems) this.remove()
+    if (this.size === this.maxSize) this.remove()
     this.array.unshift({ label, value })
     this.map.set(label, value)
     return true
@@ -74,6 +82,10 @@ class SpheroidCache {
       return (this.array[label] !== undefined || this.array[label] !== null)
     }
     return this.map.has(label)
+  }
+
+  forEach (fn) {
+    this.array.forEach(fn) // fn({ label, value })
   }
 }
 

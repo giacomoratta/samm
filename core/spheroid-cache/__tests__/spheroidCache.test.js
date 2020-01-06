@@ -1,6 +1,6 @@
 const { SpheroidCache } = require('../spheroidCache.class')
 const maxCacheItems = 3
-const cache1 = new SpheroidCache({ maxItems: maxCacheItems })
+const cache1 = new SpheroidCache({ maxSize: maxCacheItems })
 
 describe('SpheroidCache standard features', function () {
   it('Should add, change and delete items', function () {
@@ -49,23 +49,23 @@ describe('SpheroidCache standard features', function () {
   })
 
   it('Should have typical FIFO features', function () {
-    expect(cache1.first).toEqual(797)
-    expect(cache1.last).toEqual(575)
+    expect(cache1.latest).toEqual(797)
+    expect(cache1.oldest).toEqual(575)
 
     expect(cache1.remove()).toEqual(true)
-    expect(cache1.first).toEqual(797)
-    expect(cache1.last).toEqual(686)
+    expect(cache1.latest).toEqual(797)
+    expect(cache1.oldest).toEqual(686)
 
     expect(cache1.remove()).toEqual(true)
-    expect(cache1.first).toEqual(797)
-    expect(cache1.last).toEqual(797)
+    expect(cache1.latest).toEqual(797)
+    expect(cache1.oldest).toEqual(797)
 
     expect(cache1.remove()).toEqual(true)
-    expect(cache1.first).toEqual(undefined)
-    expect(cache1.last).toEqual(undefined)
+    expect(cache1.latest).toEqual(undefined)
+    expect(cache1.oldest).toEqual(undefined)
 
     expect(cache1.remove()).toEqual(false)
-    expect(cache1.first).toEqual(undefined)
-    expect(cache1.last).toEqual(undefined)
+    expect(cache1.latest).toEqual(undefined)
+    expect(cache1.oldest).toEqual(undefined)
   })
 })

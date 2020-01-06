@@ -3,7 +3,7 @@ const { PathQueryJsonFile } = require('./pathQueryJsonFile.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
-const PathBasedQueryCache = new SpheroidCache({ maxItems: 30 })
+const PathBasedQueryCache = new SpheroidCache({ maxSize: 30 })
 const PathQueryFile = new PathQueryJsonFile(Config.get('PathQueryFile'))
 PathQueryFile.load()
 
