@@ -49,31 +49,31 @@ describe('sample endpoints', function () {
     expect(result).toEqual(undefined)
 
     result = Sample.lookupByPathQuery({ queryLabel: 'invalid-label' })
-    expect(result.length).toEqual(0)
+    expect(result).toEqual(undefined)
 
     Config.set('RandomCount', 2)
     result = Sample.lookupByPathQuery({ queryString: 'file2,file3' })
-    expect(result.length).toEqual(2)
+    expect(result.lookup.length).toEqual(2)
 
     result = Sample.lookupByPathQuery({ queryString: 'invalid,query' })
-    expect(result.length).toEqual(0)
+    expect(result).toEqual(undefined)
 
     result = Sample.sampleSetByPathQuery({ queryString: 'file2,file3' })
-    expect(result.size).toEqual(5)
+    expect(result.sampleSet.size).toEqual(5)
 
     result = Sample.sampleSetByPathQuery({ queryString: 'invalid,query' })
     expect(result).toEqual(undefined)
 
     Config.set('RandomCount', 10)
     result = Sample.lookupByPathQuery({ queryString: 'file2,file3' })
-    expect(result.length).toEqual(5)
+    expect(result.lookup.length).toEqual(5)
 
     PathQuery.add('my-new-label', 'file6,file3')
     result = Sample.sampleSetByPathQuery({ queryLabel: 'my-new-label' })
-    expect(result.size).toEqual(5)
+    expect(result.sampleSet.size).toEqual(5)
 
     Config.set('RandomCount', 3)
     result = Sample.lookupByPathQuery({ queryLabel: 'my-new-label' })
-    expect(result.length).toEqual(3)
+    expect(result.lookup.length).toEqual(3)
   })
 })

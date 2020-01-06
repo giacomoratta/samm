@@ -64,63 +64,64 @@ const indexSize = () => {
 }
 
 const sampleSetByPathQuery = ({ queryString, queryLabel }) => {
-  latestSampleSet = null
-  latestSampleSetQuery = null
+  let sampleSet = null
+  let query = null
 
   if (mainSamplesIndex === null) return
-  let pathBQ1
 
   if (queryLabel) {
-    pathBQ1 = PathQuery.get(queryLabel)
-    if (!pathBQ1) return
-    latestSampleSetQuery = pathBQ1
-    if (SampleSetCache.has(pathBQ1.label)) {
-      latestSampleSet = SampleSetCache.get(pathBQ1.label)
-      return latestSampleSet
+    if (SampleSetCache.has(queryLabel)) {
+      return SampleSetCache.get(queryLabel)
     }
+    query = PathQuery.get(queryLabel)
   } else if (queryString) {
     const tempLabel = PathQuery.queryStringLabel(queryString)
-    pathBQ1 = PathQuery.create(queryString)
     if (SampleSetCache.has(tempLabel)) {
-      latestSampleSetQuery = pathBQ1
       return SampleSetCache.get(tempLabel)
     }
+    query = PathQuery.create(queryString)
   }
 
-  if (!pathBQ1 || !pathBQ1.isValid()) return
-  latestSampleSetQuery = pathBQ1
+  if (!query || !query.isValid()) return
 
-  const sampleSet1 = new SampleSet({
+  sampleSet = new SampleSet({
     validate: function (sample) {
-      return sample.isFile === true && pathBQ1.check(sample.relPath)
+      return sample.isFile === true && query.check(sample.relPath)
     }
   })
-  latestSampleSet = sampleSet1
 
   mainSamplesIndex.forEach(({ item }) => {
-    sampleSet1.add(item)
+    sampleSet.add(item)
   })
 
-  if (sampleSet1.size === 0) return
-  SampleSetCache.add(pathBQ1.label, sampleSet1)
-  return sampleSet1
+  if (sampleSet.size === 0) return
+
+  SampleSetCache.add(query.label, {
+    sampleSet,
+    query
+  })
+  return {
+    sampleSet,
+    query
+  }
 }
 
 const lookupByPathQuery = ({ queryString, queryLabel }) => {
-  latestLookup = []
-  latestLookupQuery = null
-  const sampleSet1 = sampleSetByPathQuery({ queryString, queryLabel })
-  if (!sampleSet1) return []
-  latestLookup = sampleSet1.random({
+  let lookup = []
+  const sampleSetInfo = sampleSetByPathQuery({ queryString, queryLabel })
+  if (!sampleSetInfo) return
+  lookup = sampleSetInfo.sampleSet.random({
     max: Config.get('RandomCount'),
     maxFromSameDirectory: Config.get('MaxSamplesSameDirectory')
   })
-  latestLookupQuery = (queryString ? PathQuery.create(queryString) : PathQuery.get(queryLabel))
-  // LookupCache.add(Date.now().toString(),{
-  //   latestLookup,
-  //   latestLookupQuery
-  // })
-  return latestLookup
+  if ( lookup.length > 0 ) LookupCache.add({
+    lookup,
+    ...sampleSetInfo
+  })
+  return {
+    lookup,
+    ...sampleSetInfo
+  }
 }
 
 loadIndex().then((loadResult) => {
@@ -139,9 +140,7 @@ module.exports = {
     sampleSetByPathQuery,
     lookupByPathQuery,
 
-    getLatestSampleSet: () => { return latestSampleSet },
-    getLatestSampleSetQuery: () => { return latestSampleSetQuery },
-    getLatestLookup: () => { return latestLookup },
-    getLatestLookupQuery: () => { return latestLookupQuery }
+    getLatestSampleSet: () => { return SampleSetCache.first },
+    getLatestLookup: () => { return LookupCache.first }
   }
 }

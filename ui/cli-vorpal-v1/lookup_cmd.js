@@ -18,11 +18,11 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
   /* Print latest lookup */
   if (!queryString && !queryLabel) {
-    const latestLookup = Sample.getLatestLookup()
-    if (latestLookup.length === 0) {
+    const lookupInfo = Sample.getLatestLookup()
+    if (!lookupInfo) {
       cliPrinter.warn('Latest lookup is empty!')
     } else {
-      printLookup(latestLookup, Sample.getLatestLookupQuery(), cliPrinter)
+      printLookup(lookupInfo, cliPrinter)
     }
     return cliNext()
   }
@@ -32,37 +32,37 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
   else if (queryString) options.queryString = queryString
 
   if (cliInput.hasOption('all')) {
-    const sampleSet = Sample.sampleSetByPathQuery(options)
-    if (!sampleSet || sampleSet.size === 0) {
+    const sampleSetInfo = Sample.sampleSetByPathQuery(options)
+    if (!sampleSetInfo || sampleSetInfo.sampleSet.size === 0) {
       cliPrinter.warn('No samples found!')
     } else {
-      printSampleSet(sampleSet, Sample.getLatestSampleSetQuery(), cliPrinter)
+      printSampleSet(sampleSetInfo, cliPrinter)
     }
     return cliNext()
   } else {
-    const newLookup = Sample.lookupByPathQuery(options)
-    if (newLookup.length === 0) {
+    const lookupInfo = Sample.lookupByPathQuery(options)
+    if (!lookupInfo) {
       cliPrinter.warn('No samples found!')
     } else {
-      printLookup(newLookup, Sample.getLatestLookupQuery(), cliPrinter)
+      printLookup(lookupInfo, cliPrinter)
     }
     return cliNext()
   }
 })
 
-const printLookup = (lookupArray, latestLookupQuery, cliPrinter) => {
-  cliPrinter.info(`Lookup query: ${latestLookupQuery.queryString}`)
-  cliPrinter.info(`Found samples: ${Sample.getLatestSampleSet().size}`)
+const printLookup = (lookupInfo, cliPrinter) => {
+  cliPrinter.info(`Lookup query: ${lookupInfo.query.queryString}`)
+  cliPrinter.info(`Found samples: ${lookupInfo.sampleSet.size}`)
   cliPrinter.newLine()
-  lookupArray.forEach((sample, index) => {
+  lookupInfo.lookup.forEach((sample, index) => {
     cliPrinter.info(`${index + 1}) ${sample.relPath}`)
   })
 }
 
-const printSampleSet = (sampleSet, latestSampleSetQuery, cliPrinter) => {
-  cliPrinter.info(`Lookup query: ${latestSampleSetQuery.queryString}`)
+const printSampleSet = (sampleSetInfo, cliPrinter) => {
+  cliPrinter.info(`Lookup query: ${sampleSetInfo.query.queryString}`)
   cliPrinter.newLine()
-  sampleSet.forEach((sample, index) => {
+  sampleSetInfo.sampleSet.forEach((sample, index) => {
     cliPrinter.info(`${index + 1}) ${sample.relPath}`)
   })
 }
