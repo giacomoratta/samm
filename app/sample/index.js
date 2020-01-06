@@ -4,7 +4,9 @@ const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
-const SampleSetCache = new SpheroidCache({ maxItems: 30 })
+/* todo: store better data { latest set, latest query } */
+const SampleSetCache = new SpheroidCache({ maxItems: 20 })
+const LookupCache = new SpheroidCache({ maxItems: 30 })
 
 let latestSampleSet = null
 let latestSampleSetQuery = null
@@ -114,6 +116,10 @@ const lookupByPathQuery = ({ queryString, queryLabel }) => {
     maxFromSameDirectory: Config.get('MaxSamplesSameDirectory')
   })
   latestLookupQuery = (queryString ? PathQuery.create(queryString) : PathQuery.get(queryLabel))
+  // LookupCache.add(Date.now().toString(),{
+  //   latestLookup,
+  //   latestLookupQuery
+  // })
   return latestLookup
 }
 

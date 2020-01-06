@@ -10,7 +10,7 @@ Cli.addCommand(`${commandName}`)
 Cli.addCommandHeader(commandName)
   .description('Perform a full scan of the samples directory and create the index. ' +
     'If the index is already present the scan does not start, in order to avoid resource wasting.' + '\n')
-  .option('-f, --force', 'Force the rescan.')
+  .option('-f, --force', 'Force the rescan')
 
 Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   if (!Config.get('SamplesDirectory')) {

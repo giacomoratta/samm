@@ -8,7 +8,9 @@ Cli.addCommand(`${commandName} [label] [query]`)
 
 Cli.addCommandHeader(commandName)
   .description('Manage queries for sample, for matching sample directories and files. \n')
-  .option('-r, --remove', 'Remove a query.')
+  // .option('-c, --copy <new-label>', 'Duplicate a query with the specified query \'new-label\'.') /* todo */
+  .option('-r, --remove', 'Remove a query')
+  // .option('-u, --uncovered <count>', 'Shows the first <count> uncovered samples by all queries') /* todo */
 
 Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   const queryLabel = cliInput.getParam('label')
