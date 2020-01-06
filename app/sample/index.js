@@ -8,10 +8,10 @@ const { SpheroidCache } = require('../../core/spheroid-cache')
 const SampleSetCache = new SpheroidCache({ maxItems: 20 })
 const LookupCache = new SpheroidCache({ maxItems: 30 })
 
-let latestSampleSet = null
-let latestSampleSetQuery = null
-let latestLookup = []
-let latestLookupQuery = null
+const latestSampleSet = null
+const latestSampleSetQuery = null
+const latestLookup = []
+const latestLookupQuery = null
 
 // set logger
 
@@ -114,10 +114,12 @@ const lookupByPathQuery = ({ queryString, queryLabel }) => {
     max: Config.get('RandomCount'),
     maxFromSameDirectory: Config.get('MaxSamplesSameDirectory')
   })
-  if ( lookup.length > 0 ) LookupCache.add({
-    lookup,
-    ...sampleSetInfo
-  })
+  if (lookup.length > 0) {
+    LookupCache.add({
+      lookup,
+      ...sampleSetInfo
+    })
+  }
   return {
     lookup,
     ...sampleSetInfo
