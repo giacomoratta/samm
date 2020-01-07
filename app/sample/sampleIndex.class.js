@@ -34,7 +34,7 @@ class SampleIndex {
       includedExtensions,
       excludedExtensions,
       excludedPaths,
-      objectClass: SampleInfo
+      ObjectClass: SampleInfo
     })
     await this.sampleTree.read()
     if (this.sampleTree.fileCount() === 1) return false
@@ -49,7 +49,7 @@ class SampleIndex {
     const jsonSampleTree = await fileUtils.readJsonFile(this.indexFilePath)
     if (!jsonSampleTree) return false
     this.sampleTree = new SequoiaPath(this.samplePath, {
-      objectClass: SampleInfo
+      ObjectClass: SampleInfo
     })
     this.sampleTree.fromJson(jsonSampleTree)
     return true
@@ -60,7 +60,7 @@ class SampleIndex {
       throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
     this.sampleTree.forEach({
-      itemFn: callback
+      itemFn: callback // callback({item})
     })
   }
 

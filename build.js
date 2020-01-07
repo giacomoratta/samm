@@ -1,10 +1,10 @@
 const { compile } = require('nexe')
-const package_json = require('./package.json')
-global._ = require('lodash')
-global.Utils = require('./libs/utils.js')
+const packageJson = require('./package.json')
+const _ = require('lodash')
+const Utils = {}
 
 const b$cfg = {
-  version: package_json.version,
+  version: packageJson.version,
   build_dir: Utils.File.setAsAbsPath('build'),
   compile_options: {
     input: './app-prod.js',

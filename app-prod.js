@@ -1,5 +1,5 @@
 
-global.ENV_CONFIG = {
+const ENV_CONFIG = {
   debug_enabled: false,
   absolute_app_path: ''
 }

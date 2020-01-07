@@ -6,7 +6,7 @@
 	"BookmarkFile": "bookmarks",
 	"PathQueryFile": "path_queries",
 	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-	"RandomCount": 15,
+	"RandomCount": 3,
 	"MaxSamplesSameDirectory": 2,
 	"ExtensionsPolicyForSamples": "X",
 	"Status": {

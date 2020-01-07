@@ -2,9 +2,9 @@ const path = require('path')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { SampleInfo } = require('../sample/sampleInfo.class')
 
-const { Config } = require('../config')
+// const { Config } = require('../config')
 
-const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, overwrite }) => {
+const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {
   if (!samplesArray || samplesArray.length === 0) {
     throw new Error('Sample list not valid')
   }
@@ -12,7 +12,7 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
     throw new Error('Sample list should have SampleInfo instances only')
   }
 
-  let directoryName = samplesQuery.label.substr(0, 16)
+  if (!directoryName) directoryName = samplesQuery.label.substr(0, 16)
   if (directoryName.endsWith('_')) directoryName = directoryName.substr(0, directoryName.length - 1)
 
   if (overwrite === true && fileUtils.directoryExistsSync(path.join(destinationPath, directoryName))) {
@@ -33,16 +33,17 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
   let finalSamplePath
   samplesArray.forEach((sample) => {
     finalSamplePath = (overwrite !== true ? fileUtils.uniqueFileNameSync({ parentPath: finalDirectoryPath, fileName: sample.base }) : path.join(finalDirectoryPath, sample.base))
-    promisesArray.push(fileUtils.copyFile(sample.path, finalSamplePath, { overwrite })).then(() => {
-      copiedFiles.push(finalSamplePath)
-    }).catch(() => {
-      notCopiedFiles.push(finalSamplePath)
-    })
+    promisesArray.push(fileUtils.copyFile(sample.path, finalSamplePath, { overwrite }).then((result) => {
+      copiedFiles.push(result.pathTo)
+    }).catch((result) => {
+      notCopiedFiles.push(result.pathTo)
+    }))
   })
   return Promise.all(promisesArray).then(() => {
     return {
       copiedFiles,
-      notCopiedFiles
+      notCopiedFiles,
+      destinationPath: finalDirectoryPath
     }
   })
 }

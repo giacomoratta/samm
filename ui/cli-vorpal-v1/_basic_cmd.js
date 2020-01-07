@@ -1,6 +1,7 @@
-const { App, Cli } = require('./common')
+// const { App, Cli } = require('./common')
+const { Cli } = require('./common')
 
-const Config = App.Config
+// const Config = App.Config
 
 const commandName = 'abcde'
 

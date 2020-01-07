@@ -27,10 +27,10 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
     return cliNext()
   }
 
-  if (!destinationAbsPath || !destinationDirectory) {
-    cliPrinter.error('Specify a directory name or an absolute path as destination!')
-    return cliNext()
-  }
+  // if (!destinationAbsPath || !destinationDirectory) {
+  //   cliPrinter.error('Specify a directory name or an absolute path as destination!')
+  //   return cliNext()
+  // }
 
   if (destinationAbsPath && overwriteDestination === true) {
     cliPrinter.error('Operation not allowed: cannot overwrite a custom absolute path!')
@@ -56,9 +56,10 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
     samplesQuery = lookupInfo.query
   }
 
-  let destinationPath = null
+  let destinationPath = path.join(ProjectHistory.latest().path, 'mpl')
+  let directoryName = null
   if (destinationDirectory) {
-    destinationPath = path.join(ProjectHistory.latest().path, 'mpl')
+    directoryName = destinationDirectory
   } else if (destinationAbsPath) {
     destinationPath = destinationAbsPath
   }
@@ -68,17 +69,38 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
       samplesArray,
       samplesQuery,
       destinationPath,
+      directoryName,
       overwrite: overwriteDestination
     })
 
-    cliPrinter.info(`Saved ${samplesArray.length} samples in ${destinationPath}`)
-    let i = 1
-    samplesArray.forEach((sample) => {
-      cliPrinter.info(` ${i.toString().padStart(samplesArray.length.toString().length, ' ')}) ${sample.path}`)
-      i++
-    })
+    let index
+
+    cliPrinter.info(`Destination path for samples: ${destinationPath}`)
+    cliPrinter.newLine()
+
+    if (result.copiedFiles.length > 0) {
+      cliPrinter.info(`Saved ${result.copiedFiles.length} samples:`)
+      index = 1
+      result.copiedFiles.forEach((samplePath) => {
+        cliPrinter.info(` ${index.toString().padStart(result.copiedFiles.length.toString().length, ' ')}) ${samplePath}`)
+        index++
+      })
+
+      if (result.notCopiedFiles.length > 0) {
+        cliPrinter.newLine()
+        cliPrinter.info(`...and ${result.notCopiedFiles.length} samples have not been saved:`)
+        index = 1
+        result.notCopiedFiles.forEach((samplePath) => {
+          cliPrinter.info(` ${index.toString().padStart(result.notCopiedFiles.length.toString().length, ' ')}) ${samplePath}`)
+          index++
+        })
+      }
+    } else {
+      cliPrinter.error('No samples have been saved!')
+    }
   } catch (e) {
     cliPrinter.error(e.message)
+    console.log(e)
     return cliNext()
   }
 

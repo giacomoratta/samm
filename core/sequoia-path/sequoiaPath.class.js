@@ -114,7 +114,7 @@ class SequoiaPath {
     }
     const iterator = tree.treeIterator(this.root, {})
     for (const item of iterator) {
-      if (!(item instanceof this.data.options.objectClass)) continue
+      if (!(item instanceof this.data.options.ObjectClass)) continue
       options.itemFn({
         item
       })
@@ -171,7 +171,7 @@ class SequoiaPath {
     let newPathInfo = null
 
     for (let i = 0; i < importObj.struct.length; i++) {
-      newPathInfo = new this.data.options.objectClass()
+      newPathInfo = new this.data.options.ObjectClass()
       newPathInfo.fromJson(importObj.struct[i].item)
 
       if (newPathInfo.level > prevLevel) {

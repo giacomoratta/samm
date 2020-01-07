@@ -3,7 +3,7 @@ const { Project } = require('../project.class')
 
 describe('Project class', function () {
   it('Project basic methods', function () {
-    let projectPath, projectObject, jsonObj
+    let projectPath, projectObject
 
     expect(() => {
       projectObject = new Project({ projectPath: path.join(__dirname, 'test_dir', 'my_project_invalid') })
@@ -23,7 +23,7 @@ describe('Project class', function () {
     expect(projectObject.name).toEqual('my_project1.daw')
     expect(projectObject.path).toEqual(projectPath)
 
-    jsonObj = {
+    const jsonObj = {
       name: 'my_project1.daw',
       path: projectPath
     }

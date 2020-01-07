@@ -15,7 +15,7 @@ describe('SampleIndex functions', function () {
     fileUtils.removeFileSync(SampleIndexFile)
 
     expect(function () {
-      const sIndex1 = new SampleIndex({
+      return new SampleIndex({
         indexFilePath: SampleIndexFile,
         samplesPath: SamplesDirectory + 'wrong'
       })
@@ -28,7 +28,7 @@ describe('SampleIndex functions', function () {
     result = await sIndex1.load()
     expect(result).toEqual(false)
     expect(function () { sIndex1.forEach(() => {}) }).toThrow()
-    expect(function () { sIndex1.size }).toThrow()
+    expect(function () { return sIndex1.size }).toThrow()
 
     const sIndex2 = new SampleIndex({
       indexFilePath: SampleIndexFile,
@@ -37,13 +37,13 @@ describe('SampleIndex functions', function () {
     result = await sIndex2.load()
     expect(result).toEqual(false)
     expect(function () { sIndex2.forEach(() => {}) }).toThrow()
-    expect(function () { sIndex2.size }).toThrow()
+    expect(function () { return sIndex2.size }).toThrow()
 
     fileUtils.writeTextFileSync(SampleIndexFile, '')
     result = await sIndex2.load()
     expect(result).toEqual(false)
     expect(function () { sIndex2.forEach(() => {}) }).toThrow()
-    expect(function () { sIndex2.size }).toThrow()
+    expect(function () { return sIndex2.size }).toThrow()
 
     result = await sIndex2.create()
     expect(result).toEqual(true)
@@ -109,7 +109,7 @@ describe('SampleIndex functions', function () {
   })
 
   it('should support file problems', function () {
-    let result, sIndex1
+    let sIndex1
     const SampleIndexFileWrongJson = path.join(__dirname, 'fixed_samples_index_wrong_json')
     const SampleIndexFileEmpty = path.join(__dirname, 'fixed_samples_index_empty')
     const SampleIndexFileNotExists = path.join(__dirname, 'fixed_samples_index_not_exists')
@@ -119,7 +119,7 @@ describe('SampleIndex functions', function () {
       samplesPath: __dirname
     })
 
-    expect(function () { sIndex1.size }).toThrow()
+    expect(function () { return sIndex1.size }).toThrow()
     expect(sIndex1.loaded).toEqual(false)
 
     sIndex1 = new SampleIndex({
@@ -127,7 +127,7 @@ describe('SampleIndex functions', function () {
       samplesPath: __dirname
     })
 
-    expect(function () { sIndex1.size }).toThrow()
+    expect(function () { return sIndex1.size }).toThrow()
     expect(sIndex1.loaded).toEqual(false)
 
     sIndex1 = new SampleIndex({
@@ -135,7 +135,7 @@ describe('SampleIndex functions', function () {
       samplesPath: __dirname
     })
 
-    expect(function () { sIndex1.size }).toThrow()
+    expect(function () { return sIndex1.size }).toThrow()
     expect(sIndex1.loaded).toEqual(false)
   })
 })

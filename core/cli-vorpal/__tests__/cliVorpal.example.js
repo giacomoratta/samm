@@ -1,4 +1,4 @@
-const { CliVorpal, CLI_SUCCESS } = require('../cliVorpal.class')
+const { CliVorpal } = require('../cliVorpal.class')
 const vCli = new CliVorpal()
 const vCl2 = new CliVorpal()
 

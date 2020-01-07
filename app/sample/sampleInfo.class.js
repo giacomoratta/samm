@@ -1,9 +1,9 @@
 const { PathInfo } = require('../../core/path-info')
 
 class SampleInfo extends PathInfo {
-  constructor () {
-    super()
-  }
+  // constructor () {
+  //   super()
+  // }
 }
 
 module.exports = {

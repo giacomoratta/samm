@@ -7,7 +7,7 @@ const { ProjectHistory } = require('../projectHistory')
 
 describe('ProjectHistory endpoints', function () {
   it('ProjectHistory basic functions', function () {
-    let projectPath, projectObject, jsonObj, fileContent, phArray
+    let projectPath
 
     projectPath = path.join(__dirname, 'test_dir', 'my_project1')
     expect(ProjectHistory.add(projectPath)).toEqual(true)
@@ -30,12 +30,12 @@ describe('ProjectHistory endpoints', function () {
 
     expect(ProjectHistory.save()).toEqual(true)
 
-    fileContent = fileUtils.readJsonFileSync(Config.get('ProjectHistoryFile'))
+    const fileContent = fileUtils.readJsonFileSync(Config.get('ProjectHistoryFile'))
     expect(fileContent.ProjectHistory.length).toEqual(15)
     expect(fileContent.ProjectHistory[0].path).toEqual(path.join(__dirname, 'test_dir', 'my_project17'))
     expect(fileContent.ProjectHistory[fileContent.ProjectHistory.length - 1].path).toEqual(path.join(__dirname, 'test_dir', 'my_project3'))
 
-    phArray = ProjectHistory.list()
+    const phArray = ProjectHistory.list()
     expect(phArray.length).toEqual(15)
     expect(phArray[0].path).toEqual(path.join(__dirname, 'test_dir', 'my_project17'))
     expect(phArray[phArray.length - 1].path).toEqual(path.join(__dirname, 'test_dir', 'my_project3'))

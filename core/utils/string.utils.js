@@ -2,7 +2,7 @@ const { _ } = require('./lodash.extended')
 const libUtils = {}
 
 const regexp = {
-  url_domain: /^(?:https?:)?(?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)/im
+  url_domain: /^(?:https?:)?(?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/im
   /*  'http://abc.ggg.com/kjhsf?fdklsjd'.match(rg)
         [
             'http://abc.ggg.com',
@@ -14,7 +14,8 @@ const regexp = {
 }
 
 libUtils.replaceAll = (str, str1, str2, ignore) => {
-  return str.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, '\\$&'), (ignore ? 'gi' : 'g')), (typeof (str2) === 'string') ? str2.replace(/\$/g, '$$$$') : str2)
+  // return str.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, '\\$&'), (ignore ? 'gi' : 'g')), (typeof (str2) === 'string') ? str2.replace(/\$/g, '$$$$') : str2)
+  return str.replace(new RegExp(str1.replace(/([/,!\\^${}[\]().*+?|<>\-&])/g, '\\$&'), (ignore ? 'gi' : 'g')), (typeof (str2) === 'string') ? str2.replace(/\$/g, '$$$$') : str2)
 }
 
 libUtils.fileSizeToStr = (fileSize) => {
@@ -41,7 +42,7 @@ libUtils.onlyLettersNumbers = (s) => {
 }
 
 libUtils.onlyValidPathName = (s) => {
-  return _.deburr(s).replace(/[^a-zA-Z0-9_\-\.]/g, '')
+  return _.deburr(s).replace(/[^a-zA-Z0-9_\-.]/g, '')
 }
 
 libUtils.html_query_string = (v, joinch) => {
