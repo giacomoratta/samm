@@ -71,9 +71,9 @@ class ProjectHistoryJsonFile {
     return true
   }
 
-  forEach (fn) {
+  forEach (callback) {
     this.ProjectHistoryCache.forEach(({ label, value }) => {
-      fn(value)
+      callback(value)
     })
   }
 }

@@ -72,11 +72,11 @@ class PathQueryJsonFile {
     return true
   }
 
-  forEach (fn) {
+  forEach (callback) {
     const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
     if (queryCollectionKeys.length > 0) {
       queryCollectionKeys.forEach((k) => {
-        fn(this.QueryCollectionTemp[k])
+        callback(this.QueryCollectionTemp[k])
       })
       return true
     }

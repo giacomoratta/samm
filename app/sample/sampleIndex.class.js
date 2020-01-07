@@ -55,12 +55,12 @@ class SampleIndex {
     return true
   }
 
-  forEach (fn) {
+  forEach (callback) {
     if (!this.sampleTree) {
       throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
     this.sampleTree.forEach({
-      itemFn: fn
+      itemFn: callback
     })
   }
 

@@ -7,6 +7,7 @@ const { PathQuery } = require('../../path-query')
 
 const { SampleIndex } = require('../sampleIndex.class')
 const { SampleSet } = require('../sampleSet.class')
+const { SampleInfo } = require('../sampleInfo.class')
 
 describe('SampleSet functions', function () {
   it('should create a sample set', async function () {
@@ -42,6 +43,11 @@ describe('SampleSet functions', function () {
 
     expect(set1.size).toEqual(5)
 
+    set1.forEach((sampleInfoObj, index) => {
+      expect(sampleInfoObj).toBeInstanceOf(SampleInfo)
+      expect(sampleInfoObj.relRoot).toEqual(SamplesDirectory)
+    })
+
     let randomArray1
     let testCounter1 = 20
     while (testCounter1 > 0) {
@@ -73,7 +79,6 @@ describe('SampleSet functions', function () {
     /* Test sampleSet from here... */
 
     expect(set2.size).toEqual(13)
-    set2.toArray()
 
     let randomArray2
     let testCounter2 = 20
