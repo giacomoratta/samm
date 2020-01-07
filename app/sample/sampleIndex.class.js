@@ -1,5 +1,6 @@
 const { SequoiaPath } = require('../../core/sequoia-path')
 const { fileUtils } = require('../../core/utils/file.utils')
+const { SampleInfo } = require('./sampleInfo.class')
 
 class SampleIndexError extends Error {
   constructor (message) {
@@ -32,7 +33,8 @@ class SampleIndex {
     this.sampleTree = new SequoiaPath(this.samplePath, {
       includedExtensions,
       excludedExtensions,
-      excludedPaths
+      excludedPaths,
+      objectClass: SampleInfo
     })
     await this.sampleTree.read()
     if (this.sampleTree.fileCount() === 1) return false
@@ -46,7 +48,9 @@ class SampleIndex {
     if (fExists !== true) return false
     const jsonSampleTree = await fileUtils.readJsonFile(this.indexFilePath)
     if (!jsonSampleTree) return false
-    this.sampleTree = new SequoiaPath(this.samplePath)
+    this.sampleTree = new SequoiaPath(this.samplePath, {
+      objectClass: SampleInfo
+    })
     this.sampleTree.fromJson(jsonSampleTree)
     return true
   }

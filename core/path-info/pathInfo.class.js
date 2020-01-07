@@ -15,40 +15,40 @@ const fileSizeToStr = function (fileSize) {
 }
 
 class PathInfo {
-  constructor (initData) {
+  constructor (absolutePath) {
     this.info = {}
 
-    if (_.isString(initData)) {
-      if (!isAbsolutePath(initData)) {
-        throw new Error(`PathInfo - ${initData} is not an absolute path`)
-      }
-      const absPath = initData
-      const pInfo = path.parse(absPath)
-      if (!pInfo) {
-        throw new Error(`PathInfo - error while parsing ${absPath}`)
-      }
+    if (!absolutePath) return
 
-      let stats = null
-      try {
-        stats = fs.lstatSync(absPath)
-      } catch (e) {
-        throw new Error(`PathInfo - error while getting path stats of ${absPath}`)
-      }
-
-      this.info = pInfo
-      if (this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
-      this.info.path = absPath
-      this.info.level = 1
-      this.info.size = (stats.size ? stats.size : 0)
-      this.info.createdAt = stats.birthtime
-      this.info.modifiedAt = stats.mtime
-      this.info.isFile = stats.isFile()
-      this.info.isDirectory = stats.isDirectory()
-    } else if (_.isObject(initData) && initData.constructor.name === 'PathInfo') {
-      this.info = _.cloneDeep(initData.info)
-    } else if (!_.isNil(initData)) {
-      throw new Error(`Invalid initData: ${initData}`)
+    if (!_.isString(absolutePath)) {
+      throw new Error(`Invalid absolute path: ${absolutePath}`)
     }
+
+    if (!isAbsolutePath(absolutePath)) {
+      throw new Error(`${absolutePath} is not an absolute path`)
+    }
+
+    const pInfo = path.parse(absolutePath)
+    if (!pInfo) {
+      throw new Error(`Error while parsing ${absolutePath}`)
+    }
+
+    let stats = null
+    try {
+      stats = fs.lstatSync(absolutePath)
+    } catch (e) {
+      throw new Error(`Error while getting path stats of ${absolutePath}`)
+    }
+
+    this.info = pInfo
+    if (this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
+    this.info.path = absolutePath
+    this.info.level = 1
+    this.info.size = (stats.size ? stats.size : 0)
+    this.info.createdAt = stats.birthtime
+    this.info.modifiedAt = stats.mtime
+    this.info.isFile = stats.isFile()
+    this.info.isDirectory = stats.isDirectory()
   }
 
   isEqualTo (obj2) {
@@ -93,6 +93,12 @@ class PathInfo {
     // if (this.info.relPath.length === 0) this.info.relPath = path.sep
     // if (this.info.relPath.endsWith(path.sep)) this.info.relPath = this.info.relPath.substr(0, this.info.relPath.length - 2) // remove final path.sep
     if (this.info.relPath.length > 0) this.info.level = _.split(this.info.relPath, path.sep).length + 1
+  }
+
+  clone () {
+    const newPathInfo = new this.constructor()
+    newPathInfo.info = _.cloneDeep(this.info)
+    return newPathInfo
   }
 
   toJson () {

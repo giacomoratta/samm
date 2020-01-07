@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const SymbolTree = require('symbol-tree')
-const { PathInfo } = require('../path-info')
 const utils = require('./utils')
 
 class SequoiaPath {
@@ -115,7 +114,7 @@ class SequoiaPath {
     }
     const iterator = tree.treeIterator(this.root, {})
     for (const item of iterator) {
-      if (!(item instanceof PathInfo)) continue
+      if (!(item instanceof this.data.options.objectClass)) continue
       options.itemFn({
         item
       })
@@ -172,7 +171,7 @@ class SequoiaPath {
     let newPathInfo = null
 
     for (let i = 0; i < importObj.struct.length; i++) {
-      newPathInfo = new PathInfo()
+      newPathInfo = new this.data.options.objectClass()
       newPathInfo.fromJson(importObj.struct[i].item)
 
       if (newPathInfo.level > prevLevel) {

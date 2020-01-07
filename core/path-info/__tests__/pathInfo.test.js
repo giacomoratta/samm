@@ -13,7 +13,7 @@ describe('PathInfo class and object', function () {
 
     expect(function () {
       return new PathInfo({})
-    }).toThrow('Invalid initData')
+    }).toThrow('Invalid absolute path')
 
     const absDirPath1 = path.join(__dirname, 'test_dir', 'directory6')
     const pInfo1 = new PathInfo(absDirPath1)
@@ -75,7 +75,7 @@ describe('PathInfo class and object', function () {
   it('should create a PathInfo object from another PathInfo object (with clone deep)', function () {
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory6', 'file61.txt')
     const pInfo0 = new PathInfo(absFilePath1)
-    const pInfo1 = new PathInfo(pInfo0)
+    const pInfo1 = pInfo0.clone()
 
     expect(pInfo0.isEqualTo(pInfo1)).toEqual(true)
     expect(pInfo1.isEqualTo(pInfo0)).toEqual(true)

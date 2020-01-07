@@ -11,8 +11,14 @@ const parseOptions = function (options) {
     excludedPaths: [],
     itemFn: function ({ item }) {},
     afterDirectoryFn: function ({ item }) {},
+    objectClass: PathInfo,
     ...options
   }
+
+  if (!options.objectClass && options.objectClass !== PathInfo && !PathInfo.isPrototypeOf(options.objectClass)) {
+    throw new Error('options.objectClass should inherit PathInfo class!')
+  }
+
   return options
 }
 

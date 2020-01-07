@@ -1,8 +1,21 @@
-const path = require('path')
 const _ = require('lodash')
-const { JsonizedFile } = require('../../core/jsonized-file')
-const { SequoiaPath } = require('../../core/sequoia-path')
-const { fileUtils } = require('../../core/utils/file.utils')
+const { SampleInfo } = require('./sampleInfo.class')
+
+/*
+ * create SampleInfo class
+ * use in forEach for fn({ sampleInfo, index })
+ * throw errors in add or remove
+ *
+ * this.array attribute
+ * add to table and array
+ * add = O(1)
+ * remove = O(n)
+ * toArray = O(1) and can be removed
+ * forEach will be less complex
+ *
+ * manage array with empty fields? no, because it is only for remove and remove is not so usual
+ *
+ */
 
 class SampleSet {
   constructor ({ validate } = {}) {
@@ -35,13 +48,13 @@ class SampleSet {
     return this._size
   }
 
-  toArray () {
-    const newArray = []
-    this.forEach((sample) => {
-      newArray.push(sample.toJson())
-    })
-    return newArray
-  }
+  // toArray () {
+  //   const newArray = []
+  //   this.forEach((sample) => {
+  //     newArray.push(sample.toJson())
+  //   })
+  //   return newArray
+  // }
 
   forEach (fn) {
     let index = 0
@@ -53,6 +66,12 @@ class SampleSet {
     })
   }
 
+  /**
+   * Get a random subset of SampleInfo objects
+   * @param max
+   * @param maxFromSameDirectory
+   * @returns {[<SampleInfo>]}
+   */
   random ({ max = 10, maxFromSameDirectory = 0 }) {
     const randomArray = []
     const collection = this.toArray()
