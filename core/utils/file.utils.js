@@ -324,6 +324,28 @@ libUtils.writeTextFile = (pathTo, text) => {
   return libUtils.writeFile(pathTo, text, 'iso88591')
 }
 
+libUtils.copyFile = (pathFrom, pathTo, options) => {
+  options = _.merge({
+    overwrite: true,
+    errorOnExist: false
+  }, options)
+  return new Promise(function (resolve, reject) {
+    const result = {
+      err: null,
+      pathFrom: pathFrom,
+      pathTo: pathTo
+    }
+    fsExtra.copy(pathFrom, pathTo, options, function (err) {
+      if (err) {
+        result.err = err
+        // console.error(result)
+        return reject(result)
+      }
+      return resolve(result)
+    })
+  })
+}
+
 /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.copyDirectory = (pathFrom, pathTo, options) => {
@@ -420,6 +442,18 @@ libUtils.readDirectorySync = (pathString, preProcessItemsFn, itemFn) => {
   return items
 }
 
+libUtils.uniqueDirectoryNameSync = ({ parentPath, directoryName }) => {
+  let newDestinationPath = path.join(parentPath, directoryName)
+  const parsedDir = path.parse(newDestinationPath)
+  let i = 1
+  while (libUtils.directoryExistsSync(newDestinationPath) === true && i < 1000) {
+    newDestinationPath = path.join(parsedDir.dir, `${parsedDir.base}_${i}`)
+    i++
+  }
+  if (i >= 1000) return null
+  return newDestinationPath
+}
+
 libUtils.removeDirSync = (pathString) => {
   try {
     rimraf.sync(pathString)
@@ -461,26 +495,16 @@ libUtils.copyFileSync = (pathFrom, pathTo, options) => {
   return result
 }
 
-libUtils.copyFile = (pathFrom, pathTo, options) => {
-  options = _.merge({
-    overwrite: true,
-    errorOnExist: false
-  }, options)
-  return new Promise(function (resolve, reject) {
-    const result = {
-      err: null,
-      pathFrom: pathFrom,
-      pathTo: pathTo
-    }
-    fsExtra.copy(pathFrom, pathTo, options, function (err) {
-      if (err) {
-        result.err = err
-        // console.error(result)
-        return reject(result)
-      }
-      return resolve(result)
-    })
-  })
+libUtils.uniqueFileNameSync = ({ parentPath, fileName }) => {
+  let newDestinationPath = path.join(parentPath, fileName)
+  const parsedFile = path.parse(newDestinationPath)
+  let i = 1
+  while (libUtils.fileExistsSync(newDestinationPath) === true && i < 1000) {
+    newDestinationPath = path.join(parsedFile.dir, `${parsedFile.name}_${i}${parsedFile.ext}`)
+    i++
+  }
+  if (i >= 1000) return null
+  return newDestinationPath
 }
 
 module.exports = {

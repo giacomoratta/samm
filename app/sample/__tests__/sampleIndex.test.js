@@ -107,4 +107,35 @@ describe('SampleIndex functions', function () {
 
     fileUtils.writeTextFileSync(SampleIndexFile, '')
   })
+
+  it('should support file problems', function () {
+    let result, sIndex1
+    const SampleIndexFileWrongJson = path.join(__dirname, 'fixed_samples_index_wrong_json')
+    const SampleIndexFileEmpty = path.join(__dirname, 'fixed_samples_index_empty')
+    const SampleIndexFileNotExists = path.join(__dirname, 'fixed_samples_index_not_exists')
+
+    sIndex1 = new SampleIndex({
+      indexFilePath: SampleIndexFileWrongJson,
+      samplesPath: __dirname
+    })
+
+    expect(function () { sIndex1.size }).toThrow()
+    expect(sIndex1.loaded).toEqual(false)
+
+    sIndex1 = new SampleIndex({
+      indexFilePath: SampleIndexFileEmpty,
+      samplesPath: __dirname
+    })
+
+    expect(function () { sIndex1.size }).toThrow()
+    expect(sIndex1.loaded).toEqual(false)
+
+    sIndex1 = new SampleIndex({
+      indexFilePath: SampleIndexFileNotExists,
+      samplesPath: __dirname
+    })
+
+    expect(function () { sIndex1.size }).toThrow()
+    expect(sIndex1.loaded).toEqual(false)
+  })
 })

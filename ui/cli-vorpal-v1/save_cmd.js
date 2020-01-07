@@ -16,7 +16,7 @@ Cli.addCommandHeader(commandName)
   .option('-p, --path <path>', 'Absolute custom path')
   .option('-o, --overwrite', 'Overwrite the existent directory')
 
-Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   const saveAll = cliInput.getOption('all')
   const destinationDirectory = cliInput.getOption('dirname')
   const destinationAbsPath = cliInput.getOption('path')
@@ -58,13 +58,13 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
   let destinationPath = null
   if (destinationDirectory) {
-    destinationPath = path.join(ProjectHistory.latest().path, 'mpl', destinationDirectory)
+    destinationPath = path.join(ProjectHistory.latest().path, 'mpl')
   } else if (destinationAbsPath) {
     destinationPath = destinationAbsPath
   }
 
   try {
-    Export.generateSamplesDirectory({
+    const result = await Export.generateSamplesDirectory({
       samplesArray,
       samplesQuery,
       destinationPath,
