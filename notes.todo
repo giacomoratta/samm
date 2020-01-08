@@ -13,18 +13,15 @@ APP TESTING
 
 
 SHORT
-- manage config with cli
-  - with special methods in vorpalCli and printerCli
+- check PathInfo.size
+- manage test files
+    - remove and generate files when it is needed
+    - look for unix urls and explicit path.sep
+    - be sure test files are git-ignored
 
 
 MID
-- samples manager (index, lookup, NO save!)
-  - manage samples index: scan and save
-- lookup and save with query hash in temp cache (max 3)
-- projects manager (history, current, add, remove, list, save)
 - bookmarks manager (add, remove, list, save)
-- queries manager (add, remove, validate, list, save)
-- export manager => save samples to mpl/abc
 
 
 LONG
