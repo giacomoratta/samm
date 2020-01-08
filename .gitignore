@@ -12,6 +12,7 @@ yarn-error.log*
 temp/
 userdata/
 build/
+config.json
 
 # Runtime data
 pids

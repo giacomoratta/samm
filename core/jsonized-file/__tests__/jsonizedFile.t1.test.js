@@ -1,5 +1,7 @@
+const path = require('path')
+const baseRoot = path.parse(__dirname).root
 const { JsonizedFile } = require('../index')
-const jszFile1 = new JsonizedFile({ filePath: '/fake/dir' })
+const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot,'fake','dir') })
 
 describe('JsonizedFile class and object', function () {
   it('should create an basic JsonizedFile with simple fields', function () {
@@ -151,7 +153,7 @@ describe('JsonizedFile class and object', function () {
       jszFile1.addField({
         name: 'relFile1',
         schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
-        value: 'file_utils_test_dir2/file2.json'
+        value: path.join('file_utils_test_dir2','file2.json')
       })
     }).not.toThrow()
 
@@ -180,10 +182,10 @@ describe('JsonizedFile class and object', function () {
         status: true,
         nested: { id: 42, name: 'fghil67890', status: false, listing: ['elm1', 'elm2'] }
       },
-      absDir1: '/home/giacomo/Workspace/mpl/core/jsonized-file/__tests__/file_utils_test_dir1',
-      absFile1: '/home/giacomo/Workspace/mpl/core/jsonized-file/__tests__/file_utils_test_dir1/file1.json',
-      relDir1: 'file_utils_test_dir2',
-      relFile1: 'file_utils_test_dir2/file2.json'
+      absDir1: path.join(__dirname,'file_utils_test_dir1'),
+      absFile1: path.join(__dirname,'file_utils_test_dir1','file1.json'),
+      relDir1: path.join('file_utils_test_dir2'),
+      relFile1: path.join('file_utils_test_dir2','file2.json')
     })
 
     const fieldList = jszFile1.getFieldList()

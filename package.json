@@ -29,7 +29,6 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/__toDel",
       ".example."
     ]
   },
