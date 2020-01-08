@@ -48,6 +48,19 @@ const createIndex = async () => {
   return result
 }
 
+const repairIndex = ({ newSamplesRoot='' }) => {
+  let result = true
+  if(newSamplesRoot) {
+    //result = mainSamplesIndex.replaceSamplesRoot(newSamplesRoot)
+  }
+  if (result === true) {
+    Config.getField('Status').add('new-scan-needed', false)
+    Config.getField('Status').add('first-scan-needed', false)
+    Config.save()
+  }
+  return result
+}
+
 const hasIndex = () => {
   return mainSamplesIndex !== null && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
 }
@@ -135,6 +148,7 @@ module.exports = {
     loadIndex,
     sampleSetByPathQuery,
     lookupByPathQuery,
+    repairIndex,
 
     getLatestSampleSet: () => { return SampleSetCache.latest },
     getLatestLookup: () => { return LookupCache.latest }

@@ -8,6 +8,7 @@ class JsonizedFile {
     this.prettyJson = prettyJson
     this.fields = {}
     this.fileHolder = null
+    this.preProcessRawDataFn = null
   }
 
   addField ({ name, schema, value, description }) {
@@ -15,6 +16,10 @@ class JsonizedFile {
       throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
     this.fields[name] = new DataField({ name, schema, value, description })
+  }
+
+  ensureField () {
+    /* todo */
   }
 
   hasField (name) {
@@ -61,6 +66,7 @@ class JsonizedFile {
   }
 
   fromObject (data) {
+    if(this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       this.fields[k].set(data[k], { overwrite: true })
