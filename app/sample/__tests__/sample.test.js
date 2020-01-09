@@ -11,13 +11,13 @@ const SampleIndexFile = Config.get('SampleIndexFile')
 
 describe('sample endpoints', function () {
   it('should perform basic operations', async function () {
-    fileUtils.removeFileSync(SampleIndexFile, '')
+    await fileUtils.removeFile(SampleIndexFile).catch(() => {})
     Config.unset('SamplesDirectory')
 
     let result
 
     expect(Sample.hasIndex()).toEqual(false)
-    expect(function () { Sample.indexSize() }).not.toThrow()
+    expect(function () { Sample.indexSize() }).toThrow()
 
     result = await Sample.loadIndex()
     expect(result).toEqual(false)

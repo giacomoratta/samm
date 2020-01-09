@@ -62,7 +62,7 @@ const repairIndex = ({ newSamplesRoot = '' }) => {
 }
 
 const hasIndex = () => {
-  return mainSamplesIndex !== null // && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
+  return mainSamplesIndex !== null && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
 }
 
 const indexSize = () => {

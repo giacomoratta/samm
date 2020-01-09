@@ -476,6 +476,16 @@ libUtils.removeFileSync = (pathString) => {
   }
 }
 
+/* todo: move */
+libUtils.removeFile = (pathString) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(pathString, (err) => {
+      if (err) return reject(err)
+      resolve(true)
+    })
+  })
+}
+
 libUtils.copyFileSync = (pathFrom, pathTo, options) => {
   options = _.merge({
     overwrite: true,

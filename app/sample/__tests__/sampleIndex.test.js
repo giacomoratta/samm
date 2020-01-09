@@ -12,7 +12,6 @@ describe('SampleIndex functions', function () {
     let result
     const SampleIndexFile = Config.get('SampleIndexFile')
     const SamplesDirectory = Config.get('SamplesDirectory')
-    fileUtils.removeFileSync(SampleIndexFile)
 
     expect(function () {
       return new SampleIndex({
