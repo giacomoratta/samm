@@ -13,11 +13,20 @@ APP TESTING
 
 
 SHORT
+- check remove file/dir in test files (with mask *.test.*)
+    - to make tests coherent
 - check PathInfo.size
 - manage test files
     - remove and generate files when it is needed
     - look for unix urls and explicit path.sep
     - be sure test files are git-ignored
+- unix, mac and window docker file for tests
+- start logging on external file
+    - use console immediately and switch to pino
+    - create userdata/logs directory
+        - check and clean at the beginning (in core/logger/index.js)
+    - check logs with cat -tail
+    - use pino-transport
 
 
 MID
