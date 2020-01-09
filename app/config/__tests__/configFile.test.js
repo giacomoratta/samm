@@ -1,6 +1,10 @@
 const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
-// const { Config } = require('../index')
+const { fileUtils } = require('../../../core/utils/file.utils')
+
+fileUtils.removeDirSync(path.join(process.env.ABSOLUTE_APP_PATH, 'userdata'))
+fileUtils.removeFileSync(path.join(process.env.ABSOLUTE_APP_PATH, 'config.json'))
+
 const { ConfigFile } = require('../configFile.class')
 
 describe('config endpoints', function () {

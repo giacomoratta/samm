@@ -6,17 +6,18 @@ const { Config } = require('../../config')
 const { Sample } = require('../index')
 const { PathQuery } = require('../../path-query')
 
-const SampleIndexFile = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
+const SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
+const SampleIndexFile = Config.get('SampleIndexFile')
 
 describe('sample endpoints', function () {
   it('should perform basic operations', async function () {
     fileUtils.removeFileSync(SampleIndexFile, '')
-    Config.getField('SamplesDirectory').unset()
+    Config.unset('SamplesDirectory')
 
     let result
 
     expect(Sample.hasIndex()).toEqual(false)
-    expect(function () { Sample.indexSize() }).toThrow()
+    expect(function () { Sample.indexSize() }).not.toThrow()
 
     result = await Sample.loadIndex()
     expect(result).toEqual(false)
@@ -24,7 +25,7 @@ describe('sample endpoints', function () {
     result = await Sample.createIndex()
     expect(result).toEqual(false)
 
-    Config.set('SamplesDirectory', SampleIndexFile)
+    Config.set('SamplesDirectory', SamplesDirectory)
     result = await Sample.createIndex()
     expect(result).toEqual(true)
     expect(Sample.hasIndex()).toEqual(true)
@@ -37,7 +38,7 @@ describe('sample endpoints', function () {
   })
 
   it('should perform some lookups', async function () {
-    Config.set('SamplesDirectory', SampleIndexFile)
+    Config.set('SamplesDirectory', SamplesDirectory)
     let result
 
     result = await Sample.loadIndex()

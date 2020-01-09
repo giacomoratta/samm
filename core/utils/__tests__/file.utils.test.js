@@ -11,7 +11,7 @@ describe('Utils.File.singleton', function () {
     const pathDirCustomDir = fileUtils.setAsAbsPath(path.join('.', 'file_utils_test_dir', 'directory1', 'directory2'), false, path.join(path.parse(__dirname).root, 'custom', 'dir'))
 
     expect(fileUtils.isAbsolutePath(__dirname)).toEqual(true)
-    expect(fileUtils.isAbsolutePath(path.join('abc','fgh'))).toEqual(false)
+    expect(fileUtils.isAbsolutePath(path.join('abc', 'fgh'))).toEqual(false)
 
     expect(pathFile11Std.startsWith(__dirname.substr(0, 16))).toEqual(true)
     expect(pathFile11Local.startsWith(__dirname.substr(0, 16))).toEqual(true)

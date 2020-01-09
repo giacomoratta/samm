@@ -13,30 +13,29 @@ class BookmarksJsonFileClass {
     }
   }
 
-  add(label, SampleInfo) {
+  add (label, SampleInfo) {
     /* todo */
     // check instanceof
     // ensure field with label
   }
 
-  remove(label, SampleInfo) {
+  remove (label, SampleInfo) {
 
   }
 
-  removeByIndex(label, index) {
+  removeByIndex (label, index) {
 
   }
 
-  removeLabel(label) {
+  removeLabel (label) {
 
   }
 
-  save() {
+  save () {
 
   }
 
-  load() {
+  load () {
 
   }
-
 }

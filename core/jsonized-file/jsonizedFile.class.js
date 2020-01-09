@@ -56,6 +56,11 @@ class JsonizedFile {
     return this.fields[name].set(value)
   }
 
+  unset (name) {
+    if (!this.fields[name]) return
+    return this.fields[name].unset()
+  }
+
   toObject () {
     const finalObject = {}
     Object.keys(this.fields).forEach((k) => {
@@ -66,7 +71,7 @@ class JsonizedFile {
   }
 
   fromObject (data) {
-    if(this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
+    if (this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       this.fields[k].set(data[k], { overwrite: true })

@@ -48,10 +48,10 @@ const createIndex = async () => {
   return result
 }
 
-const repairIndex = ({ newSamplesRoot='' }) => {
-  let result = true
-  if(newSamplesRoot) {
-    //result = mainSamplesIndex.replaceSamplesRoot(newSamplesRoot)
+const repairIndex = ({ newSamplesRoot = '' }) => {
+  const result = true
+  if (newSamplesRoot) {
+    // result = mainSamplesIndex.replaceSamplesRoot(newSamplesRoot)
   }
   if (result === true) {
     Config.getField('Status').add('new-scan-needed', false)
@@ -62,7 +62,7 @@ const repairIndex = ({ newSamplesRoot='' }) => {
 }
 
 const hasIndex = () => {
-  return mainSamplesIndex !== null && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
+  return mainSamplesIndex !== null // && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
 }
 
 const indexSize = () => {

@@ -13,40 +13,40 @@ describe('FileButler actions with data and files', function () {
 
     expect(function () {
       newFileButler({
-        filePath: path.join('invalid','path')
+        filePath: path.join('invalid', 'path')
       })
     }).toThrow('\'filePath\' option must be an absolute path')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(baseRoot,'dir_test','file1-not-exists.json')
+        filePath: path.join(baseRoot, 'dir_test', 'file1-not-exists.json')
       })
     }).toThrow('File specified in \'filePath\' cannot be created')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1-not-exists.json')
+        filePath: path.join(__dirname, 'dir_test', 'file1-not-exists.json')
       })
     }).not.toThrow('File specified in \'filePath\' cannot be created')
-    expect(fileUtils.fileExistsSync(path.join(__dirname, 'dir_test','file1-not-exists.json'))).toEqual(true)
-    fileUtils.removeFileSync(path.join(__dirname, 'dir_test','file1-not-exists.json'))
+    expect(fileUtils.fileExistsSync(path.join(__dirname, 'dir_test', 'file1-not-exists.json'))).toEqual(true)
+    fileUtils.removeFileSync(path.join(__dirname, 'dir_test', 'file1-not-exists.json'))
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1.json')
+        filePath: path.join(__dirname, 'dir_test', 'file1.json')
       })
     }).toThrow('\'fileType\' option must be present and have one')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1.json'),
         fileType: 'invalid-type'
       })
     }).toThrow('\'fileType\' option must be present and have one')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1.json'),
         fileType: 'json',
         cloneFrom: 'invalid/path'
       })
@@ -54,50 +54,50 @@ describe('FileButler actions with data and files', function () {
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1.json'),
         fileType: 'json',
-        cloneFrom: path.join(__dirname, 'dir_test','file1.clone-not-exists.json')
+        cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone-not-exists.json')
       })
     }).toThrow('Path specified in \'cloneFrom\' option does not exist')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1-new.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1-new.json'),
         fileType: 'json',
-        cloneFrom: path.join(__dirname, 'dir_test','file1.clone-not-exists.json')
+        cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone-not-exists.json')
       })
     }).toThrow('Path specified in \'cloneFrom\' option does not exist')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1-new.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1-new.json'),
         fileType: 'json',
-        cloneFrom: path.join(__dirname, 'dir_test','file1.clone.json')
+        cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone.json')
       })
     }).not.toThrow('Path specified in \'cloneFrom\' option does not exist')
 
     expect(function () {
       newFileButler({
-        filePath: path.join(__dirname, 'dir_test','file1-new.json'),
+        filePath: path.join(__dirname, 'dir_test', 'file1-new.json'),
         fileType: 'json',
-        cloneFrom: path.join(__dirname, 'dir_test','file1.clone.json'),
+        cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone.json'),
         backupTo: 'invalid/path'
       })
     }).toThrow('\'backupTo\' option must be an absolute path')
 
     const fb1 = newFileButler({
-      filePath: path.join(__dirname, 'dir_test','file1-new.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file1-new.json'),
       fileType: 'json',
-      cloneFrom: path.join(__dirname, 'dir_test','file1.clone.json')
+      cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone.json')
     })
     expect(fileUtils.fileExistsSync(fb1.config.filePath)).toEqual(true)
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ abc: 123 })
     fileUtils.removeFileSync(fb1.config.filePath)
 
     const fb2 = newFileButler({
-      filePath: path.join(__dirname, 'dir_test','file2-new.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2-new.json'),
       fileType: 'json',
-      backupTo: path.join(__dirname, 'dir_test','file1.backup.json')
+      backupTo: path.join(__dirname, 'dir_test', 'file1.backup.json')
     })
     fb2.set({ fgh: 756 })
     fb2.save()
@@ -128,7 +128,7 @@ describe('FileButler actions with data and files', function () {
     const mc1 = new MyClass()
 
     const fb1 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file33.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file33.json'),
       fileType: 'json',
       loadFn: function (data) {
         mc1.setFromFile(data)
@@ -147,7 +147,7 @@ describe('FileButler actions with data and files', function () {
 
   it('should create a FileButler with correct options related to fileType = json', function () {
     const fb1 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.json'),
       fileType: 'json'
     })
     expect(fb1.config.defaultValue).toEqual(null)
@@ -166,7 +166,7 @@ describe('FileButler actions with data and files', function () {
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ new: 'obj1' })
 
     const fb2 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.json'),
       fileType: 'json'
     })
     expect(fb2.get()).toMatchObject({ new: 'obj1' })
@@ -175,7 +175,7 @@ describe('FileButler actions with data and files', function () {
 
   it('should create a FileButler with correct options related to fileType = json-compact', function () {
     const fb1 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.compact.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.compact.json'),
       fileType: 'json-compact'
     })
     expect(fb1.config.defaultValue).toEqual(null)
@@ -194,7 +194,7 @@ describe('FileButler actions with data and files', function () {
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ new: 'obj1' })
 
     const fb2 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.json'),
       fileType: 'json'
     })
     expect(fb2.get()).toEqual(null)
@@ -204,7 +204,7 @@ describe('FileButler actions with data and files', function () {
 
   it('should create a FileButler with correct options related to fileType = string', function () {
     const fb1 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.txt'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.txt'),
       fileType: 'text'
     })
     expect(fb1.config.defaultValue).toEqual('')
@@ -223,7 +223,7 @@ describe('FileButler actions with data and files', function () {
     expect(fileUtils.readTextFileSync(fb1.config.filePath)).toEqual('new-value')
 
     const fb2 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2_2.txt'),
+      filePath: path.join(__dirname, 'dir_test', 'file2_2.txt'),
       fileType: 'text'
     })
     expect(fb2.get()).toEqual('')
@@ -233,7 +233,7 @@ describe('FileButler actions with data and files', function () {
 
   it('should make a deep copy of value', function () {
     const fb22 = new FileButler({
-      filePath: path.join(__dirname, 'dir_test','file2.json'),
+      filePath: path.join(__dirname, 'dir_test', 'file2.json'),
       fileType: 'json'
     })
 

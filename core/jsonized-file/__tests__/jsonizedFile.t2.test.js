@@ -7,7 +7,7 @@ describe('JsonizedFile set file holder', function () {
   it('should set a file holder and load empty file', function () {
     const newJsonizedFile = function (filePath, prettyJson) { return new JsonizedFile({ filePath, prettyJson }) }
 
-    //expect(function () { return new JsonizedFile({}) }).toThrow('Cannot read')
+    // expect(function () { return new JsonizedFile({}) }).toThrow('Cannot read')
 
     const f1 = newJsonizedFile()
     expect(function () { f1.load() }).toThrow('Missing \'filePath\'')
@@ -23,19 +23,18 @@ describe('JsonizedFile set file holder', function () {
     fileUtils.removeFileSync(path.join(__dirname, 'f1.json'))
   })
   it('should create a JsonizedFile and save on file', function () {
-    
-    fileUtils.writeJsonFileSync(path.join(__dirname, 'test_dir', 'f1.example.json'),{
-      "field1": 32,
-      "field2": {
-        "id": 32,
-        "name": "namefield2",
-        "status": false
+    fileUtils.writeJsonFileSync(path.join(__dirname, 'test_dir', 'f1.example.json'), {
+      field1: 32,
+      field2: {
+        id: 32,
+        name: 'namefield2',
+        status: false
       },
-      "field31": path.join(__dirname,"test_dir","field31.json"),
-      "field32": "field32.json",
-      "field51": path.join(__dirname,"test_dir","field51"),
-      "field52": "field52/field52sub",
-      "field7": -1111111
+      field31: path.join(__dirname, 'test_dir', 'field31.json'),
+      field32: 'field32.json',
+      field51: path.join(__dirname, 'test_dir', 'field51'),
+      field52: 'field52/field52sub',
+      field7: -1111111
     }
     )
     const f1 = new JsonizedFile({ filePath: path.join(__dirname, 'test_dir', 'f1.example.json'), prettyJson: true })

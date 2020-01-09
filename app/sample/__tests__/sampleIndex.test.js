@@ -34,6 +34,7 @@ describe('SampleIndex functions', function () {
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
+    console.log(SampleIndexFile)
     result = await sIndex2.load()
     expect(result).toEqual(false)
     expect(function () { sIndex2.forEach(() => {}) }).toThrow()

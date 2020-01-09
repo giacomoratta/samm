@@ -11,7 +11,7 @@ describe('dataField path fields', function () {
         checkExists: true,
         createIfNotExists: false,
         deleteIfExists: false,
-        default: path.join(baseRoot,'abc','file_utils_test_dir')
+        default: path.join(baseRoot, 'abc', 'file_utils_test_dir')
       }
     }
     const field1 = new DataField(field1Attr)
@@ -26,7 +26,7 @@ describe('dataField path fields', function () {
         checkExists: true,
         createIfNotExists: false,
         deleteIfExists: false,
-        default: path.join(baseRoot,'abc','file_utils_test_file')
+        default: path.join(baseRoot, 'abc', 'file_utils_test_file')
       }
     }
     const field2 = new DataField(field2Attr)
@@ -42,7 +42,7 @@ describe('dataField path fields', function () {
         createIfNotExists: false,
         deleteIfExists: false,
         basePath: __dirname,
-        default: path.join('abc','file_utils_test_dir')
+        default: path.join('abc', 'file_utils_test_dir')
       }
     }
     const field3 = new DataField(field3Attr)
@@ -58,7 +58,7 @@ describe('dataField path fields', function () {
         createIfNotExists: false,
         deleteIfExists: false,
         basePath: __dirname,
-        default: path.join('abc','file_utils_test_file')
+        default: path.join('abc', 'file_utils_test_file')
       }
     }
     const field4 = new DataField(field4Attr)

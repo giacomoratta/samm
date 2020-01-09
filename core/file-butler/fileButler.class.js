@@ -34,11 +34,11 @@ class FileButler {
     const saveResult = this.config.fn.saveToFile(this.config.filePath, savedData)
     if (saveResult === true) {
       this.eventEmitter.emit('save', { filePath: this.config.filePath, data: savedData })
-    }
-    if (this.config.backupTo) {
-      const copyResult = fileUtils.copyFileSync(this.config.filePath, this.config.backupTo)
-      if (copyResult.err) {
-        throw new FileButlerError(`Backup failed! From '${this.config.backupTo}' to ${this.config.backupTo}`)
+      if (this.config.backupTo) {
+        const copyResult = fileUtils.copyFileSync(this.config.filePath, this.config.backupTo)
+        if (copyResult.err) {
+          throw new FileButlerError(`Backup failed! From '${this.config.backupTo}' to ${this.config.backupTo}`)
+        }
       }
     }
     return saveResult
