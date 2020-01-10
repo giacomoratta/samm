@@ -2,7 +2,6 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-
 const { ConfigFile } = require('../configFile.class')
 
 describe('configuration file class manager', function () {

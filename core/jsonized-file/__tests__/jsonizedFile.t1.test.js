@@ -1,19 +1,19 @@
 const path = require('path')
+const { fileUtils } = require('../../utils/file.utils')
 const baseRoot = path.parse(__dirname).root
 const { JsonizedFile } = require('../index')
-const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 
 describe('JsonizedFile class and object', function () {
   it('should create an basic JsonizedFile with simple fields', function () {
-    expect(function () {
-      jszFile1.addField({
-        name: 'counter1',
-        schema: { type: 'number', positive: true, integer: true },
-        value: 32
-      })
-    }).not.toThrow()
+    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 
-    expect(function () { jszFile1.removeField('counter2') }).not.toThrow()
+    jszFile1.addField({
+      name: 'counter1',
+      schema: { type: 'number', positive: true, integer: true },
+      value: 32
+    })
+
+    jszFile1.removeField('counter2')
 
     expect(function () {
       jszFile1.addField({
@@ -23,13 +23,11 @@ describe('JsonizedFile class and object', function () {
       })
     }).toThrow('already exists')
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'counter2',
-        schema: { type: 'number', positive: false, integer: true },
-        value: -12
-      })
-    }).not.toThrow()
+    jszFile1.addField({
+      name: 'counter2',
+      schema: { type: 'number', positive: false, integer: true },
+      value: -12
+    })
 
     expect(function () { jszFile1.removeField('counter2') }).not.toThrow()
     expect(jszFile1.get('counter2')).toEqual(undefined)
@@ -66,6 +64,8 @@ describe('JsonizedFile class and object', function () {
   })
 
   it('should create an basic JsonizedFile with complex fields', function () {
+    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
+
     const defaultValue = {
       id: 32,
       name: 'abcde12345',
@@ -81,55 +81,48 @@ describe('JsonizedFile class and object', function () {
       }
     }
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'person1',
-        schema: {
-          type: 'object',
-          props: {
-            id: { type: 'number', positive: true, integer: true },
-            name: { type: 'string', min: 3, max: 255 },
-            status: 'boolean',
-            nested: {
-              type: 'object',
-              props: {
-                id: { type: 'number', positive: true, integer: true },
-                name: { type: 'string', min: 3, max: 255 },
-                status: 'boolean',
-                listing: { type: 'array' }
-              }
+    jszFile1.addField({
+      name: 'person1',
+      schema: {
+        type: 'object',
+        props: {
+          id: { type: 'number', positive: true, integer: true },
+          name: { type: 'string', min: 3, max: 255 },
+          status: 'boolean',
+          nested: {
+            type: 'object',
+            props: {
+              id: { type: 'number', positive: true, integer: true },
+              name: { type: 'string', min: 3, max: 255 },
+              status: 'boolean',
+              listing: { type: 'array' }
             }
           }
-        },
-        value: defaultValue
-      })
-    }).not.toThrow()
+        }
+      },
+      value: defaultValue
+    })
 
     // defaultValue.id = 1234
     // expect(jszFile1.get('person1')).not.toMatchObject(defaultValue)
   })
 
   it('should create an basic JsonizedFile with absPath fields', function () {
-    const path = require('path')
-    const { fileUtils } = require('../../utils/file.utils')
+    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'absDir1',
-        schema: { type: 'absDirPath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
-        value: path.join(__dirname, 'file_utils_test_dir1')
-      })
-    }).not.toThrow()
+    jszFile1.addField({
+      name: 'absDir1',
+      schema: { type: 'absDirPath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join(__dirname, 'file_utils_test_dir1')
+    })
 
     expect(fileUtils.directoryExistsSync(jszFile1.get('absDir1'))).toEqual(true)
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'absFile1',
-        schema: { type: 'absFilePath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
-        value: path.join(__dirname, 'file_utils_test_dir1/file1.json')
-      })
-    }).not.toThrow()
+    jszFile1.addField({
+      name: 'absFile1',
+      schema: { type: 'absFilePath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join(__dirname, 'file_utils_test_dir1/file1.json')
+    })
 
     expect(fileUtils.fileExistsSync(jszFile1.get('absFile1'))).toEqual(true)
 
@@ -137,25 +130,21 @@ describe('JsonizedFile class and object', function () {
   })
 
   it('should create an basic JsonizedFile with relPath fields', function () {
-    const { fileUtils } = require('../../utils/file.utils')
+    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'relDir1',
-        schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
-        value: 'file_utils_test_dir2'
-      })
-    }).not.toThrow()
+    jszFile1.addField({
+      name: 'relDir1',
+      schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: 'file_utils_test_dir2'
+    })
 
     expect(fileUtils.directoryExistsSync(jszFile1.get('relDir1'))).toEqual(true)
 
-    expect(function () {
-      jszFile1.addField({
-        name: 'relFile1',
-        schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
-        value: path.join('file_utils_test_dir2', 'file2.json')
-      })
-    }).not.toThrow()
+    jszFile1.addField({
+      name: 'relFile1',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join('file_utils_test_dir2', 'file2.json')
+    })
 
     expect(fileUtils.fileExistsSync(jszFile1.get('relFile1'))).toEqual(true)
 
@@ -163,13 +152,71 @@ describe('JsonizedFile class and object', function () {
   })
 
   it('should get fields list and export a complete json object', function () {
+    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
+
     jszFile1.addField({
-      name: 'null-field',
+      name: 'counter1',
+      schema: { type: 'number', positive: true, integer: true },
+      value: 42
+    })
+
+    jszFile1.addField({
+      name: 'person1',
       schema: {
-        type: 'array',
-        items: 'number',
-        default: [61, 53, 96]
+        type: 'object',
+        props: {
+          id: { type: 'number', positive: true, integer: true },
+          name: { type: 'string', min: 3, max: 255 },
+          status: 'boolean',
+          nested: {
+            type: 'object',
+            props: {
+              id: { type: 'number', positive: true, integer: true },
+              name: { type: 'string', min: 3, max: 255 },
+              status: 'boolean',
+              listing: { type: 'array' }
+            }
+          }
+        }
+      },
+      value: {
+        id: 32,
+        name: 'abcde12345',
+        status: true,
+        nested: {
+          id: 42,
+          name: 'fghil67890',
+          status: false,
+          listing: [
+            'elm1',
+            'elm2'
+          ]
+        }
       }
+    })
+
+    jszFile1.addField({
+      name: 'absDir1',
+      schema: { type: 'absDirPath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join(__dirname, 'file_utils_test_dir1')
+    })
+
+    jszFile1.addField({
+      name: 'absFile1',
+      schema: { type: 'absFilePath', checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join(__dirname, 'file_utils_test_dir1/file1.json')
+    })
+
+    jszFile1.addField({
+      name: 'relDir1',
+      schema: { type: 'relDirPath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: 'file_utils_test_dir2'
+    })
+
+    jszFile1.addField({
+      name: 'relFile1',
+      schema: { type: 'relFilePath', basePath: __dirname, checkExists: false, createIfNotExists: true, deleteIfExists: false },
+      value: path.join('file_utils_test_dir2', 'file2.json')
     })
 
     const exportObject = jszFile1.toObject()
@@ -186,6 +233,15 @@ describe('JsonizedFile class and object', function () {
       absFile1: path.join(__dirname, 'file_utils_test_dir1', 'file1.json'),
       relDir1: path.join('file_utils_test_dir2'),
       relFile1: path.join('file_utils_test_dir2', 'file2.json')
+    })
+
+    jszFile1.addField({
+      name: 'null-field',
+      schema: {
+        type: 'array',
+        items: 'number',
+        default: [61, 53, 96]
+      }
     })
 
     const fieldList = jszFile1.getFieldList()

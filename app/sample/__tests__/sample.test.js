@@ -20,7 +20,6 @@ describe('sample endpoints', function () {
   })
 
   it('should perform basic operations and lookups', async function () {
-
     expect(fileUtils.fileExistsSync(SampleIndexFile)).toEqual(false)
     Config.unset('SamplesDirectory')
 
@@ -34,7 +33,7 @@ describe('sample endpoints', function () {
 
     result = await Sample.createIndex()
     expect(result).toEqual(false)
-    //return
+    // return
 
     Config.set('SamplesDirectory', SamplesDirectory)
     result = await Sample.createIndex()

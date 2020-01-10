@@ -204,7 +204,7 @@ Config.getField('IncludedExtensionsForSamples').on('change', () => {
   }
 })
 
-if(Config.load() === true) {
+if (Config.load() === true) {
   Config.save()
 }
 

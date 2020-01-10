@@ -8,7 +8,7 @@ class ConfigFile extends JsonizedFile {
 
   errors () {
     const _errors = {}
-    if( this._loadError !== null ) _errors['loadError'] = this._loadError
+    if (this._loadError !== null) _errors.loadError = this._loadError
     return _errors
   }
 
@@ -19,7 +19,7 @@ class ConfigFile extends JsonizedFile {
   }
 
   load () {
-    if ( this._loadError !== null ) return this._loadError
+    if (this._loadError !== null) return this._loadError
     try {
       super.load()
     } catch (e) {

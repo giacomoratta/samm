@@ -5,8 +5,8 @@ const Cli = new CliVorpal()
 const Config = App.Config
 
 const ConfigErrors = Config.errors()
-if(ConfigErrors.loadError) {
-  const uiPrinter = new CliPrinter({ command:'' })
+if (ConfigErrors.loadError) {
+  const uiPrinter = new CliPrinter({ command: '' })
   uiPrinter.newLine()
 
   uiPrinter.error('Invalid configuration file')
@@ -19,7 +19,6 @@ if(ConfigErrors.loadError) {
   uiPrinter.newLine()
   process.exit(1)
 }
-
 
 const ConfigStatusMessages = () => {
   const statusFlags = Config.get('Status')

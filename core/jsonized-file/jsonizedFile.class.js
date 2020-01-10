@@ -9,12 +9,11 @@ class JsonizedFile {
     this.fields = {}
     this.fileHolder = null
     this.preProcessRawDataFn = null
-    this.latestException = null
   }
 
   addField ({ name, schema, value, description }) {
     if (this.fields[name]) {
-      this.latestException = new JsonizedFileError(`Field ${name} already exists. Remove it first`)
+      throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
     this.fields[name] = new DataField({ name, schema, value, description })
   }
@@ -62,12 +61,12 @@ class JsonizedFile {
     return this.fields[name].unset()
   }
 
-  isUnset () {
+  isUnset (name) {
     if (!this.fields[name]) return
     return this.fields[name].isUnset()
   }
 
-  _toFileData () {
+  toObject () {
     const finalObject = {}
     Object.keys(this.fields).forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
@@ -76,7 +75,7 @@ class JsonizedFile {
     return finalObject
   }
 
-  _fromFileData (data) {
+  fromObject (data) {
     if (this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
@@ -95,11 +94,11 @@ class JsonizedFile {
     options.fileType = (this.prettyJson ? 'json' : 'json-compact')
     options.loadFn = (data) => {
       if (!data) return
-      this._fromFileData(data)
+      this.fromObject(data)
     }
 
     options.saveFn = () => {
-      return this._toFileData()
+      return this.toObject()
     }
 
     try {
@@ -114,12 +113,12 @@ class JsonizedFile {
   }
 
   save () {
-    if(!this.fileHolder) return false
+    if (!this.fileHolder) return false
     return this.fileHolder.save()
   }
 
   deleteFile () {
-    let tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
+    const tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
       filePath: this.filePath,
       fileType: (this.prettyJson ? 'json' : 'json-compact')
     }))

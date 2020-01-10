@@ -36,7 +36,11 @@
     "globals": [
       "describe",
       "expect",
-      "it"
+      "it",
+      "beforeEach",
+      "beforeAll",
+      "afterEach",
+      "afterAll"
     ]
   }
 }

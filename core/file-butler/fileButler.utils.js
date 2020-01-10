@@ -30,13 +30,13 @@ const getLoadFromFileFn = function (fileType) {
   if (ENUMS.fileType.json === fileType || ENUMS.fileType.json_compact === fileType) {
     return function (filePath) {
       const result = fileUtils.readJsonFileSync(filePath)
-      if(!result || result === null || result === false) return null
+      if (!result || result === null || result === false) return null
       return result
     }
   } else if (ENUMS.fileType.text === fileType) {
     return function (filePath) {
       const result = fileUtils.readTextFileSync(filePath)
-      if(!result || result === null || result === false) return null
+      if (!result || result === null || result === false) return null
       return result
     }
   }
