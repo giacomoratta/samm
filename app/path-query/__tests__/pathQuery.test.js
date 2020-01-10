@@ -7,6 +7,8 @@ const { PathQuery } = require('../index')
 
 describe('query endpoints', function () {
   it('should perform basic operations', function () {
+    expect(fileUtils.directoryExistsSync(Config.get('UserdataDirectory'))).toEqual(true)
+
     fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
 
     PathQuery.add('my_label1', 'file1,file3')

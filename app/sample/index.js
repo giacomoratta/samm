@@ -40,6 +40,7 @@ const createIndex = async () => {
     options.includedExtensions = Config.get('IncludedExtensionsForSamples')
   }
   const result = await mainSamplesIndex.create(options)
+  //let result = false
   if (result === true) {
     Config.getField('Status').add('new-scan-needed', false)
     Config.getField('Status').add('first-scan-needed', false)
@@ -66,7 +67,7 @@ const hasIndex = () => {
 }
 
 const indexSize = () => {
-  if (mainSamplesIndex === null) return 0
+  //if (mainSamplesIndex === null) return 0
   return mainSamplesIndex.size
 }
 

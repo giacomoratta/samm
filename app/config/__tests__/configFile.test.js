@@ -2,12 +2,15 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-fileUtils.removeDirSync(path.join(process.env.ABSOLUTE_APP_PATH, 'userdata'))
-fileUtils.removeFileSync(path.join(process.env.ABSOLUTE_APP_PATH, 'config.json'))
 
 const { ConfigFile } = require('../configFile.class')
 
-describe('config endpoints', function () {
+describe('configuration file class manager', function () {
+  beforeEach(() => {
+    fileUtils.removeDirSync(path.join(process.env.ABSOLUTE_APP_PATH, 'userdata'))
+    fileUtils.removeFileSync(path.join(process.env.ABSOLUTE_APP_PATH, 'config.json'))
+  })
+
   it('should create and handle a config file', function () {
     let Config1
     const ConfigFileWrongJson = path.join(__dirname, 'config_file_wrong_json')

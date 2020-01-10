@@ -21,6 +21,9 @@ class SampleIndex {
     if (!fileUtils.directoryExistsSync(samplesPath)) {
       throw new SampleIndexError(`samplesPath does not exist: ${samplesPath}`)
     }
+    if (!fileUtils.parentDirectoryExistsSync(indexFilePath)) {
+      throw new SampleIndexError(`Cannot create index file because of a missing parent path: ${indexFilePath}`)
+    }
     this.indexFilePath = indexFilePath
     this.samplePath = samplesPath
     this.sampleTree = null

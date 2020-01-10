@@ -6,7 +6,7 @@ const dataFieldUtils = require('./utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
-const UNSET_FIELD_VALUE = null
+const UNDEFINED_FIELD_VALUE = null
 
 /* Extra properties
  *   - schema docs: https://www.npmjs.com/package/fastest-validator
@@ -34,7 +34,7 @@ class DataField {
     schema = dataFieldUtils.fixSchema(_.cloneDeep(schema))
 
     this.isDefaultValue = false
-    this.defaultValue = UNSET_FIELD_VALUE
+    this.defaultValue = UNDEFINED_FIELD_VALUE
     if (!_.isNil(schema.default) && _.isNil(value)) {
       value = schema.default
       this.defaultValue = _.cloneDeep(value)
@@ -43,7 +43,7 @@ class DataField {
 
     this.schema = { [this.name]: schema }
     this.check = validator.compile(this.schema)
-    this.value = { [this.name]: UNSET_FIELD_VALUE }
+    this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
     this.tranformFn = transform.getFieldTransformFn(schema)
     this.description = dataFieldUtils.setDescription(description, schema)
 
@@ -71,7 +71,11 @@ class DataField {
   }
 
   unset () {
-    this.value = { [this.name]: UNSET_FIELD_VALUE }
+    this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
+  }
+
+  isUnset () {
+    return this.value[this.name] === UNDEFINED_FIELD_VALUE
   }
 
   set (value, { overwrite = false } = {}) {
@@ -91,8 +95,8 @@ class DataField {
   }
 
   get (finalValue = true) {
-    if (this.isDefaultValue === true || this.value[this.name] === UNSET_FIELD_VALUE) {
-      return UNSET_FIELD_VALUE
+    if (this.isDefaultValue === true || this.value[this.name] === UNDEFINED_FIELD_VALUE) {
+      return UNDEFINED_FIELD_VALUE
     }
     if (finalValue !== false && this.tranformFn) return this.tranformFn(this.value[this.name], this.schema[this.name])
     return this.value[this.name]
@@ -113,7 +117,7 @@ class DataField {
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.addToObject(this.get(), key, value, this.schema[this.name])
     }
-    if (newValue === UNSET_FIELD_VALUE) return false
+    if (newValue === UNDEFINED_FIELD_VALUE) return false
     return this.set(newValue)
   }
 
@@ -124,7 +128,7 @@ class DataField {
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.removeFromObject(this.get(), key, this.schema[this.name])
     }
-    if (newValue === UNSET_FIELD_VALUE) return false
+    if (newValue === UNDEFINED_FIELD_VALUE) return false
     return this.set(newValue)
   }
 }

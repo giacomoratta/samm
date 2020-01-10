@@ -9,11 +9,12 @@ class JsonizedFile {
     this.fields = {}
     this.fileHolder = null
     this.preProcessRawDataFn = null
+    this.latestException = null
   }
 
   addField ({ name, schema, value, description }) {
     if (this.fields[name]) {
-      throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
+      this.latestException = new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
     this.fields[name] = new DataField({ name, schema, value, description })
   }
@@ -61,7 +62,12 @@ class JsonizedFile {
     return this.fields[name].unset()
   }
 
-  toObject () {
+  isUnset () {
+    if (!this.fields[name]) return
+    return this.fields[name].isUnset()
+  }
+
+  _toFileData () {
     const finalObject = {}
     Object.keys(this.fields).forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
@@ -70,11 +76,16 @@ class JsonizedFile {
     return finalObject
   }
 
-  fromObject (data) {
+  _fromFileData (data) {
     if (this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
-      this.fields[k].set(data[k], { overwrite: true })
+      try {
+        this.fields[k].set(data[k], { overwrite: true })
+      } catch (e) {
+        this.fields[k].unset()
+        throw e
+      }
     })
   }
 
@@ -84,11 +95,11 @@ class JsonizedFile {
     options.fileType = (this.prettyJson ? 'json' : 'json-compact')
     options.loadFn = (data) => {
       if (!data) return
-      this.fromObject(data)
+      this._fromFileData(data)
     }
 
     options.saveFn = () => {
-      return this.toObject()
+      return this._toFileData()
     }
 
     try {
@@ -98,12 +109,21 @@ class JsonizedFile {
     }
   }
 
+  hasData () {
+    return this.fileHolder !== null && this.fileHolder.hasData
+  }
+
   save () {
+    if(!this.fileHolder) return false
     return this.fileHolder.save()
   }
 
   deleteFile () {
-    return this.fileHolder.delete()
+    let tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
+      filePath: this.filePath,
+      fileType: (this.prettyJson ? 'json' : 'json-compact')
+    }))
+    return tempFileHolder.delete()
   }
 }
 

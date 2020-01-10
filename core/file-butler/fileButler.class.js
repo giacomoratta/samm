@@ -11,7 +11,12 @@ class FileButler {
     this.eventEmitter = new Events()
     this.config = parseOption(options)
     this.data = this.config.defaultValue
+    this._hasData = false
     this.load()
+  }
+
+  hasData () {
+    return this._hasData
   }
 
   get () {
@@ -53,7 +58,8 @@ class FileButler {
     }
     let loadedData = this.config.fn.loadFromFile(this.config.filePath)
     if (this.config.loadFn) loadedData = this.config.loadFn(loadedData)
-    if (_.isNil(loadedData)) loadedData = this.config.defaultValue
+    this._hasData = !_.isNil(loadedData)
+    if (!this._hasData) loadedData = this.config.defaultValue
     this.data = loadedData
     this.eventEmitter.emit('load', { filePath: this.config.filePath, data: loadedData })
   }

@@ -170,8 +170,6 @@ Config.addField({
   description: 'Application status data, flags, etc.'
 })
 
-Config.load()
-
 if (Config.get('Platform') !== PlatformString) {
   Config.deleteFile()
   Config.load()
@@ -206,7 +204,9 @@ Config.getField('IncludedExtensionsForSamples').on('change', () => {
   }
 })
 
-Config.save()
+if(Config.load() === true) {
+  Config.save()
+}
 
 module.exports = {
   Config

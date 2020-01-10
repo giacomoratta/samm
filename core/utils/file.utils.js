@@ -105,6 +105,11 @@ libUtils.directoryExistsSync = (pathString) => {
   return fs.existsSync(pathString)
 }
 
+libUtils.parentDirectoryExistsSync = (pathString) => {
+  if (!_.isString(pathString)) return false
+  return fs.existsSync(path.parse(pathString).dir)
+}
+
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (pathString) => {
@@ -375,6 +380,15 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
 libUtils.ensureDirSync = (pathString) => {
   try {
     fsExtra.ensureDirSync(pathString)
+  } catch (e) {
+    return false
+  }
+  return true
+}
+
+libUtils.ensureParentDirSync = (pathString) => {
+  try {
+    fsExtra.ensureDirSync(path.parse(pathString).dir)
   } catch (e) {
     return false
   }

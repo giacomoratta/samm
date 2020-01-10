@@ -6,12 +6,22 @@ const { Config } = require('../../config')
 const { Sample } = require('../index')
 const { PathQuery } = require('../../path-query')
 
-const SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
-const SampleIndexFile = Config.get('SampleIndexFile')
+let SamplesDirectory
+let SampleIndexFile
 
 describe('sample endpoints', function () {
-  it('should perform basic operations', async function () {
-    await fileUtils.removeFile(SampleIndexFile).catch(() => {})
+  beforeEach(() => {
+    SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
+    SampleIndexFile = Config.get('SampleIndexFile')
+    fileUtils.removeFileSync(SampleIndexFile)
+
+    fileUtils.removeDirSync(path.join(process.env.ABSOLUTE_APP_PATH, 'userdata'))
+    fileUtils.removeFileSync(path.join(process.env.ABSOLUTE_APP_PATH, 'config.json'))
+  })
+
+  it('should perform basic operations and lookups', async function () {
+
+    expect(fileUtils.fileExistsSync(SampleIndexFile)).toEqual(false)
     Config.unset('SamplesDirectory')
 
     let result
@@ -24,6 +34,7 @@ describe('sample endpoints', function () {
 
     result = await Sample.createIndex()
     expect(result).toEqual(false)
+    //return
 
     Config.set('SamplesDirectory', SamplesDirectory)
     result = await Sample.createIndex()
@@ -31,15 +42,13 @@ describe('sample endpoints', function () {
     expect(Sample.hasIndex()).toEqual(true)
     expect(Sample.indexSize()).toEqual(13)
 
+    expect(fileUtils.fileExistsSync(SampleIndexFile)).toEqual(true)
     result = await Sample.loadIndex()
     expect(result).toEqual(true)
     expect(Sample.hasIndex()).toEqual(true)
     expect(Sample.indexSize()).toEqual(13)
-  })
 
-  it('should perform some lookups', async function () {
-    Config.set('SamplesDirectory', SamplesDirectory)
-    let result
+    // lookups
 
     result = await Sample.loadIndex()
     expect(result).toEqual(true)

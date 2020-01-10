@@ -3,17 +3,31 @@ const { JsonizedFile } = require('../../core/jsonized-file')
 class ConfigFile extends JsonizedFile {
   constructor (filePath) {
     super({ filePath, prettyJson: true })
+    this._loadError = null
   }
 
-  statusMessages () {
-    const statusFlags = this.get('Status')
-    const statusMessages = []
-    if (statusFlags['first-scan-needed'] === true) {
-      statusMessages.push('First samples scan needed before start using the app')
-    } else if (statusFlags['new-scan-needed'] === true) {
-      statusMessages.push('New samples scan needed to keep using the app')
+  errors () {
+    const _errors = {}
+    if( this._loadError !== null ) _errors['loadError'] = this._loadError
+    return _errors
+  }
+
+  reset () {
+    this._loadError = null
+    this.deleteFile()
+    return this.load()
+  }
+
+  load () {
+    if ( this._loadError !== null ) return this._loadError
+    try {
+      super.load()
+    } catch (e) {
+      this._loadError = e
+      return e
     }
-    return statusMessages
+    this._loadError = null
+    return true
   }
 }
 
