@@ -2,6 +2,7 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('./../../../core/utils/file.utils')
 
+const { Config } = require('../../config')
 const { PathQuery } = require('../../path-query')
 const { SampleSet } = require('../../sample/sampleSet.class')
 const { SampleIndex } = require('../../sample/sampleIndex.class')
@@ -11,6 +12,15 @@ const samplesPath = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
 const indexFilePath = path.join(__dirname, 'sample_index')
 
 describe('Export functions', function () {
+  beforeAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    Config.reset()
+  })
+
+  afterAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+  })
+
   it('Should generate samples directories', async function () {
     let result
 

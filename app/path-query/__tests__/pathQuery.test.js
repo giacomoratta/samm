@@ -6,6 +6,15 @@ const { Config } = require('../../config')
 const { PathQuery } = require('../index')
 
 describe('query endpoints', function () {
+  beforeAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    Config.reset()
+  })
+
+  afterAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+  })
+
   it('should perform basic operations', function () {
     expect(fileUtils.directoryExistsSync(Config.get('UserdataDirectory'))).toEqual(true)
 

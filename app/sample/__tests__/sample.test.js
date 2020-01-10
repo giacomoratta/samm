@@ -16,6 +16,11 @@ describe('sample endpoints', function () {
     Config.reset()
   })
 
+  afterAll(() => {
+    fileUtils.removeFileSync(SampleIndexFile)
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+  })
+
   it('should perform basic operations and lookups', async function () {
     Config.unset('SamplesDirectory')
 

@@ -1,7 +1,18 @@
 const path = require('path')
+// process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
+// const { fileUtils } = require('../../../core/utils/file.utils')
 const { Project } = require('../project.class')
 
 describe('Project class', function () {
+  // beforeAll(() => {
+  //   fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+  //   Config.reset()
+  // })
+  //
+  // afterAll(() => {
+  //   fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+  // })
+
   it('Project basic methods', function () {
     let projectPath, projectObject
 

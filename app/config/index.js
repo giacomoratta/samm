@@ -171,8 +171,7 @@ Config.addField({
 })
 
 if (Config.get('Platform') !== PlatformString) {
-  Config.deleteFile()
-  Config.load()
+  Config.reset()
 }
 
 Config.getField('SamplesDirectory').on('change', ({ newValue }) => {
