@@ -18,10 +18,6 @@ class JsonizedFile {
     this.fields[name] = new DataField({ name, schema, value, description })
   }
 
-  ensureField () {
-    /* todo */
-  }
-
   hasField (name) {
     return (this.fields[name] !== null && this.fields[name] !== undefined)
   }

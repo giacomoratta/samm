@@ -46,7 +46,7 @@ libUtils.onlyValidPathName = (s) => {
 }
 
 libUtils.html_query_string = (v, joinch) => {
-  // TODO handle special characters
+  /* todo: handle special characters */
   const pph = v.indexOf('('); if (pph > 0) v = v.substr(0, pph - 1)
   v = this.onlyValidURL(v)
   return _.trim(v).split(' ').splice(0, 2).join(joinch)

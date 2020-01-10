@@ -87,7 +87,7 @@ libUtils.checkAndSetDuplicatedDirectoryNameSync = (pathString, renameFn) => {
   })
 }
 
-libUtils.checkAndSetPathSync = (pathString, callback) => { // todo ???
+libUtils.checkAndSetPathSync = (pathString, callback) => {
   if (!_.isString(pathString)) return null
   if (!fs.existsSync(pathString)) return null
   pathString = path.resolve(pathString) + path.sep
@@ -351,6 +351,15 @@ libUtils.copyFile = (pathFrom, pathTo, options) => {
   })
 }
 
+libUtils.removeFile = (pathString) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(pathString, (err) => {
+      if (err) return reject(err)
+      resolve(true)
+    })
+  })
+}
+
 /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.copyDirectory = (pathFrom, pathTo, options) => {
@@ -488,16 +497,6 @@ libUtils.removeFileSync = (pathString) => {
     // console.error(e.message)
     return false
   }
-}
-
-/* todo: move */
-libUtils.removeFile = (pathString) => {
-  return new Promise((resolve, reject) => {
-    fs.unlink(pathString, (err) => {
-      if (err) return reject(err)
-      resolve(true)
-    })
-  })
 }
 
 libUtils.copyFileSync = (pathFrom, pathTo, options) => {
