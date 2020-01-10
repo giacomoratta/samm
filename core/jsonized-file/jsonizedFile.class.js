@@ -117,6 +117,14 @@ class JsonizedFile {
     return this.fileHolder.save()
   }
 
+  reset () {
+    this.deleteFile()
+    Object.keys(this.fields).forEach((k) => {
+      this.fields[k].reset()
+    })
+    this.save()
+  }
+
   deleteFile () {
     const tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
       filePath: this.filePath,

@@ -14,8 +14,7 @@ class ConfigFile extends JsonizedFile {
 
   reset () {
     this._loadError = null
-    this.deleteFile()
-    return this.load()
+    return super.reset()
   }
 
   load () {

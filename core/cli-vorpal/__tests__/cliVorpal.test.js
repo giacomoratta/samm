@@ -1,7 +1,7 @@
 const { CliVorpal } = require('../index')
-const myCli = new CliVorpal()
 
 describe('cli interface with vorpal library', function () {
+  const myCli = new CliVorpal()
   it('should add a command', function () {
     expect(myCli.addCommand('cmdname1 <action> [query]')).toEqual('cmdname1')
     expect(myCli.addCommand('cmdname2 ')).toEqual('cmdname2')
@@ -18,6 +18,7 @@ describe('cli interface with vorpal library', function () {
   })
 
   it('should set listener on events', function () {
+    const myCli = new CliVorpal()
     expect(function () {
       myCli.on('show', () => {
         /* callback code */

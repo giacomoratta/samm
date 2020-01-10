@@ -18,7 +18,8 @@ class DataField {
   constructor ({ name, schema, value, description = '' }) {
     this.name = name
     this.eventEmitter = new Events()
-    this.init({ schema, value, description })
+    this._original_data = _.cloneDeep({ schema, value, description })
+    this.init(this._original_data)
   }
 
   changeSchema (schemaDiff) {
@@ -28,6 +29,10 @@ class DataField {
     const description = this.description[0]
     this.init({ schema, value, description })
     this.isDefaultValue = isDefaultValue
+  }
+
+  reset () {
+    this.init(this._original_data)
   }
 
   init ({ schema, value, description = '' }) {

@@ -1,9 +1,9 @@
 const { SpheroidCache } = require('../spheroidCache.class')
 const maxCacheItems = 3
-const cache1 = new SpheroidCache({ maxSize: maxCacheItems })
 
 describe('SpheroidCache standard features', function () {
   it('Should add, change and delete items', function () {
+    const cache1 = new SpheroidCache({ maxSize: maxCacheItems })
     expect(cache1.size).toEqual(0)
 
     expect(cache1.add('lb1', 123)).toEqual(true)
@@ -49,6 +49,12 @@ describe('SpheroidCache standard features', function () {
   })
 
   it('Should have typical FIFO features', function () {
+    const cache1 = new SpheroidCache({ maxSize: maxCacheItems })
+
+    expect(cache1.add(575)).toEqual(true)
+    expect(cache1.add(686)).toEqual(true)
+    expect(cache1.add('lb5', 797)).toEqual(true)
+
     expect(cache1.latest).toEqual(797)
     expect(cache1.oldest).toEqual(575)
 

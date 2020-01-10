@@ -1,5 +1,5 @@
-const { SequoiaPath } = require('../index')
 const path = require('path')
+const { SequoiaPath } = require('../index')
 
 describe('SequoiaPath class and object', function () {
   it('should create a basic SequoiaPath', async function () {

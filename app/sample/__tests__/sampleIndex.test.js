@@ -1,18 +1,24 @@
 const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('./../../../core/utils/file.utils')
-
-const { Config } = require('../../config')
 const { SampleIndex } = require('../sampleIndex.class')
 
-Config.set('SamplesDirectory', path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir'))
+const SampleIndexFile = path.join(__dirname, 'new_samples_index')
+const SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
+const SampleIndexFileWrongJson = path.join(__dirname, 'fixed_samples_index_wrong_json')
+const SampleIndexFileEmpty = path.join(__dirname, 'fixed_samples_index_empty')
+const SampleIndexFileNotExists = path.join(__dirname, 'fixed_samples_index_not_exists')
 
 describe('SampleIndex functions', function () {
+  beforeAll(function () {
+    fileUtils.removeFileSync(SampleIndexFile)
+  })
+  afterAll(function () {
+    fileUtils.removeFileSync(SampleIndexFile)
+  })
+
   it('should create a sample index', async function () {
     let result
-    const SampleIndexFile = Config.get('SampleIndexFile')
-    const SamplesDirectory = Config.get('SamplesDirectory')
-
     expect(function () {
       return new SampleIndex({
         indexFilePath: SampleIndexFile,
@@ -110,9 +116,6 @@ describe('SampleIndex functions', function () {
 
   it('should support file problems', function () {
     let sIndex1
-    const SampleIndexFileWrongJson = path.join(__dirname, 'fixed_samples_index_wrong_json')
-    const SampleIndexFileEmpty = path.join(__dirname, 'fixed_samples_index_empty')
-    const SampleIndexFileNotExists = path.join(__dirname, 'fixed_samples_index_not_exists')
 
     sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFileWrongJson,
