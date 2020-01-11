@@ -1,10 +1,9 @@
 const path = require('path')
-process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('./../../../core/utils/file.utils')
 const { SampleIndex } = require('../sampleIndex.class')
 
 const SampleIndexFile = path.join(__dirname, 'new_samples_index')
-const SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
+const SamplesDirectory = path.join(path.resolve(path.join(__dirname, '..', '..', '__tests__')), 'test_dir')
 const SampleIndexFileWrongJson = path.join(__dirname, 'fixed_samples_index_wrong_json')
 const SampleIndexFileEmpty = path.join(__dirname, 'fixed_samples_index_empty')
 const SampleIndexFileNotExists = path.join(__dirname, 'fixed_samples_index_not_exists')

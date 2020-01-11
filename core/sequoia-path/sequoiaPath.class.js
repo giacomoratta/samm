@@ -37,6 +37,7 @@ class SequoiaPath {
       includedExtensions: this.data.options.includedExtensions,
       excludedExtensions: this.data.options.excludedExtensions,
       excludedPaths: this.data.options.excludedPaths,
+      ObjectClass: this.data.options.ObjectClass,
       itemFn: (data) => {
         // callback for each item
         if (options.filterFn && options.filterFn(data.item) !== true) return

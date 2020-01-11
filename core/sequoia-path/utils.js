@@ -47,7 +47,7 @@ const prepareExtensionsRegex = function (includedExtensions) {
 const walkAction = async function (rootPath, absPath, options) {
   if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null
 
-  const pInfo = new PathInfo(absPath)
+  const pInfo = new options.ObjectClass(absPath)
   if (!pInfo.isFile && !pInfo.isDirectory) return
   pInfo.relRoot = rootPath /* set relative root, relative path and level */
 

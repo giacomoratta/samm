@@ -3,12 +3,14 @@ const { DataField } = require('../data-field')
 const { FileButler } = require('../file-butler')
 
 class JsonizedFile {
-  constructor ({ filePath = '', prettyJson = false }) {
+  constructor ({ filePath = '', prettyJson = false, orderedFields = false }) {
     this.filePath = filePath
-    this.prettyJson = prettyJson
+    this.options = { }
+    this.options.prettyJson = prettyJson
+    this.options.orderedFields = orderedFields
     this.fields = {}
     this.fileHolder = null
-    this.preProcessRawDataFn = null
+    this.beforeLoadFn = null
   }
 
   addField ({ name, schema, value, description }) {
@@ -64,7 +66,9 @@ class JsonizedFile {
 
   toObject () {
     const finalObject = {}
-    Object.keys(this.fields).forEach((k) => {
+    const fieldList = Object.keys(this.fields)
+    if (this.options.orderedFields === true) fieldList.sort()
+    fieldList.forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
       if (finalObject[k] === null) delete finalObject[k]
     })
@@ -72,7 +76,6 @@ class JsonizedFile {
   }
 
   fromObject (data) {
-    if (this.preProcessRawDataFn) data = this.preProcessRawDataFn(data)
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       try {
@@ -87,9 +90,10 @@ class JsonizedFile {
   load () {
     const options = {}
     options.filePath = this.filePath
-    options.fileType = (this.prettyJson ? 'json' : 'json-compact')
+    options.fileType = (this.options.prettyJson ? 'json' : 'json-compact')
     options.loadFn = (data) => {
       if (!data) return
+      if (this.beforeLoadFn) data = this.beforeLoadFn(data)
       this.fromObject(data)
     }
 
@@ -124,7 +128,7 @@ class JsonizedFile {
   deleteFile () {
     const tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
       filePath: this.filePath,
-      fileType: (this.prettyJson ? 'json' : 'json-compact')
+      fileType: (this.options.prettyJson ? 'json' : 'json-compact')
     }))
     return tempFileHolder.delete()
   }
