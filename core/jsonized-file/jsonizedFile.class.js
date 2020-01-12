@@ -11,6 +11,11 @@ class JsonizedFile {
     this.fields = {}
     this.fileHolder = null
     this.beforeLoadFn = null
+    this.fieldsCompareFn = function (a, b) {
+      a = a.toLowerCase()
+      b = b.toLowerCase()
+      return a.localeCompare(b)
+    }
   }
 
   addField ({ name, schema, value, description }) {
@@ -29,15 +34,17 @@ class JsonizedFile {
   }
 
   getFieldList ({ writableOnly = false } = {}) {
+    let fieldList = []
     if (writableOnly === true) {
-      const fieldList = []
       Object.keys(this.fields).forEach((k) => {
         if (this.fields[k].getSchema().readOnly === true) return
         fieldList.push(k)
       })
-      return fieldList
+    } else {
+      fieldList = Object.keys(this.fields)
     }
-    return Object.keys(this.fields)
+    if (this.options.orderedFields === true) fieldList.sort(this.fieldsCompareFn)
+    return fieldList
   }
 
   removeField (name) {
@@ -67,7 +74,7 @@ class JsonizedFile {
   toObject () {
     const finalObject = {}
     const fieldList = Object.keys(this.fields)
-    if (this.options.orderedFields === true) fieldList.sort()
+    if (this.options.orderedFields === true) fieldList.sort(this.fieldsCompareFn)
     fieldList.forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
       if (finalObject[k] === null) delete finalObject[k]

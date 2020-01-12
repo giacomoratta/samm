@@ -91,6 +91,50 @@ describe('dataField class and object', function () {
   })
 
   it('should manage array with add/remove', function () {
+    const df1_1 = new DataField({
+      name: 'stdArray1',
+      schema: {
+        type: 'array',
+        arrayDirection: 'bottom'
+      },
+      value: [1, 3]
+    })
+
+    expect(df1_1.add(5)).toEqual(true)
+    expect(df1_1.get()).toMatchObject([1, 3, 5])
+
+    expect(df1_1.add(7)).toEqual(true)
+    expect(df1_1.get()).toMatchObject([1, 3, 5, 7])
+
+    expect(df1_1.remove()).toEqual(true)
+    expect(df1_1.get()).toMatchObject([1, 3, 5])
+
+    expect(df1_1.remove(4)).toEqual(false)
+    expect(df1_1.remove(1)).toEqual(true)
+    expect(df1_1.get()).toMatchObject([1, 5])
+
+    const df1_2 = new DataField({
+      name: 'stdArray1',
+      schema: {
+        type: 'array',
+        arrayDirection: 'top'
+      },
+      value: [1, 2]
+    })
+
+    expect(df1_2.add(5)).toEqual(true)
+    expect(df1_2.get()).toMatchObject([5, 1, 2])
+
+    expect(df1_2.add(7)).toEqual(true)
+    expect(df1_2.get()).toMatchObject([7, 5, 1, 2])
+
+    expect(df1_2.remove()).toEqual(true)
+    expect(df1_2.get()).toMatchObject([5, 1, 2])
+
+    expect(df1_2.remove(4)).toEqual(false)
+    expect(df1_2.remove(1)).toEqual(true)
+    expect(df1_2.get()).toMatchObject([5, 2])
+
     const df2 = new DataField({
       name: 'stdArray3',
       schema: {
@@ -100,7 +144,16 @@ describe('dataField class and object', function () {
       value: [1, 2]
     })
 
+    expect(df2.remove(3)).toEqual(false)
+    expect(df2.remove(4)).toEqual(false)
+
     expect(df2.add(5)).toEqual(true)
+    expect(df2.get()).toMatchObject([1, 2, 5])
+
+    expect(df2.remove(3)).toEqual(false)
+    expect(df2.remove(4)).toEqual(false)
+
+    expect(df2.add(7)).toEqual(false)
     expect(df2.get()).toMatchObject([1, 2, 5])
 
     expect(df2.remove()).toEqual(true)
@@ -115,6 +168,21 @@ describe('dataField class and object', function () {
     expect(df2.remove()).toEqual(true)
     expect(df2.get()).toMatchObject([])
 
+    // insert/remove by index
+
+    expect(function () { df2.set([1, 3, 5, 7]) }).toThrow('arrayMax')
+    df2.set([3, 5, 7])
+    expect(df2.add(5)).toEqual(false)
+    expect(df2.get()).toMatchObject([3, 5, 7])
+    expect(df2.add(3, 9)).toEqual(false)
+    expect(df2.get()).toMatchObject([3, 5, 7])
+    expect(df2.add(1, 9)).toEqual(false)
+    expect(df2.get()).toMatchObject([3, 5, 7])
+    expect(df2.remove(1)).toEqual(true)
+    expect(df2.get()).toMatchObject([3, 7])
+    expect(df2.add(1, 9)).toEqual(true)
+    expect(df2.get()).toMatchObject([3, 9, 7])
+
     const df3 = new DataField({
       name: 'stdArray3',
       schema: {
@@ -125,8 +193,14 @@ describe('dataField class and object', function () {
       value: [1, 2]
     })
 
+    expect(df3.remove(3)).toEqual(false)
+    expect(df3.remove(4)).toEqual(false)
+
     expect(df3.add(5)).toEqual(true)
     expect(df3.get()).toMatchObject([5, 1, 2])
+
+    expect(df3.remove(3)).toEqual(false)
+    expect(df3.remove(4)).toEqual(false)
 
     expect(df3.remove()).toEqual(true)
     expect(df3.get()).toMatchObject([1, 2])
@@ -134,8 +208,8 @@ describe('dataField class and object', function () {
     expect(df3.remove()).toEqual(true)
     expect(df3.get()).toMatchObject([2])
 
-    expect(df2.remove()).toEqual(true)
-    expect(df2.get()).toMatchObject([])
+    // expect(df2.remove()).toEqual(true)
+    // expect(df2.get()).toMatchObject([])
 
     expect(df3.remove()).toEqual(true)
     expect(df3.get()).toMatchObject([])

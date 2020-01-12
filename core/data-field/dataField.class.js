@@ -6,7 +6,7 @@ const dataFieldUtils = require('./utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
-const UNDEFINED_FIELD_VALUE = null
+const UNDEFINED_FIELD_VALUE = dataFieldUtils.UNDEFINED_FIELD_VALUE
 
 /* Extra properties
  *   - schema docs: https://www.npmjs.com/package/fastest-validator
@@ -117,8 +117,11 @@ class DataField {
   add (key, value) {
     let newValue
     if (this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray') {
-      if (!value) value = key
-      newValue = dataFieldUtils.addToArray(this.get(), value, this.schema[this.name])
+      if (!value) {
+        value = key
+        key = null
+      }
+      newValue = dataFieldUtils.addToArray(this.get(), this.schema[this.name], key, value)
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.addToObject(this.get(), key, value, this.schema[this.name])
     }
@@ -126,10 +129,10 @@ class DataField {
     return this.set(newValue)
   }
 
-  remove (key, value) {
+  remove (key) {
     let newValue
     if (this.schema[this.name].type === 'array' || this.schema[this.name].type === 'circularArray') {
-      newValue = dataFieldUtils.removeFromArray(this.get(), this.schema[this.name])
+      newValue = dataFieldUtils.removeFromArray(this.get(), this.schema[this.name], key)
     } else if (this.schema[this.name].type === 'object') {
       newValue = dataFieldUtils.removeFromObject(this.get(), key, this.schema[this.name])
     }

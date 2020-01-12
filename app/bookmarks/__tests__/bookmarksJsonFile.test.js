@@ -14,10 +14,10 @@ describe('CliInput class and object', function () {
     fileUtils.removeFileSync(BookmarkFile1)
   })
 
-  afterAll(function () {
-    fileUtils.removeFileSync(SampleIndexFile)
-    fileUtils.removeFileSync(BookmarkFile1)
-  })
+  // afterAll(function () {
+  //   fileUtils.removeFileSync(SampleIndexFile)
+  //   fileUtils.removeFileSync(BookmarkFile1)
+  // })
 
   it('test', async function () {
     expect(fileUtils.fileExistsSync(SampleIndexFile)).toEqual(false)
@@ -73,10 +73,13 @@ describe('CliInput class and object', function () {
     expect(bkFile.hasBookmark('tag3', samplesArray[7])).toEqual(false)
     expect(bkFile.removeBookmarkByIndex('tag3', 1)).toEqual(true)
     expect(bkFile.hasBookmark('tag3', samplesArray[5])).toEqual(false)
-    // expect(bkFile.hasTagCollection('tag1')).toEqual(false)
+    expect(bkFile.hasTagCollection('tag1')).toEqual(false)
 
-    // todo add/remove from array -> manage indexes!
+    expect(bkFile.getTagCollection('tag3').length).toEqual(2)
+    expect(bkFile.getBookmarkByIndex('tag3', 0).path).toEqual(samplesArray[3].path)
+    expect(bkFile.getBookmarkByIndex('tag3', 1).path).toEqual(samplesArray[6].path)
+    expect(bkFile.getBookmarkByIndex('tag3', 2)).toEqual(null)
 
-    // bkFile.save()
+    bkFile.save()
   })
 })

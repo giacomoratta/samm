@@ -41,8 +41,9 @@ class BookmarksJsonFile extends JsonizedFile {
       this._createBookmarkTagField(tag)
     }
     this.getField(tag).add({
-      name: sample.relPath,
-      path: sample.path
+      name: sample.name,
+      path: sample.path,
+      relPath: sample.relPath
     })
   }
 
@@ -99,7 +100,7 @@ class BookmarksJsonFile extends JsonizedFile {
   forEach (fn) {
     const fieldList = this.getFieldList()
     fieldList.forEach((key) => {
-      fn(this.get(key))
+      fn({ tag: key, collection: this.get(key) })
     })
   }
 }
