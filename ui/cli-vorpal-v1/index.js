@@ -1,4 +1,4 @@
-const { Cli } = require('./common')
+const { Cli, App } = require('./common')
 
 require('./bookm_cmd')
 require('./config_cmd')
@@ -8,4 +8,9 @@ require('./query_cmd')
 require('./save_cmd')
 require('./scan_cmd')
 
-Cli.show('mpl')
+App.boot().then(() => {
+    Cli.show('mpl')
+
+}).catch((e) => {
+    Cli.printer.error(e)
+})

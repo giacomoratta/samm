@@ -1,22 +1,20 @@
 const { CliVorpal, CLI_SUCCESS, CLI_ERROR } = require('../../core/cli-vorpal/')
-const { CliPrinter } = require('../../core/cli-vorpal/cliPrinter.class')
 const App = require('../../app/')
 const Cli = new CliVorpal()
 const Config = App.Config
 
 const ConfigErrors = Config.errors()
 if (ConfigErrors.loadError) {
-  const uiPrinter = new CliPrinter({ command: '' })
-  uiPrinter.newLine()
+  Cli.printer.newLine()
 
-  uiPrinter.error('Invalid configuration file')
-  uiPrinter.error(` ${ConfigErrors.loadError.message}`)
-  uiPrinter.info(`Configuration file path: ${Config.filePath}`)
-  uiPrinter.newLine()
-  uiPrinter.info('To solve the problem:')
-  uiPrinter.info(' 1) delete manually the config file')
-  uiPrinter.info(' 2) open the config file and fix the wrong values')
-  uiPrinter.newLine()
+  Cli.printer.error('Invalid configuration file')
+  Cli.printer.error(` ${ConfigErrors.loadError.message}`)
+  Cli.printer.info(`Configuration file path: ${Config.filePath}`)
+  Cli.printer.newLine()
+  Cli.printer.info('To solve the problem:')
+  Cli.printer.info(' 1) delete manually the config file')
+  Cli.printer.info(' 2) open the config file and fix the wrong values')
+  Cli.printer.newLine()
   process.exit(1)
 }
 
