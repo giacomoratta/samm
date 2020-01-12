@@ -244,10 +244,10 @@ describe('JsonizedFile class and object', function () {
       }
     })
 
-    const fieldList = jszFile1.getFieldList()
+    const fieldsList = jszFile1.getFieldsList()
 
-    expect(fieldList).toBeInstanceOf(Array)
-    expect(fieldList).toMatchObject([
+    expect(fieldsList).toBeInstanceOf(Array)
+    expect(fieldsList).toMatchObject([
       'counter1',
       'person1',
       'absDir1',

@@ -3,6 +3,7 @@ const validator = require('./validator')
 const { DataFieldError } = require('./dataField.error')
 const transform = require('./transform')
 const dataFieldUtils = require('./utils')
+const { fileUtils } = require('../utils/file.utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
@@ -80,7 +81,8 @@ class DataField {
   }
 
   isUnset () {
-    return this.value[this.name] === UNDEFINED_FIELD_VALUE
+    // return this.value[this.name] === UNDEFINED_FIELD_VALUE
+    return this.get() === UNDEFINED_FIELD_VALUE
   }
 
   set (value, { overwrite = false } = {}) {
@@ -138,6 +140,17 @@ class DataField {
     }
     if (newValue === UNDEFINED_FIELD_VALUE) return false
     return this.set(newValue)
+  }
+
+  clean () {
+    if (this.isUnset()) return null
+    if (this.schema[this.name].type === 'absFilePath' || this.schema[this.name].type === 'relFilePath') {
+      return fileUtils.removeFileSync(this.get()) === true
+    }
+    if (this.schema[this.name].type === 'absDirPath' || this.schema[this.name].type === 'relDirPath') {
+      return fileUtils.removeDirSync(this.get()) === true
+    }
+    return null
   }
 }
 

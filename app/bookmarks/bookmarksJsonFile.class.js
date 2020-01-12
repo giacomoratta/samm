@@ -98,8 +98,8 @@ class BookmarksJsonFile extends JsonizedFile {
   }
 
   forEach (fn) {
-    const fieldList = this.getFieldList()
-    fieldList.forEach((key) => {
+    const fieldsList = this.getFieldsList()
+    fieldsList.forEach((key) => {
       fn({ tag: key, collection: this.get(key) })
     })
   }

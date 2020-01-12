@@ -9,8 +9,7 @@ require('./save_cmd')
 require('./scan_cmd')
 
 App.boot().then(() => {
-    Cli.show('mpl')
-
+  Cli.show('mpl')
 }).catch((e) => {
-    Cli.printer.error(e)
+  Cli.printer.error(e)
 })

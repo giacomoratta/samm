@@ -159,7 +159,7 @@ libUtils.readFileSync = (pathString, encoding, flag) => {
 }
 
 libUtils.readJsonFileSync = (pathString) => {
-  const fileContent = libUtils.readFileSync(pathString, 'iso88591')
+  const fileContent = libUtils.readFileSync(pathString, 'utf8')
   if (!_.isString(fileContent)) return false
   try {
     const jsonObj = JSON.parse(fileContent)
@@ -221,7 +221,7 @@ libUtils.writeJsonFileSync = (pathString, jsonObj, space) => {
     // console.error(e)
     return false
   }
-  return libUtils.writeTextFileSync(pathString, fileContent)
+  return libUtils.writeFileSync(pathString, fileContent, 'utf8')
 }
 
 /* FILE R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -255,7 +255,7 @@ libUtils.readFile = (pathString, encoding, flag) => {
 }
 
 libUtils.readJsonFile = (pathString) => {
-  return libUtils.readFile(pathString, 'iso88591').then((fileContent) => {
+  return libUtils.readFile(pathString, 'utf8').then((fileContent) => {
     if (!_.isString(fileContent)) return false
     try {
       const jsonObj = JSON.parse(fileContent)
@@ -322,7 +322,7 @@ libUtils.writeJsonFile = (pathTo, jsonObj, space) => {
     // console.error(e)
     return negativePromise
   }
-  return libUtils.writeTextFile(pathTo, fileContent)
+  return libUtils.writeFile(pathTo, fileContent, 'utf8')
 }
 
 libUtils.writeTextFile = (pathTo, text) => {

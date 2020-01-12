@@ -2,33 +2,29 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('./../../../core/utils/file.utils')
 
-const { Config } = require('../../config')
+const { Config, ConfigBoot, ConfigCleanData } = require('../index')
 const { PathQuery } = require('../../path-query')
 const { SampleSet } = require('../../sample/sampleSet.class')
 const { SampleIndex } = require('../../sample/sampleIndex.class')
 const { Export } = require('../index')
 
-const samplesPath = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
-const indexFilePath = path.join(__dirname, 'sample_index')
-
 describe('Export functions', function () {
   beforeAll(() => {
-    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
-    fileUtils.removeFileSync(indexFilePath)
-    Config.reset()
+    ConfigCleanData()
+    expect(ConfigBoot()).toEqual(true)
+    Config.set('SamplesDirectory', path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir'))
   })
 
   afterAll(() => {
-    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
-    fileUtils.removeFileSync(indexFilePath)
+    ConfigCleanData()
   })
 
   it('Should generate samples directories', async function () {
     let result
 
     const sIndex1 = new SampleIndex({
-      indexFilePath,
-      samplesPath
+      indexFilePath: Config.get('SampleIndexFile'),
+      samplesPath: Config.get('SamplesDirectory')
     })
 
     await sIndex1.create()

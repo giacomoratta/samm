@@ -74,4 +74,42 @@ describe('Utils.File.singleton', function () {
       directoryName: 'directoryA'
     })).toEqual(path.join(parentPath, 'directoryA_4'))
   })
+
+  it('should manage json files with special characters', async function () {
+    const file2SpecialCharsDefault = {
+      prop1: 'test \u2502test test\u2510 test',
+      prop2: 'ú ñ Ř'
+    }
+    const file2SpecialCharsDefault1 = {
+      prop1: 'test │test test┐ test',
+      prop2: 'ú ñ Ř'
+    }
+
+    let file2SpecialCharsContent, result
+    const file2SpecialChars = path.join(__dirname, 'file_utils_test_dir', 'file_2_special_chars.json')
+
+    result = fileUtils.writeJsonFileSync(file2SpecialChars, file2SpecialCharsDefault)
+    expect(result).toEqual(true)
+    file2SpecialCharsContent = fileUtils.readJsonFileSync(file2SpecialChars)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault1)
+
+    result = fileUtils.writeJsonFileSync(file2SpecialChars, file2SpecialCharsContent)
+    expect(result).toEqual(true)
+    file2SpecialCharsContent = fileUtils.readJsonFileSync(file2SpecialChars)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault1)
+
+    result = await fileUtils.writeJsonFile(file2SpecialChars, file2SpecialCharsDefault)
+    expect(result).toEqual(true)
+    file2SpecialCharsContent = await fileUtils.readJsonFile(file2SpecialChars)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault1)
+
+    result = await fileUtils.writeJsonFile(file2SpecialChars, file2SpecialCharsContent)
+    expect(result).toEqual(true)
+    file2SpecialCharsContent = await fileUtils.readJsonFile(file2SpecialChars)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault)
+    expect(file2SpecialCharsContent).toMatchObject(file2SpecialCharsDefault1)
+  })
 })

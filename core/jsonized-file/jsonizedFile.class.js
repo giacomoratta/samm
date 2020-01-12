@@ -33,18 +33,22 @@ class JsonizedFile {
     return this.fields[name]
   }
 
-  getFieldList ({ writableOnly = false } = {}) {
-    let fieldList = []
+  getFieldsCount () {
+    return Object.keys(this.fields).length
+  }
+
+  getFieldsList ({ writableOnly = false } = {}) {
+    let fieldsList = []
     if (writableOnly === true) {
       Object.keys(this.fields).forEach((k) => {
         if (this.fields[k].getSchema().readOnly === true) return
-        fieldList.push(k)
+        fieldsList.push(k)
       })
     } else {
-      fieldList = Object.keys(this.fields)
+      fieldsList = Object.keys(this.fields)
     }
-    if (this.options.orderedFields === true) fieldList.sort(this.fieldsCompareFn)
-    return fieldList
+    if (this.options.orderedFields === true) fieldsList.sort(this.fieldsCompareFn)
+    return fieldsList
   }
 
   removeField (name) {
@@ -71,11 +75,16 @@ class JsonizedFile {
     return this.fields[name].isUnset()
   }
 
+  clean (name) {
+    if (!this.fields[name]) return
+    return this.fields[name].clean()
+  }
+
   toObject () {
     const finalObject = {}
-    const fieldList = Object.keys(this.fields)
-    if (this.options.orderedFields === true) fieldList.sort(this.fieldsCompareFn)
-    fieldList.forEach((k) => {
+    const fieldsList = Object.keys(this.fields)
+    if (this.options.orderedFields === true) fieldsList.sort(this.fieldsCompareFn)
+    fieldsList.forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
       if (finalObject[k] === null) delete finalObject[k]
     })
@@ -94,7 +103,7 @@ class JsonizedFile {
     })
   }
 
-  load () {
+  load ({ autoSave } = {}) {
     const options = {}
     options.filePath = this.filePath
     options.fileType = (this.options.prettyJson ? 'json' : 'json-compact')
@@ -113,6 +122,11 @@ class JsonizedFile {
     } catch (e) {
       throw new JsonizedFileError(e.message)
     }
+
+    if (autoSave === true) {
+      return this.save()
+    }
+    return true
   }
 
   hasData () {
