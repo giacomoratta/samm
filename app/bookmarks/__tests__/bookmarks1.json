@@ -2,42 +2,42 @@
 	"A_tag1": [
 		{
 			"name": "file22",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file22.txt",
-			"relPath": "directory1/directory2/file22.txt"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\directory2\\file22.txt",
+			"relPath": "directory1\\directory2\\file22.txt"
 		}
 	],
 	"B_tag1": [
 		{
 			"name": "file26",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file26.json",
-			"relPath": "directory1/directory2/file26.json"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\directory2\\file26.json",
+			"relPath": "directory1\\directory2\\file26.json"
 		}
 	],
 	"tag1": [],
 	"tag2": [
 		{
 			"name": "file26",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file26.json",
-			"relPath": "directory1/directory2/file26.json"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\directory2\\file26.json",
+			"relPath": "directory1\\directory2\\file26.json"
 		}
 	],
 	"tag3": [
 		{
 			"name": "file35",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory3/file35.txt",
-			"relPath": "directory1/directory3/file35.txt"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\directory3\\file35.txt",
+			"relPath": "directory1\\directory3\\file35.txt"
 		},
 		{
 			"name": "file18",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/file18.wav",
-			"relPath": "directory1/file18.wav"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\file18.wav",
+			"relPath": "directory1\\file18.wav"
 		}
 	],
 	"Z_tag1": [
 		{
 			"name": "file26",
-			"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file26.json",
-			"relPath": "directory1/directory2/file26.json"
+			"path": "L:\\Workspace\\mpl-dev\\app\\__tests__\\test_dir\\directory1\\directory2\\file26.json",
+			"relPath": "directory1\\directory2\\file26.json"
 		}
 	]
 }

@@ -27,6 +27,7 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
     throw new Error(`Cannot create the destination path: ${finalDirectoryPath}`)
   }
 
+  const copyErrors = []
   const copiedFiles = []
   const notCopiedFiles = []
   const promisesArray = []
@@ -36,6 +37,7 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
     promisesArray.push(fileUtils.copyFile(sample.path, finalSamplePath, { overwrite }).then((result) => {
       copiedFiles.push(result.pathTo)
     }).catch((result) => {
+      copyErrors.push(result.err)
       notCopiedFiles.push(result.pathTo)
     }))
   })
@@ -43,7 +45,8 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
     return {
       copiedFiles,
       notCopiedFiles,
-      destinationPath: finalDirectoryPath
+      destinationPath: finalDirectoryPath,
+      copyErrors
     }
   })
 }

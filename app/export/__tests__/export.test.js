@@ -14,11 +14,13 @@ const indexFilePath = path.join(__dirname, 'sample_index')
 describe('Export functions', function () {
   beforeAll(() => {
     fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    fileUtils.removeFileSync(indexFilePath)
     Config.reset()
   })
 
   afterAll(() => {
     fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    fileUtils.removeFileSync(indexFilePath)
   })
 
   it('Should generate samples directories', async function () {
@@ -29,7 +31,7 @@ describe('Export functions', function () {
       samplesPath
     })
 
-    await sIndex1.load()
+    await sIndex1.create()
     expect(sIndex1.size).toEqual(13)
 
     const samplesQuery = PathQuery.create('file6,file2')

@@ -1,5 +1,6 @@
 const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
+const { fileUtils } = require('./../../../core/utils/file.utils')
 
 const { Config } = require('../../config')
 const { PathQuery } = require('../../path-query')
@@ -8,16 +9,29 @@ const { SampleIndex } = require('../sampleIndex.class')
 const { SampleSet } = require('../sampleSet.class')
 const { SampleInfo } = require('../sampleInfo.class')
 
+const SampleIndexFile = path.join(__dirname, 'samples_index')
+
 describe('SampleSet functions', function () {
+  beforeAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    fileUtils.removeFileSync(SampleIndexFile)
+    Config.reset()
+  })
+
+  afterAll(() => {
+    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    fileUtils.removeFileSync(SampleIndexFile)
+  })
+
   it('should create a sample set', async function () {
-    const SampleIndexFile = path.join(__dirname, 'fixed_samples_index')
     const SamplesDirectory = Config.get('SamplesDirectory') || path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
 
     const sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
-    const result = await sIndex1.load()
+
+    const result = await sIndex1.create()
     expect(result).toEqual(true)
     expect(sIndex1.size).toEqual(13)
 
