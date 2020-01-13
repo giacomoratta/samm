@@ -1,17 +1,26 @@
 const path = require('path')
-process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
+const configDataLocation = path.join(__dirname, 'config.json')
+const pathQueryLocation = path.join(__dirname, 'path_query.json')
+const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 
-const { Config } = require('../../config')
 const { PathQueryJsonFile } = require('../pathQueryJsonFile.class')
 const { PathBasedQuery } = require('../pathBasedQuery.class')
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-describe('query endpoints', function () {
-  it('should create and handle a query file', function () {
-    // reset file
-    fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
+describe('path-query endpoints', function () {
+  beforeAll(() => {
+    ConfigCleanData()
+    fileUtils.removeFileSync(pathQueryLocation)
+    expect(ConfigBoot(configDataLocation)).toEqual(true)
+  })
 
-    const PathQueryFile1 = new PathQueryJsonFile(Config.get('PathQueryFile'))
+  afterAll(() => {
+    ConfigCleanData()
+    fileUtils.removeFileSync(pathQueryLocation)
+  })
+
+  it('should create and handle a query file', function () {
+    const PathQueryFile1 = new PathQueryJsonFile(pathQueryLocation)
     PathQueryFile1.load()
     expect(PathQueryFile1.QueryCollectionTemp).toMatchObject({})
 
@@ -70,11 +79,11 @@ describe('query endpoints', function () {
 
     PathQueryFile1.save()
 
-    const qf1Json = fileUtils.readJsonFileSync(Config.get('PathQueryFile'))
+    const qf1Json = fileUtils.readJsonFileSync(pathQueryLocation)
     expect(qf1Json.QueryCollection.length).toEqual(3)
     expect(qf1Json.QueryCollection[2].queryString).toEqual('le61+file1,file3')
 
-    const PathQueryFile2 = new PathQueryJsonFile(Config.get('PathQueryFile'))
+    const PathQueryFile2 = new PathQueryJsonFile(pathQueryLocation)
     PathQueryFile2.load()
 
     expect(PathQueryFile2.get('my_label_21')).toBeInstanceOf(PathBasedQuery)
@@ -103,7 +112,7 @@ describe('query endpoints', function () {
 
     PathQueryFile2.save()
 
-    expect(fileUtils.readJsonFileSync(Config.get('PathQueryFile'))).toMatchObject({
+    expect(fileUtils.readJsonFileSync(pathQueryLocation)).toMatchObject({
       QueryCollection: []
     })
   })

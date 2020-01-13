@@ -14,4 +14,4 @@ require('./app/init.js'); */
 
 require('dotenv').config()
 process.env.ABSOLUTE_APP_PATH = __dirname
-// require('./ui/cli-vorpal-v1')
+require('./ui/cli-vorpal-v1')

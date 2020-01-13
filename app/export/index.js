@@ -2,8 +2,6 @@ const path = require('path')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { SampleInfo } = require('../sample/sampleInfo.class')
 
-// const { Config } = require('../config')
-
 const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {
   if (!samplesArray || samplesArray.length === 0) {
     throw new Error('Sample list not valid')
