@@ -1,7 +1,6 @@
 const path = require('path')
 const configDataLocation = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { Config, ConfigBoot, ConfigCleanData } = require('../index')
-const { fileUtils } = require('../../../core/utils/file.utils')
 
 describe('config endpoints', function () {
   beforeAll(() => {

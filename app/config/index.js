@@ -3,15 +3,15 @@ const path = require('path')
 const os = require('os')
 const { ConfigFile } = require('./configFile.class')
 
-const Config = new ConfigFile()
+let ConfigInstance = null
 let ConfigCleanDataPostponed = false
 const PlatformSignature = `${os.platform()}-${os.release()}`
 
 const __init__ = (filePath) => {
   const basePath = path.parse(filePath).dir
-  Config.init({ filePath })
+  ConfigInstance = new ConfigFile(filePath)
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'Platform',
     schema: {
       type: 'string',
@@ -21,7 +21,7 @@ const __init__ = (filePath) => {
     description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'UserdataDirectory',
     schema: {
       type: 'relDirPath',
@@ -33,11 +33,11 @@ const __init__ = (filePath) => {
     description: 'Directory for storing all the user data'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'SampleIndexFile',
     schema: {
       type: 'relFilePath',
-      basePath: Config.getField('UserdataDirectory').get(),
+      basePath: ConfigInstance.getField('UserdataDirectory').get(),
       createIfNotExists: true,
       readOnly: true
     },
@@ -45,11 +45,11 @@ const __init__ = (filePath) => {
     description: 'Index generated after a full samples directory scan'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'ProjectHistoryFile',
     schema: {
       type: 'relFilePath',
-      basePath: Config.getField('UserdataDirectory').get(),
+      basePath: ConfigInstance.getField('UserdataDirectory').get(),
       createIfNotExists: true,
       readOnly: true
     },
@@ -57,11 +57,11 @@ const __init__ = (filePath) => {
     description: 'List of opened projects, current one, etc.'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'BookmarkFile',
     schema: {
       type: 'relFilePath',
-      basePath: Config.getField('UserdataDirectory').get(),
+      basePath: ConfigInstance.getField('UserdataDirectory').get(),
       createIfNotExists: true,
       readOnly: true
     },
@@ -69,11 +69,11 @@ const __init__ = (filePath) => {
     description: 'List of bookmarked samples'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'PathQueryFile',
     schema: {
       type: 'relFilePath',
-      basePath: Config.getField('UserdataDirectory').get(),
+      basePath: ConfigInstance.getField('UserdataDirectory').get(),
       createIfNotExists: true,
       readOnly: true
     },
@@ -81,7 +81,7 @@ const __init__ = (filePath) => {
     description: 'File with queries for sample paths'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'SamplesDirectory',
     schema: {
       type: 'absDirPath',
@@ -91,13 +91,13 @@ const __init__ = (filePath) => {
     description: 'Directory with samples to scan and search in'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'SamplesDirectoryExclusions',
     schema: {
       type: 'array',
       items: {
         type: 'relDirPath',
-        basePath: Config.get('SamplesDirectory') || basePath
+        basePath: ConfigInstance.get('SamplesDirectory') || basePath
       },
       default: [
         'samplePack1',
@@ -107,7 +107,7 @@ const __init__ = (filePath) => {
     description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'RandomCount',
     schema: {
       type: 'number',
@@ -118,7 +118,7 @@ const __init__ = (filePath) => {
     description: 'Maximum number of random samples selected after a search'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'MaxSamplesSameDirectory',
     schema: {
       type: 'number',
@@ -129,7 +129,7 @@ const __init__ = (filePath) => {
     description: 'Maximum number of samples from the same directory, to avoid too many samples from the same family'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'ExcludedExtensionsForSamples',
     schema: {
       type: 'array',
@@ -139,7 +139,7 @@ const __init__ = (filePath) => {
     description: 'The list of extensions which the samples must NOT have'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'IncludedExtensionsForSamples',
     schema: {
       type: 'array',
@@ -149,7 +149,7 @@ const __init__ = (filePath) => {
     description: 'The list of extensions which the samples must have'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'ExtensionsPolicyForSamples',
     schema: {
       type: 'enum',
@@ -159,7 +159,7 @@ const __init__ = (filePath) => {
     description: '\'I\' to get files with declared extensions only, \'E\' to exclude file with some extensions, and \'X\' to disable the extension filter'
   })
 
-  Config.addField({
+  ConfigInstance.addField({
     name: 'Status',
     schema: {
       type: 'object',
@@ -175,45 +175,44 @@ const __init__ = (filePath) => {
     description: 'Application status data, flags, etc.'
   })
 
-  Config.getField('SamplesDirectory').on('change', ({ newValue }) => {
-    Config.getField('Status').add('new-scan-needed', true)
-    Config.getField('SamplesDirectoryExclusions').changeSchema({
+  ConfigInstance.getField('SamplesDirectory').on('change', ({ newValue }) => {
+    ConfigInstance.getField('Status').add('new-scan-needed', true)
+    ConfigInstance.getField('SamplesDirectoryExclusions').changeSchema({
       items: {
         basePath: newValue
       }
     })
   })
 
-  Config.getField('SamplesDirectoryExclusions').on('change', () => {
-    Config.getField('Status').add('new-scan-needed', true)
+  ConfigInstance.getField('SamplesDirectoryExclusions').on('change', () => {
+    ConfigInstance.getField('Status').add('new-scan-needed', true)
   })
 
-  Config.getField('ExtensionsPolicyForSamples').on('change', () => {
-    Config.getField('Status').add('new-scan-needed', true)
+  ConfigInstance.getField('ExtensionsPolicyForSamples').on('change', () => {
+    ConfigInstance.getField('Status').add('new-scan-needed', true)
   })
 
-  Config.getField('ExcludedExtensionsForSamples').on('change', () => {
-    if (Config.get('ExtensionsPolicyForSamples') === 'E') {
-      Config.getField('Status').add('new-scan-needed', true)
+  ConfigInstance.getField('ExcludedExtensionsForSamples').on('change', () => {
+    if (ConfigInstance.get('ExtensionsPolicyForSamples') === 'E') {
+      ConfigInstance.getField('Status').add('new-scan-needed', true)
     }
   })
 
-  Config.getField('IncludedExtensionsForSamples').on('change', () => {
-    if (Config.get('ExtensionsPolicyForSamples') === 'I') {
-      Config.getField('Status').add('new-scan-needed', true)
+  ConfigInstance.getField('IncludedExtensionsForSamples').on('change', () => {
+    if (ConfigInstance.get('ExtensionsPolicyForSamples') === 'I') {
+      ConfigInstance.getField('Status').add('new-scan-needed', true)
     }
   })
 }
 
 const ConfigCleanData = () => {
-  if (Config === null) {
+  if (ConfigInstance === null) {
     log.info('Clean data postponed')
     ConfigCleanDataPostponed = true
     return
   }
   log.info('Cleaning data...')
-  Config.clean('UserdataDirectory')
-  Config.deleteFile()
+  ConfigInstance.deleteFile()
 }
 
 const ConfigBoot = (filePath) => {
@@ -223,11 +222,11 @@ const ConfigBoot = (filePath) => {
     ConfigCleanData()
     ConfigCleanDataPostponed = false
   }
-  if (Config.load({ autoSave: true }) === true) {
+  if (ConfigInstance.load({ autoSave: true }) === true) {
     log.info('Loaded successfully')
-    if (Config.get('Platform') !== PlatformSignature) {
+    if (ConfigInstance.get('Platform') !== PlatformSignature) {
       log.info(`Different platform signature (current: ${PlatformSignature}). Resetting...`)
-      return Config.reset()
+      return ConfigInstance.reset()
     }
     return true
   }
@@ -236,7 +235,14 @@ const ConfigBoot = (filePath) => {
 }
 
 module.exports = {
-  Config,
+  Config: {
+    get (name) { return ConfigInstance.get(name) },
+    set (name, value) { return ConfigInstance.set(name, value) },
+    unset (name) { return ConfigInstance.unset(name) },
+    isUnset (name) { return ConfigInstance.isUnset(name) },
+    getField (name) { return ConfigInstance.getField(name) },
+    getFieldsList () { return ConfigInstance.getFieldsList({ writableOnly: true }) }
+  },
   ConfigBoot,
   ConfigCleanData
 }

@@ -1,3 +1,4 @@
+const path = require('path')
 const { _ } = require('../utils/lodash.extended')
 const { fileUtils } = require('../utils/file.utils')
 const { FileButlerError } = require('./fileButlerError.class')
@@ -70,6 +71,14 @@ const parseOption = function (options) {
     throw new FileButlerError(`'filePath' option must be an absolute path: ${options.filePath}`)
   }
   if (!options.cloneFrom && !fileUtils.fileExistsSync(options.filePath)) {
+    const parent2 = path.parse(options.filePath).dir
+    const parent1 = path.parse(parent2).dir
+    if (!fileUtils.directoryExistsSync(parent1)) {
+      throw new FileButlerError(`One of the parent directories do not exist: ${parent1}`)
+    }
+    if (!fileUtils.ensureDirSync(parent2)) {
+      throw new FileButlerError(`The parent directory cannot be created: ${parent2}`)
+    }
     if (!fileUtils.writeFileSync(options.filePath, '')) {
       throw new FileButlerError(`File specified in 'filePath' cannot be created: ${options.filePath}`)
     }

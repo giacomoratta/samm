@@ -21,7 +21,7 @@ describe('FileButler actions with data and files', function () {
       newFileButler({
         filePath: path.join(baseRoot, 'dir_test', 'file1-not-exists.json')
       })
-    }).toThrow('File specified in \'filePath\' cannot be created')
+    }).toThrow('parent directory cannot be created')
 
     expect(function () {
       newFileButler({
@@ -30,6 +30,29 @@ describe('FileButler actions with data and files', function () {
     }).not.toThrow('File specified in \'filePath\' cannot be created')
     expect(fileUtils.fileExistsSync(path.join(__dirname, 'dir_test', 'file1-not-exists.json'))).toEqual(true)
     fileUtils.removeFileSync(path.join(__dirname, 'dir_test', 'file1-not-exists.json'))
+
+    expect(function () {
+      const file1 = newFileButler({
+        filePath: path.join(__dirname, 'new_parent_dir', 'new_dir', 'file123.txt'),
+        fileType: 'text'
+      })
+      file1.set('test')
+      file1.save()
+    }).toThrow('parent directories do not exist')
+    expect(fileUtils.directoryExistsSync(path.join(__dirname, 'new_parent_dir'))).toEqual(false)
+    expect(fileUtils.directoryExistsSync(path.join(__dirname, 'new_parent_dir', 'new_dir'))).toEqual(false)
+
+    expect(function () {
+      const file1 = newFileButler({
+        filePath: path.join(__dirname, 'new_dir', 'file123.txt'),
+        fileType: 'text'
+      })
+      file1.set('test')
+      file1.save()
+    }).not.toThrow()
+    expect(fileUtils.directoryExistsSync(path.join(__dirname, 'new_dir'))).toEqual(true)
+    expect(fileUtils.fileExistsSync(path.join(__dirname, 'new_dir', 'file123.txt'))).toEqual(true)
+    expect(fileUtils.removeDirSync(path.join(__dirname, 'new_dir'))).toEqual(true)
 
     expect(function () {
       newFileButler({

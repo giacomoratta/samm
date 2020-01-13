@@ -4,10 +4,6 @@ const { FileButler } = require('../file-butler')
 
 class JsonizedFile {
   constructor ({ filePath = '', prettyJson = false, orderedFields = false }) {
-    this.init({ filePath, prettyJson, orderedFields })
-  }
-
-  init ({ filePath = '', prettyJson = false, orderedFields = false }) {
     this.filePath = filePath
     this.options = { }
     this.options.prettyJson = prettyJson
