@@ -216,11 +216,7 @@ const ConfigCleanData = () => {
 }
 
 const ConfigBoot = (filePath) => {
-  log.debug(`Booting from ${filePath}`)
   log.info(`Booting from ${filePath}`)
-  log.warn(`Booting from ${filePath}`)
-  log.error(`Booting from ${filePath}`)
-  log.fatal(`Booting from ${filePath}`)
   __init__(filePath)
   if (ConfigCleanDataPostponed === true) {
     ConfigCleanData()
