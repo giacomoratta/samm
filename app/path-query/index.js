@@ -4,8 +4,7 @@ const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
 const PathBasedQueryCache = new SpheroidCache({ maxSize: 30 })
-const PathQueryFile = new PathQueryJsonFile(Config.get('PathQueryFile'))
-PathQueryFile.load()
+let PathQueryFile = null
 
 const add = (label, queryString) => {
   return PathQueryFile.add({ label, queryString })
@@ -42,6 +41,16 @@ const create = (queryString) => {
   return newPathBasedQuery
 }
 
+const PathQueryBoot = (filePath) => {
+  if (!filePath) filePath = Config.get('PathQueryFile')
+  PathQueryFile = new PathQueryJsonFile(filePath)
+  return PathQueryFile.load()
+}
+
+const PathQueryCleanData = () => {
+  return PathBasedQuery.deleteFile()
+}
+
 module.exports = {
   PathQuery: {
     add,
@@ -52,5 +61,7 @@ module.exports = {
     create,
     queryFile: Config.get('PathQueryFile'),
     queryStringLabel: PathBasedQuery.queryStringLabel
-  }
+  },
+  PathQueryBoot,
+  PathQueryCleanData
 }

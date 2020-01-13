@@ -1,8 +1,11 @@
 const { JsonizedFile } = require('../../core/jsonized-file')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 
-class PathQueryJsonFile {
+class PathQueryJsonFile /* todo: extends JsonizedFile */ {
   constructor (filePath) {
+    // todo: check bookmarks
+    // todo: read/write ordered list of queries
+
     this.QueryCollectionTemp = {}
 
     this.jsonFile = new JsonizedFile({ filePath, prettyJson: true })
@@ -29,6 +32,10 @@ class PathQueryJsonFile {
     })
   }
 
+  deleteFile () {
+    return this.jsonFile.deleteFile()
+  }
+
   save () {
     const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
     const queryCollection = []
@@ -42,14 +49,15 @@ class PathQueryJsonFile {
   }
 
   load () {
-    this.jsonFile.load()
+    if (this.jsonFile.load() !== true) return false
     this.QueryCollectionTemp = {}
     const queryCollection = this.jsonFile.get('QueryCollection')
-    if (!(queryCollection instanceof Array) || queryCollection.length === 0) return
+    if (!(queryCollection instanceof Array) || queryCollection.length === 0) return false
     queryCollection.forEach((item) => {
       this.QueryCollectionTemp[item.label] = new PathBasedQuery()
       this.QueryCollectionTemp[item.label].fromJson(item)
     })
+    return true
   }
 
   has (label) {

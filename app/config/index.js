@@ -1,19 +1,23 @@
-const basePath = process.env.ABSOLUTE_APP_PATH
+const log = require('../../core/logger').createLogger('config')
 const path = require('path')
 const os = require('os')
 const { ConfigFile } = require('./configFile.class')
 
-const Config = new ConfigFile(path.join(basePath, 'config.json'))
-const PlatformString = `${os.platform()}-${os.release()}`
+const Config = new ConfigFile()
+let ConfigCleanDataPostponed = false
+const PlatformSignature = `${os.platform()}-${os.release()}`
 
-const __init__ = () => {
+const __init__ = (filePath) => {
+  const basePath = path.parse(filePath).dir
+  Config.init({ filePath })
+
   Config.addField({
     name: 'Platform',
     schema: {
       type: 'string',
       readOnly: true
     },
-    value: PlatformString,
+    value: PlatformSignature,
     description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
   })
 
@@ -202,20 +206,32 @@ const __init__ = () => {
 }
 
 const ConfigCleanData = () => {
+  if (Config === null) {
+    log.info('Clean data postponed')
+    ConfigCleanDataPostponed = true
+    return
+  }
+  log.info('Cleaning data...')
   Config.clean('UserdataDirectory')
   Config.deleteFile()
 }
 
-const ConfigBoot = () => {
-  if (Config.getFieldsCount() === 0) {
-    __init__()
+const ConfigBoot = (filePath) => {
+  log.info(`Booting from ${filePath}`)
+  __init__(filePath)
+  if (ConfigCleanDataPostponed === true) {
+    ConfigCleanData()
+    ConfigCleanDataPostponed = false
   }
   if (Config.load({ autoSave: true }) === true) {
-    if (Config.get('Platform') !== PlatformString) {
+    log.info('Loaded successfully')
+    if (Config.get('Platform') !== PlatformSignature) {
+      log.info(`Different platform signature (current: ${PlatformSignature}). Resetting...`)
       return Config.reset()
     }
     return true
   }
+  log.info('Cannot load or save')
   return false
 }
 

@@ -13,10 +13,6 @@ APP TESTING
 
 
 SHORT
-- unchain/unlink tests!!!
-- check remove file/dir in test files (with mask *.test.*)
-    - to make tests coherent
-- check PathInfo.size
 - manage test files
     - remove and generate files when it is needed
     - look for unix urls and explicit path.sep
