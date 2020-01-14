@@ -530,6 +530,18 @@ libUtils.uniqueFileNameSync = ({ parentPath, fileName }) => {
   return newDestinationPath
 }
 
+libUtils.getFilePathFromPool = (filePath, fileName, poolSize = 3, maxFileSize = 2100000) => {
+  // get files in path
+  // filter by fileName as prefix
+
+  // get latest file created
+
+  // if size > maxFileSize ...create new file
+  // set new file name.. if suffix>poolSize, suffix='.01'
+  // if new file exists, remove and return
+  // else ...return this file
+}
+
 module.exports = {
   fileUtils: libUtils
 }
