@@ -48,7 +48,7 @@ const PathQueryBoot = (filePath) => {
 }
 
 const PathQueryCleanData = () => {
-  if(!PathQueryFile) return
+  if (!PathQueryFile) return
   return PathQueryFile.deleteFile()
 }
 
@@ -60,8 +60,8 @@ module.exports = {
     list,
     save,
     create //,
-    //queryFile: Config.get('PathQueryFile'),
-    //queryStringLabel: PathBasedQuery.queryStringLabel
+    // queryFile: Config.get('PathQueryFile'),
+    // queryStringLabel: PathBasedQuery.queryStringLabel
   },
   PathQueryBoot,
   PathQueryCleanData

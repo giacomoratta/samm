@@ -32,15 +32,15 @@ describe('query endpoints', function () {
 
     PathQuery.save()
     expect(fileUtils.readJsonFileSync(pathQueryFilePath)).toMatchObject({
-      "my_label1": {
-        "label": "my_label1",
-        "functionBody": "if ( s.indexOf('file1')>=0 ) return true; if ( s.indexOf('file3')>=0 ) return true; return false;",
-        "queryString": "file1,file3"
+      my_label1: {
+        label: 'my_label1',
+        functionBody: "if ( s.indexOf('file1')>=0 ) return true; if ( s.indexOf('file3')>=0 ) return true; return false;",
+        queryString: 'file1,file3'
       },
-      "my_label2": {
-        "label": "my_label2",
-        "functionBody": "if ( s.indexOf('file2')>=0 ) return true; if ( s.indexOf('file4')>=0 ) return true; return false;",
-        "queryString": "file2,file4"
+      my_label2: {
+        label: 'my_label2',
+        functionBody: "if ( s.indexOf('file2')>=0 ) return true; if ( s.indexOf('file4')>=0 ) return true; return false;",
+        queryString: 'file2,file4'
       }
     })
 
@@ -60,13 +60,13 @@ describe('query endpoints', function () {
 
     PathQuery.save()
     expect(fileUtils.readJsonFileSync(pathQueryFilePath)).toMatchObject({
-      'my_label2': {
-      label: 'my_label2',
+      my_label2: {
+        label: 'my_label2',
         functionBody: "if ( s.indexOf('file2')>=0 ) return true; if ( s.indexOf('file4')>=0 ) return true; return false;",
-      queryString: 'file2,file4'
-    }
+        queryString: 'file2,file4'
+      }
     })
 
-    //fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
+    // fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
   })
 })
