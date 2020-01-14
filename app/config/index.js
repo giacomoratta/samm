@@ -1,7 +1,7 @@
-const log = require('../../core/logger').createLogger('config')
 const path = require('path')
 const os = require('os')
 const { ConfigFile } = require('./configFile.class')
+const log = require('../../core/logger').createLogger('config')
 
 let ConfigInstance = null
 let ConfigCleanDataPostponed = false
@@ -216,7 +216,7 @@ const ConfigCleanData = () => {
 }
 
 const ConfigBoot = (filePath) => {
-  log.info(`Booting from ${filePath}`)
+  log.info(`Booting from ${filePath}...`)
   __init__(filePath)
   if (ConfigCleanDataPostponed === true) {
     ConfigCleanData()

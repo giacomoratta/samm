@@ -1,8 +1,7 @@
-const { Config } = require('../config')
 const { ProjectHistoryJsonFile } = require('./projectHistoryJsonFile.class')
+const log = require('../../core/logger').createLogger('project-history')
 
-const ProjectHistoryFile = new ProjectHistoryJsonFile(Config.get('ProjectHistoryFile'))
-ProjectHistoryFile.load()
+let ProjectHistoryFile
 
 const addToHistory = (projectPath) => {
   return ProjectHistoryFile.add(projectPath)
@@ -24,11 +23,25 @@ const saveHistory = () => {
   return ProjectHistoryFile.save()
 }
 
+const ProjectHistoryBoot = (filePath) => {
+  log.info(`Booting from ${filePath}...`)
+  ProjectHistoryFile = new ProjectHistoryJsonFile(filePath)
+  return ProjectHistoryFile.load()
+}
+
+const ProjectHistoryCleanData = () => {
+  log.info('Cleaning data...')
+  if (!ProjectHistoryFile) return
+  return ProjectHistoryFile.deleteFile()
+}
+
 module.exports = {
   ProjectHistory: {
     add: addToHistory,
     latest: latestFromHistory,
     list: listHistory,
     save: saveHistory
-  }
+  },
+  ProjectHistoryBoot,
+  ProjectHistoryCleanData
 }

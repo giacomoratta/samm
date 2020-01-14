@@ -5,7 +5,6 @@ const { SpheroidCache } = require('../../core/spheroid-cache')
 class ProjectHistoryJsonFile {
   constructor (filePath) {
     this.ProjectHistoryCache = new SpheroidCache({ maxSize: 15 })
-    this.pathMap = new Map()
 
     this.jsonFile = new JsonizedFile({ filePath, prettyJson: true })
     this.jsonFile.addField({

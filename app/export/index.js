@@ -1,6 +1,7 @@
 const path = require('path')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { SampleInfo } = require('../sample/sampleInfo.class')
+const log = require('../../core/logger').createLogger('export')
 
 const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {
   if (!samplesArray || samplesArray.length === 0) {
@@ -30,16 +31,19 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
   const notCopiedFiles = []
   const promisesArray = []
   let finalSamplePath
+  log.info(`Exporting ${samplesArray.length} samples to ${finalDirectoryPath}...`)
   samplesArray.forEach((sample) => {
     finalSamplePath = (overwrite !== true ? fileUtils.uniqueFileNameSync({ parentPath: finalDirectoryPath, fileName: sample.base }) : path.join(finalDirectoryPath, sample.base))
     promisesArray.push(fileUtils.copyFile(sample.path, finalSamplePath, { overwrite }).then((result) => {
       copiedFiles.push(result.pathTo)
     }).catch((result) => {
+      log.error('Copy failed', result)
       copyErrors.push(result.err)
       notCopiedFiles.push(result.pathTo)
     }))
   })
   return Promise.all(promisesArray).then(() => {
+    log.info(`${copiedFiles.length} samples copied and ${notCopiedFiles.length} samples skipped`)
     return {
       copiedFiles,
       notCopiedFiles,

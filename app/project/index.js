@@ -1,5 +1,3 @@
-const { ProjectHistory } = require('./projectHistory')
-
 module.exports = {
-  ProjectHistory
+  ...require('./projectHistory')
 }

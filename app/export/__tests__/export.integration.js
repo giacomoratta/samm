@@ -1,8 +1,9 @@
 const path = require('path')
-process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('./../../../core/utils/file.utils')
 
-const { Config, ConfigBoot, ConfigCleanData } = require('../index')
+const testDirToCopy = path.join(__dirname, '..', '..', '__tests__', 'test_dir')
+
+const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 const { PathQuery } = require('../../path-query')
 const { SampleSet } = require('../../sample/sampleSet.class')
 const { SampleIndex } = require('../../sample/sampleIndex.class')
@@ -11,8 +12,8 @@ const { Export } = require('../index')
 describe('Export functions', function () {
   beforeAll(() => {
     ConfigCleanData()
-    expect(ConfigBoot()).toEqual(true)
-    Config.set('SamplesDirectory', path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir'))
+    expect(ConfigBoot(path.join(__dirname, 'config.json'))).toEqual(true)
+    Config.set('SamplesDirectory', testDirToCopy)
   })
 
   afterAll(() => {
