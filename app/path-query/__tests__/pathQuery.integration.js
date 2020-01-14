@@ -1,27 +1,20 @@
 const path = require('path')
-const configFilePath = path.join(__dirname, 'config.json')
 const pathQueryFilePath = path.join(__dirname, 'userdata', 'path_query')
-const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 const { fileUtils } = require('../../../core/utils/file.utils')
 const { PathQuery, PathQueryBoot, PathQueryCleanData } = require('../index')
 
 describe('query endpoints', function () {
   beforeAll(() => {
-    ConfigCleanData()
     PathQueryCleanData()
-    expect(ConfigBoot(configFilePath)).toEqual(true)
     expect(PathQueryBoot(pathQueryFilePath)).toEqual(true)
   })
 
   afterAll(() => {
-    ConfigCleanData()
     PathQueryCleanData()
   })
 
   it('should perform basic operations', function () {
     expect(fileUtils.directoryExistsSync(path.join(__dirname, 'userdata'))).toEqual(true)
-
-    fileUtils.writeTextFileSync(pathQueryFilePath, '')
 
     PathQuery.add('my_label1', 'file1,file3')
     PathQuery.add('my_label2', 'file2,file4')
@@ -66,7 +59,5 @@ describe('query endpoints', function () {
         queryString: 'file2,file4'
       }
     })
-
-    // fileUtils.writeTextFileSync(Config.get('PathQueryFile'), '')
   })
 })

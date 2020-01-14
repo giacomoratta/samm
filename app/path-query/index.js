@@ -59,9 +59,8 @@ module.exports = {
     get,
     list,
     save,
-    create //,
-    // queryFile: Config.get('PathQueryFile'),
-    // queryStringLabel: PathBasedQuery.queryStringLabel
+    create,
+    queryStringLabel: PathBasedQuery.queryStringLabel
   },
   PathQueryBoot,
   PathQueryCleanData
