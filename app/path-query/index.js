@@ -7,7 +7,7 @@ const PathBasedQueryCache = new SpheroidCache({ maxSize: 30 })
 let PathQueryFile = null
 
 const add = (label, queryString) => {
-  return PathQueryFile.add({ label, queryString })
+  return PathQueryFile.add({ jsonData: { label, queryString } })
 }
 
 const remove = (label) => {
@@ -48,7 +48,8 @@ const PathQueryBoot = (filePath) => {
 }
 
 const PathQueryCleanData = () => {
-  return PathBasedQuery.deleteFile()
+  if(!PathQueryFile) return
+  return PathQueryFile.deleteFile()
 }
 
 module.exports = {
@@ -58,9 +59,9 @@ module.exports = {
     get,
     list,
     save,
-    create,
-    queryFile: Config.get('PathQueryFile'),
-    queryStringLabel: PathBasedQuery.queryStringLabel
+    create //,
+    //queryFile: Config.get('PathQueryFile'),
+    //queryStringLabel: PathBasedQuery.queryStringLabel
   },
   PathQueryBoot,
   PathQueryCleanData
