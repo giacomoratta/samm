@@ -53,6 +53,7 @@ class JsonizedFile {
 
   removeField (name) {
     delete this.fields[name]
+    return true
   }
 
   get (name) {
@@ -130,7 +131,7 @@ class JsonizedFile {
   }
 
   hasData () {
-    return this.fileHolder !== null && this.fileHolder.hasData
+    return this.fileHolder !== null && this.fileHolder.hasData()
   }
 
   save () {

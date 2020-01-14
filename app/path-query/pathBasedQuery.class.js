@@ -94,10 +94,20 @@ class PathBasedQuery {
   }
 
   fromJson (jsonData) {
+    if (!jsonData.label || !jsonData.queryString) return false
+    if (!jsonData.functionBody) {
+      const queryInfo = processQueryString(jsonData.queryString)
+      if (!queryInfo) return false
+      this._queryString = queryInfo.queryString
+      this._functionBody = queryInfo.functionBody
+      this.check = queryInfo.checkFn
+    } else {
+      this._queryString = jsonData.queryString
+      this._functionBody = jsonData.functionBody
+      this.check = codeUtils.createFunction('s', this._functionBody)
+    }
     this._label = jsonData.label
-    this._functionBody = jsonData.functionBody
-    this._queryString = jsonData.queryString
-    this.check = codeUtils.createFunction('s', jsonData.functionBody)
+    return true
   }
 
   toJson () {

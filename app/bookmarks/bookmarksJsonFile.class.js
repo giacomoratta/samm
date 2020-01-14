@@ -10,7 +10,7 @@ class BookmarksJsonFile extends JsonizedFile {
     this.beforeLoadFn = (data) => {
       Object.keys(data).forEach((key) => {
         this.removeField(key)
-        this.addBookmarkTag(key)
+        this._createBookmarkTagField(key)
       })
       return data
     }

@@ -1,7 +1,5 @@
 const path = require('path')
-const configDataLocation = path.join(__dirname, 'config.json')
 const pathQueryLocation = path.join(__dirname, 'path_query.json')
-const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 
 const { PathQueryJsonFile } = require('../pathQueryJsonFile.class')
 const { PathBasedQuery } = require('../pathBasedQuery.class')
@@ -9,20 +7,17 @@ const { fileUtils } = require('../../../core/utils/file.utils')
 
 describe('path-query endpoints', function () {
   beforeAll(() => {
-    ConfigCleanData()
     fileUtils.removeFileSync(pathQueryLocation)
-    expect(ConfigBoot(configDataLocation)).toEqual(true)
   })
 
   afterAll(() => {
-    ConfigCleanData()
     fileUtils.removeFileSync(pathQueryLocation)
   })
 
   it('should create and handle a query file', function () {
     const PathQueryFile1 = new PathQueryJsonFile(pathQueryLocation)
     PathQueryFile1.load()
-    expect(PathQueryFile1.QueryCollectionTemp).toMatchObject({})
+    expect(PathQueryFile1.collection).toMatchObject({})
 
     expect(PathQueryFile1.get('invalid_label1')).toEqual(undefined)
     expect(function () {
@@ -30,13 +25,17 @@ describe('path-query endpoints', function () {
     }).not.toThrow()
 
     expect(PathQueryFile1.add({
-      label: 'my_label_11',
-      queryString: ',+ +,+, '
+      jsonData: {
+        label: 'my_label_11',
+        queryString: ',+ +,+, '
+      }
     })).toEqual(false)
 
     expect(PathQueryFile1.add({
-      label: 'my_label_11',
-      queryString: 'le61+file1,+fi le3,+, '
+      jsonData: {
+        label: 'my_label_11',
+        queryString: 'le61+file1,+fi le3,+, '
+      }
     })).toEqual(true)
 
     const pathQuery11 = PathQueryFile1.get('my_label_11')
@@ -55,18 +54,24 @@ describe('path-query endpoints', function () {
     expect(PathQueryFile1.has('my_label_11')).toEqual(false)
 
     expect(PathQueryFile1.add({
-      label: 'my_label_21',
-      queryString: 'le61+file1,+fi le3,+, '
+      jsonData: {
+        label: 'my_label_21',
+        queryString: 'le61+file1,+fi le3,+, '
+      }
     })).toEqual(true)
 
     expect(PathQueryFile1.add({
-      label: 'my_label_31',
-      queryString: 'le61+file1,+fi le3,+, '
+      jsonData: {
+        label: 'my_label_31',
+        queryString: 'le61+file1,+fi le3,+, '
+      }
     })).toEqual(true)
 
     expect(PathQueryFile1.add({
-      label: 'my_label_41',
-      queryString: 'le61+file1,+fi le3,+, '
+      jsonData: {
+        label: 'my_label_41',
+        queryString: 'le61+file1,+fi le3,+, '
+      }
     })).toEqual(true)
 
     PathQueryFile1.forEach((pathQuery) => {
@@ -80,8 +85,8 @@ describe('path-query endpoints', function () {
     PathQueryFile1.save()
 
     const qf1Json = fileUtils.readJsonFileSync(pathQueryLocation)
-    expect(qf1Json.QueryCollection.length).toEqual(3)
-    expect(qf1Json.QueryCollection[2].queryString).toEqual('le61+file1,file3')
+    expect(Object.keys(qf1Json).length).toEqual(3)
+    expect(qf1Json[Object.keys(qf1Json)[2]].queryString).toEqual('le61+file1,file3')
 
     const PathQueryFile2 = new PathQueryJsonFile(pathQueryLocation)
     PathQueryFile2.load()
@@ -112,8 +117,6 @@ describe('path-query endpoints', function () {
 
     PathQueryFile2.save()
 
-    expect(fileUtils.readJsonFileSync(pathQueryLocation)).toMatchObject({
-      QueryCollection: []
-    })
+    expect(fileUtils.readJsonFileSync(pathQueryLocation)).toMatchObject({})
   })
 })

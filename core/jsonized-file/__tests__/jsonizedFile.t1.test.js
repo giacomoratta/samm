@@ -4,6 +4,29 @@ const baseRoot = path.parse(__dirname).root
 const { JsonizedFile } = require('../index')
 
 describe('JsonizedFile class and object', function () {
+  it('should handle files with bad content', function () {
+    let jsonizedFile
+
+    const jsonFileWrongJson = path.join(__dirname, 'test_dir', 'config_file_wrong_json')
+    const jsonFileEmpty = path.join(__dirname, 'test_dir', 'config_file_empty')
+    const jsonFileNotExists = path.join(__dirname, 'test_dir', 'config_file_not_exists')
+
+    fileUtils.removeFileSync(jsonFileNotExists)
+
+    jsonizedFile = new JsonizedFile({ filePath: jsonFileWrongJson })
+    jsonizedFile.load()
+    expect(jsonizedFile.hasData()).toEqual(false)
+
+    jsonizedFile = new JsonizedFile({ filePath: jsonFileEmpty })
+    jsonizedFile.load()
+    expect(jsonizedFile.hasData()).toEqual(false)
+
+    jsonizedFile = new JsonizedFile({ filePath: jsonFileNotExists })
+    jsonizedFile.load()
+    expect(jsonizedFile.hasData()).toEqual(false)
+
+    fileUtils.removeFileSync(jsonFileNotExists)
+  })
   it('should create an basic JsonizedFile with simple fields', function () {
     const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 

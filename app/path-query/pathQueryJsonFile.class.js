@@ -1,94 +1,72 @@
 const { JsonizedFile } = require('../../core/jsonized-file')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 
-class PathQueryJsonFile /* todo: extends JsonizedFile */ {
+class PathQueryJsonFile extends JsonizedFile {
   constructor (filePath) {
-    // todo: check bookmarks
-    // todo: read/write ordered list of queries
+    super({ filePath, prettyJson: true, orderedFields: true })
 
-    this.QueryCollectionTemp = {}
-
-    this.jsonFile = new JsonizedFile({ filePath, prettyJson: true })
-    this.jsonFile.addField({
-      name: 'QueryCollection',
-      schema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          props: {
-            label: { type: 'string' },
-            functionBody: { type: 'string' },
-            queryString: { type: 'string' }
-          }
-        },
-        default: [
-          {
-            label: 'query_label',
-            functionBody: 'if(...) return true; return false;',
-            queryString: 'abc+def,ghj,qwerty'
-          }
-        ]
-      }
-    })
-  }
-
-  deleteFile () {
-    return this.jsonFile.deleteFile()
-  }
-
-  save () {
-    const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
-    const queryCollection = []
-    if (queryCollectionKeys.length > 0) {
-      queryCollectionKeys.forEach((k) => {
-        queryCollection.push(this.QueryCollectionTemp[k].toJson())
+    // create fields dynamically
+    this.beforeLoadFn = (data) => {
+      Object.keys(data).forEach((key) => {
+        this.removeField(key)
+        this.add({ jsonData: data[key] })
       })
+      return data
     }
-    this.jsonFile.set('QueryCollection', queryCollection)
-    return this.jsonFile.save()
+
+    this.collection = {}
   }
 
-  load () {
-    if (this.jsonFile.load() !== true) return false
-    this.QueryCollectionTemp = {}
-    const queryCollection = this.jsonFile.get('QueryCollection')
-    if (!(queryCollection instanceof Array) || queryCollection.length === 0) return false
-    queryCollection.forEach((item) => {
-      this.QueryCollectionTemp[item.label] = new PathBasedQuery()
-      this.QueryCollectionTemp[item.label].fromJson(item)
+  add ({ pathBasedQueryObject, jsonData }) {
+    if (!pathBasedQueryObject) {
+      pathBasedQueryObject = new PathBasedQuery()
+      if (pathBasedQueryObject.fromJson(jsonData) !== true) return false
+    } else if (!(pathBasedQueryObject instanceof PathBasedQuery)) {
+      throw new TypeError('pathBasedQueryObject should be an instance of PathBasedQuery class')
+    }
+
+    this.addField({
+      name: pathBasedQueryObject.label,
+      schema: {
+        type: 'object',
+        props: {
+          label: { type: 'string' },
+          functionBody: { type: 'string' },
+          queryString: { type: 'string' }
+        }
+      },
+      value: pathBasedQueryObject.toJson()
     })
-    return true
-  }
 
-  has (label) {
-    return this.QueryCollectionTemp[label] !== undefined
+    this.collection[pathBasedQueryObject.label] = pathBasedQueryObject
+    return true
   }
 
   get (label) {
-    return this.QueryCollectionTemp[label]
+    return this.collection[label]
   }
 
   remove (label) {
-    delete this.QueryCollectionTemp[label]
-  }
-
-  add ({ label, queryString }) {
-    const newPathBasedQuery = new PathBasedQuery(queryString)
-    if (!newPathBasedQuery.label) return false
-    newPathBasedQuery.label = label
-    this.QueryCollectionTemp[label] = newPathBasedQuery
-    return true
-  }
-
-  forEach (callback) {
-    const queryCollectionKeys = Object.keys(this.QueryCollectionTemp)
-    if (queryCollectionKeys.length > 0) {
-      queryCollectionKeys.forEach((k) => {
-        callback(this.QueryCollectionTemp[k])
-      })
+    if (this.removeField(label) === true) {
+      delete this.collection[label]
       return true
     }
     return false
+  }
+
+  has (label) {
+    return this.hasField(label)
+  }
+
+  size () {
+    return this.getFieldsCount()
+  }
+
+  forEach (fn) {
+    const fieldsList = this.getFieldsList()
+    fieldsList.forEach((key) => {
+      fn(this.collection[key])
+    })
   }
 }
 

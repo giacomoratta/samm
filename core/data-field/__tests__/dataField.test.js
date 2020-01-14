@@ -91,7 +91,7 @@ describe('dataField class and object', function () {
   })
 
   it('should manage array with add/remove', function () {
-    const df1_1 = new DataField({
+    const df11 = new DataField({
       name: 'stdArray1',
       schema: {
         type: 'array',
@@ -100,20 +100,20 @@ describe('dataField class and object', function () {
       value: [1, 3]
     })
 
-    expect(df1_1.add(5)).toEqual(true)
-    expect(df1_1.get()).toMatchObject([1, 3, 5])
+    expect(df11.add(5)).toEqual(true)
+    expect(df11.get()).toMatchObject([1, 3, 5])
 
-    expect(df1_1.add(7)).toEqual(true)
-    expect(df1_1.get()).toMatchObject([1, 3, 5, 7])
+    expect(df11.add(7)).toEqual(true)
+    expect(df11.get()).toMatchObject([1, 3, 5, 7])
 
-    expect(df1_1.remove()).toEqual(true)
-    expect(df1_1.get()).toMatchObject([1, 3, 5])
+    expect(df11.remove()).toEqual(true)
+    expect(df11.get()).toMatchObject([1, 3, 5])
 
-    expect(df1_1.remove(4)).toEqual(false)
-    expect(df1_1.remove(1)).toEqual(true)
-    expect(df1_1.get()).toMatchObject([1, 5])
+    expect(df11.remove(4)).toEqual(false)
+    expect(df11.remove(1)).toEqual(true)
+    expect(df11.get()).toMatchObject([1, 5])
 
-    const df1_2 = new DataField({
+    const df12 = new DataField({
       name: 'stdArray1',
       schema: {
         type: 'array',
@@ -122,18 +122,18 @@ describe('dataField class and object', function () {
       value: [1, 2]
     })
 
-    expect(df1_2.add(5)).toEqual(true)
-    expect(df1_2.get()).toMatchObject([5, 1, 2])
+    expect(df12.add(5)).toEqual(true)
+    expect(df12.get()).toMatchObject([5, 1, 2])
 
-    expect(df1_2.add(7)).toEqual(true)
-    expect(df1_2.get()).toMatchObject([7, 5, 1, 2])
+    expect(df12.add(7)).toEqual(true)
+    expect(df12.get()).toMatchObject([7, 5, 1, 2])
 
-    expect(df1_2.remove()).toEqual(true)
-    expect(df1_2.get()).toMatchObject([5, 1, 2])
+    expect(df12.remove()).toEqual(true)
+    expect(df12.get()).toMatchObject([5, 1, 2])
 
-    expect(df1_2.remove(4)).toEqual(false)
-    expect(df1_2.remove(1)).toEqual(true)
-    expect(df1_2.get()).toMatchObject([5, 2])
+    expect(df12.remove(4)).toEqual(false)
+    expect(df12.remove(1)).toEqual(true)
+    expect(df12.get()).toMatchObject([5, 2])
 
     const df2 = new DataField({
       name: 'stdArray3',
