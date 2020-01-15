@@ -1,11 +1,21 @@
 const path = require('path')
-process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
+const projectHistoryFilePath = path.join(__dirname, 'userdata', 'project_history')
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-const { Config } = require('../../config')
-const { ProjectHistory } = require('../projectHistory')
+const { ProjectHistory, ProjectHistoryBoot, ProjectHistoryCleanData } = require('../projectHistory')
 
 describe('ProjectHistory endpoints', function () {
+  beforeAll(() => {
+    ProjectHistoryCleanData()
+    fileUtils.removeDirSync(path.join(__dirname, 'userdata'))
+    expect(ProjectHistoryBoot(projectHistoryFilePath)).toEqual(true)
+  })
+
+  afterAll(() => {
+    ProjectHistoryCleanData()
+    fileUtils.removeDirSync(path.join(__dirname, 'userdata'))
+  })
+
   it('ProjectHistory basic functions', function () {
     let projectPath
 
@@ -30,16 +40,14 @@ describe('ProjectHistory endpoints', function () {
 
     expect(ProjectHistory.save()).toEqual(true)
 
-    const fileContent = fileUtils.readJsonFileSync(Config.get('ProjectHistoryFile'))
-    expect(fileContent.ProjectHistory.length).toEqual(15)
-    expect(fileContent.ProjectHistory[0].path).toEqual(path.join(__dirname, 'test_dir', 'my_project17'))
-    expect(fileContent.ProjectHistory[fileContent.ProjectHistory.length - 1].path).toEqual(path.join(__dirname, 'test_dir', 'my_project3'))
+    const fileContent = fileUtils.readJsonFileSync(projectHistoryFilePath)
+    expect(fileContent.length).toEqual(15)
+    expect(fileContent[0].path).toEqual(path.join(__dirname, 'test_dir', 'my_project17'))
+    expect(fileContent[fileContent.length - 1].path).toEqual(path.join(__dirname, 'test_dir', 'my_project3'))
 
     const phArray = ProjectHistory.list()
     expect(phArray.length).toEqual(15)
     expect(phArray[0].path).toEqual(path.join(__dirname, 'test_dir', 'my_project17'))
     expect(phArray[phArray.length - 1].path).toEqual(path.join(__dirname, 'test_dir', 'my_project3'))
-
-    fileUtils.writeTextFileSync(Config.get('ProjectHistoryFile'), '')
   })
 })

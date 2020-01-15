@@ -62,6 +62,7 @@ class FileButler {
     if (!this._hasData) loadedData = this.config.defaultValue
     this.data = loadedData
     this.eventEmitter.emit('load', { filePath: this.config.filePath, data: loadedData })
+    return this._hasData
   }
 
   on (eventName, cb) {

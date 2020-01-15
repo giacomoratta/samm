@@ -1,53 +1,59 @@
-const { JsonizedFile } = require('../../core/jsonized-file')
+const { FileButler } = require('../../core/file-butler')
 const { Project } = require('./project.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 
 class ProjectHistoryJsonFile {
   constructor (filePath) {
+    this.filePath = filePath
+    this.fileHolder = null
     this.ProjectHistoryCache = new SpheroidCache({ maxSize: 15 })
-
-    this.jsonFile = new JsonizedFile({ filePath, prettyJson: true })
-    this.jsonFile.addField({
-      name: 'ProjectHistory',
-      schema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          props: {
-            name: { type: 'string' },
-            path: { type: 'string' }
-          }
-        },
-        default: [
-          {
-            name: 'project_name1',
-            path: '/path/project_name1'
-          }
-        ]
-      }
-    })
   }
 
   save () {
-    const phCollection = []
-    this.ProjectHistoryCache.forEach(({ label, value }) => {
-      phCollection.push(value.toJson())
-    })
-    this.jsonFile.set('ProjectHistory', phCollection)
-    return this.jsonFile.save()
+    if (!this.fileHolder) return false
+    return this.fileHolder.save()
   }
 
-  load () {
+  load ({ autoSave } = {}) {
+    const options = {}
+    options.filePath = this.filePath
+    options.fileType = 'json'
+    options.loadFn = (data) => {
+      if (!data) return
+      this.fromObject(data)
+    }
+
+    options.saveFn = () => {
+      return this.toObject()
+    }
+
+    this.fileHolder = new FileButler(options) /* throw */
+    this.fileHolder.load()
+
+    if (autoSave === true) {
+      return this.fileHolder.save()
+    }
+    return true
+  }
+
+  toObject () {
+    const data = []
+    this.ProjectHistoryCache.forEach(({ label, value }) => {
+      data.push(value.toJson())
+    })
+    return data
+  }
+
+  fromObject (data) {
     let newProjectNode
-    this.jsonFile.load()
     this.ProjectHistoryCache.reset()
-    const phCollection = this.jsonFile.get('ProjectHistory')
-    if (!(phCollection instanceof Array) || phCollection.length === 0) return
-    for (let i = phCollection.length - 1; i >= 0; i--) {
+    if (!(data instanceof Array) || data.length === 0) return false
+    for (let i = data.length - 1; i >= 0; i--) {
       newProjectNode = new Project()
-      newProjectNode.fromJson(phCollection[i])
+      newProjectNode.fromJson(data[i])
       this.ProjectHistoryCache.add(newProjectNode)
     }
+    return true
   }
 
   get latest () {
@@ -74,6 +80,14 @@ class ProjectHistoryJsonFile {
     this.ProjectHistoryCache.forEach(({ label, value }) => {
       callback(value)
     })
+  }
+
+  deleteFile () {
+    const tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
+      filePath: this.filePath,
+      fileType: 'json'
+    }))
+    return tempFileHolder.delete()
   }
 }
 
