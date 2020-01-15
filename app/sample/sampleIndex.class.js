@@ -77,6 +77,10 @@ class SampleIndex {
   get loaded () {
     return this.sampleTree !== null && this.sampleTree !== undefined
   }
+
+  deleteFile () {
+    return fileUtils.removeFileSync(this.indexFilePath)
+  }
 }
 
 module.exports = {

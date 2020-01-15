@@ -12,7 +12,7 @@ class FileButler {
     this.config = parseOption(options)
     this.data = this.config.defaultValue
     this._hasData = false
-    this.load()
+    // this.load()
   }
 
   hasData () {

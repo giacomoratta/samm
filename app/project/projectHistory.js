@@ -21,12 +21,12 @@ const listHistory = () => {
 }
 
 const loadHistory = () => {
-  log.info(`Loading history...`)
+  log.info('Loading history...')
   return ProjectHistoryFile.load()
 }
 
 const saveHistory = () => {
-  log.info(`Saving history...`)
+  log.info('Saving history...')
   return ProjectHistoryFile.save()
 }
 

@@ -113,6 +113,7 @@ describe('FileButler actions with data and files', function () {
       fileType: 'json',
       cloneFrom: path.join(__dirname, 'dir_test', 'file1.clone.json')
     })
+    expect(fb1.load()).toEqual(true)
     expect(fileUtils.fileExistsSync(fb1.config.filePath)).toEqual(true)
     expect(fileUtils.readJsonFileSync(fb1.config.filePath)).toMatchObject({ abc: 123 })
     fileUtils.removeFileSync(fb1.config.filePath)
@@ -162,6 +163,7 @@ describe('FileButler actions with data and files', function () {
         expect(c).toMatchObject({ aaaaa: 432432 })
       }
     })
+    expect(fb1.load()).toEqual(true)
     expect(fb1.get()).toMatchObject({ wrap: { aaaaa: 432432 } })
 
     fb1.save()
@@ -192,6 +194,7 @@ describe('FileButler actions with data and files', function () {
       filePath: path.join(__dirname, 'dir_test', 'file2.json'),
       fileType: 'json'
     })
+    expect(fb2.load()).toEqual(true)
     expect(fb2.get()).toMatchObject({ new: 'obj1' })
     fileUtils.removeFileSync(fb1.config.filePath)
   })

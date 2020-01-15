@@ -5,18 +5,16 @@ const { SampleSet } = require('./sampleSet.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
 const log = require('../../core/logger').createLogger('sample')
 
-let SampleSetCache = new SpheroidCache({ maxSize: 20 })
-let LookupCache = new SpheroidCache({ maxSize: 40 })
-
-// set logger
+const SampleSetCache = new SpheroidCache({ maxSize: 20 })
+const LookupCache = new SpheroidCache({ maxSize: 40 })
 
 let mainSamplesIndex = null
 
 const loadIndex = async (indexFilePath) => {
-  log.info(`executing loadIndex...`)
+  log.info('executing loadIndex...')
   mainSamplesIndex = null
   if (!Config.get('SamplesDirectory')) {
-    log.info(`loadIndex - no SamplesDirectory found`)
+    log.info('loadIndex - no SamplesDirectory found')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
     Config.save()
@@ -38,24 +36,24 @@ const loadIndex = async (indexFilePath) => {
 
   if (loadResult !== true) {
     mainSamplesIndex = null
-    log.warn(`loadIndex - No indexed samples: set flag 'first-scan-needed'.`)
+    log.warn('loadIndex - No indexed samples: set flag \'first-scan-needed\'.')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
   } else {
-    log.info(`loadIndex - Found indexed samples`)
+    log.info('loadIndex - Found indexed samples')
     Config.getField('Status').add('first-scan-needed', false)
     Config.getField('Status').add('new-scan-needed', false)
   }
 
   Config.save()
-  return loadResult
+  return true
 }
 
 const createIndex = async (indexFilePath) => {
-  log.info(`executing createIndex...`)
+  log.info('executing createIndex...')
   mainSamplesIndex = null
   if (!Config.get('SamplesDirectory')) {
-    log.info(`createIndex - no SamplesDirectory found`)
+    log.info('createIndex - no SamplesDirectory found')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
     Config.save()
@@ -86,11 +84,11 @@ const createIndex = async (indexFilePath) => {
 
   if (createResult !== true) {
     mainSamplesIndex = null
-    log.warn(`createIndex - No indexed samples: set flag 'first-scan-needed'.`)
+    log.warn('createIndex - No indexed samples: set flag \'first-scan-needed\'.')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
   } else {
-    log.info(`createIndex - Found indexed samples`)
+    log.info('createIndex - Found indexed samples')
     Config.getField('Status').add('first-scan-needed', false)
     Config.getField('Status').add('new-scan-needed', false)
   }
@@ -184,15 +182,15 @@ const lookupByPathQuery = ({ queryString, queryLabel }) => {
   }
 }
 
-const SampleBoot = async (filePath) => {
-  log.info(`Booting from ${filePath}...`)
-  return await loadIndex(filePath)
+const SampleBoot = async (indexFilePath) => {
+  log.info(`Booting from ${indexFilePath}...`)
+  return await loadIndex(indexFilePath)
 }
 
 const SampleCleanData = () => {
   log.info('Cleaning data...')
-  if (!ProjectHistoryFile) return
-  return ProjectHistoryFile.deleteFile()
+  if (!mainSamplesIndex) return
+  return mainSamplesIndex.deleteFile()
 }
 
 module.exports = {

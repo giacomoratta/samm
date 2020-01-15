@@ -2,41 +2,39 @@ const path = require('path')
 process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-const { Config } = require('../../config')
-const { Sample } = require('../index')
+const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
+const { Sample, SampleBoot, SampleCleanData } = require('../index')
 const { PathQuery } = require('../../path-query')
 
-const SamplesDirectory = path.join(process.env.ABSOLUTE_APP_PATH, 'test_dir')
-const SampleIndexFile = Config.get('SampleIndexFile')
+const ConfigFilePath = path.join(__dirname, 'config.json')
+const SampleIndexFile = path.join(__dirname, 'samples_index')
+const SamplesDirectory = path.resolve(path.join(__dirname, '..', '..', '__tests__', 'test_dir'))
 
 describe('sample endpoints', function () {
-  beforeAll(() => {
-    fileUtils.removeFileSync(SampleIndexFile)
-    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
-    Config.reset()
+  beforeAll(async () => {
+    ConfigCleanData()
+    SampleCleanData()
+    expect(ConfigBoot(ConfigFilePath)).toEqual(true)
+    Config.set('SamplesDirectory', SamplesDirectory)
+    expect(await SampleBoot(SampleIndexFile)).toEqual(true)
   })
 
   afterAll(() => {
-    fileUtils.removeFileSync(SampleIndexFile)
-    fileUtils.removeDirSync(Config.get('UserdataDirectory'))
+    ConfigCleanData()
+    SampleCleanData()
   })
 
   it('should perform basic operations and lookups', async function () {
-    Config.unset('SamplesDirectory')
-
     let result
 
     expect(Sample.hasIndex()).toEqual(false)
-    expect(function () { Sample.indexSize() }).toThrow()
+    // expect(function () { Sample.indexSize() }).toThrow()
 
     result = await Sample.loadIndex()
     expect(result).toEqual(false)
 
     result = await Sample.createIndex()
     expect(result).toEqual(false)
-    // return
-
-    Config.set('SamplesDirectory', SamplesDirectory)
 
     result = await Sample.createIndex()
     expect(result).toEqual(true)

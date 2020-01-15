@@ -120,6 +120,7 @@ class JsonizedFile {
 
     try {
       this.fileHolder = new FileButler(options)
+      this.fileHolder.load()
     } catch (e) {
       throw new JsonizedFileError(e.message)
     }

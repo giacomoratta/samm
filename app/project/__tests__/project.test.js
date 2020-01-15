@@ -2,7 +2,6 @@ const path = require('path')
 const { Project } = require('../project.class')
 
 describe('Project class', function () {
-
   it('Project basic methods', function () {
     let projectPath, projectObject
 

@@ -240,6 +240,7 @@ module.exports = {
     set (name, value) { return ConfigInstance.set(name, value) },
     unset (name) { return ConfigInstance.unset(name) },
     isUnset (name) { return ConfigInstance.isUnset(name) },
+    save () { return ConfigInstance.save() },
     getField (name) { return ConfigInstance.getField(name) },
     getFieldsList () { return ConfigInstance.getFieldsList({ writableOnly: true }) }
   },
