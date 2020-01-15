@@ -4,6 +4,7 @@ const log = require('../../core/logger').createLogger('project-history')
 let ProjectHistoryFile
 
 const addToHistory = (projectPath) => {
+  log.info(`Adding to history ${projectPath}...`)
   return ProjectHistoryFile.add(projectPath)
 }
 
@@ -12,14 +13,20 @@ const latestFromHistory = () => {
 }
 
 const listHistory = () => {
-  const array = []
+  const list = []
   ProjectHistoryFile.forEach((project) => {
-    array.push(project)
+    list.push(project)
   })
-  return array
+  return list
+}
+
+const loadHistory = () => {
+  log.info(`Loading history...`)
+  return ProjectHistoryFile.load()
 }
 
 const saveHistory = () => {
+  log.info(`Saving history...`)
   return ProjectHistoryFile.save()
 }
 
@@ -40,6 +47,7 @@ module.exports = {
     add: addToHistory,
     latest: latestFromHistory,
     list: listHistory,
+    load: loadHistory,
     save: saveHistory
   },
   ProjectHistoryBoot,

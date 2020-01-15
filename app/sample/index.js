@@ -3,32 +3,67 @@ const { PathQuery } = require('../path-query')
 const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
 const { SpheroidCache } = require('../../core/spheroid-cache')
+const log = require('../../core/logger').createLogger('sample')
 
-const SampleSetCache = new SpheroidCache({ maxSize: 20 })
-const LookupCache = new SpheroidCache({ maxSize: 40 })
+let SampleSetCache = new SpheroidCache({ maxSize: 20 })
+let LookupCache = new SpheroidCache({ maxSize: 40 })
 
 // set logger
 
 let mainSamplesIndex = null
 
-const loadIndex = async () => {
-  if (!Config.get('SamplesDirectory')) return false
-  mainSamplesIndex = new SampleIndex({
-    indexFilePath: Config.get('SampleIndexFile'),
-    samplesPath: Config.get('SamplesDirectory')
-  })
-  const result = await mainSamplesIndex.load()
-  if (result === true) {
+const loadIndex = async (indexFilePath) => {
+  log.info(`executing loadIndex...`)
+  mainSamplesIndex = null
+  if (!Config.get('SamplesDirectory')) {
+    log.info(`loadIndex - no SamplesDirectory found`)
+    Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
     Config.save()
+    return false
   }
-  return result
+  mainSamplesIndex = new SampleIndex({
+    indexFilePath,
+    samplesPath: Config.get('SamplesDirectory')
+  })
+
+  let loadResult
+  try {
+    loadResult = await mainSamplesIndex.load()
+  } catch (e) {
+    log.error('loadIndex - cannot load the index!')
+    log.error(e)
+    return false
+  }
+
+  if (loadResult !== true) {
+    mainSamplesIndex = null
+    log.warn(`loadIndex - No indexed samples: set flag 'first-scan-needed'.`)
+    Config.getField('Status').add('first-scan-needed', true)
+    Config.getField('Status').add('new-scan-needed', false)
+  } else {
+    log.info(`loadIndex - Found indexed samples`)
+    Config.getField('Status').add('first-scan-needed', false)
+    Config.getField('Status').add('new-scan-needed', false)
+  }
+
+  Config.save()
+  return loadResult
 }
 
-const createIndex = async () => {
-  if (!Config.get('SamplesDirectory')) return false
+const createIndex = async (indexFilePath) => {
+  log.info(`executing createIndex...`)
+  mainSamplesIndex = null
+  if (!Config.get('SamplesDirectory')) {
+    log.info(`createIndex - no SamplesDirectory found`)
+    Config.getField('Status').add('first-scan-needed', true)
+    Config.getField('Status').add('new-scan-needed', false)
+    Config.save()
+    return false
+  }
+
   mainSamplesIndex = new SampleIndex({
-    indexFilePath: Config.get('SampleIndexFile'),
+    indexFilePath,
     samplesPath: Config.get('SamplesDirectory')
   })
   const options = {
@@ -39,14 +74,29 @@ const createIndex = async () => {
   } else if (Config.get('ExtensionsPolicyForSamples') === 'I') {
     options.includedExtensions = Config.get('IncludedExtensionsForSamples')
   }
-  const result = await mainSamplesIndex.create(options)
-  // let result = false
-  if (result === true) {
-    Config.getField('Status').add('new-scan-needed', false)
-    Config.getField('Status').add('first-scan-needed', false)
-    Config.save()
+
+  let createResult
+  try {
+    createResult = await mainSamplesIndex.create(options)
+  } catch (e) {
+    log.error('createIndex - cannot create the index!')
+    log.error(e)
+    return false
   }
-  return result
+
+  if (createResult !== true) {
+    mainSamplesIndex = null
+    log.warn(`createIndex - No indexed samples: set flag 'first-scan-needed'.`)
+    Config.getField('Status').add('first-scan-needed', true)
+    Config.getField('Status').add('new-scan-needed', false)
+  } else {
+    log.info(`createIndex - Found indexed samples`)
+    Config.getField('Status').add('first-scan-needed', false)
+    Config.getField('Status').add('new-scan-needed', false)
+  }
+
+  Config.save()
+  return loadResult
 }
 
 const repairIndex = ({ newSamplesRoot = '' }) => {
@@ -67,7 +117,7 @@ const hasIndex = () => {
 }
 
 const indexSize = () => {
-  // if (mainSamplesIndex === null) return 0
+  if (mainSamplesIndex === null) return
   return mainSamplesIndex.size
 }
 
@@ -134,12 +184,16 @@ const lookupByPathQuery = ({ queryString, queryLabel }) => {
   }
 }
 
-loadIndex().then((loadResult) => {
-  if (loadResult !== true) {
-    Config.getField('Status').add('first-scan-needed', true)
-    Config.save()
-  }
-})
+const SampleBoot = async (filePath) => {
+  log.info(`Booting from ${filePath}...`)
+  return await loadIndex(filePath)
+}
+
+const SampleCleanData = () => {
+  log.info('Cleaning data...')
+  if (!ProjectHistoryFile) return
+  return ProjectHistoryFile.deleteFile()
+}
 
 module.exports = {
   Sample: {
@@ -150,8 +204,9 @@ module.exports = {
     sampleSetByPathQuery,
     lookupByPathQuery,
     repairIndex,
-
     getLatestSampleSet: () => { return SampleSetCache.latest },
     getLatestLookup: () => { return LookupCache.latest }
-  }
+  },
+  SampleBoot,
+  SampleCleanData
 }
