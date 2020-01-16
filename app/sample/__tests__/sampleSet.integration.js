@@ -1,32 +1,30 @@
 const path = require('path')
-const { fileUtils } = require('./../../../core/utils/file.utils')
-
 const { PathQuery } = require('../../path-query')
 const { SampleIndex } = require('../sampleIndex.class')
 const { SampleSet } = require('../sampleSet.class')
 const { SampleInfo } = require('../sampleInfo.class')
 
+let sIndex1
 const SampleIndexFile = path.join(__dirname, 'samples_index')
 const SamplesDirectory = path.resolve(path.join(__dirname, '..', '..', '__tests__', 'test_dir'))
 
 describe('SampleSet functions', function () {
-  beforeAll(() => {
-    fileUtils.removeFileSync(SampleIndexFile)
-  })
-
-  afterAll(() => {
-    fileUtils.removeFileSync(SampleIndexFile)
-  })
-
-  it('should create a sample set', async function () {
-    const sIndex1 = new SampleIndex({
+  beforeAll(async () => {
+      sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
-
+    await sIndex1.deleteFile()
     const result = await sIndex1.create()
     expect(result).toEqual(true)
     expect(sIndex1.size).toEqual(13)
+  })
+
+  afterAll(async () => {
+    await sIndex1.deleteFile()
+  })
+
+  it('should create a sample set', async function () {
 
     /* Create criteria for validate function */
     const pathBQ1 = PathQuery.create('file2,4+directory')
@@ -40,7 +38,7 @@ describe('SampleSet functions', function () {
     })
 
     /* Fill sample set */
-    sIndex1.forEach(({ item }) => {
+    await sIndex1.forEach(({ item }) => {
       set1.add(item)
     })
 
@@ -77,7 +75,7 @@ describe('SampleSet functions', function () {
     })
 
     /* Fill sample set */
-    sIndex1.forEach(({ item }) => {
+    await sIndex1.forEach(({ item }) => {
       set2.add(item)
     })
 

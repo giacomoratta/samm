@@ -119,7 +119,7 @@ const indexSize = () => {
   return mainSamplesIndex.size
 }
 
-const sampleSetByPathQuery = ({ queryString, queryLabel }) => {
+const sampleSetByPathQuery = async ({ queryString, queryLabel }) => {
   let sampleSet = null
   let query = null
 
@@ -146,7 +146,7 @@ const sampleSetByPathQuery = ({ queryString, queryLabel }) => {
     }
   })
 
-  mainSamplesIndex.forEach(({ item }) => {
+  await mainSamplesIndex.forEach(({ item }) => {
     sampleSet.add(item)
   })
 
@@ -162,9 +162,9 @@ const sampleSetByPathQuery = ({ queryString, queryLabel }) => {
   }
 }
 
-const lookupByPathQuery = ({ queryString, queryLabel }) => {
+const lookupByPathQuery = async ({ queryString, queryLabel }) => {
   let lookup = []
-  const sampleSetInfo = sampleSetByPathQuery({ queryString, queryLabel })
+  const sampleSetInfo = await sampleSetByPathQuery({ queryString, queryLabel })
   if (!sampleSetInfo) return
   lookup = sampleSetInfo.sampleSet.random({
     max: Config.get('RandomCount'),
@@ -187,21 +187,21 @@ const SampleBoot = async (indexFilePath) => {
   return await loadIndex(indexFilePath)
 }
 
-const SampleCleanData = () => {
+const SampleCleanData = async () => {
   log.info('Cleaning data...')
   if (!mainSamplesIndex) return
-  return mainSamplesIndex.deleteFile()
+  return await mainSamplesIndex.deleteFile()
 }
 
 module.exports = {
   Sample: {
     hasIndex,
     indexSize,
-    createIndex,
-    loadIndex,
-    sampleSetByPathQuery,
-    lookupByPathQuery,
-    repairIndex,
+    createIndex, /* async */
+    loadIndex,  /* async */
+    sampleSetByPathQuery, /* async */
+    lookupByPathQuery, /* async */
+    // todo: repairIndex,
     getLatestSampleSet: () => { return SampleSetCache.latest },
     getLatestLookup: () => { return LookupCache.latest }
   },

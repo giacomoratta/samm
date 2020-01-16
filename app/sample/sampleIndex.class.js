@@ -10,8 +10,17 @@ class SampleIndexError extends Error {
   }
 }
 
+/**
+ * Asynchronous manager for Sample Index files.
+ * - sample directory might contain 100k+ files and walking this kind of directory might take time.
+ * - index files might easily reach 10MB+ and r/w operations take time.
+ */
 class SampleIndex {
   constructor ({ indexFilePath, samplesPath }) {
+    this.init({ indexFilePath, samplesPath })
+  }
+
+  init ({ indexFilePath, samplesPath }) {
     if (!fileUtils.isAbsolutePath(indexFilePath)) {
       throw new SampleIndexError(`indexFilePath must be an absolute path: ${indexFilePath}`)
     }
@@ -58,12 +67,15 @@ class SampleIndex {
     return true
   }
 
-  forEach (callback) {
+  async forEach (callback) {
     if (!this.sampleTree) {
       throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
     }
-    this.sampleTree.forEach({
-      itemFn: callback // callback({item})
+    return new Promise((resolve) => {
+      this.sampleTree.forEach({
+        itemFn: callback // callback({item})
+      })
+      resolve(true)
     })
   }
 
@@ -78,8 +90,9 @@ class SampleIndex {
     return this.sampleTree !== null && this.sampleTree !== undefined
   }
 
-  deleteFile () {
-    return fileUtils.removeFileSync(this.indexFilePath)
+  async deleteFile () {
+    const result =  await fileUtils.removeFile(this.indexFilePath).catch(e => { })
+    return result === true
   }
 }
 
