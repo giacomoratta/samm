@@ -63,7 +63,7 @@ const loadIndex = async (indexFilePath) => {
   }
 
   Config.save()
-  return true
+  return loadResult
 }
 
 const createIndex = async (indexFilePath) => {
@@ -217,7 +217,8 @@ const lookupByPathQuery = async ({ queryString, queryLabel }) => {
 const SampleBoot = async (indexFilePath) => {
   log.info(`Booting from ${indexFilePath}...`)
   mainSamplesIndexFilePath = indexFilePath
-  return await loadIndex(indexFilePath)
+  await loadIndex(indexFilePath)
+  return true
 }
 
 const SampleCleanData = async () => {
