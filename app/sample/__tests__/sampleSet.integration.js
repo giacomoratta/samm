@@ -5,7 +5,7 @@ const { SampleSet } = require('../sampleSet.class')
 const { SampleInfo } = require('../sampleInfo.class')
 
 let sIndex1
-const SampleIndexFile = path.join(__dirname, 'samples_index')
+const SampleIndexFile = path.join(__dirname, 'test_dir', 'samples_index')
 const SamplesDirectory = path.resolve(path.join(__dirname, '..', '..', '__tests__', 'test_dir'))
 
 describe('SampleSet functions', function () {

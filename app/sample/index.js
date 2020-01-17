@@ -9,20 +9,37 @@ const SampleSetCache = new SpheroidCache({ maxSize: 20 })
 const LookupCache = new SpheroidCache({ maxSize: 40 })
 
 let mainSamplesIndex = null
+let mainSamplesIndexFilePath = null
 
 const loadIndex = async (indexFilePath) => {
   log.info('executing loadIndex...')
   mainSamplesIndex = null
-  if (!Config.get('SamplesDirectory')) {
+  let samplesPath = Config.get('SamplesDirectory')
+
+  if (!samplesPath) {
     log.info('loadIndex - no SamplesDirectory found')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
     Config.save()
     return false
   }
+
+  if(!indexFilePath) {
+    if(!mainSamplesIndex && !mainSamplesIndexFilePath) {
+      log.error(`loadIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter`)
+      return false
+    } else if(!mainSamplesIndex) {
+      indexFilePath = mainSamplesIndexFilePath
+    } else {
+      indexFilePath = mainSamplesIndex.indexFilePath
+    }
+  }
+
+  log.info(`loadIndex - new index ...  indexFilePath=${indexFilePath}  samplesPath=${samplesPath}`)
+
   mainSamplesIndex = new SampleIndex({
     indexFilePath,
-    samplesPath: Config.get('SamplesDirectory')
+    samplesPath
   })
 
   let loadResult
@@ -36,11 +53,11 @@ const loadIndex = async (indexFilePath) => {
 
   if (loadResult !== true) {
     mainSamplesIndex = null
-    log.warn('loadIndex - No indexed samples: set flag \'first-scan-needed\'.')
+    log.warn('loadIndex - No indexed samples found: set flag \'first-scan-needed\'.')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
   } else {
-    log.info('loadIndex - Found indexed samples')
+    log.info('loadIndex - Found indexed samples: unset flags \'*-scan-needed\'')
     Config.getField('Status').add('first-scan-needed', false)
     Config.getField('Status').add('new-scan-needed', false)
   }
@@ -52,7 +69,9 @@ const loadIndex = async (indexFilePath) => {
 const createIndex = async (indexFilePath) => {
   log.info('executing createIndex...')
   mainSamplesIndex = null
-  if (!Config.get('SamplesDirectory')) {
+  let samplesPath = Config.get('SamplesDirectory')
+
+  if (!samplesPath) {
     log.info('createIndex - no SamplesDirectory found')
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
@@ -60,9 +79,22 @@ const createIndex = async (indexFilePath) => {
     return false
   }
 
+  if(!indexFilePath) {
+    if(!mainSamplesIndex && !mainSamplesIndexFilePath) {
+      log.error(`createIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter`)
+      return false
+    } else if(!mainSamplesIndex) {
+      indexFilePath = mainSamplesIndexFilePath
+    } else {
+      indexFilePath = mainSamplesIndex.indexFilePath
+    }
+  }
+
+  log.info(`createIndex - new index ...  indexFilePath=${indexFilePath}  samplesPath=${samplesPath}`)
+
   mainSamplesIndex = new SampleIndex({
     indexFilePath,
-    samplesPath: Config.get('SamplesDirectory')
+    samplesPath
   })
   const options = {
     excludedPaths: Config.get('SamplesDirectoryExclusions')
@@ -88,13 +120,13 @@ const createIndex = async (indexFilePath) => {
     Config.getField('Status').add('first-scan-needed', true)
     Config.getField('Status').add('new-scan-needed', false)
   } else {
-    log.info('createIndex - Found indexed samples')
+    log.info('createIndex - Samples indexed successfully: unset flags \'*-scan-needed\'')
     Config.getField('Status').add('first-scan-needed', false)
     Config.getField('Status').add('new-scan-needed', false)
   }
 
   Config.save()
-  return loadResult
+  return createResult
 }
 
 const repairIndex = ({ newSamplesRoot = '' }) => {
@@ -184,6 +216,7 @@ const lookupByPathQuery = async ({ queryString, queryLabel }) => {
 
 const SampleBoot = async (indexFilePath) => {
   log.info(`Booting from ${indexFilePath}...`)
+  mainSamplesIndexFilePath = indexFilePath
   return await loadIndex(indexFilePath)
 }
 

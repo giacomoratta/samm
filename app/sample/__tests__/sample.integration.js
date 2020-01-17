@@ -1,13 +1,12 @@
 const path = require('path')
-process.env.ABSOLUTE_APP_PATH = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
 const { fileUtils } = require('../../../core/utils/file.utils')
 
 const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 const { Sample, SampleBoot, SampleCleanData } = require('../index')
 const { PathQuery } = require('../../path-query')
 
-const ConfigFilePath = path.join(__dirname, 'config.json')
-const SampleIndexFile = path.join(__dirname, 'samples_index')
+const ConfigFilePath = path.join(__dirname, 'test_dir', 'config.json')
+const SampleIndexFile = path.join(__dirname, 'test_dir', 'samples_index')
 const SamplesDirectory = path.resolve(path.join(__dirname, '..', '..', '__tests__', 'test_dir'))
 
 describe('sample endpoints', function () {
