@@ -4,7 +4,7 @@
   "description": "Creativity-oriented manager for music production library",
   "main": "app.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest",
     "start": "node app.js",
     "dev": "node app-dev.js"
   },

@@ -9,10 +9,12 @@ const { SampleSet } = require('../../sample/sampleSet.class')
 const { SampleIndex } = require('../../sample/sampleIndex.class')
 const { Export } = require('../index')
 
+const indexFilePath = path.join(__dirname, 'config.json')
+
 describe('Export functions', function () {
   beforeAll(() => {
     ConfigCleanData()
-    expect(ConfigBoot(path.join(__dirname, 'config.json'))).toEqual(true)
+    expect(ConfigBoot(indexFilePath)).toEqual(true)
     Config.set('SamplesDirectory', testDirToCopy)
   })
 
@@ -24,7 +26,7 @@ describe('Export functions', function () {
     let result
 
     const sIndex1 = new SampleIndex({
-      indexFilePath: Config.get('SampleIndexFile'),
+      indexFilePath: indexFilePath,
       samplesPath: Config.get('SamplesDirectory')
     })
 

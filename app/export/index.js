@@ -5,10 +5,14 @@ const log = require('../../core/logger').createLogger('export')
 
 const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {
   if (!samplesArray || samplesArray.length === 0) {
-    throw new Error('Sample list not valid')
+    const error = new Error('Sample list not valid')
+    log.error(error.message)
+    throw error
   }
   if (!(samplesArray[0] instanceof SampleInfo)) {
-    throw new Error('Sample list should have SampleInfo instances only')
+    const error = new Error('Sample list should have SampleInfo instances only')
+    log.error(error.message)
+    throw error
   }
 
   if (!directoryName) directoryName = samplesQuery.label.substr(0, 16)
@@ -20,10 +24,14 @@ const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath,
 
   const finalDirectoryPath = fileUtils.uniqueDirectoryNameSync({ parentPath: destinationPath, directoryName })
   if (!finalDirectoryPath) {
-    throw new Error('Cannot find a unique directory name as destination path')
+    const error = new Error('Cannot find a unique directory name as destination path')
+    log.error(error.message)
+    throw error
   }
   if (!fileUtils.ensureDirSync(destinationPath) || !fileUtils.ensureDirSync(finalDirectoryPath)) {
-    throw new Error(`Cannot create the destination path: ${finalDirectoryPath}`)
+    const error = new Error(`Cannot create the destination path: ${finalDirectoryPath}`)
+    log.error(error.message)
+    throw error
   }
 
   const copyErrors = []

@@ -33,6 +33,17 @@ const child = childProcess.spawn(process.execPath, [
 ], { cwd, env })
 logThrough.pipe(child.stdin)
 
+const cleanLoggingProcesses = (a,b) => {
+  console.log(a,b)
+  child.kill('SIGINT')
+}
+
+process.on('exit', cleanLoggingProcesses.bind(null, {exit:true}))
+process.on('SIGINT', cleanLoggingProcesses.bind(null, {exit:true}))
+process.on('SIGUSR1', cleanLoggingProcesses.bind(null, {exit:true}))
+process.on('SIGUSR2', cleanLoggingProcesses.bind(null, {exit:true}))
+process.on('uncaughtException', cleanLoggingProcesses.bind(null, {exit:true}))
+
 const createLogger = (module) => {
   return log.child({ module })
 }
