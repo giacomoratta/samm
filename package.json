@@ -4,7 +4,8 @@
   "description": "Creativity-oriented manager for music production library",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
+    "integration": "jest --testPathPattern=.*\\__tests__\\.*\\.integration\\.js",
+    "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
     "start": "node app.js",
     "dev": "node app-dev.js"
   },
@@ -18,6 +19,7 @@
     "iconv-lite": "^0.5.0",
     "lodash": "^4.17.15",
     "pino": "^5.14.0",
+    "pino-pretty": "^3.5.0",
     "pino-tee": "^0.3.0",
     "rimraf": "^3.0.0",
     "symbol-tree": "^3.2.2",
