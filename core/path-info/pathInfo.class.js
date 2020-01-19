@@ -1,54 +1,61 @@
+const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
+
 const utils = require('./utils')
+const { PathInfoError } = require('./pathInfoError.class')
 
 class PathInfo {
-  constructor () {
-    this.info = null
-  }
+  constructor (absolutePath) {
+    this.info = {}
 
-  isSet () {
-    return _.isObject(this.info)
-  }
+    if (!absolutePath) return
 
-  setSync ({ absolutePath, relRootPath }) {
-    this.info = null
-    const pInfo = utils.checkParameters({ absolutePath, relRootPath })
-    if(!pInfo) return false
-    const pStats = utils.lstatSync(absolutePath)
-    if(!pStats) return false
-    if(!utils.setBasicPathInfo({ pInfo, pStats, absolutePath, relRootPath })) return false
+    if (!_.isString(absolutePath)) {
+      throw new PathInfoError(`Invalid absolute path: ${absolutePath}`)
+    }
+
+    if (!utils.isAbsolutePath(absolutePath)) {
+      throw new PathInfoError(`${absolutePath} is not an absolute path`)
+    }
+
+    const pInfo = path.parse(absolutePath)
+    if (!pInfo) {
+      throw new PathInfoError(`Cannot parse ${absolutePath}`)
+    }
+
+    let stats = null
+    try {
+      stats = fs.lstatSync(absolutePath)
+    } catch (e) {
+      throw new PathInfoError(`Cannot get path stats of ${absolutePath}`)
+    }
+
     this.info = pInfo
-    if(relRootPath) this.relRoot = relRootPath
-    return true
+    if (this.info.ext.startsWith('.')) this.info.ext = this.info.ext.slice(1)
+    this.info.path = absolutePath
+    this.info.level = 1
+    this.info.size = (stats.size ? stats.size : 0)
+    this.info.createdAt = stats.birthtime
+    this.info.modifiedAt = stats.mtime
+    this.info.isFile = stats.isFile()
+    this.info.isDirectory = stats.isDirectory()
   }
 
-  async set ({ absolutePath, relRootPath }) {
-    this.info = null
-    const pInfo = utils.checkParameters({ absolutePath, relRootPath })
-    if(!pInfo) return false
-    const pStats = await utils.lstat(absolutePath)
-    if(!pStats) return false
-    if(!utils.setBasicPathInfo({ pInfo, pStats, absolutePath })) return false
-    this.info = pInfo
-    if(relRootPath) this.relRoot = relRootPath
-    return true
-  }
-
-  isEqualTo (obj) {
+  isEqualTo (obj2) {
     return (
-      this.info.path === obj.info.path &&
-      this.info.root === obj.info.root &&
-      // && this.info.dir === obj.info.dir
-      // && this.info.base === obj.info.base
-      // && this.info.ext === obj.info.ext
-      // && this.info.name === obj.info.name
-      // && this.info.level === obj.info.level
-      this.info.relRoot === obj.info.relRoot &&
-      this.info.relPath === obj.info.relPath
-      // && this.info.size === obj.info.size
-      // && this.info.isFile === obj.info.isFile
-      // && this.info.isDirectory === obj.info.isDirectory
+      this.info.path === obj2.info.path &&
+      this.info.root === obj2.info.root &&
+      // && this.info.dir === obj2.info.dir
+      // && this.info.base === obj2.info.base
+      // && this.info.ext === obj2.info.ext
+      // && this.info.name === obj2.info.name
+      // && this.info.level === obj2.info.level
+      this.info.relRoot === obj2.info.relRoot &&
+      this.info.relPath === obj2.info.relPath
+      // && this.info.size === obj2.info.size
+      // && this.info.isFile === obj2.info.isFile
+      // && this.info.isDirectory === obj2.info.isDirectory
     )
   }
 
@@ -79,7 +86,7 @@ class PathInfo {
     this.info.relPath = this.info.path.substring(this.info.relRoot.length + 1)
     // if (this.info.relPath.length === 0) this.info.relPath = path.sep
     // if (this.info.relPath.endsWith(path.sep)) this.info.relPath = this.info.relPath.substr(0, this.info.relPath.length - 2) // remove final path.sep
-    if (this.info.relPath.length > 0) this.info.level = this.info.relPath.split(path.sep).length + 1
+    if (this.info.relPath.length > 0) this.info.level = _.split(this.info.relPath, path.sep).length + 1
   }
 
   clone () {
