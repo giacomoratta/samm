@@ -44,12 +44,12 @@ const prepareExtensionsRegex = function (includedExtensions) {
   return new RegExp(`^\\.?(${_.join(extList, '|')})$`, 'i')
 }
 
-const walkAction = async function (rootPath, absPath, options) {
-  if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absPath))) return null
+const walkAction = async function (relRootPath, absolutePath, options) {
+  if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absolutePath))) return null
 
-  const pInfo = new options.ObjectClass(absPath)
+  const pInfo = new options.ObjectClass()
+  await pInfo.set({ absolutePath, relRootPath })
   if (!pInfo.isFile && !pInfo.isDirectory) return
-  pInfo.relRoot = rootPath /* set relative root, relative path and level */
 
   if (pInfo.isFile) {
     if (options.includedExtensionsRegex) {
@@ -64,12 +64,12 @@ const walkAction = async function (rootPath, absPath, options) {
   } else if (pInfo.isDirectory) {
     await options.itemFn({ item: pInfo })
 
-    await readDirectory(absPath, sortFilesArray, async (item) => {
-      item = path.join(absPath, item)
+    await readDirectory(absolutePath, sortFilesArray, async (item) => {
+      item = path.join(absolutePath, item)
 
       if (options.maxLevel > 0 && options.maxLevel <= pInfo.level) return
 
-      const pi = await walkAction(rootPath, item, options)
+      const pi = await walkAction(relRootPath, item, options)
       if (!pi) return
       if (pi.size) pInfo.size += pi.size
     })
@@ -79,13 +79,13 @@ const walkAction = async function (rootPath, absPath, options) {
   }
 }
 
-const walkDirectory = async function (absPath, options) {
+const walkDirectory = async function (absolutePath, options) {
   options = parseOptions(options)
-  absPath = path.resolve(absPath) // + path.sep
+  absolutePath = path.resolve(absolutePath) // + path.sep
   options.excludedPaths = prepareExcludedPaths(options.excludedPaths)
   options.includedExtensionsRegex = prepareExtensionsRegex(options.includedExtensions)
   options.excludedExtensionsRegex = prepareExtensionsRegex(options.excludedExtensions)
-  await walkAction(absPath, absPath, options)
+  await walkAction(absolutePath, absolutePath, options)
 }
 
 const stringReplaceAt = function (str, index, replacement) {
