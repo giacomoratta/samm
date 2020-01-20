@@ -34,11 +34,11 @@ const prepareExcludedPaths = function (excludedPaths) {
   return exclArray
 }
 
-const prepareExtensionsRegex = function (includedExtensions) {
+const prepareExtensionsRegex = function (extensionsList) {
   // .*(sh|ini|jpg|vhost|xml|png)$  or  /\.txt$/
-  if (!_.isArray(includedExtensions) || includedExtensions.length === 0) return null
+  if (!_.isArray(extensionsList) || extensionsList.length === 0) return null
   const extList = []
-  includedExtensions.forEach(function (v) {
+  extensionsList.forEach(function (v) {
     extList.push(_.escapeRegExp(v))
   })
   return new RegExp(`^\\.?(${_.join(extList, '|')})$`, 'i')
@@ -49,7 +49,7 @@ const walkAction = async function (relRootPath, absolutePath, options) {
 
   const pInfo = new options.ObjectClass()
   await pInfo.set({ absolutePath, relRootPath })
-  if (!pInfo.isFile && !pInfo.isDirectory) return
+  if (!pInfo.isSet() || (!pInfo.isFile && !pInfo.isDirectory)) return null
 
   if (pInfo.isFile) {
     if (options.includedExtensionsRegex) {
@@ -67,10 +67,10 @@ const walkAction = async function (relRootPath, absolutePath, options) {
     await readDirectory(absolutePath, sortFilesArray, async (item) => {
       item = path.join(absolutePath, item)
 
-      if (options.maxLevel > 0 && options.maxLevel <= pInfo.level) return
+      if (options.maxLevel > 0 && options.maxLevel <= pInfo.level) return null
 
       const pi = await walkAction(relRootPath, item, options)
-      if (!pi) return
+      if (pi === null) return null
       if (pi.size) pInfo.size += pi.size
     })
 
@@ -114,7 +114,6 @@ const readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
     fs.readdir(pathString, async (err, items) => {
       if (err || !items) {
         resolve(null)
-        return
       }
       preProcessItemsFn(items)
       for (let i = 0; i < items.length; i++) {

@@ -37,7 +37,7 @@ const getLoadFromFileFn = function (fileType) {
   } else if (ENUMS.fileType.text === fileType) {
     return function (filePath) {
       const result = fileUtils.readTextFileSync(filePath)
-      if (!result || result === null || result === false) return null
+      if (!result || result === false) return null
       return result
     }
   }

@@ -64,8 +64,7 @@ class SequoiaPath {
 
   walk (options) {
     if (!this.tree || !this.root) return
-    const tree = this.tree
-    let tParent = tree.firstChild(this.root)
+    let tParent = this.tree.firstChild(this.root)
     if (!tParent) return
 
     options = {
@@ -75,7 +74,7 @@ class SequoiaPath {
     }
 
     let isFirstChild, isLastChild
-    const iterator = tree.treeIterator(tParent, {})
+    const iterator = this.tree.treeIterator(tParent, {})
     let prevLevel = 0
 
     for (const item of iterator) {
@@ -90,12 +89,12 @@ class SequoiaPath {
       }
 
       if (prevLevel !== item.level) {
-        tParent = tree.parent(item)
+        tParent = this.tree.parent(item)
         prevLevel = item.level
       }
 
-      isFirstChild = (tree.firstChild(tParent) === item)
-      isLastChild = (tree.lastChild(tParent) === item)
+      isFirstChild = (this.tree.firstChild(tParent) === item)
+      isLastChild = (this.tree.lastChild(tParent) === item)
 
       options.itemFn({
         item: item,
@@ -108,12 +107,11 @@ class SequoiaPath {
 
   forEach (options) {
     if (!this.tree || !this.root) return
-    const tree = this.tree
     options = {
       itemFn: function () {},
       ...options
     }
-    const iterator = tree.treeIterator(this.root, {})
+    const iterator = this.tree.treeIterator(this.root, {})
     for (const item of iterator) {
       if (!(item instanceof this.data.options.ObjectClass)) continue
       options.itemFn({

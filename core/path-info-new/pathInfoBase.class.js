@@ -2,7 +2,7 @@ const path = require('path')
 const _ = require('lodash')
 const utils = require('./utils')
 
-class PathInfo {
+class PathInfoBase {
   constructor () {
     this.info = null
   }
@@ -98,5 +98,5 @@ class PathInfo {
 }
 
 module.exports = {
-  PathInfo
+  PathInfoBase
 }
