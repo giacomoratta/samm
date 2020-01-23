@@ -1,11 +1,18 @@
-const autoLabel = function (index) {
-  return `_item_${index}`
-}
+class SpheroidList {
 
-class SpheroidCache {
   constructor ({ maxSize = 10 }) {
     this._maxSize = maxSize
+    if(maxSize < 1) {
+      throw new TypeError('maxSize cannot be less than 1')
+    }
+    if(typeof maxSize !== 'number' || !Number.isInteger(maxSize)) {
+      throw new TypeError('maxSize must be an integer')
+    }
     this.reset()
+  }
+
+  static autoLabel (index) {
+    return `_item_${index}`
   }
 
   reset () {
@@ -35,7 +42,7 @@ class SpheroidCache {
   add (label, value) {
     if (value === undefined) {
       value = label
-      label = autoLabel(++this._itemCounter)
+      label = SpheroidList.autoLabel(++this._itemCounter)
     }
     if (this.map.has(label)) {
       throw new Error(`Duplicated label: ${label}`)
@@ -90,5 +97,5 @@ class SpheroidCache {
 }
 
 module.exports = {
-  SpheroidCache
+  SpheroidList
 }

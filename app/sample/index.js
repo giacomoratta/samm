@@ -2,11 +2,11 @@ const { Config } = require('../config')
 const { PathQuery } = require('../path-query')
 const { SampleIndex } = require('./sampleIndex.class')
 const { SampleSet } = require('./sampleSet.class')
-const { SpheroidCache } = require('../../core/spheroid-cache')
+const { SpheroidList } = require('../../core/spheroid-list')
 const log = require('../../core/logger').createLogger('sample')
 
-const SampleSetCache = new SpheroidCache({ maxSize: 20 })
-const LookupCache = new SpheroidCache({ maxSize: 40 })
+const SampleSetCache = new SpheroidList({ maxSize: 20 })
+const LookupCache = new SpheroidList({ maxSize: 40 })
 
 let mainSamplesIndex = null
 let mainSamplesIndexFilePath = null

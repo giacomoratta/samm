@@ -1,12 +1,12 @@
 const { FileButler } = require('../../core/file-butler')
 const { Project } = require('./project.class')
-const { SpheroidCache } = require('../../core/spheroid-cache')
+const { SpheroidList } = require('../../core/spheroid-list')
 
 class ProjectHistoryJsonFile {
   constructor (filePath) {
     this.filePath = filePath
     this.fileHolder = null
-    this.ProjectHistoryCache = new SpheroidCache({ maxSize: 15 })
+    this.ProjectHistoryCache = new SpheroidList({ maxSize: 15 })
   }
 
   save () {

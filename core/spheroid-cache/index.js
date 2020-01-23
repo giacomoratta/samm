@@ -1,5 +1,5 @@
-const { SpheroidCache } = require('./spheroidCache.class')
+const { SpheroidList } = require('./spheroidList.class')
 
 module.exports = {
-  SpheroidCache
+  SpheroidList
 }

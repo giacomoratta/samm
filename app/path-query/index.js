@@ -1,9 +1,9 @@
 const { PathQueryJsonFile } = require('./pathQueryJsonFile.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
-const { SpheroidCache } = require('../../core/spheroid-cache')
+const { SpheroidList } = require('../../core/spheroid-list')
 const log = require('../../core/logger').createLogger('path-query')
 
-const PathBasedQueryCache = new SpheroidCache({ maxSize: 30 })
+const PathBasedQueryCache = new SpheroidList({ maxSize: 30 })
 let PathQueryFile = null
 
 const add = (label, queryString) => {
