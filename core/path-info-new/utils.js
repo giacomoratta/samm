@@ -41,11 +41,7 @@ utils.lstat = async (absolutePath) => {
 
 utils.checkParameters = ({ absolutePath, relRootPath }) => {
 
-  if (!_.isString(absolutePath)) {
-    throw new PathInfoError(`Invalid absolute path: ${absolutePath}`)
-  }
-
-  if (!utils.isAbsolutePath(absolutePath)) {
+  if (!_.isString(absolutePath) || !utils.isAbsolutePath(absolutePath)) {
     throw new PathInfoError(`Main path ${absolutePath} is not an absolute path`)
   }
 

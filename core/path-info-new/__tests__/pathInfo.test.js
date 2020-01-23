@@ -3,11 +3,27 @@ const path = require('path')
 const baseRoot = path.parse(__dirname).root
 
 describe('PathInfo class and object', function () {
-  it('should create a PathInfo object from an absolute directory path', function () {
-    expect(function () {
+
+  it('should throw some errors', async function () {
+    const pInfo1 = new PathInfo()
+    await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('is not an absolute path')
+    await expect(pInfo1.set({ absolutePath: path.join('asf','safsaf') })).rejects.toThrow('is not an absolute path')
+    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x')})).rejects.toThrow('path stats of')
+    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x'), relRootPath: 123 })).rejects.toThrow('Cannot get path stats of')
+    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x')})).rejects.toThrow('Cannot get path stats of')
+  })
+
+
+  it('should create a PathInfo----- object from an absolute directory path', function () {
+    expect(async function () {
       const pInfo1 = new PathInfo()
-      pInfo1.setSync({ absolutePath:'asf/safsaf' })
+      await pInfo1.set({ absolutePath:'asf/safsaf' })
     }).toThrow('is not an absolute path')
+
+    // const pInfo1 = new PathInfo()
+    // await expect(()).rejects.toEqual({
+    //   error: 'User with 3 not found.',
+    // });
 
     // expect(async function () {
     //   const pInfo1 = new PathInfo()
@@ -18,19 +34,10 @@ describe('PathInfo class and object', function () {
     //   }
     // }).toThrow('is not an absolute path')
 
-    expect(function () {
-      const pInfo1 = new PathInfo()
-      pInfo1.setSync({ absolutePath:path.join(baseRoot, 'x')})
-    }).toThrow('path stats of')
-
-    expect(function () {
-      const pInfo1 = new PathInfo()
-      pInfo1.setSync({})
-    }).toThrow('Invalid absolute path')
 
     const absDirPath1 = path.join(__dirname, 'test_dir', 'directory6')
     const pInfo1 = new PathInfo(absDirPath1)
-    pInfo1.setSync({ absolutePath:absDirPath1 })
+    pInfo1.set({ absolutePath:absDirPath1 })
 
     expect(absDirPath1.startsWith(pInfo1.root)).toEqual(true)
     expect(pInfo1.dir).toEqual(path.join(__dirname, 'test_dir'))
@@ -50,20 +57,20 @@ describe('PathInfo class and object', function () {
   it('should manage relRoot and relPath', function () {
     const absDirPath1 = path.join(__dirname, 'test_dir', 'directory1')
     let pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absDirPath1, relRootPath:absDirPath1 })
+    pInfo1.set({ absolutePath:absDirPath1, relRootPath:absDirPath1 })
     expect(pInfo1.relRoot).toEqual(absDirPath1)
     expect(pInfo1.relPath).toEqual('')
     expect(pInfo1.level).toEqual(1)
 
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory1', 'directory2', 'file26.json')
     pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absFilePath1, relRootPath:path.join(__dirname, 'test_dir', 'directory1', 'directory2') })
+    pInfo1.set({ absolutePath:absFilePath1, relRootPath:path.join(__dirname, 'test_dir', 'directory1', 'directory2') })
     expect(pInfo1.relRoot).toEqual(path.join(__dirname, 'test_dir', 'directory1', 'directory2'))
     expect(pInfo1.relPath).toEqual('file26.json')
     expect(pInfo1.level).toEqual(2)
 
     pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absFilePath1, relRootPath:path.join(__dirname, 'test_dir') })
+    pInfo1.set({ absolutePath:absFilePath1, relRootPath:path.join(__dirname, 'test_dir') })
     expect(pInfo1.relRoot).toEqual(path.join(__dirname, 'test_dir'))
     expect(pInfo1.relPath).toEqual(path.join('directory1', 'directory2', 'file26.json'))
     expect(pInfo1.level).toEqual(4)
@@ -72,7 +79,7 @@ describe('PathInfo class and object', function () {
   it('should create a PathInfo object from an absolute file path', function () {
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory6', 'file61.txt')
     const pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absFilePath1 })
+    pInfo1.set({ absolutePath:absFilePath1 })
 
     expect(absFilePath1.startsWith(pInfo1.root)).toEqual(true)
     expect(pInfo1.dir).toEqual(path.join(__dirname, 'test_dir', 'directory6'))
@@ -91,7 +98,7 @@ describe('PathInfo class and object', function () {
   it('should create a PathInfo object from another PathInfo object (with clone deep)', function () {
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory6', 'file61.txt')
     const pInfo0 = new PathInfo()
-    pInfo0.setSync({ absolutePath:absFilePath1 })
+    pInfo0.set({ absolutePath:absFilePath1 })
     const pInfo1 = pInfo0.clone()
 
     expect(pInfo0.isEqualTo(pInfo1)).toEqual(true)
@@ -119,7 +126,7 @@ describe('PathInfo class and object', function () {
   it('should NOT change PathInfo internal info', function () {
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory6', 'file61.txt')
     const pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absFilePath1 })
+    pInfo1.set({ absolutePath:absFilePath1 })
 
     pInfo1.dir = path.join(baseRoot, 'bla')
     pInfo1.path = path.join(baseRoot, 'bla', 'bla')
@@ -142,7 +149,7 @@ describe('PathInfo class and object', function () {
   it('should import and export JSON', function () {
     const absFilePath1 = path.join(__dirname, 'test_dir', 'directory6', 'file61.txt')
     const pInfo1 = new PathInfo()
-    pInfo1.setSync({ absolutePath:absFilePath1 })
+    pInfo1.set({ absolutePath:absFilePath1 })
 
     const expJson1 = pInfo1.toJson()
     expJson1.root = path.join(baseRoot, 'bla', 'bla')
