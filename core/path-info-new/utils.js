@@ -27,7 +27,7 @@ utils.lstatSync = (absolutePath) => {
 
 utils.lstat = async (absolutePath) => {
   const fstatResult = new Promise((resolve, reject) => {
-    fs.fstat(absolutePath, (err, stats) => {
+    fs.lstat(absolutePath, (err, stats) => {
       if(err) return reject(err)
       resolve(stats)
     })
@@ -42,22 +42,23 @@ utils.lstat = async (absolutePath) => {
 utils.checkParameters = ({ absolutePath, relRootPath }) => {
 
   if (!_.isString(absolutePath) || !utils.isAbsolutePath(absolutePath)) {
-    throw new PathInfoError(`Main path ${absolutePath} is not an absolute path`)
+    throw new PathInfoError(`Invalid main path: ${absolutePath}`)
   }
 
   const pInfo = path.parse(absolutePath)
   if (!pInfo) {
-    throw new PathInfoError(`Cannot parse ${absolutePath}`)
+    throw new PathInfoError(`Cannot parse the main path ${absolutePath}`)
   }
 
   if(!relRootPath) return pInfo
 
-  if (!_.isString(relRootPath)) {
+  if (!_.isString(relRootPath) || !utils.isAbsolutePath(relRootPath)) {
     throw new PathInfoError(`Invalid relative root path: ${relRootPath}`)
   }
 
-  if (!utils.isAbsolutePath(relRootPath)) {
-    throw new PathInfoError(`Relative root ${relRootPath} is not an absolute path`)
+  const pRootInfo = path.parse(relRootPath)
+  if (!pRootInfo) {
+    throw new PathInfoError(`Cannot parse relative root path ${absolutePath}`)
   }
 
   return pInfo

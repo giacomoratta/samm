@@ -4,13 +4,36 @@ const baseRoot = path.parse(__dirname).root
 
 describe('PathInfo class and object', function () {
 
-  it('should throw some errors', async function () {
+  it('should throw some basic errors', async function () {
     const pInfo1 = new PathInfo()
-    await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('is not an absolute path')
-    await expect(pInfo1.set({ absolutePath: path.join('asf','safsaf') })).rejects.toThrow('is not an absolute path')
-    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x')})).rejects.toThrow('path stats of')
-    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x'), relRootPath: 123 })).rejects.toThrow('Cannot get path stats of')
+    await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('Invalid main path')
+    await expect(pInfo1.set({ absolutePath: path.join('asf','safsaf') })).rejects.toThrow('Invalid main path')
     await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x')})).rejects.toThrow('Cannot get path stats of')
+    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x'), relRootPath: 123 })).rejects.toThrow('Invalid relative root path')
+    await expect(pInfo1.set({ absolutePath:path.join(baseRoot, 'x')})).rejects.toThrow('Cannot get path stats of')
+  })
+
+  it('should set relative root path', async function () {
+    const pInfo1 = new PathInfo()
+
+    let relRootPath = path.join(__dirname,'test_dir')
+    let absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
+    await pInfo1.set({ absolutePath, relRootPath })
+    expect(pInfo1.relPath).toEqual(path.join('directory6','file64.json'))
+    expect(pInfo1.relRoot).toEqual(relRootPath)
+    expect(pInfo1.isSet()).toEqual(true)
+    expect(pInfo1.level).toEqual(3)
+
+    relRootPath = path.join('top','test_dir22')
+    absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
+    await expect(pInfo1.set({ absolutePath, relRootPath })).rejects.toThrow('Invalid relative root path')
+    expect(pInfo1.isSet()).toEqual(false)
+
+    relRootPath = ''
+    absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
+    await expect(pInfo1.set({ absolutePath, relRootPath })).rejects.toThrow('must be a not-empty')
+    expect(pInfo1.isSet()).toEqual(true)
+
   })
 
 

@@ -20,7 +20,7 @@ class PathInfo extends PathInfoBase {
     if(!utils.setBasicPathInfo({ pInfo, pStats, absolutePath })) return false
     this.info = pInfo
 
-    if(relRootPath) this.relRoot = relRootPath
+    if(_.isString(relRootPath)) this.relRoot = relRootPath
     return true
   }
 }

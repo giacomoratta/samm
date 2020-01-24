@@ -1,6 +1,7 @@
 const path = require('path')
 const _ = require('lodash')
 const utils = require('./utils')
+const { PathInfoError } = require('./pathInfoError.class')
 
 class PathInfoBase {
   constructor () {
@@ -51,10 +52,16 @@ class PathInfoBase {
   set size (size) { this.info.size = size }
 
   set relRoot (root) {
+    if(!root || root.length===0) {
+      throw new PathInfoError(`Relative root ${root} must be a not-empty string`)
+    }
+
+    const relPath = path.relative(root,this.info.path)
+    if(!relPath || relPath.length===0 || relPath.startsWith('.')) {
+      throw new PathInfoError(`Relative root ${root} is not a valid root for ${this.info.path}`)
+    }
     this.info.relRoot = root
-    this.info.relPath = this.info.path.substring(this.info.relRoot.length + 1)
-    // if (this.info.relPath.length === 0) this.info.relPath = path.sep
-    // if (this.info.relPath.endsWith(path.sep)) this.info.relPath = this.info.relPath.substr(0, this.info.relPath.length - 2) // remove final path.sep
+    this.info.relPath = relPath
     if (this.info.relPath.length > 0) this.info.level = this.info.relPath.split(path.sep).length + 1
   }
 
