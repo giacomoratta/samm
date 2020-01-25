@@ -69,8 +69,8 @@ utils.setBasicPathInfo = ({ pInfo, pStats, absolutePath }) => {
   pInfo.path = absolutePath
   pInfo.level = 1
   pInfo.size = (pStats.size ? pStats.size : 0)
-  pInfo.createdAt = pStats.birthtime
-  pInfo.modifiedAt = pStats.mtime
+  pInfo.createdAt = (new Date(pStats.birthtime)).getTime()
+  pInfo.modifiedAt = (new Date(pStats.mtime)).getTime()
   pInfo.isFile = pStats.isFile()
   pInfo.isDirectory = pStats.isDirectory()
   return true
