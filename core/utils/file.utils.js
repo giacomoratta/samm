@@ -177,6 +177,10 @@ libUtils.readTextFileSync = (pathString) => {
   return _.trim(fileContent)
 }
 
+libUtils.touchFileSync = (pathString) => {
+  return libUtils.writeFileSync(pathString, '', 'utf8')
+}
+
 libUtils.writeFileSync = (pathString, fileContent, encoding, flag, mode) => {
   try {
     if (!encoding) encoding = 'utf8'
@@ -273,6 +277,10 @@ libUtils.readTextFile = (pathString) => {
     if (fileContent === false || _.isNil(fileContent)) return false
     return _.trim(fileContent)
   })
+}
+
+libUtils.touchFile = (pathString) => {
+  return libUtils.writeFile(pathString, '', 'utf8')
 }
 
 libUtils.writeFile = (pathString, fileContent, encoding, flag, mode) => {
