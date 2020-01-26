@@ -58,10 +58,15 @@ class PathInfoBase {
 
     const relPath = path.relative(root,this.info.path)
     if(!relPath || relPath.length===0 || relPath.startsWith('.')) {
-      throw new PathInfoError(`Relative root ${root} is not a valid root for ${this.info.path}`)
+      if(path.resolve(root) === this.info.path) {
+        this.info.relPath = ""
+      } else {
+        throw new PathInfoError(`Relative root ${root} is not a valid root for ${this.info.path}`)
+      }
+    } else {
+      this.info.relPath = relPath
     }
     this.info.relRoot = root
-    this.info.relPath = relPath
     if (this.info.relPath.length > 0) this.info.level = this.info.relPath.split(path.sep).length + 1
   }
 
