@@ -29,24 +29,16 @@ const getValidityCheckFn = function (fileType) {
 
 const getLoadFromFileFn = function (fileType) {
   if (ENUMS.fileType.json === fileType || ENUMS.fileType.json_compact === fileType) {
-    return async function (filePath) {
-      try {
-        const result = await fileUtils.readJsonFile(filePath)
-        if (!result || result === false) return null
-        return result
-      } catch (error) {
-        return null
-      }
+    return function (filePath) {
+      const result = fileUtils.readJsonFileSync(filePath)
+      if (!result || result === null || result === false) return null
+      return result
     }
   } else if (ENUMS.fileType.text === fileType) {
-    return async function (filePath) {
-      try {
-        const result = await fileUtils.readTextFile(filePath)
-        if (!result || result === false) return null
-        return result
-      } catch (e) {
-        return null
-      }
+    return function (filePath) {
+      const result = fileUtils.readTextFileSync(filePath)
+      if (!result || result === false) return null
+      return result
     }
   }
 }
@@ -54,20 +46,20 @@ const getLoadFromFileFn = function (fileType) {
 const getSaveToFileFn = function (fileType) {
   if (ENUMS.fileType.json === fileType) {
     return function (filePath, content) {
-      return fileUtils.writeJsonFile(filePath, content)
+      return fileUtils.writeJsonFileSync(filePath, content)
     }
   } else if (ENUMS.fileType.json_compact === fileType) {
     return function (filePath, content) {
-      return fileUtils.writeJsonFile(filePath, content, false)
+      return fileUtils.writeJsonFileSync(filePath, content, false)
     }
   } else if (ENUMS.fileType.text === fileType) {
     return function (filePath, content) {
-      return fileUtils.writeTextFile(filePath, content)
+      return fileUtils.writeTextFileSync(filePath, content)
     }
   }
 }
 
-const parseOption = async function (options) {
+const parseOption = function (options) {
   if (!options) {
     throw new FileButlerError(`Missing options: ${options}`)
   }
@@ -78,13 +70,13 @@ const parseOption = async function (options) {
   if (!fileUtils.isAbsolutePath(options.filePath)) {
     throw new FileButlerError(`'filePath' option must be an absolute path: ${options.filePath}`)
   }
-  if (!options.cloneFrom && !await fileUtils.fileExists(options.filePath)) {
+  if (!options.cloneFrom && !fileUtils.fileExistsSync(options.filePath)) {
     const parent2 = path.parse(options.filePath).dir
     const parent1 = path.parse(parent2).dir
-    if (!await fileUtils.directoryExists(parent1)) {
+    if (!fileUtils.directoryExistsSync(parent1)) {
       throw new FileButlerError(`One of the parent directories do not exist: ${parent1}`)
     }
-    if (!await fileUtils.ensureDir(parent2)) {
+    if (!fileUtils.ensureDirSync(parent2)) {
       throw new FileButlerError(`The parent directory cannot be created: ${parent2}`)
     }
     if (!fileUtils.writeFileSync(options.filePath, '')) {

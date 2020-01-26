@@ -29,37 +29,31 @@ class FileButler {
     return true
   }
 
-  async delete () {
-    return fileUtils.removeFile(this.config.filePath)
+  delete () {
+    return fileUtils.removeFileSync(this.config.filePath)
   }
 
-  async save () {
+  save () {
     let savedData = this.data
     if (this.config.saveFn) savedData = this.config.saveFn(this.data)
     const saveResult = this.config.fn.saveToFile(this.config.filePath, savedData)
     if (saveResult === true) {
       this.eventEmitter.emit('save', { filePath: this.config.filePath, data: savedData })
       if (this.config.backupTo) {
-        try {
-          await fileUtils.copyFile(this.config.filePath, this.config.backupTo)
-        } catch(copyResult) {
-          if (copyResult.err) {
-            throw new FileButlerError(`Backup failed! From '${this.config.backupTo}' to ${this.config.backupTo}`)
-          }
+        const copyResult = fileUtils.copyFileSync(this.config.filePath, this.config.backupTo)
+        if (copyResult.err) {
+          throw new FileButlerError(`Backup failed! From '${this.config.backupTo}' to ${this.config.backupTo}`)
         }
       }
     }
     return saveResult
   }
 
-  async load () {
-    if (this.config.cloneFrom && !await fileUtils.fileExists(this.config.filePath)) {
-      try {
-        await fileUtils.copyFile(this.config.cloneFrom, this.config.filePath)
-      } catch(copyResult) {
-        if (copyResult.err) {
-          throw new FileButlerError(`Cloning failed! From '${this.config.cloneFrom}' to ${this.config.filePath}`)
-        }
+  load () {
+    if (this.config.cloneFrom && !fileUtils.fileExistsSync(this.config.filePath)) {
+      const copyResult = fileUtils.copyFileSync(this.config.cloneFrom, this.config.filePath)
+      if (copyResult.err) {
+        throw new FileButlerError(`Cloning failed! From '${this.config.cloneFrom}' to ${this.config.filePath}`)
       }
     }
     let loadedData = this.config.fn.loadFromFile(this.config.filePath)
