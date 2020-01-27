@@ -8,6 +8,9 @@ const ACCEPTED_EVENTS = ['save', 'load']
 
 class FileButler {
   async set (options) {
+    if (!options) {
+      throw new FileButlerError(`Missing options: ${options}`)
+    }
     this.eventEmitter = new Events()
     this._hasData = false
     try {
@@ -53,7 +56,7 @@ class FileButler {
     const saveResult = await this.config.fn.saveToFile(this.config.filePath, savedData) // todo: try/catch
     if (saveResult === true) {
       this.eventEmitter.emit('save', { filePath: this.config.filePath, data: savedData })
-      if (this.config.backupTo) {
+      if (this.config.backupTo) { // todo: wrong! it should keep the old version
         try {
           await fileUtils.copyFile(this.config.filePath, this.config.backupTo)
         } catch (copyResult) {

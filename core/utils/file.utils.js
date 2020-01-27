@@ -310,7 +310,6 @@ libUtils.writeFile = (pathString, fileContent, encoding, flag, mode) => {
           return resolve(true)
         })
       }
-      return true
     } catch (e) {
       // console.error(e)
       reject(e)

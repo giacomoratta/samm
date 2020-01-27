@@ -68,44 +68,24 @@ const getSaveToFileFn = function (fileType) {
 }
 
 const parseOption = async function (options) {
-  if (!options) {
-    throw new FileButlerError(`Missing options: ${options}`)
-  }
 
-  if (!options.filePath) {
-    throw new FileButlerError(`Missing 'filePath' option ${options.filePath}`)
-  }
-  if (!fileUtils.isAbsolutePath(options.filePath)) {
-    throw new FileButlerError(`'filePath' option must be an absolute path: ${options.filePath}`)
-  }
+
   if (!options.cloneFrom && !await fileUtils.fileExists(options.filePath)) {
     const parent2 = path.parse(options.filePath).dir
     const parent1 = path.parse(parent2).dir
     if (!await fileUtils.directoryExists(parent1)) {
-      throw new FileButlerError(`One of the parent directories do not exist: ${parent1}`)
+      throw new FileButlerError(`One of the parent directories do not exist: ${parent1} .`)
     }
     if (!await fileUtils.ensureDir(parent2)) {
-      throw new FileButlerError(`The parent directory cannot be created: ${parent2}`)
+      throw new FileButlerError(`The parent directory cannot be created: ${parent2} .`)
     }
     if (!fileUtils.writeFileSync(options.filePath, '')) {
-      throw new FileButlerError(`File specified in 'filePath' cannot be created: ${options.filePath}`)
+      throw new FileButlerError(`File specified in 'filePath' cannot be created: ${options.filePath} .`)
     }
   }
 
   if (!options.fileType || !Object.values(ENUMS.fileType).includes(options.fileType)) {
-    throw new FileButlerError(`'fileType' option must be present and have one of these values: ${Object.values(ENUMS.fileType).join(', ')}`)
-  }
-
-  if (options.cloneFrom) {
-    if (!fileUtils.isAbsolutePath(options.cloneFrom)) {
-      throw new FileButlerError(`'cloneFrom' option must be an absolute path: ${options.cloneFrom}`)
-    }
-    if (!fileUtils.fileExistsSync(options.cloneFrom)) {
-      throw new FileButlerError(`Path specified in 'cloneFrom' option does not exist: ${options.cloneFrom}`)
-    }
-  }
-  if (options.backupTo && !fileUtils.isAbsolutePath(options.backupTo)) {
-    throw new FileButlerError(`'backupTo' option must be an absolute path: ${options.backupTo}`)
+    throw new FileButlerError(`'fileType' option must be present and have one of these values: ${Object.values(ENUMS.fileType).join(', ')} .`)
   }
 
   const parsed = {
