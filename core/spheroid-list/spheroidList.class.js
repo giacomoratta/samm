@@ -1,11 +1,10 @@
 class SpheroidList {
-
   constructor ({ maxSize = 10 }) {
     this._maxSize = maxSize
-    if(maxSize < 1) {
+    if (maxSize < 1) {
       throw new TypeError('maxSize cannot be less than 1')
     }
-    if(typeof maxSize !== 'number' || !Number.isInteger(maxSize)) {
+    if (typeof maxSize !== 'number' || !Number.isInteger(maxSize)) {
       throw new TypeError('maxSize must be an integer')
     }
     this.reset()

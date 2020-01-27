@@ -52,14 +52,14 @@ class PathInfoBase {
   set size (size) { this.info.size = size }
 
   set relRoot (root) {
-    if(!root || root.length===0) {
+    if (!root || root.length === 0) {
       throw new PathInfoError(`Relative root ${root} must be a not-empty string`)
     }
 
-    const relPath = path.relative(root,this.info.path)
-    if(!relPath || relPath.length===0 || relPath.startsWith('.')) {
-      if(path.resolve(root) === this.info.path) {
-        this.info.relPath = ""
+    const relPath = path.relative(root, this.info.path)
+    if (!relPath || relPath.length === 0 || relPath.startsWith('.')) {
+      if (path.resolve(root) === this.info.path) {
+        this.info.relPath = ''
       } else {
         throw new PathInfoError(`Relative root ${root} is not a valid root for ${this.info.path}`)
       }

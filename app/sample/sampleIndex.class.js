@@ -91,7 +91,7 @@ class SampleIndex {
   }
 
   async deleteFile () {
-    const result =  await fileUtils.removeFile(this.indexFilePath).catch(e => { })
+    const result = await fileUtils.removeFile(this.indexFilePath).catch(e => { })
     return result === true
   }
 }

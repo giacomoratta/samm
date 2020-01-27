@@ -28,7 +28,7 @@ utils.lstatSync = (absolutePath) => {
 utils.lstat = async (absolutePath) => {
   const fstatResult = new Promise((resolve, reject) => {
     fs.lstat(absolutePath, (err, stats) => {
-      if(err) return reject(err)
+      if (err) return reject(err)
       resolve(stats)
     })
   })
@@ -40,7 +40,6 @@ utils.lstat = async (absolutePath) => {
 }
 
 utils.checkParameters = ({ absolutePath, relRootPath }) => {
-
   if (!_.isString(absolutePath) || !utils.isAbsolutePath(absolutePath)) {
     throw new PathInfoError(`Invalid main path: ${absolutePath}`)
   }
@@ -50,7 +49,7 @@ utils.checkParameters = ({ absolutePath, relRootPath }) => {
     throw new PathInfoError(`Cannot parse the main path ${absolutePath}`)
   }
 
-  if(!relRootPath) return pInfo
+  if (!relRootPath) return pInfo
 
   if (!_.isString(relRootPath) || !utils.isAbsolutePath(relRootPath)) {
     throw new PathInfoError(`Invalid relative root path: ${relRootPath}`)
@@ -75,6 +74,5 @@ utils.setBasicPathInfo = ({ pInfo, pStats, absolutePath }) => {
   pInfo.isDirectory = pStats.isDirectory()
   return true
 }
-
 
 module.exports = utils

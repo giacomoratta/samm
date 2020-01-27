@@ -12,15 +12,15 @@ class PathInfoSync extends PathInfoBase {
     this.info = null
 
     const pInfo = utils.checkParameters({ absolutePath, relRootPath })
-    if(!pInfo) return false
+    if (!pInfo) return false
 
     const pStats = utils.lstatSync(absolutePath)
-    if(!pStats) return false
+    if (!pStats) return false
 
-    if(!utils.setBasicPathInfo({ pInfo, pStats, absolutePath, relRootPath })) return false
+    if (!utils.setBasicPathInfo({ pInfo, pStats, absolutePath, relRootPath })) return false
     this.info = pInfo
 
-    if(_.isString(relRootPath)) this.relRoot = relRootPath
+    if (_.isString(relRootPath)) this.relRoot = relRootPath
     return true
   }
 }

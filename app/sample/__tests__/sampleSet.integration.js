@@ -10,7 +10,7 @@ const SamplesDirectory = path.resolve(path.join(__dirname, '..', '..', '__tests_
 
 describe('SampleSet functions', function () {
   beforeAll(async () => {
-      sIndex1 = new SampleIndex({
+    sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile,
       samplesPath: SamplesDirectory
     })
@@ -25,7 +25,6 @@ describe('SampleSet functions', function () {
   })
 
   it('should create a sample set', async function () {
-
     /* Create criteria for validate function */
     const pathBQ1 = PathQuery.create('file2,4+directory')
     expect(pathBQ1).not.toEqual(null)

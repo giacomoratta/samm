@@ -3,45 +3,44 @@ const path = require('path')
 const baseRoot = path.parse(__dirname).root
 
 describe('PathInfoSync class and object', function () {
-
   it('should throw some basic errors', function () {
     const pInfo1 = new PathInfoSync()
-    expect(function(){ pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
-    expect(function(){ pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
-    expect(function(){ pInfo1.set({ absolutePath: path.join('asf','safsaf') }) }).toThrow('Invalid main path')
-    expect(function(){ pInfo1.set({ absolutePath:path.join(baseRoot, 'x')}) }).toThrow('Cannot get path stats of')
-    expect(function(){ pInfo1.set({ absolutePath:path.join(baseRoot, 'x'), relRootPath: 123 }) }).toThrow('Invalid relative root path')
-    expect(function(){ pInfo1.set({ absolutePath:path.join(baseRoot, 'x')}) }).toThrow('Cannot get path stats of')
+    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
+    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
+    expect(function () { pInfo1.set({ absolutePath: path.join('asf', 'safsaf') }) }).toThrow('Invalid main path')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 }) }).toThrow('Invalid relative root path')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')
   })
 
   it('should throw errors due to wrong relative root path', function () {
     const pInfo1 = new PathInfoSync()
     let relRootPath, absolutePath
 
-    relRootPath = path.join('top','test_dir22')
-    absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
-    expect(function(){ pInfo1.set({ absolutePath, relRootPath }) }).toThrow('Invalid relative root path')
+    relRootPath = path.join('top', 'test_dir22')
+    absolutePath = path.join(__dirname, 'test_dir', 'directory6', 'file64.json')
+    expect(function () { pInfo1.set({ absolutePath, relRootPath }) }).toThrow('Invalid relative root path')
     expect(pInfo1.isSet()).toEqual(false)
 
     relRootPath = ''
-    absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
-    expect(function(){ pInfo1.set({ absolutePath, relRootPath }) }).toThrow('must be a not-empty')
+    absolutePath = path.join(__dirname, 'test_dir', 'directory6', 'file64.json')
+    expect(function () { pInfo1.set({ absolutePath, relRootPath }) }).toThrow('must be a not-empty')
     expect(pInfo1.isSet()).toEqual(true)
   })
 
   it('should set relative root path', function () {
     const pInfo1 = new PathInfoSync()
 
-    let relRootPath = path.join(__dirname,'test_dir')
-    let absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
+    let relRootPath = path.join(__dirname, 'test_dir')
+    let absolutePath = path.join(__dirname, 'test_dir', 'directory6', 'file64.json')
     pInfo1.set({ absolutePath, relRootPath })
-    expect(pInfo1.relPath).toEqual(path.join('directory6','file64.json'))
+    expect(pInfo1.relPath).toEqual(path.join('directory6', 'file64.json'))
     expect(pInfo1.relRoot).toEqual(relRootPath)
     expect(pInfo1.isSet()).toEqual(true)
     expect(pInfo1.level).toEqual(3)
 
-    relRootPath = path.join(__dirname,'test_dir')
-    absolutePath = path.join(__dirname,'test_dir','directory6','file64.json')
+    relRootPath = path.join(__dirname, 'test_dir')
+    absolutePath = path.join(__dirname, 'test_dir', 'directory6', 'file64.json')
     pInfo1.set({ absolutePath })
     expect(pInfo1.isSet()).toEqual(true)
     expect(pInfo1.level).toEqual(1)
@@ -53,8 +52,8 @@ describe('PathInfoSync class and object', function () {
   it('should read directory information', function () {
     const pInfo1 = new PathInfoSync()
 
-    let relRootPath = path.join(__dirname,'test_dir')
-    let absolutePath = path.join(__dirname,'test_dir','directory1','directory2')
+    const relRootPath = path.join(__dirname, 'test_dir')
+    const absolutePath = path.join(__dirname, 'test_dir', 'directory1', 'directory2')
     pInfo1.set({ absolutePath, relRootPath })
 
     expect(pInfo1.path).toEqual(absolutePath)
@@ -65,14 +64,14 @@ describe('PathInfoSync class and object', function () {
     expect(pInfo1.isFile).toEqual(false)
     expect(pInfo1.isDirectory).toEqual(true)
     expect(pInfo1.relRoot).toEqual(relRootPath)
-    expect(pInfo1.relPath).toEqual(path.join('directory1','directory2'))
+    expect(pInfo1.relPath).toEqual(path.join('directory1', 'directory2'))
   })
 
   it('should read file information', function () {
     const pInfo1 = new PathInfoSync()
 
-    let relRootPath = path.join(__dirname,'test_dir')
-    let absolutePath = path.join(__dirname,'test_dir','directory1','directory2','file26.json')
+    const relRootPath = path.join(__dirname, 'test_dir')
+    const absolutePath = path.join(__dirname, 'test_dir', 'directory1', 'directory2', 'file26.json')
     pInfo1.set({ absolutePath, relRootPath })
 
     expect(pInfo1.path).toEqual(absolutePath)
@@ -83,14 +82,14 @@ describe('PathInfoSync class and object', function () {
     expect(pInfo1.isFile).toEqual(true)
     expect(pInfo1.isDirectory).toEqual(false)
     expect(pInfo1.relRoot).toEqual(relRootPath)
-    expect(pInfo1.relPath).toEqual(path.join('directory1','directory2','file26.json'))
+    expect(pInfo1.relPath).toEqual(path.join('directory1', 'directory2', 'file26.json'))
   })
 
   it('should import and export JSON', function () {
     const pInfo1 = new PathInfoSync()
 
-    let relRootPath = path.join(__dirname,'test_dir')
-    let absolutePath = path.join(__dirname,'test_dir','directory1','directory2','file26.json')
+    const relRootPath = path.join(__dirname, 'test_dir')
+    const absolutePath = path.join(__dirname, 'test_dir', 'directory1', 'directory2', 'file26.json')
     pInfo1.set({ absolutePath, relRootPath })
 
     const pInfo1Json = pInfo1.toJson()

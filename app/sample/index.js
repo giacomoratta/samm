@@ -14,7 +14,7 @@ let mainSamplesIndexFilePath = null
 const loadIndex = async (indexFilePath) => {
   log.info('executing loadIndex...')
   mainSamplesIndex = null
-  let samplesPath = Config.get('SamplesDirectory')
+  const samplesPath = Config.get('SamplesDirectory')
 
   if (!samplesPath) {
     log.info('loadIndex - no SamplesDirectory found')
@@ -24,11 +24,11 @@ const loadIndex = async (indexFilePath) => {
     return false
   }
 
-  if(!indexFilePath) {
-    if(!mainSamplesIndex && !mainSamplesIndexFilePath) {
-      log.error(`loadIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter`)
+  if (!indexFilePath) {
+    if (!mainSamplesIndex && !mainSamplesIndexFilePath) {
+      log.error('loadIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter')
       return false
-    } else if(!mainSamplesIndex) {
+    } else if (!mainSamplesIndex) {
       indexFilePath = mainSamplesIndexFilePath
     } else {
       indexFilePath = mainSamplesIndex.indexFilePath
@@ -69,7 +69,7 @@ const loadIndex = async (indexFilePath) => {
 const createIndex = async (indexFilePath) => {
   log.info('executing createIndex...')
   mainSamplesIndex = null
-  let samplesPath = Config.get('SamplesDirectory')
+  const samplesPath = Config.get('SamplesDirectory')
 
   if (!samplesPath) {
     log.info('createIndex - no SamplesDirectory found')
@@ -79,11 +79,11 @@ const createIndex = async (indexFilePath) => {
     return false
   }
 
-  if(!indexFilePath) {
-    if(!mainSamplesIndex && !mainSamplesIndexFilePath) {
-      log.error(`createIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter`)
+  if (!indexFilePath) {
+    if (!mainSamplesIndex && !mainSamplesIndexFilePath) {
+      log.error('createIndex - Can not load the index: no index present, no index file path, and no indexFilePath parameter')
       return false
-    } else if(!mainSamplesIndex) {
+    } else if (!mainSamplesIndex) {
       indexFilePath = mainSamplesIndexFilePath
     } else {
       indexFilePath = mainSamplesIndex.indexFilePath
@@ -232,7 +232,7 @@ module.exports = {
     hasIndex,
     indexSize,
     createIndex, /* async */
-    loadIndex,  /* async */
+    loadIndex, /* async */
     sampleSetByPathQuery, /* async */
     lookupByPathQuery, /* async */
     // todo: repairIndex,

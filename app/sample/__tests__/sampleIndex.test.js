@@ -31,7 +31,7 @@ describe('SampleIndex functions', function () {
     })
     result = await sIndex1.load()
     expect(result).toEqual(false)
-    //expect(async function () { await sIndex1.forEach(() => {}) }).toThrow()
+    // expect(async function () { await sIndex1.forEach(() => {}) }).toThrow()
     expect(function () { return sIndex1.size }).toThrow()
 
     const sIndex2 = new SampleIndex({
@@ -40,13 +40,13 @@ describe('SampleIndex functions', function () {
     })
     result = await sIndex2.load()
     expect(result).toEqual(false)
-    //expect(function () { sIndex2.forEach(() => {}) }).toThrow()
+    // expect(function () { sIndex2.forEach(() => {}) }).toThrow()
     expect(function () { return sIndex2.size }).toThrow()
 
     fileUtils.writeTextFileSync(SampleIndexFile, '')
     result = await sIndex2.load()
     expect(result).toEqual(false)
-    //expect(function () { sIndex2.forEach(() => {}) }).toThrow()
+    // expect(function () { sIndex2.forEach(() => {}) }).toThrow()
     expect(function () { return sIndex2.size }).toThrow()
 
     result = await sIndex2.create()

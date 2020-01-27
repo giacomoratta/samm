@@ -7,15 +7,12 @@ const { fileUtils } = require('../utils/file.utils')
 const ACCEPTED_EVENTS = ['save', 'load']
 
 class FileButler {
-  constructor (options) {
-  }
-
   async set (options) {
     this.eventEmitter = new Events()
     this._hasData = false
     try {
       this.config = await parseOption(options)
-    } catch(e) {
+    } catch (e) {
       throw e
     }
     this.data = this.config.defaultValue
@@ -39,7 +36,7 @@ class FileButler {
     }
     this._hasData = !_.isNil(data)
     if (!this._hasData) this.data = this.config.defaultValue
-    else this.data = (doNotClone === true ? data: _.cloneDeep(data))
+    else this.data = (doNotClone === true ? data : _.cloneDeep(data))
     return this._hasData
   }
 
@@ -53,13 +50,13 @@ class FileButler {
       // todo: if is promise...
       savedData = this.config.saveFn(this.data)
     }
-    const saveResult = await this.config.fn.saveToFile(this.config.filePath, savedData)
+    const saveResult = await this.config.fn.saveToFile(this.config.filePath, savedData) // todo: try/catch
     if (saveResult === true) {
       this.eventEmitter.emit('save', { filePath: this.config.filePath, data: savedData })
       if (this.config.backupTo) {
         try {
           await fileUtils.copyFile(this.config.filePath, this.config.backupTo)
-        } catch(copyResult) {
+        } catch (copyResult) {
           if (copyResult.err) {
             throw new FileButlerError(`Backup failed! From '${this.config.backupTo}' to ${this.config.backupTo}`)
           }
@@ -73,13 +70,13 @@ class FileButler {
     if (this.config.cloneFrom && !await fileUtils.fileExists(this.config.filePath)) {
       try {
         await fileUtils.copyFile(this.config.cloneFrom, this.config.filePath)
-      } catch(copyResult) {
+      } catch (copyResult) {
         if (copyResult.err) {
           throw new FileButlerError(`Cloning failed! From '${this.config.cloneFrom}' to ${this.config.filePath}`)
         }
       }
     }
-    let loadedData = await this.config.fn.loadFromFile(this.config.filePath)
+    let loadedData = await this.config.fn.loadFromFile(this.config.filePath) // todo: try/catch
     if (this.config.loadFn) {
       // todo: if is promise...
       loadedData = this.config.loadFn(loadedData)
