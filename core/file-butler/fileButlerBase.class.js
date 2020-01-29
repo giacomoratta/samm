@@ -131,11 +131,11 @@ class FileButlerBase {
   }
 
   _isAbsolutePath (pathString) {
-    return fileUtils.fileExists(this._config.filePath)
+    return fileUtils.isAbsolutePath(pathString)
   }
 
   _fileExists (pathString) {
-    return fileUtils.fileExists(this._config.filePath)
+    return fileUtils.fileExists(pathString)
   }
 
   _copyFile (pathFrom, pathTo, options) {
