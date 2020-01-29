@@ -2,11 +2,9 @@ const { FileButlerError } = require('./fileButlerError.class')
 const { FileButlerBase } = require('fileButlerBase.class')
 
 class TextFileButler extends FileButlerBase {
-
   constructor (options) {
-
     if (!options) {
-      throw new FileButlerError(`Missing options`)
+      throw new FileButlerError('Missing options')
     }
 
     options.fileType = 'text'
@@ -16,17 +14,17 @@ class TextFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.readFileFn = function(data) {
-      if(typeof data !== 'string') return ''
+    options.readFileFn = function (data) {
+      if (typeof data !== 'string') return ''
       return data
     }
 
-    options.writeFileFn = function(data) {
-      if(typeof data !== 'string') return ''
+    options.writeFileFn = function (data) {
+      if (typeof data !== 'string') return ''
       return data
     }
 
-    options.validityCheck = function(data) {
+    options.validityCheck = function (data) {
       return (typeof data === 'string')
     }
 

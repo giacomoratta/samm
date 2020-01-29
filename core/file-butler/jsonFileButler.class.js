@@ -9,14 +9,12 @@ const ENUMS = {
 }
 
 class JsonFileButler extends FileButlerBase {
-
   constructor (options) {
-
     if (!options) {
-      throw new FileButlerError(`Missing options`)
+      throw new FileButlerError('Missing options')
     }
 
-    if(!options.fileType) options.fileType = 'json-compact'
+    if (!options.fileType) options.fileType = 'json-compact'
 
     if (!options.fileType || !Object.values(ENUMS.fileType).includes(options.fileType)) {
       throw new FileButlerError(`'fileType' option must be present and have one of these values: ${Object.values(ENUMS.fileType).join(', ')} .`)
@@ -28,7 +26,7 @@ class JsonFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.readFileFn = function(data) {
+    options.readFileFn = function (data) {
       try {
         return JSON.parse(data)
       } catch (e) {
@@ -36,11 +34,11 @@ class JsonFileButler extends FileButlerBase {
       }
     }
 
-    options.writeFileFn = function(data) {
+    options.writeFileFn = function (data) {
       try {
-        if(options.fileType === ENUMS.fileType.json) {
+        if (options.fileType === ENUMS.fileType.json) {
           return JSON.stringify(data, null, '\t')
-        } else if(options.fileType === ENUMS.fileType.json_compact) {
+        } else if (options.fileType === ENUMS.fileType.json_compact) {
           return JSON.stringify(data, null)
         }
       } catch (e) {
@@ -48,7 +46,7 @@ class JsonFileButler extends FileButlerBase {
       }
     }
 
-    options.validityCheck = function(data) {
+    options.validityCheck = function (data) {
       return (typeof data === 'object' && data instanceof Object && data.constructor === Object)
     }
 
