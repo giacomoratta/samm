@@ -1,8 +1,7 @@
-const { _ } = require('../utils/lodash.extended')
 const { FileButlerError } = require('./fileButlerError.class')
-const { fileButlerBase } = require('fileButlerBase.class')
+const { FileButlerBase } = require('fileButlerBase.class')
 
-class textFileButler extends fileButlerBase {
+class TextFileButler extends FileButlerBase {
 
   constructor (options) {
 
@@ -10,6 +9,7 @@ class textFileButler extends fileButlerBase {
       throw new FileButlerError(`Missing options`)
     }
 
+    options.fileType = 'text'
     options.defaultValue = ''
     options.fileEncoding = 'utf8'
     options.fileReadFlag = 'r'
@@ -17,17 +17,17 @@ class textFileButler extends fileButlerBase {
     options.fileMode = 0o666
 
     options.readFileFn = function(data) {
-      if(!_.isString(data)) return ''
+      if(typeof data !== 'string') return ''
       return data
     }
 
     options.writeFileFn = function(data) {
-      if(!_.isString(data)) return ''
+      if(typeof data !== 'string') return ''
       return data
     }
 
     options.validityCheck = function(data) {
-      return _.isString(data)
+      return (typeof data === 'string')
     }
 
     super(options)
@@ -35,5 +35,5 @@ class textFileButler extends fileButlerBase {
 }
 
 module.exports = {
-  textFileButler
+  TextFileButler
 }

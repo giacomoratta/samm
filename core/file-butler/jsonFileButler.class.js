@@ -1,6 +1,5 @@
-const { _ } = require('../utils/lodash.extended')
 const { FileButlerError } = require('./fileButlerError.class')
-const { fileButlerBase } = require('fileButlerBase.class')
+const { FileButlerBase } = require('fileButlerBase.class')
 
 const ENUMS = {
   fileType: {
@@ -9,7 +8,7 @@ const ENUMS = {
   }
 }
 
-class jsonFileButler extends fileButlerBase {
+class JsonFileButler extends FileButlerBase {
 
   constructor (options) {
 
@@ -50,7 +49,7 @@ class jsonFileButler extends fileButlerBase {
     }
 
     options.validityCheck = function(data) {
-      return _.isStrictObject(data)
+      return (typeof data === 'object' && data instanceof Object && data.constructor === Object)
     }
 
     super(options)
@@ -58,5 +57,5 @@ class jsonFileButler extends fileButlerBase {
 }
 
 module.exports = {
-  jsonFileButler
+  JsonFileButler
 }

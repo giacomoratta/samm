@@ -23,7 +23,15 @@ libUtils.equalPaths = (p1, p2) => {
   if (p1.length <= p2.length) return p2.endsWith(p1)
 }
 
-/* UTILS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* UTILS    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+libUtils.isRelativePath = (p) => {
+  return !libUtils.isAbsolutePath(p)
+}
+
+libUtils.isAbsolutePath = (p) => {
+  return path.normalize(p + path.sep) === path.normalize(path.resolve(p) + path.sep)
+}
 
 libUtils.pathChangeFilename = (pathString, changeFn) => {
   const _pInfo = path.parse(pathString)
@@ -38,14 +46,6 @@ libUtils.pathChangeDirname = (pathString, changeFn) => {
 }
 
 /* CHECKS  - SYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-libUtils.isRelativePath = (p) => {
-  return !libUtils.isAbsolutePath(p)
-}
-
-libUtils.isAbsolutePath = (p) => {
-  return path.normalize(p + path.sep) === path.normalize(path.resolve(p) + path.sep)
-}
 
 libUtils.isAbsoluteParentDirSync = (pathString, checkExists) => {
   if (!_.isString(pathString)) return false
