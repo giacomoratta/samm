@@ -44,8 +44,15 @@ class FileButlerBase {
   async _readFile(pathString, encoding, flag) {
     try {
       let fileData = await fileUtils.readFile(pathString, encoding, flag)
-      fileData = this._config.readFileFn(fileData)
-      if(this._config.loadFn) fileData = this._config.loadFn(fileData)
+
+      const readFileFnResult = this._config.readFileFn(fileData)
+      if(readFileFnResult instanceof Promise) fileData = await readFileFnResult
+      else fileData = readFileFnResult
+
+      const loadFnResult = this._config.loadFn(fileData)
+      if(loadFnResult instanceof Promise) fileData = await loadFnResult
+      else fileData = loadFnResult
+
       return this._setData(fileData, true)
     } catch (e) {
       throw e
@@ -55,8 +62,16 @@ class FileButlerBase {
   async _writeFile(pathString, encoding, flag, mode) {
     if(this.empty()) return false
     try {
-      let fileData = ( this._config.saveFn ? this._config.saveFn(this.data) : this.data )
-      fileData = this._config.writeFileFn(fileData)
+      let fileData = this.data
+
+      const saveFnResult = this._config.saveFn(fileData)
+      if(saveFnResult instanceof Promise) fileData = await saveFnResult
+      else fileData = saveFnResult
+
+      const writeFileFnResult = this._config.writeFileFn(fileData)
+      if(writeFileFnResult instanceof Promise) fileData = await writeFileFnResult
+      else fileData = writeFileFnResult
+
       return await fileUtils.writeFile(pathString, fileData, encoding, flag, mode)
     } catch (e) {
       throw e
