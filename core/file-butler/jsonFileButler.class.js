@@ -1,6 +1,8 @@
 const FileButlerError = require('./fileButlerError.class')
 const FileButler = require('core/file-butler/fileButler.class')
 
+const DEFAULT_VALUE = null
+
 const ENUMS = {
   fileType: {
     json: 'json',
@@ -20,7 +22,7 @@ class JsonFileButler extends FileButler {
       throw new FileButlerError(`'fileType' option must be present and have one of these values: ${Object.values(ENUMS.fileType).join(', ')} .`)
     }
 
-    options.defaultValue = null
+    options.defaultValue = DEFAULT_VALUE
     options.fileEncoding = 'utf8'
     options.fileReadFlag = 'r'
     options.fileWriteFlag = 'w'
@@ -30,7 +32,7 @@ class JsonFileButler extends FileButler {
       try {
         return JSON.parse(data)
       } catch (e) {
-        return null
+        return DEFAULT_VALUE
       }
     }
 
@@ -42,7 +44,7 @@ class JsonFileButler extends FileButler {
           return JSON.stringify(data, null)
         }
       } catch (e) {
-        return ''
+        return DEFAULT_VALUE
       }
     }
 
