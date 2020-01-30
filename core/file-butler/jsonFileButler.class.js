@@ -26,7 +26,7 @@ class JsonFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.readFileFn = function (data) {
+    options.loadFn = function (data) {
       try {
         return JSON.parse(data)
       } catch (e) {
@@ -34,7 +34,7 @@ class JsonFileButler extends FileButlerBase {
       }
     }
 
-    options.writeFileFn = function (data) {
+    options.saveFn = function (data) {
       try {
         if (options.fileType === ENUMS.fileType.json) {
           return JSON.stringify(data, null, '\t')
@@ -47,7 +47,9 @@ class JsonFileButler extends FileButlerBase {
     }
 
     options.validityCheck = function (data) {
-      return (typeof data === 'object' && data instanceof Object && data.constructor === Object)
+      if (typeof data !== 'object' || !(data instanceof Object) || data.constructor !== Object) {
+        throw new FileButlerError('This data is not valid as json.')
+      }
     }
 
     super(options)

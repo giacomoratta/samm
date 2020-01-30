@@ -1,13 +1,8 @@
-const path = require('path')
 const _ = require('lodash')
 const utils = require('./utils')
 const { PathInfoBase } = require('./pathInfoBase.class')
 
 class PathInfoSync extends PathInfoBase {
-  constructor () {
-    super()
-  }
-
   set ({ absolutePath, relRootPath }) {
     this.info = null
 

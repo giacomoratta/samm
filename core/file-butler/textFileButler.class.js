@@ -14,18 +14,20 @@ class TextFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.readFileFn = function (data) {
+    options.loadFn = function (data) {
       if (typeof data !== 'string') return ''
       return data
     }
 
-    options.writeFileFn = function (data) {
+    options.saveFn = function (data) {
       if (typeof data !== 'string') return ''
       return data
     }
 
     options.validityCheck = function (data) {
-      return (typeof data === 'string')
+      if (typeof data !== 'string') {
+        throw new FileButlerError('This data is not valid as text.')
+      }
     }
 
     super(options)
