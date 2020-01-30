@@ -1,5 +1,5 @@
-const { FileButlerError } = require('./fileButlerError.class')
-const { FileButlerBase } = require('fileButlerBase.class')
+const FileButlerError = require('./fileButlerError.class')
+const FileButlerBase = require('fileButlerBase.class')
 
 class TextFileButler extends FileButlerBase {
   constructor (options) {
@@ -34,6 +34,4 @@ class TextFileButler extends FileButlerBase {
   }
 }
 
-module.exports = {
-  TextFileButler
-}
+module.exports = TextFileButler

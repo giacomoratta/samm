@@ -1,5 +1,5 @@
-const { _ } = require('lodash')
-const { FileButlerError } = require('./fileButlerError.class')
+const _ = require('lodash')
+const FileButlerError = require('./fileButlerError.class')
 const { fileUtils } = require('../utils/file.utils')
 
 class FileButlerBase {
@@ -146,10 +146,8 @@ class FileButlerBase {
     if (saveFnResult instanceof Promise) fileData = await saveFnResult
     else fileData = saveFnResult
 
-    return await this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+    return this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
   }
 }
 
-module.exports = {
-  FileButlerBase
-}
+module.exports = FileButlerBase

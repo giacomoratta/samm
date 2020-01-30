@@ -1,11 +1,6 @@
-const { FileButlerError } = require('./fileButlerError.class')
-const { FileButlerBase } = require('./fileButlerBase.class')
-const { JsonFileButler } = require('./jsonFileButler.class')
-const { TextFileButler } = require('./textFileButler.class')
-
 module.exports = {
-  FileButlerBase,
-  FileButlerError,
-  JsonFileButler,
-  TextFileButler
+  FileButlerBase: require('./fileButlerBase.class'),
+  FileButlerError: require('./fileButlerError.class'),
+  JsonFileButler: require('./jsonFileButler.class'),
+  TextFileButler: require('./textFileButler.class')
 }

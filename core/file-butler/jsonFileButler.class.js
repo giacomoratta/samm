@@ -1,5 +1,5 @@
-const { FileButlerError } = require('./fileButlerError.class')
-const { FileButlerBase } = require('fileButlerBase.class')
+const FileButlerError = require('./fileButlerError.class')
+const FileButlerBase = require('fileButlerBase.class')
 
 const ENUMS = {
   fileType: {
@@ -56,6 +56,4 @@ class JsonFileButler extends FileButlerBase {
   }
 }
 
-module.exports = {
-  JsonFileButler
-}
+module.exports = JsonFileButler
