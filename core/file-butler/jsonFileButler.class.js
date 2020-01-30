@@ -1,5 +1,5 @@
 const FileButlerError = require('./fileButlerError.class')
-const FileButlerBase = require('fileButlerBase.class')
+const FileButler = require('core/file-butler/fileButler.class')
 
 const ENUMS = {
   fileType: {
@@ -8,7 +8,7 @@ const ENUMS = {
   }
 }
 
-class JsonFileButler extends FileButlerBase {
+class JsonFileButler extends FileButler {
   constructor (options) {
     if (!options) {
       throw new FileButlerError('Missing options')
@@ -26,7 +26,7 @@ class JsonFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.loadFn = function (data) {
+    options.fileToDataFn = function (data) {
       try {
         return JSON.parse(data)
       } catch (e) {
@@ -34,7 +34,7 @@ class JsonFileButler extends FileButlerBase {
       }
     }
 
-    options.saveFn = function (data) {
+    options.dataToFileFn = function (data) {
       try {
         if (options.fileType === ENUMS.fileType.json) {
           return JSON.stringify(data, null, '\t')

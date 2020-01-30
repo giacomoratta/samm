@@ -1,7 +1,7 @@
 const FileButlerError = require('./fileButlerError.class')
-const FileButlerBase = require('fileButlerBase.class')
+const FileButler = require('core/file-butler/fileButler.class')
 
-class TextFileButler extends FileButlerBase {
+class TextFileButler extends FileButler {
   constructor (options) {
     if (!options) {
       throw new FileButlerError('Missing options')
@@ -14,12 +14,12 @@ class TextFileButler extends FileButlerBase {
     options.fileWriteFlag = 'w'
     options.fileMode = 0o666
 
-    options.loadFn = function (data) {
+    options.fileToDataFn = function (data) {
       if (typeof data !== 'string') return ''
       return data
     }
 
-    options.saveFn = function (data) {
+    options.dataToFileFn = function (data) {
       if (typeof data !== 'string') return ''
       return data
     }
