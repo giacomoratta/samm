@@ -1,30 +1,61 @@
 const { TextFileButler } = require('../index')
 const path = require('path')
-const dirTestPath = path.parse(__dirname, 'dir_test')
+const dirTestPath = path.join(__dirname, 'dir_test')
 
 describe('FileButler basic operations', function () {
-  it('should throw some errors', function () {
-
+  it('should load no data because the file does not exist', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'no-file.null')
+    })
+    await fb.load()
+    expect(fb.data).toEqual('')
+    expect(fb.isEmpty).toEqual(true)
+    await fb.delete()
   })
 
-  it('should load no data because the file does not exist', function () {
-
+  it('should load content from empty file', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.empty.txt')
+    })
+    await fb.load()
+    expect(fb.data).toEqual('')
+    expect(fb.isEmpty).toEqual(true)
   })
 
-  it('should load content from empty file', function () {
-
+  it('should load content from non-empty file', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.not.empty.txt')
+    })
+    await fb.load()
+    expect(fb.data).toEqual('abc\n123\ndef\n')
+    expect(fb.isEmpty).toEqual(false)
   })
 
-  it('should load content from non-empty file', function () {
-
+  it('should load content from cloned file', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'no-file.null'),
+      cloneFrom: path.join(dirTestPath, 'file.not.empty.txt')
+    })
+    await fb.load()
+    expect(fb.data).toEqual('abc\n123\ndef\n')
+    expect(fb.isEmpty).toEqual(false)
+    await fb.delete()
   })
 
-  it('should load content from cloned file', function () {
+  it('should save and create the file because it does not exist', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'no-file.null')
+    })
+    await fb.load()
+    fb.data = 'qwertyuiop'
+    await fb.save()
 
-  })
-
-  it('should save and create the file because it does not exist', function () {
-
+    const fb2 = new TextFileButler({
+      filePath: path.join(dirTestPath, 'no-file.null')
+    })
+    await fb2.load()
+    expect(fb2.data).toEqual('qwertyuiop')
+    await fb.delete()
   })
 
   it('should save and overwrite an existent file', function () {

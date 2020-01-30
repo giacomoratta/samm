@@ -22,12 +22,14 @@ class FileButler {
     return this._setData(data)
   }
 
-  empty () {
+  get isEmpty () {
     return !this._hasData
   }
 
   async delete () {
-    await this._removeFile(this._config.filePath)
+    if (await this._fileExists(this._config.filePath)) {
+      await this._removeFile(this._config.filePath)
+    }
     this._data = this._config.defaultValue
     this._hasData = false
   }
@@ -35,8 +37,8 @@ class FileButler {
   _setData (data, doNotClone = false) {
     if (this._config.validityCheck(data) !== true) return this._hasData
     this._hasData = !_.isNil(data)
-    if (!this._hasData) this.data = this._config.defaultValue
-    else this.data = (doNotClone === true ? data : _.cloneDeep(data))
+    if (!this._hasData) this._data = this._config.defaultValue
+    else this._data = (doNotClone === true ? data : _.cloneDeep(data))
     return this._hasData
   }
 
@@ -137,7 +139,11 @@ class FileButler {
       await this._copyFile(this._config.cloneFrom, this._config.filePath)
     }
 
-    let fileData = await this._readFile(this._config.filePath, this._config.fileEncoding, this._config.fileReadFlag)
+    let fileData = this._config.defaultValue
+
+    if (await this._fileExists(this._config.filePath)) {
+      fileData = await this._readFile(this._config.filePath, this._config.fileEncoding, this._config.fileReadFlag)
+    }
 
     const fileToDataFnResult = this._config.fileToDataFn(fileData)
     if (fileToDataFnResult instanceof Promise) fileData = await fileToDataFnResult
@@ -153,14 +159,14 @@ class FileButler {
   }
 
   async save () {
-    if (this.empty()) return false
+    if (this.isEmpty) return false
 
     /* backup file */
     if (this._config.backupTo && await this._fileExists(this._config.filePath)) {
       await this._copyFile(this._config.filePath, this._config.backupTo)
     }
 
-    let fileData
+    let fileData = this.data
 
     if (this._config.saveFn) {
       const saveFnResult = this._config.saveFn(fileData)

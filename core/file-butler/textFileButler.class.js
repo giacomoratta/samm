@@ -30,6 +30,7 @@ class TextFileButler extends FileButler {
       if (typeof data !== 'string') {
         throw new FileButlerError('This data is not valid as text.')
       }
+      return true
     }
 
     super(options)
