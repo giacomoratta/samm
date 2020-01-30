@@ -1,50 +1,198 @@
-// const { FileButler } = require('../index')
-// const path = require('path')
-// const { fileUtils } = require('../../utils/file.utils')
-// const baseRoot = path.parse(__dirname).root
+const { FileButler } = require('../index.js')
+const path = require('path')
+const dirTestPath = path.join(__dirname, 'dir_test')
 
-describe('FileButler basic operations', function () {
-  it('should throw some errors', function () {
+class TestFileButler extends FileButler { }
 
+describe('FileButler constructor', function () {
+  it('should not implement FileButler', function () {
+    expect(function () {
+      return new FileButler()
+    }).toThrow('Cannot construct FileButler instances directly')
   })
 
-  it('should load no data because the file does not exist', function () {
-
+  it('should have filePath option', function () {
+    expect(function () {
+      return new TestFileButler()
+    }).toThrow('Missing \'filePath\' option.')
   })
 
-  it('should load content from empty file', function () {
-
+  it('should have absolute path as filePath', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: 'abc'
+      })
+    }).toThrow('\'filePath\' option must be an absolute path')
   })
 
-  it('should load content from non-empty file', function () {
-
+  it('should have a defined defaultValue', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: undefined
+      })
+    }).toThrow('Missing \'defaultValue\' option.')
   })
 
-  it('should load content from cloned file', function () {
-
+  it('should accept null as defaultValue', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: null
+      })
+    }).not.toThrow('Missing \'defaultValue\' option.')
   })
 
-  it('should save and create the file because it does not exist', function () {
+  it('should have validityCheck as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: ''
+      })
+    }).toThrow('validityCheck\' option is required and must be a function.')
 
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: 123
+      })
+    }).toThrow('validityCheck\' option is required and must be a function.')
   })
 
-  it('should save and overwrite an existent file', function () {
+  it('should have fileToDataFn as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true }
+      })
+    }).toThrow('\'fileToDataFn\' option is required and must be a function.')
 
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: 123
+      })
+    }).toThrow('\'fileToDataFn\' option is required and must be a function.')
   })
 
-  it('should save and backup the current file', function () {
+  it('should have dataToFileFn as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true }
+      })
+    }).toThrow('\'dataToFileFn\' option is required and must be a function.')
 
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: 123
+      })
+    }).toThrow('\'dataToFileFn\' option is required and must be a function.')
   })
 
-  it('should not backup if the current file is empty', function () {
-    // use internal flag - after loading has no data => flagEmptyFile=true
+  it('should have cloneFrom as absolute path', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        cloneFrom: 'abc'
+      })
+    }).toThrow('\'cloneFrom\' option must be an absolute path')
+
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        cloneFrom: path.join(dirTestPath, 'file22.example.raw')
+      })
+    }).not.toThrow('\'cloneFrom\' option must be an absolute path')
   })
 
-  it('should manipulate data after loading with loadFn', function () {
+  it('should have backupTo as absolute path', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        backupTo: 'abc'
+      })
+    }).toThrow('\'backupTo\' option must be an absolute path')
 
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        backupTo: path.join(dirTestPath, 'file22.backup.raw')
+      })
+    }).not.toThrow('\'backupTo\' option must be an absolute path')
   })
 
-  it('should manipulate data before saving with saveFn', function () {
+  it('should have loadFn as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        loadFn: 123
+      })
+    }).toThrow('\'loadFn\' option must be a function.')
 
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        loadFn: function (data) { return data }
+      })
+    }).not.toThrow('\'loadFn\' option must be a function.')
+  })
+
+  it('should have saveFn as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        saveFn: 123
+      })
+    }).toThrow('\'saveFn\' option must be a function.')
+
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        fileToDataFn: function () { return true },
+        dataToFileFn: function () { return true },
+        saveFn: function (data) { return data }
+      })
+    }).not.toThrow('\'saveFn\' option must be a function.')
   })
 })

@@ -77,14 +77,14 @@ class FileButler {
     }
 
     if (!_.isFunction(options.validityCheck)) {
-      throw new FileButlerError('\'validityCheck\' option is required and must be a function.')
+      throw new FileButlerError('validityCheck\' option is required and must be a function.')
     }
 
-    if (options.fileToDataFn || !_.isFunction(options.fileToDataFn)) {
+    if (!options.fileToDataFn || !_.isFunction(options.fileToDataFn)) {
       throw new FileButlerError('\'fileToDataFn\' option is required and must be a function.')
     }
 
-    if (options.dataToFileFn || !_.isFunction(options.dataToFileFn)) {
+    if (!options.dataToFileFn || !_.isFunction(options.dataToFileFn)) {
       throw new FileButlerError('\'dataToFileFn\' option is required and must be a function.')
     }
 

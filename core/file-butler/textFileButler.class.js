@@ -1,5 +1,5 @@
 const FileButlerError = require('./fileButlerError.class')
-const FileButler = require('core/file-butler/fileButler.class')
+const FileButler = require('./fileButler.class')
 
 const DEFAULT_VALUE = ''
 
