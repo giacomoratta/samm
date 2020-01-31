@@ -11,6 +11,7 @@ class FileButler {
     this._config = {}
     this._parseOptions(options)
     this._hasData = false
+    this._currentFileHasData = false
     this._data = this._config.defaultValue
   }
 
@@ -36,7 +37,7 @@ class FileButler {
 
   _setData (data, doNotClone = false) {
     if (this._config.validityCheck(data) !== true) return this._hasData
-    this._hasData = !_.isNil(data)
+    this._hasData = !this._config.emptyCheck(data)
     if (!this._hasData) this._data = this._config.defaultValue
     else this._data = (doNotClone === true ? data : _.cloneDeep(data))
     return this._hasData
@@ -49,6 +50,7 @@ class FileButler {
       filePath: null,
       defaultValue: null,
       validityCheck: null,
+      emptyCheck: null,
       fileToDataFn: null,
       dataToFileFn: null,
 
@@ -79,7 +81,11 @@ class FileButler {
     }
 
     if (!_.isFunction(options.validityCheck)) {
-      throw new FileButlerError('validityCheck\' option is required and must be a function.')
+      throw new FileButlerError('\'validityCheck\' option is required and must be a function.')
+    }
+
+    if (!_.isFunction(options.emptyCheck)) {
+      throw new FileButlerError('\'emptyCheck\' option is required and must be a function.')
     }
 
     if (!options.fileToDataFn || !_.isFunction(options.fileToDataFn)) {
@@ -155,14 +161,13 @@ class FileButler {
       else fileData = loadFnResult
     }
 
-    return this._setData(fileData, true)
+    this._currentFileHasData = this._setData(fileData, true)
+    return this._currentFileHasData
   }
 
   async save () {
-    if (this.isEmpty) return false
-
     /* backup file */
-    if (this._config.backupTo && await this._fileExists(this._config.filePath)) {
+    if (this._currentFileHasData === true && this._config.backupTo && await this._fileExists(this._config.filePath)) {
       await this._copyFile(this._config.filePath, this._config.backupTo)
     }
 
@@ -178,7 +183,8 @@ class FileButler {
     if (dataToFileFnResult instanceof Promise) fileData = await dataToFileFnResult
     else fileData = dataToFileFnResult
 
-    return this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+    this._currentFileHasData = await this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+    return this._currentFileHasData
   }
 }
 

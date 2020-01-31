@@ -27,7 +27,7 @@ describe('FileButler basic operations', function () {
       filePath: path.join(dirTestPath, 'file.not.empty.txt')
     })
     await fb.load()
-    expect(fb.data).toEqual('abc\n123\ndef\n')
+    expect(fb.data.replace(/[^a-z0-9]/gi, '')).toEqual('abc123def')
     expect(fb.isEmpty).toEqual(false)
   })
 
@@ -37,7 +37,7 @@ describe('FileButler basic operations', function () {
       cloneFrom: path.join(dirTestPath, 'file.not.empty.txt')
     })
     await fb.load()
-    expect(fb.data).toEqual('abc\n123\ndef\n')
+    expect(fb.data.replace(/[^a-z0-9]/gi, '')).toEqual('abc123def')
     expect(fb.isEmpty).toEqual(false)
     await fb.delete()
   })
@@ -58,23 +58,61 @@ describe('FileButler basic operations', function () {
     await fb.delete()
   })
 
-  it('should save and overwrite an existent file', function () {
+  it('should save and backup the current file', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.not.empty.txt'),
+      backupTo: path.join(dirTestPath, 'file.backup.txt')
+    })
+    await fb.load()
+    await fb.save()
 
+    const fb2 = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.backup.txt')
+    })
+    await fb2.load()
+    expect(fb2.data).toEqual(fb.data)
+    await fb2.delete()
   })
 
-  it('should save and backup the current file', function () {
+  it('should not backup if the current file is empty', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.empty.txt'),
+      backupTo: path.join(dirTestPath, 'file.backup.txt')
+    })
+    await fb.load()
+    await fb.save()
 
+    const fb2 = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.backup.txt')
+    })
+    const loadResult = await fb2.load()
+    expect(loadResult).toEqual(false)
+    await fb2.delete()
   })
 
-  it('should not backup if the current file is empty', function () {
-    // use internal flag - after loading has no data => flagEmptyFile=true
+  it('should manipulate data after loading with loadFn', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.not.empty.txt'),
+      loadFn: function (data) { return data + '11111' }
+    })
+    await fb.load()
+    expect(fb.data.endsWith('11111')).toEqual(true)
   })
 
-  it('should manipulate data after loading with loadFn', function () {
+  it('should manipulate data before saving with saveFn', async function () {
+    const fb = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.abc.txt'),
+      saveFn: function (data) { return data + '11111' }
+    })
+    await fb.load()
+    fb.data = 'abc'
+    await fb.save()
 
-  })
-
-  it('should manipulate data before saving with saveFn', function () {
-
+    const fb2 = new TextFileButler({
+      filePath: path.join(dirTestPath, 'file.abc.txt')
+    })
+    await fb2.load()
+    expect(fb2.data).toEqual('abc11111')
+    await fb2.delete()
   })
 })

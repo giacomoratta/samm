@@ -33,6 +33,10 @@ class TextFileButler extends FileButler {
       return true
     }
 
+    options.emptyCheck = function (data) {
+      return !data || data.length === 0
+    }
+
     super(options)
   }
 }

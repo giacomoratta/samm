@@ -49,9 +49,15 @@ class JsonFileButler extends FileButler {
     }
 
     options.validityCheck = function (data) {
+      if (data === null) return true
       if (typeof data !== 'object' || !(data instanceof Object) || data.constructor !== Object) {
         throw new FileButlerError('This data is not valid as json.')
       }
+      return true
+    }
+
+    options.emptyCheck = function (data) {
+      return !data || Object.keys(data).length === 0
     }
 
     super(options)

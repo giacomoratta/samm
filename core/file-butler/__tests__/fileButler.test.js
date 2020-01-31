@@ -49,7 +49,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: ''
       })
-    }).toThrow('validityCheck\' option is required and must be a function.')
+    }).toThrow('\'validityCheck\' option is required and must be a function.')
 
     expect(function () {
       return new TestFileButler({
@@ -57,7 +57,26 @@ describe('FileButler constructor', function () {
         defaultValue: '',
         validityCheck: 123
       })
-    }).toThrow('validityCheck\' option is required and must be a function.')
+    }).toThrow('\'validityCheck\' option is required and must be a function.')
+  })
+
+  it('should have emptyCheck as function', function () {
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true }
+      })
+    }).toThrow('\'emptyCheck\' option is required and must be a function.')
+
+    expect(function () {
+      return new TestFileButler({
+        filePath: path.join(dirTestPath, 'file22.raw'),
+        defaultValue: '',
+        validityCheck: function () { return true },
+        emptyCheck: 123
+      })
+    }).toThrow('\'emptyCheck\' option is required and must be a function.')
   })
 
   it('should have fileToDataFn as function', function () {
@@ -65,7 +84,8 @@ describe('FileButler constructor', function () {
       return new TestFileButler({
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
-        validityCheck: function () { return true }
+        validityCheck: function () { return true },
+        emptyCheck: function () { return true }
       })
     }).toThrow('\'fileToDataFn\' option is required and must be a function.')
 
@@ -74,6 +94,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: 123
       })
     }).toThrow('\'fileToDataFn\' option is required and must be a function.')
@@ -85,6 +106,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true }
       })
     }).toThrow('\'dataToFileFn\' option is required and must be a function.')
@@ -94,6 +116,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: 123
       })
@@ -106,6 +129,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         cloneFrom: 'abc'
@@ -117,6 +141,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         cloneFrom: path.join(dirTestPath, 'file22.example.raw')
@@ -130,6 +155,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         backupTo: 'abc'
@@ -141,6 +167,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         backupTo: path.join(dirTestPath, 'file22.backup.raw')
@@ -154,6 +181,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         loadFn: 123
@@ -165,6 +193,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         loadFn: function (data) { return data }
@@ -178,6 +207,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         saveFn: 123
@@ -189,6 +219,7 @@ describe('FileButler constructor', function () {
         filePath: path.join(dirTestPath, 'file22.raw'),
         defaultValue: '',
         validityCheck: function () { return true },
+        emptyCheck: function () { return true },
         fileToDataFn: function () { return true },
         dataToFileFn: function () { return true },
         saveFn: function (data) { return data }
