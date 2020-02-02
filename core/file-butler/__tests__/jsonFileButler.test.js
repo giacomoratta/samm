@@ -18,7 +18,10 @@ describe('JsonFileButler custom operations', function () {
     const fb = new JsonFileButler({
       filePath: path.join(dirTestPath, 'file33.wrong.json')
     })
-    await expect(fb.load()).rejects.toThrow('This data is not valid as json')
+    await expect(fb.load()).resolves.toEqual(false)
+    expect(fb.data).toEqual(null)
+
+    expect(function () { fb.data = 123 }).toThrow('This data is not valid as json')
   })
 
   it('should save json correctly', async function () {
