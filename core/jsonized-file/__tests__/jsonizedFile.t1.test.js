@@ -1,6 +1,6 @@
 const path = require('path')
 const { fileUtils } = require('../../utils/file.utils') // todo: remove
-const baseRoot = path.parse(__dirname).root
+const baseRoot = path.join(__dirname, 'test_dir')
 const { JsonizedFile } = require('../index')
 
 const jsonFileWrongJson = path.join(__dirname, 'test_dir', 'config_file_wrong_json')
@@ -13,64 +13,49 @@ describe('JsonizedFile class and object', function () {
     await expect(jzf.load()).resolves.toEqual(false)
   })
 
-
-
-
-  it('should handle files with bad content', function () {
-    let jsonizedFile
-
-    const jsonFileWrongJson = path.join(__dirname, 'test_dir', 'config_file_wrong_json')
-    const jsonFileEmpty = path.join(__dirname, 'test_dir', 'config_file_empty')
-    const jsonFileNotExists = path.join(__dirname, 'test_dir', 'config_file_not_exists')
-
-    fileUtils.removeFileSync(jsonFileNotExists)
-
-    jsonizedFile = new JsonizedFile({ filePath: jsonFileWrongJson })
-    jsonizedFile.load()
-    expect(jsonizedFile.hasData()).toEqual(false)
-
-    jsonizedFile = new JsonizedFile({ filePath: jsonFileEmpty })
-    jsonizedFile.load()
-    expect(jsonizedFile.hasData()).toEqual(false)
-
-    jsonizedFile = new JsonizedFile({ filePath: jsonFileNotExists })
-    jsonizedFile.load()
-    expect(jsonizedFile.hasData()).toEqual(false)
-
-    fileUtils.removeFileSync(jsonFileNotExists)
+  it('should handle empty json file', async function () {
+    const jzf = new JsonizedFile({ filePath: jsonFileEmpty })
+    await expect(jzf.load()).resolves.toEqual(false)
   })
-  it('should create an basic JsonizedFile with simple fields', function () {
-    const jszFile1 = new JsonizedFile({ filePath: path.join(baseRoot, 'fake', 'dir') })
 
-    jszFile1.addField({
+  it('should handle not-existent json file', async function () {
+    const jzf = new JsonizedFile({ filePath: jsonFileNotExists })
+    await expect(jzf.load()).resolves.toEqual(false)
+  })
+
+  it('should create an basic JsonizedFile with simple fields', async function () {
+    const jzf = new JsonizedFile({ filePath: path.join(baseRoot, 'simple-fields.js') })
+    await expect(jzf.load()).resolves.toEqual(false)
+
+    jzf.addField({
       name: 'counter1',
       schema: { type: 'number', positive: true, integer: true },
       value: 32
     })
 
-    jszFile1.removeField('counter2')
+    jzf.removeField('counter2')
 
     expect(function () {
-      jszFile1.addField({
+      jzf.addField({
         name: 'counter1',
         schema: { type: 'string' },
         value: 'abcde'
       })
     }).toThrow('already exists')
 
-    jszFile1.addField({
+    jzf.addField({
       name: 'counter2',
       schema: { type: 'number', positive: false, integer: true },
       value: -12
     })
 
-    expect(function () { jszFile1.removeField('counter2') }).not.toThrow()
-    expect(jszFile1.get('counter2')).toEqual(undefined)
-    expect(jszFile1.getField('counter2')).toEqual(undefined)
+    expect(function () { jzf.removeField('counter2') }).not.toThrow()
+    expect(jzf.get('counter2')).toEqual(undefined)
+    expect(jzf.getField('counter2')).toEqual(undefined)
 
-    expect(jszFile1.get('counter1')).toEqual(32)
+    expect(jzf.get('counter1')).toEqual(32)
 
-    const counter1Field = jszFile1.getField('counter1')
+    const counter1Field = jzf.getField('counter1')
 
     expect(counter1Field).toBeInstanceOf(Object)
     expect(counter1Field.get()).toEqual(32)
@@ -80,22 +65,21 @@ describe('JsonizedFile class and object', function () {
       onChangeData.fieldAttr = fieldAttr
     })
 
-    jszFile1.set('counter1', 42)
+    jzf.set('counter1', 42)
     expect(onChangeData.fieldAttr.fieldName).toEqual('counter1')
     expect(onChangeData.fieldAttr.newValue).toEqual(42)
     expect(onChangeData.fieldAttr.oldValue).toEqual(32)
 
     expect(function () {
-      jszFile1.addField({
+      jzf.addField({
         name: 'counter1_wrong',
         schema: { type: 'number', positive: true, integer: true },
         value: -32
       })
     }).toThrow('numberPositive')
 
-    expect(jszFile1.get('counter1_wrong')).toEqual(undefined)
-
-    // expect(myConfig.isValid()).toEqual(false)
+    expect(jzf.get('counter1_wrong')).toEqual(undefined)
+    jzf.deleteFile()
   })
 
   it('should create an basic JsonizedFile with complex fields', function () {
