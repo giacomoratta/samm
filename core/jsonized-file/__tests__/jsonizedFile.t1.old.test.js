@@ -1,21 +1,9 @@
 const path = require('path')
-const { fileUtils } = require('../../utils/file.utils') // todo: remove
+const { fileUtils } = require('../../utils/file.utils')
 const baseRoot = path.parse(__dirname).root
 const { JsonizedFile } = require('../index')
 
-const jsonFileWrongJson = path.join(__dirname, 'test_dir', 'config_file_wrong_json')
-const jsonFileEmpty = path.join(__dirname, 'test_dir', 'config_file_empty')
-const jsonFileNotExists = path.join(__dirname, 'test_dir', 'config_file_not_exists')
-
 describe('JsonizedFile class and object', function () {
-  it('should handle files with bad json', async function () {
-    const jzf = new JsonizedFile({ filePath: jsonFileWrongJson })
-    await expect(jzf.load()).resolves.toEqual(false)
-  })
-
-
-
-
   it('should handle files with bad content', function () {
     let jsonizedFile
 

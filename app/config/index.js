@@ -215,14 +215,15 @@ const ConfigCleanData = () => {
   ConfigInstance.deleteFile()
 }
 
-const ConfigBoot = (filePath) => {
+const ConfigBoot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
   __init__(filePath)
   if (ConfigCleanDataPostponed === true) {
     ConfigCleanData()
     ConfigCleanDataPostponed = false
   }
-  if (ConfigInstance.load({ autoSave: true }) === true) {
+  if (await ConfigInstance.load() === true) {
+    await ConfigInstance.save()
     log.info('Loaded successfully')
     if (ConfigInstance.get('Platform') !== PlatformSignature) {
       log.info(`Different platform signature (current: ${PlatformSignature}). Resetting...`)

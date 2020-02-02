@@ -1,6 +1,6 @@
 const { JsonizedFileError } = require('./jsonizedFileError.class')
 const { DataField } = require('../data-field')
-const { FileButler } = require('../file-butler')
+const { JsonFileButler } = require('../file-butler')
 
 class JsonizedFile {
   constructor ({ filePath = '', prettyJson = false, orderedFields = false }) {
@@ -9,8 +9,21 @@ class JsonizedFile {
     this.options.prettyJson = prettyJson
     this.options.orderedFields = orderedFields
     this.fields = {}
-    this.fileHolder = null
     this.beforeLoadFn = null
+
+    this.fileHolder = new JsonFileButler({
+      filePath: this.filePath,
+      fileType: (this.options.prettyJson ? 'json' : 'json-compact'),
+      loadFn: (data) => {
+        if (!data) return null
+        if (this.beforeLoadFn) data = this.beforeLoadFn(data)
+        return this.fromJson(data)
+      },
+      saveFn: () => {
+        return this.toJson()
+      }
+    })
+
     this.fieldsCompareFn = function (a, b) {
       a = a.toLowerCase()
       b = b.toLowerCase()
@@ -18,11 +31,16 @@ class JsonizedFile {
     }
   }
 
-  addField ({ name, schema, value, description }) {
+  async addField ({ name, schema, value, description }) {
     if (this.fields[name]) {
       throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
-    this.fields[name] = new DataField({ name, schema, value, description })
+    try {
+      this.fields[name] = new DataField({ name, schema, value, description })
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
+    return true
   }
 
   hasField (name) {
@@ -81,7 +99,7 @@ class JsonizedFile {
     return this.fields[name].clean()
   }
 
-  toObject () {
+  toJson () {
     const finalObject = {}
     const fieldsList = Object.keys(this.fields)
     if (this.options.orderedFields === true) fieldsList.sort(this.fieldsCompareFn)
@@ -92,7 +110,7 @@ class JsonizedFile {
     return finalObject
   }
 
-  fromObject (data) {
+  fromJson (data) {
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       try {
@@ -104,56 +122,40 @@ class JsonizedFile {
     })
   }
 
-  load ({ autoSave } = {}) {
-    const options = {}
-    options.filePath = this.filePath
-    options.fileType = (this.options.prettyJson ? 'json' : 'json-compact')
-    options.loadFn = (data) => {
-      if (!data) return
-      if (this.beforeLoadFn) data = this.beforeLoadFn(data)
-      this.fromObject(data)
-    }
+  hasData () {
+    return !this.fileHolder.isEmpty
+  }
 
-    options.saveFn = () => {
-      return this.toObject()
-    }
-
+  async load () {
     try {
-      this.fileHolder = new FileButler(options)
-      this.fileHolder.load()
+      return await this.fileHolder.load()
     } catch (e) {
       throw new JsonizedFileError(e.message)
     }
+  }
 
-    if (autoSave === true) {
-      return this.save()
+  async save () {
+    try {
+      return await this.fileHolder.save()
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
     }
-    return true
   }
 
-  hasData () {
-    return this.fileHolder !== null && this.fileHolder.hasData()
-  }
-
-  save () {
-    if (!this.fileHolder) return false
-    return this.fileHolder.save()
-  }
-
-  reset () {
-    this.deleteFile()
+  async reset () {
+    await this.deleteFile()
     Object.keys(this.fields).forEach((k) => {
       this.fields[k].reset()
     })
     this.save()
   }
 
-  deleteFile () {
-    const tempFileHolder = (this.fileHolder ? this.fileHolder : new FileButler({
-      filePath: this.filePath,
-      fileType: (this.options.prettyJson ? 'json' : 'json-compact')
-    }))
-    return tempFileHolder.delete()
+  async deleteFile () {
+    try {
+      return await this.fileHolder.delete()
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
   }
 }
 
