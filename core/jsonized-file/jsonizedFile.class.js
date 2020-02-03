@@ -147,7 +147,7 @@ class JsonizedFile {
     Object.keys(this.fields).forEach((k) => {
       this.fields[k].reset()
     })
-    this.save()
+    await this.save()
   }
 
   async deleteFile () {

@@ -23,25 +23,50 @@ describe('JsonizedFile class and object', function () {
     await expect(jzf.load()).resolves.toEqual(false)
   })
 
-  it('should create an basic JsonizedFile with simple fields', async function () {
+  it('should avoid to create existent fields', async function () { })
+
+  it('should handle check and give information about fields', async function () { })
+
+  it('should handle operations with non-existent fields', async function () { })
+
+  it('should throw errors about values which do not match the schema', async function () { })
+
+  it('should handle object fields', async function () { })
+
+  it('should handle complex object fields', async function () { })
+
+  it('should handle path fields', async function () { })
+
+  it('should load a complex json file', async function () { })
+
+  it('should save a complex json file', async function () { })
+
+  it('should reset a complex json file', async function () { })
+
+  it('should delete the json file', async function () { })
+
+
+  it('should handle simple fields', async function () {
     const jzf = new JsonizedFile({ filePath: path.join(baseRoot, 'simple-fields.js') })
     await expect(jzf.load()).resolves.toEqual(false)
 
-    jzf.addField({
-      name: 'counter1',
-      schema: { type: 'number', positive: true, integer: true },
-      value: 32
-    })
+    await expect(
+      jzf.addField({
+        name: 'counter1',
+        schema: { type: 'number', positive: true, integer: true },
+        value: 32
+      })
+    ).resolves.toEqual(true)
 
-    jzf.removeField('counter2')
+    //expect(function () { jzf.removeField('counter2') }).not.toThrow()
 
-    expect(function () {
+    await expect(
       jzf.addField({
         name: 'counter1',
         schema: { type: 'string' },
         value: 'abcde'
       })
-    }).toThrow('already exists')
+    ).rejects.toThrow('already exists')
 
     jzf.addField({
       name: 'counter2',
