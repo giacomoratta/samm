@@ -16,9 +16,11 @@ const UNDEFINED_FIELD_VALUE = dataFieldUtils.UNDEFINED_FIELD_VALUE
  */
 
 class DataField {
-  constructor ({ name, schema, value, description = '' }) {
+  constructor ({ name, schema, value, description = '', validator, actions }) {
     this.name = name
     this.eventEmitter = new Events()
+    this.validator = validator
+    this.actions = actions
     this._original_data = _.cloneDeep({ schema, value, description })
     this.init(this._original_data)
   }
@@ -48,18 +50,18 @@ class DataField {
     }
 
     this.schema = { [this.name]: schema }
-    this.check = validator.compile(this.schema)
+    this.check = this.validator.compile(this.schema)
     this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
     this.tranformFn = transform.getFieldTransformFn(schema)
     this.description = dataFieldUtils.setDescription(description, schema)
 
     if (this.isDefaultValue === true) {
-      this.set(value, { overwrite: true })
+      this._setValue(value, { overwrite: true })
       this.isDefaultValue = true
       delete schema.default
       return
     }
-    this.set(value, { overwrite: true })
+    this._setValue(value, { overwrite: true })
   }
 
   getSchema () {
@@ -81,17 +83,24 @@ class DataField {
   }
 
   isUnset () {
-    // return this.value[this.name] === UNDEFINED_FIELD_VALUE
-    return this.get() === UNDEFINED_FIELD_VALUE
+    return this._getValue() === UNDEFINED_FIELD_VALUE
   }
 
-  set (value, { overwrite = false } = {}) {
+  get() {
+    return this._getValue()
+  }
+
+  set(value) {
+    return this._setValue(value)
+  }
+
+  _setValue (value, { overwrite = false } = {}) {
     if (overwrite !== true && this.schema[this.name].readOnly === true) {
       throw new DataFieldError(`Field '${this.name}' is read-only!`)
     }
     const errors = this.validate(value)
     if (errors === true) {
-      const oldValue = this.get(false)
+      const oldValue = this._getValue(false)
       const newValue = _.cloneDeep(value)
       this.value = { [this.name]: newValue }
       this.isDefaultValue = false
@@ -101,7 +110,7 @@ class DataField {
     throw new DataFieldError(errors)
   }
 
-  get (finalValue = true) {
+  _getValue (finalValue = true) {
     if (this.isDefaultValue === true || this.value[this.name] === UNDEFINED_FIELD_VALUE) {
       return UNDEFINED_FIELD_VALUE
     }

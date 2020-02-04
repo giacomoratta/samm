@@ -6,15 +6,18 @@
 
 utils = { _, file }
 
-DataFieldFactory.addFieldType(fieldType, function(validator, utils) {
-    return (value, schema) => {
+DataFieldFactory.define(fieldType, function(validator, utils) {
+    return {
+        validate: (value, schema) => { },
+        add: (field) => { },
+        remove: (field) => { },
+        clean: (field) => { },
+        get: (value) => { },
+        set: (value) => { },
     }
 })
 
-DataFieldFactory.addMessage(key,text)
+DataFieldFactory.message(key,text)
 
-DataFieldFactory.setAction(fieldType, action, function(data, utils) {
-    // allowed: add, remove, get, set, clean
-})
-
+DataFieldFactory._getValidator()
 - flag inside: validatorChanged = true
