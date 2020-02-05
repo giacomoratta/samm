@@ -20,16 +20,56 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   constructor () {
     super()
 
-    // this.message({ })
+    this.message({
+      notAnArray: 'The \'{field}\' field must be an array! Actual: {actual}',
+      noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute! Actual: {actual}',
+      invalidBasePath: 'The \'{field}\' field must have an absolute path as basePath! Actual: {actual}',
+      dirNotExists: 'Directory \'{field}\' does not exists! Actual: {actual}',
+      fileNotExists: 'File \'{field}\' does not exists! Actual: {actual}',
+      notAbsDirPath: 'Directory \'{field}\' is not an absolute path! Actual: {actual}',
+      notAbsFilePath: 'File \'{field}\' is not an absolute path! Actual: {actual}',
+      notRelDirPath: 'Directory \'{field}\' is not a relative path! Actual: {actual}',
+      notRelFilePath: 'File \'{field}\' is not a relative path! Actual: {actual}',
+      dirNotCreated: 'Directory \'{field}\' has not been created! Actual: {actual}',
+      fileNotCreated: 'File \'{field}\' has not been created! Actual: {actual}',
+      dirNotDeleted: 'Directory \'{field}\' has not been deleted! Actual: {actual}',
+      fileNotDeleted: 'File \'{field}\' has not been deleted! Actual: {actual}'
+    })
 
-    // this._defineCircularArray()
+    this._defineCircularArray()
     // this._defineRelFilePath()
     // this._defineRelDirPath()
     // this._defineAbsFilePath()
     // this._defineAbsDirPath()
   }
 
-  //_defineCircularArray() {}
+  _defineCircularArray() {
+    this.define('',function(validator) {
+      return {
+        validate: (value, schema) => {
+          if (!_.isNull(value) && !_.isArray(value)) {
+            return validator.makeError('notAnArray', null, value)
+          }
+          if (!schema.max || schema.max < 1 || !_.isInteger(schema.max)) {
+            return validator.makeError('noMaxAttribute', null, value)
+          }
+          if (value.length > schema.max) {
+            return validator.makeError('arrayMax', null, value)
+          }
+          return true
+        },
+        //add: (field) => { },
+        //remove: (field) => { },
+        //clean: (field) => { },
+        get: (value) => {
+          return value.join('---')
+        },
+        //set: (value) => { }
+      }
+    })
+  }
+
+
   //_defineRelFilePath() {}
   //_defineRelDirPath() {}
   //_defineAbsFilePath() {}

@@ -1,6 +1,6 @@
-const { _ } = require('../utils/lodash.extended')
+const { _ } = require('../../utils/lodash.extended')
 const FastestValidator = require('fastest-validator')
-const { fileUtils } = require('../utils/file.utils')
+const { fileUtils } = require('../../utils/file.utils')
 const transform = require('./transform')
 
 const validator = new FastestValidator({

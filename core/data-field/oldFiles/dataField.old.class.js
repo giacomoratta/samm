@@ -1,9 +1,9 @@
 const Events = require('events')
-const validator = require('./oldFiles/validator')
-const { DataFieldError } = require('./dataField.error')
-const transform = require('./oldFiles/transform')
-const dataFieldUtils = require('./oldFiles/utils')
-const { fileUtils } = require('../utils/file.utils')
+const validator = require('./validator')
+const { DataFieldError } = require('../dataField.error')
+const transform = require('./transform')
+const dataFieldUtils = require('./utils')
+const { fileUtils } = require('../../utils/file.utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']

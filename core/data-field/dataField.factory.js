@@ -1,34 +1,53 @@
 const _ = require('lodash')
+const FastestValidator = require('fastest-validator')
 
 class DataFieldFactory {
 
   constructor () {
-    this.validator = null
-    this.messages = { }
-    this.defines = { }
-    this.fields = { }
+    this._validator = null
+    this._messages = { }
+    this._fieldDefinitions = { }
+    this._fieldTypes = { }
   }
 
   init () {
-    // new validator
-    // add messages
-    // add fields = this.defines[fieldType](validator,{ _, fileUtils })
-    // check allowed keys in new field definition
+    this._validator = new FastestValidator({
+      messages: this._messages
+    })
+    this._fieldDefinitions.forEach((k) => {
+      this._fieldTypes[k] = this._fieldDefinitions[k](this._validator)
+    })
   }
 
-  define (fieldType, defineFn, messages) {
-    // avoid rewrite
-    // check fieldType exists
-    // this.defines[fieldType] = defineFn
+  define (fieldType, defineFn) {
+    // todo: get fastest-validator list
+    if(this._fieldDefinitions[fieldType]) {
+      throw new Error(`Field type ${fieldType} already exists!`)
+    }
+    this._fieldDefinitions[fieldType] = defineFn
   }
 
-  message () {
-    // avoid rewrite
-    // accept array or single obj
+  messages (dict) {
+    const oldDict = this._messages
+    this._messages = {
+      oldDict,
+      ...dict
+    }
+  }
+
+  ggg () {
+
   }
 
   create ({ name, schema, value, description = '' }) {
-    // return new DataField(...)
+    return new DataField({
+      name,
+      schema,
+      value,
+      description,
+      validator: this._validator,
+      actions: this._fieldTypes[k]
+    })
   }
 }
 
