@@ -1,5 +1,5 @@
 const path = require('path')
-const { DataField } = require('../dataField.class')
+const { DataFieldFactory } = require('../dataField.class')
 
 describe('DataField', function () {
 

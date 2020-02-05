@@ -14,12 +14,14 @@ class DataFieldFactory {
     // check allowed keys in new field definition
   }
 
-  define (fieldType, defineFn) {
+  define (fieldType, defineFn, messages) {
+    // avoid rewrite
     // check fieldType exists
     // this.defines[fieldType] = defineFn
   }
 
   message () {
+    // avoid rewrite
   }
 
   create ({ name, schema, value, description = '' }) {
