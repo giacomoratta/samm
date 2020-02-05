@@ -9,9 +9,10 @@
  *  3) define fields
  *  4) export as singleton (when used in project)
  *
- *  EDIT: no init, just act as singleton (new if not instance, init, etc.)!!!
  */
 
+const _ = require('lodash')
+const { fileUtils } = require('../utils/file.utils')
 const { DataFieldFactory } = require('../dataField.factory')
 
 class DataFieldBuiltInFactory extends DataFieldFactory {

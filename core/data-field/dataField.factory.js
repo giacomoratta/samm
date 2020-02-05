@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 class DataFieldFactory {
 
   constructor () {
@@ -22,6 +24,7 @@ class DataFieldFactory {
 
   message () {
     // avoid rewrite
+    // accept array or single obj
   }
 
   create ({ name, schema, value, description = '' }) {

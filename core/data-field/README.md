@@ -6,7 +6,7 @@
 
 utils = { _, file }
 
-DataFieldFactory.define(fieldType, function(validator, utils) {
+DataFieldFactory.define(fieldType, function(validator) {
     return {
         validate: (value, schema) => { },
         add: (field) => { },
