@@ -1,7 +1,7 @@
 const path = require('path')
-const { DataFieldFactory } = require('../dataField.class')
+const { DataFieldBuiltInFactory } = require('../dataFieldBuiltIn.factory')
 
-describe('DataField', function () {
+describe('DataFieldBuiltInFactory absDirPath field type', function () {
 
   it('should ...', function () { })
 
