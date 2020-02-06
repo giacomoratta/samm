@@ -51,8 +51,6 @@ describe('JsonizedFile operations with fields and json data', function () {
 })
 
 describe('JsonizedFile class and object', function () {
-
-
   it('should handle simple fields', async function () {
     const jzf = new JsonizedFile({ filePath: path.join(baseRoot, 'simple-fields.js') })
     await expect(jzf.load()).resolves.toEqual(false)
@@ -65,7 +63,7 @@ describe('JsonizedFile class and object', function () {
       })
     ).resolves.toEqual(true)
 
-    //expect(function () { jzf.removeField('counter2') }).not.toThrow()
+    // expect(function () { jzf.removeField('counter2') }).not.toThrow()
 
     await expect(
       jzf.addField({

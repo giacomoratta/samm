@@ -16,7 +16,6 @@ const { fileUtils } = require('../utils/file.utils')
 const { DataFieldFactory } = require('../dataField.factory')
 
 class DataFieldBuiltInFactory extends DataFieldFactory {
-
   constructor () {
     super()
 
@@ -43,8 +42,8 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
     // this._defineAbsDirPath()
   }
 
-  _defineCircularArray() {
-    this.define('',function(validator) {
+  _defineCircularArray () {
+    this.define('', function (validator) {
       return {
         validate: (value, schema) => {
           if (!_.isNull(value) && !_.isArray(value)) {
@@ -58,22 +57,21 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           }
           return true
         },
-        //add: (field) => { },
-        //remove: (field) => { },
-        //clean: (field) => { },
+        // add: (field) => { },
+        // remove: (field) => { },
+        // clean: (field) => { },
         get: (value) => {
           return value.join('---')
-        },
-        //set: (value) => { }
+        }
+        // set: (value) => { }
       }
     })
   }
 
-
-  //_defineRelFilePath() {}
-  //_defineRelDirPath() {}
-  //_defineAbsFilePath() {}
-  //_defineAbsDirPath() {}
+  // _defineRelFilePath() {}
+  // _defineRelDirPath() {}
+  // _defineAbsFilePath() {}
+  // _defineAbsDirPath() {}
 }
 
 module.exports = {

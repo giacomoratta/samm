@@ -86,11 +86,11 @@ class DataField {
     return this._getValue() === UNDEFINED_FIELD_VALUE
   }
 
-  get() {
+  get () {
     return this._getValue()
   }
 
-  set(value) {
+  set (value) {
     return this._setValue(value)
   }
 
