@@ -64,6 +64,35 @@ describe('DataFieldFactory', function () {
     expect(df.get()).toEqual(1000001)
   })
 
+  it('should define a simple field with custom GET', function () {
+    const dff = new DataFieldFactory()
+    dff.messages({
+      notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
+    })
+    dff.define('superInt', function (validator) {
+      return {
+        validate: (value, schema) => {
+          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
+          return true
+        },
+        get: (value) => {
+          return value*3
+        }
+      }
+    })
+    dff.initFactory()
+
+    const df = dff.create({
+      name: 'myBigInt',
+      schema: {
+        type: 'superInt'
+      },
+      value: 1000001
+    })
+
+    expect(df.get()).toEqual(3000003)
+  })
+
   it('should define a simple field and use it in array', function () {
     const dff = new DataFieldFactory()
     dff.messages({
@@ -114,7 +143,7 @@ describe('DataFieldFactory', function () {
     ])
   })
 
-  it('should define a simple field with actions and use it in array', function () {
+  it('should define a simple field with custom GET and use it in array', function () {
     const dff = new DataFieldFactory()
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
@@ -132,26 +161,11 @@ describe('DataFieldFactory', function () {
     })
     dff.initFactory()
 
-    expect(function () {
-      return dff.create({
-        name: 'myBigIntArray',
-        schema: {
-          type: 'array',
-          items: 'superInt'
-        },
-        value: [
-          1000001,
-          100002,
-          1000003
-        ]
-      })
-    }).toThrow('must be a big integer')
-
     const df = dff.create({
       name: 'myBigIntArray',
       schema: {
         type: 'array',
-        items: 'superInt'
+        items: { type: 'superInt' }
       },
       value: [
         1000001,

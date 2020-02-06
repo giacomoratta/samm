@@ -39,18 +39,59 @@ class DataFieldFactory {
     }
   }
 
-  ggg () {
 
+  __generateActionFn (schema, actionName) {
+    if (!schema || !schema.type) return
+
+    /* Custom function */
+    if(this._fieldTypes[schema.type] && this._fieldTypes[schema.type][actionName]) return this._fieldTypes[schema.type][actionName]
+
+    /* Array & items */
+    if (schema.items) {
+      const transformFn = this.__generateActionFn(schema.items, actionName)
+      if (transformFn) {
+        return function (value, schema) {
+          const newArray = []
+          value.forEach((item) => {
+            newArray.push(transformFn(item, schema.items))
+          })
+          return newArray
+        }
+      }
+      return
+    }
+
+    /* Object & props */
+    if (schema.props) {
+      const transformFnProps = {}
+      let foundPropsFn = false
+      Object.keys(schema.props).forEach((k) => {
+        transformFnProps[k] = this.__generateActionFn(schema.props[k], actionName)
+        foundPropsFn = true
+      })
+      if (!foundPropsFn) return
+      return function (value, schema) {
+        const newObject = {}
+        Object.keys(value).forEach((k) => {
+          newObject[k] = (transformFnProps[k] ? transformFnProps[k](value[k], schema.props[k]) : value[k])
+        })
+        return newObject
+      }
+      return
+    }
   }
 
   create ({ name, schema, value, description = '' }) {
+    // todo: fix schema
     return new DataField({
       name,
       schema,
       value,
       description,
       validator: this._validator,
-      actions: this._fieldTypes[name]
+      actions: {
+        get: this.__generateActionFn(schema,'get')
+      }
     })
   }
 }

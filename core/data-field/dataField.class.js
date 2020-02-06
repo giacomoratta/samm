@@ -26,7 +26,18 @@ class DataField {
     if (value === undefined && schema.default === undefined) {
       throw new DataFieldError('One of value or schema.default must be defined')
     }
+
+    this._setActionFn()
+
     this.init(this._original_data)
+  }
+
+  _setActionFn () {
+    if(this.actions.get) this.get = () => { return this.actions.get(this._getValue(), this.schema) }
+    else this.get = () => { return this._getValue() }
+
+    if(this.actions.set) this.set = (value) => { return this.actions.set(this._setValue(value), this.schema) }
+    else this.set = (value) => { return this._setValue(value) }
   }
 
   reset () {
@@ -88,13 +99,13 @@ class DataField {
     return this._getValue() === UNDEFINED_FIELD_VALUE
   }
 
-  get () {
-    return this._getValue()
-  }
-
-  set (value) {
-    return this._setValue(value)
-  }
+  // get () {
+  //   return this._getValue()
+  // }
+  //
+  // set (value) {
+  //   return this._setValue(value)
+  // }
 
   _setValue (value, overwrite) {
     if (overwrite !== true && this.schema[this.name].readOnly === true) {
