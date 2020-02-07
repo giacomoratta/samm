@@ -36,7 +36,7 @@ class DataField {
     if(this.actions.get) this.get = () => { return this.actions.get(this._getValue(), this.schema) }
     else this.get = () => { return this._getValue() }
 
-    if(this.actions.set) this.set = (value) => { return this.actions.set(this._setValue(value), this.schema) }
+    if(this.actions.set) this.set = (value) => { return this._setValue(this.actions.set(value, this.schema)) }
     else this.set = (value) => { return this._setValue(value) }
   }
 
@@ -59,6 +59,8 @@ class DataField {
     this._validate = this.validator.compile(this.schema)
     this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
     this.description = this._setDescription(description, schema)
+
+    if(this.actions.set) value = this.actions.set(value, this.schema)
 
     if (this.isDefaultValue === true) {
       this._setValue(value, true)

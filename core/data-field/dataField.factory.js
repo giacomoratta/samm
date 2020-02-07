@@ -83,6 +83,7 @@ class DataFieldFactory {
 
   create ({ name, schema, value, description = '' }) {
     // todo: fix schema
+    // todo: add fixed actions for basic types
     return new DataField({
       name,
       schema,
@@ -90,7 +91,8 @@ class DataFieldFactory {
       description,
       validator: this._validator,
       actions: {
-        get: this.__generateActionFn(schema,'get')
+        get: this.__generateActionFn(schema,'get'),
+        set: this.__generateActionFn(schema,'set')
       }
     })
   }

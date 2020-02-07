@@ -77,6 +77,9 @@ describe('DataFieldFactory', function () {
         },
         get: (value) => {
           return value*3
+        },
+        set: (value) => {
+          return value*9
         }
       }
     })
@@ -90,7 +93,7 @@ describe('DataFieldFactory', function () {
       value: 1000001
     })
 
-    expect(df.get()).toEqual(3000003)
+    expect(df.get()).toEqual(1000001*3*9)
   })
 
   it('should define a simple field and use it in array', function () {
