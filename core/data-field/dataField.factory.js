@@ -40,7 +40,7 @@ class DataFieldFactory {
   }
 
 
-  __generateActionFn (schema, actionName) {
+  __generateDeepFn (schema, actionName) {
     if (!schema || !schema.type) return
 
     /* Custom function */
@@ -48,7 +48,7 @@ class DataFieldFactory {
 
     /* Array & items */
     if (schema.items) {
-      const transformFn = this.__generateActionFn(schema.items, actionName)
+      const transformFn = this.__generateDeepFn(schema.items, actionName)
       if (transformFn) {
         return function (value, schema) {
           const newArray = []
@@ -66,7 +66,7 @@ class DataFieldFactory {
       const transformFnProps = {}
       let foundPropsFn = false
       Object.keys(schema.props).forEach((k) => {
-        transformFnProps[k] = this.__generateActionFn(schema.props[k], actionName)
+        transformFnProps[k] = this.__generateDeepFn(schema.props[k], actionName)
         foundPropsFn = true
       })
       if (!foundPropsFn) return
@@ -90,9 +90,15 @@ class DataFieldFactory {
       value,
       description,
       validator: this._validator,
-      actions: {
-        get: this.__generateActionFn(schema,'get'),
-        set: this.__generateActionFn(schema,'set')
+      modifiers: {
+        get: this.__generateDeepFn(schema,'get'),
+        set: this.__generateDeepFn(schema,'set')
+      },
+      customFn: {
+        ...this._fieldTypes[schema.type],
+        get: null,
+        set: null,
+        validate: null
       }
     })
   }

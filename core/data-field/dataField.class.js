@@ -16,28 +16,39 @@ const UNDEFINED_FIELD_VALUE = null
  */
 
 class DataField {
-  constructor ({ name, schema, value, description = '', validator, actions }) {
+  constructor ({ name, schema, value, description = '', validator, modifiers, customFn }) {
     this.name = name
     this.eventEmitter = new Events()
     this.validator = validator
-    this.actions = actions
+    this.modifiers = modifiers
+    this.fn = {}
     this._original_data = _.cloneDeep({ schema, value, description })
 
     if (value === undefined && schema.default === undefined) {
       throw new DataFieldError('One of value or schema.default must be defined')
     }
 
-    this._setActionFn()
+    this._setModifiers(modifiers)
+    this._setCustomFn(customFn)
 
     this.init(this._original_data)
   }
 
-  _setActionFn () {
-    if(this.actions.get) this.get = () => { return this.actions.get(this._getValue(), this.schema) }
+  _setModifiers (modifiers) {
+    if(modifiers.get) this.get = () => { return modifiers.get(this._getValue(), this.schema) }
     else this.get = () => { return this._getValue() }
 
-    if(this.actions.set) this.set = (value) => { return this._setValue(this.actions.set(value, this.schema)) }
+    if(modifiers.set) this.set = (value) => { return this._setValue(modifiers.set(value, this.schema)) }
     else this.set = (value) => { return this._setValue(value) }
+  }
+
+  _setCustomFn (customFn) {
+    const dataField = this
+
+    Object.keys(customFn).forEach((action) => {
+      if(!customFn[action]) return
+      this.fn[action] = function () { return customFn[action](...arguments, dataField) }
+    })
   }
 
   reset () {
@@ -60,7 +71,7 @@ class DataField {
     this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
     this.description = this._setDescription(description, schema)
 
-    if(this.actions.set) value = this.actions.set(value, this.schema)
+    if(this.modifiers.set) value = this.modifiers.set(value, this.schema)
 
     if (this.isDefaultValue === true) {
       this._setValue(value, true)
@@ -100,14 +111,6 @@ class DataField {
   isUnset () {
     return this._getValue() === UNDEFINED_FIELD_VALUE
   }
-
-  // get () {
-  //   return this._getValue()
-  // }
-  //
-  // set (value) {
-  //   return this._setValue(value)
-  // }
 
   _setValue (value, overwrite) {
     if (overwrite !== true && this.schema[this.name].readOnly === true) {
