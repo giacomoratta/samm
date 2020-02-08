@@ -40,12 +40,11 @@ class DataFieldFactory {
     }
   }
 
-
   __generateDeepFn (schema, actionName) {
     if (!schema || !schema.type) return
 
     /* Custom function */
-    if(this._fieldTypes[schema.type] && this._fieldTypes[schema.type][actionName]) return this._fieldTypes[schema.type][actionName]
+    if (this._fieldTypes[schema.type] && this._fieldTypes[schema.type][actionName]) return this._fieldTypes[schema.type][actionName]
 
     /* Array & items */
     if (schema.items) {
@@ -91,8 +90,8 @@ class DataFieldFactory {
       value,
       description,
       validator: this._validator,
-      getter: this.__generateDeepFn(schema,'get'),
-      setter: this.__generateDeepFn(schema,'set'),
+      getter: this.__generateDeepFn(schema, 'get'),
+      setter: this.__generateDeepFn(schema, 'set'),
       customFn: {
         ...customFn[schema.type],
         ...this._fieldTypes[schema.type],

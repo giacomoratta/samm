@@ -76,10 +76,10 @@ describe('DataFieldFactory', function () {
           return true
         },
         get: (value) => {
-          return value*3
+          return value * 3
         },
         set: (value) => {
-          return value*9
+          return value * 9
         },
         add: (field, v1, v2) => {
           field.rawValue = field.rawValue + v1 - v2
@@ -95,15 +95,15 @@ describe('DataFieldFactory', function () {
       },
       value: 1000001
     })
-    expect(df.rawValue).toEqual(1000001*9)
+    expect(df.rawValue).toEqual(1000001 * 9)
 
-    expect(df.get()).toEqual(1000001*3*9)
-    expect(df.rawValue).toEqual(1000001*9)
+    expect(df.get()).toEqual(1000001 * 3 * 9)
+    expect(df.rawValue).toEqual(1000001 * 9)
 
-    df.fn.add(2,3)
-    expect(df.get()).toEqual((1000001*9+2-3)*3)
+    df.fn.add(2, 3)
+    expect(df.get()).toEqual((1000001 * 9 + 2 - 3) * 3)
 
-    expect(function() { df.fn.add(-11111112,32) }).toThrow()
+    expect(function () { df.fn.add(-11111112, 32) }).toThrow()
   })
 
   it('should define a simple field and use it in array', function () {
@@ -189,24 +189,19 @@ describe('DataFieldFactory', function () {
         1000003
       ]
     })
+
     expect(df.get()).toMatchObject([
       2002000,
       2002002,
       2002004
     ])
-
     expect(function () { df.fn.add(24) }).toThrow('must be a big integer')
-
     expect(function () { df.fn.add(11111111124) }).not.toThrow()
     expect(df.get()).toMatchObject([
       2002000,
       2002002,
       2002004,
-      11111111124*2
+      11111111124 * 2
     ])
   })
-
-  it('should add messages and use them for a new field', function () { })
-
-  it('should create a new DataField', function () { })
 })

@@ -18,10 +18,9 @@ const UNDEFINED_FIELD_VALUE = null
 
 class DataField {
   constructor ({ name, schema, value, description = '', validator, getter, setter, customFn }) {
-
     /* Preliminary error check */
-    if (value === undefined && schema.default === undefined) {
-      throw new DataFieldError('One of value or schema.default must be defined')
+    if ((value === undefined && schema.default === undefined) || value === null || schema.default === null) {
+      throw new DataFieldError('One of value or schema.default must be defined and not null.')
     }
 
     /* @Public properties */
@@ -43,11 +42,11 @@ class DataField {
     this._isDefaultValue = false
 
     /* define this.get() */
-    if(this._getter) this.get = () => { return this._getter(this.rawValue, this._schema) }
-    else this.get = () => { return this.rawValue }
+    if (this._getter) this.get = () => { return this._getter(this.copyValue, this._schema) }
+    else this.get = () => { return this.copyValue }
 
     /* define this.set() */
-    if(this._setter) this.set = (value) => { return this._setValue(this._setter(value, this._schema)) }
+    if (this._setter) this.set = (value) => { return this._setValue(this._setter(value, this._schema)) }
     else this.set = (value) => { return this._setValue(value) }
 
     /* define this.fn... */
@@ -60,11 +59,12 @@ class DataField {
   get name () { return this._name }
   get description () { return this._description }
 
-  get rawValue () { return this._isDefaultValue !== true ? _.cloneDeep(this._value) : UNDEFINED_FIELD_VALUE }
+  get copyValue () { return _.cloneDeep(this.rawValue) }
+  get rawValue () { return this._isDefaultValue !== true ? this._value : UNDEFINED_FIELD_VALUE }
   set rawValue (value) { return this._setValue(value) }
 
   get unset () { return this.rawValue === UNDEFINED_FIELD_VALUE }
-  set unset (status) { if(status === true) this._value = UNDEFINED_FIELD_VALUE }
+  set unset (status) { if (status === true) this._value = UNDEFINED_FIELD_VALUE }
 
   get schema () { return _.cloneDeep(this._schema[this._name]) }
   set schema (schemaDiff) {
@@ -109,7 +109,7 @@ class DataField {
     this._value = UNDEFINED_FIELD_VALUE
     this._description = this._setDescription(description, schema)
 
-    if(this._setter) value = this._setter(value, this._schema)
+    if (this._setter) value = this._setter(value, this._schema)
 
     if (this._isDefaultValue === true) {
       this._setValue(value, true)
@@ -124,8 +124,8 @@ class DataField {
     const dataField = this
 
     Object.keys(customFn).forEach((action) => {
-      if(!customFn[action]) return
-      this.fn[action] = function () { return customFn[action](dataField,...arguments) }
+      if (!customFn[action]) return
+      this.fn[action] = function () { return customFn[action](dataField, ...arguments) }
     })
   }
 
@@ -141,6 +141,9 @@ class DataField {
   }
 
   _setValue (value, overwrite) {
+    if (value === undefined || value === null) {
+      throw new DataFieldError('value must be defined and not null.')
+    }
     if (overwrite !== true && this._schema[this._name].readOnly === true) {
       throw new DataFieldError(`Field '${this._name}' is read-only!`)
     }
@@ -155,32 +158,6 @@ class DataField {
     }
     throw new DataFieldError(errors)
   }
-
-  // add (key, value) {
-  //   let newValue
-  //   if (this._schema[this._name].type === 'array' || this._schema[this._name].type === 'circularArray') {
-  //     if (!value) {
-  //       value = key
-  //       key = null
-  //     }
-  //     newValue = dataFieldUtils.addToArray(this.get(), this._schema[this._name], key, value)
-  //   } else if (this._schema[this._name].type === 'object') {
-  //     newValue = dataFieldUtils.addToObject(this.get(), key, value, this._schema[this._name])
-  //   }
-  //   if (newValue === UNDEFINED_FIELD_VALUE) return false
-  //   return this.set(newValue)
-  // }
-  //
-  // remove (key) {
-  //   let newValue
-  //   if (this._schema[this._name].type === 'array' || this._schema[this._name].type === 'circularArray') {
-  //     newValue = dataFieldUtils.removeFromArray(this.get(), this._schema[this._name], key)
-  //   } else if (this._schema[this._name].type === 'object') {
-  //     newValue = dataFieldUtils.removeFromObject(this.get(), key, this._schema[this._name])
-  //   }
-  //   if (newValue === UNDEFINED_FIELD_VALUE) return false
-  //   return this.set(newValue)
-  // }
 
   // clean () {
   //   if (this.isUnset()) return null

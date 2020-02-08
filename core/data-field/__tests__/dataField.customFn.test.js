@@ -1,7 +1,6 @@
 const { DataFieldFactory } = require('../dataField.factory')
 
 describe('DataField.fn for standard schema types', function () {
-
   it('should manage \'array\' schema types', function () {
     const dff = new DataFieldFactory()
     dff.messages({
@@ -39,25 +38,24 @@ describe('DataField.fn for standard schema types', function () {
     expect(function () { df.fn.add(24) }).toThrow('must be a big integer')
 
     expect(function () { df.fn.add(11111111124) }).not.toThrow()
-    expect(function () { df.fn.add(100003232,2) }).not.toThrow()
+    expect(function () { df.fn.add(100003232, 2) }).not.toThrow()
     expect(df.get()).toMatchObject([
       2002000,
       2002002,
-      100003232*2,
+      100003232 * 2,
       2002004,
-      11111111124*2
+      11111111124 * 2
     ])
 
-    expect(function () { df.fn.remove(1000002+999) }).not.toThrow()
-    expect(function () { df.fn.remove(null,2) }).not.toThrow()
+    expect(function () { df.fn.remove(1000002 + 999) }).not.toThrow()
+    expect(function () { df.fn.remove(null, 2) }).not.toThrow()
     expect(function () { df.fn.remove() }).not.toThrow()
     expect(df.get()).toMatchObject([
       2002000,
-      100003232*2
-      //22222222248
+      100003232 * 2
+      // 22222222248
     ])
-
   })
 
-  //it('should add messages and use them for a new field', function () { })
+  // it('should add messages and use them for a new field', function () { })
 })
