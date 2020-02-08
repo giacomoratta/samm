@@ -3,12 +3,12 @@ const _ = require('lodash')
 const customFn = {}
 
 customFn['array'] = {}
-customFn['array'].add = function (value, index, field) {}
-customFn['array'].remove = function (value, index, field) {}
+customFn['array'].add = function (field, value, index) {}
+customFn['array'].remove = function (field, value, index) {}
 
 customFn['object'] = {}
-customFn['object'].add = function (key, value, field) {}
-customFn['object'].remove = function (key, field) {}
+customFn['object'].add = function (field, key, value) {}
+customFn['object'].remove = function (field, key) {}
 
 module.exports = {
   customFn

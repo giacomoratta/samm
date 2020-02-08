@@ -33,7 +33,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
 
     /* Print single parameter */
     if (!cliInput.getParam('values')) {
-      cliPrinter.info(Config.getField(paramName).describe()[0])
+      cliPrinter.info(Config.getField(paramName).description[0])
       cliPrinter.value(Config.get(paramName), '> current')
       return cliNext()
     }
@@ -91,7 +91,7 @@ const configDescribeParameters = ({ cliPrinter }) => {
   let currentValue = null
   ConfigParameters.forEach((configParam) => {
     cliPrinter.title(configParam)
-    const description = Config.getField(configParam).describe()
+    const description = Config.getField(configParam).description
     if (description.length > 0) {
       currentValue = Config.getField(configParam).get(false)
       cliPrinter.info(`  ${description[0]}`)

@@ -59,7 +59,7 @@ class JsonizedFile {
     let fieldsList = []
     if (writableOnly === true) {
       Object.keys(this.fields).forEach((k) => {
-        if (this.fields[k].getSchema().readOnly === true) return
+        if (this.fields[k].schema.readOnly === true) return
         fieldsList.push(k)
       })
     } else {

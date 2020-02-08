@@ -177,11 +177,11 @@ const __init__ = (filePath) => {
 
   ConfigInstance.getField('SamplesDirectory').on('change', ({ newValue }) => {
     ConfigInstance.getField('Status').add('new-scan-needed', true)
-    ConfigInstance.getField('SamplesDirectoryExclusions').changeSchema({
+    ConfigInstance.getField('SamplesDirectoryExclusions').schema = {
       items: {
         basePath: newValue
       }
-    })
+    }
   })
 
   ConfigInstance.getField('SamplesDirectoryExclusions').on('change', () => {
