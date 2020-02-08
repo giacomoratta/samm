@@ -58,10 +58,13 @@ class DataField {
   }
 
   get name () { return this._name }
-  get schema () { return this._schema[this._name] }
   get rawValue () { return this._isDefaultValue !== true ? this._value : UNDEFINED_FIELD_VALUE }
   get description () { return this._description }
 
+  get unset () { return this.rawValue === UNDEFINED_FIELD_VALUE }
+  set unset (status) { if(status === true) this._value = UNDEFINED_FIELD_VALUE }
+
+  get schema () { return this._schema[this._name] }
   set schema (schemaDiff) {
     const schema = _.cloneDeep(_.merge(this._schema[this._name], schemaDiff))
     const isDefaultValue = this._isDefaultValue
@@ -77,14 +80,6 @@ class DataField {
 
   validate (value) {
     return this._validate({ [this._name]: value })
-  }
-
-  unset () {
-    this._value = UNDEFINED_FIELD_VALUE
-  }
-
-  isUnset () {
-    return this.rawValue === UNDEFINED_FIELD_VALUE
   }
 
   on (eventName, cb) {

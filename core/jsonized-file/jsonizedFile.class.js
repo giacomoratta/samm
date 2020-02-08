@@ -86,12 +86,12 @@ class JsonizedFile {
 
   unset (name) {
     if (!this.fields[name]) return
-    return this.fields[name].unset()
+    return this.fields[name].unset = true
   }
 
   isUnset (name) {
     if (!this.fields[name]) return
-    return this.fields[name].isUnset()
+    return this.fields[name].unset
   }
 
   clean (name) {
@@ -116,7 +116,7 @@ class JsonizedFile {
       try {
         this.fields[k].set(data[k], { overwrite: true })
       } catch (e) {
-        this.fields[k].unset()
+        this.fields[k].unset = true
         throw e
       }
     })
