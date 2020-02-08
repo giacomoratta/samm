@@ -94,7 +94,8 @@ class DataFieldFactory {
       getter: this.__generateDeepFn(schema,'get'),
       setter: this.__generateDeepFn(schema,'set'),
       customFn: {
-        ...this._fieldTypes[schema.type] || customFn[schema.type],
+        ...customFn[schema.type],
+        ...this._fieldTypes[schema.type],
         get: null,
         set: null,
         validate: null

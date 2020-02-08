@@ -58,13 +58,15 @@ class DataField {
   }
 
   get name () { return this._name }
-  get rawValue () { return this._isDefaultValue !== true ? this._value : UNDEFINED_FIELD_VALUE }
   get description () { return this._description }
+
+  get rawValue () { return this._isDefaultValue !== true ? _.cloneDeep(this._value) : UNDEFINED_FIELD_VALUE }
+  set rawValue (value) { return this._setValue(value) }
 
   get unset () { return this.rawValue === UNDEFINED_FIELD_VALUE }
   set unset (status) { if(status === true) this._value = UNDEFINED_FIELD_VALUE }
 
-  get schema () { return this._schema[this._name] }
+  get schema () { return _.cloneDeep(this._schema[this._name]) }
   set schema (schemaDiff) {
     const schema = _.cloneDeep(_.merge(this._schema[this._name], schemaDiff))
     const isDefaultValue = this._isDefaultValue
