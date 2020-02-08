@@ -43,8 +43,8 @@ class DataField {
     this._isDefaultValue = false
 
     /* define this.get() */
-    if(this._getter) this.get = () => { return this._getter(this._getValue(), this._schema) }
-    else this.get = () => { return this._getValue() }
+    if(this._getter) this.get = () => { return this._getter(this.rawValue, this._schema) }
+    else this.get = () => { return this.rawValue }
 
     /* define this.set() */
     if(this._setter) this.set = (value) => { return this._setValue(this._setter(value, this._schema)) }
@@ -59,13 +59,13 @@ class DataField {
 
   get name () { return this._name }
   get schema () { return this._schema[this._name] }
-  get rawValue () { return this._schema[this._name] }
+  get rawValue () { return this._isDefaultValue !== true ? this._value : UNDEFINED_FIELD_VALUE }
   get description () { return this._description }
 
   set schema (schemaDiff) {
     const schema = _.cloneDeep(_.merge(this._schema[this._name], schemaDiff))
     const isDefaultValue = this._isDefaultValue
-    const value = this._value[this._name]
+    const value = this._value
     const description = this._description[0]
     this._init({ schema, value, description })
     this._isDefaultValue = isDefaultValue
@@ -80,11 +80,11 @@ class DataField {
   }
 
   unset () {
-    this._value = { [this._name]: UNDEFINED_FIELD_VALUE }
+    this._value = UNDEFINED_FIELD_VALUE
   }
 
   isUnset () {
-    return this._getValue() === UNDEFINED_FIELD_VALUE
+    return this.rawValue === UNDEFINED_FIELD_VALUE
   }
 
   on (eventName, cb) {
@@ -109,7 +109,7 @@ class DataField {
 
     this._schema = { [this._name]: schema }
     this._validate = this._factoryValidator.compile(this._schema)
-    this._value = { [this._name]: UNDEFINED_FIELD_VALUE }
+    this._value = UNDEFINED_FIELD_VALUE
     this._description = this._setDescription(description, schema)
 
     if(this._setter) value = this._setter(value, this._schema)
@@ -143,23 +143,15 @@ class DataField {
     return description
   }
 
-  _getValue (finalValue = true) {
-    if (this._isDefaultValue === true || this._value[this._name] === UNDEFINED_FIELD_VALUE) {
-      return UNDEFINED_FIELD_VALUE
-    }
-    if (finalValue !== false && this.tranformFn) return this.tranformFn(this._value[this._name], this._schema[this._name])
-    return this._value[this._name]
-  }
-
   _setValue (value, overwrite) {
     if (overwrite !== true && this._schema[this._name].readOnly === true) {
       throw new DataFieldError(`Field '${this._name}' is read-only!`)
     }
     const errors = this.validate(value)
     if (errors === true) {
-      const oldValue = this._getValue(false)
+      const oldValue = this.rawValue
       const newValue = _.cloneDeep(value)
-      this._value = { [this._name]: newValue }
+      this._value = newValue
       this._isDefaultValue = false
       this._eventEmitter.emit('change', { fieldName: this._name, newValue, oldValue })
       return true
