@@ -16,11 +16,12 @@ const UNDEFINED_FIELD_VALUE = null
  */
 
 class DataField {
-  constructor ({ name, schema, value, description = '', validator, modifiers, customFn }) {
+  constructor ({ name, schema, value, description = '', validator, getter, setter, customFn }) {
     this.name = name
     this.eventEmitter = new Events()
     this.validator = validator
-    this.modifiers = modifiers
+    this.getter = getter
+    this.setter = setter
     this.fn = {}
     this._original_data = _.cloneDeep({ schema, value, description })
 
@@ -28,18 +29,15 @@ class DataField {
       throw new DataFieldError('One of value or schema.default must be defined')
     }
 
-    this._setModifiers(modifiers)
+    if(this.getter) this.get = () => { return this.getter(this._getValue(), this.schema) }
+    else this.get = () => { return this._getValue() }
+
+    if(this.setter) this.set = (value) => { return this._setValue(this.setter(value, this.schema)) }
+    else this.set = (value) => { return this._setValue(value) }
+
     this._setCustomFn(customFn)
 
     this.init(this._original_data)
-  }
-
-  _setModifiers (modifiers) {
-    if(modifiers.get) this.get = () => { return modifiers.get(this._getValue(), this.schema) }
-    else this.get = () => { return this._getValue() }
-
-    if(modifiers.set) this.set = (value) => { return this._setValue(modifiers.set(value, this.schema)) }
-    else this.set = (value) => { return this._setValue(value) }
   }
 
   _setCustomFn (customFn) {
@@ -71,7 +69,7 @@ class DataField {
     this.value = { [this.name]: UNDEFINED_FIELD_VALUE }
     this.description = this._setDescription(description, schema)
 
-    if(this.modifiers.set) value = this.modifiers.set(value, this.schema)
+    if(this.setter) value = this.setter(value, this.schema)
 
     if (this.isDefaultValue === true) {
       this._setValue(value, true)

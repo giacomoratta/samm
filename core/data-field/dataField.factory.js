@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const FastestValidator = require('fastest-validator')
 const { DataField } = require('./dataField.class')
+const { customFn } = require('./dataField.customFn')
 
 class DataFieldFactory {
   constructor () {
@@ -90,12 +91,10 @@ class DataFieldFactory {
       value,
       description,
       validator: this._validator,
-      modifiers: {
-        get: this.__generateDeepFn(schema,'get'),
-        set: this.__generateDeepFn(schema,'set')
-      },
+      getter: this.__generateDeepFn(schema,'get'),
+      setter: this.__generateDeepFn(schema,'set'),
       customFn: {
-        ...this._fieldTypes[schema.type],
+        ...this._fieldTypes[schema.type] || customFn[schema.type],
         get: null,
         set: null,
         validate: null
