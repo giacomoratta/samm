@@ -51,6 +51,7 @@ class DataFieldFactory {
       const transformFn = this.__generateDeepFn(schema.items, actionName)
       if (transformFn) {
         return function (value, schema) {
+          if (_.isNil(value)) return null
           const newArray = []
           value.forEach((item) => {
             newArray.push(transformFn(item, schema.items))
@@ -71,6 +72,7 @@ class DataFieldFactory {
       })
       if (!foundPropsFn) return
       return function (value, schema) {
+        if (_.isNil(value)) return null
         const newObject = {}
         Object.keys(value).forEach((k) => {
           newObject[k] = (transformFnProps[k] ? transformFnProps[k](value[k], schema.props[k]) : value[k])

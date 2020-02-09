@@ -1,9 +1,5 @@
 const Events = require('events')
-// const validator = require('./oldFiles/validator')
 const { DataFieldError } = require('./dataField.error')
-// const transform = require('./oldFiles/transform')
-// const dataFieldUtils = require('./oldFiles/utils')
-// const { fileUtils } = require('../utils/file.utils')
 const _ = require('lodash')
 
 const ACCEPTED_EVENTS = ['change']
@@ -18,11 +14,6 @@ const UNDEFINED_FIELD_VALUE = null
 
 class DataField {
   constructor ({ name, schema, value, description = '', validator, getter, setter, customFn }) {
-    // /* Preliminary error check */
-    // if ((value === undefined && schema.default === undefined) || value === null || schema.default === null) {
-    //   throw new DataFieldError('One of value or schema.default must be defined and not null.')
-    // }
-
     /* @Public properties */
     this.get = null
     this.set = null
@@ -32,14 +23,12 @@ class DataField {
     this._name = name
     this._schema = null
     this._description = ''
-    this._value = null
+    this._value = UNDEFINED_FIELD_VALUE
     this._eventEmitter = new Events()
     this._factoryValidator = validator
     this._getter = getter
     this._setter = setter
     this._originalConfig = _.cloneDeep({ schema, value, description })
-    //this._defaultValue = null
-    //this._isDefaultValue = false
 
     /* define this.get() */
     if (this._getter) this.get = () => { return this._getter(this.copyValue, this._schema) }
@@ -60,7 +49,6 @@ class DataField {
   get description () { return this._description }
 
   get copyValue () { return _.cloneDeep(this.rawValue) }
-  //get rawValue () { return this._isDefaultValue !== true ? this._value : UNDEFINED_FIELD_VALUE }
   get rawValue () { return this._value }
   set rawValue (value) { return this._setValue(value) }
 
@@ -68,13 +56,11 @@ class DataField {
   set unset (status) { if (status === true) this._value = UNDEFINED_FIELD_VALUE }
 
   get schema () { return this._schema[this._name] }
-  set schema (schemaDiff) {
-    const schema = _.cloneDeep(_.merge(this._schema[this._name], schemaDiff))
-    //const isDefaultValue = this._isDefaultValue
+  set schema (difference) {
+    const schema = _.cloneDeep(_.merge(this._schema[this._name], difference))
     const value = this._value
     const description = this._description[0]
     this._init({ schema, value, description })
-    //this._isDefaultValue = isDefaultValue
   }
 
   reset () {
@@ -82,7 +68,7 @@ class DataField {
   }
 
   validate (value) {
-    if(_.isNil(value)) return true
+    if (value === undefined || value === null) return true
     return this._validate({ [this._name]: value })
   }
 
@@ -96,28 +82,12 @@ class DataField {
   /* @Private methods */
 
   _init ({ schema, value, description = '' }) {
-
-    //schema = _.cloneDeep(schema)
-    //this._isDefaultValue = false
-    //this._defaultValue = UNDEFINED_FIELD_VALUE
-    // if (!_.isNil(schema.default) && _.isNil(value)) {
-    //   value = schema.default
-    //   this._defaultValue = _.cloneDeep(value)
-    //   this._isDefaultValue = true
-    // }
-
     this._schema = { [this._name]: _.cloneDeep(schema) }
     this._validate = this._factoryValidator.compile(this._schema)
     this._description = this._setDescription(description, this.schema)
 
     if (this._setter) this._value = this._setter(this._value, this._schema)
 
-    // if (this._isDefaultValue === true) {
-    //   this._setValue(this._value, true)
-    //   this._isDefaultValue = true
-    //   delete schema.default
-    //   return
-    // }
     this._setValue(value, true)
   }
 
@@ -135,17 +105,15 @@ class DataField {
     if (!mainText) mainText = ' '
     description.push(mainText)
     Object.keys(schema).forEach((k) => {
-      if (k === 'default') return
-      description.push(`- ${k}: ${schema[k]} `)
+      let schemaString = schema[k]
+      if (_.isObject(schema[k]) || _.isArray(schema[k])) schemaString = JSON.stringify(schema[k])
+      description.push(`- ${k}: ${schemaString}`)
     })
     return description
   }
 
   _setValue (value, overwrite) {
-    // if (value === undefined || value === null) {
-    //   throw new DataFieldError('value must be defined and not null.')
-    // }
-    if(_.isNil(value)) {
+    if (value === undefined || value === null) {
       this.unset = true
       return true
     }
@@ -157,7 +125,6 @@ class DataField {
       const oldValue = this.rawValue
       const newValue = _.cloneDeep(value)
       this._value = newValue
-      //this._isDefaultValue = false
       this._eventEmitter.emit('change', { fieldName: this._name, newValue, oldValue })
       return true
     }

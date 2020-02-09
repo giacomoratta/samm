@@ -1,4 +1,3 @@
-const path = require('path')
 const { DataFieldFactory } = require('../dataField.factory')
 
 describe('DataField', function () {
@@ -22,13 +21,13 @@ describe('DataField', function () {
     expect(df1.unset).toEqual(true)
   })
 
-  it('should manage initial defined values', function () {
+  it('should manage initially defined values', function () {
     const dff = new DataFieldFactory()
     dff.initFactory()
 
-    const df1 = dff.create({ name: 'field', schema: { type: 'object' }, value: { x:123 } })
-    expect(df1.get()).toMatchObject({ x:123})
-    expect(df1.rawValue).toEqual({ x:123})
+    const df1 = dff.create({ name: 'field', schema: { type: 'object' }, value: { x: 123 } })
+    expect(df1.get()).toMatchObject({ x: 123 })
+    expect(df1.rawValue).toEqual({ x: 123 })
     expect(df1.unset).toEqual(false)
 
     df1.unset = true
@@ -36,86 +35,44 @@ describe('DataField', function () {
     expect(df1.rawValue).toEqual(null)
     expect(df1.unset).toEqual(true)
 
-    df1.set({ x:567 })
-    expect(df1.get()).toMatchObject({ x:567})
-    expect(df1.rawValue).toEqual({ x:567})
+    df1.set({ x: 567 })
+    expect(df1.get()).toMatchObject({ x: 567 })
+    expect(df1.rawValue).toEqual({ x: 567 })
     expect(df1.unset).toEqual(false)
   })
 
-
-  it('should avoid null or undefined values', function () {
+  it('should have a description for simple type', function () {
     const dff = new DataFieldFactory()
     dff.initFactory()
 
-    expect(function () {
-      dff.create({ name: 'field', schema: { type: 'object', default: null } })
-      return
-    }).toThrow('defined and not null')
-
-    expect(function () {
-      dff.create({ name: 'field', schema: { type: 'object' }, value: null })
-    }
-    ).toThrow('defined and not null')
-
-    expect(function () {
-      const df1 = dff.create({ name: 'field', schema: { type: 'number', default: 12 } })
-      df1.set(null)
-    }).toThrow('defined and not null')
+    const df1 = dff.create({ name: 'field1', schema: { type: 'number', min: 12 }, value: 14, description: 'my test description' })
+    expect(df1.description[0]).toEqual('my test description')
+    expect(df1.description[1]).toEqual('- type: number')
+    expect(df1.description[2]).toEqual('- min: 12')
   })
 
-  it('should manage initial value for number', function () {
+  it('should have a description for complex type', function () {
     const dff = new DataFieldFactory()
     dff.initFactory()
 
-    const df1 = dff.create({ name: 'field', schema: { type: 'number' }, value: 32 })
-    expect(df1.get()).toEqual(32)
-    expect(df1.unset).toEqual(false)
+    const df2 = dff.create({
+      name: 'field2',
+      schema: {
+        type: 'object',
+        props: {
+          name: { type: 'string' },
+          age: { type: 'number' }
+        }
+      },
+      description: 'my test big description'
+    })
 
-    df1.unset = true
-    expect(df1.unset).toEqual(true)
-
-    df1.set(543)
-    expect(df1.get()).toEqual(543)
-    expect(df1.unset).toEqual(false)
+    expect(df2.description[0]).toEqual('my test big description')
+    expect(df2.description[1]).toEqual('- type: object')
+    expect(df2.description[2]).toEqual('- props: {"name":{"type":"string"},"age":{"type":"number"}}')
   })
 
-  it('should manage default value for number', function () {
-    const dff = new DataFieldFactory()
-    dff.initFactory()
-
-    const df1 = dff.create({ name: 'field', schema: { type: 'number', default: 11 } })
-    expect(df1.get()).toEqual(null)
-    expect(df1.rawValue).toEqual(null)
-    expect(df1.unset).toEqual(true)
-  })
-
-  it('should manage initial value for object', function () {
-    const dff = new DataFieldFactory()
-    dff.initFactory()
-
-    const df1 = dff.create({ name: 'field', schema: { type: 'object' }, value: {} })
-    expect(df1.get()).toEqual({})
-    expect(df1.rawValue).toEqual({})
-    expect(df1.unset).toEqual(false)
-  })
-
-  it('should manage default value for object', function () {
-    const dff = new DataFieldFactory()
-    dff.initFactory()
-
-    const df1 = dff.create({ name: 'field', schema: { type: 'object', default: {} } })
-    expect(df1.get()).toEqual(null)
-    expect(df1.rawValue).toEqual(null)
-    expect(df1.unset).toEqual(true)
-  })
-
-  it('should ...', function () { })
-
-  it('should ...', function () { })
-
-  it('should ...', function () { })
-
-  it('should ...', function () { })
-
-  it('should ...', function () { })
+  // it('should ...', function () { })
+  // it('should ...', function () { })
+  // it('should ...', function () { })
 })
