@@ -29,18 +29,18 @@ customFn.array.remove = function (field, value, index) {
 customFn.object = {}
 customFn.object.getProp = function (field, key) {
   const obj = field.rawValue
-  if(!obj) return null
+  if (!obj) return null
   return _.cloneDeep(obj[key])
 }
 customFn.object.setProp = function (field, key, value) {
   let obj = field.copyValue
-  if(!obj) obj = {}
+  if (!obj) obj = {}
   obj[key] = value
   field.rawValue = obj
 }
 customFn.object.unsetProp = function (field, key) {
   const obj = field.copyValue
-  if(!obj) return
+  if (!obj) return
   delete obj[key]
   field.rawValue = obj
 }

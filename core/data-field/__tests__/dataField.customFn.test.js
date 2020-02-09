@@ -61,28 +61,28 @@ describe('DataField.fn for standard schema types', function () {
     const dff = new DataFieldFactory()
     dff.initFactory()
 
-    const df1 =  dff.create({ name:'field1', schema: { type: 'object', props: { name: 'string', age: 'number' } } } )
+    const df1 = dff.create({ name: 'field1', schema: { type: 'object', props: { name: 'string', age: 'number' } } })
 
     df1.set({
       name: 'test1',
       age: 12
     })
 
-    df1.fn.setProp('name','cde')
+    df1.fn.setProp('name', 'cde')
     expect(df1.rawValue).toMatchObject({
       name: 'cde',
       age: 12
     })
     expect(df1.fn.getProp('age')).toEqual(12)
 
-    df1.fn.setProp('newProp',444)
+    df1.fn.setProp('newProp', 444)
     expect(df1.rawValue).toMatchObject({
       name: 'cde',
       age: 12,
       newProp: 444
     })
 
-    expect(function(){ df1.fn.unsetProp('age') }).toThrow('field is required')
+    expect(function () { df1.fn.unsetProp('age') }).toThrow('field is required')
     df1.fn.unsetProp('newProp')
     expect(df1.rawValue).toMatchObject({
       name: 'cde',
