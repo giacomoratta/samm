@@ -79,7 +79,6 @@ class DataFieldFactory {
         })
         return newObject
       }
-      return
     }
   }
 

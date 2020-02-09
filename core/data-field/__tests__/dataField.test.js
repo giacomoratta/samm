@@ -72,6 +72,75 @@ describe('DataField', function () {
     expect(df2.description[2]).toEqual('- props: {"name":{"type":"string"},"age":{"type":"number"}}')
   })
 
+  it('should manage implicit \'type\' in schema', function () {
+    const dff = new DataFieldFactory()
+    dff.initFactory()
+
+    const df2 = dff.create({
+      name: 'field2',
+      schema: {
+        type: 'object',
+        props: {
+          name: 'string',
+          age: 'number'
+        }
+      }
+    })
+
+    expect(function () {
+      df2.set({
+        name: 'abc',
+        age: 'x'
+      })
+    }).toThrow('Invalid value')
+
+    expect(function () {
+      df2.set({
+        name: 'abc',
+        age: 12
+      })
+    }).not.toThrow()
+  })
+
+  it('should manage implicit custom \'type\' in schema', function () {
+    const dff = new DataFieldFactory()
+
+    dff.define('superInt', function (validator) {
+      return {
+        validate: (value, schema) => {
+          if (value < 1000000) return validator.makeError('number', null, value)
+          return true
+        }
+      }
+    })
+    dff.initFactory()
+
+    const df3 = dff.create({
+      name: 'field3',
+      schema: {
+        type: 'object',
+        props: {
+          name: 'string',
+          age: 'superInt'
+        }
+      }
+    })
+
+    expect(function () {
+      df3.set({
+        name: 'abc',
+        age: 1000000 - 1
+      })
+    }).toThrow('Invalid value')
+
+    expect(function () {
+      df3.set({
+        name: 'abc',
+        age: 1000000
+      })
+    }).not.toThrow('Invalid value')
+  })
+
   // it('should ...', function () { })
   // it('should ...', function () { })
   // it('should ...', function () { })
