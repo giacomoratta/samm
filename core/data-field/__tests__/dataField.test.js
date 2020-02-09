@@ -141,6 +141,25 @@ describe('DataField', function () {
     }).not.toThrow('Invalid value')
   })
 
+  it('should preserve the internal data', function () {
+    const dff = new DataFieldFactory()
+    dff.initFactory()
+
+    const df1 = dff.create({ name: 'field1', schema: 'object' })
+    const obj0 = { name: 'abc', age: 12 }
+    const obj1 = { name: 'abc', age: 12 }
+
+    df1.set(obj1)
+    expect(df1.get()).toMatchObject(obj0)
+
+    obj1.age = 21
+    expect(df1.get()).toMatchObject(obj0)
+
+    const obj2 = df1.get()
+    obj2.age = 31
+    expect(df1.get()).toMatchObject(obj0)
+  })
+
   // it('should ...', function () { })
   // it('should ...', function () { })
   // it('should ...', function () { })

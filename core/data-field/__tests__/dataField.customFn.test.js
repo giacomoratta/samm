@@ -1,7 +1,7 @@
 const { DataFieldFactory } = require('../dataField.factory')
 
 describe('DataField.fn for standard schema types', function () {
-  it('should manage \'array\' schema types', function () {
+  it('should have custom fn for \'array\' schema types', function () {
     const dff = new DataFieldFactory()
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
@@ -57,5 +57,7 @@ describe('DataField.fn for standard schema types', function () {
     ])
   })
 
-  // it('should add messages and use them for a new field', function () { })
+  it('should have custom fn for \'object\' schema types', function () {
+
+  })
 })

@@ -86,7 +86,7 @@ class DataField {
     this._validate = this._factoryValidator.compile(this._schema)
     this._description = this._setDescription(description, this.schema)
 
-    if (this._setter) this._value = this._setter(this._value, this._schema)
+    if (this._setter) value = this._setter(value, this._schema)
 
     this._setValue(value, true)
   }
