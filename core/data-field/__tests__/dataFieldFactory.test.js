@@ -204,4 +204,90 @@ describe('DataFieldFactory', function () {
       11111111124 * 2
     ])
   })
+
+  it('should define a complex object field with generated GET, SET and customFn', function () {
+    const dff = new DataFieldFactory()
+    dff.messages({
+      notKmDistance: 'The \'{field}\' field must be a big integer! Actual: {actual}'
+    })
+    dff.define('kmDistance', function (validator) {
+      return {
+        validate: (value, schema) => {
+          if (value < 1000000) return validator.makeError('notKmDistance', null, value)
+          return true
+        },
+        get: (value) => {
+          if (value > 1000) return `${value / 1000}km`
+          return `${value}km`
+        },
+        set: (value) => {
+          if (typeof value === 'string' && value.endsWith('km')) {
+            value = parseFloat(value)
+            return value * 1000
+          }
+          return value
+        }
+      }
+    })
+    dff.initFactory()
+
+    const df1 = dff.create({
+      name: 'myObj',
+      schema: {
+        type: 'object',
+        props: {
+          name: 'string',
+          info: {
+            type: 'object',
+            props: {
+              age: 'number',
+              distance: 'kmDistance'
+            }
+          }
+        }
+      }
+    })
+
+    const obj0 = {
+      name: 'abc',
+      info: {
+        age: 12,
+        distance: 1230223
+      }
+    }
+
+    df1.set(obj0)
+    expect(df1.get().info.distance).toEqual('1230.223km')
+    expect(df1.rawValue.info.distance).toEqual(1230223)
+
+    expect(df1.get()).toMatchObject({
+      name: 'abc',
+      info: {
+        age: 12,
+        distance: '1230.223km'
+      }
+    })
+    expect(df1.rawValue).toMatchObject(obj0)
+
+    const obj1 = {
+      name: 'abcd',
+      info: {
+        age: 23,
+        distance: '2540.772km'
+      }
+    }
+
+    df1.set(obj1)
+    expect(df1.get().info.distance).toEqual('2540.772km')
+    expect(df1.rawValue.info.distance).toEqual(2540772)
+
+    expect(df1.get()).toMatchObject(obj1)
+    expect(df1.rawValue).toMatchObject({
+      name: 'abcd',
+      info: {
+        age: 23,
+        distance: 2540772
+      }
+    })
+  })
 })
