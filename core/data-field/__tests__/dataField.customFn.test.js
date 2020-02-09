@@ -58,6 +58,54 @@ describe('DataField.fn for standard schema types', function () {
   })
 
   it('should have custom fn for \'object\' schema types', function () {
+    const dff = new DataFieldFactory()
+    dff.messages({
+      notKmDistance: 'The \'{field}\' field must be a big integer! Actual: {actual}'
+    })
+    dff.define('kmDistance', function (validator) {
+      return {
+        validate: (value, schema) => {
+          if (value < 1000000) return validator.makeError('notKmDistance', null, value)
+          return true
+        },
+        get: (value) => {
+          if (value > 1000) return `${value / 1000}km`
+          return `${value}km`
+        },
+        set: (value) => {
+          if (typeof value === 'string' || value.endsWith('km')) value = parseInt(value)
+          if (value < 1000) return value * 1000
+          return value
+        }
+      }
+    })
+    dff.initFactory()
 
+    const df1 = dff.create({
+      name: 'myObj',
+      schema: {
+        type: 'object',
+        props: {
+          name: 'string',
+          info: {
+            type: 'object',
+            props: {
+              age: 'number',
+              distance: 'kmDistance'
+            }
+          }
+        }
+      }
+    })
+
+    const obj0 = {
+      name: 'abc',
+      info: {
+        age: 12,
+        distance: 1230223
+      }
+    }
+
+    df1.set(obj0)
   })
 })

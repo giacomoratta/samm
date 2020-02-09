@@ -158,6 +158,10 @@ describe('DataField', function () {
     const obj2 = df1.get()
     obj2.age = 31
     expect(df1.get()).toMatchObject(obj0)
+
+    const obj3 = df1.rawValue
+    obj3.age = 31
+    expect(df1.get()).toMatchObject(obj3)
   })
 
   // it('should ...', function () { })

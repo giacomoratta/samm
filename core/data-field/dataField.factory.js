@@ -68,7 +68,7 @@ class DataFieldFactory {
       let foundPropsFn = false
       Object.keys(schema.props).forEach((k) => {
         transformFnProps[k] = this.__generateDeepFn(schema.props[k], actionName)
-        foundPropsFn = true
+        if (transformFnProps[k]) foundPropsFn = true
       })
       if (!foundPropsFn) return
       return function (value, schema) {
