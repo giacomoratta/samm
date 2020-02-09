@@ -41,6 +41,7 @@ class DataFieldFactory {
   }
 
   __generateDeepFn (schema, actionName) {
+    if (typeof schema === 'string') schema = { type: schema }
     if (!schema || !schema.type) return
 
     /* Custom function */

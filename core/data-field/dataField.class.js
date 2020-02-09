@@ -31,11 +31,11 @@ class DataField {
     this._originalConfig = _.cloneDeep({ schema, value, description })
 
     /* define this.get() */
-    if (this._getter) this.get = () => { return this._getter(this.copyValue, this._schema) }
+    if (this._getter) this.get = () => { return this._getter(this.copyValue, this.schema) }
     else this.get = () => { return this.copyValue }
 
     /* define this.set() */
-    if (this._setter) this.set = (value) => { return this._setValue(this._setter(value, this._schema)) }
+    if (this._setter) this.set = (value) => { return this._setValue(this._setter(value, this.schema)) }
     else this.set = (value) => { return this._setValue(value) }
 
     /* define this.fn... */
