@@ -42,13 +42,13 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
   _defineQueue () {
     const queryPop = function (queueType, queueSchema, fieldValue) {
-      if(fieldValue.length === 0) return null
+      if (fieldValue.length === 0) return null
       let removed
-      if(queueType === 'FIFO') {
+      if (queueType === 'FIFO') {
         removed = fieldValue[0]
-        fieldValue.splice(0,1)
+        fieldValue.splice(0, 1)
       } else {
-        removed = fieldValue[queueSchema.max-1]
+        removed = fieldValue[queueSchema.max - 1]
         fieldValue.pop()
       }
       return removed
@@ -63,7 +63,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!schema.max || schema.max < 1 || !_.isInteger(schema.max)) {
             return validator.makeError('noMaxAttribute', null, value)
           }
-          if (schema.queue === undefined || ['FIFO','LIFO'].indexOf(schema.queue) === -1) {
+          if (schema.queue === undefined || ['FIFO', 'LIFO'].indexOf(schema.queue) === -1) {
             return validator.makeError('invalidQueueType', null, value)
           }
           if (value.length > schema.max) {
@@ -87,7 +87,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           const queueSchema = field.schema
           const queueType = queueSchema.type || 'FIFO'
           const fieldValue = field.rawValue
-          let removed = queryPop(queueType, queueSchema, fieldValue)
+          const removed = queryPop(queueType, queueSchema, fieldValue)
           field.rawValue = fieldValue
           return removed
         }
@@ -95,7 +95,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
     })
   }
 
-  _definePathFields() {
+  _definePathFields () {
     const checkAbsDirPath = function (value, schema, validator) {
       if (schema.default) return true
       const dirExists = fileUtils.directoryExistsSync(value)

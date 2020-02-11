@@ -4,7 +4,7 @@ const { SampleInfo } = require('./../sample/sampleInfo.class')
 
 class BookmarksJsonFile extends JsonizedFile {
   constructor (filePath) {
-    super({ filePath, prettyJson: true, orderedFields: true })
+    super({ filePath, prettyJson: true, sortedFields: true })
 
     // create fields dynamically
     this.beforeLoadFn = (data) => {

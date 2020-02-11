@@ -1,5 +1,6 @@
-const { JsonizedFileError } = require('./jsonizedFileError.class')
-const { JsonFileButler } = require('../file-butler')
+const { JsonizedFileError } = require('../jsonizedFileError.class')
+const { DataField } = require('../../data-field')
+const { JsonFileButler } = require('../../file-butler')
 
 class JsonizedFile {
   constructor ({ filePath = '', prettyJson = false, sortedFields = false }) {
@@ -30,11 +31,15 @@ class JsonizedFile {
     }
   }
 
-  addField (dataField) {
+  async addField ({ name, schema, value, description }) {
     if (this.fields[name]) {
       throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
-    this.fields[name] = dataField
+    try {
+      this.fields[name] = new DataField({ name, schema, value, description })
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
     return true
   }
 
@@ -45,17 +50,6 @@ class JsonizedFile {
   getField (name) {
     return this.fields[name]
   }
-
-  /*
-
-  field(fieldData) {
-    if(fieldData) {
-      if (this.fields[name]) {
-        throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
-      }
-    }
-  }
-  * */
 
   getFieldsCount () {
     return Object.keys(this.fields).length
