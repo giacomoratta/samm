@@ -23,14 +23,14 @@ class JsonizedFile {
       }
     })
 
-    this.fieldNameCompareFn = function (a, b) {
+    this._fieldNameCompareFn = function (a, b) {
       a = a.toLowerCase()
       b = b.toLowerCase()
       return a.localeCompare(b)
     }
   }
 
-  addField (dataField) {
+  add (dataField) {
     if (this.fields[name]) {
       throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
     }
@@ -38,30 +38,19 @@ class JsonizedFile {
     return true
   }
 
-  hasField (name) {
+  has (name) {
     return (this.fields[name] !== null && this.fields[name] !== undefined)
   }
 
-  getField (name) {
+  field (name) {
     return this.fields[name]
   }
 
-  /*
-
-  field(fieldData) {
-    if(fieldData) {
-      if (this.fields[name]) {
-        throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
-      }
-    }
-  }
-  * */
-
-  getFieldsCount () {
+  fieldsCount () {
     return Object.keys(this.fields).length
   }
 
-  getFieldsList ({ writableOnly = false } = {}) {
+  fieldsList ({ writableOnly = false } = {}) {
     let fieldsList = []
     if (writableOnly === true) {
       Object.keys(this.fields).forEach((k) => {
@@ -71,44 +60,19 @@ class JsonizedFile {
     } else {
       fieldsList = Object.keys(this.fields)
     }
-    if (this.options.sortedFields === true) fieldsList.sort(this.fieldNameCompareFn)
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
     return fieldsList
   }
 
-  removeField (name) {
+  remove (name) {
     delete this.fields[name]
     return true
-  }
-
-  get (name) {
-    if (!this.fields[name]) return
-    return this.fields[name].get()
-  }
-
-  set (name, value) {
-    if (!this.fields[name]) return null
-    return this.fields[name].set(value)
-  }
-
-  unset (name) {
-    if (!this.fields[name]) return
-    return this.fields[name].unset = true
-  }
-
-  isUnset (name) {
-    if (!this.fields[name]) return
-    return this.fields[name].unset
-  }
-
-  clean (name) {
-    if (!this.fields[name]) return
-    return this.fields[name].clean()
   }
 
   toJson () {
     const finalObject = {}
     const fieldsList = Object.keys(this.fields)
-    if (this.options.sortedFields === true) fieldsList.sort(this.fieldNameCompareFn)
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
     fieldsList.forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
       if (finalObject[k] === null) delete finalObject[k]
@@ -120,7 +84,7 @@ class JsonizedFile {
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       try {
-        this.fields[k].set(data[k], { overwrite: true })
+        this.fields[k].rawValue = data[k]
       } catch (e) {
         this.fields[k].unset = true
         throw e

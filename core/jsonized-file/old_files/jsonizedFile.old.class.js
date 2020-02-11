@@ -24,7 +24,7 @@ class JsonizedFile {
       }
     })
 
-    this.fieldNameCompareFn = function (a, b) {
+    this._fieldNameCompareFn = function (a, b) {
       a = a.toLowerCase()
       b = b.toLowerCase()
       return a.localeCompare(b)
@@ -65,7 +65,7 @@ class JsonizedFile {
     } else {
       fieldsList = Object.keys(this.fields)
     }
-    if (this.options.sortedFields === true) fieldsList.sort(this.fieldNameCompareFn)
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
     return fieldsList
   }
 
@@ -102,7 +102,7 @@ class JsonizedFile {
   toJson () {
     const finalObject = {}
     const fieldsList = Object.keys(this.fields)
-    if (this.options.sortedFields === true) fieldsList.sort(this.fieldNameCompareFn)
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
     fieldsList.forEach((k) => {
       finalObject[k] = this.fields[k].get(false)
       if (finalObject[k] === null) delete finalObject[k]

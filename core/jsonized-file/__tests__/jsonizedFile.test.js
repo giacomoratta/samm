@@ -33,19 +33,20 @@ describe('JsonizedFile operations with files', function () {
 })
 
 describe('JsonizedFile operations with fields and json data', function () {
-  it('should handle simple fields', async function () { })
 
-  it('should avoid to create existent fields', async function () { })
+  beforeAll(function() {
+    // add, remove, etc. many fields
+  })
+
+  it('should perform basic operations with fields', async function () { })
 
   it('should handle check and give information about fields', async function () { })
 
+  it('should avoid to create existent fields', async function () { })
+
   it('should handle operations with non-existent fields', async function () { })
 
-  it('should throw errors about values which do not match the schema', async function () { })
+  it('should ...files', async function () { })
 
-  it('should handle object fields', async function () { })
 
-  it('should handle complex object fields', async function () { })
-
-  it('should handle path fields', async function () { })
 })

@@ -82,7 +82,7 @@ describe('DataFieldFactory', function () {
           return value * 9
         },
         add: (field, v1, v2) => {
-          field.rawValueRef = field.rawValueRef + v1 - v2
+          field.rawValue = field.rawValueRef + v1 - v2
         }
       }
     })

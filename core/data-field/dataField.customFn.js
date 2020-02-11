@@ -8,7 +8,7 @@ customFn.array.add = function (field, value, index) {
   if (index === undefined) array.push(value)
   else if (index === 0) array.unshift(value)
   else array.splice(Math.min(index, array.length), 0, value)
-  field.rawValueRef = array
+  field.rawValue = array
 }
 customFn.array.remove = function (field, value, index) {
   const array = field.rawValueRefalue
@@ -23,7 +23,7 @@ customFn.array.remove = function (field, value, index) {
   } else {
     array.pop()
   }
-  field.rawValueRef = array
+  field.rawValue = array
 }
 
 customFn.object = {}
@@ -36,13 +36,13 @@ customFn.object.setProp = function (field, key, value) {
   let obj = field.rawValue
   if (!obj) obj = {}
   obj[key] = value
-  field.rawValueRef = obj
+  field.rawValue = obj
 }
 customFn.object.unsetProp = function (field, key) {
   const obj = field.rawValue
   if (!obj) return
   delete obj[key]
-  field.rawValueRef = obj
+  field.rawValue = obj
 }
 
 module.exports = {

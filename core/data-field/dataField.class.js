@@ -13,7 +13,7 @@ const UNDEFINED_FIELD_VALUE = null
  */
 
 class DataField {
-  constructor ({ name, schema, value, description = '', validator, getter, setter, customFn }) {
+  constructor ({ name, schema, value, description = '', validator, getter, setter, cleaner, customFn }) {
     /* @Public properties */
     this.get = null
     this.set = null
@@ -28,6 +28,7 @@ class DataField {
     this._factoryValidator = validator
     this._getter = getter
     this._setter = setter
+    this._cleaner = cleaner
     this._originalConfig = _.cloneDeep({ schema, value, description })
 
     /* define this.get() */
@@ -37,6 +38,10 @@ class DataField {
     /* define this.set() */
     if (this._setter) this.set = (value) => { return this._setValue(this._setter(value, this.schema)) }
     else this.set = (value) => { return this._setValue(value) }
+
+    /* define this.clean() */
+    if (this._cleaner) this.clean = () => { return this._cleaner(value, this.schema) }
+    else this.clean = () => { }
 
     /* define this.fn... */
     this._setCustomFn(customFn)
@@ -49,8 +54,8 @@ class DataField {
   get description () { return this._description }
 
   get rawValue () { return _.cloneDeep(this.rawValueRef) }
+  set rawValue (value) { return this._setValue(value, true) }
   get rawValueRef () { return this._value }
-  set rawValueRef (value) { return this._setValue(value) }
 
   get unset () { return this.rawValueRef === UNDEFINED_FIELD_VALUE }
   set unset (status) { if (status === true) this._value = UNDEFINED_FIELD_VALUE }
@@ -64,6 +69,7 @@ class DataField {
   }
 
   reset () {
+    this.clean()
     this._init(this._originalConfig)
   }
 
