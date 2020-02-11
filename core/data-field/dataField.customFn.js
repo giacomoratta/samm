@@ -4,14 +4,14 @@ const customFn = {}
 
 customFn.array = {}
 customFn.array.add = function (field, value, index) {
-  const array = field.copyValue
+  const array = field.rawValueRefalue
   if (index === undefined) array.push(value)
   else if (index === 0) array.unshift(value)
   else array.splice(Math.min(index, array.length), 0, value)
-  field.rawValue = array
+  field.rawValueRef = array
 }
 customFn.array.remove = function (field, value, index) {
-  const array = field.copyValue
+  const array = field.rawValueRefalue
   if (array.length === 0) return
   if (value) {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -23,26 +23,26 @@ customFn.array.remove = function (field, value, index) {
   } else {
     array.pop()
   }
-  field.rawValue = array
+  field.rawValueRef = array
 }
 
 customFn.object = {}
 customFn.object.getProp = function (field, key) {
-  const obj = field.rawValue
+  const obj = field.rawValueRef
   if (!obj) return null
   return _.cloneDeep(obj[key])
 }
 customFn.object.setProp = function (field, key, value) {
-  let obj = field.copyValue
+  let obj = field.rawValue
   if (!obj) obj = {}
   obj[key] = value
-  field.rawValue = obj
+  field.rawValueRef = obj
 }
 customFn.object.unsetProp = function (field, key) {
-  const obj = field.copyValue
+  const obj = field.rawValue
   if (!obj) return
   delete obj[key]
-  field.rawValue = obj
+  field.rawValueRef = obj
 }
 
 module.exports = {

@@ -7,17 +7,17 @@ describe('DataField', function () {
 
     const df1 = dff.create({ name: 'field', schema: { type: 'object' } })
     expect(df1.get()).toEqual(null)
-    expect(df1.rawValue).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
 
     df1.set({})
     expect(df1.get()).toEqual({})
-    expect(df1.rawValue).toEqual({})
+    expect(df1.rawValueRef).toEqual({})
     expect(df1.unset).toEqual(false)
 
     df1.unset = true
     expect(df1.get()).toEqual(null)
-    expect(df1.rawValue).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
   })
 
@@ -27,17 +27,17 @@ describe('DataField', function () {
 
     const df1 = dff.create({ name: 'field', schema: { type: 'object' }, value: { x: 123 } })
     expect(df1.get()).toMatchObject({ x: 123 })
-    expect(df1.rawValue).toEqual({ x: 123 })
+    expect(df1.rawValueRef).toEqual({ x: 123 })
     expect(df1.unset).toEqual(false)
 
     df1.unset = true
     expect(df1.get()).toEqual(null)
-    expect(df1.rawValue).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
 
     df1.set({ x: 567 })
     expect(df1.get()).toMatchObject({ x: 567 })
-    expect(df1.rawValue).toEqual({ x: 567 })
+    expect(df1.rawValueRef).toEqual({ x: 567 })
     expect(df1.unset).toEqual(false)
   })
 
@@ -159,7 +159,7 @@ describe('DataField', function () {
     obj2.age = 31
     expect(df1.get()).toMatchObject(obj0)
 
-    const obj3 = df1.rawValue
+    const obj3 = df1.rawValueRef
     obj3.age = 31
     expect(df1.get()).toMatchObject(obj3)
   })

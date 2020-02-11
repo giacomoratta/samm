@@ -82,7 +82,7 @@ describe('DataFieldFactory', function () {
           return value * 9
         },
         add: (field, v1, v2) => {
-          field.rawValue = field.rawValue + v1 - v2
+          field.rawValueRef = field.rawValueRef + v1 - v2
         }
       }
     })
@@ -95,10 +95,10 @@ describe('DataFieldFactory', function () {
       },
       value: 1000001
     })
-    expect(df.rawValue).toEqual(1000001 * 9)
+    expect(df.rawValueRef).toEqual(1000001 * 9)
 
     expect(df.get()).toEqual(1000001 * 3 * 9)
-    expect(df.rawValue).toEqual(1000001 * 9)
+    expect(df.rawValueRef).toEqual(1000001 * 9)
 
     df.fn.add(2, 3)
     expect(df.get()).toEqual((1000001 * 9 + 2 - 3) * 3)
@@ -258,7 +258,7 @@ describe('DataFieldFactory', function () {
 
     df1.set(obj0)
     expect(df1.get().info.distance).toEqual('1230.223km')
-    expect(df1.rawValue.info.distance).toEqual(1230223)
+    expect(df1.rawValueRef.info.distance).toEqual(1230223)
 
     expect(df1.get()).toMatchObject({
       name: 'abc',
@@ -267,7 +267,7 @@ describe('DataFieldFactory', function () {
         distance: '1230.223km'
       }
     })
-    expect(df1.rawValue).toMatchObject(obj0)
+    expect(df1.rawValueRef).toMatchObject(obj0)
 
     const obj1 = {
       name: 'abcd',
@@ -279,10 +279,10 @@ describe('DataFieldFactory', function () {
 
     df1.set(obj1)
     expect(df1.get().info.distance).toEqual('2540.772km')
-    expect(df1.rawValue.info.distance).toEqual(2540772)
+    expect(df1.rawValueRef.info.distance).toEqual(2540772)
 
     expect(df1.get()).toMatchObject(obj1)
-    expect(df1.rawValue).toMatchObject({
+    expect(df1.rawValueRef).toMatchObject({
       name: 'abcd',
       info: {
         age: 23,

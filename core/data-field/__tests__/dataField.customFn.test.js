@@ -69,14 +69,14 @@ describe('DataField.fn for standard schema types', function () {
     })
 
     df1.fn.setProp('name', 'cde')
-    expect(df1.rawValue).toMatchObject({
+    expect(df1.rawValueRef).toMatchObject({
       name: 'cde',
       age: 12
     })
     expect(df1.fn.getProp('age')).toEqual(12)
 
     df1.fn.setProp('newProp', 444)
-    expect(df1.rawValue).toMatchObject({
+    expect(df1.rawValueRef).toMatchObject({
       name: 'cde',
       age: 12,
       newProp: 444
@@ -84,7 +84,7 @@ describe('DataField.fn for standard schema types', function () {
 
     expect(function () { df1.fn.unsetProp('age') }).toThrow('field is required')
     df1.fn.unsetProp('newProp')
-    expect(df1.rawValue).toMatchObject({
+    expect(df1.rawValueRef).toMatchObject({
       name: 'cde',
       age: 12
     })

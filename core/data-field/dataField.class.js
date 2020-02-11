@@ -31,8 +31,8 @@ class DataField {
     this._originalConfig = _.cloneDeep({ schema, value, description })
 
     /* define this.get() */
-    if (this._getter) this.get = () => { return this._getter(this.copyValue, this.schema) }
-    else this.get = () => { return this.copyValue }
+    if (this._getter) this.get = () => { return this._getter(this.rawValue, this.schema) }
+    else this.get = () => { return this.rawValue }
 
     /* define this.set() */
     if (this._setter) this.set = (value) => { return this._setValue(this._setter(value, this.schema)) }
@@ -48,11 +48,11 @@ class DataField {
   get name () { return this._name }
   get description () { return this._description }
 
-  get copyValue () { return _.cloneDeep(this.rawValue) }
-  get rawValue () { return this._value }
-  set rawValue (value) { return this._setValue(value) }
+  get rawValue () { return _.cloneDeep(this.rawValueRef) }
+  get rawValueRef () { return this._value }
+  set rawValueRef (value) { return this._setValue(value) }
 
-  get unset () { return this.rawValue === UNDEFINED_FIELD_VALUE }
+  get unset () { return this.rawValueRef === UNDEFINED_FIELD_VALUE }
   set unset (status) { if (status === true) this._value = UNDEFINED_FIELD_VALUE }
 
   get schema () { return this._schema[this._name] }
@@ -122,7 +122,7 @@ class DataField {
     }
     const errors = this.validate(value)
     if (errors === true) {
-      const oldValue = this.rawValue
+      const oldValue = this.rawValueRef
       const newValue = _.cloneDeep(value)
       this._value = newValue
       this._eventEmitter.emit('change', { fieldName: this._name, newValue, oldValue })
