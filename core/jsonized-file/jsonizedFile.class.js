@@ -120,8 +120,12 @@ class JsonizedFile {
     await this.save()
   }
 
-  async deleteFile () {
+  async clean () {
     try {
+      const keys = Object.keys(this.fields)
+      for(let i=0; i<keys.length; i++) {
+        await this.fields[keys[i]].clean()
+      }
       return await this.fileHolder.delete()
     } catch (e) {
       throw new JsonizedFileError(e.message)

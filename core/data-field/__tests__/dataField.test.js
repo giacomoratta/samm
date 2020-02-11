@@ -72,7 +72,7 @@ describe('DataField', function () {
     expect(df2.description[2]).toEqual('- props: {"name":{"type":"string"},"age":{"type":"number"}}')
   })
 
-  it('should manage implicit \'type\' in schema', function () {
+  it('should manage implicit type in schema', function () {
     const dff = new DataFieldFactory()
     dff.initFactory()
 
@@ -102,7 +102,7 @@ describe('DataField', function () {
     }).not.toThrow()
   })
 
-  it('should manage implicit custom \'type\' in schema', function () {
+  it('should manage implicit custom type in schema', function () {
     const dff = new DataFieldFactory()
 
     dff.define('superInt', function (validator) {
@@ -164,7 +164,7 @@ describe('DataField', function () {
     expect(df1.get()).toMatchObject(obj3)
   })
 
-  // it('should ...', function () { })
-  // it('should ...', function () { })
-  // it('should ...', function () { })
+  it('should define clean method', function() { })
+
+  it('should support read-only schema property', function() { })
 })
