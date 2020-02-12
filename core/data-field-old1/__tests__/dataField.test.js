@@ -6,18 +6,18 @@ describe('DataField', function () {
     dff.initFactory()
 
     const df1 = dff.create({ name: 'field', schema: { type: 'object' } })
-    expect(df1.value).toEqual(null)
-    expect(df1.valueRef).toEqual(null)
+    expect(df1.get()).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
 
-    df1.value = {}
-    expect(df1.value).toEqual({})
-    expect(df1.valueRef).toEqual({})
+    df1.set({})
+    expect(df1.get()).toEqual({})
+    expect(df1.rawValueRef).toEqual({})
     expect(df1.unset).toEqual(false)
 
     df1.unset = true
-    expect(df1.value).toEqual(null)
-    expect(df1.valueRef).toEqual(null)
+    expect(df1.get()).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
   })
 
@@ -26,18 +26,18 @@ describe('DataField', function () {
     dff.initFactory()
 
     const df1 = dff.create({ name: 'field', schema: { type: 'object' }, value: { x: 123 } })
-    expect(df1.value).toMatchObject({ x: 123 })
-    expect(df1.valueRef).toEqual({ x: 123 })
+    expect(df1.get()).toMatchObject({ x: 123 })
+    expect(df1.rawValueRef).toEqual({ x: 123 })
     expect(df1.unset).toEqual(false)
 
     df1.unset = true
-    expect(df1.value).toEqual(null)
-    expect(df1.valueRef).toEqual(null)
+    expect(df1.get()).toEqual(null)
+    expect(df1.rawValueRef).toEqual(null)
     expect(df1.unset).toEqual(true)
 
-    df1.value = { x: 567 }
-    expect(df1.value).toMatchObject({ x: 567 })
-    expect(df1.valueRef).toEqual({ x: 567 })
+    df1.set({ x: 567 })
+    expect(df1.get()).toMatchObject({ x: 567 })
+    expect(df1.rawValueRef).toEqual({ x: 567 })
     expect(df1.unset).toEqual(false)
   })
 
@@ -88,17 +88,17 @@ describe('DataField', function () {
     })
 
     expect(function () {
-      df2.value = {
+      df2.set({
         name: 'abc',
         age: 'x'
-      }
+      })
     }).toThrow('Invalid value')
 
     expect(function () {
-      df2.value = {
+      df2.set({
         name: 'abc',
         age: 12
-      }
+      })
     }).not.toThrow()
   })
 
@@ -127,17 +127,17 @@ describe('DataField', function () {
     })
 
     expect(function () {
-      df3.value = {
+      df3.set({
         name: 'abc',
         age: 1000000 - 1
-      }
+      })
     }).toThrow('Invalid value')
 
     expect(function () {
-      df3.value = {
+      df3.set({
         name: 'abc',
         age: 1000000
-      }
+      })
     }).not.toThrow('Invalid value')
   })
 
@@ -149,19 +149,19 @@ describe('DataField', function () {
     const obj0 = { name: 'abc', age: 12 }
     const obj1 = { name: 'abc', age: 12 }
 
-    df1.value = obj1
-    expect(df1.value).toMatchObject(obj0)
+    df1.set(obj1)
+    expect(df1.get()).toMatchObject(obj0)
 
     obj1.age = 21
-    expect(df1.value).toMatchObject(obj0)
+    expect(df1.get()).toMatchObject(obj0)
 
-    const obj2 = df1.value
+    const obj2 = df1.get()
     obj2.age = 31
-    expect(df1.value).toMatchObject(obj0)
+    expect(df1.get()).toMatchObject(obj0)
 
-    const obj3 = df1.valueRef
+    const obj3 = df1.rawValueRef
     obj3.age = 31
-    expect(df1.value).toMatchObject(obj3)
+    expect(df1.get()).toMatchObject(obj3)
   })
 
   it('should define clean method', function () { })

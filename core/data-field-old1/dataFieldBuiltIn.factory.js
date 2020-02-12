@@ -63,7 +63,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!schema.max || schema.max < 1 || !_.isInteger(schema.max)) {
             return validator.makeError('noMaxAttribute', null, value)
           }
-          if (schema.queueType === undefined || ['FIFO', 'LIFO'].indexOf(schema.queueType) === -1) {
+          if (schema.queue === undefined || ['FIFO', 'LIFO'].indexOf(schema.queue) === -1) {
             return validator.makeError('invalidQueueType', null, value)
           }
           if (value.length > schema.max) {
@@ -74,21 +74,21 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
         push: (field, value) => {
           const queueSchema = field.schema
           const queueType = queueSchema.type || 'FIFO'
-          const fieldValue = field.value
+          const fieldValue = field.rawValue
           let removed = null
           if (fieldValue.length >= queueSchema.max) {
             removed = queryPop(queueType, queueSchema, fieldValue)
           }
           fieldValue.push(value)
-          field.value = fieldValue
+          field.rawValue = fieldValue
           return removed
         },
         pop: (field) => {
           const queueSchema = field.schema
           const queueType = queueSchema.type || 'FIFO'
-          const fieldValue = field.value
+          const fieldValue = field.rawValue
           const removed = queryPop(queueType, queueSchema, fieldValue)
-          field.value = fieldValue
+          field.rawValue = fieldValue
           return removed
         }
       }
@@ -165,7 +165,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           value = relativePathTransform(value, schema)
           return checkAbsDirPath(value, schema)
         },
-        toAbsolute: relativePathTransform
+        get: relativePathTransform
       }
     })
 
@@ -181,7 +181,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           value = relativePathTransform(value, schema)
           return checkAbsFilePath(value, schema)
         },
-        toAbsolute: relativePathTransform
+        get: relativePathTransform
       }
     })
   }

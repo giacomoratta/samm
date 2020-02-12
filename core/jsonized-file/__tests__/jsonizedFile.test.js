@@ -7,8 +7,7 @@ const jsonFileEmpty = path.join(__dirname, 'test_dir', 'config_file_empty')
 const jsonFileNotExists = path.join(__dirname, 'test_dir', 'config_file_not_exists')
 
 describe('JsonizedFile operations with fields and json data', function () {
-
-  beforeAll(function() {
+  beforeAll(function () {
     // add, remove, etc. many fields
   })
 

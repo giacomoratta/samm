@@ -123,7 +123,7 @@ class JsonizedFile {
   async clean () {
     try {
       const keys = Object.keys(this.fields)
-      for(let i=0; i<keys.length; i++) {
+      for (let i = 0; i < keys.length; i++) {
         await this.fields[keys[i]].clean()
       }
       return await this.fileHolder.delete()
