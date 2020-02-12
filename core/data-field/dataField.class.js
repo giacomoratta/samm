@@ -37,7 +37,6 @@ class DataField {
   get name () { return this._name }
   get description () { return this._description }
 
-  // todo: support functions cloning
   get value () { return _.cloneDeep(this.valueRef) }
   set value (value) { return this._setValue(_.cloneDeep(value), false) }
 

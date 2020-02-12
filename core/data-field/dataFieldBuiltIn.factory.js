@@ -6,20 +6,20 @@
  *
  *  1) extends the a DataFieldFactory class
  *  2) declare messages
- *  3) define fields
+ *  3) define fields (with new validators or custom functions)
  *  4) export as singleton (when used in project)
  *
  */
 
 const _ = require('lodash')
 const { fileUtils } = require('../utils/file.utils')
-const { DataFieldFactory } = require('../dataField.factory')
+const { DataFieldFactory } = require('./dataField.factory')
 
 class DataFieldBuiltInFactory extends DataFieldFactory {
   constructor () {
     super()
 
-    this.message({
+    this.messages({
       notAnArray: 'The \'{field}\' field must be an array! Actual: {actual}',
       noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute! Actual: {actual}',
       invalidQueueType: 'The queue \'{field}\' field must have FIFO or LIFO \'queueType\' attribute! Actual: {actual}',
@@ -36,8 +36,63 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
       fileNotDeleted: 'File \'{field}\' has not been deleted! Actual: {actual}'
     })
 
+    this._enrichArray()
+    this._enrichObject()
     this._defineQueue()
     this._definePathFields()
+  }
+
+  _enrichArray () {
+    this.define('array', function () {
+      return {
+        add: (field, value, index) => {
+          const array = field.value
+          if (index === undefined) array.push(value)
+          else if (index === 0) array.unshift(value)
+          else array.splice(Math.min(index, array.length), 0, value)
+          field.valueRef = array
+        },
+        remove: (field, value, index) => {
+          const array = field.value
+          if (array.length === 0) return
+          if (value) {
+            for (let i = array.length - 1; i >= 0; i--) {
+              if (array[i] === value) array.splice(i, 1)
+            }
+          } else if (index !== undefined) {
+            if (index === 0) array.shift(value)
+            else array.splice(index, 1)
+          } else {
+            array.pop()
+          }
+          field.valueRef = array
+        }
+      }
+    })
+  }
+
+  _enrichObject () {
+    this.define('object', function () {
+      return {
+        getProp: (field, key) => {
+          const obj = field.valueRef
+          if (!obj) return null
+          return _.cloneDeep(obj[key])
+        },
+        setProp: (field, key, value) => {
+          let obj = field.value
+          if (!obj) obj = {}
+          obj[key] = value
+          field.valueRef = obj
+        },
+        unsetProp: (field, key) => {
+          const obj = field.value
+          if (!obj) return
+          delete obj[key]
+          field.valueRef = obj
+        }
+      }
+    })
   }
 
   _defineQueue () {

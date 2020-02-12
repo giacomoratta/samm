@@ -1,7 +1,8 @@
-const _ = require('lodash')
 const FastestValidator = require('fastest-validator')
 const { DataField } = require('./dataField.class')
-const { customFn } = require('./dataField.customFn')
+
+const fvRules = ['any', 'array', 'boolean', 'date', 'email', 'enum', 'forbidden', 'number', 'object', 'string', 'url', 'uuid', 'mac', 'luhn']
+const fvRulesNotSupported = ['function']
 
 class DataFieldFactory {
   constructor () {
@@ -17,18 +18,26 @@ class DataFieldFactory {
     })
     Object.keys(this._fieldDefinitions).forEach((k) => {
       this._fieldTypes[k] = this._fieldDefinitions[k](this._validator)
-      // todo: throw error if no 'validate' key
-      this._validator.add(k, this._fieldTypes[k].validate)
+      if (this._fieldTypes[k].validate) {
+        if (fvRules.indexOf(k) >= 0) {
+          throw new Error(`Field type '${k}' is a built-in type and cannot have a custom validator.`)
+        }
+        this._validator.add(k, this._fieldTypes[k].validate)
+      } else if (fvRules.indexOf(k) === -1) {
+        throw new Error(`Field type '${k}' does not have a validator in its definition.`)
+      }
     })
   }
 
   define (fieldType, defineFn) {
-    // todo: check fastest-validator list
     if (!fieldType || !defineFn) {
       throw new Error('fieldType and defineFn are mandatory arguments.')
     }
+    if (fvRulesNotSupported.indexOf(fieldType) >= 0) {
+      throw new Error(`Field type ${fieldType} is not supported as DataField.`)
+    }
     if (this._fieldDefinitions[fieldType]) {
-      throw new Error(`Field type ${fieldType} already exists!`)
+      throw new Error(`Field type ${fieldType} already exists.`)
     }
     this._fieldDefinitions[fieldType] = defineFn
   }
@@ -42,66 +51,18 @@ class DataFieldFactory {
   }
 
   create ({ name, schema, value, description = '' }) {
-    // todo: fix schema
-    // todo: add fixed actions for basic types
     return new DataField({
       name,
       schema,
       value,
       description,
       validator: this._validator,
-      // getter: this.__generateDeepFn(schema, 'get'),
-      // setter: this.__generateDeepFn(schema, 'set'),
       customFn: {
-        ...customFn[schema.type],
         ...this._fieldTypes[schema.type],
         validate: null
       }
     })
   }
-
-  // __generateDeepFn (schema, actionName) {
-  //   if (typeof schema === 'string') schema = { type: schema }
-  //   if (!schema || !schema.type) return
-  //
-  //   /* Custom function */
-  //   if (this._fieldTypes[schema.type] && this._fieldTypes[schema.type][actionName]) return this._fieldTypes[schema.type][actionName]
-  //
-  //   /* Array & items */
-  //   if (schema.items) {
-  //     const transformFn = this.__generateDeepFn(schema.items, actionName)
-  //     if (transformFn) {
-  //       return function (value, schema) {
-  //         if (_.isNil(value)) return null
-  //         const newArray = []
-  //         value.forEach((item) => {
-  //           newArray.push(transformFn(item, schema.items))
-  //         })
-  //         return newArray
-  //       }
-  //     }
-  //     return
-  //   }
-  //
-  //   /* Object & props */
-  //   if (schema.props) {
-  //     const transformFnProps = {}
-  //     let foundPropsFn = false
-  //     Object.keys(schema.props).forEach((k) => {
-  //       transformFnProps[k] = this.__generateDeepFn(schema.props[k], actionName)
-  //       if (transformFnProps[k]) foundPropsFn = true
-  //     })
-  //     if (!foundPropsFn) return
-  //     return function (value, schema) {
-  //       if (_.isNil(value)) return null
-  //       const newObject = {}
-  //       Object.keys(value).forEach((k) => {
-  //         newObject[k] = (transformFnProps[k] ? transformFnProps[k](value[k], schema.props[k]) : value[k])
-  //       })
-  //       return newObject
-  //     }
-  //   }
-  // }
 }
 
 module.exports = {
