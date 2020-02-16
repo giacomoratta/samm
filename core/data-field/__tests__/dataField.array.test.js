@@ -46,9 +46,9 @@ describe('DataField.fn for array schema', function () {
     expect(function () { df.fn.remove(null, 2) }).not.toThrow()
     expect(function () { df.fn.remove() }).not.toThrow()
     expect(df.value).toMatchObject([
-      2002000,
-      100003232 * 2
-      // 22222222248
+      1000001,
+      1000002,
+      1000003
     ])
   })
 })

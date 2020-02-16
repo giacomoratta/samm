@@ -75,8 +75,8 @@ describe('DataFieldFactory', function () {
           if (value < 1000000) return validator.makeError('notSuperInt', null, value)
           return true
         },
-        get: (value) => {
-          return value * 3
+        get: (field) => {
+          return field.valueRef * 3
         },
         set: (value) => {
           return value * 9
@@ -95,7 +95,7 @@ describe('DataFieldFactory', function () {
       },
       value: 1000001
     })
-    expect(df.valueRef).toEqual(1000001 * 9)
+    expect(df.fn.get()).toEqual(1000001 * 3)
 
     expect(df.value).toEqual(1000001 * 3 * 9)
     expect(df.valueRef).toEqual(1000001 * 9)
