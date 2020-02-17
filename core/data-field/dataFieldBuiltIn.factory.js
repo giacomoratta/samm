@@ -96,20 +96,20 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   }
 
   _defineQueue () {
-    const queryPop = function (queueSchema, fieldValue) {
-      if (fieldValue.length === 0) return null
-      let removed
-      if (queueSchema.queueType === 'FIFO') {
-        removed = fieldValue[0]
-        fieldValue.splice(0, 1)
-      } else {
-        removed = fieldValue[queueSchema.max - 1]
-        fieldValue.pop()
-      }
-      return removed
-    }
-
     this.define('queue', function (validator) {
+      const queryPop = function (queueSchema, fieldValue) {
+        if (fieldValue.length === 0) return null
+        let removed
+        if (queueSchema.queueType === 'FIFO') {
+          removed = fieldValue[0]
+          fieldValue.splice(0, 1)
+        } else {
+          removed = fieldValue[queueSchema.max - 1]
+          fieldValue.pop()
+        }
+        return removed
+      }
+
       return {
         validate: (value, schema) => {
           if (!_.isNull(value) && !_.isArray(value)) {
