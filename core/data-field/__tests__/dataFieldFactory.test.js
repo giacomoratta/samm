@@ -64,7 +64,7 @@ describe('DataFieldFactory', function () {
     expect(df.value).toEqual(1000001)
   })
 
-  it('should define a simple field with generated GET, SET and customFn', function () {
+  it('should define a simple field with custom functions', function () {
     const dff = new DataFieldFactory()
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
@@ -75,14 +75,13 @@ describe('DataFieldFactory', function () {
           if (value < 1000000) return validator.makeError('notSuperInt', null, value)
           return true
         },
-        get: (field) => {
+        getTriple: (field) => {
           return field.valueRef * 3
         },
-        set: (value) => {
-          return value * 9
-        },
-        add: (field, v1, v2) => {
-          field.value = field.valueRef + v1 - v2
+        setNineTimes: (field, value) => {
+          const newValue = value * 9
+          field.valueRef = newValue
+          return newValue
         }
       }
     })
@@ -95,15 +94,11 @@ describe('DataFieldFactory', function () {
       },
       value: 1000001
     })
-    expect(df.fn.get()).toEqual(1000001 * 3)
-
-    expect(df.value).toEqual(1000001 * 3 * 9)
-    expect(df.valueRef).toEqual(1000001 * 9)
-
-    df.fn.add(2, 3)
-    expect(df.value).toEqual((1000001 * 9 + 2 - 3) * 3)
-
-    expect(function () { df.fn.add(-11111112, 32) }).toThrow()
+    expect(df.fn.getTriple()).toEqual(1000001 * 3)
+    expect(df.fn.setNineTimes(1010101)).toEqual(1010101 * 9)
+    expect(df.value).toEqual(1010101 * 9)
+    expect(df.valueRef).toEqual(1010101 * 9)
+    expect(function () { df.fn.setNineTimes(-11111112) }).toThrow('notSuperInt')
   })
 
   it('should define a simple field and use it in array', function () {
@@ -156,56 +151,7 @@ describe('DataFieldFactory', function () {
     ])
   })
 
-  it('should define a simple field with generated GET, SET and customFn and use it in array', function () {
-    const dff = new DataFieldFactory()
-    dff.messages({
-      notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
-    })
-    dff.define('superInt', function (validator) {
-      return {
-        validate: (value, schema) => {
-          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
-          return true
-        },
-        get: (value) => {
-          return value * 2
-        },
-        set: (value) => {
-          return value + 999
-        }
-      }
-    })
-    dff.initFactory()
-
-    const df = dff.create({
-      name: 'myBigIntArray',
-      schema: {
-        type: 'array',
-        items: { type: 'superInt' }
-      },
-      value: [
-        1000001,
-        1000002,
-        1000003
-      ]
-    })
-
-    expect(df.value).toMatchObject([
-      2002000,
-      2002002,
-      2002004
-    ])
-    expect(function () { df.fn.add(24) }).toThrow('must be a big integer')
-    expect(function () { df.fn.add(11111111124) }).not.toThrow()
-    expect(df.value).toMatchObject([
-      2002000,
-      2002002,
-      2002004,
-      11111111124 * 2
-    ])
-  })
-
-  it('should define a complex object field with generated GET, SET and customFn', function () {
+  it('should define a simple field ans use it in object', function () {
     const dff = new DataFieldFactory()
     dff.messages({
       notKmDistance: 'The \'{field}\' field must be a big integer! Actual: {actual}'
@@ -213,19 +159,8 @@ describe('DataFieldFactory', function () {
     dff.define('kmDistance', function (validator) {
       return {
         validate: (value, schema) => {
-          if (value < 1000000) return validator.makeError('notKmDistance', null, value)
+          if (typeof value !== 'number' || value < 1000000) return validator.makeError('notKmDistance', null, value)
           return true
-        },
-        get: (value) => {
-          if (value > 1000) return `${value / 1000}km`
-          return `${value}km`
-        },
-        set: (value) => {
-          if (typeof value === 'string' && value.endsWith('km')) {
-            value = parseFloat(value)
-            return value * 1000
-          }
-          return value
         }
       }
     })
@@ -257,14 +192,13 @@ describe('DataFieldFactory', function () {
     }
 
     df1.value = obj0
-    expect(df1.value.info.distance).toEqual('1230.223km')
     expect(df1.valueRef.info.distance).toEqual(1230223)
 
     expect(df1.value).toMatchObject({
       name: 'abc',
       info: {
         age: 12,
-        distance: '1230.223km'
+        distance: 1230223
       }
     })
     expect(df1.valueRef).toMatchObject(obj0)
@@ -277,17 +211,16 @@ describe('DataFieldFactory', function () {
       }
     }
 
-    df1.value = obj1
-    expect(df1.value.info.distance).toEqual('2540.772km')
-    expect(df1.valueRef.info.distance).toEqual(2540772)
-
-    expect(df1.value).toMatchObject(obj1)
-    expect(df1.valueRef).toMatchObject({
-      name: 'abcd',
-      info: {
-        age: 23,
-        distance: 2540772
+    expect(function () {
+      df1.value = {
+        name: 'abcd',
+        info: {
+          age: 23,
+          distance: '2540.772km'
+        }
       }
-    })
+    }).toThrow('notKmDistance')
+    expect(df1.value.info.distance).toEqual(1230223)
+    expect(df1.valueRef.info.distance).toEqual(1230223)
   })
 })
