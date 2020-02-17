@@ -1,29 +1,7 @@
 - readOnly schema attr
 - custom fn
-- validate fn special case
-
-___________________________________________________________
-
-- callbacks prototypes and returned data
-- methods
-- special methods (data handler)
-- built-in custom validators
-- how to add custom validators
-
-utils = { _, file }
-
-DataFieldFactory.define(fieldType, function(validator) {
-    return {
-        validate: (value, schema) => { },
-        add: (field) => { },
-        remove: (field) => { },
-        clean: (field) => { },
-        get: (value) => { },
-        set: (value) => { },
-    }
-})
-
-DataFieldFactory.message(key,text)
-
-DataFieldFactory._getValidator()
-- flag inside: validatorChanged = true
+- validate fn reserved keyword (added to factory validator)
+- clean fn reserved keyword (used in reset)
+- builtin fields
+- builtin fn for standard fields
+- examples? look to builtin.factory.js

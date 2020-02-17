@@ -22,7 +22,6 @@ class DataField {
     this._schema = null
     this._description = ''
     this._value = UNDEFINED_FIELD_VALUE
-    this._cleanerFn = () => {}
     this._eventEmitter = new Events()
     this._factoryValidator = validator
     this._originalConfig = _.cloneDeep({ schema, value, description })
@@ -54,11 +53,8 @@ class DataField {
     this._init({ schema, value, description })
   }
 
-  get clean () { return this._cleanerFn }
-  set clean (fn) { this._cleanerFn = () => { fn(this) } }
-
   reset () {
-    this.clean()
+    this.fn.clean && this.fn.clean()
     this._init(this._originalConfig)
   }
 
@@ -85,7 +81,6 @@ class DataField {
 
   _setCustomFn (customFn) {
     const dataField = this
-
     Object.keys(customFn).forEach((action) => {
       if (!customFn[action]) return
       this.fn[action] = function () { return customFn[action](dataField, ...arguments) }
