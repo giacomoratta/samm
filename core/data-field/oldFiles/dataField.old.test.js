@@ -1,7 +1,7 @@
 const { fileUtils } = require('../../utils/file.utils')
 const path = require('path')
 const _ = require('lodash')
-const { DataField } = require('../index')
+const { DataField } = require('../../data-field-old1')
 const baseRoot = path.parse(__dirname).root
 
 const newDataField = function (args) {

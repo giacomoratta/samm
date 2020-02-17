@@ -1,5 +1,5 @@
 const path = require('path')
-const { DataField } = require('../index')
+const { DataField } = require('../../data-field-old1')
 const baseRoot = path.parse(__dirname).root
 
 describe('dataField path fields', function () {
