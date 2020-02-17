@@ -96,10 +96,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   }
 
   _defineQueue () {
-    const queryPop = function (queueType, queueSchema, fieldValue) {
+    const queryPop = function (queueSchema, fieldValue) {
       if (fieldValue.length === 0) return null
       let removed
-      if (queueType === 'FIFO') {
+      if (queueSchema.queueType === 'FIFO') {
         removed = fieldValue[0]
         fieldValue.splice(0, 1)
       } else {
@@ -128,11 +128,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
         },
         push: (field, value) => {
           const queueSchema = field.schema
-          const queueType = queueSchema.type || 'FIFO'
-          const fieldValue = field.value
+          const fieldValue = field.value || []
           let removed = null
           if (fieldValue.length >= queueSchema.max) {
-            removed = queryPop(queueType, queueSchema, fieldValue)
+            removed = queryPop(queueSchema, fieldValue)
           }
           fieldValue.push(value)
           field.value = fieldValue
@@ -140,9 +139,8 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
         },
         pop: (field) => {
           const queueSchema = field.schema
-          const queueType = queueSchema.type || 'FIFO'
           const fieldValue = field.value
-          const removed = queryPop(queueType, queueSchema, fieldValue)
+          const removed = queryPop(queueSchema, fieldValue)
           field.value = fieldValue
           return removed
         }

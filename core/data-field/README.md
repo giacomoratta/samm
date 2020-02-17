@@ -1,3 +1,9 @@
+- readOnly schema attr
+- custom fn
+- validate fn special case
+
+___________________________________________________________
+
 - callbacks prototypes and returned data
 - methods
 - special methods (data handler)
