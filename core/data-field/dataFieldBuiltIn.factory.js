@@ -241,9 +241,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           return checkAbsDirPath(value, schema)
         },
         fromAbsPath: (field, absPath) => {
-
+          if (field.unset === true || !absPath) return false
         },
         toAbsPath: (field) => {
+          if (field.unset === true) return null
           return relToAbsPath(field.valueRef, field.schema)
         },
         ensure: (field) => {
@@ -275,9 +276,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           return checkAbsFilePath(value, schema)
         },
         fromAbsPath: (field, absPath) => {
-
+          if (field.unset === true || !absPath) return false
         },
         toAbsPath: (field) => {
+          if (field.unset === true) return null
           return relToAbsPath(field.valueRef, field.schema)
         },
         ensure: (field) => {

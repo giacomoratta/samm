@@ -42,8 +42,6 @@ describe('DataFieldBuiltInFactory absDirPath field type', function () {
   it('should have fn.toAbsPath', function () { })
 
   it('should support empty initial path', function () { })
-
   it('should support default path', function () { })
-
   it('should support an initial path', function () { })
 })
