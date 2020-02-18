@@ -20,20 +20,22 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
     super()
 
     this.messages({
-      notAnArray: 'The \'{field}\' field must be an array! Actual: {actual}',
-      noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute! Actual: {actual}',
-      invalidQueueType: 'The queue \'{field}\' field must have FIFO or LIFO \'queueType\' attribute! Actual: {actual}',
-      invalidBasePath: 'The \'{field}\' field must have an absolute path as basePath! Actual: {actual}',
-      dirNotExists: 'Directory \'{field}\' does not exists! Actual: {actual}',
-      fileNotExists: 'File \'{field}\' does not exists! Actual: {actual}',
-      notAbsDirPath: 'Directory \'{field}\' is not an absolute path! Actual: {actual}',
-      notAbsFilePath: 'File \'{field}\' is not an absolute path! Actual: {actual}',
-      notRelDirPath: 'Directory \'{field}\' is not a relative path! Actual: {actual}',
-      notRelFilePath: 'File \'{field}\' is not a relative path! Actual: {actual}',
-      dirNotCreated: 'Directory \'{field}\' has not been created! Actual: {actual}',
-      fileNotCreated: 'File \'{field}\' has not been created! Actual: {actual}',
-      dirNotDeleted: 'Directory \'{field}\' has not been deleted! Actual: {actual}',
-      fileNotDeleted: 'File \'{field}\' has not been deleted! Actual: {actual}'
+      notAnArray: 'The \'{field}\' field must be an array. Actual: {actual}',
+      noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute. Actual: {actual}',
+      invalidQueueType: 'The queue \'{field}\' field must have FIFO or LIFO \'queueType\' attribute. Actual: {actual}',
+      invalidBasePath: 'The \'{field}\' field must have an absolute path as basePath. Actual: {actual}',
+      dirNotExists: 'Directory \'{field}\' does not exists. Actual: {actual}',
+      dirAlreadyExists: 'Directory \'{field}\' already exists. Actual: {actual}',
+      fileNotExists: 'File \'{field}\' does not exists. Actual: {actual}',
+      fileAlreadyExists: 'File \'{field}\' already exists. Actual: {actual}',
+      notAbsDirPath: 'Directory \'{field}\' is not an absolute path. Actual: {actual}',
+      notAbsFilePath: 'File \'{field}\' is not an absolute path. Actual: {actual}',
+      notRelDirPath: 'Directory \'{field}\' is not a relative path. Actual: {actual}',
+      notRelFilePath: 'File \'{field}\' is not a relative path. Actual: {actual}',
+      dirNotCreated: 'Directory \'{field}\' has not been created. Actual: {actual}',
+      fileNotCreated: 'File \'{field}\' has not been created. Actual: {actual}',
+      dirNotDeleted: 'Directory \'{field}\' has not been deleted. Actual: {actual}',
+      fileNotDeleted: 'File \'{field}\' has not been deleted. Actual: {actual}'
     })
 
     this._enrichArray()
@@ -96,26 +98,26 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   }
 
   _defineQueue () {
-    this.define('queue', function (validator) {
-      const queryPop = function (queueSchema, fieldValue) {
-        if (fieldValue.length === 0) return null
-        let removed
-        if (queueSchema.queueType === 'FIFO') {
-          removed = fieldValue[0]
-          fieldValue.splice(0, 1)
-        } else {
-          removed = fieldValue[queueSchema.max - 1]
-          fieldValue.pop()
-        }
-        return removed
+    const queryPop = function (queueSchema, fieldValue) {
+      if (fieldValue.length === 0) return null
+      let removed
+      if (queueSchema.queueType === 'FIFO') {
+        removed = fieldValue[0]
+        fieldValue.splice(0, 1)
+      } else {
+        removed = fieldValue[fieldValue.length - 1]
+        fieldValue.pop()
       }
+      return removed
+    }
 
+    this.define('queue', function (validator) {
       return {
         validate: (value, schema) => {
           if (!_.isNull(value) && !_.isArray(value)) {
             return validator.makeError('notAnArray', null, value)
           }
-          if (!schema.max || schema.max < 1 || !_.isInteger(schema.max)) {
+          if (schema.max && !_.isInteger(schema.max)) {
             return validator.makeError('noMaxAttribute', null, value)
           }
           if (schema.queueType === undefined || ['FIFO', 'LIFO'].indexOf(schema.queueType) === -1) {
@@ -130,7 +132,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           const queueSchema = field.schema
           const fieldValue = field.value || []
           let removed = null
-          if (fieldValue.length >= queueSchema.max) {
+          if (queueSchema.max && fieldValue.length >= queueSchema.max) {
             removed = queryPop(queueSchema, fieldValue)
           }
           fieldValue.push(value)
@@ -150,36 +152,40 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
   _definePathFields () {
     const checkAbsDirPath = function (value, schema, validator) {
-      if (schema.default) return true
-      const dirExists = fileUtils.directoryExistsSync(value)
-      if (schema.checkExists === true && dirExists === false) {
-        return validator.makeError('dirNotExists', null, value)
+      if (!value) return true
+      if (typeof schema.presence === 'boolean') {
+        const dirExists = fileUtils.directoryExistsSync(value)
+        if (schema.presence === true && dirExists === false) {
+          return validator.makeError('dirNotExists', null, value)
+        }
+        if (schema.presence === false && dirExists === true) {
+          return validator.makeError('dirAlreadyExists', null, value)
+        }
       }
-      if (schema.deleteIfExists === true && dirExists === true && !fileUtils.removeDirSync(value)) {
-        return validator.makeError('dirNotDeleted', null, value)
-      }
-      if (schema.createIfNotExists === true && dirExists === false && !fileUtils.ensureDirSync(value)) {
+      if (schema.ensure === true && dirExists === false && !fileUtils.ensureDirSync(value)) {
         return validator.makeError('dirNotCreated', null, value)
       }
       return true
     }
 
     const checkAbsFilePath = function (value, schema, validator) {
-      if (schema.default) return true
-      const fileExists = fileUtils.fileExistsSync(value)
-      if (schema.checkExists === true && fileExists === false) {
-        return validator.makeError('fileNotExists', null, value)
+      if (!value) return true
+      if (typeof schema.presence === 'boolean') {
+        const fileExists = fileUtils.fileExistsSync(value)
+        if (schema.presence === true && fileExists === false) {
+          return validator.makeError('fileNotExists', null, value)
+        }
+        if (schema.presence === false && fileExists === true) {
+          return validator.makeError('fileAlreadyExists', null, value)
+        }
       }
-      if (schema.deleteIfExists === true && fileExists === true && !fileUtils.removeFileSync(value)) {
-        return validator.makeError('fileNotDeleted', null, value)
-      }
-      if (schema.createIfNotExists === true && fileExists === false && !fileUtils.writeFileSync(value, '', 'utf8')) {
+      if (schema.ensure === true && fileExists === false && !fileUtils.writeFileSync(value, '', 'utf8')) {
         return validator.makeError('fileNotCreated', null, value)
       }
       return true
     }
 
-    const relativePathTransform = function (value, schema) {
+    const relToAbsPath = function (value, schema) {
       if (!value) return
       return path.join(schema.basePath, value)
     }
@@ -191,6 +197,14 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             return validator.makeError('notAbsDirPath', null, value)
           }
           return checkAbsDirPath(value, schema)
+        },
+        create: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.ensureDirSync(field.valueRef)
+        },
+        delete: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeDirSync(field.valueRef)
         }
       }
     })
@@ -202,6 +216,14 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             return validator.makeError('notAbsFilePath', null, value)
           }
           return checkAbsFilePath(value, schema)
+        },
+        create: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.writeFileSync(field.valueRef, '', 'utf8')
+        },
+        delete: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeFileSync(field.valueRef)
         }
       }
     })
@@ -215,10 +237,20 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isAbsolutePath(schema.basePath)) {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
-          value = relativePathTransform(value, schema)
+          value = relToAbsPath(value, schema)
           return checkAbsDirPath(value, schema)
         },
-        toAbsolute: relativePathTransform
+        toAbsolute: (field) => {
+          return relToAbsPath(field.valueRef, field.schema)
+        },
+        create: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.ensureDirSync(relToAbsPath(field.valueRef, field.schema))
+        },
+        delete: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeDirSync(relToAbsPath(field.valueRef, field.schema))
+        }
       }
     })
 
@@ -231,10 +263,20 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isAbsolutePath(schema.basePath)) {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
-          value = relativePathTransform(value, schema)
+          value = relToAbsPath(value, schema)
           return checkAbsFilePath(value, schema)
         },
-        toAbsolute: relativePathTransform
+        toAbsolute: (field) => {
+          return relToAbsPath(field.valueRef, field.schema)
+        },
+        create: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.writeFileSync(relToAbsPath(field.valueRef, field.schema), '', 'utf8')
+        },
+        delete: (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeFileSync(relToAbsPath(field.valueRef, field.schema))
+        }
       }
     })
   }

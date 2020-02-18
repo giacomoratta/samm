@@ -7,7 +7,7 @@ describe('PathInfoSync class and object', function () {
     const pInfo1 = new PathInfoSync()
     expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
     expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
-    expect(function () { pInfo1.set({ absolutePath: path.join('asf', 'safsaf') }) }).toThrow('Invalid main path')
+    expect(function () { pInfo1.set({ absolutePath: path.join('abc', 'abc-test') }) }).toThrow('Invalid main path')
     expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')
     expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 }) }).toThrow('Invalid relative root path')
     expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')

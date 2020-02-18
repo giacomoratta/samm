@@ -12,7 +12,8 @@ describe('DataFieldBuiltInFactory queue field type', function () {
       const qq = dfbf.create({
         name: 'queue1',
         schema: {
-          type: 'queue'
+          type: 'queue',
+          max: 'abc'
         }
       })
       qq.value = [1, 2]

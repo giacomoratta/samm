@@ -6,7 +6,7 @@ describe('PathInfo class and object', function () {
   it('should throw some basic errors', async function () {
     const pInfo1 = new PathInfo()
     await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('Invalid main path')
-    await expect(pInfo1.set({ absolutePath: path.join('asf', 'safsaf') })).rejects.toThrow('Invalid main path')
+    await expect(pInfo1.set({ absolutePath: path.join('abc', 'abc-test') })).rejects.toThrow('Invalid main path')
     await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Cannot get path stats of')
     await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 })).rejects.toThrow('Invalid relative root path')
     await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Cannot get path stats of')

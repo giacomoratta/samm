@@ -1,3 +1,6 @@
+better tests
+clean files
+
 - callbacks prototypes and returned data
 - methods
 - basic example
