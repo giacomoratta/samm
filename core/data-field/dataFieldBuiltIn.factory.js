@@ -198,7 +198,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           }
           return checkAbsDirPath(value, schema)
         },
-        create: (field) => {
+        ensure: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.ensureDirSync(field.valueRef)
         },
@@ -217,7 +217,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           }
           return checkAbsFilePath(value, schema)
         },
-        create: (field) => {
+        ensure: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.writeFileSync(field.valueRef, '', 'utf8')
         },
@@ -240,16 +240,24 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           value = relToAbsPath(value, schema)
           return checkAbsDirPath(value, schema)
         },
-        toAbsolute: (field) => {
+        fromAbsPath: (field, absPath) => {
+
+        },
+        toAbsPath: (field) => {
           return relToAbsPath(field.valueRef, field.schema)
         },
-        create: (field) => {
+        ensure: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.ensureDirSync(relToAbsPath(field.valueRef, field.schema))
         },
         delete: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.removeDirSync(relToAbsPath(field.valueRef, field.schema))
+        },
+        changeBasePath: (field, basePath) => {
+          if (!fileUtils.isAbsolutePath(basePath)) return false
+          field.schema = { basePath }
+          return true
         }
       }
     })
@@ -266,16 +274,24 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           value = relToAbsPath(value, schema)
           return checkAbsFilePath(value, schema)
         },
-        toAbsolute: (field) => {
+        fromAbsPath: (field, absPath) => {
+
+        },
+        toAbsPath: (field) => {
           return relToAbsPath(field.valueRef, field.schema)
         },
-        create: (field) => {
+        ensure: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.writeFileSync(relToAbsPath(field.valueRef, field.schema), '', 'utf8')
         },
         delete: (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.removeFileSync(relToAbsPath(field.valueRef, field.schema))
+        },
+        changeBasePath: (field, basePath) => {
+          if (!fileUtils.isAbsolutePath(basePath)) return false
+          field.schema = { basePath }
+          return true
         }
       }
     })
