@@ -153,8 +153,9 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   _definePathFields () {
     const checkAbsDirPath = function (value, schema, validator) {
       if (!value) return true
+      let dirExists
       if (typeof schema.presence === 'boolean') {
-        const dirExists = fileUtils.directoryExistsSync(value)
+        dirExists = fileUtils.directoryExistsSync(value)
         if (schema.presence === true && dirExists === false) {
           return validator.makeError('dirNotExists', null, value)
         }
@@ -162,7 +163,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           return validator.makeError('dirAlreadyExists', null, value)
         }
       }
-      if (schema.ensure === true && dirExists === false && !fileUtils.ensureDirSync(value)) {
+      if (schema.ensure === true && dirExists !== true && !fileUtils.ensureDirSync(value)) {
         return validator.makeError('dirNotCreated', null, value)
       }
       return true
@@ -196,15 +197,19 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isAbsolutePath(value)) {
             return validator.makeError('notAbsDirPath', null, value)
           }
-          return checkAbsDirPath(value, schema)
+          return checkAbsDirPath(value, schema, validator)
         },
-        ensure: (field) => {
+        exists: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.ensureDirSync(field.valueRef)
+          return /* boolean */ await fileUtils.directoryExists(field.valueRef)
         },
-        delete: (field) => {
+        ensure: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.removeDirSync(field.valueRef)
+          return /* boolean */ fileUtils.ensureDir(field.valueRef)
+        },
+        delete: async (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeDir(field.valueRef)
         }
       }
     })
@@ -215,15 +220,19 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isAbsolutePath(value)) {
             return validator.makeError('notAbsFilePath', null, value)
           }
-          return checkAbsFilePath(value, schema)
+          return checkAbsFilePath(value, schema, validator)
         },
-        ensure: (field) => {
+        exists: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.writeFileSync(field.valueRef, '', 'utf8')
+          return /* boolean */ fileUtils.fileExists(field.valueRef)
         },
-        delete: (field) => {
+        ensure: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.removeFileSync(field.valueRef)
+          return /* boolean */ fileUtils.writeFile(field.valueRef, '', 'utf8')
+        },
+        delete: async (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeFile(field.valueRef)
         }
       }
     })
@@ -238,7 +247,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
           value = relToAbsPath(value, schema)
-          return checkAbsDirPath(value, schema)
+          return checkAbsDirPath(value, schema, validator)
         },
         fromAbsPath: (field, absPath) => {
           if (field.unset === true || !absPath) return false
@@ -247,13 +256,17 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (field.unset === true) return null
           return relToAbsPath(field.valueRef, field.schema)
         },
-        ensure: (field) => {
+        exists: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.ensureDirSync(relToAbsPath(field.valueRef, field.schema))
+          return /* boolean */ fileUtils.directoryExists(relToAbsPath(field.valueRef, field.schema))
         },
-        delete: (field) => {
+        ensure: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.removeDirSync(relToAbsPath(field.valueRef, field.schema))
+          return /* boolean */ fileUtils.ensureDir(relToAbsPath(field.valueRef, field.schema))
+        },
+        delete: async (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeDir(relToAbsPath(field.valueRef, field.schema))
         },
         changeBasePath: (field, basePath) => {
           if (!fileUtils.isAbsolutePath(basePath)) return false
@@ -273,7 +286,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
           value = relToAbsPath(value, schema)
-          return checkAbsFilePath(value, schema)
+          return checkAbsFilePath(value, schema, validator)
         },
         fromAbsPath: (field, absPath) => {
           if (field.unset === true || !absPath) return false
@@ -282,13 +295,17 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (field.unset === true) return null
           return relToAbsPath(field.valueRef, field.schema)
         },
-        ensure: (field) => {
+        exists: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.writeFileSync(relToAbsPath(field.valueRef, field.schema), '', 'utf8')
+          return /* boolean */ fileUtils.fileExists(relToAbsPath(field.valueRef, field.schema))
         },
-        delete: (field) => {
+        ensure: async (field) => {
           if (field.unset === true) return false
-          return /* boolean */ fileUtils.removeFileSync(relToAbsPath(field.valueRef, field.schema))
+          return /* boolean */ fileUtils.writeFile(relToAbsPath(field.valueRef, field.schema), '', 'utf8')
+        },
+        delete: async (field) => {
+          if (field.unset === true) return false
+          return /* boolean */ fileUtils.removeFile(relToAbsPath(field.valueRef, field.schema))
         },
         changeBasePath: (field, basePath) => {
           if (!fileUtils.isAbsolutePath(basePath)) return false

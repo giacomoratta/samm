@@ -113,10 +113,10 @@ libUtils.parentDirectoryExistsSync = (pathString) => {
 /* CHECKS  - ASYNC   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.fileExists = (pathString) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fs.access(pathString, fs.constants.F_OK, (error) => {
       if (!error) return resolve(true)
-      return resolve(false)
+      return resolve(error)
     })
   })
 }
@@ -368,6 +368,22 @@ libUtils.removeFile = (pathString) => {
 }
 
 /* DIRECTORY R/W - ASYNC  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+libUtils.ensureDir = async (pathString) => {
+  try {
+    return fsExtra.ensureDir(pathString)
+  } catch (e) {
+    return e
+  }
+}
+
+libUtils.removeDir = async (pathString) => {
+  try {
+    return await rimraf(pathString)
+  } catch (e) {
+    return e
+  }
+}
 
 libUtils.copyDirectory = (pathFrom, pathTo, options) => {
   options = _.merge({
