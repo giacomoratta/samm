@@ -56,26 +56,24 @@ describe('DataFieldBuiltInFactory relFilePath field type', function () {
 
   /* Tests for relative path fields  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  */
 
-  // it('should throw notRelDirPath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw dirNotExists error', function () { })
-  // it('should throw dirAlreadyExists error', function () { })
-  // it('should throw dirNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
-  //
-  // it('should throw notAbsFilePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  //
-  // it('should throw notRelFilePath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
+  it('should throw invalidBasePath error', function () {
+    tH.throwInvalidBasePathFn('invalidBasePath')
+  })
 
-  // it('should have fn.changeBasePath', function () { })
-  // it('should have fn.fromAbsPath', function () { })
-  // it('should have fn.toAbsPath', function () { })
+  it('should have fn.changeBasePath', function () {
+    tH.customFnChangeBasePath(path.join(tH.testDir, 'directory2', 'file543.txt'))
+  })
+
+  it('should have fn.fromAbsPath', function () {
+    tH.customFnFromAbsPath(
+      path.join('directory1', 'directory2', 'file123.txt'),
+      tH.testDir,
+      path.join(tH.testDir, 'directory1', 'directory33', 'file777.txt'),
+      path.join(tH.rootDir, 'different', 'root', 'file999.txt')
+    )
+  })
+
+  it('should have fn.toAbsPath', function () {
+    tH.customFnToAbsPath(path.join('directory1', 'directory2', 'file9292'), tH.testDir)
+  })
 })

@@ -65,7 +65,12 @@ describe('DataFieldBuiltInFactory relDirPath field type', function () {
   })
 
   it('should have fn.fromAbsPath', function () {
-    tH.customFnFromAbsPath(path.join('directory1', 'directory2'), tH.testDir)
+    tH.customFnFromAbsPath(
+      path.join('directory1', 'directory2'),
+      tH.testDir,
+      path.join(tH.testDir, 'directory1', 'directory33'),
+      path.join(tH.rootDir, 'different', 'root')
+    )
   })
 
   it('should have fn.toAbsPath', function () {
