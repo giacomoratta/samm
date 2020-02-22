@@ -171,8 +171,9 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     const checkAbsFilePath = function (value, schema, validator) {
       if (!value) return true
+      let fileExists
       if (typeof schema.presence === 'boolean') {
-        const fileExists = fileUtils.fileExistsSync(value)
+        fileExists = fileUtils.fileExistsSync(value)
         if (schema.presence === true && fileExists === false) {
           return validator.makeError('fileNotExists', null, value)
         }
@@ -180,7 +181,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           return validator.makeError('fileAlreadyExists', null, value)
         }
       }
-      if (schema.ensure === true && fileExists === false && !fileUtils.writeFileSync(value, '', 'utf8')) {
+      if (schema.ensure === true && fileExists !== true && !fileUtils.writeFileSync(value, '', 'utf8')) {
         return validator.makeError('fileNotCreated', null, value)
       }
       return true

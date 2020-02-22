@@ -92,7 +92,7 @@ module.exports = (schemaType) => {
 
     throwPathNotCreatedFn: (errorType, pathString) => {
       pathString = `${rootDir}-:!@#$%^&*??><{}[]\\/.!~${pathString}`
-      console.log('throwPathNotCreatedFn - bad path:', pathString)
+      console.log(`[${schemaType}]`, 'bad path used for throwPathNotCreatedFn:', pathString)
 
       expect(function () {
         DFBF.create({

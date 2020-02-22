@@ -1,29 +1,79 @@
 const path = require('path')
-const { DataFieldBuiltInFactory } = require('../dataFieldBuiltIn.factory')
+const tH = require('./dataFieldBuiltIn.testHelpers')('relFilePath')
 
 describe('DataFieldBuiltInFactory relFilePath field type', function () {
   beforeAll(function () {
-    dfbf = new DataFieldBuiltInFactory()
-    dfbf.initFactory()
+    tH.DFBF.initFactory()
   })
 
-  it('should throw some schema errors', function () {
-    // missing schema fields
-    // wrong schema fields
-    // wrong schema attribute values
+  it('should throw notRelFilePath error', function () {
+    tH.throwInvalidPathFn('notRelFilePath')
   })
 
-  it('should throw for invalid paths in schema', function () { })
+  it('should throw fileNotExists error', function () {
+    tH.throwPathNotExistsFn('fileNotExists', path.join(tH.rootDir, 'not', 'exists'))
+  })
 
-  it('should throw for invalid paths as value', function () { })
+  it('should throw fileAlreadyExists error', function () {
+    tH.throwPathAlreadyExistsFn('fileAlreadyExists', path.join(tH.testDir, 'directory1', 'file11.txt'))
+  })
 
-  it('should support empty initial path', function () { })
+  it('should throw fileNotCreated error', function () {
+    tH.throwPathNotCreatedFn('fileNotCreated', path.join(tH.rootDir, 'new-file33.txt'))
+  })
 
-  it('should support default path', function () { })
+  it('should support empty initial path', function () {
+    tH.supportEmptyInitialPath('notRelFilePath')
+  })
 
-  it('should support an initial path', function () { })
+  it('should support default path', function () {
+    tH.supportDefaultPath(path.join(tH.testDir, 'directory1', 'file11.txt'))
+  })
 
-  it('should check if file exists', function () { })
+  it('should support schema.presence = true', function () {
+    tH.schemaPresenceTrueFn(path.join(tH.testDir, 'directory1', 'file11.txt'))
+  })
 
-  it('should ensure file', function () { })
+  it('should support schema.presence = false', function () {
+    tH.schemaPresenceFalseFn(path.join(tH.testDir, 'directory1', 'not', 'file11.txt'))
+  })
+
+  it('should support schema.ensure (not create)', function () {
+    tH.schemaEnsureFn(path.join(tH.testDir, 'directory1', 'file11.txt'), false)
+  })
+
+  it('should support schema.ensure (create)', function () {
+    tH.schemaEnsureFn(path.join(tH.testDir, 'directory1', 'file123.txt'), true)
+  })
+
+  it('should have fn.exists', async function () {
+    await tH.customFnExists(path.join(tH.testDir, 'directory1', 'file11.txt'))
+  })
+
+  it('should have fn.ensure and fn.delete', async function () {
+    await tH.customFnEnsureDelete(path.join(tH.testDir, 'directory1', 'file44.txt'))
+  })
+
+  // it('should throw notRelDirPath error', function () { })
+  // it('should throw invalidBasePath error', function () { })
+  // it('should throw dirNotExists error', function () { })
+  // it('should throw dirAlreadyExists error', function () { })
+  // it('should throw dirNotCreated error', function () { })
+  // it('should support schema.basePath', function () { })
+  //
+  // it('should throw notAbsFilePath error', function () { })
+  // it('should throw fileNotExists error', function () { })
+  // it('should throw fileAlreadyExists error', function () { })
+  // it('should throw fileNotCreated error', function () { })
+  //
+  // it('should throw notRelFilePath error', function () { })
+  // it('should throw invalidBasePath error', function () { })
+  // it('should throw fileNotExists error', function () { })
+  // it('should throw fileAlreadyExists error', function () { })
+  // it('should throw fileNotCreated error', function () { })
+  // it('should support schema.basePath', function () { })
+
+  // it('should have fn.changeBasePath', function () { })
+  // it('should have fn.fromAbsPath', function () { })
+  // it('should have fn.toAbsPath', function () { })
 })

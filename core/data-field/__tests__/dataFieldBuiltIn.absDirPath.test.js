@@ -53,27 +53,4 @@ describe('DataFieldBuiltInFactory absDirPath field type', function () {
   it('should have fn.ensure and fn.delete', async function () {
     await tH.customFnEnsureDelete(path.join(tH.testDir, 'directory1', 'directory2z'))
   })
-
-  // it('should throw notRelDirPath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw dirNotExists error', function () { })
-  // it('should throw dirAlreadyExists error', function () { })
-  // it('should throw dirNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
-  //
-  // it('should throw notAbsFilePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  //
-  // it('should throw notRelFilePath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
-
-  // it('should have fn.changeBasePath', function () { })
-  // it('should have fn.fromAbsPath', function () { })
-  // it('should have fn.toAbsPath', function () { })
 })
