@@ -371,18 +371,19 @@ libUtils.removeFile = (pathString) => {
 
 libUtils.ensureDir = async (pathString) => {
   try {
-    return fsExtra.ensureDir(pathString)
+    return !!fsExtra.ensureDir(pathString)
   } catch (e) {
     return e
   }
 }
 
 libUtils.removeDir = async (pathString) => {
-  try {
-    return await rimraf(pathString)
-  } catch (e) {
-    return e
-  }
+  return new Promise(function (resolve, reject) {
+    rimraf(pathString, (err) => {
+      if (err) return resolve(err)
+      resolve(true)
+    })
+  })
 }
 
 libUtils.copyDirectory = (pathFrom, pathTo, options) => {

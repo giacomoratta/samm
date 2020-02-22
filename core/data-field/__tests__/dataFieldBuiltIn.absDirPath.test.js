@@ -1,11 +1,9 @@
 const path = require('path')
-const { DataFieldBuiltInFactory } = require('../dataFieldBuiltIn.factory')
-const dfbf = new DataFieldBuiltInFactory()
-const tH = require('./dataFieldBuiltIn.testHelpers')(dfbf, 'absDirPath')
+const tH = require('./dataFieldBuiltIn.testHelpers')('absDirPath')
 
 describe('DataFieldBuiltInFactory absDirPath field type', function () {
   beforeAll(function () {
-    dfbf.initFactory()
+    tH.DFBF.initFactory()
   })
 
   it('should throw notAbsDirPath error', function () {
@@ -24,24 +22,13 @@ describe('DataFieldBuiltInFactory absDirPath field type', function () {
     tH.throwPathNotCreatedFn('dirNotCreated', path.join(tH.rootDir, 'new-dir'))
   })
 
-  // it('should throw notRelDirPath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw dirNotExists error', function () { })
-  // it('should throw dirAlreadyExists error', function () { })
-  // it('should throw dirNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
-  //
-  // it('should throw notAbsFilePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  //
-  // it('should throw notRelFilePath error', function () { })
-  // it('should throw invalidBasePath error', function () { })
-  // it('should throw fileNotExists error', function () { })
-  // it('should throw fileAlreadyExists error', function () { })
-  // it('should throw fileNotCreated error', function () { })
-  // it('should support schema.basePath', function () { })
+  it('should support empty initial path', function () {
+    tH.supportEmptyInitialPath('notAbsDirPath')
+  })
+
+  it('should support default path', function () {
+    tH.supportDefaultPath(path.join(tH.testDir, 'directory1', 'directory2'))
+  })
 
   it('should support schema.presence = true', function () {
     tH.schemaPresenceTrueFn(path.join(tH.testDir, 'directory1', 'directory2'))
@@ -63,13 +50,30 @@ describe('DataFieldBuiltInFactory absDirPath field type', function () {
     await tH.customFnExists(path.join(tH.testDir, 'directory1', 'directory2'))
   })
 
-  it('should have fn.ensure', function () { })
-  it('should have fn.delete', function () { })
-  it('should have fn.changeBasePath', function () { })
-  it('should have fn.fromAbsPath', function () { })
-  it('should have fn.toAbsPath', function () { })
+  it('should have fn.ensure and fn.delete', async function () {
+    await tH.customFnEnsureDelete(path.join(tH.testDir, 'directory1', 'directory2z'))
+  })
 
-  it('should support empty initial path', function () { })
-  it('should support default path', function () { })
-  it('should support an initial path', function () { })
+  // it('should throw notRelDirPath error', function () { })
+  // it('should throw invalidBasePath error', function () { })
+  // it('should throw dirNotExists error', function () { })
+  // it('should throw dirAlreadyExists error', function () { })
+  // it('should throw dirNotCreated error', function () { })
+  // it('should support schema.basePath', function () { })
+  //
+  // it('should throw notAbsFilePath error', function () { })
+  // it('should throw fileNotExists error', function () { })
+  // it('should throw fileAlreadyExists error', function () { })
+  // it('should throw fileNotCreated error', function () { })
+  //
+  // it('should throw notRelFilePath error', function () { })
+  // it('should throw invalidBasePath error', function () { })
+  // it('should throw fileNotExists error', function () { })
+  // it('should throw fileAlreadyExists error', function () { })
+  // it('should throw fileNotCreated error', function () { })
+  // it('should support schema.basePath', function () { })
+
+  // it('should have fn.changeBasePath', function () { })
+  // it('should have fn.fromAbsPath', function () { })
+  // it('should have fn.toAbsPath', function () { })
 })

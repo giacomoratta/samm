@@ -21,7 +21,7 @@
     "pino": "^5.14.0",
     "pino-pretty": "^3.5.0",
     "pino-tee": "^0.3.0",
-    "rimraf": "^3.0.0",
+    "rimraf": "^3.0.2",
     "symbol-tree": "^3.2.2",
     "vorpal": "^1.12.0"
   },

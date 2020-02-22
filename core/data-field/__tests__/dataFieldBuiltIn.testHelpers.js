@@ -1,18 +1,21 @@
 const path = require('path')
 const { fileUtils } = require('../../utils/file.utils')
 
+const { DataFieldBuiltInFactory } = require('../dataFieldBuiltIn.factory')
+const DFBF = new DataFieldBuiltInFactory()
+
 const rootDir = path.parse(__dirname).root
 const testDir = path.join(__dirname, 'test_dir')
 
-module.exports = (dfbf, schemaType) => {
+module.exports = (schemaType) => {
   return {
-
     rootDir,
     testDir,
+    DFBF,
 
     throwInvalidPathFn: (errorType) => {
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType
@@ -21,7 +24,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).toThrow(errorType)
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType
@@ -37,7 +40,7 @@ module.exports = (dfbf, schemaType) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(false)
 
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -47,7 +50,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).toThrow(errorType)
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -64,7 +67,7 @@ module.exports = (dfbf, schemaType) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
 
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -74,7 +77,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).toThrow(errorType)
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -92,7 +95,7 @@ module.exports = (dfbf, schemaType) => {
       console.log('throwPathNotCreatedFn - bad path:', pathString)
 
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -102,7 +105,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).toThrow(errorType)
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -115,11 +118,49 @@ module.exports = (dfbf, schemaType) => {
       }).toThrow(errorType)
     },
 
+    supportEmptyInitialPath: (errorType) => {
+      expect(function () {
+        DFBF.create({
+          name: 'fieldName1',
+          schema: {
+            type: schemaType
+          },
+          value: ''
+        })
+      }).toThrow(errorType)
+
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType
+        },
+        value: null
+      })
+
+      expect(field1.value).toEqual(null)
+      expect(field1.valueRef).toEqual(null)
+      expect(field1.unset).toEqual(true)
+    },
+
+    supportDefaultPath: (pathString) => {
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType
+        },
+        value: pathString
+      })
+
+      expect(field1.value).toEqual(pathString)
+      expect(field1.valueRef).toEqual(pathString)
+      expect(field1.unset).toEqual(false)
+    },
+
     schemaPresenceTrueFn: (pathString) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
 
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -129,7 +170,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).not.toThrow()
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -146,7 +187,7 @@ module.exports = (dfbf, schemaType) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(false)
 
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -156,7 +197,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).not.toThrow()
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -171,7 +212,7 @@ module.exports = (dfbf, schemaType) => {
 
     schemaEnsureFn: (pathString, deletePath) => {
       expect(function () {
-        dfbf.create({
+        DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
@@ -181,7 +222,7 @@ module.exports = (dfbf, schemaType) => {
         })
       }).not.toThrow()
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
@@ -204,15 +245,30 @@ module.exports = (dfbf, schemaType) => {
     customFnExists: async (pathString) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
 
-      const field1 = dfbf.create({
+      const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
           presence: true
         }
       })
+      field1.value = pathString
 
-      expect(field1.fn.exists()).resolves.toEqual(true)
+      await expect(field1.fn.exists()).resolves.toEqual(true)
+    },
+
+    customFnEnsureDelete: async (pathString, deletePath) => {
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType
+        }
+      })
+      field1.value = pathString
+
+      await expect(field1.fn.ensure()).resolves.toEqual(true)
+
+      await expect(field1.fn.delete()).resolves.toEqual(true)
     }
   }
 }
