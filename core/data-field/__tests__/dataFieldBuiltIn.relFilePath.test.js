@@ -54,6 +54,8 @@ describe('DataFieldBuiltInFactory relFilePath field type', function () {
     await tH.customFnEnsureDelete(path.join('directory1', 'file44.txt'), tH.testDir)
   })
 
+  /* Tests for relative path fields  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  */
+
   // it('should throw notRelDirPath error', function () { })
   // it('should throw invalidBasePath error', function () { })
   // it('should throw dirNotExists error', function () { })

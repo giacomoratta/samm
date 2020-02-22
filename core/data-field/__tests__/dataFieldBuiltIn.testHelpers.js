@@ -43,6 +43,19 @@ module.exports = (schemaType) => {
       }).toThrow(errorType)
     },
 
+    throwInvalidBasePathFn: (errorType) => {
+      expect(function () {
+        DFBF.create({
+          name: 'fieldName1',
+          schema: {
+            type: schemaType,
+            basePath: 'invalid'
+          },
+          value: 'dir123'
+        })
+      }).toThrow(errorType)
+    },
+
     throwPathNotExistsFn: (errorType, pathString) => {
       expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(false)
 
@@ -301,6 +314,55 @@ module.exports = (schemaType) => {
       await expect(field1.fn.ensure()).resolves.toEqual(true)
 
       await expect(field1.fn.delete()).resolves.toEqual(true)
+    },
+
+    customFnChangeBasePath: (newBasePath) => {
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType,
+          basePath
+        }
+      })
+
+      expect(field1.fn.changeBasePath('invalid')).toEqual(false)
+      expect(field1.schema.basePath).toEqual(basePath)
+
+      expect(field1.fn.changeBasePath(newBasePath)).toEqual(true)
+      expect(field1.schema.basePath).toEqual(newBasePath)
+    },
+
+    customFnFromAbsPath: (pathString, basePath, pathStringFrom, pathStringFromInvalid) => {
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType,
+          basePath
+        },
+        value: pathString
+      })
+
+      expect(field1.value).toEqual(pathString)
+
+      expect(field1.fn.fromAbsPath(pathStringFrom)).toEqual(true)
+      expect(pathStringFrom.endsWith(field1.value)).toEqual(true)
+
+      expect(field1.fn.fromAbsPath(pathStringFromInvalid)).toEqual(false)
+      expect(pathStringFrom.endsWith(field1.value)).toEqual(true)
+    },
+
+    customFnToAbsPath: (pathString, basePath) => {
+      const field1 = DFBF.create({
+        name: 'fieldName2',
+        schema: {
+          type: schemaType,
+          basePath
+        },
+        value: pathString
+      })
+
+      expect(field1.value).toEqual(pathString)
+      expect(field1.fn.toAbsPath()).toEqual(path.join(basePath, pathString))
     }
   }
 }

@@ -251,7 +251,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           return checkAbsDirPath(relToAbsPath(value, schema), schema, validator)
         },
         fromAbsPath: (field, absPath) => {
-          if (field.unset === true || !absPath) return false
+          if (!absPath) return false
         },
         toAbsPath: (field) => {
           if (field.unset === true) return null
