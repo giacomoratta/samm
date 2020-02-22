@@ -12,6 +12,7 @@
  */
 
 const _ = require('lodash')
+const path = require('path')
 const { fileUtils } = require('../utils/file.utils')
 const { DataFieldFactory } = require('./dataField.factory')
 
@@ -244,11 +245,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isRelativePath(value)) {
             return validator.makeError('notRelDirPath', null, value)
           }
-          if (!fileUtils.isAbsolutePath(schema.basePath)) {
+          if (!schema.basePath || !fileUtils.isAbsolutePath(schema.basePath)) {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
-          value = relToAbsPath(value, schema)
-          return checkAbsDirPath(value, schema, validator)
+          return checkAbsDirPath(relToAbsPath(value, schema), schema, validator)
         },
         fromAbsPath: (field, absPath) => {
           if (field.unset === true || !absPath) return false
@@ -283,11 +283,10 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           if (!fileUtils.isRelativePath(value)) {
             return validator.makeError('notRelFilePath', null, value)
           }
-          if (!fileUtils.isAbsolutePath(schema.basePath)) {
+          if (!schema.basePath || !fileUtils.isAbsolutePath(schema.basePath)) {
             return validator.makeError('invalidBasePath', null, schema.basePath)
           }
-          value = relToAbsPath(value, schema)
-          return checkAbsFilePath(value, schema, validator)
+          return checkAbsFilePath(relToAbsPath(value, schema), schema, validator)
         },
         fromAbsPath: (field, absPath) => {
           if (field.unset === true || !absPath) return false

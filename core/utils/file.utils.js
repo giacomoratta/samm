@@ -26,10 +26,12 @@ libUtils.equalPaths = (p1, p2) => {
 /* UTILS    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 libUtils.isRelativePath = (p) => {
+  if (!p || typeof p !== 'string' || p.length === 0) return false
   return !libUtils.isAbsolutePath(p)
 }
 
 libUtils.isAbsolutePath = (p) => {
+  if (!p || typeof p !== 'string' || p.length === 0) return false
   return path.normalize(p + path.sep) === path.normalize(path.resolve(p) + path.sep)
 }
 

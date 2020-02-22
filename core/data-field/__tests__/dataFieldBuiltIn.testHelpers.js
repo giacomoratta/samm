@@ -8,6 +8,11 @@ const rootDir = path.parse(__dirname).root
 const testDir = path.join(__dirname, 'test_dir')
 
 module.exports = (schemaType) => {
+  const isRelField = schemaType.startsWith('rel')
+
+  const basePath = (isRelField ? testDir : undefined)
+  const invalidTestPath = (isRelField ? rootDir : 'invalid')
+
   return {
     rootDir,
     testDir,
@@ -18,21 +23,23 @@ module.exports = (schemaType) => {
         DFBF.create({
           name: 'fieldName1',
           schema: {
-            type: schemaType
+            type: schemaType,
+            basePath
           },
-          value: 'invalid'
+          value: invalidTestPath
         })
       }).toThrow(errorType)
 
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
-          type: schemaType
+          type: schemaType,
+          basePath
         }
       })
 
       expect(function () {
-        field1.value = 'invalid'
+        field1.value = invalidTestPath
       }).toThrow(errorType)
     },
 
@@ -44,6 +51,7 @@ module.exports = (schemaType) => {
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             presence: true
           },
           value: pathString
@@ -54,6 +62,7 @@ module.exports = (schemaType) => {
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           presence: true
         }
       })
@@ -63,14 +72,16 @@ module.exports = (schemaType) => {
       }).toThrow(errorType)
     },
 
-    throwPathAlreadyExistsFn: (errorType, pathString) => {
-      expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
+    throwPathAlreadyExistsFn: (errorType, pathString, basePath) => {
+      const testPathString = (basePath ? path.join(basePath, pathString) : pathString)
+      expect(fileUtils.directoryExistsSync(testPathString) || fileUtils.fileExistsSync(testPathString)).toEqual(true)
 
       expect(function () {
         DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             presence: false
           },
           value: pathString
@@ -81,6 +92,7 @@ module.exports = (schemaType) => {
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           presence: false
         }
       })
@@ -91,24 +103,28 @@ module.exports = (schemaType) => {
     },
 
     throwPathNotCreatedFn: (errorType, pathString) => {
-      pathString = `${rootDir}-:!@#$%^&*??><{}[]\\/.!~${pathString}`
+      const basePath = (isRelField ? `${rootDir}-:!@#$%^&*` : undefined)
+      pathString = `${(isRelField ? '' : rootDir)}-:!@#$%^&*??><{}[]\\/.!~${pathString}`
       console.log(`[${schemaType}]`, 'bad path used for throwPathNotCreatedFn:', pathString)
 
       expect(function () {
-        DFBF.create({
+        const f1 = DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             ensure: true
           },
           value: pathString
         })
+        console.log(f1.fn.toAbsPath())
       }).toThrow(errorType)
 
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           ensure: true
         }
       })
@@ -123,7 +139,8 @@ module.exports = (schemaType) => {
         DFBF.create({
           name: 'fieldName1',
           schema: {
-            type: schemaType
+            type: schemaType,
+            basePath
           },
           value: ''
         })
@@ -132,7 +149,8 @@ module.exports = (schemaType) => {
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
-          type: schemaType
+          type: schemaType,
+          basePath
         },
         value: null
       })
@@ -142,11 +160,12 @@ module.exports = (schemaType) => {
       expect(field1.unset).toEqual(true)
     },
 
-    supportDefaultPath: (pathString) => {
+    supportDefaultPath: (pathString, basePath) => {
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
-          type: schemaType
+          type: schemaType,
+          basePath
         },
         value: pathString
       })
@@ -156,14 +175,16 @@ module.exports = (schemaType) => {
       expect(field1.unset).toEqual(false)
     },
 
-    schemaPresenceTrueFn: (pathString) => {
-      expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
+    schemaPresenceTrueFn: (pathString, basePath) => {
+      const testPathString = (basePath ? path.join(basePath, pathString) : pathString)
+      expect(fileUtils.directoryExistsSync(testPathString) || fileUtils.fileExistsSync(testPathString)).toEqual(true)
 
       expect(function () {
         DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             presence: true
           },
           value: pathString
@@ -174,6 +195,7 @@ module.exports = (schemaType) => {
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           presence: true
         }
       })
@@ -183,14 +205,16 @@ module.exports = (schemaType) => {
       }).not.toThrow()
     },
 
-    schemaPresenceFalseFn: (pathString) => {
-      expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(false)
+    schemaPresenceFalseFn: (pathString, basePath) => {
+      const testPathString = (basePath ? path.join(basePath, pathString) : pathString)
+      expect(fileUtils.directoryExistsSync(testPathString) || fileUtils.fileExistsSync(testPathString)).toEqual(false)
 
       expect(function () {
         DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             presence: false
           },
           value: pathString
@@ -201,6 +225,7 @@ module.exports = (schemaType) => {
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           presence: false
         }
       })
@@ -210,12 +235,15 @@ module.exports = (schemaType) => {
       }).not.toThrow()
     },
 
-    schemaEnsureFn: (pathString, deletePath) => {
+    schemaEnsureFn: (pathString, deletePath, basePath) => {
+      const testPathString = (basePath ? path.join(basePath, pathString) : pathString)
+
       expect(function () {
         DFBF.create({
           name: 'fieldName1',
           schema: {
             type: schemaType,
+            basePath,
             ensure: true
           },
           value: pathString
@@ -226,6 +254,7 @@ module.exports = (schemaType) => {
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           ensure: true
         }
       })
@@ -234,21 +263,23 @@ module.exports = (schemaType) => {
         field1.value = pathString
       }).not.toThrow()
 
-      expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
+      expect(fileUtils.directoryExistsSync(testPathString) || fileUtils.fileExistsSync(testPathString)).toEqual(true)
 
       if (deletePath === true) {
-        fileUtils.removeDirSync(pathString)
-        fileUtils.removeFileSync(pathString)
+        fileUtils.removeDirSync(testPathString)
+        fileUtils.removeFileSync(testPathString)
       }
     },
 
-    customFnExists: async (pathString) => {
-      expect(fileUtils.directoryExistsSync(pathString) || fileUtils.fileExistsSync(pathString)).toEqual(true)
+    customFnExists: async (pathString, basePath) => {
+      const testPathString = (basePath ? path.join(basePath, pathString) : pathString)
+      expect(fileUtils.directoryExistsSync(testPathString) || fileUtils.fileExistsSync(testPathString)).toEqual(true)
 
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
           type: schemaType,
+          basePath,
           presence: true
         }
       })
@@ -257,11 +288,12 @@ module.exports = (schemaType) => {
       await expect(field1.fn.exists()).resolves.toEqual(true)
     },
 
-    customFnEnsureDelete: async (pathString, deletePath) => {
+    customFnEnsureDelete: async (pathString, basePath) => {
       const field1 = DFBF.create({
         name: 'fieldName2',
         schema: {
-          type: schemaType
+          type: schemaType,
+          basePath
         }
       })
       field1.value = pathString

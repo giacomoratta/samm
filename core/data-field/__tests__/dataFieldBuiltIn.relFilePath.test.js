@@ -11,11 +11,11 @@ describe('DataFieldBuiltInFactory relFilePath field type', function () {
   })
 
   it('should throw fileNotExists error', function () {
-    tH.throwPathNotExistsFn('fileNotExists', path.join(tH.rootDir, 'not', 'exists'))
+    tH.throwPathNotExistsFn('fileNotExists', path.join('not', 'exists'))
   })
 
   it('should throw fileAlreadyExists error', function () {
-    tH.throwPathAlreadyExistsFn('fileAlreadyExists', path.join(tH.testDir, 'directory1', 'file11.txt'))
+    tH.throwPathAlreadyExistsFn('fileAlreadyExists', path.join('directory1', 'file11.txt'), tH.testDir)
   })
 
   it('should throw fileNotCreated error', function () {
@@ -27,31 +27,31 @@ describe('DataFieldBuiltInFactory relFilePath field type', function () {
   })
 
   it('should support default path', function () {
-    tH.supportDefaultPath(path.join(tH.testDir, 'directory1', 'file11.txt'))
+    tH.supportDefaultPath(path.join('directory1', 'file11.txt'), tH.testDir)
   })
 
   it('should support schema.presence = true', function () {
-    tH.schemaPresenceTrueFn(path.join(tH.testDir, 'directory1', 'file11.txt'))
+    tH.schemaPresenceTrueFn(path.join('directory1', 'file11.txt'), tH.testDir)
   })
 
   it('should support schema.presence = false', function () {
-    tH.schemaPresenceFalseFn(path.join(tH.testDir, 'directory1', 'not', 'file11.txt'))
+    tH.schemaPresenceFalseFn(path.join('directory1', 'not', 'file11.txt'), tH.testDir)
   })
 
   it('should support schema.ensure (not create)', function () {
-    tH.schemaEnsureFn(path.join(tH.testDir, 'directory1', 'file11.txt'), false)
+    tH.schemaEnsureFn(path.join('directory1', 'file11.txt'), false, tH.testDir)
   })
 
   it('should support schema.ensure (create)', function () {
-    tH.schemaEnsureFn(path.join(tH.testDir, 'directory1', 'file123.txt'), true)
+    tH.schemaEnsureFn(path.join('directory1', 'file123.txt'), true, tH.testDir)
   })
 
   it('should have fn.exists', async function () {
-    await tH.customFnExists(path.join(tH.testDir, 'directory1', 'file11.txt'))
+    await tH.customFnExists(path.join('directory1', 'file11.txt'), tH.testDir)
   })
 
   it('should have fn.ensure and fn.delete', async function () {
-    await tH.customFnEnsureDelete(path.join(tH.testDir, 'directory1', 'file44.txt'))
+    await tH.customFnEnsureDelete(path.join('directory1', 'file44.txt'), tH.testDir)
   })
 
   // it('should throw notRelDirPath error', function () { })
