@@ -1,5 +1,4 @@
 const path = require('path')
-const { fileUtils } = require('../../utils/file.utils') // todo: remove
 const { JsonizedFile } = require('../index')
 
 const jsonFileWrongJson = path.join(__dirname, 'test_dir', 'config_file_wrong_json')
