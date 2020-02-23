@@ -28,7 +28,7 @@ class FileButler {
   }
 
   async delete () {
-    if (await this._fileExists(this._config.filePath)) {
+    if ((await this._fileExists(this._config.filePath)) === true) {
       await this._removeFile(this._config.filePath)
     }
     this._data = this._config.defaultValue
@@ -141,13 +141,13 @@ class FileButler {
 
   async load () {
     /* clone file */
-    if (this._config.cloneFrom && await this._fileExists(this._config.cloneFrom)) {
+    if (this._config.cloneFrom && (await this._fileExists(this._config.cloneFrom)) === true) {
       await this._copyFile(this._config.cloneFrom, this._config.filePath)
     }
 
     let fileData = this._config.defaultValue
 
-    if (await this._fileExists(this._config.filePath)) {
+    if ((await this._fileExists(this._config.filePath)) === true) {
       fileData = await this._readFile(this._config.filePath, this._config.fileEncoding, this._config.fileReadFlag)
     }
 
@@ -167,7 +167,7 @@ class FileButler {
 
   async save () {
     /* backup file */
-    if (this._currentFileHasData === true && this._config.backupTo && await this._fileExists(this._config.filePath)) {
+    if (this._currentFileHasData === true && this._config.backupTo && (await this._fileExists(this._config.filePath)) === true) {
       await this._copyFile(this._config.filePath, this._config.backupTo)
     }
 
