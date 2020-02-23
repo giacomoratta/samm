@@ -179,11 +179,13 @@ class FileButler {
       else fileData = saveFnResult
     }
 
+    this._currentFileHasData = this._setData(fileData, true)
+
     const dataToFileFnResult = this._config.dataToFileFn(fileData)
     if (dataToFileFnResult instanceof Promise) fileData = await dataToFileFnResult
     else fileData = dataToFileFnResult
 
-    this._currentFileHasData = await this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+    await this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
     return this._currentFileHasData
   }
 }

@@ -30,7 +30,7 @@ describe('JsonizedFile operations with fields and json data', function () {
     await expect(jzf.load()).resolves.toEqual(false)
   })
 
-  it('should perform basic operations with fields', async function () {
+  it('should perform basic operations with fields and file', async function () {
     const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
 
     jzf.add(DFBF.create({
@@ -42,12 +42,39 @@ describe('JsonizedFile operations with fields and json data', function () {
       value: 'qwerty098'
     }))
 
-    // await expect(jzf.load()).resolves.toEqual(false)
-    await jzf.load()
+    jzf.add(DFBF.create({
+      name: 'age',
+      schema: {
+        type: 'number',
+        min: 3
+      },
+      value: 32
+    }))
 
-    jzf.field('username').value = 'asfasf'
+    jzf.add(DFBF.create({
+      name: 'optional1',
+      schema: {
+        type: 'string'
+      }
+    }))
 
+    await expect(jzf.load()).resolves.toEqual(false)
     await jzf.save()
+
+    expect(jzf.jsonData).toMatchObject({
+      username: 'qwerty098',
+      age: 32
+    })
+
+    jzf.field('optional1').value = 'test-not-null'
+    await jzf.save()
+    expect(jzf.jsonData).toMatchObject({
+      username: 'qwerty098',
+      age: 32,
+      optional1: 'test-not-null'
+    })
+
+    await jzf.clean()
   })
 
   it('should handle check and give information about fields', async function () { })

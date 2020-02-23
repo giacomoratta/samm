@@ -92,7 +92,11 @@ class JsonizedFile {
     return data
   }
 
-  empty () {
+  get jsonData () {
+    return this.fileHolder.data
+  }
+
+  get isEmpty () {
     return this.fileHolder.isEmpty
   }
 
@@ -113,7 +117,7 @@ class JsonizedFile {
   }
 
   async reset () {
-    await this.deleteFile()
+    await this.fileHolder.delete()
     Object.keys(this.fields).forEach((k) => {
       this.fields[k].reset()
     })
@@ -124,7 +128,7 @@ class JsonizedFile {
     try {
       const keys = Object.keys(this.fields)
       for (let i = 0; i < keys.length; i++) {
-        await this.fields[keys[i]].clean()
+        this.fields[keys[i]].fn.clean && await this.fields[keys[i]].fn.clean()
       }
       return await this.fileHolder.delete()
     } catch (e) {
