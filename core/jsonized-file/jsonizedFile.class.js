@@ -3,7 +3,6 @@ const { JsonFileButler } = require('../file-butler')
 
 class JsonizedFile {
   constructor ({ filePath = '', prettyJson = false, sortedFields = false }) {
-    this.filePath = filePath
     this.options = { }
     this.options.prettyJson = prettyJson
     this.options.sortedFields = sortedFields
@@ -11,7 +10,7 @@ class JsonizedFile {
     this.beforeLoadFn = null
 
     this.fileHolder = new JsonFileButler({
-      filePath: this.filePath,
+      filePath: filePath,
       fileType: (this.options.prettyJson ? 'json' : 'json-compact'),
       loadFn: (data) => {
         if (!data) return null
@@ -31,10 +30,10 @@ class JsonizedFile {
   }
 
   add (dataField) {
-    if (this.fields[name]) {
-      throw new JsonizedFileError(`Field ${name} already exists. Remove it first`)
+    if (this.fields[dataField.name]) {
+      throw new JsonizedFileError(`Field ${dataField.name} already exists. Remove it first`)
     }
-    this.fields[name] = dataField
+    this.fields[dataField.name] = dataField
     return true
   }
 
@@ -46,11 +45,11 @@ class JsonizedFile {
     return this.fields[name]
   }
 
-  fieldsCount () {
+  length () {
     return Object.keys(this.fields).length
   }
 
-  fieldsList ({ writableOnly = false } = {}) {
+  list ({ writableOnly = false } = {}) {
     let fieldsList = []
     if (writableOnly === true) {
       Object.keys(this.fields).forEach((k) => {
@@ -74,7 +73,7 @@ class JsonizedFile {
     const fieldsList = Object.keys(this.fields)
     if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
     fieldsList.forEach((k) => {
-      finalObject[k] = this.fields[k].get(false)
+      finalObject[k] = this.fields[k].valueRef
       if (finalObject[k] === null) delete finalObject[k]
     })
     return finalObject
@@ -84,16 +83,17 @@ class JsonizedFile {
     Object.keys(data).forEach((k) => {
       if (!this.fields[k]) return
       try {
-        this.fields[k].rawValue = data[k]
+        this.fields[k].valueRef = data[k]
       } catch (e) {
         this.fields[k].unset = true
         throw e
       }
     })
+    return data
   }
 
-  hasData () {
-    return !this.fileHolder.isEmpty
+  empty () {
+    return this.fileHolder.isEmpty
   }
 
   async load () {
