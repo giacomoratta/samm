@@ -5,3 +5,4 @@ clean files
 - methods
 - basic example
 - use case #1: configuration file
+- expected custom fn: clean

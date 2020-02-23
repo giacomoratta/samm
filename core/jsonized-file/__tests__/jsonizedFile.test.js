@@ -30,7 +30,7 @@ describe('JsonizedFile operations with fields and json data', function () {
     await expect(jzf.load()).resolves.toEqual(false)
   })
 
-  it('should perform basic operations with fields and file', async function () {
+  it('should perform a basic operative flow', async function () {
     const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
 
     jzf.add(DFBF.create({
