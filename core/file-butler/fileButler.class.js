@@ -29,10 +29,11 @@ class FileButler {
 
   async delete () {
     if ((await this._fileExists(this._config.filePath)) === true) {
-      await this._removeFile(this._config.filePath)
+      if ((await this._removeFile(this._config.filePath)) !== true) return false
     }
     this._data = this._config.defaultValue
     this._hasData = false
+    return true
   }
 
   _setData (data, doNotClone = false) {
@@ -180,6 +181,9 @@ class FileButler {
     }
 
     this._currentFileHasData = this._setData(fileData, true)
+    if (this._currentFileHasData === false) {
+      return await this._writeFile('', this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+    }
 
     const dataToFileFnResult = this._config.dataToFileFn(fileData)
     if (dataToFileFnResult instanceof Promise) fileData = await dataToFileFnResult

@@ -2,7 +2,7 @@ const { JsonizedFileError } = require('./jsonizedFileError.class')
 const { JsonFileButler } = require('../file-butler')
 
 class JsonizedFile {
-  constructor ({ filePath = '', prettyJson = false, sortedFields = false }) {
+  constructor ({ filePath, prettyJson = false, sortedFields = false, cloneFrom }) {
     this.options = { }
     this.options.prettyJson = prettyJson
     this.options.sortedFields = sortedFields
@@ -12,6 +12,7 @@ class JsonizedFile {
     this.fileHolder = new JsonFileButler({
       filePath: filePath,
       fileType: (this.options.prettyJson ? 'json' : 'json-compact'),
+      cloneFrom,
       loadFn: (data) => {
         if (!data) return null
         if (this.beforeLoadFn) data = this.beforeLoadFn(data)
