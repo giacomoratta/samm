@@ -184,13 +184,13 @@ describe('JsonizedFile operations with fields and json data', function () {
     // remove
   })
 
-  it('should reset a jsonizedFile object', async function () {
+  it('should reset a jsonizedFile object with path fields', async function () {
     // create 3 fields (1 absFilePath empty)
     // reset
     // file already there
   })
 
-  it('should clean a jsonizedFile object', async function () {
+  it('should clean a jsonizedFile object with path fields', async function () {
     // create 3 fields (1 absFilePath empty)
     // clean
     // file removed
