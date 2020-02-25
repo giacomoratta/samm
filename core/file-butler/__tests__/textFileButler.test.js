@@ -9,7 +9,7 @@ describe('FileButler basic operations', function () {
     })
     await fb.load()
     expect(fb.data).toEqual('')
-    expect(fb.isEmpty).toEqual(true)
+    expect(fb.empty).toEqual(true)
     await fb.delete()
   })
 
@@ -19,7 +19,7 @@ describe('FileButler basic operations', function () {
     })
     await fb.load()
     expect(fb.data).toEqual('')
-    expect(fb.isEmpty).toEqual(true)
+    expect(fb.empty).toEqual(true)
   })
 
   it('should load content from non-empty file', async function () {
@@ -28,7 +28,7 @@ describe('FileButler basic operations', function () {
     })
     await fb.load()
     expect(fb.data.replace(/[^a-z0-9]/gi, '')).toEqual('abc123def')
-    expect(fb.isEmpty).toEqual(false)
+    expect(fb.empty).toEqual(false)
   })
 
   it('should load content from cloned file', async function () {
@@ -38,7 +38,7 @@ describe('FileButler basic operations', function () {
     })
     await fb.load()
     expect(fb.data.replace(/[^a-z0-9]/gi, '')).toEqual('abc123def')
-    expect(fb.isEmpty).toEqual(false)
+    expect(fb.empty).toEqual(false)
     await fb.delete()
   })
 

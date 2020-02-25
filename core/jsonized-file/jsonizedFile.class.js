@@ -46,7 +46,7 @@ class JsonizedFile {
     return this.fields[name]
   }
 
-  length () {
+  get length () {
     return Object.keys(this.fields).length
   }
 
@@ -97,8 +97,8 @@ class JsonizedFile {
     return this.fileHolder.data
   }
 
-  get isEmpty () {
-    return this.fileHolder.isEmpty
+  get empty () {
+    return this.fileHolder.empty
   }
 
   async load () {

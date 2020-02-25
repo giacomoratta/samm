@@ -123,7 +123,7 @@ class JsonizedFile {
   }
 
   hasData () {
-    return !this.fileHolder.isEmpty
+    return !this.fileHolder.empty
   }
 
   async load () {

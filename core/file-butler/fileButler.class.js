@@ -23,7 +23,7 @@ class FileButler {
     return this._setData(data)
   }
 
-  get isEmpty () {
+  get empty () {
     return !this._hasData
   }
 

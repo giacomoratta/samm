@@ -11,7 +11,7 @@ describe('JsonFileButler custom operations', function () {
     expect(fb.data).toMatchObject({
       aaaaa: 432432
     })
-    expect(fb.isEmpty).toEqual(false)
+    expect(fb.empty).toEqual(false)
   })
 
   it('should load even if json is wrong', async function () {
@@ -29,7 +29,7 @@ describe('JsonFileButler custom operations', function () {
       filePath: path.join(dirTestPath, 'file44.json')
     })
     await fb.load()
-    expect(fb.isEmpty).toEqual(true)
+    expect(fb.empty).toEqual(true)
     fb.data = {
       bbbbb: 654533
     }
@@ -72,7 +72,7 @@ describe('JsonFileButler custom operations', function () {
       }
     })
     await fb.load()
-    expect(fb.isEmpty).toEqual(true)
+    expect(fb.empty).toEqual(true)
     await fb.save()
 
     const fb2 = new JsonFileButler({
