@@ -65,6 +65,7 @@ class JsonizedFile {
   }
 
   remove (name) {
+    if (!this.fields[name]) return false
     delete this.fields[name]
     return true
   }

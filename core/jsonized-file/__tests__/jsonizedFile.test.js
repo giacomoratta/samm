@@ -173,21 +173,59 @@ describe('JsonizedFile operations with fields and json data', function () {
   })
 
   it('should avoid to create existent fields and remove it', async function () {
-    // create x2
-    // remove
+    const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
+
+    jzf.add(DFBF.create({
+      name: 'username',
+      schema: {
+        type: 'string',
+        min: 3
+      },
+      value: 'qwerty098'
+    }))
+
+    expect(function () {
+      jzf.add(DFBF.create({
+        name: 'username',
+        schema: {
+          type: 'string',
+          min: 3
+        },
+        value: 'qwerty098'
+      }))
+    }).toThrow('already exists')
+
+    expect(jzf.remove('username')).toEqual(true)
+    expect(jzf.remove('username')).toEqual(false)
   })
 
   it('should handle operations with non-existent fields', async function () {
-    // has
-    // field
-    // empty
-    // remove
+    const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
+    expect(jzf.has('username')).toEqual(false)
+    expect(jzf.remove('username')).toEqual(false)
+    expect(jzf.field('username')).toEqual(undefined)
+    expect(jzf.empty).toEqual(true)
   })
 
   it('should reset a jsonizedFile object with path fields', async function () {
-    // create 3 fields (1 absFilePath empty)
-    // reset
-    // file already there
+    const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
+
+    jzf.add(DFBF.create({
+      name: 'field51',
+      schema: {
+        type: 'absDirPath',
+        ensure: true
+      }
+    }))
+
+    jzf.field('field51').value = path.join(jsonTestDir, 'field51')
+    await expect(jzf.field('field51').fn.exists()).resolves.toEqual(true)
+    expect(jzf.field('field51').value).toEqual(path.join(jsonTestDir, 'field51'))
+
+    jzf.field('field51').reset()
+    expect(jzf.field('field51').value).toEqual(null)
+
+    await jzf.field('field51').fn.delete()
   })
 
   it('should clean a jsonizedFile object with path fields', async function () {
