@@ -74,6 +74,7 @@ describe('JsonizedFile operations with fields and json data', function () {
 
   it('should perform a basic flow: load, edit, save, re-load', async function () {
     const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile1.json'), prettyJson: true })
+    await jzf.clean()
 
     jzf.add(DFBF.create({
       name: 'username',

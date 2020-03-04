@@ -125,6 +125,10 @@ class JsonizedFile {
     })
     hard !== true && await this.save()
   }
+
+  async clean (hard = false) {
+    await this.fileHolder.delete()
+  }
 }
 
 module.exports = {
