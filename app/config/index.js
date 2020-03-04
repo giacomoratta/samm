@@ -248,3 +248,10 @@ module.exports = {
   ConfigBoot,
   ConfigCleanData
 }
+
+module.exports = ({ reboot = false, clean = false }) => {
+  if (reboot === false || !ConfigInstance) {
+    return {}
+  }
+  return {}
+}

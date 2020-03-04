@@ -1,4 +1,4 @@
-const { Config } = require('./config')
+const { Config, ConfigBoot, ConfigCleanData } = require('./config')
 // const { PathQuery } = require('./path-query')
 // const { ProjectHistory } = require('./project')
 // const { Sample } = require('./sample')
@@ -6,14 +6,21 @@ const { Config } = require('./config')
 
 console.error(process.cwd())
 
-const boot = () => {
-  return new Promise((resolve, reject) => {
-    resolve()
-  })
+const boot = async () => {
+  await ConfigBoot('file/path/file.json')
+  // return false: severe error, app closed
+  return true
+}
+
+const clean = async () => {
+  await ConfigCleanData()
+  // return false: severe error, app closed
+  return true
 }
 
 module.exports = {
   boot,
+  clean,
   Config
   // PathQuery,
   // ProjectHistory,
