@@ -118,24 +118,12 @@ class JsonizedFile {
     }
   }
 
-  async reset () {
+  async reset (hard = false) {
     await this.fileHolder.delete()
     Object.keys(this.fields).forEach((k) => {
       this.fields[k].reset()
     })
-    await this.save()
-  }
-
-  async clean () {
-    try {
-      const keys = Object.keys(this.fields)
-      for (let i = 0; i < keys.length; i++) {
-        this.fields[keys[i]].fn.clean && await this.fields[keys[i]].fn.clean()
-      }
-      return await this.fileHolder.delete()
-    } catch (e) {
-      throw new JsonizedFileError(e.message)
-    }
+    hard !== true && await this.save()
   }
 }
 

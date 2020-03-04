@@ -226,11 +226,25 @@ describe('JsonizedFile operations with fields and json data', function () {
     expect(jzf.field('field51').value).toEqual(null)
 
     await jzf.field('field51').fn.delete()
+    await expect(jzf.field('field51').fn.exists()).resolves.toEqual(false)
   })
 
-  it('should clean a jsonizedFile object with path fields', async function () {
-    // create 3 fields (1 absFilePath empty)
-    // clean
-    // file removed
+  it('should hard-reset a jsonizedFile object', async function () {
+    const jzf = new JsonizedFile({ filePath: path.join(jsonTestDir, 'basicFile-hard-reset.json'), prettyJson: true })
+
+    jzf.add(DFBF.create({
+      name: 'username',
+      schema: {
+        type: 'string',
+        min: 3
+      },
+      value: 'qwerty098'
+    }))
+
+    await jzf.save()
+    await expect(jzf.fileHolder.exists()).resolves.toEqual(true)
+
+    await jzf.reset(true)
+    await expect(jzf.fileHolder.exists()).resolves.toEqual(false)
   })
 })

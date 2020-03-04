@@ -27,6 +27,14 @@ class FileButler {
     return !this._hasData
   }
 
+  async exists () {
+    try {
+      return await this._fileExists(this._config.filePath)
+    } catch (e) {
+      return false
+    }
+  }
+
   async delete () {
     if ((await this._fileExists(this._config.filePath)) === true) {
       if ((await this._removeFile(this._config.filePath)) !== true) return false

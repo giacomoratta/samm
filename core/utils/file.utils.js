@@ -118,7 +118,7 @@ libUtils.fileExists = (pathString) => {
   return new Promise((resolve) => {
     fs.access(pathString, fs.constants.F_OK, (error) => {
       if (!error) return resolve(true)
-      return resolve(error)
+      return resolve(false)
     })
   })
 }
