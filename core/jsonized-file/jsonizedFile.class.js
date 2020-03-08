@@ -126,7 +126,7 @@ class JsonizedFile {
     hard !== true && await this.save()
   }
 
-  async clean (hard = false) {
+  async clean () {
     await this.fileHolder.delete()
   }
 }
