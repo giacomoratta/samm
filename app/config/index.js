@@ -1,11 +1,8 @@
-const path = require('path')
-const os = require('os')
 const { ConfigFile } = require('./configFile.class')
 const log = require('../../core/logger').createLogger('config')
 
 let ConfigInstance = null
 let ConfigCleanDataPostponed = false
-const PlatformSignature = `${os.platform()}-${os.release()}`
 
 const __init__ = (filePath) => {
   // ConfigInstance.addField({
@@ -86,17 +83,12 @@ const ConfigBoot = async (filePath) => {
     ConfigCleanData()
     ConfigCleanDataPostponed = false
   }
-  if (await ConfigInstance.load() === true) {
-    await ConfigInstance.save()
-    log.info('Loaded successfully')
-    if (ConfigInstance.get('Platform') !== PlatformSignature) {
-      log.info(`Different platform signature (current: ${PlatformSignature}). Resetting...`)
-      return ConfigInstance.reset()
-    }
-    return true
+  if (await ConfigInstance.load() !== true) {
+    log.info('Cannot load or save')
+    return false
   }
-  log.info('Cannot load or save')
-  return false
+  log.info('Loaded successfully')
+  return true
 }
 
 module.exports = {

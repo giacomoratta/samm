@@ -1,3 +1,5 @@
+const os = require('os')
+const path = require('path')
 const { JsonizedFile } = require('../../core/jsonized-file')
 
 class ConfigFile extends JsonizedFile {
@@ -5,6 +7,7 @@ class ConfigFile extends JsonizedFile {
     super({ filePath, prettyJson: true })
 
     const basePath = path.parse(filePath).dir
+    this.PlatformSignature = `${os.platform()}-${os.release()}`
 
     this.addField({
       name: 'Platform',
@@ -12,7 +15,7 @@ class ConfigFile extends JsonizedFile {
         type: 'string',
         readOnly: true
       },
-      value: PlatformSignature,
+      value: this.PlatformSignature,
       description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
     })
 
@@ -138,6 +141,16 @@ class ConfigFile extends JsonizedFile {
         this.getField('Status').add('new-scan-needed', true)
       }
     })
+  }
+
+  async load () {
+    const generateFile = !(await this.fileHolder.exists())
+    if (await super.load() !== true) return false
+    generateFile === true && await this.save()
+    if (this.get('Platform') !== this.PlatformSignature) {
+      return this.reset()
+    }
+    return true
   }
 }
 

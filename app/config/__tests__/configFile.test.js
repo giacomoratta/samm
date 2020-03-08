@@ -1,8 +1,8 @@
 const path = require('path')
 const configDataLocation = path.resolve(path.join(__dirname, '..', '..', '__tests__'))
-const { fileUtils } = require('../../../core/utils/file.utils')
 
-// const { ConfigFile } = require('../configFile.class')
+const { ConfigFile } = require('./configFile.class')
+const ConfigInstance = null
 
 describe('configuration file class manager', function () {
   beforeEach(() => {
