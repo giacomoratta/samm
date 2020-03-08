@@ -4,8 +4,8 @@ const { JsonizedFile } = require('../../core/jsonized-file')
 const { DataFieldBuiltInFactory } = require('../../core/data-field/dataFieldBuiltIn.factory')
 
 class ConfigFile extends JsonizedFile {
-  constructor (filePath) {
-    super({ filePath, prettyJson: true })
+  constructor (filePath, cloneFrom) {
+    super({ filePath, prettyJson: true, cloneFrom })
 
     const basePath = path.parse(filePath).dir
 
@@ -14,7 +14,7 @@ class ConfigFile extends JsonizedFile {
 
     this.PlatformSignature = `${os.platform()}-${os.release()}`
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'Platform',
       schema: {
         type: 'string',
@@ -22,19 +22,19 @@ class ConfigFile extends JsonizedFile {
       },
       value: this.PlatformSignature,
       description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'SamplesDirectory',
       schema: {
         type: 'absDirPath',
         checkExists: true
       },
-      default: basePath,
+      value: basePath,
       description: 'Directory with samples to scan and search in'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'SamplesDirectoryExclusions',
       schema: {
         type: 'array',
@@ -48,9 +48,9 @@ class ConfigFile extends JsonizedFile {
         'samplePack2'
       ],
       description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'RandomCount',
       schema: {
         type: 'number',
@@ -59,9 +59,9 @@ class ConfigFile extends JsonizedFile {
       },
       value: 15,
       description: 'Maximum number of random samples selected after a search'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'MaxSamplesSameDirectory',
       schema: {
         type: 'number',
@@ -70,29 +70,29 @@ class ConfigFile extends JsonizedFile {
       },
       value: 2,
       description: 'Maximum number of samples from the same directory, to avoid too many samples from the same family'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'ExcludedExtensionsForSamples',
       schema: {
         type: 'array',
         items: 'string'
       },
-      default: ['exe', 'DS_Store', 'info'],
+      value: ['exe', 'DS_Store', 'info'],
       description: 'The list of extensions which the samples must NOT have'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'IncludedExtensionsForSamples',
       schema: {
         type: 'array',
         items: 'string'
       },
-      default: ['wav', 'mp3'],
+      value: ['wav', 'mp3'],
       description: 'The list of extensions which the samples must have'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'ExtensionsPolicyForSamples',
       schema: {
         type: 'enum',
@@ -100,9 +100,9 @@ class ConfigFile extends JsonizedFile {
       },
       value: 'X',
       description: '\'I\' to get files with declared extensions only, \'E\' to exclude file with some extensions, and \'X\' to disable the extension filter'
-    })
+    }))
 
-    this.add({
+    this.add(this.DFBF.create({
       name: 'Status',
       schema: {
         type: 'object',
@@ -116,10 +116,10 @@ class ConfigFile extends JsonizedFile {
         'new-scan-needed': false
       },
       description: 'Application status data, flags, etc.'
-    })
+    }))
 
     this.field('SamplesDirectory').on('change', ({ newValue }) => {
-      this.field('Status').add('new-scan-needed', true)
+      this.field('Status').fn.setProp('new-scan-needed', true)
       this.field('SamplesDirectoryExclusions').schema = {
         items: {
           basePath: newValue
@@ -128,28 +128,24 @@ class ConfigFile extends JsonizedFile {
     })
 
     this.field('SamplesDirectoryExclusions').on('change', () => {
-      this.field('Status').add('new-scan-needed', true)
+      this.field('Status').fn.setProp('new-scan-needed', true)
     })
 
     this.field('ExtensionsPolicyForSamples').on('change', () => {
-      this.field('Status').add('new-scan-needed', true)
+      this.field('Status').fn.setProp('new-scan-needed', true)
     })
 
     this.field('ExcludedExtensionsForSamples').on('change', () => {
       if (this.field('ExtensionsPolicyForSamples').valueRef === 'E') {
-        this.field('Status').add('new-scan-needed', true)
+        this.field('Status').fn.setProp('new-scan-needed', true)
       }
     })
 
     this.field('IncludedExtensionsForSamples').on('change', () => {
       if (this.field('ExtensionsPolicyForSamples').valueRef === 'I') {
-        this.field('Status').add('new-scan-needed', true)
+        this.field('Status').fn.setProp('new-scan-needed', true)
       }
     })
-  }
-
-  add (dataFieldConfig) {
-    return super.add(this.DFBF.create(dataFieldConfig))
   }
 
   async load () {
