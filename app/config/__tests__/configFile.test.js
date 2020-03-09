@@ -8,6 +8,10 @@ describe('configuration file class manager', function () {
     await ConfigInstance.clean()
   })
 
+  afterAll(async function () {
+    await ConfigInstance.clean()
+  })
+
   it('should load and create a config file with default values', async function () {
     await expect(ConfigInstance.load()).resolves.toEqual(false)
     expect(ConfigInstance.field('SamplesDirectoryExclusions').valueRef).toMatchObject([
