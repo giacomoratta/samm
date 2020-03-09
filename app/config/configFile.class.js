@@ -153,7 +153,8 @@ class ConfigFile extends JsonizedFile {
     if (await super.load() !== true) return false
     generateFile === true && await this.save()
     if (this.field('Platform').valueRef !== this.PlatformSignature) {
-      return this.reset()
+      await this.reset()
+      return false
     }
     return true
   }

@@ -46,6 +46,7 @@ describe('configuration file class manager', function () {
   it('should reset because different os platform', async function () {
     const ConfigObj = new ConfigFile(path.join(__dirname, 'config_test001.json'), path.join(__dirname, 'config_test0.json'))
     await ConfigObj.clean()
+    await expect(ConfigObj.load()).resolves.toEqual(false)
 
     expect(ConfigObj.field('RandomCount').valueRef).toEqual(15)
     expect(ConfigObj.field('MaxSamplesSameDirectory').valueRef).toEqual(2)

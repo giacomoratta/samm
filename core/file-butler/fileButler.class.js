@@ -154,50 +154,57 @@ class FileButler {
       await this._copyFile(this._config.cloneFrom, this._config.filePath)
     }
 
+    /* read file */
     let fileData = this._config.defaultValue
-
     if ((await this._fileExists(this._config.filePath)) === true) {
       fileData = await this._readFile(this._config.filePath, this._config.fileEncoding, this._config.fileReadFlag)
     }
 
+    /* file content to data */
     const fileToDataFnResult = this._config.fileToDataFn(fileData)
     if (fileToDataFnResult instanceof Promise) fileData = await fileToDataFnResult
     else fileData = fileToDataFnResult
 
+    /* post-process file data and set internal data */
     if (this._config.loadFn) {
       const loadFnResult = this._config.loadFn(fileData)
       if (loadFnResult instanceof Promise) fileData = await loadFnResult
       else fileData = loadFnResult
     }
-
     this._currentFileHasData = this._setData(fileData, true)
+
+    /* return the presence of data */
     return this._currentFileHasData
   }
 
   async save () {
-    /* backup file */
+    /* backup file before saving */
     if (this._currentFileHasData === true && this._config.backupTo && (await this._fileExists(this._config.filePath)) === true) {
       await this._copyFile(this._config.filePath, this._config.backupTo)
     }
 
+    /* pre-process file data and set internal data */
     let fileData = this.data
-
     if (this._config.saveFn) {
       const saveFnResult = this._config.saveFn(fileData)
       if (saveFnResult instanceof Promise) fileData = await saveFnResult
       else fileData = saveFnResult
     }
-
     this._currentFileHasData = this._setData(fileData, true)
+
+    /* save empty file */
     if (this._currentFileHasData === false) {
-      return await this._writeFile('', this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+      await this._writeFile('', this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+      return false
     }
 
+    /* data to specific file content and save */
     const dataToFileFnResult = this._config.dataToFileFn(fileData)
     if (dataToFileFnResult instanceof Promise) fileData = await dataToFileFnResult
     else fileData = dataToFileFnResult
-
     await this._writeFile(fileData, this._config.filePath, this._config.fileEncoding, this._config.fileWriteFlag, this._config.fileMode)
+
+    /* return the presence of data */
     return this._currentFileHasData
   }
 }
