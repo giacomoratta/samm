@@ -1,4 +1,4 @@
-const { App, Cli, CLI_ERROR } = require('./common')
+const { App, Cli, CLI_ERROR } = require('./ui_common')
 
 const Config = App.Config
 

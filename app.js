@@ -13,5 +13,5 @@ require('./app/init.js'); */
 // const log = require('./core/logger').createLogger('app')
 
 require('dotenv').config()
-process.env.ABSOLUTE_APP_PATH = __dirname
-require('./ui/cli-vorpal-v1')
+process.env.ABSOLUTE_APP_PATH = process.cwd()
+require('./ui/cli-vorpal-v1/ui_start')

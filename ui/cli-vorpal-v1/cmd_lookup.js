@@ -1,4 +1,4 @@
-const { App, Cli } = require('./common')
+const { App, Cli } = require('./ui_common')
 
 const Sample = App.Sample
 

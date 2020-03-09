@@ -1,5 +1,5 @@
 // const { App, Cli } = require('./common')
-const { Cli } = require('./common')
+const { Cli } = require('./ui_common')
 
 // const Config = App.Config
 

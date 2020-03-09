@@ -2,77 +2,78 @@ const { ConfigFile } = require('./configFile.class')
 const log = require('../../core/logger').createLogger('config')
 
 let ConfigInstance = null
+const configFilePath = process.cwd()
 
-const __init__ = (filePath) => {
-  // ConfigInstance.addField({
-  //   name: 'UserdataDirectory',
-  //   schema: {
-  //     type: 'relDirPath',
-  //     basePath: basePath,
-  //     createIfNotExists: true,
-  //     readOnly: true
-  //   },
-  //   value: 'userdata',
-  //   description: 'Directory for storing all the user data'
-  // })
-  //
-  // ConfigInstance.addField({
-  //   name: 'SampleIndexFile',
-  //   schema: {
-  //     type: 'relFilePath',
-  //     basePath: ConfigInstance.getField('UserdataDirectory').get(),
-  //     createIfNotExists: true,
-  //     readOnly: true
-  //   },
-  //   value: 'samples_index',
-  //   description: 'Index generated after a full samples directory scan'
-  // })
-  //
-  // ConfigInstance.addField({
-  //   name: 'ProjectHistoryFile',
-  //   schema: {
-  //     type: 'relFilePath',
-  //     basePath: ConfigInstance.getField('UserdataDirectory').get(),
-  //     createIfNotExists: true,
-  //     readOnly: true
-  //   },
-  //   value: 'project_history',
-  //   description: 'List of opened projects, current one, etc.'
-  // })
-  //
-  // ConfigInstance.addField({
-  //   name: 'BookmarkFile',
-  //   schema: {
-  //     type: 'relFilePath',
-  //     basePath: ConfigInstance.getField('UserdataDirectory').get(),
-  //     createIfNotExists: true,
-  //     readOnly: true
-  //   },
-  //   value: 'bookmarks',
-  //   description: 'List of bookmarked samples'
-  // })
-  //
-  // ConfigInstance.addField({
-  //   name: 'PathQueryFile',
-  //   schema: {
-  //     type: 'relFilePath',
-  //     basePath: ConfigInstance.getField('UserdataDirectory').get(),
-  //     createIfNotExists: true,
-  //     readOnly: true
-  //   },
-  //   value: 'path_queries',
-  //   description: 'File with queries for sample paths'
-  // })
-}
+// const __init__ = (filePath) => {
+//   ConfigInstance.addField({
+//     name: 'UserdataDirectory',
+//     schema: {
+//       type: 'relDirPath',
+//       basePath: basePath,
+//       createIfNotExists: true,
+//       readOnly: true
+//     },
+//     value: 'userdata',
+//     description: 'Directory for storing all the user data'
+//   })
+//
+//   ConfigInstance.addField({
+//     name: 'SampleIndexFile',
+//     schema: {
+//       type: 'relFilePath',
+//       basePath: ConfigInstance.getField('UserdataDirectory').get(),
+//       createIfNotExists: true,
+//       readOnly: true
+//     },
+//     value: 'samples_index',
+//     description: 'Index generated after a full samples directory scan'
+//   })
+//
+//   ConfigInstance.addField({
+//     name: 'ProjectHistoryFile',
+//     schema: {
+//       type: 'relFilePath',
+//       basePath: ConfigInstance.getField('UserdataDirectory').get(),
+//       createIfNotExists: true,
+//       readOnly: true
+//     },
+//     value: 'project_history',
+//     description: 'List of opened projects, current one, etc.'
+//   })
+//
+//   ConfigInstance.addField({
+//     name: 'BookmarkFile',
+//     schema: {
+//       type: 'relFilePath',
+//       basePath: ConfigInstance.getField('UserdataDirectory').get(),
+//       createIfNotExists: true,
+//       readOnly: true
+//     },
+//     value: 'bookmarks',
+//     description: 'List of bookmarked samples'
+//   })
+//
+//   ConfigInstance.addField({
+//     name: 'PathQueryFile',
+//     schema: {
+//       type: 'relFilePath',
+//       basePath: ConfigInstance.getField('UserdataDirectory').get(),
+//       createIfNotExists: true,
+//       readOnly: true
+//     },
+//     value: 'path_queries',
+//     description: 'File with queries for sample paths'
+//   })
+// }
 
-const ConfigCleanData = async () => {
+const clean = async () => {
   log.info('Cleaning data...')
   await ConfigInstance.clean()
 }
 
-const ConfigBoot = async (filePath) => {
-  log.info(`Booting from ${filePath}...`)
-  ConfigInstance = new ConfigFile(filePath)
+const boot = async () => {
+  log.info(`Booting from ${configFilePath}...`)
+  ConfigInstance = new ConfigFile(configFilePath)
   try {
     await ConfigInstance.load()
     log.info('Loaded successfully')
@@ -83,16 +84,19 @@ const ConfigBoot = async (filePath) => {
   }
 }
 
-// TODO: remove boot and cleandata fn
-// TODO: return singleton
-
-module.exports = {
-  Config: {
-    field (name) { return ConfigInstance.field(name) },
-    save () { return ConfigInstance.save() },
-    save () { return ConfigInstance.save() },
-    getFieldsList () { return ConfigInstance.list({ writableOnly: true }) }
+const apiConfig = {
+  field (name) {
+    return ConfigInstance.field(name)
   },
-  ConfigBoot,
-  ConfigCleanData
+
+  getFieldsList () {
+    return ConfigInstance.list({ writableOnly: true })
+  },
+
+  save () {
+    log.info('Saving configuration...')
+    return ConfigInstance.save()
+  }
 }
+
+module.exports = { apiConfig, moduleConfig: { boot, clean } }

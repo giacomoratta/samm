@@ -1,12 +1,12 @@
-const { Cli, App } = require('./common')
+const { Cli, App } = require('./ui_common')
 
-require('./bookm_cmd')
-require('./config_cmd')
-require('./lookup_cmd')
-require('./project_cmd')
-require('./query_cmd')
-require('./save_cmd')
-require('./scan_cmd')
+require('./cmd_bookm')
+require('./cmd_config')
+require('./cmd_lookup')
+require('./cmd_project')
+require('./cmd_query')
+require('./cmd_save')
+require('./cmd_scan')
 
 // todo: move here some code from common.js (messages and general things)
 

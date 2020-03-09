@@ -1,4 +1,4 @@
-const { App, Cli } = require('./common')
+const { App, Cli } = require('./ui_common')
 
 const Config = App.Config
 const ProjectHistory = App.ProjectHistory
