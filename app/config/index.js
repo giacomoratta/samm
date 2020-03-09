@@ -93,9 +93,14 @@ const apiConfig = {
     return ConfigInstance.list({ writableOnly: true })
   },
 
-  save () {
-    log.info('Saving configuration...')
-    return ConfigInstance.save()
+  async save () {
+    try {
+      const saveResult = ConfigInstance.save()
+      saveResult === true && log.info('Configuration saved succesfully.')
+      saveResult !== true && log.info('Configuration not saved.')
+    } catch (e) {
+      log.error(e, 'Error while saving the configuration.')
+    }
   }
 }
 
