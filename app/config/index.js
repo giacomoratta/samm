@@ -2,7 +2,6 @@ const { ConfigFile } = require('./configFile.class')
 const log = require('../../core/logger').createLogger('config')
 
 let ConfigInstance = null
-let ConfigCleanDataPostponed = false
 
 const __init__ = (filePath) => {
   // ConfigInstance.addField({
@@ -66,48 +65,30 @@ const __init__ = (filePath) => {
   // })
 }
 
-const ConfigCleanData = () => {
-  if (ConfigInstance === null) {
-    log.info('Clean data postponed')
-    ConfigCleanDataPostponed = true
-    return
-  }
+const ConfigCleanData = async () => {
   log.info('Cleaning data...')
-  ConfigInstance.deleteFile()
+  await ConfigInstance.clean()
 }
 
 const ConfigBoot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
   ConfigInstance = new ConfigFile(filePath)
-  if (ConfigCleanDataPostponed === true) {
-    ConfigCleanData()
-    ConfigCleanDataPostponed = false
-  }
-  if (await ConfigInstance.load() !== true) {
-    log.info('Cannot load or save')
+  try {
+    await ConfigInstance.load()
+    log.info('Loaded successfully')
+    return true
+  } catch (e) {
+    log.error(e, 'Cannot load or save')
     return false
   }
-  log.info('Loaded successfully')
-  return true
 }
 
 module.exports = {
   Config: {
-    get (name) { return ConfigInstance.get(name) },
-    set (name, value) { return ConfigInstance.set(name, value) },
-    unset (name) { return ConfigInstance.unset(name) },
-    isUnset (name) { return ConfigInstance.isUnset(name) },
+    field (name) { return ConfigInstance.field(name) },
     save () { return ConfigInstance.save() },
-    getField (name) { return ConfigInstance.getField(name) },
-    getFieldsList () { return ConfigInstance.getFieldsList({ writableOnly: true }) }
+    getFieldsList () { return ConfigInstance.list({ writableOnly: true }) }
   },
   ConfigBoot,
   ConfigCleanData
-}
-
-module.exports = ({ reboot = false, clean = false }) => {
-  if (reboot === false || !ConfigInstance) {
-    return {}
-  }
-  return {}
 }
