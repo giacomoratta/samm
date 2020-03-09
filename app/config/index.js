@@ -83,9 +83,13 @@ const ConfigBoot = async (filePath) => {
   }
 }
 
+// TODO: remove boot and cleandata fn
+// TODO: return singleton
+
 module.exports = {
   Config: {
     field (name) { return ConfigInstance.field(name) },
+    save () { return ConfigInstance.save() },
     save () { return ConfigInstance.save() },
     getFieldsList () { return ConfigInstance.list({ writableOnly: true }) }
   },
