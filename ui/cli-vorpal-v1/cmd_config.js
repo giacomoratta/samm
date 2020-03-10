@@ -1,5 +1,4 @@
 const { App, Cli, CLI_ERROR } = require('./ui_common')
-
 const { API } = App
 
 const ConfigParameters = [

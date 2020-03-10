@@ -1,5 +1,5 @@
-const { Cli, App } = require('./ui_common')
-const { apiConfig } = App
+const { Cli, App, log } = require('./ui_common')
+const { API } = App
 
 // require('./cmd_bookm')
 require('./cmd_config')
@@ -10,7 +10,7 @@ require('./cmd_config')
 // require('./cmd_scan')
 
 const ConfigStatusMessages = () => {
-  const statusFlags = apiConfig.field('Status').value
+  const statusFlags = API.config.field('Status').value
   const statusMessages = []
   if (statusFlags['first-scan-needed'] === true) {
     statusMessages.push('First samples scan needed before start using the app')
@@ -43,5 +43,6 @@ App.boot({
   }
   Cli.show('mpl')
 }).catch((e) => {
+  log.error(e)
   Cli.printer.error(e)
 })

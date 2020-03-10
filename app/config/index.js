@@ -2,7 +2,6 @@ const { ConfigFile } = require('./configFile.class')
 const log = require('../../core/logger').createLogger('config')
 
 let ConfigInstance = null
-const configFilePath = process.cwd()
 
 // const __init__ = (filePath) => {
 //   ConfigInstance.addField({
@@ -71,7 +70,7 @@ const clean = async () => {
   await ConfigInstance.clean()
 }
 
-const boot = async () => {
+const boot = async (configFilePath) => {
   log.info(`Booting from ${configFilePath}...`)
   ConfigInstance = new ConfigFile(configFilePath)
   try {
