@@ -1,8 +1,6 @@
 const { Cli, App } = require('./ui_common')
 const { apiConfig } = App
 
-// todo: set logger ?
-
 // require('./cmd_bookm')
 require('./cmd_config')
 // require('./cmd_lookup')
@@ -36,7 +34,10 @@ const printWarnings = () => {
 Cli.on('show', printWarnings)
 Cli.on('afterCommand', printWarnings)
 
-App.boot().then((outcome) => {
+App.boot({
+  appRootPath: process.cwd()
+
+}).then((outcome) => {
   if (outcome === false) {
     Cli.printer.error('Severe internal error: app cannot be initialized (see logs).')
   }

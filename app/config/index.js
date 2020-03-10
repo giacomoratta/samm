@@ -84,24 +84,30 @@ const boot = async () => {
   }
 }
 
-const apiConfig = {
-  field (name) {
-    return ConfigInstance.field(name)
-  },
+module.exports = {
+  boot,
+  clean,
 
-  getFieldsList () {
-    return ConfigInstance.list({ writableOnly: true })
-  },
+  API: {
+    config: {
 
-  async save () {
-    try {
-      const saveResult = ConfigInstance.save()
-      saveResult === true && log.info('Configuration saved succesfully.')
-      saveResult !== true && log.info('Configuration not saved.')
-    } catch (e) {
-      log.error(e, 'Error while saving the configuration.')
+      field (name) {
+        return ConfigInstance.field(name)
+      },
+
+      getFieldsList () {
+        return ConfigInstance.list({ writableOnly: true })
+      },
+
+      async save () {
+        try {
+          const saveResult = ConfigInstance.save()
+          saveResult === true && log.info('Configuration saved successfully.')
+          saveResult !== true && log.info('Configuration not saved.')
+        } catch (e) {
+          log.error(e, 'Error while saving the configuration.')
+        }
+      }
     }
   }
 }
-
-module.exports = { apiConfig, moduleConfig: { boot, clean } }

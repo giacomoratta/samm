@@ -1,6 +1,6 @@
 const { App, Cli, CLI_ERROR } = require('./ui_common')
 
-const { apiConfig } = App
+const { API } = App
 
 const ConfigParameters = [
   'SamplesDirectory',
@@ -26,15 +26,15 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
 
   if (paramName) {
     /* Invalid parameter */
-    if (!apiConfig.has(paramName)) {
+    if (!API.config.has(paramName)) {
       cliPrinter.warn(`Config parameter ${paramName} does not exist.`)
       return cliNext()
     }
 
     /* Print single parameter */
     if (!cliInput.getParam('values')) {
-      cliPrinter.info(apiConfig.field(paramName).description[0])
-      cliPrinter.value(apiConfig.field(paramName).valueRef, '> current')
+      cliPrinter.info(API.config.field(paramName).description[0])
+      cliPrinter.value(API.config.field(paramName).valueRef, '> current')
       return cliNext()
     }
 
@@ -42,19 +42,19 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
     let newConfigValue
     if (paramName === 'ExcludedExtensionsForSamples') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: apiConfig.field('ExcludedExtensionsForSamples').value,
+        currentArray: API.config.field('ExcludedExtensionsForSamples').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
     } else if (paramName === 'IncludedExtensionsForSamples') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: apiConfig.field('IncludedExtensionsForSamples').value,
+        currentArray: API.config.field('IncludedExtensionsForSamples').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
     } else if (paramName === 'SamplesDirectoryExclusions') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: apiConfig.field('SamplesDirectoryExclusions').value,
+        currentArray: API.config.field('SamplesDirectoryExclusions').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
@@ -63,8 +63,8 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
     }
     if (!newConfigValue) return cliNext()
     try {
-      apiConfig.field(paramName).value = newConfigValue
-      await apiConfig.save()
+      API.config.field(paramName).value = newConfigValue
+      await API.config.save()
     } catch (e) {
       cliPrinter.error(e.message)
       return cliNext(CLI_ERROR, e)
@@ -91,9 +91,9 @@ const configDescribeParameters = ({ cliPrinter }) => {
   let currentValue = null
   ConfigParameters.forEach((configParam) => {
     cliPrinter.title(configParam)
-    const description = apiConfig.field(configParam).description
+    const description = API.config.field(configParam).description
     if (description.length > 0) {
-      currentValue = apiConfig.field(configParam).value
+      currentValue = API.config.field(configParam).value
       cliPrinter.info(`  ${description[0]}`)
 
       if (currentValue instanceof Array) {
