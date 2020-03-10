@@ -1,8 +1,6 @@
-const { Cli, App, log } = require('./ui_common')
-const { API } = App
+const { Cli, App, API, log } = require('./ui_common')
 
 // require('./cmd_bookm')
-require('./cmd_config')
 // require('./cmd_lookup')
 // require('./cmd_project')
 // require('./cmd_query')
@@ -41,6 +39,9 @@ App.boot({
   if (outcome === false) {
     Cli.printer.error('Severe internal error: app cannot be initialized (see logs).')
   }
+
+  require('./cmd_config')
+
   Cli.show('mpl')
 }).catch((e) => {
   log.error(e)

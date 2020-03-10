@@ -5,6 +5,7 @@ const Cli = new CliVorpal()
 
 module.exports = {
   App,
+  API: App.API,
   Cli,
   log,
   CLI_SUCCESS,

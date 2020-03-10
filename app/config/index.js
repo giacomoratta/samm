@@ -94,6 +94,10 @@ module.exports = {
         return ConfigInstance.field(name)
       },
 
+      has (name) {
+        return ConfigInstance.has(name)
+      },
+
       getFieldsList () {
         return ConfigInstance.list({ writableOnly: true })
       },

@@ -1,5 +1,4 @@
-const { App, Cli, CLI_ERROR } = require('./ui_common')
-const { API } = App
+const { API, Cli, CLI_ERROR } = require('./ui_common')
 
 const ConfigParameters = [
   'SamplesDirectory',
@@ -16,7 +15,7 @@ const commandName = 'config'
 Cli.addCommand(`${commandName} [name] [values...]`)
 
 Cli.addCommandHeader(commandName)
-  .autocomplete(ConfigParameters)
+  .autocomplete(API.config.getFieldsList())
   .description('Get or set the value of a configuration parameter. \n')
   .option('-r, --remove', 'Remove a key or a value from a complex parameter (e.g. list)')
 
