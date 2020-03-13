@@ -3,12 +3,6 @@ const FileButler = require('./fileButler.class')
 
 const DEFAULT_VALUE = null
 
-const _compAZ = function (a, b) {
-  a = a.toLowerCase()
-  b = b.toLowerCase()
-  return a.localeCompare(b)
-}
-
 const ENUMS = {
   fileType: {
     json: 'json',
@@ -67,17 +61,6 @@ class JsonFileButler extends FileButler {
     }
 
     super(options)
-  }
-
-  sortFields () {
-    if (this.empty === true) return
-    const fieldsList = Object.keys(this.data)
-    fieldsList.sort(_compAZ)
-    const sortedData = {}
-    fieldsList.forEach((key) => {
-      sortedData[key] = this.data[key]
-    })
-    this.data = sortedData
   }
 }
 
