@@ -1,4 +1,4 @@
-const { PathQueryJsonFile } = require('./pathQueryJsonFile.class')
+const { PathQueryJsonFile } = require('./pathQueryCollection.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidList } = require('../../core/spheroid-list')
 const log = require('../../core/logger').createLogger('path-query')
@@ -8,7 +8,10 @@ let PathQueryFile = null
 
 const add = (label, queryString) => {
   log.info('add', label, queryString)
-  return PathQueryFile.add({ jsonData: { label, queryString } })
+  const pbq = new PathBasedQuery(queryString)
+  if (!pbq.isValid()) return false
+  pbq.label = label
+  return PathQueryFile.add(label, pbq)
 }
 
 const remove = (label) => {

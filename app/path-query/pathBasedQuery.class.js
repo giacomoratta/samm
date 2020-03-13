@@ -94,6 +94,7 @@ class PathBasedQuery {
   }
 
   fromJson (jsonData) {
+    this._label = null
     if (!jsonData.label || !jsonData.queryString) return false
     if (!jsonData.functionBody) {
       const queryInfo = processQueryString(jsonData.queryString)

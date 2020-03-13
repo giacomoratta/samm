@@ -1,15 +1,5 @@
 const { API, Cli, CLI_ERROR } = require('./ui_common')
 
-const ConfigParameters = [
-  'SamplesDirectory',
-  'SamplesDirectoryExclusions',
-  'RandomCount',
-  'MaxSamplesSameDirectory',
-  'ExcludedExtensionsForSamples',
-  'IncludedExtensionsForSamples',
-  'ExtensionsPolicyForSamples'
-]
-
 const commandName = 'config'
 
 Cli.addCommand(`${commandName} [name] [values...]`)
@@ -75,6 +65,7 @@ Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cl
   return cliNext()
 })
 
+// todo: replace with dataField.fn.bulkAdd and dataField.fn.bulkRemove
 const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
   if (!currentArray) currentArray = []
   if (!newValues) return []
@@ -87,7 +78,7 @@ const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
 
 const configDescribeParameters = ({ cliPrinter }) => {
   let currentValue = null
-  ConfigParameters.forEach((configParam) => {
+  API.config.getFieldsList().forEach((configParam) => {
     cliPrinter.title(configParam)
     const description = API.config.field(configParam).description
     if (description.length > 0) {
