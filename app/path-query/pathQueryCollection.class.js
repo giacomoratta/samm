@@ -1,4 +1,4 @@
-const { JsonCollectionFile } = require('./jsonCollection.class')
+const { JsonCollectionFile } = require('../../core/file-butler/jsonCollection.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 
 class PathQueryCollection extends JsonCollectionFile {

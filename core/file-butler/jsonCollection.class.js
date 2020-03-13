@@ -1,4 +1,4 @@
-const { JsonFileButler } = require('../../core/file-butler')
+const { JsonFileButler } = require('./index')
 
 class JsonCollectionFile {
   constructor (filePath) {
