@@ -34,7 +34,7 @@ class JsonArrayType {
     }
 
     if (!(obj instanceof this._itemsClass)) {
-      throw new TypeError('obj should be an instance of ' + this._itemsClass.className + ' class')
+      throw new TypeError('obj should be an instance of ' + this._itemsClass.name + ' class')
     }
     if (obj.isValid() !== true) return false
 

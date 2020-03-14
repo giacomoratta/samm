@@ -2,6 +2,7 @@ const { JsonCollectionFile } = require('../jsonCollectionFile.class')
 
 class TestCollectionObject {
   constructor (testData) {
+    if (!testData) return
     this.attr1 = 'test123'
     this.label = testData.label
     this.queryString = testData.queryString
@@ -30,7 +31,7 @@ class TestCollectionFile extends JsonCollectionFile {
   constructor (filePath, testOptions) {
     super({
       filePath,
-      objectClass: TestCollectionObject,
+      itemsClass: TestCollectionObject,
       ...testOptions
     })
   }

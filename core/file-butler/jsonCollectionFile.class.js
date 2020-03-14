@@ -2,30 +2,22 @@ const { JsonFileButler } = require('./index')
 const { JsonArrayType } = require('./types/jsonArrayType')
 const { JsonObjectType } = require('./types/jsonObjectType')
 
-/*
-
- todo: this._checkItemsClass
- Must have:
- objectClass.isValid()
- objectClass.fromJson()
- objectClass.toJson()
-
- */
-
 class JsonCollectionFile {
   constructor ({ filePath, orderType = 'ASC', collectionType = 'object', itemsClass }) {
     this.collection = null
     this.itemsClass = itemsClass
 
-    // todo: if(this._checkItemsClass(itemsClass)) throw
+    if (!itemsClass.prototype.isValid) throw TypeError(`Class '${itemsClass.name}' must have isValid method`)
+    if (!itemsClass.prototype.toJson) throw TypeError(`Class '${itemsClass.name}' must have toJson method`)
+    if (!itemsClass.prototype.fromJson) throw TypeError(`Class '${itemsClass.name}' must have fromJson method`)
 
     this._collectionType = ['array', 'object'].indexOf(collectionType) === -1 ? 'object' : collectionType
     this._collectionIsArray = this._collectionType === 'array'
     this._collectionIsObject = this._collectionType === 'object'
     if (this._collectionIsArray) {
-      this.collection = new JsonArrayType({ orderType, objectClass })
+      this.collection = new JsonArrayType({ orderType, itemsClass })
     } else if (this._collectionIsObject) {
-      this.collection = new JsonObjectType({ orderType, objectClass })
+      this.collection = new JsonObjectType({ orderType, itemsClass })
     }
 
     this.fileHolder = new JsonFileButler({
