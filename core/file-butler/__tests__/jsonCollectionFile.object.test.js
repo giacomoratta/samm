@@ -1,62 +1,32 @@
 const path = require('path')
-const testObjLocation = path.join(__dirname, 'dir_test', 'test_collection.json')
-
-const { JsonCollectionFile } = require('../jsonCollectionFile.class')
-
-class TestCollectionObject {
-  constructor (testData) {
-    this.attr1 = 'test123'
-    this.label = testData.label
-    this.queryString = testData.queryString
-  }
-}
-
-class TestCollectionFile extends JsonCollectionFile {
-  constructor (filePath) {
-    super({ filePath, orderType: 'ASC', collectionType: 'object' })
-  }
-
-  fromJson (jsonData) {
-    const obj = new TestCollectionObject(jsonData)
-    return obj
-  }
-
-  toJson (obj) {
-    return {
-      attr1: obj.attr1,
-      label: obj.label,
-      queryString: obj.queryString
-    }
-  }
-
-  add (label, dataObject) {
-    if (!(dataObject instanceof TestCollectionObject)) {
-      throw new TypeError('dataObject should be an instance of TestCollectionObject class')
-    }
-    if (dataObject.queryString === 'bad-value') return false
-    super.add(label, dataObject)
-    return true
-  }
-}
+const testObjLocation = path.join(__dirname, 'dir_test', 'test_obj_collection.json')
+const { TestCollectionObject, TestCollectionFile } = require('./jsonCollectionHelper.test')
 
 let pbCollection
 
 // todo: split tests
+// todo: checkFn
 // todo: check load and save
 // todo: check ASC and DESC
 
 describe('A collection of TestCollectionObject objects', function () {
-  beforeAll(() => {
-    pbCollection = new TestCollectionFile(testObjLocation)
-    pbCollection.fileHolder.delete()
+  beforeAll(async function () {
+    pbCollection = new TestCollectionFile(testObjLocation, /* test options */ {
+      orderType: 'ASC',
+      collectionType: 'object'
+    })
+    await pbCollection.fileHolder.delete()
   })
 
-  afterAll(() => {
-    pbCollection.fileHolder.delete()
+  afterAll(async function () {
+    await pbCollection.fileHolder.delete()
   })
 
   it('should create and handle a collection file', async function () {
-    const TestFile1 = new TestCollectionFile(testObjLocation)
+    const TestFile1 = new TestCollectionFile(testObjLocation, /* test options */ {
+      orderType: 'ASC',
+      collectionType: 'object'
+    })
     await TestFile1.fileHolder.load()
     expect(TestFile1.fileHolder.data).toEqual(null)
 
@@ -69,7 +39,7 @@ describe('A collection of TestCollectionObject objects', function () {
       label: 'my_label_11',
       queryString: 'bad-value'
     })
-    expect(TestFile1.collection.add('my_label_11', pbq1)).toEqual(true)
+    expect(TestFile1.collection.add('my_label_11', pbq1)).toEqual(false)
 
     const pbq2 = new TestCollectionObject({
       label: 'my_label_11',
@@ -112,7 +82,10 @@ describe('A collection of TestCollectionObject objects', function () {
 
     await TestFile1.fileHolder.save()
 
-    const TestFile2 = new TestCollectionFile(testObjLocation)
+    const TestFile2 = new TestCollectionFile(testObjLocation, /* test options */ {
+      orderType: 'ASC',
+      collectionType: 'object'
+    })
     await TestFile2.fileHolder.load()
 
     const qf1Json = TestFile2.fileHolder.data

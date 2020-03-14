@@ -2,20 +2,6 @@ const { JsonCollectionFile } = require('../../core/file-butler/jsonCollectionFil
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 
 class PathQueryCollection extends JsonCollectionFile {
-  constructor (filePath) {
-    super({
-      filePath,
-      orderType: 'ASC',
-      collectionType: 'object',
-      checkFn: (obj) => {
-        if (!(obj instanceof PathBasedQuery)) {
-          throw new TypeError('pathBasedQueryObject should be an instance of PathBasedQuery class')
-        }
-        return obj.isValid()
-      }
-    })
-  }
-
   fromJson (jsonData) {
     const obj = new PathBasedQuery()
     obj.fromJson(jsonData)
@@ -24,6 +10,15 @@ class PathQueryCollection extends JsonCollectionFile {
 
   toJson (obj) {
     return obj.toJson()
+  }
+
+  add (label, pathBasedQueryObject) {
+    if (!(pathBasedQueryObject instanceof PathBasedQuery)) {
+      throw new TypeError('pathBasedQueryObject should be an instance of PathBasedQuery class')
+    }
+    if (!pathBasedQueryObject.isValid()) return false
+    super.add(label, pathBasedQueryObject)
+    return true
   }
 }
 

@@ -1,7 +1,8 @@
 class JsonArrayType {
-  constructor ({ orderType = 'ASC' }) {
+  constructor ({ orderType = 'ASC', itemsClass }) {
     this._collection = []
     orderType = ['ASC', 'DESC'].indexOf(orderType) === -1 ? 'ASC' : orderType
+    this._itemsClass = itemsClass
 
     /**
      * ASC = insert on top, delete from bottom
@@ -27,10 +28,16 @@ class JsonArrayType {
   }
 
   add (index, obj) {
-    if (!obj) {
+    if (!obj) { /* support 1 only argument */
       obj = index
       index = -1
     }
+
+    if (!(obj instanceof this._itemsClass)) {
+      throw new TypeError('obj should be an instance of ' + this._itemsClass.className + ' class')
+    }
+    if (obj.isValid() !== true) return false
+
     if (index >= 0 && index < this._collection.length) {
       this._collection.splice(index, 0, obj)
       return true

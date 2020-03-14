@@ -12,11 +12,12 @@ function _orderByDESC (a, b) {
 }
 
 class JsonObjectType {
-  constructor ({ orderType = 'ASC' }) {
+  constructor ({ orderType = 'ASC', itemsClass }) {
     this._collection = {}
     this._keys = []
     orderType = ['ASC', 'DESC'].indexOf(orderType) === -1 ? 'ASC' : orderType
     this._isASC = (orderType === 'ASC')
+    this._itemsClass = itemsClass
   }
 
   get length () {
@@ -37,6 +38,11 @@ class JsonObjectType {
   }
 
   add (key, obj) {
+    if (!(obj instanceof this._itemsClass)) {
+      throw new TypeError('obj should be an instance of ' + this._itemsClass.className + ' class')
+    }
+    if (obj.isValid() !== true) return false
+
     if (!this._collection[key]) {
       this._keys.push(key)
       this._keys.sort(this._isASC === true ? _orderByASC : _orderByDESC)
