@@ -203,14 +203,6 @@ describe('DataFieldFactory', function () {
     })
     expect(df1.valueRef).toMatchObject(obj0)
 
-    const obj1 = {
-      name: 'abcd',
-      info: {
-        age: 23,
-        distance: '2540.772km'
-      }
-    }
-
     expect(function () {
       df1.value = {
         name: 'abcd',

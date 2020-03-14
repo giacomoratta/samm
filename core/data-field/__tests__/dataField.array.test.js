@@ -1,4 +1,3 @@
-const { DataFieldFactory } = require('../dataField.factory')
 const { DataFieldBuiltInFactory } = require('../dataFieldBuiltIn.factory')
 
 describe('DataField.fn for array schema', function () {
