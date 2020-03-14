@@ -1,8 +1,9 @@
 class JsonArrayType {
-  constructor ({ orderType = 'ASC', itemsClass }) {
+  constructor ({ orderType = 'ASC', itemsClass, collectionMaxLength }) {
     this._collection = []
     orderType = ['ASC', 'DESC'].indexOf(orderType) === -1 ? 'ASC' : orderType
     this._itemsClass = itemsClass
+    this._maxLength = (!collectionMaxLength ? 0 : collectionMaxLength)
 
     /**
      * ASC = insert on top, delete from bottom
@@ -23,6 +24,22 @@ class JsonArrayType {
     return this._collection[index]
   }
 
+  get latest () {
+    if (this._isTop === true) {
+      return this._collection[0]
+    } else {
+      return this._collection[this._collection.length - 1]
+    }
+  }
+
+  get oldest () {
+    if (this._isTop === true) {
+      return this._collection[this._collection.length - 1]
+    } else {
+      return this._collection[0]
+    }
+  }
+
   has (index) {
     return (this._collection[index] !== undefined)
   }
@@ -40,6 +57,7 @@ class JsonArrayType {
 
     if (index >= 0 && index < this._collection.length) {
       this._collection.splice(index, 0, obj)
+      if (this.length > this._maxLength) this.remove()
       return true
     }
     if (this._isTop === true) {
@@ -47,6 +65,7 @@ class JsonArrayType {
     } else {
       this._collection.push(obj)
     }
+    if (this.length > this._maxLength) this.remove()
     return true
   }
 

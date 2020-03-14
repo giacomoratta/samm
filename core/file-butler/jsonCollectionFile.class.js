@@ -3,7 +3,7 @@ const { JsonArrayType } = require('./types/jsonArrayType')
 const { JsonObjectType } = require('./types/jsonObjectType')
 
 class JsonCollectionFile {
-  constructor ({ filePath, orderType = 'ASC', collectionType = 'object', itemsClass }) {
+  constructor ({ filePath, orderType = 'ASC', collectionType = 'object', collectionMaxLength, itemsClass }) {
     this.collection = null
     this.itemsClass = itemsClass
 
@@ -15,7 +15,7 @@ class JsonCollectionFile {
     this._collectionIsArray = this._collectionType === 'array'
     this._collectionIsObject = this._collectionType === 'object'
     if (this._collectionIsArray) {
-      this.collection = new JsonArrayType({ orderType, itemsClass })
+      this.collection = new JsonArrayType({ orderType, itemsClass, collectionMaxLength })
     } else if (this._collectionIsObject) {
       this.collection = new JsonObjectType({ orderType, itemsClass })
     }
