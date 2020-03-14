@@ -201,9 +201,9 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
           }
           return checkAbsDirPath(value, schema, validator)
         },
-        exists: async (field) => {
+        exists: (field) => {
           if (field.unset === true) return false
-          return /* boolean */ await fileUtils.directoryExists(field.valueRef)
+          return /* boolean await */ fileUtils.directoryExists(field.valueRef)
         },
         ensure: async (field) => {
           if (field.unset === true) return false
