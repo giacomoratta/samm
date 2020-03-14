@@ -22,6 +22,20 @@ describe('A collection of TestCollectionObject objects', function () {
     await pbCollection.fileHolder.delete()
   })
 
+  it('load and save empty file', async function () { })
+
+  it('basic flow with ASC', async function () {
+    // check order
+    // and wrong values
+    // save, load and check order
+  })
+
+  it('basic flow with DESC', async function () {
+    // check order
+    // and wrong values
+    // save, load and check order
+  })
+
   it('should create and handle a collection file', async function () {
     const TestFile1 = new TestCollectionFile(testObjLocation, /* test options */ {
       orderType: 'ASC',

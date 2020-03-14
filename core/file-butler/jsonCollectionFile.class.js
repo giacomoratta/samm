@@ -4,6 +4,9 @@ const { JsonObjectType } = require('./types/jsonObjectType')
 
 class JsonCollectionFile {
   constructor ({ filePath, orderType = 'ASC', collectionType = 'object', collectionMaxLength, itemsClass }) {
+    if (!filePath) throw Error('Missing mandatory argument: filePath')
+    if (!itemsClass) throw Error('Missing mandatory argument: itemsClass')
+
     this.collection = null
     this.itemsClass = itemsClass
 

@@ -8,6 +8,7 @@ let pbCollection
 // todo: checkFn
 // todo: check load and save
 // todo: check ASC and DESC
+// todo: collectionMaxLength
 
 describe('A collection of TestCollectionObject objects', function () {
   beforeAll(async function () {
@@ -20,6 +21,20 @@ describe('A collection of TestCollectionObject objects', function () {
 
   afterAll(async function () {
     await pbCollection.fileHolder.delete()
+  })
+
+  it('load and save empty file', async function () { })
+
+  it('basic flow with ASC + collectionMaxLength', async function () {
+    // check order
+    // and wrong values
+    // save, load and check order
+  })
+
+  it('basic flow with DESC + collectionMaxLength', async function () {
+    // check order
+    // and wrong values
+    // save, load and check order
   })
 
   it('should create and handle a collection file', async function () {
