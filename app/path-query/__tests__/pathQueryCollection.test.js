@@ -1,7 +1,7 @@
 const path = require('path')
 const pathQueryLocation = path.join(__dirname, 'path_query.json')
 
-const { PathQueryCollection } = require('../pathQueryCollection.class')
+const { PathQueryCollection } = require('../pathQueryFile.class')
 const { PathBasedQuery } = require('../pathBasedQuery.class')
 
 let pbCollection

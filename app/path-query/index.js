@@ -1,4 +1,4 @@
-const { PathQueryJsonFile } = require('./pathQueryCollection.class')
+const { PathQueryFile } = require('./pathQueryFile.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidList } = require('../../core/spheroid-list')
 const log = require('../../core/logger').createLogger('path-query')
@@ -56,7 +56,7 @@ const create = (queryString) => {
 
 const PathQueryBoot = (filePath) => {
   log.info(`Booting from ${filePath}...`)
-  PathQueryFile = new PathQueryJsonFile(filePath)
+  PathQueryFile = new PathQueryFile(filePath)
   return PathQueryFile.load()
 }
 

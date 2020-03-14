@@ -1,7 +1,7 @@
 const { JsonCollectionFile } = require('../../core/file-butler/jsonCollectionFile.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 
-class PathQueryCollection extends JsonCollectionFile {
+class PathQueryFile extends JsonCollectionFile {
   constructor (filePath) {
     super({
       filePath,
@@ -13,5 +13,5 @@ class PathQueryCollection extends JsonCollectionFile {
 }
 
 module.exports = {
-  PathQueryCollection
+  PathQueryFile
 }
