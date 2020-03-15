@@ -1,9 +1,9 @@
 class JsonArrayType {
-  constructor ({ orderType = 'ASC', itemsClass, collectionMaxLength }) {
+  constructor ({ orderType = 'ASC', itemsClass, collectionMaxSize }) {
     this._collection = []
     orderType = ['ASC', 'DESC'].indexOf(orderType) === -1 ? 'ASC' : orderType
     this._itemsClass = itemsClass
-    this._maxLength = (!collectionMaxLength ? 0 : collectionMaxLength)
+    this._maxSize = (!collectionMaxSize ? 0 : collectionMaxSize)
 
     /**
      * ASC = insert on top, delete from bottom
@@ -12,7 +12,7 @@ class JsonArrayType {
     this._isTop = (orderType === 'ASC')
   }
 
-  get length () {
+  get size () {
     return this._collection.length
   }
 
@@ -28,13 +28,13 @@ class JsonArrayType {
     if (this._isTop === true) {
       return this._collection[0]
     } else {
-      return this._collection[this._collection.length - 1]
+      return this._collection[this.size - 1]
     }
   }
 
   get oldest () {
     if (this._isTop === true) {
-      return this._collection[this._collection.length - 1]
+      return this._collection[this.size - 1]
     } else {
       return this._collection[0]
     }
@@ -51,13 +51,13 @@ class JsonArrayType {
     }
 
     if (!(obj instanceof this._itemsClass)) {
-      throw new TypeError('obj should be an instance of ' + this._itemsClass.name + ' class')
+      throw new TypeError('the object should be an instance of ' + this._itemsClass.name + ' class')
     }
     if (obj.isValid() !== true) return false
 
-    if (index >= 0 && index < this._collection.length) {
+    if (index >= 0 && index < this.size) {
       this._collection.splice(index, 0, obj)
-      if (this.length > this._maxLength) this.remove()
+      if (this.size > this._maxSize) this.remove()
       return true
     }
     if (this._isTop === true) {
@@ -65,12 +65,12 @@ class JsonArrayType {
     } else {
       this._collection.push(obj)
     }
-    if (this.length > this._maxLength) this.remove()
+    if (this.size > this._maxSize) this.remove()
     return true
   }
 
   remove (index) {
-    if (index >= 0 && index < this._collection.length) {
+    if (index >= 0 && index < this.size) {
       this._collection.splice(index, 1)
       return true
     }

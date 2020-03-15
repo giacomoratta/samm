@@ -20,7 +20,7 @@ class JsonObjectType {
     this._itemsClass = itemsClass
   }
 
-  get length () {
+  get size () {
     return this._keys.length
   }
 
@@ -39,7 +39,7 @@ class JsonObjectType {
 
   add (key, obj) {
     if (!(obj instanceof this._itemsClass)) {
-      throw new TypeError('obj should be an instance of ' + this._itemsClass.name + ' class')
+      throw new TypeError('the object should be an instance of ' + this._itemsClass.name + ' class')
     }
     if (obj.isValid() !== true) return false
 
