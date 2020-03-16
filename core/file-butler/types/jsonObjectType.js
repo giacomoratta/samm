@@ -33,6 +33,11 @@ class JsonObjectType {
     return this._collection[key]
   }
 
+  getByIndex (index) {
+    if (!this._keys[index]) return
+    return this._collection[this._keys[index]]
+  }
+
   has (key) {
     return (this._collection[key] !== undefined)
   }
