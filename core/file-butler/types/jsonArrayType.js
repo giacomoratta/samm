@@ -87,6 +87,26 @@ class JsonArrayType {
       fn(index, item)
     })
   }
+
+  fromJson (data) {
+    this.clean()
+    const ItemsClass = this._itemsClass
+    if (!this._isTop) data.reverse()
+    data.forEach((item) => {
+      const obj = new ItemsClass()
+      obj.fromJson(item)
+      this.add(obj)
+    })
+  }
+
+  toJson () {
+    const data = []
+    this.forEach((index, item) => {
+      data.push(item.toJson())
+    })
+    if (this._isTop) data.reverse()
+    return data
+  }
 }
 
 module.exports = { JsonArrayType }

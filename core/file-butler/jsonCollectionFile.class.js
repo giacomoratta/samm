@@ -4,11 +4,20 @@ const { JsonObjectType } = require('./types/jsonObjectType')
 
 class JsonCollectionFile {
   constructor ({ filePath, orderType = 'ASC', collectionType = 'object', collectionMaxSize, itemsClass }) {
+    /**
+     * The collection object
+     * @type {JsonObjectType | JsonArrayType}
+     */
+    this.collection = null
+
+    /**
+     * The file manager for this collection
+     * @type {JsonFileButler}
+     */
+    this.fileHolder = null
+
     if (!filePath) throw Error('Missing mandatory argument: filePath')
     if (!itemsClass) throw Error('Missing mandatory argument: itemsClass')
-
-    this.collection = null
-    this.itemsClass = itemsClass
 
     if (!itemsClass.prototype.isValid) throw TypeError(`Class '${itemsClass.name}' must have isValid method`)
     if (!itemsClass.prototype.toJson) throw TypeError(`Class '${itemsClass.name}' must have toJson method`)
@@ -28,22 +37,11 @@ class JsonCollectionFile {
       fileType: 'json',
       loadFn: (fileData) => {
         if (!fileData) return null
-
         if (this._collectionIsArray) {
           if (!fileData.array || fileData.array.length === 0) return null
-          this.collection.clean()
-          fileData.array.forEach((item) => {
-            const dataObject = new this.itemsClass()
-            dataObject.fromJson(item)
-            this.collection.add(dataObject)
-          })
+          this.collection.fromJson(fileData.array)
         } else if (this._collectionIsObject) {
-          this.collection.clean()
-          Object.keys(fileData).forEach((key) => {
-            const dataObject = new this.itemsClass()
-            dataObject.fromJson(fileData[key])
-            this.collection.add(key, dataObject)
-          })
+          this.collection.fromJson(fileData)
         }
         return fileData
       },
@@ -51,16 +49,10 @@ class JsonCollectionFile {
       saveFn: () => {
         let fileData
         if (this._collectionIsArray) {
-          fileData = { array: [] }
-          this.collection.forEach((i, dataObject) => {
-            fileData.array.push(dataObject.toJson())
-          })
+          fileData = { array: this.collection.toJson() }
           if (fileData.array.length === 0) fileData = null
         } else if (this._collectionIsObject) {
-          fileData = {}
-          this.collection.forEach((key, dataObject) => {
-            fileData[key] = dataObject.toJson()
-          })
+          fileData = this.collection.toJson()
         }
         return fileData
       }

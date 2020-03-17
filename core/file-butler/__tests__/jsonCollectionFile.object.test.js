@@ -1,6 +1,8 @@
 const path = require('path')
 const testObjAscColl = path.join(__dirname, 'dir_test', 'test_obj_asc_coll.json')
+const testArrAscColl = path.join(__dirname, 'dir_test', 'test_arr_asc_coll.json')
 const testObjDescColl = path.join(__dirname, 'dir_test', 'test_obj_desc_coll.json')
+const testArrDescColl = path.join(__dirname, 'dir_test', 'test_arr_desc_coll.json')
 const { JsonCollectionFile } = require('../jsonCollectionFile.class')
 const { TestCollectionObject, TestCollectionFile, bulkInsertObjectType, bulkInsertArrayType } = require('./jsonCollectionHelper.test')
 
@@ -27,20 +29,20 @@ describe('A collection of TestCollectionObject objects', function () {
       collectionType: 'object'
     })
 
-    TestFileAA1 = new TestCollectionFile(testObjAscColl, /* test options */ {
+    TestFileAA1 = new TestCollectionFile(testArrAscColl, /* test options */ {
       orderType: 'ASC',
       collectionType: 'array'
     })
-    TestFileAD1 = new TestCollectionFile(testObjDescColl, /* test options */ {
+    TestFileAD1 = new TestCollectionFile(testArrDescColl, /* test options */ {
       orderType: 'DESC',
       collectionType: 'array',
       collectionMaxSize: 3
     })
-    TestFileAA2 = new TestCollectionFile(testObjAscColl, /* test options */ {
+    TestFileAA2 = new TestCollectionFile(testArrAscColl, /* test options */ {
       orderType: 'ASC',
       collectionType: 'array'
     })
-    TestFileAD2 = new TestCollectionFile(testObjDescColl, /* test options */ {
+    TestFileAD2 = new TestCollectionFile(testArrDescColl, /* test options */ {
       orderType: 'DESC',
       collectionType: 'array',
       collectionMaxSize: 3
@@ -149,7 +151,10 @@ describe('A collection of TestCollectionObject objects', function () {
       expect(TFObj.collection.get(i++)).toEqual(undefined)
 
       expect(TFObj.collection.latest.label).toEqual(TFObj.collection.get(3 - testNumber).label)
+      expect(TFObj.collection.latest.label).toEqual('my_label_41')
       expect(TFObj.collection.oldest.label).toEqual(TFObj.collection.get(0).label)
+      expect(TFObj.collection.oldest.label).toEqual('my_label_11')
+      expect(TFObj.collection.size).toEqual(4 - testNumber)
     }
     checkArrayOrderASC(TestFileAA1, 0)
     expect(TestFileAA1.collection.remove(2)).toEqual(true)
@@ -166,13 +171,34 @@ describe('A collection of TestCollectionObject objects', function () {
   })
 
   it('basic flow with array DESC and max size 3', async function () {
-    bulkInsertObjectType(TestFileAD1)
-    // checkObjectOrderDESC()
-    // remove 1
-    // save, load (new repo), bulkCheckObjectType()
-    // checkObjectOrderDESC()
-    TestFileOA1.fileHolder.data = null
-    TestFileOA1.collection.clean()
+    bulkInsertArrayType(TestFileAD1)
+
+    function checkArrayOrderDESC (TFObj, testNumber) {
+      let i = 0
+      expect(TFObj.collection.get(i++).label).toEqual('my_label_41')
+      expect(TFObj.collection.get(i++).label).toEqual('my_label_31')
+      if (testNumber === 0) expect(TFObj.collection.get(i++).label).toEqual('my_label_21')
+      // removed because max size = 3 // expect(TFObj.collection.get(i++).label).toEqual('my_label_11')
+      expect(TFObj.collection.get(i++)).toEqual(undefined)
+
+      expect(TFObj.collection.oldest.label).toEqual(TFObj.collection.get(2 - testNumber).label)
+      expect(TFObj.collection.oldest.label).toEqual('my_label_21')
+      expect(TFObj.collection.latest.label).toEqual(TFObj.collection.get(0).label)
+      expect(TFObj.collection.latest.label).toEqual('my_label_41')
+      expect(TFObj.collection.size).toEqual(3 - testNumber)
+    }
+    checkArrayOrderDESC(TestFileAD1, 0)
+    expect(TestFileAD1.collection.remove(2)).toEqual(true)
+
+    await TestFileAD1.fileHolder.save()
+    await TestFileAD2.fileHolder.load()
+
+    checkArrayOrderDESC(TestFileAD2, 1)
+
+    TestFileAD1.fileHolder.clean()
+    TestFileAD2.fileHolder.clean()
+    TestFileAD1.collection.clean()
+    TestFileAD2.collection.clean()
   })
 
   it('should throw some errors', function () {

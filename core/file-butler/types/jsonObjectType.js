@@ -71,6 +71,24 @@ class JsonObjectType {
       fn(key, this._collection[key])
     })
   }
+
+  fromJson (data) {
+    this.clean()
+    const ItemsClass = this._itemsClass
+    Object.keys(data).forEach((key) => {
+      const obj = new ItemsClass()
+      obj.fromJson(data[key])
+      this.add(key, obj)
+    })
+  }
+
+  toJson () {
+    const data = {}
+    this.forEach((key, obj) => {
+      data[key] = obj.toJson()
+    })
+    return data
+  }
 }
 
 module.exports = { JsonObjectType }
