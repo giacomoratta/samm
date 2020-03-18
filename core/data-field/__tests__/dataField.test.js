@@ -107,7 +107,7 @@ describe('DataField', function () {
 
     dff.define('superInt', function (validator) {
       return {
-        validate: (value, schema) => {
+        validate: (value /*, schema */) => {
           if (value < 1000000) return validator.makeError('number', null, value)
           return true
         }

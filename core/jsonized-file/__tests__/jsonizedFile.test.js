@@ -157,7 +157,7 @@ describe('JsonizedFile operations with fields and json data', function () {
     expect(jzf.has()).toEqual(false)
 
     expect(jzf.field('username').value).toEqual('qwerty098')
-    expect(function () { jzf.field('not-exists').value }).toThrow()
+    expect(function () { return jzf.field('not-exists').value }).toThrow()
 
     expect(jzf.length).toEqual(3)
 

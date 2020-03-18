@@ -82,10 +82,10 @@ describe('A collection of test objects', function () {
 
   it('try to insert a wrong object', async function () {
     expect(function () {
-      TestFileOA1.collection.add('my_label_11', new Object({
+      TestFileOA1.collection.add('my_label_11', {
         label: 'my_label_11',
         queryString: 'bad-value'
-      }))
+      })
     }).toThrow('the object should be an instance of')
     expect(TestFileOA1.collection.size).toEqual(0)
   })
@@ -205,7 +205,7 @@ describe('A collection of test objects', function () {
 
   it('should throw some errors', function () {
     expect(function () {
-      const tf = new JsonCollectionFile({})
+      return new JsonCollectionFile({})
     }).toThrow('Missing mandatory argument: filePath')
 
     expect(function () {
@@ -213,15 +213,12 @@ describe('A collection of test objects', function () {
     }).toThrow('Missing mandatory argument: itemsClass')
 
     expect(function () {
-      class example {
-        constructor () { }
-      }
+      class example { }
       return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
     }).toThrow('must have isValid method')
 
     expect(function () {
       class example {
-        constructor () { }
         isValid () {}
         toJson () {}
         fromJson () {}
@@ -231,7 +228,6 @@ describe('A collection of test objects', function () {
 
     expect(function () {
       class example {
-        constructor () { }
         isValid () {}
       }
       return new JsonCollectionFile({ filePath: testObjAscColl, itemsClass: example })
@@ -239,7 +235,6 @@ describe('A collection of test objects', function () {
 
     expect(function () {
       class example {
-        constructor () { }
         isValid () {}
         toJson () {}
       }
@@ -248,7 +243,6 @@ describe('A collection of test objects', function () {
 
     expect(function () {
       class example {
-        constructor () { }
         isValid () {}
         toJson () {}
         fromJson () {}
@@ -258,7 +252,6 @@ describe('A collection of test objects', function () {
 
     expect(function () {
       class example {
-        constructor () { }
         isValid () {}
         toJson () {}
         fromJson () {}

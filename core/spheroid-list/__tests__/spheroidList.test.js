@@ -59,15 +59,15 @@ describe('SpheroidList standard features', function () {
 
   it('Should throw some errors', function () {
     expect(function () {
-      const list1 = new SpheroidList({ maxSize: -32 })
+      return new SpheroidList({ maxSize: -32 })
     }).toThrow('maxSize')
 
     expect(function () {
-      const list1 = new SpheroidList({ maxSize: 3.2 })
+      return new SpheroidList({ maxSize: 3.2 })
     }).toThrow('maxSize')
 
     expect(function () {
-      const list1 = new SpheroidList({ maxSize: 'abc' })
+      return new SpheroidList({ maxSize: 'abc' })
     }).toThrow('maxSize')
 
     expect(function () {

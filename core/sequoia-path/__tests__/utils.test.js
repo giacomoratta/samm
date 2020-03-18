@@ -21,7 +21,7 @@ async function walkDirectory (options) {
         currentNode = newNode
       }
     },
-    afterDirectoryFn: async ({ item }) => {
+    afterDirectoryFn: async (/* { item } */) => {
       currentNode = currentNode.parent
     }
   }

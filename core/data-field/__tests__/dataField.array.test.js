@@ -8,7 +8,7 @@ describe('DataField.fn for array schema', function () {
     })
     dff.define('superInt', function (validator) {
       return {
-        validate: (value, schema) => {
+        validate: (value /*, schema */) => {
           if (value < 1000000) return validator.makeError('notSuperInt', null, value)
           return true
         }
