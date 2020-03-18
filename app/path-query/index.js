@@ -4,37 +4,37 @@ const { SpheroidList } = require('../../core/spheroid-list')
 const log = require('../../core/logger').createLogger('path-query')
 
 const PathBasedQueryCache = new SpheroidList({ maxSize: 30 })
-let PathQueryFile = null
+let PathQueryFileInstance = null
 
 const add = (label, queryString) => {
   log.info('add', label, queryString)
   const pbq = new PathBasedQuery(queryString)
   if (!pbq.isValid()) return false
   pbq.label = label
-  return PathQueryFile.add(label, pbq)
+  return PathQueryFileInstance.collection.add(label, pbq)
 }
 
 const remove = (label) => {
   log.info('remove', label)
-  return PathQueryFile.remove(label)
+  return PathQueryFileInstance.collection.remove(label)
 }
 
 const get = (label) => {
-  return PathQueryFile.get(label)
+  return PathQueryFileInstance.collection.get(label)
 }
 
 const list = () => {
   const array = []
-  PathQueryFile.forEach((pathQuery) => {
+  PathQueryFileInstance.collection.forEach((pathQuery) => {
     array.push(pathQuery)
   })
   return array
 }
 
-const save = () => {
-  const saveResult = PathQueryFile.save()
-  if (saveResult === true) log.info('saved successfully', PathQueryFile.filePath)
-  else log.warn('save failure', PathQueryFile.filePath)
+const save = async () => {
+  const saveResult = await PathQueryFileInstance.fileHolder.save()
+  if (saveResult === true) log.info('saved successfully', PathQueryFileInstance.fileHolder.path)
+  else log.warn('save failure', PathQueryFileInstance.fileHolder.path)
   return saveResult
 }
 
@@ -54,16 +54,17 @@ const create = (queryString) => {
   return newPathBasedQuery
 }
 
-const PathQueryBoot = (filePath) => {
+const PathQueryBoot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
-  PathQueryFile = new PathQueryFile(filePath)
-  return PathQueryFile.load()
+  PathQueryFileInstance = new PathQueryFile(filePath) // todo: filePath from config
+  return PathQueryFileInstance.fileHolder.load()
 }
 
-const PathQueryCleanData = () => {
+const PathQueryCleanData = async () => {
   log.info('Cleaning data...')
-  if (!PathQueryFile) return
-  return PathQueryFile.deleteFile()
+  if (!PathQueryFileInstance) return
+  PathQueryFileInstance.collection.clean()
+  return PathQueryFileInstance.fileHolder.delete()
 }
 
 module.exports = {

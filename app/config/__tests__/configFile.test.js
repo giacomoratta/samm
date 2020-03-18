@@ -2,7 +2,7 @@ const path = require('path')
 const { ConfigFile } = require('../configFile.class')
 let ConfigInstance = null
 
-describe('configuration file class manager', function () {
+describe('App-specific ConfigFile', function () {
   beforeAll(async function () {
     ConfigInstance = new ConfigFile(path.join(__dirname, 'config_test1.json'))
     await ConfigInstance.clean()

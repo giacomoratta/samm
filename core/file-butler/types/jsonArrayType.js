@@ -9,7 +9,7 @@ class JsonArrayType {
      * ASC = insert on top, delete from bottom
      * DESC = insert on bottom, delete from top
      */
-    this._isTop = (orderType === 'DESC')
+    this._isTop = (orderType === 'ASC')
   }
 
   get size () {
@@ -25,7 +25,7 @@ class JsonArrayType {
   }
 
   get latest () {
-    if (this._isTop === true) {
+    if (this._isTop !== true) {
       return this._collection[0]
     } else {
       return this._collection[this.size - 1]
@@ -33,7 +33,7 @@ class JsonArrayType {
   }
 
   get oldest () {
-    if (this._isTop === true) {
+    if (this._isTop !== true) {
       return this._collection[this.size - 1]
     } else {
       return this._collection[0]
@@ -60,7 +60,7 @@ class JsonArrayType {
       if (this._maxSize && this.size > this._maxSize) this.remove()
       return true
     }
-    if (this._isTop === true) {
+    if (this._isTop !== true) {
       this._collection.unshift(obj)
     } else {
       this._collection.push(obj)
@@ -74,7 +74,7 @@ class JsonArrayType {
       this._collection.splice(index, 1)
       return true
     }
-    if (this._isTop === true) {
+    if (this._isTop !== true) {
       this._collection.pop()
     } else {
       this._collection.shift()
@@ -104,7 +104,7 @@ class JsonArrayType {
     this.forEach((index, item) => {
       data.push(item.toJson())
     })
-    if (!this._isTop) data.reverse()
+    if (this._isTop === true) data.reverse()
     return data
   }
 }

@@ -15,6 +15,10 @@ class FileButler {
     this._data = this._config.defaultValue
   }
 
+  get path () {
+    return this._config.filePath
+  }
+
   get data () {
     return this._data
   }
