@@ -91,7 +91,7 @@ class JsonArrayType {
   fromJson (data) {
     this.clean()
     const ItemsClass = this._itemsClass
-    if (!this._isTop) data.reverse()
+    data.reverse()
     data.forEach((item) => {
       const obj = new ItemsClass()
       obj.fromJson(item)
@@ -104,7 +104,7 @@ class JsonArrayType {
     this.forEach((index, item) => {
       data.push(item.toJson())
     })
-    if (this._isTop) data.reverse()
+    if (!this._isTop) data.reverse()
     return data
   }
 }

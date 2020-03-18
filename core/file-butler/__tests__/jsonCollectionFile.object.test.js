@@ -1,18 +1,19 @@
 const path = require('path')
 const testObjAscColl = path.join(__dirname, 'dir_test', 'test_obj_asc_coll.json')
-const testArrAscColl = path.join(__dirname, 'dir_test', 'test_arr_asc_coll.json')
 const testObjDescColl = path.join(__dirname, 'dir_test', 'test_obj_desc_coll.json')
-const testArrDescColl = path.join(__dirname, 'dir_test', 'test_arr_desc_coll.json')
-const { JsonCollectionFile } = require('../jsonCollectionFile.class')
-const { TestCollectionFile, bulkInsertObjectType, bulkInsertArrayType } = require('./jsonCollectionHelper.test')
+const { TestCollectionFile, bulkInsertObjectType } = require('./jsonCollectionHelper.test')
 
 /* TestFile<Object|Array><Asc|Desc> */
-let TestFileOA1, TestFileOD1, TestFileAA1, TestFileAD1
-let TestFileOA2, TestFileOD2, TestFileAA2, TestFileAD2
+let TestFileOA1, TestFileOD1, TestFileOA2, TestFileOD2
 
-// todo: check ASC and DESC for object and array
+async function __clean () {
+  await TestFileOA1.fileHolder.delete()
+  await TestFileOA2.fileHolder.delete()
+  await TestFileOD1.fileHolder.delete()
+  await TestFileOD2.fileHolder.delete()
+}
 
-describe('A collection of test objects', function () {
+describe('A collection OBJECT of test objects', function () {
   beforeAll(async function () {
     TestFileOA1 = new TestCollectionFile(testObjAscColl, /* test options */ {
       orderType: 'ASC',
@@ -31,63 +32,13 @@ describe('A collection of test objects', function () {
       collectionType: 'object'
     })
 
-    TestFileAA1 = new TestCollectionFile(testArrAscColl, /* test options */ {
-      orderType: 'ASC',
-      collectionType: 'array'
-    })
-    TestFileAD1 = new TestCollectionFile(testArrDescColl, /* test options */ {
-      orderType: 'DESC',
-      collectionType: 'array',
-      collectionMaxSize: 3
-    })
-    TestFileAA2 = new TestCollectionFile(testArrAscColl, /* test options */ {
-      orderType: 'ASC',
-      collectionType: 'array'
-    })
-    TestFileAD2 = new TestCollectionFile(testArrDescColl, /* test options */ {
-      orderType: 'DESC',
-      collectionType: 'array',
-      collectionMaxSize: 3
-    })
-
-    await TestFileOA1.fileHolder.delete()
-    await TestFileOA2.fileHolder.delete()
-    await TestFileOD1.fileHolder.delete()
-    await TestFileOD2.fileHolder.delete()
+    await __clean()
     await expect(TestFileOA1.fileHolder.load()).resolves.toEqual(false)
     await expect(TestFileOD1.fileHolder.load()).resolves.toEqual(false)
   })
 
   afterAll(async function () {
-    await TestFileOA1.fileHolder.delete()
-    await TestFileOD1.fileHolder.delete()
-  })
-
-  it('operations with empty collection', async function () {
-    expect(TestFileOA1.fileHolder.data).toEqual(null)
-    expect(TestFileOA1.collection.size).toEqual(0)
-
-    expect(TestFileOA1.collection.get('bad_label1')).toEqual(undefined)
-    expect(TestFileOA1.collection.has('bad_label1')).toEqual(false)
-    expect(function () {
-      TestFileOA1.collection.remove('bad_label1')
-    }).not.toThrow()
-
-    expect(function () {
-      TestFileOA1.collection.forEach((key, item) => {
-        console.log(key, item)
-      })
-    }).not.toThrow()
-  })
-
-  it('try to insert a wrong object', async function () {
-    expect(function () {
-      TestFileOA1.collection.add('my_label_11', {
-        label: 'my_label_11',
-        queryString: 'bad-value'
-      })
-    }).toThrow('the object should be an instance of')
-    expect(TestFileOA1.collection.size).toEqual(0)
+    await __clean()
   })
 
   it('basic flow with object ASC', async function () {
@@ -102,12 +53,24 @@ describe('A collection of test objects', function () {
       expect(TFObj.collection.getByIndex(i++)).toEqual(undefined)
     }
 
+    function checkFileDataASC (TFObj, testNumber) {
+      let i = 0
+      const objKeys = Object.keys(TFObj.fileHolder.data)
+      expect(objKeys[i++]).toEqual('my_label_11')
+      expect(objKeys[i++]).toEqual('my_label_21')
+      if (testNumber === 0) expect(objKeys[i]).toEqual('my_label_31')
+      expect(objKeys[i++]).toEqual('my_label_41')
+      expect(objKeys[i++]).toEqual(undefined)
+    }
+
     checkObjectOrderASC(TestFileOA1, 0)
     expect(TestFileOA1.collection.remove('my_label_31')).toEqual(true)
 
     await TestFileOA1.fileHolder.save()
     await TestFileOA2.fileHolder.load()
+
     checkObjectOrderASC(TestFileOA2, 1)
+    checkFileDataASC(TestFileOA2, 1)
 
     TestFileOA1.fileHolder.clean()
     TestFileOA2.fileHolder.clean()
@@ -127,6 +90,16 @@ describe('A collection of test objects', function () {
       expect(TFObj.collection.getByIndex(i++)).toEqual(undefined)
     }
 
+    function checkFileDataDESC (TFObj, testNumber) {
+      let i = 0
+      const objKeys = Object.keys(TFObj.fileHolder.data)
+      expect(objKeys[i++]).toEqual('my_label_41')
+      if (testNumber === 0) expect(objKeys[i]).toEqual('my_label_31')
+      expect(objKeys[i++]).toEqual('my_label_21')
+      expect(objKeys[i++]).toEqual('my_label_11')
+      expect(objKeys[i++]).toEqual(undefined)
+    }
+
     checkObjectOrderDESC(TestFileOD1, 0)
     expect(TestFileOD1.collection.remove('my_label_31')).toEqual(true)
 
@@ -134,129 +107,11 @@ describe('A collection of test objects', function () {
     await TestFileOD2.fileHolder.load()
 
     checkObjectOrderDESC(TestFileOD2, 1)
+    checkFileDataDESC(TestFileOD2, 1)
 
     TestFileOD1.fileHolder.clean()
     TestFileOD2.fileHolder.clean()
     TestFileOD1.collection.clean()
     TestFileOD2.collection.clean()
-  })
-
-  it('basic flow with array ASC', async function () {
-    bulkInsertArrayType(TestFileAA1)
-
-    function checkArrayOrderASC (TFObj, testNumber) {
-      let i = 0
-      expect(TFObj.collection.get(i++).label).toEqual('my_label_11')
-      expect(TFObj.collection.get(i++).label).toEqual('my_label_21')
-      if (testNumber === 0) expect(TFObj.collection.get(i++).label).toEqual('my_label_31')
-      expect(TFObj.collection.get(i++).label).toEqual('my_label_41')
-      expect(TFObj.collection.get(i++)).toEqual(undefined)
-
-      expect(TFObj.collection.latest.label).toEqual(TFObj.collection.get(3 - testNumber).label)
-      expect(TFObj.collection.latest.label).toEqual('my_label_41')
-      expect(TFObj.collection.oldest.label).toEqual(TFObj.collection.get(0).label)
-      expect(TFObj.collection.oldest.label).toEqual('my_label_11')
-      expect(TFObj.collection.size).toEqual(4 - testNumber)
-    }
-    checkArrayOrderASC(TestFileAA1, 0)
-    expect(TestFileAA1.collection.remove(2)).toEqual(true)
-
-    await TestFileAA1.fileHolder.save()
-    await TestFileAA2.fileHolder.load()
-
-    checkArrayOrderASC(TestFileAA2, 1)
-
-    TestFileAA1.fileHolder.clean()
-    TestFileAA2.fileHolder.clean()
-    TestFileAA1.collection.clean()
-    TestFileAA2.collection.clean()
-  })
-
-  it('basic flow with array DESC and max size 3', async function () {
-    bulkInsertArrayType(TestFileAD1)
-
-    function checkArrayOrderDESC (TFObj, testNumber) {
-      let i = 0
-      expect(TFObj.collection.get(i++).label).toEqual('my_label_41')
-      expect(TFObj.collection.get(i++).label).toEqual('my_label_31')
-      if (testNumber === 0) expect(TFObj.collection.get(i++).label).toEqual('my_label_21')
-      // removed because max size = 3 // expect(TFObj.collection.get(i++).label).toEqual('my_label_11')
-      expect(TFObj.collection.get(i++)).toEqual(undefined)
-
-      expect(TFObj.collection.oldest.label).toEqual(TFObj.collection.get(2 - testNumber).label)
-      expect(TFObj.collection.oldest.label).toEqual('my_label_21')
-      expect(TFObj.collection.latest.label).toEqual(TFObj.collection.get(0).label)
-      expect(TFObj.collection.latest.label).toEqual('my_label_41')
-      expect(TFObj.collection.size).toEqual(3 - testNumber)
-    }
-    checkArrayOrderDESC(TestFileAD1, 0)
-    expect(TestFileAD1.collection.remove(2)).toEqual(true)
-
-    await TestFileAD1.fileHolder.save()
-    await TestFileAD2.fileHolder.load()
-
-    checkArrayOrderDESC(TestFileAD2, 1)
-
-    TestFileAD1.fileHolder.clean()
-    TestFileAD2.fileHolder.clean()
-    TestFileAD1.collection.clean()
-    TestFileAD2.collection.clean()
-  })
-
-  it('should throw some errors', function () {
-    expect(function () {
-      return new JsonCollectionFile({})
-    }).toThrow('Missing mandatory argument: filePath')
-
-    expect(function () {
-      return new JsonCollectionFile({ filePath: 'abc' })
-    }).toThrow('Missing mandatory argument: itemsClass')
-
-    expect(function () {
-      class example { }
-      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('must have isValid method')
-
-    expect(function () {
-      class example {
-        isValid () {}
-        toJson () {}
-        fromJson () {}
-      }
-      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('\'filePath\' option must be an absolute path')
-
-    expect(function () {
-      class example {
-        isValid () {}
-      }
-      return new JsonCollectionFile({ filePath: testObjAscColl, itemsClass: example })
-    }).toThrow('must have toJson method')
-
-    expect(function () {
-      class example {
-        isValid () {}
-        toJson () {}
-      }
-      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('must have fromJson method')
-
-    expect(function () {
-      class example {
-        isValid () {}
-        toJson () {}
-        fromJson () {}
-      }
-      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('\'filePath\' option must be an absolute path')
-
-    expect(function () {
-      class example {
-        isValid () {}
-        toJson () {}
-        fromJson () {}
-      }
-      return new JsonCollectionFile({ filePath: testObjAscColl, itemsClass: example })
-    }).not.toThrow()
   })
 })
