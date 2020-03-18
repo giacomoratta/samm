@@ -54,13 +54,13 @@ const create = (queryString) => {
   return newPathBasedQuery
 }
 
-const PathQueryBoot = async (filePath) => {
+const boot = async (filePath) => { // todo: use try/catch (see config/index.js)
   log.info(`Booting from ${filePath}...`)
   PathQueryFileInstance = new PathQueryFile(filePath) // todo: filePath from config
   return PathQueryFileInstance.fileHolder.load()
 }
 
-const PathQueryCleanData = async () => {
+const clean = async () => { // todo: use try/catch (see config/index.js)
   log.info('Cleaning data...')
   if (!PathQueryFileInstance) return
   PathQueryFileInstance.collection.clean()
@@ -68,15 +68,18 @@ const PathQueryCleanData = async () => {
 }
 
 module.exports = {
-  PathQuery: {
-    add,
-    remove,
-    get,
-    list,
-    save,
-    create,
-    queryStringLabel: PathBasedQuery.queryStringLabel
-  },
-  PathQueryBoot,
-  PathQueryCleanData
+  boot,
+  clean,
+
+  API: {
+    pathQuery: {
+      add,
+      remove,
+      get,
+      list,
+      save,
+      create,
+      queryStringLabel: PathBasedQuery.queryStringLabel
+    }
+  }
 }
