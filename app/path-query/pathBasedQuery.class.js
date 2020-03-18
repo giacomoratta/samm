@@ -46,7 +46,7 @@ const processQueryString = function (queryString) {
   delete queryInfo._linesOR
   delete queryInfo._functionLinesOR
 
-  queryInfo.label = PathBasedQuery.queryStringLabel(queryInfo.queryString)
+  queryInfo.label = PathBasedQuery.generateQueryStringLabel(queryInfo.queryString)
   return queryInfo
 }
 
@@ -72,7 +72,7 @@ class PathBasedQuery {
     return this._label !== null
   }
 
-  static queryStringLabel (queryString) {
+  static generateQueryStringLabel (queryString) {
     return queryString.toLowerCase()
       .replace(/[^a-zA-Z0-9+,]/g, '')
       .replace(/[^a-zA-Z0-9]/g, ' ')

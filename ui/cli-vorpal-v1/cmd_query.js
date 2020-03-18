@@ -1,6 +1,6 @@
-const { App, Cli } = require('./ui_common')
+const { API, Cli } = require('./ui_common')
 
-const PathQuery = App.PathQuery
+const PathQuery = API.PathQuery
 
 const commandName = 'query'
 

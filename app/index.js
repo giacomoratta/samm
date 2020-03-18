@@ -1,9 +1,6 @@
 const path = require('path')
 const ConfigModule = require('./config')
-// const { apiPathQuery, modulePathQuery } = require('./path-query')
-// const { apiProjectHistory, moduleProjectHistory } = require('./project')
-// const { apiSample, moduleSample } = require('./sample')
-// const { apiExport, moduleExport } = require('./export')
+const PathQueryModule = require('./path-query')
 
 const log = require('../core/logger').createLogger('app')
 
@@ -15,6 +12,14 @@ const log = require('../core/logger').createLogger('app')
 const boot = async ({ appRootPath }) => {
   log.info('Booting the application...')
   if (await ConfigModule.boot(path.join(appRootPath, 'config.json')) !== true) return false
+
+  const config = ConfigModule.API.config
+  if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'path_query.json')) !== true) return false
+  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'project_history.json')) !== true) return false
+  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'bookmarks.json')) !== true) return false
+  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'samples_index.json')) !== true) return false
+  // todo: remove json extension
+  // todo: put everything in the same directory (also config.json)
   return true
 }
 
@@ -25,6 +30,7 @@ const boot = async ({ appRootPath }) => {
 const clean = async () => {
   log.info('Cleaning application files...')
   await ConfigModule.clean()
+  await PathQueryModule.clean()
   return true
 }
 
@@ -33,6 +39,7 @@ module.exports = {
   clean,
 
   API: {
-    config: ConfigModule.API.config
+    config: ConfigModule.API.config,
+    pathQuery: PathQueryModule.API.pathQuery
   }
 }

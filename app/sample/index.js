@@ -163,7 +163,7 @@ const sampleSetByPathQuery = async ({ queryString, queryLabel }) => {
     }
     query = PathQuery.get(queryLabel)
   } else if (queryString) {
-    const tempLabel = PathQuery.queryStringLabel(queryString)
+    const tempLabel = PathQuery.generateQueryStringLabel(queryString)
     if (SampleSetCache.has(tempLabel)) {
       return SampleSetCache.get(tempLabel)
     }

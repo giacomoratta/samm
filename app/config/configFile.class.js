@@ -15,6 +15,18 @@ class ConfigFile extends JsonizedFile {
     this.PlatformSignature = `${os.platform()}-${os.release()}`
 
     this.add(this.DFBF.create({
+      name: 'AppDataDirectory',
+      schema: {
+        type: 'relDirPath',
+        basePath: basePath,
+        createIfNotExists: true,
+        readOnly: true
+      },
+      value: 'app-data',
+      description: 'Directory for storing all the user data'
+    }))
+
+    this.add(this.DFBF.create({
       name: 'Platform',
       schema: {
         type: 'string',
@@ -30,7 +42,7 @@ class ConfigFile extends JsonizedFile {
         type: 'absDirPath',
         checkExists: true
       },
-      value: basePath,
+      value: basePath, // todo: set as null
       description: 'Directory with samples to scan and search in'
     }))
 
@@ -40,7 +52,7 @@ class ConfigFile extends JsonizedFile {
         type: 'array',
         items: {
           type: 'relDirPath',
-          basePath: this.field('SamplesDirectory').value || basePath
+          basePath: this.field('SamplesDirectory').value || null
         }
       },
       value: [

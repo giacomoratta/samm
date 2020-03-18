@@ -6,65 +6,29 @@ const log = require('../../core/logger').createLogger('path-query')
 const PathBasedQueryCache = new SpheroidList({ maxSize: 30 })
 let PathQueryFileInstance = null
 
-const add = (label, queryString) => {
-  log.info('add', label, queryString)
-  const pbq = new PathBasedQuery(queryString)
-  if (!pbq.isValid()) return false
-  pbq.label = label
-  return PathQueryFileInstance.collection.add(label, pbq)
-}
-
-const remove = (label) => {
-  log.info('remove', label)
-  return PathQueryFileInstance.collection.remove(label)
-}
-
-const get = (label) => {
-  return PathQueryFileInstance.collection.get(label)
-}
-
-const list = () => {
-  const array = []
-  PathQueryFileInstance.collection.forEach((pathQuery) => {
-    array.push(pathQuery)
-  })
-  return array
-}
-
-const save = async () => {
-  const saveResult = await PathQueryFileInstance.fileHolder.save()
-  if (saveResult === true) log.info('saved successfully', PathQueryFileInstance.fileHolder.path)
-  else log.warn('save failure', PathQueryFileInstance.fileHolder.path)
-  return saveResult
-}
-
-const create = (queryString) => {
-  const queryStringLabel = PathBasedQuery.queryStringLabel(queryString)
-  if (PathBasedQueryCache.has(queryStringLabel)) {
-    log.info('get path-query from cache', queryStringLabel)
-    return PathBasedQueryCache.get(queryStringLabel)
-  }
-  const newPathBasedQuery = new PathBasedQuery(queryString)
-  if (!newPathBasedQuery.isValid()) {
-    log.warn('created an invalid path-query', queryString)
-    return null
-  }
-  PathBasedQueryCache.add(queryStringLabel, newPathBasedQuery)
-  log.info('created a new path-query', newPathBasedQuery.queryString)
-  return newPathBasedQuery
-}
-
 const boot = async (filePath) => { // todo: use try/catch (see config/index.js)
   log.info(`Booting from ${filePath}...`)
-  PathQueryFileInstance = new PathQueryFile(filePath) // todo: filePath from config
-  return PathQueryFileInstance.fileHolder.load()
+  try {
+    PathQueryFileInstance = new PathQueryFile(filePath)
+    await PathQueryFileInstance.fileHolder.load()
+    log.info('Loaded successfully')
+    return true
+  } catch (e) {
+    log.error(e, 'Cannot load')
+    return false
+  }
 }
 
 const clean = async () => { // todo: use try/catch (see config/index.js)
   log.info('Cleaning data...')
   if (!PathQueryFileInstance) return
-  PathQueryFileInstance.collection.clean()
-  return PathQueryFileInstance.fileHolder.delete()
+  try {
+    PathQueryFileInstance.collection.clean()
+    return await PathQueryFileInstance.fileHolder.delete()
+  } catch (e) {
+    log.error(e, 'Error while cleaning')
+    return false
+  }
 }
 
 module.exports = {
@@ -73,13 +37,62 @@ module.exports = {
 
   API: {
     pathQuery: {
-      add,
-      remove,
-      get,
-      list,
-      save,
-      create,
-      queryStringLabel: PathBasedQuery.queryStringLabel
+      add: (label, queryString) => {
+        log.info({ label, queryString }, 'Adding path-query')
+        const pathQueryObj = new PathBasedQuery(queryString)
+        if (!pathQueryObj.isValid()) {
+          log.warn({ label, queryString }, 'Invalid path-query')
+          return false
+        }
+        pathQueryObj.label = label
+        return PathQueryFileInstance.collection.add(label, pathQueryObj)
+      },
+
+      remove: (label) => {
+        log.info({ label }, 'Removing path-query')
+        return PathQueryFileInstance.collection.remove(label)
+      },
+
+      get: (label) => {
+        return PathQueryFileInstance.collection.get(label)
+      },
+
+      list: () => {
+        const array = []
+        PathQueryFileInstance.collection.forEach((label, pathQuery) => {
+          array.push(pathQuery)
+        })
+        return array
+      },
+
+      save: async () => {
+        try {
+          const saveResult = await PathQueryFileInstance.fileHolder.save()
+          log.info({ saveResult }, `Save file in ${PathQueryFileInstance.fileHolder.path}`)
+          return saveResult
+        } catch (e) {
+          log.error(e, `Error while saving in ${PathQueryFileInstance.fileHolder.path}`)
+        }
+      },
+
+      create: (queryString) => {
+        const queryStringLabel = PathBasedQuery.generateQueryStringLabel(queryString)
+        if (PathBasedQueryCache.has(queryStringLabel)) {
+          const pathQueryObj = PathBasedQueryCache.get(queryStringLabel)
+          log.info({ label: pathQueryObj.label, queryString: pathQueryObj.queryString }, 'Found object in cache')
+          return pathQueryObj.clone()
+        }
+        const pathQueryObj = new PathBasedQuery(queryString)
+        if (!pathQueryObj.isValid()) {
+          log.warn({ queryString }, 'Invalid query string')
+          return null
+        }
+        PathBasedQueryCache.add(queryStringLabel, pathQueryObj)
+        log.info({ label: pathQueryObj.label, queryString: pathQueryObj.queryString }, 'New object created')
+        return pathQueryObj
+      },
+
+      generateQueryStringLabel: PathBasedQuery.generateQueryStringLabel
     }
   }
 }
