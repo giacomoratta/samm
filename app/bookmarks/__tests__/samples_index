@@ -21,12 +21,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
 				"level": 1,
 				"size": 20993,
-				"createdAt": "2020-01-09T10:06:14.336Z",
-				"modifiedAt": "2020-01-09T10:06:14.372Z",
+				"createdAt": 1578564374336,
+				"modifiedAt": 1578564374372,
 				"isFile": false,
 				"isDirectory": true,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": ""
+				"relPath": "",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": true
@@ -41,12 +41,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1",
 				"level": 2,
 				"size": 12590,
-				"createdAt": "2020-01-09T10:06:14.340Z",
-				"modifiedAt": "2020-01-09T10:06:14.364Z",
+				"createdAt": 1578564374340,
+				"modifiedAt": 1578564374364,
 				"isFile": false,
 				"isDirectory": true,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1"
+				"relPath": "directory1",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": false
@@ -61,12 +61,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2",
 				"level": 3,
 				"size": 4184,
-				"createdAt": "2020-01-09T10:06:14.344Z",
-				"modifiedAt": "2020-01-09T10:06:14.352Z",
+				"createdAt": 1578564374344,
+				"modifiedAt": 1578564374352,
 				"isFile": false,
 				"isDirectory": true,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory2"
+				"relPath": "directory1/directory2",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": false
@@ -81,12 +81,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file22.txt",
 				"level": 4,
 				"size": 44,
-				"createdAt": "2020-01-09T10:06:14.348Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374348,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory2/file22.txt"
+				"relPath": "directory1/directory2/file22.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": false
@@ -101,12 +101,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory2/file26.json",
 				"level": 4,
 				"size": 44,
-				"createdAt": "2020-01-09T10:06:14.352Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374352,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory2/file26.json"
+				"relPath": "directory1/directory2/file26.json",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": true
@@ -121,12 +121,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory3",
 				"level": 3,
 				"size": 4184,
-				"createdAt": "2020-01-09T10:06:14.356Z",
-				"modifiedAt": "2020-01-09T10:06:14.360Z",
+				"createdAt": 1578564374356,
+				"modifiedAt": 1578564374360,
 				"isFile": false,
 				"isDirectory": true,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory3"
+				"relPath": "directory1/directory3",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -141,12 +141,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory3/file33.txt",
 				"level": 4,
 				"size": 44,
-				"createdAt": "2020-01-09T10:06:14.356Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374356,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory3/file33.txt"
+				"relPath": "directory1/directory3/file33.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": false
@@ -161,12 +161,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/directory3/file35.txt",
 				"level": 4,
 				"size": 44,
-				"createdAt": "2020-01-09T10:06:14.360Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374360,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/directory3/file35.txt"
+				"relPath": "directory1/directory3/file35.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": true
@@ -181,12 +181,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/file11.txt",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.364Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374364,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/file11.txt"
+				"relPath": "directory1/file11.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -201,12 +201,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/file14.json",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.364Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374364,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/file14.json"
+				"relPath": "directory1/file14.json",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -221,12 +221,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory1/file18.wav",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.364Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374364,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory1/file18.wav"
+				"relPath": "directory1/file18.wav",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": true
@@ -241,12 +241,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory6",
 				"level": 2,
 				"size": 4222,
-				"createdAt": "2020-01-09T10:06:14.368Z",
-				"modifiedAt": "2020-01-09T10:06:14.372Z",
+				"createdAt": 1578564374368,
+				"modifiedAt": 1578564374372,
 				"isFile": false,
 				"isDirectory": true,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory6"
+				"relPath": "directory6",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -261,12 +261,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory6/file61.txt",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.368Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374368,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory6/file61.txt"
+				"relPath": "directory6/file61.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": true,
 			"isLastChild": false
@@ -281,12 +281,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory6/file64.json",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.372Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374372,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory6/file64.json"
+				"relPath": "directory6/file64.json",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -301,12 +301,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/directory6/file68.txt",
 				"level": 3,
 				"size": 42,
-				"createdAt": "2020-01-09T10:06:14.372Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374372,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "directory6/file68.txt"
+				"relPath": "directory6/file68.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": true
@@ -321,12 +321,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/file1.txt",
 				"level": 2,
 				"size": 31,
-				"createdAt": "2020-01-09T10:06:14.340Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374340,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "file1.txt"
+				"relPath": "file1.txt",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -341,12 +341,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/my_file1.json",
 				"level": 2,
 				"size": 27,
-				"createdAt": "2020-01-09T10:06:14.372Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374372,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "my_file1.json"
+				"relPath": "my_file1.json",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": false
@@ -361,12 +361,12 @@
 				"path": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir/my_file2.json",
 				"level": 2,
 				"size": 27,
-				"createdAt": "2020-01-09T10:06:14.372Z",
-				"modifiedAt": "2020-01-09T10:02:26.423Z",
+				"createdAt": 1578564374372,
+				"modifiedAt": 1578564146423,
 				"isFile": true,
 				"isDirectory": false,
-				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir",
-				"relPath": "my_file2.json"
+				"relPath": "my_file2.json",
+				"relRoot": "/home/giacomo/Workspace/mpl/app/__tests__/test_dir"
 			},
 			"isFirstChild": false,
 			"isLastChild": true

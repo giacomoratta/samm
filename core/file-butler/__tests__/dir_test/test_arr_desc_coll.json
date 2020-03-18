@@ -1,0 +1,12 @@
+{
+	"array": [
+		{
+			"label": "my_label_31",
+			"queryString": "good-value3"
+		},
+		{
+			"label": "my_label_41",
+			"queryString": "good-value4"
+		}
+	]
+}

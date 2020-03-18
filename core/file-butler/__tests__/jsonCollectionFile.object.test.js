@@ -4,13 +4,15 @@ const testArrAscColl = path.join(__dirname, 'dir_test', 'test_arr_asc_coll.json'
 const testObjDescColl = path.join(__dirname, 'dir_test', 'test_obj_desc_coll.json')
 const testArrDescColl = path.join(__dirname, 'dir_test', 'test_arr_desc_coll.json')
 const { JsonCollectionFile } = require('../jsonCollectionFile.class')
-const { TestCollectionObject, TestCollectionFile, bulkInsertObjectType, bulkInsertArrayType } = require('./jsonCollectionHelper.test')
+const { TestCollectionFile, bulkInsertObjectType, bulkInsertArrayType } = require('./jsonCollectionHelper.test')
 
 /* TestFile<Object|Array><Asc|Desc> */
 let TestFileOA1, TestFileOD1, TestFileAA1, TestFileAD1
 let TestFileOA2, TestFileOD2, TestFileAA2, TestFileAD2
 
-describe('A collection of TestCollectionObject objects', function () {
+// todo: check ASC and DESC for object and array
+
+describe('A collection of test objects', function () {
   beforeAll(async function () {
     TestFileOA1 = new TestCollectionFile(testObjAscColl, /* test options */ {
       orderType: 'ASC',
