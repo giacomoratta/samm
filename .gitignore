@@ -13,6 +13,7 @@ yarn-error.log*
 temp/
 userdata/
 app-data/
+test-app-data/
 build/
 config.json
 

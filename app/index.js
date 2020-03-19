@@ -7,9 +7,10 @@ const log = require('../core/logger').createLogger('app')
 /**
  * Starts the boot procedure for the application
  * @param {string} appRootPath: where the executable is located
+ * @param {string} appDataDirName: name of the directory where config and db files are located
  * @returns {Promise<boolean>}: false means 'severe error', so app must be closed
  */
-const boot = async ({ appRootPath }) => {
+const boot = async ({ appRootPath, appDataDirName }) => {
   log.info('Booting the application...')
   if (await ConfigModule.boot(path.join(appRootPath, 'config.json')) !== true) return false
 

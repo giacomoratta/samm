@@ -6,14 +6,13 @@
   "scripts": {
     "integration": "jest --testPathPattern=.*\\__tests__\\.*\\.integration\\.js",
     "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
-    "start": "node app.js",
-    "dev": "NODE_ENV=development APPDATA_DIRNAME=test-app-data node app.js"
+    "start": "NODE_ENV=production APP_DATA_DIRNAME=app-data node app.js",
+    "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-app-data node app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "archiver": "^3.1.1",
-    "dotenv": "^8.2.0",
     "fastest-validator": "^0.6.19",
     "fs-extra": "^7.0.1",
     "iconv-lite": "^0.5.0",

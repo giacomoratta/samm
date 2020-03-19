@@ -32,7 +32,8 @@ Cli.on('show', printWarnings)
 Cli.on('afterCommand', printWarnings)
 
 App.boot({
-  appRootPath: process.env.ABSOLUTE_APP_PATH || process.cwd()
+  appRootPath: process.env.APP_ABSPATH || process.cwd(),
+  appDataDirName: process.env.APP_DATA_DIRNAME || 'app-data'
 
 }).then((outcome) => {
   if (outcome === false) {

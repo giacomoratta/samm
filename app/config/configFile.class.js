@@ -22,7 +22,7 @@ class ConfigFile extends JsonizedFile {
         ensure: true,
         readOnly: true
       },
-      value: 'app-data',
+      value: process.env.APP_DATA_DIRNAME || 'app-data',
       description: 'Directory for storing all the user data'
     }))
 
