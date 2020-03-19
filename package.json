@@ -7,7 +7,7 @@
     "integration": "jest --testPathPattern=.*\\__tests__\\.*\\.integration\\.js",
     "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
     "start": "node app.js",
-    "dev": "node app-dev.js"
+    "dev": "NODE_ENV=development APPDATA_DIRNAME=test-app-data node app.js"
   },
   "author": "",
   "license": "ISC",
