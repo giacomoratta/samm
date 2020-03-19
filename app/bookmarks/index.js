@@ -1,27 +1,24 @@
+const log = require('../../core/logger').createLogger('bookmarks')
 
-/*
+const clean = async () => {
+  log.info('Cleaning data...')
+}
 
-getCollection
-  - bookmarks (this.collection)
+const boot = async () => {
+  log.info('Booting...')
+}
 
-add
+module.exports = {
+  boot,
+  clean,
 
-remove
-
-hasTag
-  - check key
-  - check length>0
-
-*/
-
-// module.exports = {
-//   Bookmarks: {
-//     add,
-//     remove,
-//     get,
-//     list,
-//     save
-//   },
-//   BookmarksBoot,
-//   BookmarksCleanData
-// }
+  API: {
+    bookmarks: {
+      add: (label, sampleObj) => {},
+      remove: (label, sampleObj) => {}, // or index
+      get: (label, index) => {},
+      labels: () => {},
+      list: (label) => {}
+    }
+  }
+}
