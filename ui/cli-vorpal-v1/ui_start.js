@@ -3,7 +3,6 @@ const { Cli, App, API, log } = require('./ui_common')
 // require('./cmd_bookm')
 // require('./cmd_lookup')
 // require('./cmd_project')
-// require('./cmd_query')
 // require('./cmd_save')
 // require('./cmd_scan')
 
@@ -41,6 +40,7 @@ App.boot({
   }
 
   require('./cmd_config')
+  require('./cmd_query')
 
   Cli.show('mpl')
 }).catch((e) => {

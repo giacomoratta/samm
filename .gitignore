@@ -11,6 +11,7 @@ yarn-error.log*
 # Project generated files
 temp/
 userdata/
+app-data/
 build/
 config.json
 

@@ -14,10 +14,12 @@ const boot = async ({ appRootPath }) => {
   if (await ConfigModule.boot(path.join(appRootPath, 'config.json')) !== true) return false
 
   const config = ConfigModule.API.config
-  if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'path_query.json')) !== true) return false
-  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'project_history.json')) !== true) return false
-  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'bookmarks.json')) !== true) return false
-  // if (await PathQueryModule.boot(path.join(config.field('AppDataDirectory').value, 'samples_index.json')) !== true) return false
+  const AppDataDirectory = config.field('AppDataDirectory').fn.toAbsPath()
+
+  if (await PathQueryModule.boot(path.join(AppDataDirectory, 'path_query.json')) !== true) return false
+  // if (await PathQueryModule.boot(AppDataDirectory, 'project_history.json')) !== true) return false
+  // if (await PathQueryModule.boot(AppDataDirectory, 'bookmarks.json')) !== true) return false
+  // if (await PathQueryModule.boot(AppDataDirectory, 'samples_index.json')) !== true) return false
   // todo: remove json extension
   // todo: put everything in the same directory (also config.json)
   return true

@@ -6,12 +6,12 @@ const log = require('../../core/logger').createLogger('path-query')
 const PathBasedQueryCache = new SpheroidList({ maxSize: 30 })
 let PathQueryFileInstance = null
 
-const boot = async (filePath) => { // todo: use try/catch (see config/index.js)
+const boot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
   try {
     PathQueryFileInstance = new PathQueryFile(filePath)
-    await PathQueryFileInstance.fileHolder.load()
-    log.info('Loaded successfully')
+    const dataPresence = await PathQueryFileInstance.fileHolder.load()
+    log.info({ dataPresence }, 'Loaded successfully')
     return true
   } catch (e) {
     log.error(e, 'Cannot load')
@@ -19,7 +19,7 @@ const boot = async (filePath) => { // todo: use try/catch (see config/index.js)
   }
 }
 
-const clean = async () => { // todo: use try/catch (see config/index.js)
+const clean = async () => {
   log.info('Cleaning data...')
   if (!PathQueryFileInstance) return
   try {
@@ -37,8 +37,12 @@ module.exports = {
 
   API: {
     pathQuery: {
+
+      getFilePath: () => {
+        return PathQueryFileInstance.fileHolder.path
+      },
+
       add: (label, queryString) => {
-        log.info({ label, queryString }, 'Adding path-query')
         const pathQueryObj = new PathBasedQuery(queryString)
         if (!pathQueryObj.isValid()) {
           log.warn({ label, queryString }, 'Invalid path-query')

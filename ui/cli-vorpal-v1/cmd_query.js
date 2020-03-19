@@ -1,18 +1,20 @@
 const { API, Cli } = require('./ui_common')
 
-const PathQuery = API.PathQuery
+const PathQuery = API.pathQuery
 
 const commandName = 'query'
 
 Cli.addCommand(`${commandName} [label] [query]`)
 
 Cli.addCommandHeader(commandName)
-  .description('Manage queries for sample, for matching sample directories and files. \n')
+  .description('Manage queries for sample, for matching sample directories and files. \n' +
+                'In order to add, get or remove a query, use the 2 params label and query. \n'
+  )
   // .option('-c, --copy <new-label>', 'Duplicate a query with the specified query \'new-label\'.') /* todo */
   .option('-r, --remove', 'Remove a query')
   // .option('-u, --uncovered <count>', 'Shows the first <count> uncovered samples by all queries') /* todo */
 
-Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ /* thisCli, */ cliNext, cliInput, cliPrinter }) {
   const queryLabel = cliInput.getParam('label')
   const queryString = cliInput.getParam('query')
 
@@ -22,9 +24,9 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
       cliPrinter.error('Cannot add the query')
     } else {
       cliPrinter.info('Query added successfully')
-    }
-    if (PathQuery.save() !== true) {
-      cliPrinter.error(`Cannot save the query file: ${PathQuery.queryFile}`)
+      if (await PathQuery.save() !== true) {
+        cliPrinter.error(`Cannot save the query file: ${PathQuery.getFilePath()}`)
+      }
     }
     return cliNext()
   }
@@ -39,8 +41,8 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
     if (cliInput.hasOption('remove')) {
       PathQuery.remove(queryLabel)
       cliPrinter.info(`Query '${queryLabel}' removed successfully`)
-      if (PathQuery.save() !== true) {
-        cliPrinter.error(`Cannot save the query file: ${PathQuery.queryFile}`)
+      if (await PathQuery.save() !== true) {
+        cliPrinter.error(`Cannot save the query file: ${PathQuery.getFilePath()}`)
       }
       return cliNext()
     }

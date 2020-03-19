@@ -19,7 +19,7 @@ class ConfigFile extends JsonizedFile {
       schema: {
         type: 'relDirPath',
         basePath: basePath,
-        createIfNotExists: true,
+        ensure: true,
         readOnly: true
       },
       value: 'app-data',
