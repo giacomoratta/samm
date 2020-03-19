@@ -115,6 +115,14 @@ class ConfigFile extends JsonizedFile {
     }))
 
     this.add(this.DFBF.create({
+      name: 'TemplatesDirectory',
+      schema: {
+        type: 'absDirPath'
+      },
+      description: 'Directory where all templates are located; they can be used to start a ready-to-go project instead of an empty one.'
+    }))
+
+    this.add(this.DFBF.create({
       name: 'Status',
       schema: {
         type: 'object',
