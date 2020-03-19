@@ -24,6 +24,15 @@ class Project {
     return this._name && this._path
   }
 
+  async createFromTemplate (templateObj) {
+    if (!(templateObj instanceof Project)) {
+      throw new TypeError('templateObj must be instance of Project class.')
+    }
+    const result = await fileUtils.copyDirectory(templateObj.path, this.path)
+    if (result.err) throw result.err
+    return result.pathTo
+  }
+
   _setFromProjectPath (projectPath) {
     if (!fileUtils.isAbsolutePath(projectPath)) {
       throw new ProjectError(`Project path is not an absolute path! ${projectPath}`)

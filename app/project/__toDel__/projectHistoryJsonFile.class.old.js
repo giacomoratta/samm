@@ -1,6 +1,6 @@
-const { FileButler } = require('../../core/file-butler')
-const { Project } = require('./project.class')
-const { SpheroidList } = require('../../core/spheroid-list')
+const { FileButler } = require('../../../core/file-butler')
+const { Project } = require('../project.class')
+const { SpheroidList } = require('../../../core/spheroid-list')
 
 class ProjectHistoryJsonFile {
   constructor (filePath) {

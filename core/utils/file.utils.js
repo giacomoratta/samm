@@ -393,7 +393,7 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
     overwrite: false,
     errorOnExist: false
   }, options)
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     const result = {
       err: null,
       pathFrom: pathFrom,
@@ -403,9 +403,26 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
       if (err) {
         result.err = err
         // console.log(result)
-        return reject(result)
+        return resolve(result)
       }
       return resolve(result)
+    })
+  })
+}
+
+libUtils.readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
+  return new Promise((resolve) => {
+    if (!itemFn) itemFn = async function () {}
+    if (!preProcessItemsFn) preProcessItemsFn = function () {}
+    fs.readdir(pathString, async (err, items) => {
+      if (err || !items) {
+        resolve(null)
+      }
+      preProcessItemsFn(items)
+      for (let i = 0; i < items.length; i++) {
+        await itemFn(items[i], i, items)
+      }
+      resolve(items)
     })
   })
 }

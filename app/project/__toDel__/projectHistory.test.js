@@ -2,7 +2,7 @@ const path = require('path')
 const projectHistoryFilePath = path.join(__dirname, 'userdata', 'project_history')
 const { fileUtils } = require('../../../core/utils/file.utils')
 
-const { ProjectHistory, ProjectHistoryBoot, ProjectHistoryCleanData } = require('../projectHistory.old')
+const { ProjectHistory, ProjectHistoryBoot, ProjectHistoryCleanData } = require('./projectHistory.old')
 
 describe('ProjectHistory endpoints', function () {
   beforeAll(() => {

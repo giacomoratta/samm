@@ -1,5 +1,5 @@
 const { ProjectHistoryJsonFile } = require('./projectHistoryJsonFile.class.old')
-const log = require('../../core/logger').createLogger('project-history')
+const log = require('../../../core/logger').createLogger('project-history')
 
 let ProjectHistoryFile
 
