@@ -6,7 +6,7 @@ const stream = require('stream')
 // Environment variables
 const cwd = process.cwd()
 const { env } = process
-const logPath = path.join(cwd, 'log')
+const logPath = path.join(cwd, 'logs-mpl')
 
 // todo create directory
 // todo create files

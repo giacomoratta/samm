@@ -32,7 +32,7 @@ Cli.on('show', printWarnings)
 Cli.on('afterCommand', printWarnings)
 
 App.boot({
-  appRootPath: process.cwd()
+  appRootPath: process.env.ABSOLUTE_APP_PATH || process.cwd()
 
 }).then((outcome) => {
   if (outcome === false) {
