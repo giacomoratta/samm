@@ -1,37 +1,27 @@
 const path = require('path')
-const { Project } = require('../project.class')
+const { ProjectTemplates } = require('../projectTemplate.class')
 
 describe('ProjectTemplate class', function () {
-  it('Project basic methods', function () {
-    let projectPath, projectObject
+  it('should throw some errors', async function () {
+    expect(function () {
+      return new ProjectTemplates('not-valid-abs-path')
+    }).toThrow('is not an absolute path')
 
-    expect(() => {
-      projectObject = new Project({ projectPath: path.join(__dirname, 'test_dir', 'my_project_invalid') })
-    }).toThrow()
+    await expect((() => {
+      const ptRepo = new ProjectTemplates(path.join(__dirname, 'test_dir', 'templates-not'))
+      return ptRepo.scan()
+    })()).rejects.toThrow('path does not exist')
+  })
 
-    expect(() => {
-      projectObject = new Project({ projectPath: 'invalid/path' })
-    }).toThrow()
+  it('should scan a template directory and get a sorted list', async function () {
+    const ptRepo = new ProjectTemplates(path.join(__dirname, 'test_dir', 'templates'))
 
-    projectPath = path.join(__dirname, 'test_dir', 'my_project1')
-    projectObject = new Project({ projectPath })
-    expect(projectObject.name).toEqual('my_project1')
-    expect(projectObject.path).toEqual(projectPath)
+    await ptRepo.scan()
+    expect(ptRepo.empty).toEqual(false)
+    expect(ptRepo.list.length).toEqual(3)
 
-    projectPath = path.join(__dirname, 'test_dir', 'my_project1.daw')
-    projectObject = new Project({ projectPath })
-    expect(projectObject.name).toEqual('my_project1.daw')
-    expect(projectObject.path).toEqual(projectPath)
-
-    const jsonObj = {
-      name: 'my_project1.daw',
-      path: projectPath
-    }
-    expect(projectObject.toJson()).toMatchObject(jsonObj)
-
-    projectObject = new Project()
-    projectObject.fromJson(jsonObj)
-    expect(projectObject.name).toEqual('my_project1.daw')
-    expect(projectObject.path).toEqual(projectPath)
+    expect(ptRepo.list[0].name).toEqual('tpl1')
+    expect(ptRepo.list[1].name).toEqual('tpl2')
+    expect(ptRepo.list[2].name).toEqual('tpl3')
   })
 })

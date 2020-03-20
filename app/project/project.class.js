@@ -3,13 +3,9 @@ const { fileUtils } = require('../../core/utils/file.utils')
 const { ProjectError } = require('./project.error')
 
 class Project {
-  constructor ({ projectPath } = {}) {
+  constructor () {
     this._name = null
     this._path = null
-
-    if (projectPath) {
-      this._setFromProjectPath(projectPath)
-    }
   }
 
   get name () {
@@ -20,17 +16,33 @@ class Project {
     return this._path
   }
 
+  set path (projectPath) {
+    // return this._path
+  }
+
   isValid () {
     return this._name && this._path
   }
 
-  async createFromTemplate (templateObj) {
-    if (!(templateObj instanceof Project)) {
-      throw new TypeError('templateObj must be instance of Project class.')
+  async copyFrom (projectObj) {
+    if (!(projectObj instanceof Project)) {
+      throw new TypeError('projectObj must be instance of Project class.')
     }
-    const result = await fileUtils.copyDirectory(templateObj.path, this.path)
+    const result = await fileUtils.copyDirectory(projectObj.path, this.path)
     if (result.err) throw result.err
+
+    // todo: _findFilesWithName and return array with absPath
+
     return result.pathTo
+  }
+
+  async findFilesByName (name) {
+    // todo: recursive optional argument?
+    // this.path
+  }
+
+  async fixInternalFileNames (array) {
+    // this.path
   }
 
   _setFromProjectPath (projectPath) {

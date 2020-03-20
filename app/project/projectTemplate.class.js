@@ -16,6 +16,10 @@ class ProjectTemplates {
     return this._list
   }
 
+  get empty () {
+    return this._list.length === 0
+  }
+
   async scan () {
     if (!await fileUtils.directoryExists(this._filePath)) {
       throw new ProjectError(`Project templates path does not exist: ${this._filePath}`)
