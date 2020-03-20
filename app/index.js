@@ -1,6 +1,7 @@
 const path = require('path')
 const ConfigModule = require('./config')
 const PathQueryModule = require('./path-query')
+const ProjectModule = require('./project')
 
 const log = require('../core/logger').createLogger('app')
 
@@ -43,6 +44,9 @@ module.exports = {
 
   API: {
     config: ConfigModule.API.config,
-    pathQuery: PathQueryModule.API.pathQuery
+    pathQuery: PathQueryModule.API.pathQuery,
+    project: ProjectModule.API.project,
+    projectHistory: ProjectModule.API.projectHistory,
+    projectTemplate: ProjectModule.API.projectTemplate
   }
 }

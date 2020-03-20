@@ -12,6 +12,9 @@ class CliInput {
     this.options = { ...values.options }
     this.params = { ...values }
     delete this.params.options
+
+    this.hasParams = (Object.keys(this.params).length > 0)
+    this.hasOptions = (Object.keys(this.options).length > 0)
   }
 
   hasParam (name) {
