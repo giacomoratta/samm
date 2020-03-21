@@ -99,7 +99,7 @@ class CliVorpal {
             await thisCli.prompt(props, (result) => {
               input = result.inputValue
             })
-            const exit = input === 'q' || isNaN(input.charCodeAt(0)) === true
+            const exit = input === 'q' // || isNaN(input.charCodeAt(0)) === true
 
             if (await handler({ exit, input }) !== true) {
               self.printer.newLine(1)

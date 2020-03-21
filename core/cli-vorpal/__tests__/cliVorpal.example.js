@@ -115,14 +115,14 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
   cliNext()
 })
 
-vCli.addCommand('pp')
-vCli.addCommandBody('pp', async function ({ thisCli, cliNext, cliPrinter, cliPrompt }) {
+vCli.addCommand('prompt1')
+vCli.addCommandBody('prompt1', async function ({ thisCli, cliNext, cliPrinter, cliPrompt }) {
   // await cliPrompt(async ({ result }) => {
   //   console.log(result)
   //   cliNext()
   // })
 
-  await cliPrompt(({ exit, input }) => {
+  await cliPrompt(async ({ exit, input }) => {
     if (exit === true) {
       cliNext()
       return true
