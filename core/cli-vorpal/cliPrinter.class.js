@@ -84,35 +84,35 @@ class CliPrinter {
     this.info(text)
   }
 
-  orderedList (array) {
+  orderedList (array, toString) {
     if (!array) return
     let i = 1
     array.forEach((e) => {
-      console.info(`${this.indent}${i++} ${e}`)
+      console.info(`${this.indent}${i++} ${toString ? toString(e) : e}`)
     })
     console.info('')
   }
 
-  unorderedList (array) {
+  unorderedList (array, toString) {
     if (!array) return
     array.forEach((e) => {
-      console.info(`${this.indent}- ${e}`)
+      console.info(`${this.indent}- ${toString ? toString(e) : e}`)
     })
     console.info('')
   }
 
-  simpleMap (object) {
+  simpleMap (object, toString) {
     if (!object) return
     Object.keys(object).forEach((k) => {
-      console.info(`${this.indent}  ${k}: ${object[k]}`)
+      console.info(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
     })
     console.info('')
   }
 
-  simpleMapByKey (object) {
+  simpleMapByKey (object, toString) {
     if (!object) return
     Object.keys(object).sort().forEach((k) => {
-      console.info(`${this.indent}  ${k}: ${object[k]}`)
+      console.info(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
     })
     console.info('')
   }

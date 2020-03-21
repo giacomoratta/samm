@@ -104,7 +104,7 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
     name: 'inputValue',
     message: "['q' to quit] > "
   }, (result) => {
-    const cliP1 = cliPrinter.createChild({ command: 'chotest' })
+    const cliP1 = cliPrinter.createChild({ command: 'clip-test' })
     console.log(cliP1.indent.length)
     cliP1.info('result prompt:', result.inputValue)
     data = result
@@ -113,6 +113,30 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
   console.log('222', data)
 
   cliNext()
+})
+
+vCli.addCommand('pp')
+vCli.addCommandBody('pp', async function ({ thisCli, cliNext, cliPrinter, cliPrompt }) {
+  // await cliPrompt(async ({ result }) => {
+  //   console.log(result)
+  //   cliNext()
+  // })
+
+  await cliPrompt(({ exit, input }) => {
+    if (exit === true) {
+      cliNext()
+      return true
+    }
+
+    if (input === 'good') {
+      cliPrinter.info('Well done! Free to go!')
+      cliNext()
+      return true
+    }
+
+    cliPrinter.error('Error, so... repeat!')
+    return false
+  })
 })
 
 vCli.show('abc')

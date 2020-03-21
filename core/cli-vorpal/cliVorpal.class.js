@@ -54,24 +54,70 @@ class CliVorpal {
       throw new Error(`Command ${command} not defined. Use addCommand().`)
     }
     const self = this
+
     this.commands[command].action(function (values, cb) {
-      /* this function has to be a normal function not lambda or something else;
-       * the keyword 'this' will be cliReference and its needed, for instance, to call prompt method */
+      // todo: avoid calling every time
+
+      /* this function must be a normal function (not lambda or something else);
+       * the keyword 'this' will be thisCli argument for cmdFn() and its needed, for instance, to call prompt method */
       self.printer.newLine()
+      const thisCli = this
+      const cliInput = new CliInput({ values, command })
+      const cliPrinter = new CliPrinter({ command })
+      const cliNext = (code, err) => {
+        if (code === CLI_ERROR) {
+          self.logger.error(`command '${command}' terminated with an error.`)
+          if (err) self.logger.error(err)
+        }
+        self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
+        self.printer.newLine()
+        cb()
+      }
+
+      const cliPrompt = function (props, handler) {
+        if (!handler) {
+          handler = props
+          props = {}
+        }
+
+        const exitValue = props.exitValue || 'q'
+        delete props.exitValue
+
+        const promptMessage = `['${exitValue}' to quit] > `
+        if (props.message) props.message = `${props.message} ${promptMessage}`
+        else props.message = `${promptMessage}`
+
+        props = {
+          type: 'input',
+          name: 'inputValue',
+          ...props
+        }
+
+        const _promptFn = async function (handler) {
+          let input = null
+          try {
+            await thisCli.prompt(props, (result) => {
+              input = result.inputValue
+            })
+            const exit = input === 'q' || isNaN(input.charCodeAt(0)) === true
+
+            if (await handler({ exit, input }) !== true) {
+              self.printer.newLine(1)
+              await _promptFn(handler)
+            }
+          } catch (e) {
+            await handler({ exit: true })
+          }
+        }
+        return _promptFn(handler)
+      }
 
       cmdFn({
-        thisCli: this,
-        cliNext: (code, err) => {
-          if (code === CLI_ERROR) {
-            self.logger.error(`command '${command}' terminated with an error.`)
-            if (err) self.logger.error(err)
-          }
-          self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
-          self.printer.newLine()
-          cb()
-        },
-        cliInput: new CliInput({ values, command }),
-        cliPrinter: new CliPrinter({ command })
+        thisCli,
+        cliNext,
+        cliInput,
+        cliPrinter,
+        cliPrompt
       })
     })
   }

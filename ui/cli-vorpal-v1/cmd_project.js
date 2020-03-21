@@ -11,25 +11,47 @@ Cli.addCommand(`${commandName}`)
 Cli.addCommandHeader(commandName)
   .description('Project manager (set current project, project history, templates, etc.) \n')
   .option('-c, --create <name>', 'Create and set a project in the same parent directory of current project')
-  .option('-l, --list', 'Show all projects in the same parent directory of current project')
+  .option('-l, --list [index]', 'Show all projects in the same parent directory or set one of them')
   .option('-p, --path <path>', 'Set or create current project from its absolute path')
   .option('-h, --history [index]', 'Show all project history or set the current project from one of them')
   .option('-t, --template [index]', 'Show all templates or create a new project from one of them')
 
-Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
   const createProjectName = cliInput.getOption('create')
+  const listProjects = cliInput.getOption('list')
   const projectPath = cliInput.getOption('path')
   const historyIndex = cliInput.getOption('history')
   const templateIndex = cliInput.getOption('template')
 
   /* Show current project */
   if (!cliInput.hasParams && !cliInput.hasOptions) {
-    // todo
+    const currentProject = Project.current()
+    if (currentProject) {
+      cliPrinter.info(`Current project: ${currentProject.path}`)
+    } else {
+      cliPrinter.warn('No current project set.')
+    }
+    return cliNext()
   }
 
   /* List projects in the same directory */
   if (cliInput.hasOption('list')) {
-    // todo
+    const currentProject = Project.current()
+    if (currentProject) {
+      cliPrinter.info(`Current project: ${currentProject}`)
+      cliPrinter.info(`Parent directory: ${currentProject.parentPath}`)
+      cliPrinter.newLine()
+
+      const pList = Project.listSiblings()
+      if (pList.length > 0) {
+        cliPrinter.orderedList(pList, (pItem) => { return pItem.path })
+      } else {
+        cliPrinter.warn('No projects in the parent directory.')
+      }
+    } else {
+      cliPrinter.warn('No current project set.')
+    }
+    return cliNext()
   }
 
   /* Create a project in the same directory */
