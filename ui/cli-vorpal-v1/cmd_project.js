@@ -16,7 +16,7 @@ Cli.addCommandHeader(commandName)
   .option('-h, --history [index]', 'Show all project history or set the current project from one of them')
   .option('-t, --template [index]', 'Show all templates or create a new project from one of them')
 
-Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   const createProjectName = cliInput.getOption('create')
   const listProjects = cliInput.getOption('list')
   const projectPath = cliInput.getOption('path')
@@ -40,11 +40,20 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     if (currentProject) {
       cliPrinter.info(`Current project: ${currentProject}`)
       cliPrinter.info(`Parent directory: ${currentProject.parentPath}`)
-      cliPrinter.newLine()
 
       const pList = ProjectManager.listSiblings()
       if (pList.length > 0) {
-        cliPrinter.orderedList(pList, (pItem) => { return pItem.path })
+        await cliPrompt({
+          // message: '',
+          showFn: () => {
+            cliPrinter.orderedList(pList, (pItem) => { return pItem.path })
+          }
+        }, async ({ exit, input }) => {
+          if (exit === true) {
+            cliNext()
+            return true
+          }
+        })
       } else {
         cliPrinter.warn('No projects in the parent directory.')
       }
