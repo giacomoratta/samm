@@ -60,7 +60,7 @@ Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrint
   return showAllBookmarks({ tag: mainTag, thisCli, cliNext, cliInput, cliPrinter })
 })
 
-const showAllBookmarks = ({ tag, thisCli, cliNext, cliInput, cliPrinter }) => {
+const showAllBookmarks = ({ tag, cliNext, cliPrinter }) => {
   if (tag) {
     if (Bookmarks.hasTag(tag)) {
       printBookmarks({ tag, cliPrinter })
@@ -100,7 +100,7 @@ const printBookmarks = ({ tag, toArray = false, cliPrinter }) => {
   return registry
 }
 
-const manageAllBookmarks = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
+const manageAllBookmarks = ({ cliNext }) => {
   if (Bookmarks.size() > 0) {
     // interactiveManager
   } else {
@@ -109,7 +109,7 @@ const manageAllBookmarks = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
   return cliNext()
 }
 
-const manageBookmarkTag = ({ tag, thisCli, cliNext, cliInput, cliPrinter }) => {
+const manageBookmarkTag = ({ tag, cliNext }) => {
   if (Bookmarks.hasTag(tag)) {
     // remove
   } else {
@@ -118,7 +118,7 @@ const manageBookmarkTag = ({ tag, thisCli, cliNext, cliInput, cliPrinter }) => {
   return cliNext()
 }
 
-const removeBookmarkTag = ({ tag, thisCli, cliNext, cliInput, cliPrinter }) => {
+const removeBookmarkTag = ({ tag, cliNext }) => {
   if (Bookmarks.hasTag(tag)) {
     // remove
   } else {
@@ -127,7 +127,7 @@ const removeBookmarkTag = ({ tag, thisCli, cliNext, cliInput, cliPrinter }) => {
   return cliNext()
 }
 
-const addFromLookup = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
+const addFromLookup = ({ cliNext }) => {
   if (Sample.getLatestLookup()) {
     // interactiveManager
   } else {
@@ -136,7 +136,7 @@ const addFromLookup = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
   return cliNext()
 }
 
-const exportToProject = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
+const exportToProject = ({ cliNext }) => {
   if (ProjectHistory.latest()) {
     // ASK and export
   } else {
@@ -145,7 +145,7 @@ const exportToProject = ({ thisCli, cliNext, cliInput, cliPrinter }) => {
   return cliNext()
 }
 
-const copyBookmarksTag = ({ fromTag, toTag, thisCli, cliNext, cliInput, cliPrinter }) => {
+const copyBookmarksTag = ({ fromTag, toTag, cliNext }) => {
   if (fromTag) {
     // duplicate
   } else {

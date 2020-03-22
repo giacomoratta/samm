@@ -12,7 +12,7 @@ Cli.addCommandHeader(commandName)
     'if the index is already present the scan does not start, in order to avoid resource wasting.' + '\n')
   .option('-f, --force', 'Force the rescan')
 
-Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   if (!Config.get('SamplesDirectory')) {
     cliPrinter.warn('No samples directory set; see \'config SamplesDirectory\' ')
     return cliNext()

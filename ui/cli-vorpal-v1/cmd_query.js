@@ -14,7 +14,7 @@ Cli.addCommandHeader(commandName)
   .option('-r, --remove', 'Remove a query')
   // .option('-u, --uncovered <count>', 'Shows the first <count> uncovered samples by all queries') /* todo */
 
-Cli.addCommandBody(commandName, async function ({ /* thisCli, */ cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   const queryLabel = cliInput.getParam('label')
   const queryString = cliInput.getParam('query')
 

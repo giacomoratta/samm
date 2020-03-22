@@ -9,7 +9,7 @@ Cli.addCommandHeader(commandName)
   .description('Get or set the value of a configuration parameter. \n')
   .option('-r, --remove', 'Remove a key or a value from a complex parameter (e.g. list)')
 
-Cli.addCommandBody(commandName, async function ({ /* thisCli, */ cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   const paramName = cliInput.getParam('name')
 
   if (paramName) {

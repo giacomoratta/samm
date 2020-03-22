@@ -16,7 +16,7 @@ Cli.addCommandHeader(commandName)
   .option('-p, --path <path>', 'Absolute custom path')
   .option('-o, --overwrite', 'Overwrite the existent directory')
 
-Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   const saveAll = cliInput.getOption('all')
   const destinationDirectory = cliInput.getOption('dirname')
   const destinationAbsPath = cliInput.getOption('path')

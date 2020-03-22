@@ -26,7 +26,7 @@ vCli.addCommandHeader('projects')
   .option('--save', 'Save bookmarks in the current project')
   .option('-d, --dirname <dirname>', 'Set directory name.')
 
-vCli.addCommandBody('projects', function ({ thisCli, cliNext, cliInput }) {
+vCli.addCommandBody('projects', function ({ cliNext, cliInput }) {
   console.log(cliInput.command)
   console.log(cliInput.params)
   console.log(cliInput.options)
@@ -74,7 +74,7 @@ function wait1 (label, time) {
 }
 
 vCli.addCommand('wait')
-vCli.addCommandBody('wait', async function ({ thisCli, cliNext }) {
+vCli.addCommandBody('wait', async function ({ cliNext }) {
   let data
   data = await wait1('label1', 8000)
   console.log(1, data)
@@ -116,7 +116,7 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
 })
 
 vCli.addCommand('prompt1')
-vCli.addCommandBody('prompt1', async function ({ thisCli, cliNext, cliPrinter, cliPrompt }) {
+vCli.addCommandBody('prompt1', async function ({ cliNext, cliPrinter, cliPrompt }) {
   await cliPrompt(async ({ exit, input }) => {
     if (exit === true) {
       cliNext()

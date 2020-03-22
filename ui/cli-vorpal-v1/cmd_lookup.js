@@ -11,7 +11,7 @@ Cli.addCommandHeader(commandName)
   .option('-a, --all', 'Show all samples that match the query (instead of the default random selection)')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
 
-Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   const queryString = cliInput.getParam('query')
   const queryLabel = cliInput.getOption('label')
 

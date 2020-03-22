@@ -10,6 +10,6 @@ Cli.addCommand(`${commandName} [name] [values...]`)
 Cli.addCommandHeader(commandName)
   .description('Text. \n')
 
-Cli.addCommandBody(commandName, function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, function ({ cliNext }) {
   return cliNext()
 })

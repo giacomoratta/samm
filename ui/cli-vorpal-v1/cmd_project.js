@@ -16,7 +16,7 @@ Cli.addCommandHeader(commandName)
   .option('-h, --history [index]', 'Show all project history or set the current project from one of them')
   .option('-t, --template [index]', 'Show all templates or create a new project from one of them')
 
-Cli.addCommandBody(commandName, async function ({ thisCli, cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   const createProjectName = cliInput.getOption('create')
   const listProjects = cliInput.getOption('list')
   const projectPath = cliInput.getOption('path')
