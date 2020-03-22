@@ -45,7 +45,7 @@ module.exports = {
   API: {
     config: ConfigModule.API.config,
     pathQuery: PathQueryModule.API.pathQuery,
-    project: ProjectModule.API.project,
+    projectManager: ProjectModule.API.projectManager,
     projectHistory: ProjectModule.API.projectHistory,
     projectTemplate: ProjectModule.API.projectTemplate
   }

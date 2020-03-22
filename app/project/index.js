@@ -36,11 +36,16 @@ module.exports = {
   clean,
 
   API: {
-    project: {
+    projectManager: {
       create: ({ templateObj, projectPath }) => {},
 
       current: () => {
         return ProjectHistoryFileInstance.collection.latest
+      },
+
+      listSiblings: () => {
+        // todo
+        // return array of Project object
       }
     },
 

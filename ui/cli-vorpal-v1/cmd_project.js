@@ -1,6 +1,6 @@
 const { App, Cli } = require('./ui_common')
 
-const Project = App.project
+const ProjectManager = App.projectManager
 const ProjectHistory = App.projectHistory
 const ProjectTemplate = App.projectTemplate
 
@@ -25,7 +25,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
 
   /* Show current project */
   if (!cliInput.hasParams && !cliInput.hasOptions) {
-    const currentProject = Project.current()
+    const currentProject = ProjectManager.current()
     if (currentProject) {
       cliPrinter.info(`Current project: ${currentProject.path}`)
     } else {
@@ -36,13 +36,13 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
 
   /* List projects in the same directory */
   if (cliInput.hasOption('list')) {
-    const currentProject = Project.current()
+    const currentProject = ProjectManager.current()
     if (currentProject) {
       cliPrinter.info(`Current project: ${currentProject}`)
       cliPrinter.info(`Parent directory: ${currentProject.parentPath}`)
       cliPrinter.newLine()
 
-      const pList = Project.listSiblings()
+      const pList = ProjectManager.listSiblings()
       if (pList.length > 0) {
         cliPrinter.orderedList(pList, (pItem) => { return pItem.path })
       } else {

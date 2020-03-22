@@ -83,9 +83,12 @@ class CliVorpal {
         const exitValue = props.exitValue || 'q'
         delete props.exitValue
 
-        const promptMessage = `['${exitValue}' to quit] > `
-        if (props.message) props.message = `${props.message} ${promptMessage}`
+        const promptMessage = `${cliPrinter.indent}[${exitValue}:quit] > `
+        if (props.message) props.message = `${cliPrinter.indent}${props.message} \n${promptMessage}`
         else props.message = `${promptMessage}`
+
+        const showFn = props.showFn || null
+        delete props.showFn
 
         props = {
           type: 'input',
@@ -95,14 +98,17 @@ class CliVorpal {
 
         const _promptFn = async function (handler) {
           let input = null
+          self.printer.newLine()
+          if (showFn) showFn()
           try {
             await thisCli.prompt(props, (result) => {
               input = result.inputValue
             })
+            self.printer.newLine()
             const exit = input === 'q' // || isNaN(input.charCodeAt(0)) === true
 
             if (await handler({ exit, input }) !== true) {
-              self.printer.newLine(1)
+              self.printer.newLine()
               await _promptFn(handler)
             }
           } catch (e) {

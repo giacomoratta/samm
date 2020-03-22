@@ -117,7 +117,13 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
 
 vCli.addCommand('prompt1')
 vCli.addCommandBody('prompt1', async function ({ cliNext, cliPrinter, cliPrompt }) {
-  await cliPrompt(async ({ exit, input }) => {
+  await cliPrompt({
+    message: 'Insert a good value',
+    showFn: () => {
+      cliPrinter.orderedList(['item1', 'item2', 'item3'])
+    }
+
+  }, async ({ exit, input }) => {
     if (exit === true) {
       cliNext()
       return true
