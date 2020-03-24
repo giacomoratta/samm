@@ -42,11 +42,23 @@ class JsonObjectType {
     return (this._collection[key] !== undefined)
   }
 
+  find (obj) {
+    const keyIndex = this._keys.findIndex((key/*, index, array */) => {
+      return obj.isEqualTo(this._collection[key])
+    })
+    if (keyIndex >= 0) return this._keys[keyIndex]
+    return null
+  }
+
   add (key, obj) {
     if (!(obj instanceof this._itemsClass)) {
       throw new TypeError('the object should be an instance of ' + this._itemsClass.name + ' class')
     }
     if (obj.isValid() !== true) return false
+
+    /* remove duplicate first */
+    const foundKey = this.find(obj)
+    if (foundKey) this.remove(foundKey)
 
     if (!this._collection[key]) {
       this._keys.push(key)

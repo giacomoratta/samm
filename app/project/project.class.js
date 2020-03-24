@@ -69,6 +69,15 @@ class Project {
     // this.path
   }
 
+  isValid () {
+    return this._name !== null
+  }
+
+  isEqualTo (obj) {
+    // todo
+    return true
+  }
+
   fromJson (data) {
     this._name = data.name
     this._path = data.path

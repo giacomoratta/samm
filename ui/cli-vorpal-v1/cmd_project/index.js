@@ -1,8 +1,14 @@
-const { App, Cli } = require('./ui_common')
+const { API, Cli, CLI_CMD_ERR_FORMAT } = require('../ui_common')
 
-const ProjectManager = App.projectManager
-const ProjectHistory = App.projectHistory
-const ProjectTemplate = App.projectTemplate
+const optCreateHandler = require('./opt_list')
+const optHistoryHandler = require('./opt_list')
+const optListHandler = require('./opt_list')
+const optPathHandler = require('./opt_list')
+const optTemplateHandler = require('./opt_list')
+
+const ProjectManager = API.projectManager
+const ProjectHistory = API.projectHistory
+const ProjectTemplate = API.projectTemplate
 
 const commandName = 'project'
 
@@ -12,20 +18,21 @@ Cli.addCommandHeader(commandName)
   .description('Project manager (set current project, project history, templates, etc.) \n')
   .option('-c, --create <name>', 'Create and set a project in the same parent directory of current project')
   .option('-l, --list [index]', 'Show all projects in the same parent directory or set one of them')
-  .option('-p, --path <path>', 'Set or create current project from its absolute path')
+  .option('-p, --path <path>', 'Set current project from its absolute path')
   .option('-h, --history [index]', 'Show all project history or set the current project from one of them')
   .option('-t, --template [index]', 'Show all templates or create a new project from one of them')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
-  const createProjectName = cliInput.getOption('create')
-  const listProjects = cliInput.getOption('list')
-  const projectPath = cliInput.getOption('path')
-  const historyIndex = cliInput.getOption('history')
-  const templateIndex = cliInput.getOption('template')
+  const sharedArgs = { cliNext, cliPrinter, cliPrompt }
+  const optCreate = cliInput.getOption('create')
+  const optList = cliInput.getOption('list')
+  const optHistory = cliInput.getOption('history')
+  const optPath = cliInput.getOption('path')
+  const optTemplate = cliInput.getOption('template')
 
   /* Show current project */
   if (!cliInput.hasParams && !cliInput.hasOptions) {
-    const currentProject = ProjectManager.current()
+    const currentProject = ProjectManager.getCurrentProject()
     if (currentProject) {
       cliPrinter.info(`Current project: ${currentProject.path}`)
     } else {
@@ -36,69 +43,39 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
   /* List projects in the same directory */
   if (cliInput.hasOption('list')) {
-    const currentProject = ProjectManager.current()
-    if (currentProject) {
-      cliPrinter.info(`Current project: ${currentProject}`)
-      cliPrinter.info(`Parent directory: ${currentProject.parentPath}`)
-
-      const pList = ProjectManager.listSiblings()
-      if (pList.length > 0) {
-        await cliPrompt({
-          // message: '',
-          showFn: () => {
-            cliPrinter.orderedList(pList, (pItem) => { return pItem.path })
-          }
-        }, async ({ exit, input }) => {
-          if (exit === true) {
-            cliNext()
-            return true
-          }
-        })
-      } else {
-        cliPrinter.warn('No projects in the parent directory.')
-      }
-    } else {
-      cliPrinter.warn('No current project set.')
-    }
-    return cliNext()
+    return await optListHandler({ optList, ...sharedArgs })
   }
 
   /* Create a project in the same directory */
-  if (cliInput.hasOption('create') && createProjectName) {
-    // todo
+  if (cliInput.hasOption('create')) {
+    return await optCreateHandler({ optCreate, ...sharedArgs })
   }
 
   /* Set or create project from path */
-  if (projectPath) {
-    // todo
+  if (cliInput.hasOption('path')) {
+    return await optPathHandler({ optPath, ...sharedArgs })
   }
 
-  /* Show project history */
-  if (cliInput.hasOption('history') && !historyIndex) {
-    // todo
-  }
-
+  /* Show project history !optHistory */
   /* Set project from history */
-  if (historyIndex) {
-    // todo
+  if (cliInput.hasOption('history')) {
+    return await optHistoryHandler({ optHistory, ...sharedArgs })
   }
 
-  /* Show project templates */
-  if (cliInput.hasOption('template') && !templateIndex) {
-    // todo
-  }
-
+  /* Show project templates && !optTemplate */
   /* Create project from template */
-  if (templateIndex) {
-    // todo
+  if (cliInput.hasOption('template')) {
+    return await optTemplateHandler({ optTemplate, ...sharedArgs })
   }
+
+  return cliNext(CLI_CMD_ERR_FORMAT)
 
   // - - - - - - - - - - - - - - - -
 
   /* Set project by project path */
-  if (projectPath) {
+  if (optPath) {
     try {
-      ProjectHistory.add(projectPath)
+      ProjectHistory.add(optPath)
       cliPrinter.info(`Current project: ${ProjectHistory.latest().path}`)
       ProjectHistory.save()
     } catch (e) {
@@ -108,11 +85,11 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   }
 
   /* Project History */
-  const hIndex = parseInt(historyIndex)
-  if (historyIndex === true || (!isNaN(hIndex) && hIndex > 0)) {
+  const hIndex = parseInt(optHistory)
+  if (optHistory === true || (!isNaN(hIndex) && hIndex > 0)) {
     const historyList = ProjectHistory.list()
 
-    if (historyIndex === true) {
+    if (optHistory === true) {
       /* List project history */
       if (historyList.length === 0) {
         cliPrinter.warn('Project history is empty.')

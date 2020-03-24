@@ -3,8 +3,9 @@ const vorpal = require('vorpal')
 const { CliInput } = require('./cliInput.class.js')
 const { CliPrinter } = require('./cliPrinter.class')
 
-const CLI_ERROR = -1
-const CLI_SUCCESS = 1
+const CLI_CMD_ERR_FORMAT = -2
+const CLI_CMD_KO = -1
+const CLI_CMD_OK = 1
 const ACCEPTED_EVENTS = ['show', 'exit', 'beforeCommand', 'afterCommand']
 
 class CliVorpal {
@@ -65,9 +66,11 @@ class CliVorpal {
       const cliInput = new CliInput({ values, command })
       const cliPrinter = new CliPrinter({ command })
       const cliNext = (code, err) => {
-        if (code === CLI_ERROR) {
+        if (code === CLI_CMD_KO) {
           self.logger.error(`command '${command}' terminated with an error.`)
           if (err) self.logger.error(err)
+        } else if (code === CLI_CMD_ERR_FORMAT) {
+          self.printer.error(`Incorrect format for command; type ${command} --help`)
         }
         self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
         self.printer.newLine()
@@ -147,6 +150,6 @@ class CliVorpal {
 
 module.exports = {
   CliVorpal,
-  CLI_ERROR,
-  CLI_SUCCESS
+  CLI_CMD_KO,
+  CLI_CMD_OK
 }

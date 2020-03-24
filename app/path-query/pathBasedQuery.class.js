@@ -72,6 +72,11 @@ class PathBasedQuery {
     return this._label !== null
   }
 
+  isEqualTo (obj) {
+    // todo
+    return true
+  }
+
   static generateQueryStringLabel (queryString) {
     return queryString.toLowerCase()
       .replace(/[^a-zA-Z0-9+,]/g, '')

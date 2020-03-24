@@ -11,6 +11,10 @@ class TestCollectionObject {
     return this.queryString !== 'bad-value'
   }
 
+  isEqualTo (obj) {
+    return this.queryString === obj.queryString
+  }
+
   fromJson (jsonData) {
     this.label = jsonData.label
     this.queryString = jsonData.queryString

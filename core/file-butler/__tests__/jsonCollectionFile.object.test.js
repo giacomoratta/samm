@@ -114,4 +114,18 @@ describe('A collection OBJECT of test objects', function () {
     TestFileOD1.collection.clean()
     TestFileOD2.collection.clean()
   })
+
+  it('add a duplicate object', async function () {
+    bulkInsertObjectType(TestFileOD1)
+
+    const copyObj = TestFileOD1.collection.getByIndex(1)
+    TestFileOD1.collection.add('zzz-label', copyObj)
+
+    expect(TestFileOD1.collection.size).toEqual(4)
+    const firstObj = TestFileOD1.collection.getByIndex(0)
+    const secondObj = TestFileOD1.collection.getByIndex(1)
+    expect(firstObj.isEqualTo(copyObj)).toEqual(true)
+    expect(secondObj.isEqualTo(copyObj)).toEqual(false)
+    expect(TestFileOD1.collection.size).toEqual(4)
+  })
 })

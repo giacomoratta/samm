@@ -37,10 +37,17 @@ module.exports = {
 
   API: {
     projectManager: {
-      create: ({ templateObj, projectPath }) => {},
+      create: ({ projectObj, projectPath }) => {
+        // todo: projectObj can be template
+      },
 
-      current: () => {
+      getCurrentProject: () => {
         return ProjectHistoryFileInstance.collection.latest
+      },
+
+      setCurrentProject: async ({ projectObj, projectPath }) => {
+        // string or Project
+        return ProjectHistoryFileInstance.collection.add(projectObj)
       },
 
       listSiblings: () => {

@@ -20,6 +20,7 @@ class JsonCollectionFile {
     if (!itemsClass) throw Error('Missing mandatory argument: itemsClass')
 
     if (!itemsClass.prototype.isValid) throw TypeError(`Class '${itemsClass.name}' must have isValid method`)
+    if (!itemsClass.prototype.isEqualTo) throw TypeError(`Class '${itemsClass.name}' must have isEqualTo method`)
     if (!itemsClass.prototype.toJson) throw TypeError(`Class '${itemsClass.name}' must have toJson method`)
     if (!itemsClass.prototype.fromJson) throw TypeError(`Class '${itemsClass.name}' must have fromJson method`)
 

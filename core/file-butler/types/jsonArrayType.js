@@ -44,6 +44,12 @@ class JsonArrayType {
     return (this._collection[index] !== undefined)
   }
 
+  find (obj) {
+    return this._collection.findIndex((element/*, index, array */) => {
+      return obj.isEqualTo(element)
+    })
+  }
+
   add (index, obj) {
     if (!obj) { /* support 1 only argument */
       obj = index
@@ -54,6 +60,10 @@ class JsonArrayType {
       throw new TypeError('the object should be an instance of ' + this._itemsClass.name + ' class')
     }
     if (obj.isValid() !== true) return false
+
+    /* remove duplicate first */
+    const foundIndex = this.find(obj)
+    if (foundIndex >= 0) this.remove(foundIndex)
 
     if (index >= 0 && index < this.size) {
       this._collection.splice(index, 0, obj)

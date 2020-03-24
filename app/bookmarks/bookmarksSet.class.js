@@ -19,6 +19,11 @@ class BookmarksSet {
     return this._label && this._set.length !== 0
   }
 
+  isEqualTo (obj) {
+    return (this._label !== obj._label || this._set.length !== obj._set.length)
+    // todo: match internal set objects
+  }
+
   fromJson (jsonData) {
     if (!jsonData.label) return null
     if (!jsonData.set || jsonData.set.length === 0) return null

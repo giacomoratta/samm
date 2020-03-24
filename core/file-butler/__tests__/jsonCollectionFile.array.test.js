@@ -104,4 +104,17 @@ describe('A collection ARRAY of test objects', function () {
     TestFileAD1.collection.clean()
     TestFileAD2.collection.clean()
   })
+
+  it('add a duplicate object', async function () {
+    bulkInsertArrayType(TestFileAD1)
+
+    const copyObj = TestFileAD1.collection.get(1)
+    TestFileAD1.collection.add(copyObj)
+
+    const firstObj = TestFileAD1.collection.get(0)
+    const secondObj = TestFileAD1.collection.get(1)
+    expect(firstObj.isEqualTo(copyObj)).toEqual(true)
+    expect(secondObj.isEqualTo(copyObj)).toEqual(false)
+    expect(TestFileAD1.collection.size).toEqual(3)
+  })
 })

@@ -1,4 +1,4 @@
-const { CliVorpal, CLI_SUCCESS, CLI_ERROR } = require('../../core/cli-vorpal/') /* leave final slash */
+const { CliVorpal, CLI_CMD_OK, CLI_CMD_KO, CLI_CMD_ERR_FORMAT } = require('../../core/cli-vorpal/') /* leave final slash */
 const log = require('../../core/logger').createLogger('ui')
 const App = require('../../app/') /* leave final slash */
 const Cli = new CliVorpal()
@@ -8,6 +8,7 @@ module.exports = {
   API: App.API,
   Cli,
   log,
-  CLI_SUCCESS,
-  CLI_ERROR
+  CLI_CMD_OK,
+  CLI_CMD_KO,
+  CLI_CMD_ERR_FORMAT
 }
