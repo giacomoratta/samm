@@ -13,7 +13,7 @@ describe('App-specific ConfigFile', function () {
   })
 
   it('should load and create a config file with default values', async function () {
-    await expect(ConfigInstance.load()).resolves.toEqual(false)
+    await expect(ConfigInstance.load()).resolves.toEqual(true)
     expect(ConfigInstance.field('SamplesDirectoryExclusions').valueRef).toMatchObject([
       'samplePack1',
       'samplePack2'
@@ -50,7 +50,7 @@ describe('App-specific ConfigFile', function () {
   it('should reset because different os platform', async function () {
     const ConfigObj = new ConfigFile(path.join(__dirname, 'config_test001.json'), path.join(__dirname, 'config_test0.json'))
     await ConfigObj.clean()
-    await expect(ConfigObj.load()).resolves.toEqual(false)
+    await expect(ConfigObj.load()).resolves.toEqual(true)
 
     expect(ConfigObj.field('RandomCount').valueRef).toEqual(15)
     expect(ConfigObj.field('MaxSamplesSameDirectory').valueRef).toEqual(2)

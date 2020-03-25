@@ -1,4 +1,4 @@
-const { API } = require('../../ui_common')
+const { API } = require('../ui_common')
 const PathQuery = API.pathQuery
 
 const _renameOrCopy = async function ({ copy, paramQueryLabel, paramNewQueryLabel, cliNext, cliPrinter }) {

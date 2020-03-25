@@ -170,13 +170,14 @@ class ConfigFile extends JsonizedFile {
 
   async load () {
     const generateFile = !(await this.fileHolder.exists())
-    if (await super.load() !== true) return false
-    generateFile === true && await this.save()
-    if (this.field('Platform').valueRef !== this.PlatformSignature) {
-      await this.reset()
-      return false
+    if (await super.load() === true) {
+      if (this.field('Platform').valueRef !== this.PlatformSignature) {
+        await this.reset()
+      }
+      return true
     }
-    return true
+    if (generateFile === true) return await this.save()
+    return false
   }
 }
 

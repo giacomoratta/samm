@@ -75,7 +75,7 @@ class Project {
 
   isEqualTo (obj) {
     // todo
-    return true
+    return false
   }
 
   fromJson (data) {
