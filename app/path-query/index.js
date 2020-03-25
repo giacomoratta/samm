@@ -61,6 +61,10 @@ module.exports = {
         return PathQueryFileInstance.collection.get(label)
       },
 
+      has: (label) => {
+        return PathQueryFileInstance.collection.has(label)
+      },
+
       list: () => {
         const array = []
         PathQueryFileInstance.collection.forEach((label, pathQuery) => {

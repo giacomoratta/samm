@@ -69,7 +69,7 @@ class JsonObjectType {
   }
 
   remove (key) {
-    if (!this._collection[key]) return
+    if (!this._collection[key]) return false
     const index = this._keys.indexOf(key)
     if (index >= 0) {
       this._keys.splice(index, 1)

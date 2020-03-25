@@ -80,9 +80,12 @@ class JsonArrayType {
   }
 
   remove (index) {
-    if (index >= 0 && index < this.size) {
-      this._collection.splice(index, 1)
-      return true
+    if (index !== undefined || index !== null) {
+      if (index >= 0 && index < this.size) {
+        this._collection.splice(index, 1)
+        return true
+      }
+      return false
     }
     if (this._isTop !== true) {
       this._collection.pop()
