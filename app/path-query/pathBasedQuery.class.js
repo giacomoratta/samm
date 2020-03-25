@@ -9,7 +9,7 @@ const removeEmptyArrayStringItems = function (array) {
 }
 
 const processQueryString = function (queryString) {
-  queryString = queryString.toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
+  queryString = queryString.toString().toLowerCase().replace(/[^a-zA-Z0-9+,]/g, '')
 
   const queryInfo = {
     label: '',

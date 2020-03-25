@@ -160,7 +160,7 @@ class FileButler {
   async load () {
     /* clone file */
     if (this._config.cloneFrom && (await this._fileExists(this._config.cloneFrom)) === true) {
-      await this._copyFile(this._config.cloneFrom, this._config.filePath)
+      await this._copyFile(this._config.cloneFrom, this._config.filePath) // return result.err
     }
 
     /* read file */

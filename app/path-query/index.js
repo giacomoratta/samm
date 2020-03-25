@@ -77,9 +77,10 @@ module.exports = {
         try {
           const saveResult = await PathQueryFileInstance.fileHolder.save()
           log.info({ saveResult }, `Save file in ${PathQueryFileInstance.fileHolder.path}`)
-          return saveResult
+          return true
         } catch (e) {
           log.error(e, `Error while saving in ${PathQueryFileInstance.fileHolder.path}`)
+          return false
         }
       },
 
