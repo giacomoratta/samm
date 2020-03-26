@@ -21,6 +21,7 @@ class Project {
     return !(this._name && this._path)
   }
 
+  // todo: make static to analyze the project path - isValidPath
   async set (projectPath, create = false) {
     this._name = null
     this._path = null
@@ -70,12 +71,11 @@ class Project {
   }
 
   isValid () {
-    return this._name !== null
+    return this._name !== null || this._path !== null
   }
 
   isEqualTo (obj) {
-    // todo
-    return false
+    return this._path === obj._path
   }
 
   fromJson (data) {

@@ -1,8 +1,7 @@
-const configModule = require('../config')
+const config = require('../config').API.config
+const { Project } = require('./project.class')
 const { ProjectHistoryFile } = require('./projectHistoryFile.class')
 const log = require('../../core/logger').createLogger('project')
-
-const config = configModule.API.config
 
 let ProjectHistoryFileInstance = null
 
@@ -12,6 +11,7 @@ const boot = async (filePath) => {
     ProjectHistoryFileInstance = new ProjectHistoryFile(filePath)
     const dataPresence = await ProjectHistoryFileInstance.fileHolder.load()
     log.info({ dataPresence }, 'History loaded successfully')
+    // todo: remove all invalid projects (not exists)
     return true
   } catch (e) {
     log.error(e, 'Cannot load history')
@@ -37,7 +37,17 @@ module.exports = {
 
   API: {
     projectManager: {
-      create: ({ projectObj, projectPath }) => {
+      /* ! Do not allow to delete directories ! */
+
+      create: ({ projectPath }) => {
+        // create a new project directory if not exists
+        // todo: projectObj can be template
+      },
+
+      copy: ({ projectPath, projectSourcePath }) => {
+        // create a new project directory if not exists
+        // check source exists
+        // copy source to projectPath
         // todo: projectObj can be template
       },
 
@@ -47,6 +57,7 @@ module.exports = {
 
       setCurrentProject: async ({ projectObj, projectPath }) => {
         // string or Project
+        // check project exists
         return ProjectHistoryFileInstance.collection.add(projectObj)
       },
 

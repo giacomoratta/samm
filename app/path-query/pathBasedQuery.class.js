@@ -73,8 +73,7 @@ class PathBasedQuery {
   }
 
   isEqualTo (obj) {
-    // todo
-    return false
+    return this._queryString === obj._queryString
   }
 
   static generateQueryStringLabel (queryString) {
