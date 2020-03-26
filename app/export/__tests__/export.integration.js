@@ -1,5 +1,5 @@
 const path = require('path')
-const { fileUtils } = require('./../../../core/utils/file.utils')
+const { fileUtils } = require('../../../core/utils/file.utils')
 
 const testDirToCopy = path.join(__dirname, '..', '..', '__tests__', 'test_dir')
 

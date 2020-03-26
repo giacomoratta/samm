@@ -157,6 +157,11 @@ class FileButler {
     return fileUtils.writeFile(pathString, fileData, encoding, flag, mode)
   }
 
+  /**
+   * Load data from file.
+   * Error related to I/O are thrown exceptions.
+   * @returns {Promise<boolean>} Presence of data
+   */
   async load () {
     /* clone file */
     if (this._config.cloneFrom && (await this._fileExists(this._config.cloneFrom)) === true) {
@@ -186,6 +191,11 @@ class FileButler {
     return this._currentFileHasData
   }
 
+  /**
+   * Save data to file.
+   * Error related to I/O are thrown exceptions.
+   * @returns {Promise<boolean>} Presence of data
+   */
   async save () {
     /* backup file before saving */
     if (this._currentFileHasData === true && this._config.backupTo && (await this._fileExists(this._config.filePath)) === true) {

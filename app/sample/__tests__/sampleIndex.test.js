@@ -1,5 +1,5 @@
 const path = require('path')
-const { fileUtils } = require('./../../../core/utils/file.utils')
+const { fileUtils } = require('../../../core/utils/file.utils')
 const { SampleIndex } = require('../sampleIndex.class')
 
 const SampleIndexFile = path.join(__dirname, 'new_samples_index')
