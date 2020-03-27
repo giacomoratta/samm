@@ -51,6 +51,11 @@ class PathInfoBase {
 
   set size (size) { this.info.size = size }
 
+  /**
+   * Set the relative root for the current path, as the highest level for this specific path.
+   * If it fails (throws), it does not invalidate the object.
+   * @param {string} root
+   */
   set relRoot (root) {
     if (!root || root.length === 0) {
       throw new PathInfoError(`Relative root ${root} must be a not-empty string`)

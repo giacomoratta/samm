@@ -17,6 +17,20 @@ utils.fileSizeToStr = (fileSize) => {
   return Math.round(fileSize / (1099511627776)) + ' TB'
 }
 
+utils.pathExists = (pathString) => {
+  return new Promise((resolve) => {
+    fs.access(pathString, fs.constants.F_OK, (error) => {
+      if (!error) return resolve(true)
+      return resolve(false)
+    })
+  })
+}
+
+utils.pathExistsSync = (pathString) => {
+  if (!_.isString(pathString)) return false
+  return fs.existsSync(pathString)
+}
+
 utils.lstatSync = (absolutePath) => {
   try {
     return fs.lstatSync(absolutePath)

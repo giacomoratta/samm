@@ -12,7 +12,7 @@ const ProjectTemplate = API.projectTemplate
 
 const commandName = 'project'
 
-Cli.addCommand(`${commandName}`)
+Cli.addCommand(`${commandName} [operation]`)
 
 Cli.addCommandHeader(commandName)
   .description('Project manager (set current project, project history, templates, etc.) \n')
@@ -29,6 +29,9 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   const optHistory = cliInput.getOption('history')
   const optPath = cliInput.getOption('path')
   const optTemplate = cliInput.getOption('template')
+
+  // todo: no operation and options => see history and current project
+  // todo: operations: history, templates, list, set, create
 
   /* Show current project */
   if (!cliInput.hasParams && !cliInput.hasOptions) {

@@ -8,9 +8,9 @@ describe('PathInfoSync class and object', function () {
     expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
     expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
     expect(function () { pInfo1.set({ absolutePath: path.join('abc', 'abc-test') }) }).toThrow('Invalid main path')
-    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Main path does not exist')
     expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 }) }).toThrow('Invalid relative root path')
-    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Cannot get path stats of')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Main path does not exist')
   })
 
   it('should throw errors due to wrong relative root path', function () {
@@ -24,7 +24,7 @@ describe('PathInfoSync class and object', function () {
 
     relRootPath = ''
     absolutePath = path.join(__dirname, 'test_dir', 'directory6', 'file64.json')
-    expect(function () { pInfo1.set({ absolutePath, relRootPath }) }).toThrow('must be a not-empty')
+    expect(function () { pInfo1.set({ absolutePath, relRootPath }) }).toThrow('must be a not-empty string')
     expect(pInfo1.isSet()).toEqual(true)
   })
 

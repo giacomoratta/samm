@@ -7,6 +7,7 @@ class Project {
   constructor () {
     this._name = null
     this._path = null
+    this._pathInfo = null
   }
 
   get name () {
@@ -21,15 +22,19 @@ class Project {
     return !(this._name && this._path)
   }
 
+  async copyTo ({ projectName, projectPath }) {
+    // todo
+    // do not create if already exists
+    if (await fileUtils.directoryExists(projectPath) !== false) {
+      throw new ProjectError(`A project already exists in ${projectPath}.`)
+    }
+  }
+
   // todo: make static to analyze the project path - isValidPath
-  async set (projectPath, create = false) {
+  async set (projectPath) {
     this._name = null
     this._path = null
     const pathInfo = new PathInfo()
-
-    if (create === true && await fileUtils.directoryExists(projectPath) !== false) {
-      throw new ProjectError(`A project already exists in ${projectPath}.`)
-    }
 
     if (await pathInfo.set({ absolutePath: projectPath }) !== true) {
       throw new ProjectError(`Cannot set ${projectPath} as project path.`)
@@ -39,6 +44,7 @@ class Project {
       throw new ProjectError('Project must be a directory')
     }
 
+    this._pathInfo = pathInfo
     this._name = pathInfo.name
     this._path = pathInfo.path
   }
