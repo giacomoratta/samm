@@ -55,7 +55,7 @@ utils.lstat = async (absolutePath) => {
 
 utils.checkParameters = ({ absolutePath, relRootPath }) => {
   if (!_.isString(absolutePath) || !utils.isAbsolutePath(absolutePath)) {
-    throw new PathInfoError(`Invalid main path: ${absolutePath}`)
+    throw new PathInfoError(`Invalid path: ${absolutePath}`)
   }
 
   const pInfo = path.parse(absolutePath)

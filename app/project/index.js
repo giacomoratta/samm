@@ -60,7 +60,7 @@ module.exports = {
         return ProjectHistoryFileInstance.collection.latest
       },
 
-      setCurrentProject: async ({ projectObj, projectPath }) => {
+      setCurrentProject: ({ projectObj, projectPath }) => {
         // string or Project
         // check project exists
         return ProjectHistoryFileInstance.collection.add(projectObj)

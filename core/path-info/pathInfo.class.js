@@ -11,7 +11,7 @@ class PathInfo extends PathInfoBase {
     if (!pInfo) return false
 
     if (await utils.pathExists(absolutePath) !== true) {
-      throw new PathInfoError(`Main path does not exist: ${absolutePath}`)
+      throw new PathInfoError(`Path does not exist: ${absolutePath}`)
     }
 
     const pStats = await utils.lstat(absolutePath)

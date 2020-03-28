@@ -5,11 +5,11 @@ const baseRoot = path.parse(__dirname).root
 describe('PathInfo class and object', function () {
   it('should throw some basic errors', async function () {
     const pInfo1 = new PathInfo()
-    await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('Invalid main path')
-    await expect(pInfo1.set({ absolutePath: path.join('abc', 'abc-test') })).rejects.toThrow('Invalid main path')
-    await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Main path does not exist')
+    await expect(pInfo1.set({ absolutePath: 123123 })).rejects.toThrow('Invalid path')
+    await expect(pInfo1.set({ absolutePath: path.join('abc', 'abc-test') })).rejects.toThrow('Invalid path')
+    await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Path does not exist')
     await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 })).rejects.toThrow('Invalid relative root path')
-    await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Main path does not exist')
+    await expect(pInfo1.set({ absolutePath: path.join(baseRoot, 'x') })).rejects.toThrow('Path does not exist')
   })
 
   it('should throw errors due to wrong relative root path', async function () {

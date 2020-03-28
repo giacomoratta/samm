@@ -1,3 +1,4 @@
+const path = require('path')
 const { PathInfo } = require('../../core/path-info')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { ProjectError } = require('./project.error')
@@ -15,8 +16,12 @@ class Project {
     return this._pathInfo.path
   }
 
+  get modifiedAt () {
+    return this._pathInfo.modifiedAt
+  }
+
   /**
-   * Set the project object by its path
+   * Set the project object by its path (and it must exist!)
    * @param {string} projectPath
    * @throws {PathInfoError, ProjectError}
    * @returns {Promise<boolean>}
@@ -26,48 +31,62 @@ class Project {
       throw new ProjectError(`Cannot set ${projectPath} as project path.`)
     }
     if (!this._pathInfo.isDirectory) {
-      throw new ProjectError('Project must be a directory')
+      throw new ProjectError(`Project is not a directory: ${projectPath}`)
     }
     return true
   }
 
-  async copyTo ({ projectName, projectPath }) {
+  /**
+   * Create a new project (if it does not exist)
+   * @param {string} projectPath
+   * @returns {Promise<boolean>}
+   */
+  async create (projectPath) {
     // todo
-    // do not create if already exists
-    if (await fileUtils.directoryExists(projectPath) !== false) {
-      throw new ProjectError(`A project already exists in ${projectPath}.`)
-    }
+    // check absolute path
+    // create if not exists
+    // this.set
   }
 
-  async copyFrom (projectObj) {
-    if (!(projectObj instanceof Project)) {
-      throw new TypeError('projectObj must be instance of Project class.')
+  /**
+   * Gets an array of projects in the same parent directory; returns the failed paths too.
+   * @param {string} orderBy
+   * @returns {Promise<{ siblings:[], failed:[] }>}
+   */
+  async getSiblings ({ orderBy = 'name' } = {}) {
+    if (!this.isValid()) {
+      throw new ProjectError('Project is not a valid object')
     }
-    if (projectObj.unset) {
-      throw new ProjectError('projectObj is not set.')
+    const siblingsArray = []
+    const failsArray = []
+    await fileUtils.readDirectory(this._pathInfo.dir, null, async (item) => {
+      const tempObj = new this.constructor()
+      const tempObjPath = path.join(this._pathInfo.dir, item)
+      try {
+        await tempObj.set(tempObjPath)
+        siblingsArray.push(tempObj)
+      } catch (e) {
+        failsArray.push({
+          path: tempObjPath,
+          error: e.message
+        })
+      }
+    })
+    if (siblingsArray.length > 0) {
+      orderBy === 'modifiedAt' && siblingsArray.sort((a, b) => { /* DESC */
+        if (a.modifiedAt > b.modifiedAt) return -1
+        if (a.modifiedAt < b.modifiedAt) return 1
+        return 0
+      })
     }
-    if (await fileUtils.directoryExists(projectObj.path)) {
-
+    return {
+      siblings: siblingsArray,
+      failed: failsArray
     }
-    const result = await fileUtils.copyDirectory(projectObj.path, this.path)
-    if (result.err) throw result.err
-
-    // todo: _findFilesWithName and return array with absPath
-
-    return result.pathTo
-  }
-
-  async findFilesByName (name) {
-    // todo: recursive optional argument?
-    // this.path
-  }
-
-  async fixInternalFileNames (array) {
-    // this.path
   }
 
   isValid () {
-    return this._pathInfo !== null && this._pathInfo.isSet()
+    return this._pathInfo !== null && this._pathInfo.isSet() === true
   }
 
   isEqualTo (obj) {

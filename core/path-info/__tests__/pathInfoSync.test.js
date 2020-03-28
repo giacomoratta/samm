@@ -5,12 +5,12 @@ const baseRoot = path.parse(__dirname).root
 describe('PathInfoSync class and object', function () {
   it('should throw some basic errors', function () {
     const pInfo1 = new PathInfoSync()
-    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
-    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid main path')
-    expect(function () { pInfo1.set({ absolutePath: path.join('abc', 'abc-test') }) }).toThrow('Invalid main path')
-    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Main path does not exist')
+    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid path')
+    expect(function () { pInfo1.set({ absolutePath: 123123 }) }).toThrow('Invalid path')
+    expect(function () { pInfo1.set({ absolutePath: path.join('abc', 'abc-test') }) }).toThrow('Invalid path')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Path does not exist')
     expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x'), relRootPath: 123 }) }).toThrow('Invalid relative root path')
-    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Main path does not exist')
+    expect(function () { pInfo1.set({ absolutePath: path.join(baseRoot, 'x') }) }).toThrow('Path does not exist')
   })
 
   it('should throw errors due to wrong relative root path', function () {

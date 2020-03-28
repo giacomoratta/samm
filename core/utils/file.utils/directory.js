@@ -65,12 +65,11 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
 libUtils.readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
   return new Promise((resolve) => {
     if (!itemFn) itemFn = async function () {}
-    if (!preProcessItemsFn) preProcessItemsFn = function () {}
     fs.readdir(pathString, async (err, items) => {
       if (err || !items) {
         resolve(null)
       }
-      preProcessItemsFn(items)
+      if (preProcessItemsFn) preProcessItemsFn(items)
       for (let i = 0; i < items.length; i++) {
         await itemFn(items[i], i, items)
       }

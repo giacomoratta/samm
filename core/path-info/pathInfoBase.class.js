@@ -37,11 +37,11 @@ class PathInfoBase {
   get ext () { return this.info.ext }
   get name () { return this.info.name }
   get path () { return this.info.path }
-  get createdAt () { return this.info.createdAt }
-  get modifiedAt () { return this.info.modifiedAt }
-  get size () { return this.info.size }
-  get isFile () { return this.info.isFile }
-  get isDirectory () { return this.info.isDirectory }
+  get createdAt () { return this.info.createdAt } /* integer (timestamp) */
+  get modifiedAt () { return this.info.modifiedAt } /* integer (timestamp) */
+  get size () { return this.info.size } /* integer (Byte) */
+  get isFile () { return this.info.isFile } /* boolean */
+  get isDirectory () { return this.info.isDirectory } /* boolean */
   get relRoot () { return this.info.relRoot }
   get relPath () { return this.info.relPath }
   get level () { return this.info.level }

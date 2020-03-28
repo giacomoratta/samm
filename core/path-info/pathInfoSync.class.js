@@ -11,7 +11,7 @@ class PathInfoSync extends PathInfoBase {
     if (!pInfo) return false
 
     if (utils.pathExistsSync(absolutePath) !== true) {
-      throw new PathInfoError(`Main path does not exist: ${absolutePath}`)
+      throw new PathInfoError(`Path does not exist: ${absolutePath}`)
     }
 
     const pStats = utils.lstatSync(absolutePath)
