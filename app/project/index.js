@@ -69,6 +69,7 @@ module.exports = {
       listSiblings: () => {
         // todo
         // order by name DESC
+        // order by last modified DESC
         // return array of Project object
       }
     },

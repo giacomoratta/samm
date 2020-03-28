@@ -1,25 +1,34 @@
-const path = require('path')
 const { PathInfo } = require('../../core/path-info')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { ProjectError } = require('./project.error')
 
 class Project {
   constructor () {
-    this._name = null
-    this._path = null
-    this._pathInfo = null
+    this._pathInfo = new PathInfo()
   }
 
   get name () {
-    return this._name
+    return this._pathInfo.name
   }
 
   get path () {
-    return this._path
+    return this._pathInfo.path
   }
 
-  get unset () {
-    return !(this._name && this._path)
+  /**
+   * Set the project object by its path
+   * @param {string} projectPath
+   * @throws {PathInfoError, ProjectError}
+   * @returns {Promise<boolean>}
+   */
+  async set (projectPath) {
+    if (await this._pathInfo.set({ absolutePath: projectPath }) !== true) {
+      throw new ProjectError(`Cannot set ${projectPath} as project path.`)
+    }
+    if (!this._pathInfo.isDirectory) {
+      throw new ProjectError('Project must be a directory')
+    }
+    return true
   }
 
   async copyTo ({ projectName, projectPath }) {
@@ -28,25 +37,6 @@ class Project {
     if (await fileUtils.directoryExists(projectPath) !== false) {
       throw new ProjectError(`A project already exists in ${projectPath}.`)
     }
-  }
-
-  // todo: make static to analyze the project path - isValidPath
-  async set (projectPath) {
-    this._name = null
-    this._path = null
-    const pathInfo = new PathInfo()
-
-    if (await pathInfo.set({ absolutePath: projectPath }) !== true) {
-      throw new ProjectError(`Cannot set ${projectPath} as project path.`)
-    }
-
-    if (!pathInfo.isDirectory) {
-      throw new ProjectError('Project must be a directory')
-    }
-
-    this._pathInfo = pathInfo
-    this._name = pathInfo.name
-    this._path = pathInfo.path
   }
 
   async copyFrom (projectObj) {
@@ -77,22 +67,20 @@ class Project {
   }
 
   isValid () {
-    return this._name !== null || this._path !== null
+    return this._pathInfo !== null && this._pathInfo.isSet()
   }
 
   isEqualTo (obj) {
-    return this._path === obj._path
+    return this._pathInfo.isEqualTo(obj._pathInfo)
   }
 
   fromJson (data) {
-    this._name = data.name
-    this._path = data.path
+    this._pathInfo.fromJson(data.pathInfo)
   }
 
   toJson () {
     return {
-      name: this._name,
-      path: this._path
+      pathInfo: this._pathInfo.toJson()
     }
   }
 }

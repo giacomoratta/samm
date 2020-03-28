@@ -8,8 +8,8 @@ Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)
   .description('Show all project history or set the current project from one of them.\n')
-  .option('-d, --date', 'Order by date')
-  .option('-n, --name', 'Order by name')
+  .option('-d, --date', 'order by date.')
+  .option('-n, --name', 'order by name.')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   /* Show project history !optHistory */
