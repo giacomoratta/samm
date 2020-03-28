@@ -4,7 +4,7 @@ const ProjectManager = API.projectManager
 const ProjectHistory = API.projectHistory
 const ProjectTemplate = API.projectTemplate
 
-const commandName = 'project template'
+const commandName = 'project-template'
 Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)

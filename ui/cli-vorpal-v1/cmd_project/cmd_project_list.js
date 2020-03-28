@@ -2,7 +2,7 @@ const { API, Cli, CLI_CMD_ERR_FORMAT } = require('../ui_common')
 
 const ProjectManager = API.projectManager
 
-const commandName = 'project list'
+const commandName = 'project-list'
 Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)
