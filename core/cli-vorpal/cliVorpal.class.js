@@ -3,10 +3,7 @@ const vorpal = require('vorpal')
 const { CliInput } = require('./cliInput.class.js')
 const { CliPrinter } = require('./cliPrinter.class')
 
-const CLI_CMD_ERR_FORMAT = -2
-const CLI_CMD_KO = -1
-const CLI_CMD_OK = 1
-const ACCEPTED_EVENTS = ['show', 'exit', 'beforeCommand', 'afterCommand']
+const { CLI_CMD_ERR_FORMAT, CLI_CMD_KO, ACCEPTED_EVENTS } = require('./constants')
 
 class CliVorpal {
   constructor () {
@@ -57,7 +54,8 @@ class CliVorpal {
     this.commands[command].action(function (values, cb) {
       /* this function must be a normal function (not lambda or something else);
        * the keyword 'this' will be thisCli argument for cmdFn() and its needed, for instance, to call prompt method
-       * todo: avoid calling every time */
+       * todo: avoid calling every time
+       */
 
       const thisCli = this
       const cliInput = new CliInput({ values, command })
@@ -151,8 +149,4 @@ class CliVorpal {
   }
 }
 
-module.exports = {
-  CliVorpal,
-  CLI_CMD_KO,
-  CLI_CMD_OK
-}
+module.exports = { CliVorpal }
