@@ -41,12 +41,6 @@ class CliVorpal {
     return cmdName
   }
 
-  addCommandOld (cmdString) {
-    const cmdSplit = cmdString.trim().split(' ')
-    this.commands[cmdSplit[0]] = this.vorpal.command(cmdString)
-    return cmdSplit[0]
-  }
-
   addCommandHeader (command) {
     if (!this.commands[command]) {
       throw new Error(`Command ${command} not defined. Use addCommand().`)
