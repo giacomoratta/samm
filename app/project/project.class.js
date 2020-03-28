@@ -16,6 +16,10 @@ class Project {
     return this._pathInfo.path
   }
 
+  get parentPath () {
+    return this._pathInfo.dir
+  }
+
   get modifiedAt () {
     return this._pathInfo.modifiedAt
   }
