@@ -19,9 +19,9 @@ const boot = async ({ appRootPath, appDataDirName }) => {
   const AppDataDirectory = config.field('AppDataDirectory').fn.toAbsPath()
 
   if (await PathQueryModule.boot(path.join(AppDataDirectory, 'path_query.json')) !== true) return false
-  // if (await PathQueryModule.boot(AppDataDirectory, 'project_history.json')) !== true) return false
-  // if (await PathQueryModule.boot(AppDataDirectory, 'bookmarks.json')) !== true) return false
-  // if (await PathQueryModule.boot(AppDataDirectory, 'samples_index.json')) !== true) return false
+  if (await ProjectModule.boot(path.join(AppDataDirectory, 'project_history.json')) !== true) return false
+  // if (await PathQueryModule.boot(path.join(AppDataDirectory, 'bookmarks.json')) !== true) return false
+  // if (await PathQueryModule.boot(path.join(AppDataDirectory, 'samples_index.json')) !== true) return false
   // todo: remove json extension
   // todo: put everything in the same directory (also config.json)
   return true
