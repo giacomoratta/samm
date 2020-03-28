@@ -23,3 +23,7 @@ require('./cmd_project_history')
 require('./cmd_project_list')
 require('./cmd_project_set')
 require('./cmd_project_template')
+
+const fs = require('fs')
+const buffer1 = fs.readFileSync('./buffer1')
+console.log(buffer1)
