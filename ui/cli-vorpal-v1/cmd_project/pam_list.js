@@ -1,4 +1,4 @@
-const { API } = require('../../ui_common')
+const { API } = require('../ui_common')
 const ProjectManager = API.projectManager
 
 module.exports = async function ({ optList, cliNext, cliPrinter, cliPrompt }) {

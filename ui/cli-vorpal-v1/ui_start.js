@@ -41,6 +41,7 @@ App.boot({
   }
 
   require('./cmd_config')
+  require('./cmd_project')
   require('./cmd_query')
 
   Cli.show('mpl')

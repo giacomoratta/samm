@@ -39,12 +39,17 @@ module.exports = {
     projectManager: {
       /* ! Do not allow to delete directories ! */
 
-      create: ({ projectPath }) => {
-        // create a new project directory if not exists
-        // todo: projectObj can be template
-      },
+      // todo: create: ({ projectPath }) => {
+      // create a new project directory if not exists
+      // projectObj can be template
+      // },
 
-      copy: ({ projectPath, projectSourcePath }) => {
+      // todo: createSibling: ({ projectPath }) => {
+      // create a new project directory if not exists
+      // projectObj can be template
+      // },
+
+      duplicate: ({ srcPath, srcObj, dstPath, dstObj, waitFn, requestOnly = false }) => {
         // create a new project directory if not exists
         // check source exists
         // copy source to projectPath

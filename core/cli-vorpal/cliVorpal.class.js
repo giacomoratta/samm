@@ -15,7 +15,6 @@ class CliVorpal {
     this.delimiter = ''
     this.logger = console
     this.eventEmitter = new Events()
-    this.printer = new CliPrinter({ command: null })
 
     this.vorpal.on('client_prompt_submit', (command) => {
       if (command === 'exit') {
@@ -37,7 +36,12 @@ class CliVorpal {
       .show()
   }
 
-  addCommand (cmdString) {
+  addCommand (cmdName, cmdArgs = '') {
+    this.commands[cmdName] = this.vorpal.command(`${cmdName} ${cmdArgs}`)
+    return cmdName
+  }
+
+  addCommandOld (cmdString) {
     const cmdSplit = cmdString.trim().split(' ')
     this.commands[cmdSplit[0]] = this.vorpal.command(cmdString)
     return cmdSplit[0]
@@ -57,23 +61,27 @@ class CliVorpal {
     const self = this
 
     this.commands[command].action(function (values, cb) {
-      // todo: avoid calling every time
-
       /* this function must be a normal function (not lambda or something else);
-       * the keyword 'this' will be thisCli argument for cmdFn() and its needed, for instance, to call prompt method */
-      self.printer.newLine()
+       * the keyword 'this' will be thisCli argument for cmdFn() and its needed, for instance, to call prompt method
+       * todo: avoid calling every time */
+
       const thisCli = this
       const cliInput = new CliInput({ values, command })
-      const cliPrinter = new CliPrinter({ command })
+
+      const cliPrinter = new CliPrinter({
+        command,
+        logFn: (msg) => { thisCli.log(msg) } // workaround (logFn=this.log does not work)
+      })
+
       const cliNext = (code, err) => {
         if (code === CLI_CMD_KO) {
           self.logger.error(`command '${command}' terminated with an error.`)
           if (err) self.logger.error(err)
         } else if (code === CLI_CMD_ERR_FORMAT) {
-          self.printer.error(`Incorrect format for command; type ${command} --help`)
+          cliPrinter.error(`Incorrect format for command; type ${command} --help`)
         }
         self.eventEmitter.emit('afterCommand', { logger: self.logger, command })
-        self.printer.newLine()
+        cliPrinter.newLine()
         cb()
       }
 
@@ -101,17 +109,17 @@ class CliVorpal {
 
         const _promptFn = async function (handler) {
           let input = null
-          self.printer.newLine()
+          cliPrinter.newLine()
           if (showFn) showFn()
           try {
             await thisCli.prompt(props, (result) => {
               input = result.inputValue
             })
-            self.printer.newLine()
+            cliPrinter.newLine()
             const exit = input === 'q' // || isNaN(input.charCodeAt(0)) === true
 
             if (await handler({ exit, input }) !== true) {
-              self.printer.newLine()
+              cliPrinter.newLine()
               await _promptFn(handler)
             }
           } catch (e) {
@@ -121,6 +129,7 @@ class CliVorpal {
         return _promptFn(handler)
       }
 
+      cliPrinter.newLine()
       cmdFn({
         thisCli,
         cliNext,

@@ -5,7 +5,7 @@ const optPrintHandler = require('./opt_print')
 
 const commandName = 'query'
 
-Cli.addCommand(`${commandName} [label] [query]`)
+Cli.addCommand(commandName, '[label] [query]')
 
 Cli.addCommandHeader(commandName) // todo: improve description with examples
   .description('Manage queries for sample, for matching sample directories and files. \n' +

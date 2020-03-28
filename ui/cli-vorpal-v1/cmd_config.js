@@ -2,7 +2,7 @@ const { API, Cli, CLI_CMD_KO } = require('./ui_common')
 
 const commandName = 'config'
 
-Cli.addCommand(`${commandName} [name] [values...]`)
+Cli.addCommand(commandName, '[name] [values...]')
 
 Cli.addCommandHeader(commandName)
   .autocomplete(API.config.getFieldsList())

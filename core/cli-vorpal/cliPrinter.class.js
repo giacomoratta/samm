@@ -3,9 +3,10 @@ const INDENT = '  '
 const NL = '\n'
 
 class CliPrinter {
-  constructor ({ command, indentLevel = 1 }) {
+  constructor ({ command, logFn = console.info, indentLevel = 1 }) {
     this.command = command
     this.indent = INDENT.repeat(indentLevel)
+    this.logFn = logFn
   }
 
   createChild ({ command }) {
@@ -13,23 +14,23 @@ class CliPrinter {
   }
 
   newLine (count = 0) {
-    console.info(`${NL.repeat(count)}`)
+    this.logFn(`${NL.repeat(count)}`)
   }
 
   info (message) {
-    console.info(`${this.indent}${message}`)
+    this.logFn(`${this.indent}${message}`)
   }
 
   warn (message) {
-    console.info(`${this.indent}WARNING: ${message}`)
+    this.logFn(`${this.indent}WARNING: ${message}`)
   }
 
   error (message) {
-    console.info(`${this.indent}ERROR: ${message}`)
+    this.logFn(`${this.indent}ERROR: ${message}`)
   }
 
   title (message) {
-    console.info(`${NL}${this.indent}${message}`)
+    this.logFn(`${NL}${this.indent}${message}`)
   }
 
   boxed (message, title = '') {
@@ -66,7 +67,7 @@ class CliPrinter {
       }
       centerString = `${centerStringLine}\u2502${NL}${middleLine}${NL}${centerString}`
     }
-    console.info(`${NL} \u250C${topLine}\u2510${NL}${middleLine}${NL}${centerString}${middleLine}${NL} \u2514${topLine}\u2518${NL}`)
+    this.logFn(`${NL} \u250C${topLine}\u2510${NL}${middleLine}${NL}${centerString}${middleLine}${NL} \u2514${topLine}\u2518${NL}`)
   }
 
   value (value, message) {
@@ -88,33 +89,33 @@ class CliPrinter {
     if (!array) return
     let i = 1
     array.forEach((e) => {
-      console.info(`${this.indent}${i++} ${toString ? toString(e) : e}`)
+      this.logFn(`${this.indent}${i++} ${toString ? toString(e) : e}`)
     })
-    console.info('')
+    this.logFn('')
   }
 
   unorderedList (array, toString) {
     if (!array) return
     array.forEach((e) => {
-      console.info(`${this.indent}- ${toString ? toString(e) : e}`)
+      this.logFn(`${this.indent}- ${toString ? toString(e) : e}`)
     })
-    console.info('')
+    this.logFn('')
   }
 
   simpleMap (object, toString) {
     if (!object) return
     Object.keys(object).forEach((k) => {
-      console.info(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
+      this.logFn(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
     })
-    console.info('')
+    this.logFn('')
   }
 
   simpleMapByKey (object, toString) {
     if (!object) return
     Object.keys(object).sort().forEach((k) => {
-      console.info(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
+      this.logFn(`${this.indent}  ${k}: ${toString ? toString(object[k]) : object[k]}`)
     })
-    console.info('')
+    this.logFn('')
   }
 }
 
