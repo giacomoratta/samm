@@ -42,15 +42,23 @@ class Project {
   }
 
   /**
-   * Create a new project (if it does not exist)
+   * Copy the current project to a new project (if it does not exist)
    * @param {string} projectPath
-   * @returns {Promise<boolean>}
+   * @returns {Promise<object>}
    */
-  async create (projectPath) {
-    // todo
-    // check absolute path
-    // create if not exists
-    // this.set
+  async copyTo ({ parentPath, projectName }) {
+    const result = {
+      candidatePath: null,
+      project: null
+    }
+    result.candidatePath = path.join(parentPath, projectName)
+    if (await fileUtils.fileExists(result.candidatePath) === true) return result
+    const newProject = new Project()
+    await fileUtils.ensureDir(result.candidatePath)
+    await fileUtils.copyDirectory(this.path, result.candidatePath)
+    await newProject.set(result.candidatePath)
+    result.project = newProject
+    return result
   }
 
   /**

@@ -108,6 +108,12 @@ module.exports = {
     },
 
     projectTemplate: {
+      createFrom: async ({ templateProject, parentPath, projectName }) => {
+        const result = await templateProject.copyTo({ parentPath, projectName })
+        if (!result.project) log.info(result)
+        return result
+      },
+
       list: async () => {
         const projectsList = await Project.projectsFromDirectory({
           projectsPath: config.field('TemplatesDirectory').value
