@@ -18,7 +18,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     if (cliInput.hasOption('date') === true) orderBy = 'modifiedAt'
     const projectSiblingsData = await currentProject.getSiblings({ orderBy })
 
-    if (projectSiblingsData.siblings.length === 0) {
+    if (projectSiblingsData.projects.length === 0) {
       cliPrinter.warn('No projects in the parent directory.')
     } else {
       cliPrinter.info(`Current project: ${currentProject.path}`)
@@ -27,7 +27,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
         message: 'Select a project',
         showFn: () => {
           cliPrinter.info(`Projects in the same directory: ${currentProject.parentPath}`)
-          cliPrinter.orderedList(projectSiblingsData.siblings, (pItem) => {
+          cliPrinter.orderedList(projectSiblingsData.projects, (pItem) => {
             const date = new Date(pItem.modifiedAt)
             return `${pItem.name} [${pItem.path.length > 36 ? '...' : ''}${pItem.path.substr(-36)}] ${date.toUTCString()}`
           })
@@ -36,14 +36,14 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
         if (exit === true) return true
 
         let pIndex = parseInt(input)
-        if (isNaN(pIndex) || pIndex < 1 || pIndex > projectSiblingsData.siblings.length) {
-          cliPrinter.warn(`Invalid input: choose an index between 1 and ${projectSiblingsData.siblings.length}.`)
+        if (isNaN(pIndex) || pIndex < 1 || pIndex > projectSiblingsData.projects.length) {
+          cliPrinter.warn(`Invalid input: choose an index between 1 and ${projectSiblingsData.projects.length}.`)
           return false
         }
 
         pIndex--
         try {
-          const projectObj = projectSiblingsData.siblings[pIndex]
+          const projectObj = projectSiblingsData.projects[pIndex]
           const setResult = await ProjectManager.setCurrentProject({ projectObj })
           if (setResult === true) {
             cliPrinter.info(`New current project: ${ProjectManager.getCurrentProject().path}`)

@@ -108,13 +108,11 @@ module.exports = {
     },
 
     projectTemplate: {
-      list: () => {
-        if (config.field('TemplatesDirectory').unset !== false || config.field('TemplatesDirectory').fn.exists() !== true) {
-          return
-        }
-        const array = []
-        // todo
-        return array
+      list: async () => {
+        const projectsList = await Project.projectsFromDirectory({
+          projectsPath: config.field('TemplatesDirectory').value
+        })
+        return projectsList.projects
       }
     }
   }

@@ -29,7 +29,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
   /* Create new query */
   if (paramQueryLabel && paramQueryString) {
-    return await optCrudHandler.create({ paramQueryLabel, paramQueryString, ...sharedArgs })
+    return optCrudHandler.create({ paramQueryLabel, paramQueryString, ...sharedArgs })
   }
 
   if (paramQueryLabel && !paramQueryString) {
@@ -40,19 +40,19 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
     /* Remove a query */
     if (cliInput.hasOption('remove')) {
-      return await optCrudHandler.remove({ paramQueryLabel, ...sharedArgs })
+      return optCrudHandler.remove({ paramQueryLabel, ...sharedArgs })
     }
 
     /* Rename a query */
     if (cliInput.hasOption('label')) {
       const paramNewQueryLabel = cliInput.getOption('label')
-      return await optCrudHandler.rename({ paramQueryLabel, paramNewQueryLabel, ...sharedArgs })
+      return optCrudHandler.rename({ paramQueryLabel, paramNewQueryLabel, ...sharedArgs })
     }
 
     /* Copy a query */
     if (cliInput.hasOption('copy')) {
       const paramNewQueryLabel = cliInput.getOption('copy')
-      return await optCrudHandler.copy({ paramQueryLabel, paramNewQueryLabel, ...sharedArgs })
+      return optCrudHandler.copy({ paramQueryLabel, paramNewQueryLabel, ...sharedArgs })
     }
   }
 

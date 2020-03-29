@@ -26,7 +26,7 @@ describe('Project class', function () {
     await expect(testP.set(path.join(testDirPath, 'projects', 'prj2'))).resolves.toEqual(true)
     expect(testP.isValid())
     const sibData = await testP.getSiblings({ orderBy: 'modifiedAt' })
-    expect(sibData.siblings.length).toEqual(5)
+    expect(sibData.projects.length).toEqual(5)
     expect(sibData.failed.length).toEqual(2)
   })
 })

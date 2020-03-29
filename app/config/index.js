@@ -42,7 +42,7 @@ module.exports = {
 
       async save () {
         try {
-          const saveResult = ConfigInstance.save()
+          const saveResult = await ConfigInstance.save()
           saveResult === true && log.info('Configuration saved successfully.')
           saveResult !== true && log.info('Configuration not saved.')
         } catch (e) {
