@@ -1,4 +1,4 @@
-const { API, Cli, CLI_CMD_ERR_FORMAT } = require('../ui_common')
+const { API, Cli } = require('../ui_common')
 
 const ProjectManager = API.projectManager
 const ProjectHistory = API.projectHistory
