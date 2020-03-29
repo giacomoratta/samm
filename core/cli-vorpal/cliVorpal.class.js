@@ -87,7 +87,7 @@ class CliVorpal {
         delete props.exitValue
 
         const promptMessage = `${cliPrinter.indent}[${exitValue}:quit] > `
-        if (props.message) props.message = `${cliPrinter.indent}${props.message} \n${promptMessage}`
+        if (props.message) props.message = `${cliPrinter.indent}${props.message}\n${promptMessage}`
         else props.message = `${promptMessage}`
 
         const showFn = props.showFn || null

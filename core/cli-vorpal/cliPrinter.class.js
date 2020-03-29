@@ -88,8 +88,9 @@ class CliPrinter {
   orderedList (array, toString) {
     if (!array) return
     let i = 1
+    const indent = `${this.indent}${''.repeat(array.length.toString().length - 1)}`
     array.forEach((e) => {
-      this.logFn(`${this.indent}${i++} ${toString ? toString(e) : e}`)
+      this.logFn(`${indent} ${i++}) ${toString ? toString(e) : e}`)
     })
     this.logFn('')
   }
@@ -97,7 +98,7 @@ class CliPrinter {
   unorderedList (array, toString) {
     if (!array) return
     array.forEach((e) => {
-      this.logFn(`${this.indent}- ${toString ? toString(e) : e}`)
+      this.logFn(`${this.indent} - ${toString ? toString(e) : e}`)
     })
     this.logFn('')
   }

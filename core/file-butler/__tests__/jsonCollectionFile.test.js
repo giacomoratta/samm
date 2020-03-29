@@ -66,26 +66,12 @@ describe('A collection of test objects', function () {
         fromJson () {}
       }
       return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('\'filePath\' option must be an absolute path')
+    }).toThrow('must have isEqualTo method')
 
     expect(function () {
       class example {
         isValid () {}
-      }
-      return new JsonCollectionFile({ filePath: testObjFilePath, itemsClass: example })
-    }).toThrow('must have toJson method')
-
-    expect(function () {
-      class example {
-        isValid () {}
-        toJson () {}
-      }
-      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
-    }).toThrow('must have fromJson method')
-
-    expect(function () {
-      class example {
-        isValid () {}
+        isEqualTo () {}
         toJson () {}
         fromJson () {}
       }
@@ -95,6 +81,41 @@ describe('A collection of test objects', function () {
     expect(function () {
       class example {
         isValid () {}
+      }
+      return new JsonCollectionFile({ filePath: testObjFilePath, itemsClass: example })
+    }).toThrow('must have isEqualTo method')
+
+    expect(function () {
+      class example {
+        isValid () {}
+        isEqualTo () {}
+      }
+      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
+    }).toThrow('must have toJson method')
+
+    expect(function () {
+      class example {
+        isValid () {}
+        isEqualTo () {}
+        toJson () {}
+      }
+      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
+    }).toThrow('must have fromJson method')
+
+    expect(function () {
+      class example {
+        isValid () {}
+        isEqualTo () {}
+        toJson () {}
+        fromJson () {}
+      }
+      return new JsonCollectionFile({ filePath: 'abc', itemsClass: example })
+    }).toThrow('\'filePath\' option must be an absolute path')
+
+    expect(function () {
+      class example {
+        isValid () {}
+        isEqualTo () {}
         toJson () {}
         fromJson () {}
       }

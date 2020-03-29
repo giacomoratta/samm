@@ -60,6 +60,15 @@ describe('A collection ARRAY of test objects', function () {
       expect(TFObj.collection.oldest.label).toEqual(TFObj.collection.get(0).label)
       expect(TFObj.collection.oldest.label).toEqual('my_label_21')
       expect(TFObj.collection.size).toEqual(3 - testNumber)
+
+      const array = []
+      TFObj.collection.forEach((index, projectObj) => {
+        array.push(projectObj)
+      })
+      i = 0
+      expect(array[i++].label).toEqual('my_label_21')
+      if (testNumber === 0) expect(array[i++].label).toEqual('my_label_31')
+      expect(array[i++].label).toEqual('my_label_41')
     }
     checkArrayOrderASC(TestFileAA1, 0)
     expect(TestFileAA1.collection.remove(1)).toEqual(true)
@@ -90,6 +99,15 @@ describe('A collection ARRAY of test objects', function () {
       expect(TFObj.collection.latest.label).toEqual(TFObj.collection.get(0).label)
       expect(TFObj.collection.latest.label).toEqual('my_label_41')
       expect(TFObj.collection.size).toEqual(3 - testNumber)
+
+      const array = []
+      TFObj.collection.forEach((index, projectObj) => {
+        array.push(projectObj)
+      })
+      i = 0
+      expect(array[i++].label).toEqual('my_label_41')
+      if (testNumber === 0) expect(array[i++].label).toEqual('my_label_31')
+      expect(array[i++].label).toEqual('my_label_21')
     }
     checkArrayOrderDESC(TestFileAD1, 0)
     expect(TestFileAD1.collection.remove(1)).toEqual(true)

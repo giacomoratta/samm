@@ -1,4 +1,4 @@
-const { API, Cli, CLI_CMD_ERR_FORMAT } = require('../ui_common')
+const { API, Cli } = require('../ui_common')
 
 const ProjectManager = API.projectManager
 
@@ -7,30 +7,33 @@ Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)
   .description('Show all projects in the same parent directory or set the current project from of them. \n')
-  .option('-d, --date', 'order by date.')
-  .option('-n, --name', 'order by name.')
+  .option('-d, --date', 'order by date of latest change.')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   const currentProject = ProjectManager.getCurrentProject()
   if (!currentProject) {
     cliPrinter.warn('No current project set: cannot show projects in the same directory.')
   } else {
-    const projectSiblingsData = await currentProject.getSiblings()
+    let orderBy = 'name'
+    if (cliInput.hasOption('date') === true) orderBy = 'modifiedAt'
+    const projectSiblingsData = await currentProject.getSiblings({ orderBy })
+
     if (projectSiblingsData.siblings.length === 0) {
       cliPrinter.warn('No projects in the parent directory.')
     } else {
+      cliPrinter.info(`Current project: ${currentProject.path}`)
+
       await cliPrompt({
-        message: 'Set the current project',
+        message: 'Select a project',
         showFn: () => {
-          cliPrinter.info(`Current project: ${currentProject.path}\n`)
           cliPrinter.info(`Projects in the same directory: ${currentProject.parentPath}`)
-          cliPrinter.orderedList(projectSiblingsData.siblings, (pItem) => { return pItem.name })
+          cliPrinter.orderedList(projectSiblingsData.siblings, (pItem) => {
+            const date = new Date(pItem.modifiedAt)
+            return `${pItem.name} [${pItem.path.length > 36 ? '...' : ''}${pItem.path.substr(-36)}] ${date.toUTCString()}`
+          })
         }
       }, async ({ exit, input }) => {
-        if (exit === true) {
-          cliNext()
-          return true
-        }
+        if (exit === true) return true
 
         let pIndex = parseInt(input)
         if (isNaN(pIndex) || pIndex < 1 || pIndex > projectSiblingsData.siblings.length) {
@@ -40,14 +43,15 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
         pIndex--
         try {
-          if (ProjectManager.setCurrentProject(projectSiblingsData.siblings[pIndex]) === true) {
-            cliPrinter.info(`New current project: ${ProjectManager.getCurrentProject().path}.`)
-            cliNext()
-            return true
+          const projectObj = projectSiblingsData.siblings[pIndex]
+          const setResult = await ProjectManager.setCurrentProject({ projectObj })
+          if (setResult === true) {
+            cliPrinter.info(`New current project: ${ProjectManager.getCurrentProject().path}`)
           } else {
-            cliPrinter.warn(`Project #${pIndex + 1} is not valid.`)
-            return false
+            cliPrinter.error(`Project #${pIndex + 1} is not valid: ${projectObj.path}`)
+            if (setResult.error) cliPrinter.error(`> reason: ${setResult.error.message}`)
           }
+          return true
         } catch (e) {
           cliPrinter.error(`Project #${pIndex + 1} is not valid: ${e.message}`)
           return false

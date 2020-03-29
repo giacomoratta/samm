@@ -60,17 +60,20 @@ module.exports = {
         return ProjectHistoryFileInstance.collection.latest
       },
 
-      setCurrentProject: ({ projectObj, projectPath }) => {
-        // string or Project
-        // check project exists
-        return ProjectHistoryFileInstance.collection.add(projectObj)
-      },
-
-      listSiblings: () => {
-        // todo
-        // order by name DESC
-        // order by last modified DESC
-        // return array of Project object
+      setCurrentProject: async ({ projectObj, projectPath }) => {
+        try {
+          if (projectPath) {
+            projectObj = new Project()
+            await projectObj.set(projectPath)
+          }
+          const result = ProjectHistoryFileInstance.collection.add(projectObj)
+          if (result !== true) return result
+          await ProjectHistoryFileInstance.fileHolder.save()
+          return result
+        } catch (error) {
+          log.error({ error, projectObj, projectPath }, 'Cannot set the current project')
+          return error
+        }
       }
     },
 
@@ -83,11 +86,23 @@ module.exports = {
         return ProjectHistoryFileInstance.collection.latest
       },
 
-      list: () => {
+      list: ({ orderBy = 'history' } = {}) => {
         const array = []
         ProjectHistoryFileInstance.collection.forEach((index, projectObj) => {
-          array.push(projectObj.path)
+          array.push(projectObj)
         })
+        if (array.length > 0) {
+          orderBy === 'name' && array.sort((a, b) => { /* ASC */
+            if (a.name < b.name) return -1
+            if (a.name > b.name) return 1
+            return 0
+          })
+          orderBy === 'modifiedAt' && array.sort((a, b) => { /* DESC */
+            if (a.modifiedAt > b.modifiedAt) return -1
+            if (a.modifiedAt < b.modifiedAt) return 1
+            return 0
+          })
+        }
         return array
       }
     },
