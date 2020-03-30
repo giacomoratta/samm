@@ -1,4 +1,4 @@
-const { App, Cli } = require('./ui_common')
+const { App, Cli } = require('../ui_common')
 /**
  * bookm [label]: show entire list (if label, show single label list)
  *

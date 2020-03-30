@@ -1,11 +1,5 @@
 const { Cli, App, API, log } = require('./ui_common')
 
-// require('./cmd_bookm')
-// require('./cmd_lookup')
-// require('./cmd_project')
-// require('./cmd_save')
-// require('./cmd_scan')
-
 const ConfigStatusMessages = () => {
   const statusFlags = API.config.field('Status').value
   const statusMessages = []
@@ -21,11 +15,9 @@ const printWarnings = () => {
   const messages = ConfigStatusMessages()
   if (messages.length === 0) return
   messages.forEach((line) => {
-    Cli.printer.newLine()
-    Cli.printer.warn(`${line}`)
+    console.warn(`\n${line}`)
   })
-  Cli.printer.newLine()
-  // Cli.printer.boxed(messages,'WARNING')
+  console.log('\n')
 }
 
 Cli.on('show', printWarnings)
@@ -37,7 +29,7 @@ App.boot({
 
 }).then((outcome) => {
   if (outcome === false) {
-    Cli.printer.error('Severe internal error: app cannot be initialized (see logs).')
+    console.error('Severe internal error: app cannot be initialized (see logs).')
   }
 
   require('./cmd_config')
@@ -47,5 +39,5 @@ App.boot({
   Cli.show('mpl')
 }).catch((e) => {
   log.error(e)
-  Cli.printer.error(e)
+  console.error(e)
 })

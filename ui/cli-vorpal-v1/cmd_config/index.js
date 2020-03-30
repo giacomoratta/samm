@@ -1,4 +1,4 @@
-const { API, Cli, CLI_CMD_KO } = require('./ui_common')
+const { API, Cli } = require('../ui_common')
 
 const commandName = 'config'
 
@@ -55,7 +55,6 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
       await API.config.save()
     } catch (e) {
       cliPrinter.error(e.message)
-      return cliNext(CLI_CMD_KO, e)
     }
     return cliNext()
   }

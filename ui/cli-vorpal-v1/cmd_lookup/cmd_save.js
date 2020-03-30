@@ -1,5 +1,5 @@
 const path = require('path')
-const { App, Cli } = require('./ui_common')
+const { App, Cli } = require('../ui_common')
 
 const Sample = App.Sample
 const ProjectHistory = App.ProjectHistory
