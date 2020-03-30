@@ -2,7 +2,6 @@ const { API, Cli } = require('../ui_common')
 
 const Config = API.config
 const ProjectManager = API.projectManager
-const ProjectHistory = API.projectHistory
 const ProjectTemplate = API.projectTemplate
 
 const commandName = 'project-template'
@@ -11,7 +10,7 @@ Cli.addCommand(commandName)
 Cli.addCommandHeader(commandName)
   .description('Show all templates or create a new project from one of them.\n')
 
-Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliPrinter, cliPrompt }) {
   if (Config.field('TemplatesDirectory').unset !== false) {
     cliPrinter.warn('No templates directory set (type \'config TemplatesDirectory template\\directory\\folder\')')
     return cliNext()
@@ -25,17 +24,17 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   const tplList = await ProjectTemplate.list()
   const currentProject = ProjectManager.getCurrentProject()
 
-  cliPrinter.info('This feature allows to start a new project in the current project\'s parent path.')
+  cliPrinter.info('NOTE: This feature allows to start a new project in the current project\'s parent path.')
   !currentProject && cliPrinter.warn('no current project: it is mandatory to have a current project set.')
 
   await cliPrompt({
     message: 'Select template and type a project name: <index> <project-name>',
     showFn: () => {
+      cliPrinter.info(`Current project: ${(currentProject && currentProject.path) || '<unknown>'}\n`)
       cliPrinter.info(`Templates directory: ${Config.field('TemplatesDirectory').value}`)
-      cliPrinter.info(`Current project: ${currentProject || '<unknown>'}`)
       cliPrinter.orderedList(tplList, (pItem) => {
         const date = new Date(pItem.modifiedAt)
-        return `${pItem.name} ${date.toUTCString()}`
+        return `${pItem.name}  (${date.toUTCString()})`
       })
     }
   }, async ({ exit, input }) => {

@@ -176,7 +176,7 @@ class ConfigFile extends JsonizedFile {
       }
       return true
     }
-    if (generateFile === true) return await this.save()
+    if (generateFile === true) return /* await */ this.save()
     return false
   }
 }

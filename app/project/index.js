@@ -5,13 +5,35 @@ const log = require('../../core/logger').createLogger('project')
 
 let ProjectHistoryFileInstance = null
 
+const _removeInvalidProjects = async () => {
+  const promisesArray = []
+  const invalidProjects = []
+  ProjectHistoryFileInstance.collection.forEach((index, project) => {
+    if (!project.isValid()) {
+      invalidProjects.push(index)
+      log.warn(`[history boot] invalid project: ${project.path}`)
+    }
+    promisesArray.push(project.exists().then((check) => {
+      if (check !== true) {
+        invalidProjects.push(index)
+        log.warn(`[history boot] not existing project: ${project.path}`)
+      }
+    }))
+  })
+  await Promise.all(promisesArray)
+  if (invalidProjects.length === 0) return
+  invalidProjects.forEach((indexItem) => {
+    ProjectHistoryFileInstance.collection.remove(indexItem)
+  })
+}
+
 const boot = async (filePath) => {
   log.info('Booting...')
   try {
     ProjectHistoryFileInstance = new ProjectHistoryFile(filePath)
     const dataPresence = await ProjectHistoryFileInstance.fileHolder.load()
     log.info({ dataPresence }, 'History loaded successfully')
-    // todo: remove all invalid projects (not exists)
+    await _removeInvalidProjects()
     return true
   } catch (e) {
     log.error(e, 'Cannot load history')
@@ -70,9 +92,9 @@ module.exports = {
           if (result !== true) return result
           await ProjectHistoryFileInstance.fileHolder.save()
           return result
-        } catch (error) {
-          log.error({ error, projectObj, projectPath }, 'Cannot set the current project')
-          return error
+        } catch (e) {
+          log.error({ error: e.message, projectObj, projectPath }, 'Cannot set the current project')
+          return e
         }
       }
     },

@@ -80,7 +80,7 @@ class JsonArrayType {
   }
 
   remove (index) {
-    if (index) {
+    if (index !== null || index !== undefined) {
       if (index >= 0 && index < this.size) {
         this._collection.splice(index, 1)
         return true

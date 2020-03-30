@@ -25,6 +25,10 @@ class Project {
     return this._pathInfo.modifiedAt
   }
 
+  async exists () {
+    return fileUtils.fileExists(this._pathInfo.path)
+  }
+
   /**
    * Set the project object by its path (and it must exist!)
    * @param {string} projectPath

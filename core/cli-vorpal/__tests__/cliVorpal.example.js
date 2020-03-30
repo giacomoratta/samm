@@ -86,7 +86,7 @@ vCli.addCommandBody('wait', async function ({ cliNext }) {
   console.log(4, data)
   data = await wait1('label5', 2000)
   console.log(5, data)
-  cliNext()
+  return cliNext()
 })
 
 vCli.addCommand('wait2')
@@ -112,7 +112,7 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
   if (data.inputValue === 'q') return cliNext()
   console.log('222', data)
 
-  cliNext()
+  return cliNext()
 })
 
 vCli.addCommand('prompt1')
@@ -125,13 +125,13 @@ vCli.addCommandBody('prompt1', async function ({ cliNext, cliPrinter, cliPrompt 
 
   }, async ({ exit, input }) => {
     if (exit === true) {
-      cliNext()
+      return cliNext()
       return true
     }
 
     if (input === 'good') {
       cliPrinter.info('Well done! Free to go!')
-      cliNext()
+      return cliNext()
       return true
     }
 
