@@ -1,4 +1,19 @@
 const { App, Cli } = require('./ui_common')
+/**
+ * bookm [label]: show entire list (if label, show single label list)
+ *
+ * -a <path>: add bookmark (ask for confirmation)
+ * -c <new-label>: copy bookmark set with the new label
+ * -l <new-label>: rename label
+ * -r [index]: remove entire label or remove bookmark from a label by index (ask for confirmation)
+ *
+ * bookm-export [path]: all bookmarks to current project dir or external dir
+ *
+ * bookm-lookup: add bookmarks from latest lookup (prompt, label, index)
+ *               (info: show all available labels)
+ *
+ *
+ * */
 
 const Config = App.Config
 const ProjectHistory = App.ProjectHistory
@@ -11,7 +26,6 @@ Cli.addCommand(`${commandName} [tag]`)
 
 Cli.addCommandHeader(commandName)
   .description('Manage all bookmarks. It shows all the bookmarks by default, if no options are specified. \n')
-  .option('-c, --copy <tag-to>', 'Copy a bookmark tag')
   .option('-e, --export', 'Export bookmarks in the current project')
   .option('-m, --manage', 'Shows and manage bookmarks with a prompt')
   .option('-l, --lookup', 'Add bookmarks from the latest lookup')

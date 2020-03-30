@@ -2,6 +2,8 @@ const { API, Cli } = require('../ui_common')
 
 const ProjectManager = API.projectManager
 
+// todo: merge to index with this command: project [path]
+
 const commandName = 'project-set'
 Cli.addCommand(commandName, '<path>')
 

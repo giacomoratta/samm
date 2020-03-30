@@ -1,7 +1,4 @@
-// const { App, Cli } = require('./common')
-const { Cli } = require('./ui_common')
-
-// const Config = App.Config
+const { /* App, */ Cli } = require('./common')
 
 const commandName = 'abcde'
 

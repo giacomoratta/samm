@@ -7,7 +7,7 @@ Cli.addCommand(commandName, '[name] [values...]')
 Cli.addCommandHeader(commandName)
   .autocomplete(API.config.getFieldsList())
   .description('Get or set the value of a configuration parameter. \n')
-  .option('-r, --remove', 'Remove a key or a value from a complex parameter (e.g. list)')
+  .option('-r, --remove', 'Remove a key or a value from a complex parameter (e.g. list, key-value map)')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   const paramName = cliInput.getParam('name')
