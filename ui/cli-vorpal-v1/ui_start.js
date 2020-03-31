@@ -29,7 +29,8 @@ App.boot({
 
 }).then((outcome) => {
   if (outcome === false) {
-    console.error('Severe internal error: app cannot be initialized (see logs).')
+    console.error('Severe internal error: app cannot be initialized (see logs).\n')
+    return
   }
 
   require('./cmd_config')

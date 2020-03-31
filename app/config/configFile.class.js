@@ -52,7 +52,7 @@ class ConfigFile extends JsonizedFile {
         type: 'array',
         items: {
           type: 'relDirPath',
-          basePath: this.field('SamplesDirectory').value || null
+          basePath: this.field('SamplesDirectory').value || path.parse(process.cwd()).root
         }
       },
       value: [

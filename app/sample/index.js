@@ -4,8 +4,9 @@ const clean = async () => {
   log.info('Cleaning data...')
 }
 
-const boot = async () => {
-  log.info('Booting...')
+const boot = async (filePath) => {
+  log.info(`Booting from ${filePath}...`)
+  return true
 }
 
 module.exports = {

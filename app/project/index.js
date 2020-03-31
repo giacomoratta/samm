@@ -28,7 +28,7 @@ const _removeInvalidProjects = async () => {
 }
 
 const boot = async (filePath) => {
-  log.info('Booting...')
+  log.info(`Booting from ${filePath}...`)
   try {
     ProjectHistoryFileInstance = new ProjectHistoryFile(filePath)
     const dataPresence = await ProjectHistoryFileInstance.fileHolder.load()

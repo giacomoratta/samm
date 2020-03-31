@@ -25,7 +25,7 @@ const boot = async ({ appRootPath, appDataDirName }) => {
   if (await ConfigModule.boot(path.join(AppDataDirectory, 'config.json')) !== true) return false
   if (await PathQueryModule.boot(path.join(AppDataDirectory, 'path_query.json')) !== true) return false
   if (await ProjectModule.boot(path.join(AppDataDirectory, 'project_history.json')) !== true) return false
-  if (await SampleModule.boot(path.join(AppDataDirectory, 'sample_index.json')) !== true) return false
+  if (await SampleModule.boot(path.join(AppDataDirectory, 'samples_index.json')) !== true) return false
   // todo: remove json extension
   return true
 }
