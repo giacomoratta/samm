@@ -43,11 +43,6 @@ libUtils.directoryExistsSync = (pathString) => {
   return fs.existsSync(pathString)
 }
 
-libUtils.parentDirectoryExistsSync = (pathString) => {
-  if (!_.isString(pathString)) return false
-  return fs.existsSync(path.parse(pathString).dir)
-}
-
 libUtils.ensureDirSync = (pathString) => {
   try {
     fsExtra.ensureDirSync(pathString)

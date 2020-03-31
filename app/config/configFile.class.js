@@ -14,18 +14,6 @@ class ConfigFile extends JsonizedFile {
 
     this.PlatformSignature = `${os.platform()}-${os.release()}`
 
-    // this.add(this.DFBF.create({
-    //   name: 'AppDataDirectory',
-    //   schema: {
-    //     type: 'relDirPath',
-    //     basePath: fallbackBasePath,
-    //     ensure: true,
-    //     readOnly: true
-    //   },
-    //   value: process.env.APP_DATA_DIRNAME || 'app-data',
-    //   description: 'Directory for storing all the user data'
-    // }))
-
     this.add(this.DFBF.create({
       name: 'Platform',
       schema: {

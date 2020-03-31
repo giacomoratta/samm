@@ -17,32 +17,30 @@ class SampleIndexError extends Error {
  */
 class SampleIndex {
   constructor ({ indexFilePath, samplesPath }) {
-    this.init({ indexFilePath, samplesPath })
-  }
-
-  init ({ indexFilePath, samplesPath }) {
-    if (!fileUtils.isAbsolutePath(indexFilePath)) {
-      throw new SampleIndexError(`indexFilePath must be an absolute path: ${indexFilePath}`)
-    }
-    if (!fileUtils.isAbsolutePath(samplesPath)) {
-      throw new SampleIndexError(`samplesPath must be an absolute path: ${samplesPath}`)
-    }
-    if (!fileUtils.directoryExistsSync(samplesPath)) {
-      throw new SampleIndexError(`samplesPath does not exist: ${samplesPath}`)
-    }
-    if (!fileUtils.parentDirectoryExistsSync(indexFilePath)) {
-      throw new SampleIndexError(`Cannot create index file because of a missing parent path: ${indexFilePath}`)
-    }
     this.indexFilePath = indexFilePath
-    this.samplePath = samplesPath
+    this.samplesPath = samplesPath
     this.sampleTree = null
   }
 
   async create ({ includedExtensions = [], excludedExtensions = [], excludedPaths = [] } = {}) {
+    if (!fileUtils.isAbsolutePath(this.indexFilePath)) {
+      throw new SampleIndexError(`indexFilePath must be an absolute path: ${this.indexFilePath}`)
+    }
+    if (!fileUtils.isAbsolutePath(this.samplesPath)) {
+      throw new SampleIndexError(`samplesPath must be an absolute path: ${this.samplesPath}`)
+    }
+    if (await fileUtils.directoryExists(this.samplesPath) !== true) {
+      throw new SampleIndexError(`samplesPath does not exist: ${this.samplesPath}`)
+    }
+    // const parentSamplesPath = path.parse(this.samplesPath).dir
+    // if (await fileUtils.directoryExists(parentSamplesPath) !== true) {
+    //   throw new SampleIndexError(`samplesPath does not exist: ${parentSamplesPath}`)
+    // }
+
     this.sampleTree = null
-    let writeResult = await fileUtils.writeTextFile(this.indexFilePath, '')
+    let writeResult = await fileUtils.writeTextFile(this.indexFilePath, '') /* pre-write test */
     if (writeResult !== true) return false
-    this.sampleTree = new SequoiaPath(this.samplePath, {
+    this.sampleTree = new SequoiaPath(this.samplesPath, {
       includedExtensions,
       excludedExtensions,
       excludedPaths,
@@ -60,7 +58,7 @@ class SampleIndex {
     if (fExists !== true) return false
     const jsonSampleTree = await fileUtils.readJsonFile(this.indexFilePath)
     if (!jsonSampleTree) return false
-    this.sampleTree = new SequoiaPath(this.samplePath, {
+    this.sampleTree = new SequoiaPath(this.samplesPath, {
       ObjectClass: SampleInfo
     })
     this.sampleTree.fromJson(jsonSampleTree)
