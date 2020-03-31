@@ -7,7 +7,7 @@ class ConfigFile extends JsonizedFile {
   constructor (filePath, cloneFrom) {
     super({ filePath, prettyJson: true, cloneFrom })
 
-    const basePath = path.parse(filePath).dir
+    const fallbackBasePath = path.parse(filePath).dir
 
     this.DFBF = new DataFieldBuiltInFactory()
     this.DFBF.initFactory()
@@ -18,7 +18,7 @@ class ConfigFile extends JsonizedFile {
     //   name: 'AppDataDirectory',
     //   schema: {
     //     type: 'relDirPath',
-    //     basePath: basePath,
+    //     basePath: fallbackBasePath,
     //     ensure: true,
     //     readOnly: true
     //   },
@@ -52,7 +52,7 @@ class ConfigFile extends JsonizedFile {
         type: 'array',
         items: {
           type: 'relDirPath',
-          basePath: this.field('SamplesDirectory').value || basePath
+          basePath: this.field('SamplesDirectory').value || fallbackBasePath
         }
       },
       value: [

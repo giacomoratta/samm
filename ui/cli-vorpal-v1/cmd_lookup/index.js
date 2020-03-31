@@ -5,8 +5,6 @@ const { App, Cli } = require('./common')
  * -a: get all matching samples
  * -s: save to project dir
  *
- * samples-scan: (with -f)
- *
  */
 
 const commandName = 'samples'
