@@ -6,14 +6,14 @@ const stream = require('stream')
 // Environment variables
 const cwd = process.cwd()
 const { env } = process
-const logPath = path.join(cwd, 'logs-mpl')
+let logPath = path.join(cwd, 'logs')
 
 // todo create directory
 // todo create files
 
 let mainLogFile = 'logs.log'
 if (process.env.NODE_ENV === 'test') mainLogFile = 'test.log'
-mainLogFile = path.join(logPath, mainLogFile)
+let mainLogFilePath = path.join(logPath, mainLogFile)
 
 // Create a stream where the logs will be written
 const logThrough = new stream.PassThrough()
@@ -26,7 +26,7 @@ const log = pino({
 // Log to multiple files using a separate process
 const child = childProcess.spawn(process.execPath, [
   require.resolve('pino-tee'),
-  'debug', mainLogFile
+  'debug', mainLogFilePath
   // 'info', `${logPath}/info.log`,
   // 'warn', `${logPath}/warn.log`,
   // 'error', `${logPath}/error.log`,
@@ -49,6 +49,12 @@ const createLogger = (module) => {
   return log.child({ module })
 }
 
+const setLogsDirectory = (directoryPath) => {
+  logPath = directoryPath
+  mainLogFilePath = path.join(logPath, mainLogFile)
+}
+
 module.exports = {
-  createLogger
+  createLogger,
+  setLogsDirectory
 }

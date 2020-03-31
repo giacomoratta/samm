@@ -2,8 +2,11 @@ const path = require('path')
 const ConfigModule = require('./config')
 const PathQueryModule = require('./path-query')
 const ProjectModule = require('./project')
+const SampleModule = require('./sample')
+const { fileUtils } = require('../core/utils/file.utils')
 
-const log = require('../core/logger').createLogger('app')
+const { createLogger, setLogsDirectory } = require('../core/logger')
+const log = createLogger('app')
 
 /**
  * Starts the boot procedure for the application
@@ -12,18 +15,19 @@ const log = require('../core/logger').createLogger('app')
  * @returns {Promise<boolean>}: false means 'severe error', so app must be closed
  */
 const boot = async ({ appRootPath, appDataDirName }) => {
+  const AppDataDirectory = path.join(appRootPath, process.env.APP_DATA_DIRNAME || 'app-data')
+  setLogsDirectory(path.join(AppDataDirectory, 'logs'))
+
   log.info('Booting the application...')
-  if (await ConfigModule.boot(path.join(appRootPath, 'config.json')) !== true) return false
+  log.info(`App data directory: ${AppDataDirectory}`)
 
-  const config = ConfigModule.API.config
-  const AppDataDirectory = config.field('AppDataDirectory').fn.toAbsPath()
-
+  if (await fileUtils.ensureDir(AppDataDirectory) !== true) return false
+  if (await ConfigModule.boot(path.join(AppDataDirectory, 'config.json')) !== true) return false
   if (await PathQueryModule.boot(path.join(AppDataDirectory, 'path_query.json')) !== true) return false
   if (await ProjectModule.boot(path.join(AppDataDirectory, 'project_history.json')) !== true) return false
   // if (await PathQueryModule.boot(path.join(AppDataDirectory, 'bookmarks.json')) !== true) return false
   // if (await PathQueryModule.boot(path.join(AppDataDirectory, 'samples_index.json')) !== true) return false
   // todo: remove json extension
-  // todo: put everything in the same directory (also config.json)
   return true
 }
 
@@ -47,6 +51,9 @@ module.exports = {
     pathQuery: PathQueryModule.API.pathQuery,
     projectManager: ProjectModule.API.projectManager,
     projectHistory: ProjectModule.API.projectHistory,
-    projectTemplate: ProjectModule.API.projectTemplate
+    projectTemplate: ProjectModule.API.projectTemplate,
+    sampleIndex: SampleModule.API.sampleIndex,
+    sampleLookup: SampleModule.API.sampleLookup,
+    sampleSet: SampleModule.API.sampleSet
   }
 }

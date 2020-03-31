@@ -1,6 +1,15 @@
-const { /* App, */ Cli } = require('./common')
+const { App, Cli } = require('./common')
 
-const commandName = 'abcde'
+/**
+ * lookup: quick lookup on samples
+ * -a: get all matching samples
+ * -s: save to project dir
+ *
+ * samples-scan: (with -f)
+ *
+ */
+
+const commandName = 'samples'
 
 Cli.addCommand(`${commandName} [name] [values...]`)
 

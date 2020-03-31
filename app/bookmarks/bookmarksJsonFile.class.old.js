@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const { JsonizedFile } = require('../../core/jsonized-file')
 const { SampleInfo } = require('./../sample/sampleInfo.class')
 

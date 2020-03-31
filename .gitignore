@@ -15,7 +15,7 @@ userdata/
 app-data/
 test-app-data/
 build/
-config.json
+test-app-data/config.json
 
 # Runtime data
 pids

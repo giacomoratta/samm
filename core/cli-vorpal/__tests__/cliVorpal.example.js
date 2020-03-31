@@ -125,19 +125,18 @@ vCli.addCommandBody('prompt1', async function ({ cliNext, cliPrinter, cliPrompt 
 
   }, async ({ exit, input }) => {
     if (exit === true) {
-      return cliNext()
       return true
     }
 
     if (input === 'good') {
       cliPrinter.info('Well done! Free to go!')
-      return cliNext()
       return true
     }
 
     cliPrinter.error('Error, so... repeat!')
     return false
   })
+  return cliNext()
 })
 
 vCli.show('abc')

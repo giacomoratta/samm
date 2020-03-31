@@ -24,9 +24,15 @@ module.exports = {
     },
 
     sampleIndex: {
-      has: () => {},
-      size: () => {},
-      create: () => {}
+      has: () => {
+        return false
+      },
+      size: () => {
+        return -1
+      },
+      create: async () => {
+        return false
+      }
     }
   }
 }

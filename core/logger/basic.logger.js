@@ -38,5 +38,6 @@ const createLogger = (module) => {
 }
 
 module.exports = {
-  createLogger
+  createLogger,
+  setLogsDirectory: () => { }
 }

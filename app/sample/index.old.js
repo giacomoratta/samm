@@ -129,18 +129,18 @@ const createIndex = async (indexFilePath) => {
   return createResult
 }
 
-const repairIndex = ({ newSamplesRoot = '' }) => {
-  const result = true
-  if (newSamplesRoot) {
-    // result = mainSamplesIndex.replaceSamplesRoot(newSamplesRoot)
-  }
-  if (result === true) {
-    Config.getField('Status').add('new-scan-needed', false)
-    Config.getField('Status').add('first-scan-needed', false)
-    Config.save()
-  }
-  return result
-}
+// const repairIndex = ({ newSamplesRoot = '' }) => {
+//   const result = true
+//   if (newSamplesRoot) {
+//     // result = mainSamplesIndex.replaceSamplesRoot(newSamplesRoot)
+//   }
+//   if (result === true) {
+//     Config.getField('Status').add('new-scan-needed', false)
+//     Config.getField('Status').add('first-scan-needed', false)
+//     Config.save()
+//   }
+//   return result
+// }
 
 const hasIndex = () => {
   return mainSamplesIndex !== null && mainSamplesIndex.loaded && mainSamplesIndex.size > 0
@@ -224,7 +224,7 @@ const SampleBoot = async (indexFilePath) => {
 const SampleCleanData = async () => {
   log.info('Cleaning data...')
   if (!mainSamplesIndex) return
-  return await mainSamplesIndex.deleteFile()
+  return mainSamplesIndex.deleteFile()
 }
 
 module.exports = {

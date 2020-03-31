@@ -35,9 +35,11 @@ App.boot({
   require('./cmd_config')
   require('./cmd_project')
   require('./cmd_query')
+  require('./cmd_samples')
 
   Cli.show('mpl')
 }).catch((e) => {
   log.error(e)
-  console.error(e)
+  console.error(`Unexpected error: ${e.message}`)
+  console.error('(see logs for more details)')
 })
