@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
+const fileUtils = require('./file.utils')
 const { PathInfo } = require('../path-info/pathInfo.class')
-const { fileUtils } = require('../utils/file.utils') // todo: remove
 
 const getDefaultOptions = function () {
   return {
@@ -146,13 +146,5 @@ module.exports = {
   parseOptions,
   walkDirectory,
   stringReplaceAt,
-  stringReplaceAll,
-
-  // todo: fix
-  isAbsolutePath: fileUtils.isAbsolutePath,
-  directoryExists: fileUtils.directoryExists,
-  fileExists: fileUtils.fileExists,
-  readJsonFile: fileUtils.readJsonFile,
-  writeJsonFile: fileUtils.writeJsonFile,
-  removeFile: fileUtils.removeFile
+  stringReplaceAll
 }

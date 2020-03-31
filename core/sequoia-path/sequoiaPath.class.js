@@ -2,13 +2,14 @@ const { cloneDeep } = require('lodash')
 const SymbolTree = require('symbol-tree')
 const { PathInfo } = require('../path-info/pathInfo.class')
 const utils = require('./utils')
+const fileUtils = require('./file.utils')
 
 class SequoiaPath {
   constructor (rootPath) {
     this.tree = null /* the real tree */
     this.root = {}
 
-    if (rootPath && !utils.isAbsolutePath(rootPath)) {
+    if (rootPath && !fileUtils.isAbsolutePath(rootPath)) {
       throw new Error(`Tree's root path must be an absolute path: ${rootPath}`)
     }
 
@@ -113,7 +114,7 @@ class SequoiaPath {
     const { filePath } = this.data.options
     if (!filePath) return true
     try {
-      await utils.removeFile(filePath)
+      await fileUtils.removeFile(filePath)
       return true
     } catch (error) {
       return error
@@ -129,7 +130,7 @@ class SequoiaPath {
     this.reset()
     const { rootPath } = this.data
 
-    if (await utils.directoryExists(rootPath) !== true) {
+    if (await fileUtils.directoryExists(rootPath) !== true) {
       throw new Error(`Tree's root path does not exist: ${rootPath}`)
     }
 
@@ -180,8 +181,8 @@ class SequoiaPath {
       throw new Error('No file associated to this tree')
     }
     this.reset()
-    if (await utils.fileExists(filePath) !== true) return false
-    const jsonData = await utils.readJsonFile(filePath)
+    if (await fileUtils.fileExists(filePath) !== true) return false
+    const jsonData = await fileUtils.readJsonFile(filePath)
     if (!jsonData) return false
     this.fromJson(jsonData)
     return true
@@ -198,7 +199,7 @@ class SequoiaPath {
       throw new Error('No file associated to this tree')
     }
     if (this.fileCount === 1) return false
-    return !!(await utils.writeJsonFile(filePath, this.toJson()))
+    return !!(await fileUtils.writeJsonFile(filePath, this.toJson()))
   }
 
   /**
