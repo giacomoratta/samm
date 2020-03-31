@@ -42,7 +42,7 @@ class ConfigFile extends JsonizedFile {
         type: 'absDirPath',
         checkExists: true
       },
-      value: basePath, // todo: set as null
+      // value: basePath, // todo: set as null
       description: 'Directory with samples to scan and search in'
     }))
 
