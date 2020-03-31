@@ -34,14 +34,14 @@ class SequoiaPath {
    * @param {string|null} filePath
    */
   options ({
-    maxLevel = 0,
-    includedExtensions = [],
-    excludedExtensions = [],
-    excludedPaths = [],
-    itemFn = function ({ item }) {},
-    afterDirectoryFn = function ({ item }) {},
-    ObjectClass = PathInfo,
-    filePath = null
+    maxLevel,
+    includedExtensions,
+    excludedExtensions,
+    excludedPaths,
+    itemFn,
+    afterDirectoryFn,
+    ObjectClass,
+    filePath
   }) {
     this.data.options = utils.parseOptions({
       maxLevel,

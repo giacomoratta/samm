@@ -16,10 +16,19 @@ describe('SampleIndex functions', function () {
   })
 
   it('should throw some errors', async function () {})
-  it('should create an empty index', async function () {})
-  it('should create a complete index', async function () {})
-  it('should load an empty index', async function () {})
-  it('should load a complete index', async function () {})
+
+  it('should have empty values when tree is not loaded', async function () {})
+  it('should read simple directory', async function () {})
+  it('should read from empty json', async function () {})
+  it('should match two equal trees', async function () {})
+  it('should loop on a tree', async function () {})
+  it('should walk in a tree', async function () {})
+
+  it('should load an empty file', async function () {})
+  it('should load a full file', async function () {})
+
+  it('should not save an empty file and remove it', async function () {})
+  it('should save a full file', async function () {})
 
   // size, isLoaded in each test
   // clean at the end

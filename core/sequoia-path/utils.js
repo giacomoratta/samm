@@ -19,6 +19,7 @@ const getDefaultOptions = function () {
 }
 
 const parseOptions = function (options, defaultOptions) {
+  if (!defaultOptions) defaultOptions = getDefaultOptions()
   options = {
     ...defaultOptions,
     ...options
