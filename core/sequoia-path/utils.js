@@ -3,6 +3,7 @@ const path = require('path')
 const _ = require('lodash')
 const fileUtils = require('./file.utils')
 const { PathInfo } = require('../path-info/pathInfo.class')
+const { SequoiaPathError } = require('./sequoiaPathError.class')
 
 const getDefaultOptions = function () {
   return {
@@ -24,15 +25,15 @@ const parseOptions = function (options, defaultOptions) {
   }
 
   if (!options.ObjectClass && options.ObjectClass !== PathInfo && options.ObjectClass instanceof PathInfo.prototype) {
-    throw new Error('options.ObjectClass should inherit PathInfo class!')
+    throw new SequoiaPathError('options.ObjectClass should inherit PathInfo class!')
   }
 
   if (options.filePath) {
     if (!fileUtils.isAbsolutePath(options.filePath)) {
-      throw new Error(`filePath must be an absolute path: ${options.filePath}`)
+      throw new SequoiaPathError(`filePath must be an absolute path: ${options.filePath}`)
     }
     if (!fileUtils.isAbsolutePath(this.samplesPath)) {
-      throw new Error(`samplesPath must be an absolute path: ${options.samplesPath}`)
+      throw new SequoiaPathError(`samplesPath must be an absolute path: ${options.samplesPath}`)
     }
   }
 
