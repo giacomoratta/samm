@@ -1,20 +1,101 @@
-const _ = require('lodash')
+const { cloneDeep } = require('lodash')
 const SymbolTree = require('symbol-tree')
+const { PathInfo } = require('../path-info/pathInfo.class')
 const utils = require('./utils')
 
 class SequoiaPath {
-  constructor (absPath, options) {
+  constructor (rootPath) {
     this.tree = null /* the real tree */
     this.root = {}
 
+    if (rootPath && !utils.isAbsolutePath(rootPath)) {
+      throw new Error(`Tree's root path must be an absolute path: ${rootPath}`)
+    }
+
     this.data = {
-      options: utils.parseOptions(options),
-      rootPath: absPath,
+      options: utils.getDefaultOptions(),
+      rootPath: rootPath,
       filesCount: 0,
       directoriesCount: 0
     }
   }
 
+  /**
+   * Set options before using the tree.
+   * @param {number} maxLevel: maximum depth level
+   * @param {array<string>} includedExtensions
+   * @param {array<string>} excludedExtensions
+   * @param {array<string>} excludedPaths
+   * @param {function({item:<PathInfo>})} itemFn
+   * @param {function({item:<PathInfo>})} afterDirectoryFn
+   * @param {PathInfo} ObjectClass
+   * @param {string|null} filePath
+   */
+  options ({
+    maxLevel = 0,
+    includedExtensions = [],
+    excludedExtensions = [],
+    excludedPaths = [],
+    itemFn = function ({ item }) {},
+    afterDirectoryFn = function ({ item }) {},
+    ObjectClass = PathInfo,
+    filePath = null
+  }) {
+    this.data.options = utils.parseOptions({
+      maxLevel,
+      includedExtensions,
+      excludedExtensions,
+      excludedPaths,
+      itemFn,
+      afterDirectoryFn,
+      ObjectClass,
+      filePath
+    }, this.data.options)
+  }
+
+  /**
+   * True if tree is not see or it has no nodes.
+   * @returns {boolean}
+   */
+  get empty () {
+    return this.tree == null || this.nodeCount === 0
+  }
+
+  /**
+   * Get the absolute path of the tree's root node.
+   * @returns {*}
+   */
+  get rootPath () {
+    return this.data.rootPath
+  }
+
+  /**
+   * Total number of files and directories in the tree.
+   * @returns {number}
+   */
+  get nodeCount () {
+    return this.data.filesCount + this.data.directoriesCount
+  }
+
+  /**
+   * Total number of files in the tree.
+   * @returns {number}
+   */
+  get fileCount () {
+    return this.data.filesCount
+  }
+
+  /**
+   * Total number of directories in the tree.
+   * @returns {number}
+   */
+  get directoryCount () {
+    return this.data.directoriesCount
+  }
+
+  /**
+   * Reset the internal data: empty tree, no files, no directories.
+   */
   reset () {
     this.tree = null
     this.root = {}
@@ -22,25 +103,51 @@ class SequoiaPath {
     this.data.directoriesCount = 0
   }
 
-  async read (options) {
-    options = {
-      filterFn: null,
-      ...options
+  /**
+   * Reset and clean all data and files related to this object.
+   * Return true if index file is removed successfully, otherwise an Error object
+   * @returns {Promise<boolean|Error>}
+   */
+  async clean () {
+    this.reset()
+    const { filePath } = this.data.options
+    if (!filePath) return true
+    try {
+      await utils.removeFile(filePath)
+      return true
+    } catch (error) {
+      return error
+    }
+  }
+
+  /**
+   * Read the root directory and create the tree.
+   * @param {function({item:<PathInfo>})} filterFn: if present, it should return true to add the item to the tree
+   * @returns {Promise<void>}
+   */
+  async read ({ filterFn = null } = {}) {
+    this.reset()
+    const { rootPath } = this.data
+
+    if (await utils.directoryExists(rootPath) !== true) {
+      throw new Error(`Tree's root path does not exist: ${rootPath}`)
     }
 
-    this.reset()
     const tree = new SymbolTree()
     let tParent = this.root
 
-    await utils.walkDirectory(this.data.rootPath, {
-      maxLevel: this.data.options.maxLevel,
-      includedExtensions: this.data.options.includedExtensions,
-      excludedExtensions: this.data.options.excludedExtensions,
-      excludedPaths: this.data.options.excludedPaths,
-      ObjectClass: this.data.options.ObjectClass,
+    const { maxLevel, includedExtensions, excludedExtensions, excludedPaths, ObjectClass } = this.data.options
+    const { itemFn: defaultItemFn, afterDirectoryFn: defaultAfterDirectoryFn } = this.data.options
+
+    await utils.walkDirectory(rootPath, {
+      maxLevel,
+      includedExtensions,
+      excludedExtensions,
+      excludedPaths,
+      ObjectClass,
       itemFn: (data) => {
         // callback for each item
-        if (options.filterFn && options.filterFn(data.item) !== true) return
+        if (filterFn && filterFn(data.item) !== true) return
         if (data.item.isFile === true) {
           tree.appendChild(tParent, data.item)
           this.data.filesCount++
@@ -48,12 +155,12 @@ class SequoiaPath {
           tParent = tree.appendChild(tParent, data.item)
           this.data.directoriesCount++
         }
-        this.data.options.itemFn(data)
+        defaultItemFn(data)
       },
       afterDirectoryFn: (data) => {
         // callback after reading directory
         tParent = tree.parent(data.item)
-        this.data.options.afterDirectoryFn(data)
+        defaultAfterDirectoryFn(data)
       }
     })
 
@@ -62,116 +169,135 @@ class SequoiaPath {
     }
   }
 
-  walk (options) {
-    if (!this.tree || !this.root) return
-    let tParent = this.tree.firstChild(this.root)
-    if (!tParent) return
-
-    options = {
-      skipEmpty: false,
-      itemFn: function () {},
-      ...options
+  /**
+   * Loads tree structure from file.
+   * Returns false if, for some reason, it is not possible to read or get data from file or file has no data.
+   * @returns {Promise<boolean>}
+   */
+  async load () {
+    const { filePath } = this.data.options
+    if (!filePath) {
+      throw new Error('No file associated to this tree')
     }
+    this.reset()
+    if (await utils.fileExists(filePath) !== true) return false
+    const jsonData = await utils.readJsonFile(filePath)
+    if (!jsonData) return false
+    this.fromJson(jsonData)
+    return true
+  }
 
-    let isFirstChild, isLastChild
-    const iterator = this.tree.treeIterator(tParent, {})
+  /**
+   * Save the data in a json file.
+   * Return false if, for some reason, it is not possible to write data on file.
+   * @returns {Promise<boolean>}
+   */
+  async save () {
+    const { filePath } = this.data.options
+    if (!filePath) {
+      throw new Error('No file associated to this tree')
+    }
+    if (this.fileCount === 1) return false
+    return !!(await utils.writeJsonFile(filePath, this.toJson()))
+  }
+
+  /**
+   * Walk inside the tree nodes
+   * @param {boolean} skipEmpty: skip empty directories
+   * @param {function({item, parent, isFirstChild, isLastChild })} itemFn
+   */
+  walk ({ skipEmpty = false, itemFn = function () {} }) {
+    if (!this.tree || !this.root) return
+    let parent = this.tree.firstChild(this.root)
+    if (!parent) return
+
+    let isFirstChild = false; let isLastChild = false
+    const iterator = this.tree.treeIterator(parent, {})
     let prevLevel = 0
 
     for (const item of iterator) {
-      if (options.skipEmpty === true && item.isDirectory && item.size < 1) {
-        options.itemFn({
-          item: item,
-          parent: tParent,
-          isFirstChild: isFirstChild,
-          isLastChild: true /* also works with isLastChild */
+      if (skipEmpty === true && item.isDirectory && item.size < 1) {
+        itemFn({
+          item,
+          parent,
+          isFirstChild,
+          isLastChild: true
         })
         continue
       }
 
       if (prevLevel !== item.level) {
-        tParent = this.tree.parent(item)
+        parent = this.tree.parent(item)
         prevLevel = item.level
       }
 
-      isFirstChild = (this.tree.firstChild(tParent) === item)
-      isLastChild = (this.tree.lastChild(tParent) === item)
-
-      options.itemFn({
-        item: item,
-        parent: tParent,
-        isFirstChild: isFirstChild,
-        isLastChild: isLastChild
+      isFirstChild = (this.tree.firstChild(parent) === item)
+      isLastChild = (this.tree.lastChild(parent) === item)
+      itemFn({
+        item,
+        parent,
+        isFirstChild,
+        isLastChild
       })
     }
   }
 
-  forEach (options) {
+  /**
+   * Simple loop on tree nodes.
+   * @param {function({item:<PathInfo>})} itemFn
+   */
+  forEach ({ itemFn }) {
     if (!this.tree || !this.root) return
-    options = {
-      itemFn: function () {},
-      ...options
-    }
     const iterator = this.tree.treeIterator(this.root, {})
+    const { ObjectClass } = this.data.options
     for (const item of iterator) {
-      if (!(item instanceof this.data.options.ObjectClass)) continue
-      options.itemFn({
-        item
-      })
+      if (!(item instanceof ObjectClass)) continue
+      itemFn({ item })
     }
   }
 
-  empty () {
-    return this.tree == null || this.nodeCount() === 0
-  }
-
-  rootPath () {
-    return this.data.rootPath
-  }
-
-  nodeCount () {
-    return this.data.filesCount + this.data.directoriesCount
-  }
-
-  fileCount () {
-    return this.data.filesCount
-  }
-
-  directoryCount () {
-    return this.data.directoriesCount
-  }
-
+  /**
+   * Export the tree as json data.
+   * @returns {object}
+   */
   toJson () {
-    const exportObj = {}
-    exportObj.data = _.cloneDeep(this.data)
-    exportObj.struct = []
+    const jsonData = {}
+    jsonData.data = cloneDeep(this.data)
+    jsonData.struct = []
     this.walk({
-      itemFn: (itemData) => {
-        delete itemData.parent
-        itemData.item = itemData.item.toJson()
-        exportObj.struct.push(itemData)
+      itemFn: ({ item, isFirstChild, isLastChild }) => {
+        jsonData.struct.push({
+          item: item.toJson(),
+          isFirstChild,
+          isLastChild
+        })
       }
     })
-    return exportObj
+    return jsonData
   }
 
-  fromJson (importObj) {
+  /**
+   * Import the tree from json data.
+   * @param {object} jsonData
+   */
+  fromJson (jsonData) {
     this.reset()
     const tree = new SymbolTree()
     let tParent = this.root
-    this.data.options.includedExtensions = _.cloneDeep(importObj.data.options.includedExtensions)
-    this.data.options.excludedExtensions = _.cloneDeep(importObj.data.options.excludedExtensions)
-    this.data.options.excludedPaths = _.cloneDeep(importObj.data.options.excludedPaths)
-    this.data.rootPath = importObj.data.rootPath
-    this.data.filesCount = importObj.data.filesCount
-    this.data.directoriesCount = importObj.data.directoriesCount
+    this.data.options.includedExtensions = cloneDeep(jsonData.data.options.includedExtensions)
+    this.data.options.excludedExtensions = cloneDeep(jsonData.data.options.excludedExtensions)
+    this.data.options.excludedPaths = cloneDeep(jsonData.data.options.excludedPaths)
+    this.data.rootPath = jsonData.data.rootPath
+    this.data.filesCount = jsonData.data.filesCount
+    this.data.directoriesCount = jsonData.data.directoriesCount
 
     let prevLevel = 1
     let latestItem
     let newPathInfo = null
 
-    for (let i = 0; i < importObj.struct.length; i++) {
+    for (let i = 0; i < jsonData.struct.length; i++) {
       newPathInfo = new this.data.options.ObjectClass()
-      newPathInfo.fromJson(importObj.struct[i].item)
+      newPathInfo.fromJson(jsonData.struct[i].item)
 
       if (newPathInfo.level > prevLevel) {
         tParent = latestItem
@@ -184,17 +310,22 @@ class SequoiaPath {
     this.tree = tree
   }
 
-  isEqualTo (tree2) {
-    if (!tree2.tree || !tree2.root) return
-    if (!this.tree || !this.root) return
+  /**
+   * Compare two SequoiaPath objects.
+   * @param {SequoiaPath} sqTree
+   * @returns {boolean}
+   */
+  isEqualTo (sqTree) {
+    if (!sqTree.tree || !sqTree.root) return false
+    if (!this.tree || !this.root) return false
     const treeA = this.tree
-    const treeB = tree2.tree
+    const treeB = sqTree.tree
 
     let item1, item2
     const iterator1 = treeA.treeIterator(this.root, {})
-    const iterator2 = treeB.treeIterator(tree2.root, {})
-    item1 = iterator1.next() // discard the empty root
-    item2 = iterator2.next() // discard the empty root
+    const iterator2 = treeB.treeIterator(sqTree.root, {})
+    iterator1.next() // discard the empty root
+    iterator2.next() // discard the empty root
     item1 = iterator1.next()
     item2 = iterator2.next()
 
@@ -203,7 +334,7 @@ class SequoiaPath {
       item1 = item1.value
       item2 = item2.value
       flag = item1.isEqualTo(item2)
-      if (!flag) return null
+      if (!flag) return false
       item1 = iterator1.next()
       item2 = iterator2.next()
     }
@@ -211,17 +342,18 @@ class SequoiaPath {
     return flag
   }
 
-  print (options) {
-    options = {
-      skipFiles: false,
-      skipEmpty: true,
-      printFn: console.log,
-      ...options
-    }
-    if (!options.itemFn) {
-      options.itemFn = function (data) {
-        if (options.skipFiles === true && data.item.isFile === true) return
-        options.printFn(setBranchPrefix(data) + data.item.base + (data.item.isDirectory ? '/' : '')) //, data.item.level, data.isFirstChild, data.isLastChild);
+  /**
+   * Print the directory tree.
+   * @param {boolean} skipFiles: avoid printing files
+   * @param {boolean} skipEmpty: skip empty directories
+   * @param {function(...<string>)} printFn: print strings (default console.log)
+   * @param {function(object)} itemFn: manage the single node (with props like item, isLastChild, isFirstChild, etc.)
+   */
+  print ({ skipFiles = false, skipEmpty = true, printFn = console.log, itemFn } = {}) {
+    if (!itemFn) {
+      itemFn = function (node) {
+        if (skipFiles === true && node.item.isFile === true) return
+        printFn(setBranchPrefix(node) + node.item.base + (node.item.isDirectory ? '/' : ''))
       }
     }
 
@@ -229,20 +361,20 @@ class SequoiaPath {
     const defaultBranchPrefix = '|    '
     let prevLevel = 0
 
-    const setBranchPrefix = function (data) {
+    const setBranchPrefix = function (node) {
       branchPrefix = utils.stringReplaceAll(branchPrefix, '\u2514', ' ')
       branchPrefix = utils.stringReplaceAll(branchPrefix, '\u251C', '\u2502')
       branchPrefix = utils.stringReplaceAll(branchPrefix, '\u2500', ' ')
 
-      if (data.item.level < 1) return ''
-      let _level = data.item.level
+      if (node.item.level < 1) return ''
+      let _level = node.item.level
       if (_level <= 1) return ''
 
       _level -= 2
       if (branchPrefix.length < (5 * (_level + 1))) branchPrefix += defaultBranchPrefix
       if (branchPrefix.length > (5 * (_level + 1))) branchPrefix = branchPrefix.substr(0, branchPrefix.length - 5 * (prevLevel - _level))
 
-      if (data.isLastChild === true) {
+      if (node.isLastChild === true) {
         // unique + last
         branchPrefix = utils.stringReplaceAt(branchPrefix, _level * 5, '\u2514')
       } else {
@@ -254,21 +386,24 @@ class SequoiaPath {
       prevLevel = _level
       return branchPrefix
     }
-    this.walk(options)
+    this.walk({
+      skipEmpty,
+      itemFn
+    })
 
-    options.printFn('\n Root path:', this.rootPath())
-    options.printFn('\n Directories#:', this.directoryCount())
-    options.printFn('\n Files#:', this.fileCount())
+    printFn('\n Root path:', this.rootPath)
+    printFn('\n Directories#:', this.directoryCount)
+    printFn('\n Files#:', this.fileCount)
     if (this.data.options.includedExtensions.length > 0) {
-      options.printFn('\n Included libs:', this.data.options.includedExtensions.join(', '))
+      printFn('\n Included libs:', this.data.options.includedExtensions.join(', '))
     }
     if (this.data.options.excludedExtensions.length > 0) {
-      options.printFn('\n Excluded libs:', this.data.options.excludedExtensions.join(', '))
+      printFn('\n Excluded libs:', this.data.excludedExtensions.join(', '))
     }
     if (this.data.options.excludedPaths.length > 0) {
-      options.printFn('\n Excluded paths:')
+      printFn('\n Excluded paths:')
       this.data.options.excludedPaths.forEach(function (v) {
-        options.printFn('  - ', v)
+        printFn('  - ', v)
       })
     }
   }

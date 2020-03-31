@@ -1,6 +1,5 @@
 const path = require('path')
-const { fileUtils } = require('../../../core/utils/file.utils')
-const { SampleIndex } = require('../sampleIndex.class')
+const { SampleIndex } = require('../sequoiaIndex.class.old')
 
 const SampleIndexFile = path.join(__dirname, 'new_samples_index')
 const SamplesDirectory = path.join(path.resolve(path.join(__dirname, '..', '..', '__tests__')), 'test_dir')
@@ -10,20 +9,30 @@ const SampleIndexFileNotExists = path.join(__dirname, 'test_dir', 'fixed_samples
 
 describe('SampleIndex functions', function () {
   beforeAll(function () {
-    fileUtils.removeFileSync(SampleIndexFile)
+
   })
   afterAll(function () {
-    fileUtils.removeFileSync(SampleIndexFile)
+
   })
+
+  it('should throw some errors', async function () {})
+  it('should create an empty index', async function () {})
+  it('should create a complete index', async function () {})
+  it('should load an empty index', async function () {})
+  it('should load a complete index', async function () {})
+
+  // size, isLoaded in each test
+  // clean at the end
 
   it('should create a sample index', async function () {
     let result
-    expect(function () {
-      return new SampleIndex({
+    await expect((async function () {
+      const tmpIndex = new SampleIndex({
         indexFilePath: SampleIndexFile,
         samplesPath: SamplesDirectory + 'wrong'
       })
-    }).toThrow()
+      return tmpIndex.create()
+    })()).rejects.toThrow()
 
     const sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFile + 'wrong',
@@ -32,7 +41,7 @@ describe('SampleIndex functions', function () {
     result = await sIndex1.load()
     expect(result).toEqual(false)
     // expect(async function () { await sIndex1.forEach(() => {}) }).toThrow()
-    expect(function () { return sIndex1.size }).toThrow()
+    expect(sIndex1.size).toEqual(-1)
 
     const sIndex2 = new SampleIndex({
       indexFilePath: SampleIndexFile,
@@ -41,13 +50,12 @@ describe('SampleIndex functions', function () {
     result = await sIndex2.load()
     expect(result).toEqual(false)
     // expect(function () { sIndex2.forEach(() => {}) }).toThrow()
-    expect(function () { return sIndex2.size }).toThrow()
+    expect(sIndex2.size).toEqual(-1)
 
-    fileUtils.writeTextFileSync(SampleIndexFile, '')
     result = await sIndex2.load()
     expect(result).toEqual(false)
     // expect(function () { sIndex2.forEach(() => {}) }).toThrow()
-    expect(function () { return sIndex2.size }).toThrow()
+    expect(sIndex2.size).toEqual(-1)
 
     result = await sIndex2.create()
     expect(result).toEqual(true)
@@ -108,8 +116,6 @@ describe('SampleIndex functions', function () {
     expect(result).toEqual(true)
     expect(function () { sIndex3.forEach(() => {}) }).not.toThrow()
     expect(sIndex3.size).toEqual(5)
-
-    fileUtils.writeTextFileSync(SampleIndexFile, '')
   })
 
   it('should support file problems', function () {
@@ -119,24 +125,18 @@ describe('SampleIndex functions', function () {
       indexFilePath: SampleIndexFileWrongJson,
       samplesPath: __dirname
     })
-
-    expect(function () { return sIndex1.size }).toThrow()
-    expect(sIndex1.loaded).toEqual(false)
+    expect(sIndex1.isLoaded).toEqual(false)
 
     sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFileEmpty,
       samplesPath: __dirname
     })
-
-    expect(function () { return sIndex1.size }).toThrow()
-    expect(sIndex1.loaded).toEqual(false)
+    expect(sIndex1.isLoaded).toEqual(false)
 
     sIndex1 = new SampleIndex({
       indexFilePath: SampleIndexFileNotExists,
       samplesPath: __dirname
     })
-
-    expect(function () { return sIndex1.size }).toThrow()
-    expect(sIndex1.loaded).toEqual(false)
+    expect(sIndex1.isLoaded).toEqual(false)
   })
 })

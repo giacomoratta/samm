@@ -6,7 +6,7 @@ const testDirToCopy = path.join(__dirname, '..', '..', '__tests__', 'test_dir')
 const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 const { PathQuery } = require('../../path-query')
 const { SampleSet } = require('../../sample/sampleSet.class')
-const { SampleIndex } = require('../../sample/sampleIndex.class')
+const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
 const { Export } = require('../index')
 
 const indexFilePath = path.join(__dirname, 'config.json')

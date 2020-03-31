@@ -2,9 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const { PathInfo } = require('../path-info/pathInfo.class')
+const { fileUtils } = require('../utils/file.utils') // todo: remove
 
-const parseOptions = function (options) {
-  options = {
+const getDefaultOptions = function () {
+  return {
     maxLevel: 0,
     includedExtensions: [],
     excludedExtensions: [],
@@ -12,11 +13,27 @@ const parseOptions = function (options) {
     itemFn: function ({ item }) {},
     afterDirectoryFn: function ({ item }) {},
     ObjectClass: PathInfo,
+    filePath: null
+  }
+}
+
+const parseOptions = function (options, defaultOptions) {
+  options = {
+    ...defaultOptions,
     ...options
   }
 
   if (!options.ObjectClass && options.ObjectClass !== PathInfo && options.ObjectClass instanceof PathInfo.prototype) {
     throw new Error('options.ObjectClass should inherit PathInfo class!')
+  }
+
+  if (options.filePath) {
+    if (!fileUtils.isAbsolutePath(options.filePath)) {
+      throw new Error(`filePath must be an absolute path: ${options.filePath}`)
+    }
+    if (!fileUtils.isAbsolutePath(this.samplesPath)) {
+      throw new Error(`samplesPath must be an absolute path: ${options.samplesPath}`)
+    }
   }
 
   return options
@@ -81,7 +98,7 @@ const walkAction = async function (relRootPath, absolutePath, options) {
 
 const walkDirectory = async function (absolutePath, options) {
   options = parseOptions(options)
-  absolutePath = path.resolve(absolutePath) // + path.sep
+  absolutePath = path.resolve(absolutePath)
   options.excludedPaths = prepareExcludedPaths(options.excludedPaths)
   options.includedExtensionsRegex = prepareExtensionsRegex(options.includedExtensions)
   options.excludedExtensionsRegex = prepareExtensionsRegex(options.excludedExtensions)
@@ -125,8 +142,17 @@ const readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
 }
 
 module.exports = {
+  getDefaultOptions,
   parseOptions,
   walkDirectory,
   stringReplaceAt,
-  stringReplaceAll
+  stringReplaceAll,
+
+  // todo: fix
+  isAbsolutePath: fileUtils.isAbsolutePath,
+  directoryExists: fileUtils.directoryExists,
+  fileExists: fileUtils.fileExists,
+  readJsonFile: fileUtils.readJsonFile,
+  writeJsonFile: fileUtils.writeJsonFile,
+  removeFile: fileUtils.removeFile
 }

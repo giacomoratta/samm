@@ -1,6 +1,6 @@
-const { fileUtils } = require('../../core/utils/file.utils')
-const { SequoiaPath } = require('../../core/sequoia-path')
-const { SampleInfo } = require('./sampleInfo.class')
+const { fileUtils } = require('../utils/file.utils')
+const { SequoiaPath } = require('./index')
+const { SampleInfo } = require('../../app/sample/sampleInfo.class')
 
 class SampleIndexError extends Error {
   constructor (message) {
@@ -56,7 +56,7 @@ class SampleIndex {
       ObjectClass: SampleInfo
     })
     await this._sampleTree.read()
-    if (this._sampleTree.fileCount() === 1) return false
+    if (this._sampleTree.fileCount === 1) return false
     if (await fileUtils.writeJsonFile(this.indexFilePath, this._sampleTree.toJson()) !== true) {
       throw new SampleIndexError(`Cannot write on index file: ${this.indexFilePath}`)
     }
@@ -99,7 +99,7 @@ class SampleIndex {
    */
   get size () {
     if (!this._sampleTree) return -1
-    return this._sampleTree.fileCount()
+    return this._sampleTree.fileCount
   }
 
   /**
@@ -124,6 +124,10 @@ class SampleIndex {
       return false
     }
   }
+
+  // save+load with _indexCheck and exceptions
+  // isLoaded
+  // doc!
 }
 
 module.exports = {

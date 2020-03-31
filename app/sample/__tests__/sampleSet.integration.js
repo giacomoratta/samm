@@ -1,6 +1,6 @@
 const path = require('path')
 const { PathQuery } = require('../../path-query')
-const { SampleIndex } = require('../sampleIndex.class')
+const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
 const { SampleSet } = require('../sampleSet.class')
 const { SampleInfo } = require('../sampleInfo.class')
 

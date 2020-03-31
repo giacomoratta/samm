@@ -1,6 +1,6 @@
 const path = require('path')
 const { fileUtils } = require('../../../core/utils/file.utils')
-const { SampleIndex } = require('../../sample/sampleIndex.class')
+const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
 const { BookmarksJsonFile } = require('../bookmarksJsonFile.class.old')
 
 const SamplesDirectory = path.join(path.resolve(path.join(__dirname, '..', '..', '__tests__')), 'test_dir')
