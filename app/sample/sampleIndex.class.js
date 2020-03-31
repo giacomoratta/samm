@@ -1,5 +1,5 @@
-const { SequoiaPath } = require('../../core/sequoia-path')
 const { fileUtils } = require('../../core/utils/file.utils')
+const { SequoiaPath } = require('../../core/sequoia-path')
 const { SampleInfo } = require('./sampleInfo.class')
 
 class SampleIndexError extends Error {
@@ -19,9 +19,19 @@ class SampleIndex {
   constructor ({ indexFilePath, samplesPath }) {
     this.indexFilePath = indexFilePath
     this.samplesPath = samplesPath
-    this.sampleTree = null
+    this._sampleTree = null
   }
 
+  /**
+   * Scan the entire samplesPath, then create and save an index file for samples.
+   * Returns true if some samples have been found and indexed, otherwise false.
+   * Any other bad outcomes will be thrown.
+   * @param {array<string>} includedExtensions
+   * @param {array<string>} excludedExtensions
+   * @param {array<string>} excludedPaths
+   * @throws SampleIndexError
+   * @returns {Promise<boolean>}
+   */
   async create ({ includedExtensions = [], excludedExtensions = [], excludedPaths = [] } = {}) {
     if (!fileUtils.isAbsolutePath(this.indexFilePath)) {
       throw new SampleIndexError(`indexFilePath must be an absolute path: ${this.indexFilePath}`)
@@ -32,65 +42,87 @@ class SampleIndex {
     if (await fileUtils.directoryExists(this.samplesPath) !== true) {
       throw new SampleIndexError(`samplesPath does not exist: ${this.samplesPath}`)
     }
-    // const parentSamplesPath = path.parse(this.samplesPath).dir
-    // if (await fileUtils.directoryExists(parentSamplesPath) !== true) {
-    //   throw new SampleIndexError(`samplesPath does not exist: ${parentSamplesPath}`)
-    // }
 
-    this.sampleTree = null
-    let writeResult = await fileUtils.writeTextFile(this.indexFilePath, '') /* pre-write test */
-    if (writeResult !== true) return false
-    this.sampleTree = new SequoiaPath(this.samplesPath, {
+    /* pre-write test for indexFile to avoid launching (heavy) indexing if it is not possible to write its results */
+    if (await fileUtils.writeTextFile(this.indexFilePath, '') !== true) {
+      throw new SampleIndexError(`Cannot write on index file: ${this.indexFilePath}`)
+    }
+
+    this._sampleTree = null
+    this._sampleTree = new SequoiaPath(this.samplesPath, {
       includedExtensions,
       excludedExtensions,
       excludedPaths,
       ObjectClass: SampleInfo
     })
-    await this.sampleTree.read()
-    if (this.sampleTree.fileCount() === 1) return false
-    writeResult = await fileUtils.writeJsonFile(this.indexFilePath, this.sampleTree.toJson())
-    return writeResult
+    await this._sampleTree.read()
+    if (this._sampleTree.fileCount() === 1) return false
+    if (await fileUtils.writeJsonFile(this.indexFilePath, this._sampleTree.toJson()) !== true) {
+      throw new SampleIndexError(`Cannot write on index file: ${this.indexFilePath}`)
+    }
+    return true
   }
 
+  /**
+   * Loads sample index from file.
+   * Returns false if, for different reasons, it is not possible to read or get data from index file.
+   * Return true if index file has been read successfully but it does no mean that there are indexed samples found.
+   * @returns {Promise<boolean>}
+   */
   async load () {
-    this.sampleTree = null
+    this._sampleTree = null
     const fExists = await fileUtils.fileExists(this.indexFilePath)
     if (fExists !== true) return false
     const jsonSampleTree = await fileUtils.readJsonFile(this.indexFilePath)
     if (!jsonSampleTree) return false
-    this.sampleTree = new SequoiaPath(this.samplesPath, {
+    this._sampleTree = new SequoiaPath(this.samplesPath, {
       ObjectClass: SampleInfo
     })
-    this.sampleTree.fromJson(jsonSampleTree)
+    this._sampleTree.fromJson(jsonSampleTree)
     return true
   }
 
-  async forEach (callback) {
-    if (!this.sampleTree) {
-      throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
-    }
-    return new Promise((resolve) => {
-      this.sampleTree.forEach({
-        itemFn: callback // callback({item})
-      })
-      resolve(true)
+  /**
+   * Loops on samples
+   * @param {function({item})} callback
+   */
+  forEach (callback) {
+    if (!this._sampleTree) return
+    this._sampleTree.forEach({
+      itemFn: callback
     })
   }
 
+  /**
+   * Get number of indexed samples, or -1 if index is not present.
+   * @returns {number}
+   */
   get size () {
-    if (!this.sampleTree) {
-      throw new SampleIndexError('Sample index is still not initialized; run \'createIndex\' method first')
+    if (!this._sampleTree) return -1
+    return this._sampleTree.fileCount()
+  }
+
+  /**
+   * Check if index is loaded and present
+   * @returns {boolean}
+   */
+  get isLoaded () {
+    return this._sampleTree !== null && this._sampleTree !== undefined
+  }
+
+  /**
+   * Deletes the index and its index file.
+   * Returns true if index file is removed successfully.
+   * @returns {Promise<boolean>}
+   */
+  async clean () {
+    this._sampleTree = null
+    try {
+      await fileUtils.removeFile(this.indexFilePath)
+      return true
+    } catch (e) {
+      return false
     }
-    return this.sampleTree.fileCount()
-  }
-
-  get loaded () {
-    return this.sampleTree !== null && this.sampleTree !== undefined
-  }
-
-  async deleteFile () {
-    const result = await fileUtils.removeFile(this.indexFilePath).catch(e => { })
-    return result === true
   }
 }
 
