@@ -123,12 +123,12 @@ class SequoiaPath {
   }
 
   /**
-   * Read the root directory and create the tree.
+   * Scan all the nodes of the root directory and create the tree.
    * Returns the opposite value of this.empty getter in order to check the tree immediately.
    * @param {function(item:<PathInfo>)} filterFn: if present, it should return true to add the item to the tree
    * @returns {Promise<boolean>}
    */
-  async read ({ filterFn = null } = {}) {
+  async scan ({ filterFn = null } = {}) {
     this.reset()
     const { rootPath } = this.data
 
@@ -329,6 +329,8 @@ class SequoiaPath {
   isEqualTo (sqTree) {
     if (!sqTree || !sqTree.tree || !sqTree.root) return false
     if (!this.tree || !this.root) return false
+    if (this.rootPath !== sqTree.rootPath) return false
+
     const treeA = this.tree
     const treeB = sqTree.tree
 

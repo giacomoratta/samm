@@ -21,7 +21,7 @@ describe('SequoiaPath class and object', function () {
     expect(dT2.directoryCount).toEqual(0)
     expect(typeof dT2.toJson() === 'object').toEqual(true)
 
-    await dT1.read()
+    await dT1.scan()
     expect(dT1.empty).toEqual(false)
     expect(dT1.rootPath).toEqual(absPath1)
     expect(dT1.nodeCount).toEqual(4)
@@ -38,7 +38,7 @@ describe('SequoiaPath class and object', function () {
     const absPath1 = path.join(__dirname, 'test_dir')
     const dT1 = new SequoiaPath(absPath1)
 
-    await dT1.read()
+    await dT1.scan()
     expect(dT1.empty).toEqual(false)
 
     const filesArray1 = []

@@ -25,7 +25,7 @@ describe('SequoiaPath empty objects', function () {
 
     await expect((async function () {
       const sq = new SequoiaPath(path.join(__dirname, 'not-exists'))
-      await sq.read()
+      await sq.scan()
     })()).rejects.toThrow('Tree\'s root path does not exist')
 
     await expect((async function () {
@@ -44,7 +44,7 @@ describe('SequoiaPath empty objects', function () {
     expect(sq.empty).toEqual(true)
     expect(sq.rootPath).toEqual(undefined)
 
-    await expect((async () => { await sq.read() })()).rejects.toThrow('Tree\'s root path does not exist')
+    await expect((async () => { await sq.scan() })()).rejects.toThrow('Tree\'s root path does not exist')
     await expect((async () => { await sq.load() })()).rejects.toThrow('No file associated to this tree')
     await expect((async () => { await sq.save() })()).rejects.toThrow('No file associated to this tree')
     await checkEmptySequoiaPath(sq)
@@ -53,7 +53,7 @@ describe('SequoiaPath empty objects', function () {
 
   it('should be empty after reading an empty directory', async function () {
     const sq = new SequoiaPath(TestEmptyDirectory)
-    await sq.read({
+    await sq.scan({
       filterFn: (item) => {
         if (item.name === 'skipped-file') return false
       }
@@ -86,7 +86,7 @@ describe('SequoiaPath empty objects', function () {
       filePath: path.join(__dirname, 'test_dir', 'not-save.json')
     })
     await fileUtils.writeJsonFile(sq.data.options.filePath, {})
-    await sq.read({
+    await sq.scan({
       filterFn: (item) => {
         if (item.name === 'skipped-file') return false
       }
