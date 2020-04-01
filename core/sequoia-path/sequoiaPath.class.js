@@ -124,7 +124,7 @@ class SequoiaPath {
 
   /**
    * Read the root directory and create the tree.
-   * @param {function({item:<PathInfo>})} filterFn: if present, it should return true to add the item to the tree
+   * @param {function(item:<PathInfo>)} filterFn: if present, it should return true to add the item to the tree
    * @returns {Promise<void>}
    */
   async read ({ filterFn = null } = {}) {
@@ -185,8 +185,7 @@ class SequoiaPath {
     if (await fileUtils.fileExists(filePath) !== true) return false
     const jsonData = await fileUtils.readJsonFile(filePath)
     if (!jsonData) return false
-    this.fromJson(jsonData)
-    return true
+    return this.fromJson(jsonData)
   }
 
   /**
@@ -199,8 +198,12 @@ class SequoiaPath {
     if (!filePath) {
       throw new SequoiaPathError('No file associated to this tree')
     }
-    if (this.fileCount === 1) return false
-    return !!(await fileUtils.writeJsonFile(filePath, this.toJson()))
+    const jsonData = this.toJson()
+    if (!jsonData) {
+      this.clean()
+      return false
+    }
+    return !!(await fileUtils.writeJsonFile(filePath, jsonData))
   }
 
   /**
@@ -263,7 +266,7 @@ class SequoiaPath {
    * @returns {object}
    */
   toJson () {
-    if (!this.tree || !this.root) return null
+    if (!this.tree || !this.root || this.empty === true) return null
     const jsonData = {}
     jsonData.data = JSON.parse(JSON.stringify(this.data))
     jsonData.struct = []

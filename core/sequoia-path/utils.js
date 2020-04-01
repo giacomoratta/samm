@@ -20,6 +20,7 @@ const getDefaultOptions = function () {
 
 const parseOptions = function (options, defaultOptions) {
   if (!defaultOptions) defaultOptions = getDefaultOptions()
+  Object.keys(options).forEach((k) => { if (options[k] === undefined) delete options[k] })
   options = {
     ...defaultOptions,
     ...options
