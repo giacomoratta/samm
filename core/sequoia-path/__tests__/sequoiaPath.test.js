@@ -1,6 +1,5 @@
 const path = require('path')
 const { SequoiaPath } = require('../index')
-const fileUtils = require('../file.utils')
 
 const TestTempDirectory = path.join(__dirname, 'test_dir')
 
