@@ -2,7 +2,8 @@ const path = require('path')
 const { SequoiaPath } = require('../index')
 const fileUtils = require('../file.utils')
 
-const SamplesDirectory = path.join(__dirname, 'test_dir')
+const TestTempDirectory = path.join(__dirname, 'test_temp')
+const TestEmptyDirectory = path.join(__dirname, 'test_temp', 'empty-dir')
 
 describe('SequoiaPath empty objects', function () {
   it('should throw some errors', async function () {
@@ -11,13 +12,13 @@ describe('SequoiaPath empty objects', function () {
     }).toThrow('Tree\'s root path must be an absolute path')
 
     expect(function () {
-      const sq = new SequoiaPath(SamplesDirectory)
+      const sq = new SequoiaPath(TestTempDirectory)
       const ObjectClass = class WrongObject { }
       sq.options({ ObjectClass })
     }).toThrow('should extend PathInfo class')
 
     expect(function () {
-      const sq = new SequoiaPath(SamplesDirectory)
+      const sq = new SequoiaPath(TestTempDirectory)
       const filePath = 'not-abs-path'
       sq.options({ filePath })
     }).toThrow('filePath must be an absolute path')
@@ -51,7 +52,7 @@ describe('SequoiaPath empty objects', function () {
   })
 
   it('should be empty after reading an empty directory', async function () {
-    const sq = new SequoiaPath(path.join(__dirname, 'test_dir', 'empty-dir'))
+    const sq = new SequoiaPath(TestEmptyDirectory)
     await sq.read({
       filterFn: (item) => {
         if (item.name === 'skipped-file') return false
@@ -64,7 +65,7 @@ describe('SequoiaPath empty objects', function () {
   it('should be empty when it loads an empty json', async function () {
     const sq = new SequoiaPath()
     sq.options({
-      filePath: path.join(__dirname, 'test_dir', 'empty-json.json')
+      filePath: path.join(TestTempDirectory, 'empty-json.json')
     })
     await expect(sq.load()).resolves.toEqual(false)
     await checkEmptySequoiaPath(sq)
@@ -80,7 +81,7 @@ describe('SequoiaPath empty objects', function () {
   })
 
   it('should not save a file (or remove it) when saving an empty tree', async function () {
-    const sq = new SequoiaPath(path.join(__dirname, 'test_dir', 'empty-dir'))
+    const sq = new SequoiaPath(TestEmptyDirectory)
     sq.options({
       filePath: path.join(__dirname, 'test_dir', 'not-save.json')
     })

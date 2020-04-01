@@ -4,7 +4,7 @@ const fileUtils = require('../file.utils')
 
 const SamplesDirectory = path.join(__dirname, 'test_dir')
 
-describe('SequoiaPath object', function () {
+describe('SequoiaPath object with a full tree', function () {
   beforeAll(function () {})
   afterAll(function () {})
 
