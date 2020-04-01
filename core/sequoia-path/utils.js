@@ -25,17 +25,12 @@ const parseOptions = function (options, defaultOptions) {
     ...options
   }
 
-  if (!options.ObjectClass && options.ObjectClass !== PathInfo && options.ObjectClass instanceof PathInfo.prototype) {
-    throw new SequoiaPathError('options.ObjectClass should inherit PathInfo class!')
+  if (options.ObjectClass && options.ObjectClass !== PathInfo && !(options.ObjectClass instanceof PathInfo)) {
+    throw new SequoiaPathError('options.ObjectClass should extend PathInfo class')
   }
 
-  if (options.filePath) {
-    if (!fileUtils.isAbsolutePath(options.filePath)) {
-      throw new SequoiaPathError(`filePath must be an absolute path: ${options.filePath}`)
-    }
-    if (!fileUtils.isAbsolutePath(this.samplesPath)) {
-      throw new SequoiaPathError(`samplesPath must be an absolute path: ${options.samplesPath}`)
-    }
+  if (options.filePath && !fileUtils.isAbsolutePath(options.filePath)) {
+    throw new SequoiaPathError(`filePath must be an absolute path: ${options.filePath}`)
   }
 
   return options

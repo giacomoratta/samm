@@ -47,13 +47,6 @@ describe('Static utils for DirectoryTree', function () {
     options.maxLevel = 7
     options.itemFn = 'abc'
 
-    expect(function () {
-      options2.afterDirectoryFn()
-    }).toThrow()
-    expect(function () {
-      options2.afterDirectoryFn({})
-    }).not.toThrow()
-
     expect(options.maxLevel).toEqual(7)
     expect(options2.maxLevel).toEqual(5)
     expect(options.itemFn).toEqual('abc')

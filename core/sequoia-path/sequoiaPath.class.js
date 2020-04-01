@@ -1,6 +1,5 @@
 const { cloneDeep } = require('lodash')
 const SymbolTree = require('symbol-tree')
-const { PathInfo } = require('../path-info/pathInfo.class')
 const { SequoiaPathError } = require('./sequoiaPathError.class')
 const utils = require('./utils')
 const fileUtils = require('./file.utils')
@@ -24,14 +23,15 @@ class SequoiaPath {
 
   /**
    * Set options before using the tree.
-   * @param {number} maxLevel: maximum depth level
-   * @param {array<string>} includedExtensions
-   * @param {array<string>} excludedExtensions
-   * @param {array<string>} excludedPaths
-   * @param {function({item:<PathInfo>})} itemFn
-   * @param {function({item:<PathInfo>})} afterDirectoryFn
-   * @param {PathInfo} ObjectClass
-   * @param {string|null} filePath
+   * @param {Object} [options]
+   * @param {number} [options.maxLevel]: maximum depth level
+   * @param {array<string>} [options.includedExtensions]
+   * @param {array<string>} [options.excludedExtensions]
+   * @param {array<string>} [options.excludedPaths]
+   * @param {function({item:<PathInfo>})} [options.itemFn]
+   * @param {function({item:<PathInfo>})} [options.afterDirectoryFn]
+   * @param {Class} [options.ObjectClass] - should extend PathInfo
+   * @param {string|null} [options.filePath]
    */
   options ({
     maxLevel,
@@ -131,7 +131,7 @@ class SequoiaPath {
     this.reset()
     const { rootPath } = this.data
 
-    if (await fileUtils.directoryExists(rootPath) !== true) {
+    if (!rootPath || await fileUtils.directoryExists(rootPath) !== true) {
       throw new SequoiaPathError(`Tree's root path does not exist: ${rootPath}`)
     }
 
@@ -179,7 +179,7 @@ class SequoiaPath {
   async load () {
     const { filePath } = this.data.options
     if (!filePath) {
-      throw new SequoiaPathError('No file associated to this tree')
+      throw new SequoiaPathError('No file associated to this tree (see options.filePath)')
     }
     this.reset()
     if (await fileUtils.fileExists(filePath) !== true) return false
@@ -205,10 +205,10 @@ class SequoiaPath {
 
   /**
    * Walk inside the tree nodes
-   * @param {boolean} skipEmpty: skip empty directories
+   * @param {boolean} [skipEmpty]: skip empty directories
    * @param {function({item, parent, isFirstChild, isLastChild })} itemFn
    */
-  walk ({ skipEmpty = false, itemFn = function () {} }) {
+  walk ({ skipEmpty = false, itemFn }) {
     if (!this.tree || !this.root) return
     let parent = this.tree.firstChild(this.root)
     if (!parent) return
@@ -263,8 +263,9 @@ class SequoiaPath {
    * @returns {object}
    */
   toJson () {
+    if (!this.tree || !this.root) return null
     const jsonData = {}
-    jsonData.data = cloneDeep(this.data)
+    jsonData.data = JSON.parse(JSON.stringify(this.data))
     jsonData.struct = []
     this.walk({
       itemFn: ({ item, isFirstChild, isLastChild }) => {
@@ -283,6 +284,7 @@ class SequoiaPath {
    * @param {object} jsonData
    */
   fromJson (jsonData) {
+    if (!jsonData || !jsonData.data || !jsonData.data.options || !jsonData.struct) return false
     this.reset()
     const tree = new SymbolTree()
     let tParent = this.root
@@ -294,22 +296,23 @@ class SequoiaPath {
     this.data.directoriesCount = jsonData.data.directoriesCount
 
     let prevLevel = 1
-    let latestItem
-    let newPathInfo = null
+    let latestItem = null
+    let pathInfoObj = null
 
     for (let i = 0; i < jsonData.struct.length; i++) {
-      newPathInfo = new this.data.options.ObjectClass()
-      newPathInfo.fromJson(jsonData.struct[i].item)
+      pathInfoObj = new this.data.options.ObjectClass()
+      pathInfoObj.fromJson(jsonData.struct[i].item)
 
-      if (newPathInfo.level > prevLevel) {
+      if (pathInfoObj.level > prevLevel) {
         tParent = latestItem
-      } else if (newPathInfo.level < prevLevel) {
-        for (let j = newPathInfo.level; j < prevLevel; j++) tParent = tree.parent(tParent)
+      } else if (pathInfoObj.level < prevLevel) {
+        for (let j = pathInfoObj.level; j < prevLevel; j++) tParent = tree.parent(tParent)
       }
-      prevLevel = newPathInfo.level
-      latestItem = tree.appendChild(tParent, newPathInfo)
+      prevLevel = pathInfoObj.level
+      latestItem = tree.appendChild(tParent, pathInfoObj)
     }
     this.tree = tree
+    return true
   }
 
   /**
@@ -318,7 +321,7 @@ class SequoiaPath {
    * @returns {boolean}
    */
   isEqualTo (sqTree) {
-    if (!sqTree.tree || !sqTree.root) return false
+    if (!sqTree || !sqTree.tree || !sqTree.root) return false
     if (!this.tree || !this.root) return false
     const treeA = this.tree
     const treeB = sqTree.tree
@@ -352,6 +355,7 @@ class SequoiaPath {
    * @param {function(object)} itemFn: manage the single node (with props like item, isLastChild, isFirstChild, etc.)
    */
   print ({ skipFiles = false, skipEmpty = true, printFn = console.log, itemFn } = {}) {
+    if (!this.tree || !this.root) return false
     if (!itemFn) {
       itemFn = function (node) {
         if (skipFiles === true && node.item.isFile === true) return

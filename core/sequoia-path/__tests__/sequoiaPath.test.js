@@ -1,74 +1,87 @@
 const path = require('path')
 const { SequoiaPath } = require('../index')
 
+const SamplesDirectory = path.join(__dirname, 'test_dir')
+
 describe('SequoiaPath class and object', function () {
-  it('should create a basic SequoiaPath', async function () {
-    const absPath1 = path.join(__dirname, 'test_dir', 'directory6')
-    const dT1 = new SequoiaPath(absPath1)
-    expect(dT1.empty).toEqual(true)
-    expect(dT1.rootPath).toEqual(absPath1)
-    expect(dT1.nodeCount).toEqual(0)
-    expect(dT1.fileCount).toEqual(0)
-    expect(dT1.directoryCount).toEqual(0)
-    expect(typeof dT1.toJson() === 'object').toEqual(true)
+  beforeAll(function () {})
+  afterAll(function () {})
 
-    const dT2 = new SequoiaPath()
-    dT2.fromJson(dT1.toJson())
-    expect(dT2.empty).toEqual(true)
-    expect(dT2.rootPath).toEqual(absPath1)
-    expect(dT2.nodeCount).toEqual(0)
-    expect(dT2.fileCount).toEqual(0)
-    expect(dT2.directoryCount).toEqual(0)
-    expect(typeof dT2.toJson() === 'object').toEqual(true)
+  it('should check an empty SequoiaPath', async function () {
+    const sq = new SequoiaPath()
+    // todo: check internal status and methods
+    expect(sq.empty).toEqual(true)
+    expect(sq.rootPath).toEqual(undefined)
+    expect(sq.nodeCount).toEqual(0)
+    expect(sq.fileCount).toEqual(0)
+    expect(sq.directoryCount).toEqual(0)
 
-    await dT1.read()
-    expect(dT1.empty).toEqual(false)
-    expect(dT1.rootPath).toEqual(absPath1)
-    expect(dT1.nodeCount).toEqual(4)
-    expect(dT1.fileCount).toEqual(3)
-    expect(dT1.directoryCount).toEqual(1)
-    expect(typeof dT1.toJson() === 'object').toEqual(true)
+    await expect(sq.clean()).resolves.toEqual(true)
+    await expect((async () => { await sq.read() })()).rejects.toThrow('Tree\'s root path does not exist')
+    await expect((async () => { await sq.load() })()).rejects.toThrow('No file associated to this tree')
+    await expect((async () => { await sq.save() })()).rejects.toThrow('No file associated to this tree')
 
-    const dT3 = new SequoiaPath()
-    dT3.fromJson(dT1.toJson())
-    expect(dT3.isEqualTo(dT1)).toEqual(true)
+    expect(sq.toJson()).toEqual(null)
+    expect(sq.fromJson(null)).toEqual(false)
+    expect(sq.isEqualTo(null)).toEqual(false)
+    expect(sq.isEqualTo(new SequoiaPath())).toEqual(false)
+
+    let walkFlag = false
+    sq.walk({ itemFn: () => { walkFlag = true } })
+    expect(walkFlag).toEqual(false) /* itemFn should be never called */
+
+    let foreachFlag = false
+    sq.forEach({ itemFn: () => { foreachFlag = true } })
+    expect(foreachFlag).toEqual(false) /* itemFn should be never called */
+
+    let printFlag = false
+    sq.print({ itemFn: () => { printFlag = true } })
+    expect(printFlag).toEqual(false) /* itemFn should be never called */
   })
 
-  it('should loop and walk the directory tree', async function () {
-    const absPath1 = path.join(__dirname, 'test_dir')
-    const dT1 = new SequoiaPath(absPath1)
+  it('should have empty values when tree is not loaded', async function () {})
+  it('should read simple directory', async function () {})
+  it('should read from empty json', async function () {})
+  it('should match two equal trees', async function () {})
+  it('should loop on a tree', async function () {})
+  it('should walk in a tree', async function () {})
 
-    await dT1.read()
-    expect(dT1.empty).toEqual(false)
+  it('should load an empty file', async function () {})
+  it('should load a full file', async function () {})
 
-    const filesArray1 = []
-    const directoriesArray1 = []
-    dT1.forEach({
-      itemFn: ({ item }) => {
-        if (item.isDirectory) directoriesArray1.push(item)
-        else if (item.isFile) filesArray1.push(item)
-      }
-    })
-    expect(directoriesArray1.length).toEqual(5)
-    expect(filesArray1.length).toEqual(13)
+  it('should not save an empty file and remove it', async function () {})
+  it('should save a full file', async function () {})
 
-    const filesArray2 = []
-    const directoriesArray2 = []
-    dT1.walk({
-      itemFn: ({ item, parent, isFirstChild, isLastChild }) => {
-        if (item.isDirectory) directoriesArray2.push(item)
-        else if (item.isFile) filesArray2.push(item)
+  it('should throw some errors', async function () {
+    expect(function () {
+      return new SequoiaPath('not-abs-path')
+    }).toThrow('Tree\'s root path must be an absolute path')
 
-        if (item.base === 'test_dir') expect(item.level).toEqual(1)
-        else if (item.base === 'file33.txt') expect(item.level).toEqual(4)
-        else if (item.base === 'directory6') expect(item.level).toEqual(2)
-        else if (item.base === 'file18.wav') {
-          expect(item.ext).toEqual('wav')
-          expect(item.level).toEqual(3)
-        }
-      }
-    })
-    expect(directoriesArray2.length).toEqual(5)
-    expect(filesArray2.length).toEqual(13)
+    expect(function () {
+      const sq = new SequoiaPath(SamplesDirectory)
+      const ObjectClass = class WrongObject { }
+      sq.options({ ObjectClass })
+    }).toThrow('should extend PathInfo class')
+
+    expect(function () {
+      const sq = new SequoiaPath(SamplesDirectory)
+      const filePath = 'not-abs-path'
+      sq.options({ filePath })
+    }).toThrow('filePath must be an absolute path')
+
+    await expect((async function () {
+      const sq = new SequoiaPath(path.join(__dirname, 'not-exists'))
+      await sq.read()
+    })()).rejects.toThrow('Tree\'s root path does not exist')
+
+    await expect((async function () {
+      const sq = new SequoiaPath()
+      await sq.load()
+    })()).rejects.toThrow('No file associated to this tree')
+
+    await expect((async function () {
+      const sq = new SequoiaPath()
+      await sq.save()
+    })()).rejects.toThrow('No file associated to this tree')
   })
 })
