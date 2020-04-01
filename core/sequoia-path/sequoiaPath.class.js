@@ -124,8 +124,9 @@ class SequoiaPath {
 
   /**
    * Read the root directory and create the tree.
+   * Returns the opposite value of this.empty getter in order to check the tree immediately.
    * @param {function(item:<PathInfo>)} filterFn: if present, it should return true to add the item to the tree
-   * @returns {Promise<void>}
+   * @returns {Promise<boolean>}
    */
   async read ({ filterFn = null } = {}) {
     this.reset()
@@ -169,6 +170,8 @@ class SequoiaPath {
     if (tree.childrenCount(this.root) > 0) {
       this.tree = tree
     }
+
+    return !this.empty
   }
 
   /**
