@@ -22,9 +22,6 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
     super()
 
     this.messages({
-      notAnArray: 'The \'{field}\' field must be an array. Actual: {actual}',
-      noMaxAttribute: 'The \'{field}\' field must must have a positive integer \'max\' attribute. Actual: {actual}',
-      invalidQueueType: 'The queue \'{field}\' field must have FIFO or LIFO \'queueType\' attribute. Actual: {actual}',
       invalidBasePath: 'The \'{field}\' field must have an absolute path as basePath. Actual: {actual}',
       dirNotExists: 'Directory \'{field}\' does not exists. Actual: {actual}',
       dirAlreadyExists: 'Directory \'{field}\' already exists. Actual: {actual}',
