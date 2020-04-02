@@ -24,6 +24,7 @@ const log = pino({
 }, logThrough)
 
 // Log to multiple files using a separate process
+// todo: avoid this when testing
 const child = childProcess.spawn(process.execPath, [
   require.resolve('pino-tee'),
   'debug', mainLogFilePath
