@@ -37,7 +37,7 @@ describe('Export functions', function () {
     expect(samplesQuery).not.toEqual(null)
 
     const set1 = new SampleSet({
-      validate: function (sample) {
+      valid: function (sample) {
         return sample.isFile === true && samplesQuery.check(sample.relPath)
       }
     })

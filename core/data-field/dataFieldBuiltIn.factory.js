@@ -114,7 +114,12 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('queue', function (validator) {
       return {
-        validate: (value, schema) => {
+        $validate: function ({ schema, messages }, path, context) {
+          return {
+            source: 'return value;'
+          }
+        },
+        validate: ({ value, schema }) => {
           if (!_.isNull(value) && !_.isArray(value)) {
             return validator.makeError('notAnArray', null, value)
           }
@@ -195,7 +200,12 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('absDirPath', function (validator) {
       return {
-        validate: (value, schema) => {
+        $validate: function ({ schema, messages }, path, context) {
+          return {
+            source: 'return value;'
+          }
+        },
+        validate: function ({ value, schema }) {
           if (!fileUtils.isAbsolutePath(value)) {
             return validator.makeError('notAbsDirPath', null, value)
           }
@@ -218,7 +228,12 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('absFilePath', function (validator) {
       return {
-        validate: (value, schema) => {
+        $validate: function ({ schema, messages }, path, context) {
+          return {
+            source: 'return value;'
+          }
+        },
+        validate: ({ value, schema }) => {
           if (!fileUtils.isAbsolutePath(value)) {
             return validator.makeError('notAbsFilePath', null, value)
           }
@@ -241,7 +256,12 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relDirPath', function (validator) {
       return {
-        validate: (value, schema) => {
+        $validate: function ({ schema, messages }, path, context) {
+          return {
+            source: 'return value;'
+          }
+        },
+        validate: ({ value, schema }) => {
           if (!fileUtils.isRelativePath(value)) {
             return validator.makeError('notRelDirPath', null, value)
           }
@@ -283,7 +303,12 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relFilePath', function (validator) {
       return {
-        validate: (value, schema) => {
+        $validate: function ({ schema, messages }, path, context) {
+          return {
+            source: 'return value;'
+          }
+        },
+        validate: ({ value, schema }) => {
           if (!fileUtils.isRelativePath(value)) {
             return validator.makeError('notRelFilePath', null, value)
           }

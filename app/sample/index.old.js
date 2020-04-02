@@ -173,7 +173,7 @@ const sampleSetByPathQuery = async ({ queryString, queryLabel }) => {
   if (!query || !query.isValid()) return
 
   sampleSet = new SampleSet({
-    validate: function (sample) {
+    valid: function (sample) {
       return sample.isFile === true && query.check(sample.relPath)
     }
   })

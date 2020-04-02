@@ -18,11 +18,11 @@ class DataFieldFactory {
     })
     Object.keys(this._fieldDefinitions).forEach((k) => {
       this._fieldTypes[k] = this._fieldDefinitions[k](this._validator)
-      if (this._fieldTypes[k].validate) {
+      if (this._fieldTypes[k].$validate) {
         if (fvRules.indexOf(k) >= 0) {
           throw new Error(`Field type '${k}' is a built-in type and cannot have a custom validator.`)
         }
-        this._validator.add(k, this._fieldTypes[k].validate)
+        this._validator.add(k, this._fieldTypes[k].$validate)
       } else if (fvRules.indexOf(k) === -1) {
         throw new Error(`Field type '${k}' does not have a validator in its definition.`)
       }
@@ -59,7 +59,7 @@ class DataFieldFactory {
       validator: this._validator,
       customFn: {
         ...this._fieldTypes[schema.type],
-        validate: null
+        $validate: null
       }
     })
   }

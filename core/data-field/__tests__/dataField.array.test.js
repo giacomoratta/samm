@@ -6,11 +6,18 @@ describe('DataField.fn for array schema', function () {
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
     })
-    dff.define('superInt', function (validator) {
+    dff.define('superInt', function () {
       return {
-        validate: (value /*, schema */) => {
-          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
-          return true
+        $validate: function ({ schema, messages }, path, context) {
+          const x = 1000000
+          return {
+            source: `
+              if (value < ${x}) {
+                ${this.makeError({ type: 'notSuperInt', actual: 'value', messages })}
+              }
+              return value
+            `
+          }
         }
       }
     })

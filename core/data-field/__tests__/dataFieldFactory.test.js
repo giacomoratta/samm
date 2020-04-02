@@ -29,11 +29,17 @@ describe('DataFieldFactory', function () {
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
     })
-    dff.define('superInt', function (validator) {
+    dff.define('superInt', function () {
       return {
-        validate: (value /*, schema */) => {
-          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
-          return true
+        $validate: function ({ schema, messages }) {
+          return {
+            source: `
+              if (value < 1000000) {
+                ${this.makeError({ type: 'notSuperInt', actual: 'value', messages })}
+              }
+              return value
+            `
+          }
         }
       }
     })
@@ -69,11 +75,17 @@ describe('DataFieldFactory', function () {
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
     })
-    dff.define('superInt', function (validator) {
+    dff.define('superInt', function () {
       return {
-        validate: (value /*, schema */) => {
-          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
-          return true
+        $validate: function ({ schema, messages }) {
+          return {
+            source: `
+              if (value < 100000) {
+                ${this.makeError({ type: 'notSuperInt', actual: 'value', messages })}
+              }
+              return value
+            `
+          }
         },
         getTriple: (field) => {
           return field.valueRef * 3
@@ -106,11 +118,17 @@ describe('DataFieldFactory', function () {
     dff.messages({
       notSuperInt: 'The \'{field}\' field must be a big integer! Actual: {actual}'
     })
-    dff.define('superInt', function (validator) {
+    dff.define('superInt', function () {
       return {
-        validate: (value /*, schema */) => {
-          if (value < 1000000) return validator.makeError('notSuperInt', null, value)
-          return true
+        $validate: function ({ schema, messages }) {
+          return {
+            source: `
+              if (value < 1000000) {
+                ${this.makeError({ type: 'notSuperInt', actual: 'value', messages })}
+              }
+              return value
+            `
+          }
         }
       }
     })
@@ -156,11 +174,17 @@ describe('DataFieldFactory', function () {
     dff.messages({
       notKmDistance: 'The \'{field}\' field must be a big integer! Actual: {actual}'
     })
-    dff.define('kmDistance', function (validator) {
+    dff.define('kmDistance', function () {
       return {
-        validate: (value /*, schema */) => {
-          if (typeof value !== 'number' || value < 1000000) return validator.makeError('notKmDistance', null, value)
-          return true
+        $validate: function ({ schema, messages }) {
+          return {
+            source: `
+              if (typeof value !== 'number' || value < 1000000) {
+                ${this.makeError({ type: 'notKmDistance', actual: 'value', messages })}
+              }
+              return value
+            `
+          }
         }
       }
     })
