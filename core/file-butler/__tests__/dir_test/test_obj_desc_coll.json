@@ -1,0 +1,14 @@
+{
+	"my_label_41": {
+		"label": "my_label_41",
+		"queryString": "good-value4"
+	},
+	"my_label_21": {
+		"label": "my_label_21",
+		"queryString": "good-value2"
+	},
+	"my_label_11": {
+		"label": "my_label_11",
+		"queryString": "good-value1"
+	}
+}

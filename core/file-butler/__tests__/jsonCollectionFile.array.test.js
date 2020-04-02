@@ -1,7 +1,7 @@
 const path = require('path')
 const testArrAscColl = path.join(__dirname, 'dir_test', 'test_arr_asc_coll.json')
 const testArrDescColl = path.join(__dirname, 'dir_test', 'test_arr_desc_coll.json')
-const { TestCollectionFile, bulkInsertArrayType } = require('./jsonCollectionHelper.test')
+const { TestCollectionFile, bulkInsertArrayType } = require('./jsonCollectionTestHelper')
 
 /* TestFile<Object|Array><Asc|Desc> */
 let TestFileAA1, TestFileAD1, TestFileAA2, TestFileAD2

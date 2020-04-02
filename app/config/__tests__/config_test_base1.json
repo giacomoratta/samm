@@ -1,0 +1,24 @@
+{
+	"Platform": "linux-5.0.0-37-generic",
+	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/config/__tests__",
+	"SamplesDirectoryExclusions": [
+		"samplePack1",
+		"samplePack2"
+	],
+	"RandomCount": 15,
+	"MaxSamplesSameDirectory": 2,
+	"ExcludedExtensionsForSamples": [
+		"exe",
+		"DS_Store",
+		"info"
+	],
+	"IncludedExtensionsForSamples": [
+		"wav",
+		"mp3"
+	],
+	"ExtensionsPolicyForSamples": "X",
+	"Status": {
+		"first-scan-needed": false,
+		"new-scan-needed": false
+	}
+}

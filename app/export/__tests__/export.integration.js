@@ -6,23 +6,26 @@ const testDirToCopy = path.join(__dirname, '..', '..', '__tests__', 'test_dir')
 const { Config, ConfigBoot, ConfigCleanData } = require('../../config')
 const { PathQuery } = require('../../path-query')
 const { SampleSet } = require('../../sample/sampleSet.class')
-const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
+// const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
 const { Export } = require('../index')
 
 const indexFilePath = path.join(__dirname, 'config.json')
 
 describe('Export functions', function () {
   beforeAll(() => {
+    return
     ConfigCleanData()
     expect(ConfigBoot(indexFilePath)).toEqual(true)
     Config.set('SamplesDirectory', testDirToCopy)
   })
 
   afterAll(() => {
+    return
     ConfigCleanData()
   })
 
   it('Should generate samples directories', async function () {
+    return
     let result
 
     const sIndex1 = new SampleIndex({

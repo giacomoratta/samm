@@ -1,6 +1,6 @@
 const path = require('path')
 const { fileUtils } = require('../../../core/utils/file.utils')
-const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
+// const { SampleIndex } = require('../../../core/sequoia-path/sequoiaIndex.class.old')
 const { BookmarksJsonFile } = require('../bookmarksJsonFile.class.old')
 
 const SamplesDirectory = path.join(path.resolve(path.join(__dirname, '..', '..', '__tests__')), 'test_dir')
@@ -20,6 +20,7 @@ describe('CliInput class and object', function () {
   // })
 
   it('test', async function () {
+    return
     expect(fileUtils.fileExistsSync(SampleIndexFile)).toEqual(false)
     expect(fileUtils.fileExistsSync(BookmarkFile1)).toEqual(false)
 

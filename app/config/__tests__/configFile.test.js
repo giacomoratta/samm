@@ -4,7 +4,7 @@ let ConfigInstance = null
 
 describe('App-specific ConfigFile', function () {
   beforeAll(async function () {
-    ConfigInstance = new ConfigFile(path.join(__dirname, 'config_test1.json'))
+    ConfigInstance = new ConfigFile(path.join(__dirname, 'config_test1.json'), path.join(__dirname, 'config_test_base1.json'))
     await ConfigInstance.clean()
   })
 
@@ -42,9 +42,9 @@ describe('App-specific ConfigFile', function () {
     await ConfigInstance.save()
     await expect(ConfigInstance.load()).resolves.toEqual(true)
 
-    expect(ConfigInstance.field('RandomCount').valueRef).toEqual(21)
-    expect(ConfigInstance.field('MaxSamplesSameDirectory').valueRef).toEqual(3)
-    expect(ConfigInstance.field('ExtensionsPolicyForSamples').valueRef).toEqual('E')
+    expect(ConfigInstance.field('RandomCount').valueRef).toEqual(15)
+    expect(ConfigInstance.field('MaxSamplesSameDirectory').valueRef).toEqual(2)
+    expect(ConfigInstance.field('ExtensionsPolicyForSamples').valueRef).toEqual('X')
   })
 
   it('should reset because different os platform', async function () {

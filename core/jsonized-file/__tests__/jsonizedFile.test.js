@@ -37,7 +37,7 @@ describe('JsonizedFile operations with fields and json data', function () {
     const jzf = new JsonizedFile({ filePath: jsonFileEmpty2 })
     await expect(jzf.load()).resolves.toEqual(false)
     expect(jzf.empty).toEqual(true)
-    await expect(jzf.save()).resolves.toEqual(true)
+    await expect(jzf.save()).resolves.toEqual(false)
     expect(jzf.empty).toEqual(true)
     expect(jzf.jsonData).toEqual(null)
     expect(jzf.empty).toEqual(true)

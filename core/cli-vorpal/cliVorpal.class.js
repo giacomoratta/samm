@@ -34,6 +34,7 @@ class CliVorpal {
   }
 
   addCommand (cmdName, cmdArgs = '') {
+    cmdName = cmdName.trim()
     this.commands[cmdName] = this.vorpal.command(`${cmdName} ${cmdArgs}`)
     return cmdName
   }

@@ -1,7 +1,7 @@
 const path = require('path')
 const testObjFilePath = path.join(__dirname, 'dir_test', 'test_obj_asc_coll.json')
 const { JsonCollectionFile } = require('../jsonCollectionFile.class')
-const { TestCollectionFile } = require('./jsonCollectionHelper.test')
+const { TestCollectionFile } = require('./jsonCollectionTestHelper')
 
 let TestFileObj
 

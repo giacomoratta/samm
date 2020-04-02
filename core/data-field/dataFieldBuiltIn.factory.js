@@ -190,25 +190,55 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
       return true
     }
 
+    const rootPath = path.parse(process.cwd()).root
+
     const relToAbsPath = function (value, schema) {
       if (!value) return
       return path.join(schema.basePath, value)
     }
 
+    const $validateAbsPath = (errorCodeName) => {
+      return function ({ schema, messages } /*, path, context */) {
+        return {
+          source: `
+          if(typeof value !== 'string') {
+            ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
+          }
+          value = value.trim()
+          if(value.length === 0 || !value.startsWith('${rootPath}')) {
+            ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
+          }
+          return value;
+        `
+        }
+      }
+    }
+
+    const $validateRelPath = (errorCodeName) => {
+      return function ({ schema, messages }, path /* context */) {
+        const basePathError = new DataFieldError(`[invalidBasePath] The '${schema.type}' field must must have an absolute path as 'basePath' attribute. Field name: '${path}'.`)
+        if (typeof schema.basePath !== 'string') throw basePathError
+        schema.basePath = schema.basePath.trim()
+        if (!schema.basePath.startsWith(rootPath)) throw basePathError
+        return {
+          source: `
+          if(typeof value !== 'string') {
+            ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
+          }
+          value = value.trim()
+          if(value.length === 0 || value.startsWith('${rootPath}')) {
+            ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
+          }
+          return value;
+        `
+        }
+      }
+    }
+
     this.define('absDirPath', function (validator) {
       return {
-        $validate: function ({ schema, messages } /*, path, context */) {
-          return {
-            source: 'return value;'
-          }
-        },
-        validate: function ({ value, schema }) {
-          if (!fileUtils.isAbsolutePath(value)) {
-            return validator.makeError('notAbsDirPath', null, value)
-          }
-          return checkAbsDirPath(value, schema, validator)
-        },
-        exists: (field) => {
+        $validate: $validateAbsPath('notAbsDirPath'),
+        exists: async (field) => {
           if (field.unset === true) return false
           return /* boolean await */ fileUtils.directoryExists(field.valueRef)
         },
@@ -225,17 +255,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('absFilePath', function (validator) {
       return {
-        $validate: function ({ schema, messages } /*, path, context */) {
-          return {
-            source: 'return value;'
-          }
-        },
-        validate: ({ value, schema }) => {
-          if (!fileUtils.isAbsolutePath(value)) {
-            return validator.makeError('notAbsFilePath', null, value)
-          }
-          return checkAbsFilePath(value, schema, validator)
-        },
+        $validate: $validateAbsPath('notAbsFilePath'),
         exists: async (field) => {
           if (field.unset === true) return false
           return /* boolean */ fileUtils.fileExists(field.valueRef)
@@ -253,20 +273,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relDirPath', function (validator) {
       return {
-        $validate: function ({ schema, messages } /*, path, context */) {
-          return {
-            source: 'return value;'
-          }
-        },
-        validate: ({ value, schema }) => {
-          if (!fileUtils.isRelativePath(value)) {
-            return validator.makeError('notRelDirPath', null, value)
-          }
-          if (!schema.basePath || !fileUtils.isAbsolutePath(schema.basePath)) {
-            return validator.makeError('invalidBasePath', null, schema.basePath)
-          }
-          return checkAbsDirPath(relToAbsPath(value, schema), schema, validator)
-        },
+        $validate: $validateRelPath('notRelDirPath'),
         fromAbsPath: (field, absPath) => {
           if (!absPath) return false
           const relPath = path.relative(field.schema.basePath, absPath)
@@ -300,20 +307,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relFilePath', function (validator) {
       return {
-        $validate: function ({ schema, messages } /*, path, context */) {
-          return {
-            source: 'return value;'
-          }
-        },
-        validate: ({ value, schema }) => {
-          if (!fileUtils.isRelativePath(value)) {
-            return validator.makeError('notRelFilePath', null, value)
-          }
-          if (!schema.basePath || !fileUtils.isAbsolutePath(schema.basePath)) {
-            return validator.makeError('invalidBasePath', null, schema.basePath)
-          }
-          return checkAbsFilePath(relToAbsPath(value, schema), schema, validator)
-        },
+        $validate: $validateRelPath('notRelFilePath'),
         fromAbsPath: (field, absPath) => {
           if (!absPath) return false
           const relPath = path.relative(field.schema.basePath, absPath)
