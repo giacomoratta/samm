@@ -24,8 +24,7 @@ Cli.on('show', printWarnings)
 Cli.on('afterCommand', printWarnings)
 
 App.boot({
-  appRootPath: process.env.APP_ABSPATH || process.cwd(),
-  appDataDirName: process.env.APP_DATA_DIRNAME || 'app-data'
+  appRootPath: process.env.APP_ABSPATH || process.cwd()
 
 }).then((outcome) => {
   if (outcome === false) {
@@ -41,6 +40,5 @@ App.boot({
   Cli.show('mpl')
 }).catch((e) => {
   log.error(e)
-  console.error(`Unexpected error: ${e.message}`)
-  console.error('(see logs for more details)')
+  console.error(`Unexpected error: ${e.message}.  (see logs for more details)`)
 })

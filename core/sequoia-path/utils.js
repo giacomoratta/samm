@@ -18,6 +18,19 @@ const getDefaultOptions = function () {
   }
 }
 
+/**
+ * Set options before using the tree.
+ * @param {Object} [options]
+ * @param {Object} [defaultOptions]: same as options parameter
+ * @param {number} [options.maxLevel]: maximum depth level
+ * @param {array<string>} [options.includedExtensions]
+ * @param {array<string>} [options.excludedExtensions]
+ * @param {array<string>} [options.excludedPaths]
+ * @param {function({item:<PathInfo>})} [options.itemFn]
+ * @param {function({item:<PathInfo>})} [options.afterDirectoryFn]
+ * @param {Class} [options.ObjectClass] - should extend PathInfo
+ * @param {string|null} [options.filePath]
+ */
 const parseOptions = function (options, defaultOptions) {
   if (!defaultOptions) defaultOptions = getDefaultOptions()
   Object.keys(options).forEach((k) => { if (options[k] === undefined) delete options[k] })
@@ -26,7 +39,7 @@ const parseOptions = function (options, defaultOptions) {
     ...options
   }
 
-  if (options.ObjectClass && options.ObjectClass !== PathInfo && !(options.ObjectClass instanceof PathInfo)) {
+  if (options.ObjectClass && options.ObjectClass !== PathInfo && !(options.ObjectClass.prototype instanceof PathInfo)) {
     throw new SequoiaPathError('options.ObjectClass should extend PathInfo class')
   }
 

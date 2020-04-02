@@ -30,24 +30,7 @@ class ConfigFile extends JsonizedFile {
         type: 'absDirPath',
         checkExists: true
       },
-      // value: basePath, // todo: set as null
       description: 'Directory with samples to scan and search in'
-    }))
-
-    this.add(this.DFBF.create({
-      name: 'SamplesDirectoryExclusions',
-      schema: {
-        type: 'array',
-        items: {
-          type: 'relDirPath',
-          basePath: this.field('SamplesDirectory').value || fallbackBasePath
-        }
-      },
-      value: [
-        'samplePack1',
-        'samplePack2'
-      ],
-      description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
     }))
 
     this.add(this.DFBF.create({
@@ -73,12 +56,28 @@ class ConfigFile extends JsonizedFile {
     }))
 
     this.add(this.DFBF.create({
+      name: 'SamplesDirectoryExclusions',
+      schema: {
+        type: 'array',
+        items: {
+          type: 'relDirPath',
+          basePath: this.field('SamplesDirectory').value || fallbackBasePath
+        }
+      },
+      // value: [
+      //   'samplePack1',
+      //   'samplePack2'
+      // ],
+      description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
+    }))
+
+    this.add(this.DFBF.create({
       name: 'ExcludedExtensionsForSamples',
       schema: {
         type: 'array',
         items: 'string'
       },
-      value: ['exe', 'DS_Store', 'info'],
+      // value: ['exe', 'DS_Store', 'info'],
       description: 'The list of extensions which the samples must NOT have'
     }))
 
@@ -88,7 +87,7 @@ class ConfigFile extends JsonizedFile {
         type: 'array',
         items: 'string'
       },
-      value: ['wav', 'mp3'],
+      // value: ['wav', 'mp3'],
       description: 'The list of extensions which the samples must have'
     }))
 

@@ -11,10 +11,9 @@ const log = createLogger('app')
 /**
  * Starts the boot procedure for the application
  * @param {string} appRootPath: where the executable is located
- * @param {string} appDataDirName: name of the directory where config and db files are located
  * @returns {Promise<boolean>}: false means 'severe error', so app must be closed
  */
-const boot = async ({ appRootPath, appDataDirName }) => {
+const boot = async ({ appRootPath }) => {
   const AppDataDirectory = path.join(appRootPath, process.env.APP_DATA_DIRNAME || 'app-data')
   setLogsDirectory(path.join(AppDataDirectory, 'logs'))
 

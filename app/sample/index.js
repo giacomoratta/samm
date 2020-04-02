@@ -1,12 +1,36 @@
-const log = require('../../core/logger').createLogger('samples')
+const log = require('../../core/logger').createLogger('sample')
+const { SampleIndex } = require('./sampleIndex.class')
 
-const clean = async () => {
-  log.info('Cleaning data...')
-}
+let SampleIndexInstance = null
 
 const boot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
-  return true
+  SampleIndexInstance = new SampleIndex(filePath)
+  try {
+    const dataPresence = await SampleIndexInstance.load()
+    log.info({ dataPresence }, 'Loaded successfully')
+    return true
+  } catch (e) {
+    log.error(e, 'Cannot load sample index')
+    return false
+  }
+}
+
+const clean = async () => {
+  log.info('Cleaning data...')
+  if (SampleIndexInstance) {
+    await SampleIndexInstance.clean()
+  }
+}
+
+const _absentSampleIndex = () => {
+  // has no rootPath
+  return !SampleIndexInstance || !SampleIndexInstance.rootPath
+}
+
+const _emptySampleIndex = () => {
+  // empty index
+  return !SampleIndexInstance || SampleIndexInstance.empty
 }
 
 module.exports = {
@@ -25,8 +49,11 @@ module.exports = {
     },
 
     sampleIndex: {
-      has: () => {
-        return false
+      absent: () => {
+        return _absentSampleIndex()
+      },
+      empty: () => {
+        return _emptySampleIndex()
       },
       size: () => {
         return -1

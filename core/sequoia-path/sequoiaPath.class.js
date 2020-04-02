@@ -409,10 +409,10 @@ class SequoiaPath {
     printFn('\n Directories#:', this.directoryCount)
     printFn('\n Files#:', this.fileCount)
     if (this.data.options.includedExtensions.length > 0) {
-      printFn('\n Included libs:', this.data.options.includedExtensions.join(', '))
+      printFn('\n Included extensions:', this.data.options.includedExtensions.join(', '))
     }
     if (this.data.options.excludedExtensions.length > 0) {
-      printFn('\n Excluded libs:', this.data.excludedExtensions.join(', '))
+      printFn('\n Excluded extensions:', this.data.excludedExtensions.join(', '))
     }
     if (this.data.options.excludedPaths.length > 0) {
       printFn('\n Excluded paths:')
