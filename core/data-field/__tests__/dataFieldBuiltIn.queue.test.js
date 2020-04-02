@@ -17,7 +17,7 @@ describe('DataFieldBuiltInFactory queue field type', function () {
         }
       })
       qq.value = [1, 2]
-    }).toThrow('noMaxAttribute')
+    }).toThrow('[noMaxAttribute]')
 
     expect(function () {
       const qq = dfbf.create({
@@ -28,7 +28,7 @@ describe('DataFieldBuiltInFactory queue field type', function () {
         }
       })
       qq.value = [1, 2]
-    }).toThrow('invalidQueueType')
+    }).toThrow('[invalidQueueType]')
 
     expect(function () {
       const qq = dfbf.create({
@@ -40,7 +40,19 @@ describe('DataFieldBuiltInFactory queue field type', function () {
         }
       })
       qq.value = 'invalid'
-    }).toThrow('array')
+    }).toThrow('[array]')
+
+    expect(function () {
+      const qq = dfbf.create({
+        name: 'queue1',
+        schema: {
+          type: 'queue',
+          queueType: 'FIFO',
+          max: 3
+        }
+      })
+      qq.value = [11, 16, 21, 26]
+    }).toThrow('[arrayMax]')
   })
 
   it('should handle a FIFO queue', function () {

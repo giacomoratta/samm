@@ -134,21 +134,6 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             `
           }
         },
-        // validate: ({ value, schema }) => {
-        //   if (!_.isNull(value) && !_.isArray(value)) {
-        //     return validator.makeError('notAnArray', null, value)
-        //   }
-        //   if (schema.max && !_.isInteger(schema.max)) {
-        //     return validator.makeError('noMaxAttribute', null, value)
-        //   }
-        //   if (schema.queueType === undefined || ['FIFO', 'LIFO'].indexOf(schema.queueType) === -1) {
-        //     return validator.makeError('invalidQueueType', null, value)
-        //   }
-        //   if (value.length > schema.max) {
-        //     return validator.makeError('arrayMax', null, value)
-        //   }
-        //   return true
-        // },
         push: (field, value) => {
           const queueSchema = field.schema
           const fieldValue = field.value || []
