@@ -7,7 +7,7 @@ const v = new Validator({
   }
 })
 
-v.add('pre-even', function ({ schema, messages }, path, context) {
+v.add('pre-even', function ({ schema, messages } /*, path, context */) {
   return {
     source: `
             if (value % 2 != 0)
@@ -20,8 +20,12 @@ v.add('pre-even', function ({ schema, messages }, path, context) {
 
 // Register a custom 'even' validator
 v.add('even', function ({ schema, messages }, path, context) {
+  console.log(path)
+  console.warn(schema, 'AA')
+  if (!schema.attr1 || schema.attr1 === 123) throw new Error('my error')
   return {
     source: `
+      console.log(${schema.attr1}, value)
       if (value % 2 != 0)
         ${this.makeError({ type: 'evenNumber', actual: 'value', messages })}
       return value;
@@ -31,13 +35,20 @@ v.add('even', function ({ schema, messages }, path, context) {
 
 const schema = {
   name: { type: 'string', min: 3, max: 255 },
-  age: { type: 'even' }
+  test1: { type: 'array' },
+  ages: {
+    type: 'array',
+    items: { type: 'even', attr1: 1233 }
+  }
 }
 
-console.log(v.validate({ name: 'John', age: 20 }, schema))
+const valFn = v.compile(schema)
+v.compile(schema)
+
+console.log(valFn({ name: 'John', test1: '32', ages: [20, 30, 40] }))
 // Returns: true
 
-console.log(v.validate({ name: 'John', age: 19 }, schema))
+console.log(valFn({ name: 'John', ages: [19, 22, 32] }))
 /* Returns an array with errors:
     [{
         type: 'evenNumber',

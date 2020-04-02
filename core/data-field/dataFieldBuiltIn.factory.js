@@ -14,6 +14,7 @@
 const _ = require('lodash')
 const path = require('path')
 const { fileUtils } = require('../utils/file.utils')
+const { DataFieldError } = require('./dataField.error')
 const { DataFieldFactory } = require('./dataField.factory')
 
 class DataFieldBuiltInFactory extends DataFieldFactory {
@@ -114,26 +115,40 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('queue', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
-          return {
-            source: 'return value;'
-          }
-        },
-        validate: ({ value, schema }) => {
-          if (!_.isNull(value) && !_.isArray(value)) {
-            return validator.makeError('notAnArray', null, value)
-          }
+        $validate: function ({ schema, messages }, path /* context */) {
           if (schema.max && !_.isInteger(schema.max)) {
-            return validator.makeError('noMaxAttribute', null, value)
+            throw new DataFieldError(`[noMaxAttribute] The '${schema.type}' field must must have a positive integer 'max' attribute. Field name: '${path}'.`)
           }
           if (schema.queueType === undefined || ['FIFO', 'LIFO'].indexOf(schema.queueType) === -1) {
-            return validator.makeError('invalidQueueType', null, value)
+            throw new DataFieldError(`[invalidQueueType] The '${schema.type}' field must must have FIFO or LIFO as 'queueType' attribute. Field name: '${path}'.`)
           }
-          if (value.length > schema.max) {
-            return validator.makeError('arrayMax', null, value)
+          return {
+            source: `
+              if (!(value instanceof Array)) {
+                ${this.makeError({ type: 'array', actual: 'value', messages })}
+              }
+              if (value.length > ${schema.max}) {
+                ${this.makeError({ type: 'arrayMax', actual: 'value', messages })}
+              }
+              return value
+            `
           }
-          return true
         },
+        // validate: ({ value, schema }) => {
+        //   if (!_.isNull(value) && !_.isArray(value)) {
+        //     return validator.makeError('notAnArray', null, value)
+        //   }
+        //   if (schema.max && !_.isInteger(schema.max)) {
+        //     return validator.makeError('noMaxAttribute', null, value)
+        //   }
+        //   if (schema.queueType === undefined || ['FIFO', 'LIFO'].indexOf(schema.queueType) === -1) {
+        //     return validator.makeError('invalidQueueType', null, value)
+        //   }
+        //   if (value.length > schema.max) {
+        //     return validator.makeError('arrayMax', null, value)
+        //   }
+        //   return true
+        // },
         push: (field, value) => {
           const queueSchema = field.schema
           const fieldValue = field.value || []
@@ -200,7 +215,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('absDirPath', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
+        $validate: function ({ schema, messages } /*, path, context */) {
           return {
             source: 'return value;'
           }
@@ -228,7 +243,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('absFilePath', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
+        $validate: function ({ schema, messages } /*, path, context */) {
           return {
             source: 'return value;'
           }
@@ -256,7 +271,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relDirPath', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
+        $validate: function ({ schema, messages } /*, path, context */) {
           return {
             source: 'return value;'
           }
@@ -303,7 +318,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
 
     this.define('relFilePath', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
+        $validate: function ({ schema, messages } /*, path, context */) {
           return {
             source: 'return value;'
           }

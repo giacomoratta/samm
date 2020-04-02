@@ -8,11 +8,10 @@ describe('DataField.fn for array schema', function () {
     })
     dff.define('superInt', function () {
       return {
-        $validate: function ({ schema, messages }, path, context) {
-          const x = 1000000
+        $validate: function ({ schema, messages } /*, path, context */) {
           return {
             source: `
-              if (value < ${x}) {
+              if (value < 1000000) {
                 ${this.makeError({ type: 'notSuperInt', actual: 'value', messages })}
               }
               return value

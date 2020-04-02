@@ -107,7 +107,7 @@ describe('DataField', function () {
 
     dff.define('superInt', function (validator) {
       return {
-        $validate: function ({ schema, messages }, path, context) {
+        $validate: function ({ schema, messages } /*, path, context */) {
           const x = 1000000
           return {
             source: `

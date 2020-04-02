@@ -35,23 +35,12 @@ describe('DataFieldBuiltInFactory queue field type', function () {
         name: 'queue1',
         schema: {
           type: 'queue',
+          queueType: 'FIFO',
           max: 3
         }
       })
       qq.value = 'invalid'
-    }).toThrow('notAnArray')
-
-    expect(function () {
-      const qq = dfbf.create({
-        name: 'queue1',
-        schema: {
-          type: 'queue',
-          max: 3,
-          queueType: 'FIFO'
-        }
-      })
-      qq.value = [3, 5, 7, 8]
-    }).toThrow('arrayMax')
+    }).toThrow('array')
   })
 
   it('should handle a FIFO queue', function () {
