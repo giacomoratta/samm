@@ -2,10 +2,12 @@ const log = require('../../core/logger').createLogger('sample')
 const { SampleIndex } = require('./sampleIndex.class')
 
 let SampleIndexInstance = null
+let SampleIndexFilePath = null
 
 const boot = async (filePath) => {
   log.info(`Booting from ${filePath}...`)
-  SampleIndexInstance = new SampleIndex(filePath)
+  SampleIndexFilePath = filePath
+  SampleIndexInstance = new SampleIndex(SampleIndexFilePath)
   try {
     const dataPresence = await SampleIndexInstance.load()
     log.info({ dataPresence }, 'Loaded successfully')
@@ -28,11 +30,6 @@ const _absentSampleIndex = () => {
   return !SampleIndexInstance || !SampleIndexInstance.rootPath
 }
 
-const _emptySampleIndex = () => {
-  // empty index
-  return !SampleIndexInstance || SampleIndexInstance.empty
-}
-
 module.exports = {
   boot,
   clean,
@@ -49,17 +46,48 @@ module.exports = {
     },
 
     sampleIndex: {
+
+      /**
+       * Current sample index is not set and any usage will throw errors.
+       * With this function, many errors could be prevented.
+       * @returns {boolean}
+       */
       absent: () => {
         return _absentSampleIndex()
       },
+
+      /**
+       * Current sample index is empty
+       * @returns {boolean}
+       */
       empty: () => {
-        return _emptySampleIndex()
+        return SampleIndexInstance.empty
       },
+
+      /**
+       * The number of samples (files only)
+       * @returns {number}
+       */
       size: () => {
-        return -1
+        return SampleIndexInstance.fileCount
       },
+
+      /**
+       * Create and save a new sample index (and destroy the previous one).
+       * @returns {Promise<boolean>}
+       */
       create: async () => {
-        return false
+        await SampleIndexInstance.clear()
+        SampleIndexInstance = new SampleIndex(SampleIndexFilePath)
+        if (await SampleIndexInstance.scan() !== true) {
+          log.warn('samples root path is empty')
+          return false
+        }
+        if (await SampleIndexInstance.save() !== true) {
+          log.warn('cannot save sample index file')
+          return false
+        }
+        return true
       }
     }
   }
