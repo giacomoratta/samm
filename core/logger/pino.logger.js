@@ -1,7 +1,9 @@
 const path = require('path')
-const pino = require('pino')
+const fs = require('fs')
+const fsExtra = require('fs-extra')
 const childProcess = require('child_process')
 const stream = require('stream')
+const pino = require('pino')
 
 // Environment variables
 const cwd = process.cwd()
@@ -10,7 +12,6 @@ let logPath = path.join(cwd, 'logs')
 
 let log = null
 const mainLogFile = 'logs.log'
-// if (process.env.NODE_ENV === 'test') mainLogFile = 'test.log'
 let mainLogFilePath = path.join(logPath, mainLogFile)
 
 const __initLogger__ = () => {
@@ -24,6 +25,9 @@ const __initLogger__ = () => {
 
   // Log to multiple files using a separate process
   if (process.env.NODE_ENV !== 'test') {
+    // Ensure log directory
+    // fsExtra.ensureDir(path.parse(mainLogFilePath).dir)
+
     const child = childProcess.spawn(process.execPath, [
       require.resolve('pino-tee'),
       'debug', mainLogFilePath
@@ -55,6 +59,9 @@ const createLogger = (module) => {
 }
 
 const setLogsDirectory = (directoryPath) => {
+  directoryPath = directoryPath.trim()
+  if (directoryPath === logPath) return
+  fs.unlink(mainLogFilePath, function (err) { })
   logPath = directoryPath
   mainLogFilePath = path.join(logPath, mainLogFile)
   log = __initLogger__()
