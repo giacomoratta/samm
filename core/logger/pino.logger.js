@@ -14,17 +14,18 @@ let log = null
 const mainLogFile = 'logs.log'
 let mainLogFilePath = path.join(logPath, mainLogFile)
 
-const __initLogger__ = () => {
+const __initLogger__ = (mainLogFilePath) => {
   // Create a stream where the logs will be written
   const logThrough = new stream.PassThrough()
   const log = pino({
-    prettyPrint: { colorize: true },
-    level: (process.env.NODE_ENV === 'production' ? 20 : 10),
+    name: 'project',
+    // prettyPrint: { colorize: true },
+    level: (process.env.NODE_ENV === 'production' ? 10 : 10),
     base: {}
   }, logThrough)
 
   // Log to multiple files using a separate process
-  if (process.env.NODE_ENV !== 'test') {
+  if (mainLogFilePath && process.env.NODE_ENV !== 'test') {
     // Ensure log directory
     fsExtra.ensureDir(path.parse(mainLogFilePath).dir)
 
@@ -37,6 +38,8 @@ const __initLogger__ = () => {
       // 'fatal', `${logPath}/fatal.log`
     ], { cwd, env })
     logThrough.pipe(child.stdin)
+    child.kill('SIGHUP')
+    // logThrough.pipe(process.stdout)
   }
   return log
 }
@@ -52,7 +55,7 @@ const __initLogger__ = () => {
 // process.on('SIGUSR2', cleanLoggingProcesses.bind(null, {exit:true}))
 // process.on('uncaughtException', cleanLoggingProcesses.bind(null, {exit:true}))
 
-log = __initLogger__()
+log = __initLogger__(mainLogFilePath)
 
 const createLogger = (module) => {
   return log.child({ module })
@@ -64,7 +67,7 @@ const setLogsDirectory = (directoryPath) => {
   fs.unlink(mainLogFilePath, function (err) { })
   logPath = directoryPath
   mainLogFilePath = path.join(logPath, mainLogFile)
-  log = __initLogger__()
+  log = __initLogger__(mainLogFilePath)
 }
 
 module.exports = {
