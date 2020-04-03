@@ -15,9 +15,8 @@ const printWarnings = () => {
   const messages = ConfigStatusMessages()
   if (messages.length === 0) return
   messages.forEach((line) => {
-    console.warn(`\n${line}`)
+    console.warn(`${line}`)
   })
-  console.log('\n')
 }
 
 Cli.on('show', printWarnings)
@@ -33,6 +32,7 @@ App.boot({
   }
 
   require('./cmd_config')
+  require('./cmd_lookup')
   require('./cmd_project')
   require('./cmd_query')
   require('./cmd_samples')

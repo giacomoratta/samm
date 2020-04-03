@@ -79,6 +79,7 @@ module.exports = {
       create: async () => {
         await SampleIndexInstance.clean()
         SampleIndexInstance = new SampleIndex(SampleIndexFilePath)
+        // todo: set config status
         if (await SampleIndexInstance.scan() !== true) {
           log.warn('samples root path is empty')
           return false

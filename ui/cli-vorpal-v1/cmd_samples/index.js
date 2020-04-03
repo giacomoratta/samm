@@ -24,7 +24,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
 
   cliPrinter.info('Indexing in progress...')
   if (await SampleIndex.create() !== true) {
-    cliPrinter.error('Indexing process failed.')
+    cliPrinter.error('Indexing process has failed.')
     return cliNext()
   }
 

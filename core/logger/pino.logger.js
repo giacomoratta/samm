@@ -26,7 +26,7 @@ const __initLogger__ = () => {
   // Log to multiple files using a separate process
   if (process.env.NODE_ENV !== 'test') {
     // Ensure log directory
-    // fsExtra.ensureDir(path.parse(mainLogFilePath).dir)
+    fsExtra.ensureDir(path.parse(mainLogFilePath).dir)
 
     const child = childProcess.spawn(process.execPath, [
       require.resolve('pino-tee'),
