@@ -77,7 +77,7 @@ module.exports = {
        * @returns {Promise<boolean>}
        */
       create: async () => {
-        await SampleIndexInstance.clear()
+        await SampleIndexInstance.clean()
         SampleIndexInstance = new SampleIndex(SampleIndexFilePath)
         if (await SampleIndexInstance.scan() !== true) {
           log.warn('samples root path is empty')

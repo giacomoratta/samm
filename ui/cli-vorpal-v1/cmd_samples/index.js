@@ -17,7 +17,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     return cliNext()
   }
 
-  if (SampleIndex.has() && !cliInput.hasOption('force')) {
+  if (SampleIndex.absent() !== true && SampleIndex.empty() !== true && !cliInput.hasOption('force')) {
     cliPrinter.warn('Samples already indexed; use -f to force a rescan.')
     return cliNext()
   }
