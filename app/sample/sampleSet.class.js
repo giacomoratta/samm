@@ -1,10 +1,28 @@
-const _ = require('lodash')
+/**
+ * index should return a sampleSet
+ * sampleSet allows to perform filtering and subselection
+ * not aware about PathBasedQuery (index should be!)
+ *
+ * sampleSet is a generic sampleInfo set with no duplicates
+ * should offer fromJson and toJson
+ */
+
 const { SampleInfo } = require('./sampleInfo.class')
 
+function getRandomInt (min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max) // not included
+  return Math.floor(Math.random() * (max - min)) + min
+}
+
 class SampleSet {
-  constructor ({ validate } = {}) {
-    this.validate = validate
-    this.table = { }
+  constructor ({ validateFn } = {}) {
+    this.validateFn = validateFn
+
+    /**
+     * List of SampleInfo objects
+     * @type {[<SampleInfo>]}
+     */
     this.array = []
   }
 
@@ -16,43 +34,54 @@ class SampleSet {
     this.array.forEach(callback)
   }
 
+  /**
+   * Create a new SampleObject.
+   * @param {string} absolutePath
+   * @param {string} [relRootPath]
+   * @returns {Promise<SampleInfo>}
+   */
+  static async create ({ absolutePath, relRootPath }) {
+    const sampleInfoObj = new SampleInfo()
+    await sampleInfoObj.set({ absolutePath, relRootPath })
+    return sampleInfoObj
+  }
+
+  /**
+   * Add a SampleInfo object to the set.
+   * @param {SampleInfo} sample
+   * @returns {boolean}
+   */
   add (sample) {
     if (!(sample instanceof SampleInfo)) {
       throw new Error('The sample object must be an instance of SampleInfo!')
     }
-    if (this.validate && this.validate(sample) === false) return false
-    if (!this.table[sample.name]) this.table[sample.name] = []
-    this.table[sample.name].push(sample)
+    if (this.validateFn && this.validateFn(sample) === false) return false
     this.array.push(sample)
     return true
   }
 
+  /**
+   * Remove a sample by index or by match.
+   * @param {SampleInfo|number} sample
+   * @returns {SampleInfo|null}
+   */
   remove (sample) {
-    if (!(sample instanceof SampleInfo)) {
-      throw new Error('The sample object must be an instance of SampleInfo!')
+    let sampleIndex = -1
+    if (sample instanceof SampleInfo) {
+      sampleIndex = this.array.findIndex(item => item.isEqualTo(sample))
+    } else if (typeof sample !== 'number') {
+      throw new Error('The sample object must be an integer or an SampleInfo instance.')
+    } else {
+      sampleIndex = sample
     }
-    let removedSamples = 0
-    if (!this.table[sample.name]) return removedSamples
-    for (let i = this.table[sample.name].length - 1; i >= 0; i--) {
-      if (!this.table[sample.name][i].isEqualTo(sample)) continue
-      this.table[sample.name].splice(i, 1)
-      removedSamples++
-    }
-    for (let i = this.array.length - 1; i >= 0; i--) {
-      if (!this.array[i].isEqualTo(sample)) continue
-      this.array.splice(i, 1)
-      removedSamples++
-    }
-    if (removedSamples % 2 !== 0) {
-      throw new Error('Discrepancy in sample set internal collections!')
-    }
-    return removedSamples
+    if (sampleIndex < 0 || this.array.length === 0 || this.array.length - 1 < sampleIndex) return null
+    return this.array.splice(sampleIndex, 1)[0]
   }
 
   /**
    * Get a random subset of SampleInfo objects
-   * @param max
-   * @param maxFromSameDirectory
+   * @param {number} max
+   * @param {number} maxFromSameDirectory
    * @returns {[<SampleInfo>]}
    */
   random ({ max = 10, maxFromSameDirectory = 0 }) {
@@ -74,7 +103,7 @@ class SampleSet {
         }
       }
 
-      randomIndex = (_.random(0, collectionSize) % collectionSize)
+      randomIndex = getRandomInt(0, collectionSize)
       if (addedIndexes.indexOf(randomIndex) >= 0) continue
       addedIndexes.push(randomIndex)
 

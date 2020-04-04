@@ -4,8 +4,13 @@ const { SampleIndex } = require('./sampleIndex.class')
 let SampleIndexInstance = null
 let SampleIndexFilePath = null
 
+/**
+ * Healthy check before using SampleIndexAPI to avoid some useless errors.
+ * Check if the index is not present or not ready (missing rootPath).
+ * @returns {boolean}
+ * @private
+ */
 const _absentSampleIndex = () => {
-  // has no rootPath
   return !SampleIndexInstance || !SampleIndexInstance.rootPath
 }
 
@@ -28,11 +33,13 @@ module.exports = {
   clean,
 
   SampleSetAPI: {
-    create: ({ queryString, queryLabel, pathBasedQuery }) => {},
+    create: ({ queryString, queryLabel, pathBasedQuery }) => {
+
+    },
     latest: () => {}
   },
 
-  SampleLookupAPI: {
+  SampleLookAPI: {
     create: ({ queryString, queryLabel, pathBasedQuery }) => {},
     latest: () => {}
   },
