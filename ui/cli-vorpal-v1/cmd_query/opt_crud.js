@@ -1,5 +1,5 @@
-const { API } = require('../ui_common')
-const PathQuery = API.pathQuery
+const { App } = require('../ui_common')
+const { PathQueryAPI } = App
 
 const _renameOrCopy = async function ({ copy, paramQueryLabel, paramNewQueryLabel, cliNext, cliPrinter }) {
   // get paramQueryLabel --> error
@@ -11,24 +11,24 @@ const _renameOrCopy = async function ({ copy, paramQueryLabel, paramNewQueryLabe
 
 module.exports = {
   create: async function ({ paramQueryLabel, paramQueryString, cliNext, cliPrinter }) {
-    if (PathQuery.add(paramQueryLabel, paramQueryString) !== true) {
+    if (PathQueryAPI.add(paramQueryLabel, paramQueryString) !== true) {
       cliPrinter.error('Cannot add the query')
     } else {
       cliPrinter.info('Query added successfully')
-      if (await PathQuery.save() !== true) {
-        cliPrinter.error(`Cannot save the query file: ${PathQuery.getFilePath()}`)
+      if (await PathQueryAPI.save() !== true) {
+        cliPrinter.error(`Cannot save the query file: ${PathQueryAPI.getFilePath()}`)
       }
     }
     return cliNext()
   },
 
   remove: async function ({ paramQueryLabel, cliNext, cliPrinter }) {
-    if (PathQuery.remove(paramQueryLabel) === false) {
+    if (PathQueryAPI.remove(paramQueryLabel) === false) {
       cliPrinter.info(`Query '${paramQueryLabel}' not found or not removed`)
     } else {
       cliPrinter.info(`Query '${paramQueryLabel}' removed successfully`)
-      if (await PathQuery.save() !== true) {
-        cliPrinter.error(`Cannot save the query file: ${PathQuery.getFilePath()}`)
+      if (await PathQueryAPI.save() !== true) {
+        cliPrinter.error(`Cannot save the query file: ${PathQueryAPI.getFilePath()}`)
       }
     }
     return cliNext()

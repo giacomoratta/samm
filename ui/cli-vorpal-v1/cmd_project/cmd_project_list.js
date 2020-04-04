@@ -1,6 +1,5 @@
-const { API, Cli } = require('../ui_common')
-
-const ProjectManager = API.projectManager
+const { App, Cli } = require('../ui_common')
+const { ProjectManagerAPI } = App
 
 const commandName = 'project-list'
 Cli.addCommand(commandName)
@@ -10,7 +9,7 @@ Cli.addCommandHeader(commandName)
   .option('-d, --date', 'order by date of latest change.')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
-  const currentProject = ProjectManager.getCurrentProject()
+  const currentProject = ProjectManagerAPI.getCurrentProject()
   if (!currentProject) {
     cliPrinter.warn('No current project set: cannot show projects in the same directory.')
   } else {
@@ -44,9 +43,9 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
         pIndex--
         try {
           const projectObj = projectSiblingsData.projects[pIndex]
-          const setResult = await ProjectManager.setCurrentProject({ projectObj })
+          const setResult = await ProjectManagerAPI.setCurrentProject({ projectObj })
           if (setResult === true) {
-            cliPrinter.info(`New current project: ${ProjectManager.getCurrentProject().path}`)
+            cliPrinter.info(`New current project: ${ProjectManagerAPI.getCurrentProject().path}`)
           } else {
             cliPrinter.error(`Project #${pIndex + 1} is not valid: ${projectObj.path}`)
             if (setResult.error) cliPrinter.error(`> reason: ${setResult.error.message}`)

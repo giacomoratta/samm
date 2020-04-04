@@ -1,6 +1,5 @@
-const { API, Cli } = require('../ui_common')
-
-const ProjectManager = API.projectManager
+const { App, Cli } = require('../ui_common')
+const { ProjectManagerAPI } = App
 
 const commandName = 'project'
 Cli.addCommand(commandName, '[path]')
@@ -13,9 +12,9 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
   /* Set another current project */
   if (projectPath) {
-    const setResult = await ProjectManager.setCurrentProject({ projectPath })
+    const setResult = await ProjectManagerAPI.setCurrentProject({ projectPath })
     if (setResult === true) {
-      cliPrinter.info(`Current project: ${ProjectManager.getCurrentProject().path}`)
+      cliPrinter.info(`Current project: ${ProjectManagerAPI.getCurrentProject().path}`)
     } else {
       cliPrinter.error(`Cannot set this current path: ${projectPath}`)
       if (setResult.error) cliPrinter.error(`> reason: ${setResult.error.message}`)
@@ -24,7 +23,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   }
 
   /* Show current project */
-  const currentProject = ProjectManager.getCurrentProject()
+  const currentProject = ProjectManagerAPI.getCurrentProject()
   if (currentProject) {
     cliPrinter.info(`Current project: ${currentProject.path}`)
   } else {

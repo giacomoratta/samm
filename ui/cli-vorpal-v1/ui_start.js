@@ -1,7 +1,8 @@
-const { Cli, App, API, log } = require('./ui_common')
+const { Cli, App, log } = require('./ui_common')
+const { ConfigAPI } = App
 
 const ConfigStatusMessages = () => {
-  const statusFlags = API.config.field('Status').value
+  const statusFlags = ConfigAPI.field('Status').value
   const statusMessages = []
   if (statusFlags['first-scan-needed'] === true) {
     statusMessages.push('First samples scan needed before start using the app')
@@ -14,8 +15,9 @@ const ConfigStatusMessages = () => {
 const printWarnings = () => {
   const messages = ConfigStatusMessages()
   if (messages.length === 0) return
+  Cli.printer.newLine()
   messages.forEach((line) => {
-    console.warn(`${line}`)
+    Cli.printer.warn(`${line}`)
   })
 }
 

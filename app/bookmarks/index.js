@@ -12,13 +12,11 @@ module.exports = {
   boot,
   clean,
 
-  API: {
-    bookmarks: {
-      add: (label, sampleObj) => {},
-      remove: (label, sampleObj) => {}, // or index
-      get: (label, index) => {},
-      labels: () => {},
-      list: (label) => {}
-    }
+  BookmarksAPI: {
+    add: (label, sampleObj) => {},
+    remove: (label, sampleObj) => {}, // or index
+    get: (label, index) => {},
+    labels: () => {},
+    list: (label) => {}
   }
 }

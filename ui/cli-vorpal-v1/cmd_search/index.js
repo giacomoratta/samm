@@ -1,6 +1,5 @@
-const { API, Cli } = require('../ui_common')
-const Config = API.config
-const SampleIndex = API.sampleIndex
+const { App, Cli } = require('../ui_common')
+const { ConfigAPI, SampleIndexAPI } = App
 
 const commandName = 'lookup'
 
@@ -13,11 +12,11 @@ Cli.addCommandHeader(commandName)
   .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
 
 Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
-  if (SampleIndex.absent() === true) {
+  if (SampleIndexAPI.absent() === true) {
     cliPrinter.warn('No samples indexed (see \'config SamplesDirectory\' and use \'samples-scan\')')
     return cliNext()
   }
-  if (SampleIndex.empty() === true) {
+  if (SampleIndexAPI.empty() === true) {
     cliPrinter.warn('Sample index is empty (see \'config SamplesDirectory\' and use \'samples-scan\')')
     return cliNext()
   }

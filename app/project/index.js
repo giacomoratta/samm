@@ -1,4 +1,4 @@
-const config = require('../config').API.config
+const { ConfigAPI } = require('../config')
 const { Project } = require('./project.class')
 const { ProjectHistoryFile } = require('./projectHistoryFile.class')
 const log = require('../logger').createLogger('project')
@@ -57,91 +57,89 @@ module.exports = {
   boot,
   clean,
 
-  API: {
-    projectManager: {
-      /* ! Do not allow to delete directories ! */
+  ProjectManagerAPI: {
+    /* ! Do not allow to delete directories ! */
 
-      // todo: create: ({ projectPath }) => {
+    // todo: create: ({ projectPath }) => {
+    // create a new project directory if not exists
+    // projectObj can be template
+    // },
+
+    // todo: createSibling: ({ projectPath }) => {
+    // create a new project directory if not exists
+    // projectObj can be template
+    // },
+
+    duplicate: ({ srcPath, srcObj, dstPath, dstObj, waitFn, requestOnly = false }) => {
       // create a new project directory if not exists
-      // projectObj can be template
-      // },
-
-      // todo: createSibling: ({ projectPath }) => {
-      // create a new project directory if not exists
-      // projectObj can be template
-      // },
-
-      duplicate: ({ srcPath, srcObj, dstPath, dstObj, waitFn, requestOnly = false }) => {
-        // create a new project directory if not exists
-        // check source exists
-        // copy source to projectPath
-        // todo: projectObj can be template
-      },
-
-      getCurrentProject: () => {
-        return ProjectHistoryFileInstance.collection.latest
-      },
-
-      setCurrentProject: async ({ projectObj, projectPath }) => {
-        try {
-          if (projectPath) {
-            projectObj = new Project()
-            await projectObj.set(projectPath)
-          }
-          const result = ProjectHistoryFileInstance.collection.add(projectObj)
-          if (result !== true) return result
-          await ProjectHistoryFileInstance.fileHolder.save()
-          return result
-        } catch (e) {
-          log.error({ error: e.message, projectObj, projectPath }, 'Cannot set the current project')
-          return e
-        }
-      }
+      // check source exists
+      // copy source to projectPath
+      // todo: projectObj can be template
     },
 
-    projectHistory: {
-      get: (index) => {
-        return ProjectHistoryFileInstance.collection.get(index)
-      },
-
-      latest: () => {
-        return ProjectHistoryFileInstance.collection.latest
-      },
-
-      list: ({ orderBy = 'history' } = {}) => {
-        const array = []
-        ProjectHistoryFileInstance.collection.forEach((index, projectObj) => {
-          array.push(projectObj)
-        })
-        if (array.length > 0) {
-          orderBy === 'name' && array.sort((a, b) => { /* ASC */
-            if (a.name < b.name) return -1
-            if (a.name > b.name) return 1
-            return 0
-          })
-          orderBy === 'modifiedAt' && array.sort((a, b) => { /* DESC */
-            if (a.modifiedAt > b.modifiedAt) return -1
-            if (a.modifiedAt < b.modifiedAt) return 1
-            return 0
-          })
-        }
-        return array
-      }
+    getCurrentProject: () => {
+      return ProjectHistoryFileInstance.collection.latest
     },
 
-    projectTemplate: {
-      createFrom: async ({ templateProject, parentPath, projectName }) => {
-        const result = await templateProject.copyTo({ parentPath, projectName })
-        if (!result.project) log.info(result)
+    setCurrentProject: async ({ projectObj, projectPath }) => {
+      try {
+        if (projectPath) {
+          projectObj = new Project()
+          await projectObj.set(projectPath)
+        }
+        const result = ProjectHistoryFileInstance.collection.add(projectObj)
+        if (result !== true) return result
+        await ProjectHistoryFileInstance.fileHolder.save()
         return result
-      },
-
-      list: async () => {
-        const projectsList = await Project.projectsFromDirectory({
-          projectsPath: config.field('TemplatesDirectory').value
-        })
-        return projectsList.projects
+      } catch (e) {
+        log.error({ error: e.message, projectObj, projectPath }, 'Cannot set the current project')
+        return e
       }
+    }
+  },
+
+  ProjectHistoryAPI: {
+    get: (index) => {
+      return ProjectHistoryFileInstance.collection.get(index)
+    },
+
+    latest: () => {
+      return ProjectHistoryFileInstance.collection.latest
+    },
+
+    list: ({ orderBy = 'history' } = {}) => {
+      const array = []
+      ProjectHistoryFileInstance.collection.forEach((index, projectObj) => {
+        array.push(projectObj)
+      })
+      if (array.length > 0) {
+        orderBy === 'name' && array.sort((a, b) => { /* ASC */
+          if (a.name < b.name) return -1
+          if (a.name > b.name) return 1
+          return 0
+        })
+        orderBy === 'modifiedAt' && array.sort((a, b) => { /* DESC */
+          if (a.modifiedAt > b.modifiedAt) return -1
+          if (a.modifiedAt < b.modifiedAt) return 1
+          return 0
+        })
+      }
+      return array
+    }
+  },
+
+  ProjectTemplateAPI: {
+    createFrom: async ({ templateProject, parentPath, projectName }) => {
+      const result = await templateProject.copyTo({ parentPath, projectName })
+      if (!result.project) log.info(result)
+      return result
+    },
+
+    list: async () => {
+      const projectsList = await Project.projectsFromDirectory({
+        projectsPath: ConfigAPI.field('TemplatesDirectory').value
+      })
+      return projectsList.projects
     }
   }
 }

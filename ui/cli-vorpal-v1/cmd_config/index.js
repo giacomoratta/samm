@@ -1,12 +1,12 @@
-const { API, Cli } = require('../ui_common')
-const Config = API.config
+const { App, Cli } = require('../ui_common')
+const { ConfigAPI } = App
 
 const commandName = 'config'
 
 Cli.addCommand(commandName, '[name] [values...]')
 
 Cli.addCommandHeader(commandName)
-  .autocomplete(Config.getFieldsList())
+  .autocomplete(ConfigAPI.getFieldsList())
   .description('Get or set the value of a configuration parameter. \n')
   .option('-r, --remove', 'Remove a key or a value from a complex parameter (e.g. list, key-value map)')
 
@@ -15,15 +15,15 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
 
   if (paramName) {
     /* Invalid parameter */
-    if (!Config.has(paramName)) {
+    if (!ConfigAPI.has(paramName)) {
       cliPrinter.warn(`Config parameter ${paramName} does not exist.`)
       return cliNext()
     }
 
     /* Print single parameter */
     if (!cliInput.getParam('values')) {
-      cliPrinter.info(Config.field(paramName).description[0])
-      cliPrinter.value(Config.field(paramName).valueRef, '> current')
+      cliPrinter.info(ConfigAPI.field(paramName).description[0])
+      cliPrinter.value(ConfigAPI.field(paramName).valueRef, '> current')
       return cliNext()
     }
 
@@ -31,19 +31,19 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     let newConfigValue
     if (paramName === 'ExcludedExtensionsForSamples') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: Config.field('ExcludedExtensionsForSamples').value,
+        currentArray: ConfigAPI.field('ExcludedExtensionsForSamples').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
     } else if (paramName === 'IncludedExtensionsForSamples') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: Config.field('IncludedExtensionsForSamples').value,
+        currentArray: ConfigAPI.field('IncludedExtensionsForSamples').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
     } else if (paramName === 'SamplesDirectoryExclusions') {
       newConfigValue = BasicArrayFieldEditor({
-        currentArray: Config.field('SamplesDirectoryExclusions').value,
+        currentArray: ConfigAPI.field('SamplesDirectoryExclusions').value,
         newValues: cliInput.getParam('values'),
         cliInput
       })
@@ -52,8 +52,8 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     }
     if (!newConfigValue) return cliNext()
     try {
-      Config.field(paramName).value = newConfigValue
-      await Config.save()
+      ConfigAPI.field(paramName).value = newConfigValue
+      await ConfigAPI.save()
     } catch (e) {
       cliPrinter.error(e.message)
     }
@@ -78,11 +78,11 @@ const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
 
 const configDescribeParameters = ({ cliPrinter }) => {
   let currentValue = null
-  Config.getFieldsList().forEach((configParam) => {
+  ConfigAPI.getFieldsList().forEach((configParam) => {
     cliPrinter.title(configParam)
-    const description = Config.field(configParam).description
+    const description = ConfigAPI.field(configParam).description
     if (description.length > 0) {
-      currentValue = Config.field(configParam).value
+      currentValue = ConfigAPI.field(configParam).value
       cliPrinter.info(`  ${description[0]}`)
 
       if (currentValue instanceof Array) {

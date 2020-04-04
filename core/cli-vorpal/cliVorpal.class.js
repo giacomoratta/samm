@@ -11,6 +11,9 @@ class CliVorpal {
     this.vorpal = vorpal()
     this.delimiter = ''
     this.logger = console
+    this.printer = new CliPrinter({
+      logFn: (msg) => { this.vorpal.log(msg) } // workaround (logFn=this.log does not work)
+    })
     this.eventEmitter = new Events()
 
     this.vorpal.on('client_prompt_submit', (command) => {

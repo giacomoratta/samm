@@ -12,9 +12,7 @@ module.exports = {
   boot,
   clean,
 
-  API: {
-    export: {
-      generateSamplesDirectory: ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {}
-    }
+  ExportAPI: {
+    generateSamplesDirectory: ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {}
   }
 }

@@ -43,14 +43,12 @@ module.exports = {
   boot,
   clean,
 
-  API: {
-    config: ConfigModule.API.config,
-    pathQuery: PathQueryModule.API.pathQuery,
-    projectManager: ProjectModule.API.projectManager,
-    projectHistory: ProjectModule.API.projectHistory,
-    projectTemplate: ProjectModule.API.projectTemplate,
-    sampleIndex: SampleModule.API.sampleIndex,
-    sampleLookup: SampleModule.API.sampleLookup,
-    sampleSet: SampleModule.API.sampleSet
-  }
+  ConfigAPI: ConfigModule.ConfigAPI,
+  PathQueryAPI: PathQueryModule.PathQueryAPI,
+  ProjectManagerAPI: ProjectModule.ProjectManagerAPI,
+  ProjectHistoryAPI: ProjectModule.ProjectHistoryAPI,
+  ProjectTemplateAPI: ProjectModule.ProjectTemplateAPI,
+  SampleIndexAPI: SampleModule.SampleIndexAPI,
+  SampleLookupAPI: SampleModule.SampleLookupAPI,
+  SampleSetAPI: SampleModule.SampleSetAPI
 }

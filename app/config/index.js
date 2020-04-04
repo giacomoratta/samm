@@ -25,29 +25,27 @@ module.exports = {
   boot,
   clean,
 
-  API: {
-    config: {
+  ConfigAPI: {
 
-      field (name) {
-        return ConfigInstance.field(name)
-      },
+    field (name) {
+      return ConfigInstance.field(name)
+    },
 
-      has (name) {
-        return ConfigInstance.has(name)
-      },
+    has (name) {
+      return ConfigInstance.has(name)
+    },
 
-      getFieldsList () {
-        return ConfigInstance.list({ writableOnly: true })
-      },
+    getFieldsList () {
+      return ConfigInstance.list({ writableOnly: true })
+    },
 
-      async save () {
-        try {
-          const saveResult = await ConfigInstance.save()
-          saveResult === true && log.info('Configuration saved successfully.')
-          saveResult !== true && log.info('Configuration not saved.')
-        } catch (e) {
-          log.error(e, 'Error while saving the configuration.')
-        }
+    async save () {
+      try {
+        const saveResult = await ConfigInstance.save()
+        saveResult === true && log.info('Configuration saved successfully.')
+        saveResult !== true && log.info('Configuration not saved.')
+      } catch (e) {
+        log.error(e, 'Error while saving the configuration.')
       }
     }
   }

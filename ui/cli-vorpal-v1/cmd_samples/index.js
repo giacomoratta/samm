@@ -1,6 +1,5 @@
-const { API, Cli } = require('../ui_common')
-const Config = API.config
-const SampleIndex = API.sampleIndex
+const { App, Cli } = require('../ui_common')
+const { ConfigAPI, SampleIndexAPI } = App
 
 const commandName = 'samples-scan'
 
@@ -12,22 +11,22 @@ Cli.addCommandHeader(commandName)
   .option('-f, --force', 'Force the rescan')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
-  if (!Config.field('SamplesDirectory').value) {
+  if (!ConfigAPI.field('SamplesDirectory').value) {
     cliPrinter.warn('No samples directory set; use \'config SamplesDirectory\'.')
     return cliNext()
   }
 
-  if (SampleIndex.absent() !== true && SampleIndex.empty() !== true && !cliInput.hasOption('force')) {
+  if (SampleIndexAPI.absent() !== true && SampleIndexAPI.empty() !== true && !cliInput.hasOption('force')) {
     cliPrinter.warn('Samples already indexed; use -f to force a rescan.')
     return cliNext()
   }
 
   cliPrinter.info('Indexing in progress...')
-  if (await SampleIndex.create() !== true) {
+  if (await SampleIndexAPI.create() !== true) {
     cliPrinter.error('Indexing process has failed.')
     return cliNext()
   }
 
-  cliPrinter.info(`Indexing process completed successfully: ${SampleIndex.size()} samples found.`)
+  cliPrinter.info(`Indexing process completed successfully: ${SampleIndexAPI.size()} samples found.`)
   return cliNext()
 })
