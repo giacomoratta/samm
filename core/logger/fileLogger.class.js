@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const fsExtra = require('fs-extra')
 const childProcess = require('child_process')
 const stream = require('stream')
@@ -6,11 +7,12 @@ const pino = require('pino')
 const pinoTeeReq = require.resolve('pino-tee')
 
 class FileLogger {
-  constructor ({ logsDirPath, minLevel = 10 }) {
+  constructor ({ logsDirPath, minLevel = 10, maxFiles = 10 }) {
     this.mainLogFile = logsDirPath ? path.join(logsDirPath, `${this._generateFileName()}.log`) : null // todo: add date to filename
     logsDirPath && fsExtra.ensureDir(logsDirPath)
 
-    this._init({ logsDirPath, minLevel })
+    logsDirPath && this._removeOldLogFiles({ logsDirPath, maxFiles })
+    this._init({ minLevel })
   }
 
   _init ({ minLevel }) {
@@ -25,7 +27,7 @@ class FileLogger {
     // Log to multiple files using a separate process
     this.childProcess = childProcess.spawn(process.execPath, [
       pinoTeeReq,
-      'debug', this.mainLogFile
+      'trace', this.mainLogFile
       // 'info', `${logPath}/info.log`,
       // 'warn', `${logPath}/warn.log`,
       // 'error', `${logPath}/error.log`,
@@ -44,10 +46,23 @@ class FileLogger {
       d.getFullYear().toString(),
       (d.getMonth() + 1).toString().padStart(2, '0'),
       d.getDate().toString().padStart(2, '0'),
-      'T',
-      d.getHours().toString().padStart(2, '0'),
-      d.getMinutes().toString().padStart(2, '0')
+      'H',
+      d.getHours().toString().padStart(2, '0')
+      // d.getMinutes().toString().padStart(2, '0')
     ].join('')
+  }
+
+  _removeOldLogFiles ({ logsDirPath, maxFiles }) {
+    fs.readdir(logsDirPath, async (err, items) => {
+      if (err || !items || items.length < maxFiles) return
+      items.sort((a, b) => {
+        return b.localeCompare(a)
+      })
+      items = items.slice(maxFiles)
+      for (let i = 0; i < items.length; i++) {
+        fs.unlink(path.join(logsDirPath, items[i]), () => {})
+      }
+    })
   }
 
   child ({ module }) {

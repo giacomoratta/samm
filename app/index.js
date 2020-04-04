@@ -4,9 +4,7 @@ const PathQueryModule = require('./path-query')
 const ProjectModule = require('./project')
 const SampleModule = require('./sample')
 const { fileUtils } = require('../core/utils/file.utils')
-
-const { createLogger, setLogsDirectory } = require('../core/logger')
-const log = createLogger('app')
+const log = require('./logger').createLogger('app')
 
 /**
  * Starts the boot procedure for the application
@@ -15,7 +13,6 @@ const log = createLogger('app')
  */
 const boot = async ({ appRootPath }) => {
   const AppDataDirectory = path.join(appRootPath, process.env.APP_DATA_DIRNAME || 'app-data')
-  setLogsDirectory(path.join(AppDataDirectory, 'logs'))
 
   log.info('Booting the application...')
   log.info(`App data directory: ${AppDataDirectory}`)

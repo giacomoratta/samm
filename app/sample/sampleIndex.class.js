@@ -1,7 +1,7 @@
 const config = require('../config').API.config
 const { SequoiaPath } = require('../../core/sequoia-path')
 const { SampleInfo } = require('./sampleInfo.class')
-const log = require('../../core/logger').createLogger('sampleIndex')
+const log = require('../logger').createLogger('sampleIndex')
 
 class SampleIndex extends SequoiaPath {
   constructor (filePath) {

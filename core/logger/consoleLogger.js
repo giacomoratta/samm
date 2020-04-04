@@ -6,7 +6,20 @@ const addArguments = function (extra, args) {
   return newArgs
 }
 
-class BasicLogger {
+class ConsoleLogger {
+  child ({ module }) {
+    return new ChildLogger({ module })
+  }
+
+  kill () {
+  }
+}
+
+module.exports = {
+  ConsoleLogger
+}
+
+class ChildLogger {
   constructor ({ module }) {
     this.module = module
     this.moduleLabel = `[${module}]`
@@ -31,13 +44,8 @@ class BasicLogger {
   error () {
     console.error.apply(null, addArguments([this.moduleLabel], arguments))
   }
-}
 
-const createLogger = (module) => {
-  return new BasicLogger({ module })
-}
-
-module.exports = {
-  createLogger,
-  setLogsDirectory: () => { }
+  fatal () {
+    console.error.apply(null, addArguments([this.moduleLabel], arguments))
+  }
 }

@@ -1,7 +1,7 @@
 const path = require('path')
 const { fileUtils } = require('../../core/utils/file.utils')
 const { SampleInfo } = require('../sample/sampleInfo.class')
-const log = require('../../core/logger').createLogger('export')
+const log = require('../logger').createLogger('export')
 
 const generateSamplesDirectory = ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {
   if (!samplesArray || samplesArray.length === 0) {

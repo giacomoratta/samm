@@ -1,4 +1,4 @@
-const log = require('../../core/logger').createLogger('bookmarks')
+const log = require('../logger').createLogger('bookmarks')
 
 const clean = async () => {
   log.info('Cleaning data...')

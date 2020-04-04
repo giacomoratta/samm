@@ -1,4 +1,4 @@
-const log = require('../../core/logger').createLogger('export')
+const log = require('../logger').createLogger('export')
 
 const clean = async () => {
   log.info('Cleaning data...')

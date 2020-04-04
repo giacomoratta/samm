@@ -1,5 +1,5 @@
 const { ConfigFile } = require('./configFile.class')
-const log = require('../../core/logger').createLogger('config')
+const log = require('../logger').createLogger('config')
 
 let ConfigInstance = null
 

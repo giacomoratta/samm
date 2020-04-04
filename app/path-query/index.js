@@ -1,7 +1,7 @@
 const { PathQueryFile } = require('./pathQueryFile.class')
 const { PathBasedQuery } = require('./pathBasedQuery.class')
 const { SpheroidList } = require('../../core/spheroid-list')
-const log = require('../../core/logger').createLogger('path-query')
+const log = require('../logger').createLogger('path-query')
 
 const PathBasedQueryCache = new SpheroidList({ maxSize: 30 })
 let PathQueryFileInstance = null

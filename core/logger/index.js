@@ -1,14 +1,6 @@
-let logModule
-if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'production') {
-  logModule = require('./pino.logger')
-} else {
-  logModule = require('./basic.logger')
+const { FileLogger } = require('./fileLogger.class')
+const { BasicLogger } = require('./basicLogger.class')
+module.exports = {
+  FileLogger,
+  BasicLogger
 }
-
-const log = logModule.createLogger('logger')
-log.info('.')
-log.info('.')
-log.info('.')
-log.info(`LOGGER STARTED at ${(new Date().toUTCString())}`)
-
-module.exports = logModule

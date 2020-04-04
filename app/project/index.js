@@ -1,7 +1,7 @@
 const config = require('../config').API.config
 const { Project } = require('./project.class')
 const { ProjectHistoryFile } = require('./projectHistoryFile.class')
-const log = require('../../core/logger').createLogger('project')
+const log = require('../logger').createLogger('project')
 
 let ProjectHistoryFileInstance = null
 

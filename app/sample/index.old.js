@@ -3,7 +3,7 @@ const { PathQuery } = require('../path-query')
 const { SampleIndex } = require('../../core/sequoia-path/sequoiaIndex.class.old')
 const { SampleSet } = require('./sampleSet.class')
 const { SpheroidList } = require('../../core/spheroid-list')
-const log = require('../../core/logger').createLogger('sample')
+const log = require('../logger').createLogger('sample')
 
 const SampleSetCache = new SpheroidList({ maxSize: 20 })
 const LookupCache = new SpheroidList({ maxSize: 40 })

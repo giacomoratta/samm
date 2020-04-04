@@ -1,4 +1,4 @@
-const log = require('../../core/logger').createLogger('sample')
+const log = require('../logger').createLogger('sample')
 const { SampleIndex } = require('./sampleIndex.class')
 
 let SampleIndexInstance = null
