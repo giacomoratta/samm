@@ -32,7 +32,8 @@ class SampleIndex extends SequoiaPath {
     try {
       const dataPresence = await super.load()
       log.info({ dataPresence }, 'Loaded successfully')
-      ConfigAPI.field('Status').fn.setProp('new-scan-needed', true)
+      ConfigAPI.field('Status').fn.setProp('new-scan-needed', !dataPresence)
+      dataPresence && ConfigAPI.field('Status').fn.setProp('first-scan-needed', false)
       await ConfigAPI.save()
       return true
     } catch (e) {

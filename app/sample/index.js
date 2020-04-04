@@ -48,21 +48,13 @@ module.exports = {
       return _absentSampleIndex()
     },
 
-    /**
-     * Current sample index is empty
-     * @returns {boolean}
-     */
     empty: () => {
-      if (!_absentSampleIndex()) return true
+      if (_absentSampleIndex()) return true
       return SampleIndexInstance.empty
     },
 
-    /**
-     * The number of samples (files only)
-     * @returns {number}
-     */
     size: () => {
-      if (!_absentSampleIndex()) return -1
+      if (_absentSampleIndex()) return -1
       return SampleIndexInstance.fileCount
     },
 
@@ -71,7 +63,7 @@ module.exports = {
      * @returns {Promise<boolean>}
      */
     create: async () => {
-      if (!_absentSampleIndex()) return false
+      if (!SampleIndexInstance) return false
       await SampleIndexInstance.clean()
       SampleIndexInstance = new SampleIndex(SampleIndexFilePath)
       return SampleIndexInstance.regenerate()
