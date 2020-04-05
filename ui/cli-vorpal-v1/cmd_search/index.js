@@ -27,7 +27,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   const paramQueryString = cliInput.getParam('query')
   if (paramQueryString) {
     cliPrinter.info(`Searching samples with query: ${paramQueryString}`)
-    const sampleSet = SampleSetAPI.create({ queryString: paramQueryString })
+    const { sampleSet } = SampleSetAPI.create({ queryString: paramQueryString })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
@@ -45,7 +45,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
       cliPrinter.warn('Query not found!')
       return cliNext()
     }
-    const sampleSet = SampleSetAPI.create({ pathQueryObj })
+    const { sampleSet } = SampleSetAPI.create({ pathQueryObj })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
@@ -55,7 +55,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   }
 
   /* No options, no params */
-  const sampleSet = SampleSetAPI.latest()
+  const { sampleSet } = SampleSetAPI.latest()
   if (!sampleSet || sampleSet.size === 0) {
     cliPrinter.warn('No samples found in the latest search!')
   } else {

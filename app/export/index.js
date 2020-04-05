@@ -1,3 +1,4 @@
+const exportSampleSet = require('./exportSampleSet')
 const log = require('../logger').createLogger('export')
 
 const clean = async () => {
@@ -13,6 +14,6 @@ module.exports = {
   clean,
 
   ExportAPI: {
-    generateSamplesDirectory: ({ samplesArray, samplesQuery, destinationPath, directoryName, overwrite }) => {}
+    exportSampleSet
   }
 }

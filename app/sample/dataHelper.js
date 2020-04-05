@@ -54,41 +54,38 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pa
 }
 
 const getSampleSet = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
-  if (!pbqEntry) return null
-  return pbqEntry.sampleSet
+  return _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj }) || {}
 }
 
 const getSampleLook = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
   const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
-  if (!pbqEntry) return null
+  if (!pbqEntry) return {}
   pbqEntry.sampleLook = pbqEntry.sampleSet.random({
     max: ConfigAPI.field('LookRandomCount').value,
     maxFromSameDirectory: ConfigAPI.field('LookRandomSameDirectory').value
   })
-  return pbqEntry.sampleLook
+  return pbqEntry
 }
 
 const latestSampleSet = () => {
   if (!LatestSampleSetLabel || !DataHelperCache.has(LatestSampleSetLabel)) {
     log.warn({ LatestSampleSetLabel }, 'Latest sample set not found.')
-    return null
+    return {}
   }
-  const pbqEntry = DataHelperCache.get(LatestSampleSetLabel)
-  return pbqEntry.sampleSet
+  return DataHelperCache.get(LatestSampleSetLabel)
 }
 
 const latestSampleLook = () => {
   if (!LatestSampleSetLabel || !DataHelperCache.has(LatestSampleSetLabel)) {
     log.warn({ LatestSampleSetLabel }, 'Latest sample set not found (sample look).')
-    return null
+    return {}
   }
   const pbqEntry = DataHelperCache.get(LatestSampleSetLabel)
   if (!pbqEntry.sampleLook) {
     log.warn({ LatestSampleSetLabel }, 'Latest sample look not found.')
-    return null
+    return {}
   }
-  return pbqEntry.sampleLook
+  return pbqEntry
 }
 
 module.exports = {

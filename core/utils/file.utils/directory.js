@@ -1,4 +1,5 @@
 const { _ } = require('../lodash.extended')
+const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
 const rimraf = require('rimraf') /* A "rm -rf" util for nodejs */
@@ -62,7 +63,7 @@ libUtils.copyDirectory = (pathFrom, pathTo, options) => {
   })
 }
 
-libUtils.readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
+libUtils.readDirectory = async (pathString, preProcessItemsFn, itemFn) => {
   return new Promise((resolve) => {
     if (!itemFn) itemFn = async function () {}
     fs.readdir(pathString, async (err, items) => {
@@ -76,6 +77,18 @@ libUtils.readDirectory = async function (pathString, preProcessItemsFn, itemFn) 
       resolve(items)
     })
   })
+}
+
+libUtils.uniqueDirectoryName = async ({ parentPath, directoryName }) => {
+  let newDestinationPath = path.join(parentPath, directoryName)
+  const parsedDir = path.parse(newDestinationPath)
+  let i = 1
+  while (await libUtils.directoryExists(newDestinationPath) === true && i < 1000) {
+    newDestinationPath = path.join(parsedDir.dir, `${parsedDir.base}_${i}`)
+    i++
+  }
+  if (i >= 1000) return null
+  return newDestinationPath
 }
 
 module.exports = libUtils

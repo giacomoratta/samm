@@ -1,4 +1,5 @@
 const { _ } = require('../lodash.extended')
+const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
 const iconv = require('iconv-lite')
@@ -151,6 +152,18 @@ libUtils.removeFile = (pathString) => {
       resolve(true)
     })
   })
+}
+
+libUtils.uniqueFileName = async ({ parentPath, fileName }) => {
+  let newDestinationPath = path.join(parentPath, fileName)
+  const parsedFile = path.parse(newDestinationPath)
+  let i = 1
+  while (await libUtils.fileExists(newDestinationPath) === true && i < 1000) {
+    newDestinationPath = path.join(parsedFile.dir, `${parsedFile.name}_${i}${parsedFile.ext}`)
+    i++
+  }
+  if (i >= 1000) return null
+  return newDestinationPath
 }
 
 module.exports = libUtils

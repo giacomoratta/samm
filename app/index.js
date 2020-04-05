@@ -1,5 +1,6 @@
 const path = require('path')
 const ConfigModule = require('./config')
+const ExportModule = require('./export')
 const PathQueryModule = require('./path-query')
 const ProjectModule = require('./project')
 const SampleModule = require('./sample')
@@ -44,6 +45,7 @@ module.exports = {
   clean,
 
   ConfigAPI: ConfigModule.ConfigAPI,
+  ExportAPI: ExportModule.ExportAPI,
   PathQueryAPI: PathQueryModule.PathQueryAPI,
   ProjectManagerAPI: ProjectModule.ProjectManagerAPI,
   ProjectHistoryAPI: ProjectModule.ProjectHistoryAPI,
