@@ -102,6 +102,23 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
     overwrite: !!cliInput.getOption('overwrite')
   })
 
+  let wantToProceed = false
+
+  await cliPrompt({
+    message: 'Do you want to proceed? (y/n)',
+    showFn: () => {
+      cliPrinter.info(`Going to export ${sampleSet.size} samples to ${exportPath} .\n`)
+    }
+  }, async ({ exit, input }) => {
+    if (exit === true || input !== 'y') {
+      return true
+    }
+    wantToProceed = true
+    return true
+  })
+
+  if (!wantToProceed) return
+
   const expResult = await ExportAPI.exportSampleSet({
     sampleSet,
     exportPath,
@@ -118,19 +135,4 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
     cliPrinter.newLine()
     cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
   }
-
-  return
-
-  await cliPrompt({
-    message: 'Do you want to proceed? (y/n)',
-    showFn: () => {
-      cliPrinter.info(`Going to export ${sampleSet.size} samples to ${exportPath} .`)
-    }
-  }, async ({ exit, input }) => {
-    if (exit === true || input !== 'y') {
-      return true
-    }
-
-    return true
-  })
 }
