@@ -254,7 +254,7 @@ class SequoiaPath {
    * Simple loop on tree nodes.
    * @param {function({item:<PathInfo>})} itemFn
    */
-  forEach ({ itemFn }) {
+  forEach (itemFn) {
     if (!this.tree || !this.root) return
     const iterator = this.tree.treeIterator(this.root, {})
     const { ObjectClass } = this.data.options

@@ -1,5 +1,5 @@
 const { App, Cli } = require('../ui_common')
-const { ConfigAPI, SampleIndexAPI, SampleSetAPI } = App
+const { ConfigAPI, SampleIndexAPI, SampleSetAPI, PathQueryAPI } = App
 
 const commandName = 'search'
 
@@ -33,10 +33,15 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   }
 
   /* OPTION: label */
-  const optQueryLabel = cliInput.getParam('label')
+  const optQueryLabel = cliInput.getOption('label')
   if (optQueryLabel) {
     cliPrinter.info(`Searching samples with label: ${optQueryLabel}`)
-    const sampleSet = SampleSetAPI.create({ queryLabel: optQueryLabel })
+    const pathQueryObj = PathQueryAPI.get(optQueryLabel)
+    if(!pathQueryObj) {
+      cliPrinter.warn('Query not found!')
+      return cliNext()
+    }
+    const sampleSet = SampleSetAPI.create({ pathQueryObj })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
@@ -66,7 +71,8 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
 const printSearchResults = (sampleSet, cliPrinter) => {
   const printer = cliPrinter.child()
   let index = 1
+  const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    printer.info(`${index++} ${sample.relPath}`)
+    printer.info(`${(index++).toString().padStart(length,'0')}) ${sample.relPath}`)
   })
 }

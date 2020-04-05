@@ -50,11 +50,9 @@ describe('SequoiaPath object', function () {
   it('should loop on a tree', async function () {
     const filesArray = []
     const directoriesArray = []
-    sq.forEach({
-      itemFn: ({ item }) => {
-        if (item.isDirectory) directoriesArray.push(item)
-        else if (item.isFile) filesArray.push(item)
-      }
+    sq.forEach(({ item }) => {
+      if (item.isDirectory) directoriesArray.push(item)
+      else if (item.isFile) filesArray.push(item)
     })
     expect(directoriesArray.length).toEqual(sq.directoryCount)
     expect(filesArray.length).toEqual(sq.fileCount)

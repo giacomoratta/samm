@@ -38,6 +38,7 @@ App.boot({
   require('./cmd_project')
   require('./cmd_query')
   require('./cmd_samples')
+  require('./cmd_search')
 
   Cli.show('mpl')
 }).catch((e) => {

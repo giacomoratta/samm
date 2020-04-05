@@ -9,7 +9,7 @@ class CliPrinter {
     this.logFn = logFn
   }
 
-  child ({ command }) {
+  child ({ command } = {}) {
     if (!command) command = this.command
     return new this.constructor({ command, indentLevel: this.indent + 1 })
   }

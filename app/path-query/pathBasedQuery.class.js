@@ -77,7 +77,7 @@ class PathBasedQuery {
   }
 
   static generateQueryStringLabel (queryString) {
-    return queryString.toLowerCase()
+    return queryString.toString().toLowerCase()
       .replace(/[^a-zA-Z0-9+,]/g, '')
       .replace(/[^a-zA-Z0-9]/g, ' ')
       .trim()

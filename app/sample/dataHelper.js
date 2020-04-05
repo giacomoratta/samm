@@ -11,10 +11,11 @@ let LatestSampleSetLabel = null
  * @param {SampleIndex} sampleIndex
  * @param {string} [queryString]: string for a path-based query
  * @param {string} [queryLabel]: string for a path-based object label
+ * @param {PathBasedQuery} [pathQueryObj]: path query object
  * @returns {Object|null} cache entry
  */
-const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel }) => {
-  const designatedQueryLabel = queryLabel || PathBasedQuery.generateQueryStringLabel(queryString)
+const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
+  const designatedQueryLabel = queryLabel || PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
   if (designatedQueryLabel.length === 0) {
     log.warn({ designatedQueryLabel, queryString, queryLabel }, 'Invalid generated query string.')
     return
@@ -27,7 +28,7 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel }) 
     return pbqEntry
   }
 
-  const pathBasedQueryObj = new PathBasedQuery(queryString)
+  const pathBasedQueryObj = pathQueryObj || new PathBasedQuery(queryString)
   if (!pathBasedQueryObj.isValid()) {
     log.warn({ queryString }, 'Invalid path based query.')
     return
@@ -51,14 +52,14 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel }) 
   return pbqEntry
 }
 
-const getSampleSet = ({ sampleIndex, queryString, queryLabel }) => {
-  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel })
+const getSampleSet = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
+  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
   if (!pbqEntry) return null
   return pbqEntry.sampleSet
 }
 
-const getSampleLook = ({ sampleIndex, queryString, queryLabel }) => {
-  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel })
+const getSampleLook = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
+  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
   if (!pbqEntry) return null
   return pbqEntry.sampleLook
 }

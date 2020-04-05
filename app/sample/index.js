@@ -34,9 +34,9 @@ module.exports = {
   clean,
 
   SampleSetAPI: {
-    create: ({ queryString, queryLabel }) => {
+    create: ({ queryString, queryLabel, pathQueryObj }) => {
       if (_absentSampleIndex()) return
-      return getSampleSet({ sampleIndex: SampleIndexInstance, queryLabel, queryString })
+      return getSampleSet({ sampleIndex: SampleIndexInstance, queryLabel, queryString, pathQueryObj })
     },
     latest: () => {
       if (_absentSampleIndex()) return
@@ -45,9 +45,9 @@ module.exports = {
   },
 
   SampleLookAPI: {
-    create: ({ queryString, queryLabel }) => {
+    create: ({ queryString, queryLabel, pathQueryObj }) => {
       if (_absentSampleIndex()) return
-      return getSampleLook({ sampleIndex: SampleIndexInstance, queryLabel, queryString })
+      return getSampleLook({ sampleIndex: SampleIndexInstance, queryLabel, queryString, pathQueryObj })
     },
     latest: () => {
       if (_absentSampleIndex()) return
