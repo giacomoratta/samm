@@ -92,7 +92,7 @@ const showAllBookmarks = ({ tag, cliNext, cliPrinter }) => {
 }
 
 const printBookmarks = ({ tag, toArray = false, cliPrinter }) => {
-  const indentedPrinter = cliPrinter.createChild({ command: cliPrinter.command })
+  const indentedPrinter = cliPrinter.child()
   const registry = []
   let i = 0
   const printBookmark = (bookmark) => {

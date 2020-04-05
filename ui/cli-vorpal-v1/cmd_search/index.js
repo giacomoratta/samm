@@ -26,6 +26,8 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
     const sampleSet = SampleSetAPI.create({ queryString: paramQueryString })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
+    } else {
+      printSearchResults(sampleSet, cliPrinter)
     }
     return cliNext()
   }
@@ -37,6 +39,8 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
     const sampleSet = SampleSetAPI.create({ queryLabel: optQueryLabel })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
+    } else {
+      printSearchResults(sampleSet, cliPrinter)
     }
     return cliNext()
   }
@@ -58,3 +62,11 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   // search [query]: search, set and print all samples
   // search -l <label>: get path-query, search, set and print latest lookup
 })
+
+const printSearchResults = (sampleSet, cliPrinter) => {
+  const printer = cliPrinter.child()
+  let index = 1
+  sampleSet.forEach((sample) => {
+    printer.info(`${index++} ${sample.relPath}`)
+  })
+}

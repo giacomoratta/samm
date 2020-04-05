@@ -104,7 +104,7 @@ vCli.addCommandBody('wait2', async function ({ thisCli, cliNext, cliPrinter }) {
     name: 'inputValue',
     message: "['q' to quit] > "
   }, (result) => {
-    const cliP1 = cliPrinter.createChild({ command: 'clip-test' })
+    const cliP1 = cliPrinter.child({ command: 'clip-test' })
     console.log(cliP1.indent.length)
     cliP1.info('result prompt:', result.inputValue)
     data = result
