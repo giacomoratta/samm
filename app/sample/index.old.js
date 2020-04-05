@@ -199,8 +199,8 @@ const lookupByPathQuery = async ({ queryString, queryLabel }) => {
   const sampleSetInfo = await sampleSetByPathQuery({ queryString, queryLabel })
   if (!sampleSetInfo) return
   lookup = sampleSetInfo.sampleSet.random({
-    max: Config.get('RandomCount'),
-    maxFromSameDirectory: Config.get('MaxSamplesSameDirectory')
+    max: Config.get('LookRandomCount'),
+    maxFromSameDirectory: Config.get('LookRandomSameDirectory')
   })
   if (lookup.length > 0) {
     LookupCache.add({

@@ -82,19 +82,21 @@ class SampleSet {
    * Get a random subset of SampleInfo objects
    * @param {number} max
    * @param {number} maxFromSameDirectory
-   * @returns {[<SampleInfo>]}
+   * @returns {SampleSet}
    */
   random ({ max = 10, maxFromSameDirectory = 0 }) {
-    const randomArray = []
+    const randomSampleSet = new SampleSet({
+      validateFn: this.validateFn
+    })
     const collectionSize = this.array.length
     max = Math.min(max, collectionSize)
 
     const addedIndexes = []
     const addedDirectories = {}
 
-    for (let randomIndex, retry = 10, i = 0; randomArray.length < max; i++) {
+    for (let randomIndex, retry = 10, i = 0; randomSampleSet.size < max; i++) {
       if (i === collectionSize) {
-        if (randomArray.length < max && retry > 0) {
+        if (randomSampleSet.size < max && retry > 0) {
           i = -1
           retry--
           continue
@@ -113,10 +115,10 @@ class SampleSet {
         addedDirectories[this.array[randomIndex].dir]++
       }
 
-      randomArray.push(this.array[randomIndex])
+      randomSampleSet.add(this.array[randomIndex])
     }
 
-    return randomArray
+    return randomSampleSet
   }
 }
 

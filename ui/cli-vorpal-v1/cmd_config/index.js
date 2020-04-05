@@ -50,7 +50,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     } else {
       newConfigValue = cliInput.getParam('values')[0]
     }
-    if (!newConfigValue) return cliNext()
+    if (newConfigValue === null || newConfigValue === undefined) return cliNext()
     try {
       ConfigAPI.field(paramName).value = newConfigValue
       await ConfigAPI.save()

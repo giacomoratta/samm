@@ -8,7 +8,7 @@
                 </p>
                 <p>
                     Run a search inside the samples collection and print out a random selection of the founded samples.
-                    The results depends on these configuration parameters: <?php $TemplateMgr->printCfgParamLink('RandomCount','RandomCount'); ?>
+                    The results depends on these configuration parameters: <?php $TemplateMgr->printCfgParamLink('LookRandomCount','LookRandomCount'); ?>
                     and <?php $TemplateMgr->printCfgParamLink('MaxOccurrencesSameDirectory','MaxOccurrencesSameDirectory'); ?>.
                 </p>
                 <p>

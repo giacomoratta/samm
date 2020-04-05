@@ -33,8 +33,8 @@
                     <label>Project: </label>
                     <span>absolute path to the current project (where the imported samples directory will be created).</span>
                 </p>
-                <p <?php $TemplateMgr->printCfgParamID('randomcount'); ?>>
-                    <label>RandomCount: </label>
+                <p <?php $TemplateMgr->printCfgParamID('LookRandomCount'); ?>>
+                    <label>LookRandomCount: </label>
                     <span>number of random samples selected by the <?php $TemplateMgr->printCommandLink('lookup','lookup command'); ?>.</span>
                 </p>
                 <p <?php $TemplateMgr->printCfgParamID('maxoccurrencessamedirectory'); ?>>
@@ -42,7 +42,7 @@
                     <span>number of random samples selected by the <?php $TemplateMgr->printCommandLink('lookup','lookup command'); ?>
                         which can belong to the same directory. The lower value the higher randomness.
                                 The lookup command will increase this value if not enought samples are found in order
-                                to guarantee the <?php $TemplateMgr->printCfgParamLink('randomcount','RandomCount'); ?> value.
+                                to guarantee the <?php $TemplateMgr->printCfgParamLink('LookRandomCount','LookRandomCount'); ?> value.
                             </span>
                 </p>
                 <p <?php $TemplateMgr->printCfgParamID('tags'); ?>>

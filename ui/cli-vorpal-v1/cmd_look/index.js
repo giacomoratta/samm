@@ -1,13 +1,14 @@
 const { App, Cli } = require('../ui_common')
-const { ConfigAPI, SampleIndexAPI, SampleSetAPI, PathQueryAPI } = App
+const { ConfigAPI, SampleIndexAPI, SampleLookAPI, PathQueryAPI } = App
 
-const commandName = 'search'
+const commandName = 'look'
 
 Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
-  .description('Search samples by query or show the latest search results. \n')
+  .description('Search samples by query or show the latest sample look. \n')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
+  .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
 
 Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   if (ConfigAPI.field('SamplesDirectory').unset === true) {
@@ -27,7 +28,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   const paramQueryString = cliInput.getParam('query')
   if (paramQueryString) {
     cliPrinter.info(`Searching samples with query: ${paramQueryString}`)
-    const sampleSet = SampleSetAPI.create({ queryString: paramQueryString })
+    const sampleSet = SampleLookAPI.create({ queryString: paramQueryString })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
@@ -45,7 +46,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
       cliPrinter.warn('Query not found!')
       return cliNext()
     }
-    const sampleSet = SampleSetAPI.create({ pathQueryObj })
+    const sampleSet = SampleLookAPI.create({ pathQueryObj })
     if (!sampleSet || sampleSet.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
@@ -55,7 +56,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   }
 
   /* No options, no params */
-  const sampleSet = SampleSetAPI.latest()
+  const sampleSet = SampleLookAPI.latest()
   if (!sampleSet || sampleSet.size === 0) {
     cliPrinter.warn('No samples found in the latest search!')
   } else {
@@ -71,4 +72,8 @@ const printSearchResults = (sampleSet, cliPrinter) => {
   sampleSet.forEach((sample) => {
     printer.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath}`)
   })
+}
+
+const saveSearchResults = (sampleSet, cliPrinter) => {
+  // exportAPI save to
 }

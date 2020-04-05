@@ -1,3 +1,4 @@
+const { ConfigAPI } = require('../config')
 const { PathBasedQuery } = require('../path-query/pathBasedQuery.class')
 const { SampleSet } = require('./sampleSet.class')
 const { SpheroidList } = require('../../core/spheroid-list')
@@ -61,6 +62,10 @@ const getSampleSet = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) =>
 const getSampleLook = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
   const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
   if (!pbqEntry) return null
+  pbqEntry.sampleLook = pbqEntry.sampleSet.random({
+    max: ConfigAPI.field('LookRandomCount').value,
+    maxFromSameDirectory: ConfigAPI.field('LookRandomSameDirectory').value
+  })
   return pbqEntry.sampleLook
 }
 

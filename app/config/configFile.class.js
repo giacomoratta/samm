@@ -34,7 +34,7 @@ class ConfigFile extends JsonizedFile {
     }))
 
     this.add(this.DFBF.create({
-      name: 'RandomCount',
+      name: 'LookRandomCount',
       schema: {
         type: 'number',
         positive: true,
@@ -45,7 +45,7 @@ class ConfigFile extends JsonizedFile {
     }))
 
     this.add(this.DFBF.create({
-      name: 'MaxSamplesSameDirectory',
+      name: 'LookRandomSameDirectory',
       schema: {
         type: 'number',
         positive: true,

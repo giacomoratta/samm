@@ -49,6 +49,6 @@ module.exports = {
   ProjectHistoryAPI: ProjectModule.ProjectHistoryAPI,
   ProjectTemplateAPI: ProjectModule.ProjectTemplateAPI,
   SampleIndexAPI: SampleModule.SampleIndexAPI,
-  SampleLookupAPI: SampleModule.SampleLookupAPI,
+  SampleLookAPI: SampleModule.SampleLookAPI,
   SampleSetAPI: SampleModule.SampleSetAPI
 }
