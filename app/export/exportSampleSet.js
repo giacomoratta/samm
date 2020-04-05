@@ -15,6 +15,21 @@ const exportSampleSet = async function ({
 
   log.info(`Exporting ${sampleSet.size} samples to ${exportPath}...`)
 
+  const parentPath = path.parse(exportPath).dir
+  let ensureDirResult = await fileUtils.ensureDir(parentPath)
+  if (ensureDirResult !== true) {
+    log.error({ parentPath, result: ensureDirResult }, 'Cannot create the parent path')
+    exportResult.errors.push(ensureDirResult)
+    return exportResult
+  }
+
+  ensureDirResult = await fileUtils.ensureDir(exportPath)
+  if (ensureDirResult !== true) {
+    log.error({ exportPath, result: ensureDirResult }, 'Cannot create the export path')
+    exportResult.errors.push(ensureDirResult)
+    return exportResult
+  }
+
   const promisesArray = []
   const copyFile = (sourceSamplePath, destSamplePath, overwrite) => {
     promisesArray.push(fileUtils.copyFile(sourceSamplePath, destSamplePath, { overwrite }).then((result) => {
@@ -68,17 +83,6 @@ const getSamplesExportPath = async function ({
     return
   }
 
-  let ensureDirResult = await fileUtils.ensureDir(destinationPath)
-  if (ensureDirResult !== true) {
-    log.error({ destinationPath, result: ensureDirResult }, 'Cannot create the destination path')
-    return
-  }
-
-  ensureDirResult = await fileUtils.ensureDir(exportPath)
-  if (ensureDirResult !== true) {
-    log.error({ exportPath, result: ensureDirResult }, 'Cannot create the destination path')
-    return
-  }
   return exportPath
 }
 

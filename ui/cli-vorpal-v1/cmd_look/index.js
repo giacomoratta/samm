@@ -117,14 +117,14 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
     })
 
     if (expResult.success.length === 0) {
-      cliPrinter.info({ expResult }, `No samples exported to ${expResult.exportPath}.`)
+      cliPrinter.info(`No samples exported to ${expResult.exportPath}.`)
     } else if (expResult.failed.length === 0) {
-      cliPrinter.info({ expResult }, `${expResult.success.length}/${sampleSet.size} samples exported successfully to ${expResult.exportPath}.`)
+      cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
     } else {
       cliPrinter.info(`${sampleSet.size} samples not exported:`)
       cliPrinter.orderedList(expResult.failed)
       cliPrinter.newLine()
-      cliPrinter.info({ expResult }, `${expResult.success.length}/${sampleSet.size} samples exported successfully to ${expResult.exportPath}.`)
+      cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
     }
     return true
   })
