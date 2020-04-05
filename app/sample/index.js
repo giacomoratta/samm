@@ -1,5 +1,6 @@
 const log = require('../logger').createLogger('sample')
 const { SampleIndex } = require('./sampleIndex.class')
+const { getSampleSet, getSampleLook, latestSampleSet, latestSampleLook } = require('./dataHelper')
 
 let SampleIndexInstance = null
 let SampleIndexFilePath = null
@@ -33,15 +34,25 @@ module.exports = {
   clean,
 
   SampleSetAPI: {
-    create: ({ queryString, queryLabel, pathBasedQuery }) => {
-
+    create: ({ queryString, queryLabel }) => {
+      if (_absentSampleIndex()) return
+      return getSampleSet({ sampleIndex: SampleIndexInstance, queryLabel, queryString })
     },
-    latest: () => {}
+    latest: () => {
+      if (_absentSampleIndex()) return
+      return latestSampleSet()
+    }
   },
 
   SampleLookAPI: {
-    create: ({ queryString, queryLabel, pathBasedQuery }) => {},
-    latest: () => {}
+    create: ({ queryString, queryLabel }) => {
+      if (_absentSampleIndex()) return
+      return getSampleLook({ sampleIndex: SampleIndexInstance, queryLabel, queryString })
+    },
+    latest: () => {
+      if (_absentSampleIndex()) return
+      return latestSampleLook()
+    }
   },
 
   SampleIndexAPI: {

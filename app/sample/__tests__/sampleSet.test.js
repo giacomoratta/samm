@@ -6,15 +6,14 @@ const SamplesDirectory = path.join(path.resolve(path.join(__dirname, '..', '..',
 describe('SampleSet class', function () {
   it('should create a basic sample set', async function () {
     const TestSampleSet = new SampleSet()
-    let tmpSampleInfo1, tmpSampleInfo2, tmpSampleInfo3
 
-    tmpSampleInfo1 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file11.txt') })
+    const tmpSampleInfo1 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file11.txt') })
     TestSampleSet.add(tmpSampleInfo1)
 
-    tmpSampleInfo2 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file18.wav') })
+    const tmpSampleInfo2 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file18.wav') })
     TestSampleSet.add(tmpSampleInfo2)
 
-    tmpSampleInfo3 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory6', 'file64.json') })
+    const tmpSampleInfo3 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory6', 'file64.json') })
     TestSampleSet.add(tmpSampleInfo3)
 
     expect(TestSampleSet.size).toEqual(3)

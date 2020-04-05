@@ -84,6 +84,7 @@ module.exports = {
     },
 
     create: (queryString) => {
+      // todo: remove this method?
       const queryStringLabel = PathBasedQuery.generateQueryStringLabel(queryString)
       if (PathBasedQueryCache.has(queryStringLabel)) {
         const pathQueryObj = PathBasedQueryCache.get(queryStringLabel)
