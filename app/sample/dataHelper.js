@@ -34,8 +34,8 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel }) 
   }
 
   const sampleSetObj = new SampleSet({
-    validateFn: () => {
-      return pathBasedQueryObj.isValid() // todo: set validation rule
+    validateFn: (sample) => {
+      return sample.isFile === true && pathBasedQueryObj.check(sample.relPath)
     }
   })
   sampleIndex.forEach(({ item }) => { sampleSetObj.add(item) })

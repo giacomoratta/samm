@@ -1,13 +1,12 @@
 const { App, Cli } = require('../ui_common')
 const { ConfigAPI, SampleIndexAPI } = App
 
-const commandName = 'lookup'
+const commandName = 'look'
 
 Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
-  .description('Search samples by query or show the latest lookup. \n')
-  .option('-a, --all', 'Show all samples that match the query (instead of the default random selection)')
+  .description('Search samples by query or show the latest sample look. \n')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
   .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
 

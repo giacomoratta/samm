@@ -1,15 +1,13 @@
 const { App, Cli } = require('../ui_common')
-const { ConfigAPI, SampleIndexAPI } = App
+const { ConfigAPI, SampleIndexAPI, SampleSetAPI } = App
 
-const commandName = 'lookup'
+const commandName = 'search'
 
 Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
-  .description('Search samples by query or show the latest lookup. \n')
-  .option('-a, --all', 'Show all samples that match the query (instead of the default random selection)')
+  .description('Search samples by query or show the latest search results. \n')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
-  .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
 
 Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   if (SampleIndexAPI.absent() === true) {
@@ -21,6 +19,35 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
     return cliNext()
   }
 
+  /* PARAM: query */
+  const paramQueryString = cliInput.getParam('query')
+  if (paramQueryString) {
+    cliPrinter.info(`Searching samples with query: ${paramQueryString}`)
+    const sampleSet = SampleSetAPI.create({ queryString: paramQueryString })
+    if (!sampleSet || sampleSet.size === 0) {
+      cliPrinter.warn('Samples not found!')
+    }
+    return cliNext()
+  }
+
+  /* OPTION: label */
+  const optQueryLabel = cliInput.getParam('label')
+  if (optQueryLabel) {
+    cliPrinter.info(`Searching samples with label: ${optQueryLabel}`)
+    const sampleSet = SampleSetAPI.create({ queryLabel: optQueryLabel })
+    if (!sampleSet || sampleSet.size === 0) {
+      cliPrinter.warn('Samples not found!')
+    }
+    return cliNext()
+  }
+
+  /* No options, no params */
+  const sampleSet = SampleSetAPI.latest()
+  if (!sampleSet || sampleSet.size === 0) {
+    cliPrinter.warn('No samples found in the latest search!')
+  }
+  return cliNext()
+
   // look: print latest lookup
   // look [query]: search, set and print latest lookup
   // look -l <label>: get path-query, search, set and print latest lookup
@@ -30,6 +57,4 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   // search: print all samples
   // search [query]: search, set and print all samples
   // search -l <label>: get path-query, search, set and print latest lookup
-
-  return cliNext()
 })
