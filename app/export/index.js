@@ -1,4 +1,4 @@
-const exportSampleSet = require('./exportSampleSet')
+const { exportSampleSet, getSamplesExportPath } = require('./exportSampleSet')
 const log = require('../logger').createLogger('export')
 
 const clean = async () => {
@@ -14,6 +14,7 @@ module.exports = {
   clean,
 
   ExportAPI: {
+    getSamplesExportPath,
     exportSampleSet
   }
 }

@@ -1,6 +1,5 @@
 const { App, Cli } = require('../ui_common')
 const { ConfigAPI, SampleIndexAPI, SampleLookAPI, PathQueryAPI, ProjectManagerAPI, ExportAPI } = App
-const path = require('path')
 
 const commandName = 'look'
 
@@ -95,10 +94,16 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
   let destinationName = pathBasedQuery.label.substr(0, 16)
   if (destinationName.endsWith('_')) destinationName = destinationName.substr(0, destinationName.length - 1)
 
+  const exportPath = await ExportAPI.getSamplesExportPath({
+    destinationPath,
+    destinationName,
+    overwrite: false
+  })
+
   await cliPrompt({
     message: 'Do you want to proceed? (y/n)',
     showFn: () => {
-      cliPrinter.info(`Going to export ${sampleSet.size} samples to ${path.join(destinationPath, destinationName)} .`)
+      cliPrinter.info(`Going to export ${sampleSet.size} samples to ${exportPath} .`)
     }
   }, async ({ exit, input }) => {
     if (exit === true || input !== 'y') {
@@ -107,8 +112,7 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
 
     const expResult = await ExportAPI.exportSampleSet({
       sampleSet,
-      destinationPath,
-      destinationName,
+      exportPath,
       overwrite: false
     })
 
