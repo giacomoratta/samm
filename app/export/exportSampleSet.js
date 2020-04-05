@@ -13,6 +13,11 @@ const exportSampleSet = async function ({
     errors: []
   }
 
+  if (overwrite === true && await fileUtils.directoryExists(exportPath) === true) {
+    const removeDirResult = await fileUtils.removeDir(exportPath)
+    log.warn({ result: removeDirResult, exportPath }, 'Remove before overwrite')
+  }
+
   log.info(`Exporting ${sampleSet.size} samples to ${exportPath}...`)
 
   const parentPath = path.parse(exportPath).dir
@@ -31,30 +36,32 @@ const exportSampleSet = async function ({
   }
 
   const promisesArray = []
-  const copyFile = (sourceSamplePath, destSamplePath, overwrite) => {
-    promisesArray.push(fileUtils.copyFile(sourceSamplePath, destSamplePath, { overwrite }).then((result) => {
+  const copyFile = async (sample, exportPath, overwrite) => {
+    let destSamplePath
+    if (overwrite !== true) {
+      try {
+        destSamplePath = await fileUtils.uniqueFileName({
+          parentPath: exportPath,
+          fileName: sample.base
+        })
+      } catch (error) {
+        exportResult.errors.push(error)
+        exportResult.failed.push(sample.path)
+      }
+    } else {
+      destSamplePath = path.join(exportPath, sample.base)
+    }
+    try {
+      const result = await fileUtils.copyFile(sample.path, destSamplePath, { overwrite })
       exportResult.success.push(result.pathFrom)
-    }).catch((result) => {
-      // log.error({ result }, 'Copy failed')
+    } catch (result) {
       exportResult.errors.push(result.err)
       exportResult.failed.push(result.pathFrom)
-    }))
+    }
   }
 
   sampleSet.forEach((sample) => {
-    if (overwrite !== true) {
-      fileUtils.uniqueFileName({
-        parentPath: exportPath,
-        fileName: sample.base
-      }).then((uniqueFilePath) => {
-        copyFile(sample.path, uniqueFilePath, overwrite)
-      }).catch((error) => {
-        exportResult.errors.push(error)
-        exportResult.failed.push(sample.path)
-      })
-    } else {
-      copyFile(sample.path, path.join(exportPath, sample.base), overwrite)
-    }
+    promisesArray.push(copyFile(sample, exportPath, overwrite))
   })
 
   await Promise.all(promisesArray)
@@ -72,9 +79,9 @@ const getSamplesExportPath = async function ({
   destinationPath = path.join(destinationPath, 'mpl')
 
   let exportPath = path.join(destinationPath, destinationName)
-  if (overwrite === true && await fileUtils.directoryExists(exportPath) === true) {
-    const removeDirResult = await fileUtils.removeDir(exportPath)
-    log.warn({ result: removeDirResult, exportPath }, 'Remove before overwrite')
+  if (overwrite === true) {
+    log.warn({ overwrite, exportPath }, 'Export path will be overwritten')
+    return exportPath
   }
 
   exportPath = fileUtils.uniqueDirectoryNameSync({ parentPath: destinationPath, directoryName: destinationName })

@@ -8,7 +8,9 @@ Cli.addCommand(commandName, '[query]')
 Cli.addCommandHeader(commandName)
   .description('Search samples by query or show the latest sample look; ' +
     '(related configurations: LookRandomCount, LookRandomSameDirectory) \n')
+  .option('-d, --directory <name>', 'Directory name for the exported samples')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
+  .option('-o, --overwrite', 'Overwrite the destination directory if exists')
   .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
@@ -96,9 +98,28 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
 
   const exportPath = await ExportAPI.getSamplesExportPath({
     destinationPath,
-    destinationName,
-    overwrite: false
+    destinationName: cliInput.getOption('directory') || destinationName,
+    overwrite: !!cliInput.getOption('overwrite')
   })
+
+  const expResult = await ExportAPI.exportSampleSet({
+    sampleSet,
+    exportPath,
+    overwrite: !!cliInput.getOption('overwrite')
+  })
+
+  if (expResult.success.length === 0) {
+    cliPrinter.info(`No samples exported to ${exportPath}.`)
+  } else if (expResult.failed.length === 0) {
+    cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
+  } else {
+    cliPrinter.info(`${sampleSet.size} samples not exported:`)
+    cliPrinter.orderedList(expResult.failed)
+    cliPrinter.newLine()
+    cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
+  }
+
+  return
 
   await cliPrompt({
     message: 'Do you want to proceed? (y/n)',
@@ -110,22 +131,6 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
       return true
     }
 
-    const expResult = await ExportAPI.exportSampleSet({
-      sampleSet,
-      exportPath,
-      overwrite: false
-    })
-
-    if (expResult.success.length === 0) {
-      cliPrinter.info(`No samples exported to ${expResult.exportPath}.`)
-    } else if (expResult.failed.length === 0) {
-      cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
-    } else {
-      cliPrinter.info(`${sampleSet.size} samples not exported:`)
-      cliPrinter.orderedList(expResult.failed)
-      cliPrinter.newLine()
-      cliPrinter.info(`${expResult.success.length}/${sampleSet.size} samples exported successfully to ${exportPath}.`)
-    }
     return true
   })
 }
