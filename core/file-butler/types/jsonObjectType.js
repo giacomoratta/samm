@@ -24,6 +24,10 @@ class JsonObjectType {
     return this._keys.length
   }
 
+  get keys () {
+    return this._keys.concat() // simple copy
+  }
+
   clean () {
     this._collection = {}
     this._keys = []

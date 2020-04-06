@@ -47,6 +47,15 @@ class SampleSet {
   }
 
   /**
+   * Get sample by index
+   * @param {number} index
+   * @returns {SampleInfo}
+   */
+  get (index) {
+    return this.array[index]
+  }
+
+  /**
    * Add a SampleInfo object to the set.
    * @param {SampleInfo} sample
    * @returns {boolean}
