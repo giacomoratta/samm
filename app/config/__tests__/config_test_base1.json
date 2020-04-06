@@ -5,8 +5,8 @@
 		"samplePack1",
 		"samplePack2"
 	],
-	"RandomCount": 15,
-	"MaxSamplesSameDirectory": 2,
+	"LookRandomCount": 15,
+	"LookRandomSameDirectory": 2,
 	"ExcludedExtensionsForSamples": [
 		"exe",
 		"DS_Store",

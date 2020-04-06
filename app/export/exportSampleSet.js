@@ -70,7 +70,7 @@ const exportSampleSet = async function ({
   return exportResult
 }
 
-const getSamplesExportPath = async function ({
+const getExportPath = async function ({
   destinationPath,
   destinationName,
   overwrite = false
@@ -94,6 +94,6 @@ const getSamplesExportPath = async function ({
 }
 
 module.exports = {
-  getSamplesExportPath,
+  getExportPath,
   exportSampleSet
 }

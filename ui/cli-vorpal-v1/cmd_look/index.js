@@ -96,7 +96,7 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
   let destinationName = pathBasedQuery.label.substr(0, 16)
   if (destinationName.endsWith('_')) destinationName = destinationName.substr(0, destinationName.length - 1)
 
-  const exportPath = await ExportAPI.getSamplesExportPath({
+  const exportPath = await ExportAPI.getExportPath({
     destinationPath,
     destinationName: cliInput.getOption('directory') || destinationName,
     overwrite: !!cliInput.getOption('overwrite')

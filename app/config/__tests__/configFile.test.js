@@ -18,8 +18,8 @@ describe('App-specific ConfigFile', function () {
       'samplePack1',
       'samplePack2'
     ])
-    expect(ConfigInstance.field('RandomCount').valueRef).toEqual(15)
-    expect(ConfigInstance.field('MaxSamplesSameDirectory').valueRef).toEqual(2)
+    expect(ConfigInstance.field('LookRandomCount').valueRef).toEqual(15)
+    expect(ConfigInstance.field('LookRandomSameDirectory').valueRef).toEqual(2)
     expect(ConfigInstance.field('ExtensionsPolicyForSamples').valueRef).toEqual('X')
 
     expect(ConfigInstance.field('ExcludedExtensionsForSamples').valueRef).toMatchObject(['exe', 'DS_Store', 'info'])
@@ -31,19 +31,19 @@ describe('App-specific ConfigFile', function () {
   })
 
   it('should change some fields, save and reload', async function () {
-    ConfigInstance.field('RandomCount').value = 21
-    ConfigInstance.field('MaxSamplesSameDirectory').value = 3
+    ConfigInstance.field('LookRandomCount').value = 21
+    ConfigInstance.field('LookRandomSameDirectory').value = 3
     ConfigInstance.field('ExtensionsPolicyForSamples').value = 'E'
 
-    expect(ConfigInstance.field('RandomCount').valueRef).toEqual(21)
-    expect(ConfigInstance.field('MaxSamplesSameDirectory').valueRef).toEqual(3)
+    expect(ConfigInstance.field('LookRandomCount').valueRef).toEqual(21)
+    expect(ConfigInstance.field('LookRandomSameDirectory').valueRef).toEqual(3)
     expect(ConfigInstance.field('ExtensionsPolicyForSamples').valueRef).toEqual('E')
 
     await ConfigInstance.save()
     await expect(ConfigInstance.load()).resolves.toEqual(true)
 
-    expect(ConfigInstance.field('RandomCount').valueRef).toEqual(15)
-    expect(ConfigInstance.field('MaxSamplesSameDirectory').valueRef).toEqual(2)
+    expect(ConfigInstance.field('LookRandomCount').valueRef).toEqual(15)
+    expect(ConfigInstance.field('LookRandomSameDirectory').valueRef).toEqual(2)
     expect(ConfigInstance.field('ExtensionsPolicyForSamples').valueRef).toEqual('X')
   })
 
@@ -52,8 +52,8 @@ describe('App-specific ConfigFile', function () {
     await ConfigObj.clean()
     await expect(ConfigObj.load()).resolves.toEqual(true)
 
-    expect(ConfigObj.field('RandomCount').valueRef).toEqual(15)
-    expect(ConfigObj.field('MaxSamplesSameDirectory').valueRef).toEqual(2)
+    expect(ConfigObj.field('LookRandomCount').valueRef).toEqual(15)
+    expect(ConfigObj.field('LookRandomSameDirectory').valueRef).toEqual(2)
     expect(ConfigObj.field('ExtensionsPolicyForSamples').valueRef).toEqual('X')
     await ConfigObj.clean()
   })
