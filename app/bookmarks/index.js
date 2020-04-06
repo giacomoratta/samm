@@ -2,14 +2,31 @@ const { BookmarksFile } = require('./bookmarkFile.class')
 const { BookmarkSet } = require('./bookmarkSet.class')
 const log = require('../logger').createLogger('bookmarks')
 
-const BookmarksFileInstance = new BookmarksFile('file-path-to-do')
+let BookmarksFileInstance = null
+
+const boot = async (filePath) => {
+  log.info(`Booting from ${filePath}...`)
+  try {
+    BookmarksFileInstance = new BookmarksFile(filePath)
+    const dataPresence = await BookmarksFileInstance.fileHolder.load()
+    log.info({ dataPresence }, 'Loaded successfully')
+    return true
+  } catch (e) {
+    log.error(e, 'Cannot load')
+    return false
+  }
+}
 
 const clean = async () => {
   log.info('Cleaning data...')
-}
-
-const boot = async () => {
-  log.info('Booting...')
+  if (!BookmarksFileInstance) return
+  try {
+    BookmarksFileInstance.collection.clean()
+    return await BookmarksFileInstance.fileHolder.delete()
+  } catch (e) {
+    log.error(e, 'Error while cleaning')
+    return false
+  }
 }
 
 module.exports = {
