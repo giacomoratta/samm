@@ -120,6 +120,20 @@ class SampleSet {
 
     return randomSampleSet
   }
+
+  toJson () {
+    const jsonData = this.array.map(sample => sample.toJson())
+    return jsonData || []
+  }
+
+  fromJson (jsonData, SampleInfoClass) {
+    if (!SampleInfoClass) SampleInfoClass = SampleInfo
+    this.array = jsonData.map(jsonItem => {
+      const sample = new SampleInfoClass()
+      sample.fromJson(jsonItem)
+      return sample
+    })
+  }
 }
 
 module.exports = {
