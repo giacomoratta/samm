@@ -185,6 +185,11 @@ module.exports = {
       const sourceSet = BF.collection.get(oldLabel)
       BF.collection.add(newLabel, sourceSet)
       return BF.collection.remove(oldLabel)
+    },
+
+    update: async () => {
+      const dataPresence = await BookmarksFileInstance.save()
+      log.info({ dataPresence }, 'Bookmark file updated.')
     }
   }
 }

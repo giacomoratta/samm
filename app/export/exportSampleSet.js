@@ -73,10 +73,11 @@ const exportSampleSet = async function ({
 const getExportPath = async function ({
   destinationPath,
   destinationName,
+  destinationParentName = 'mpl',
   overwrite = false
 }) {
   /* Add app signature (useful for multiple exports and to avoid confusion in file system) */
-  destinationPath = path.join(destinationPath, 'mpl')
+  destinationPath = path.join(destinationPath, destinationParentName)
 
   let exportPath = path.join(destinationPath, destinationName)
   if (overwrite === true) {

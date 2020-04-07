@@ -16,9 +16,10 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   }
 
   const labelsArray = BookmarkAPI.labels()
+  let changesFlag = false
 
   await cliPrompt({
-    message: 'Add samples to bookmarks: [label] [indexes...]',
+    message: `Add samples to bookmarks: [label] [indexes...${sampleLook.size > 2 ? `<1,${sampleLook.size}>` : '<1>'}]`,
     showFn: () => {
       printSampleSet(sampleLook, cliPrinter)
       cliPrinter.newLine()
@@ -34,9 +35,21 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     parsed.indexes.forEach((index) => {
       if (BookmarkAPI.add(parsed.label, sampleLook.get(index - 1).clone()) !== true) {
         cliPrinter.error(`Cannot add the sample #${index} to ${parsed.label}`)
+        return
       }
+      changesFlag = true
     })
+    return false
   })
+
+  if (changesFlag === true) {
+    try {
+      await BookmarkAPI.update()
+      cliPrinter.info('Bookmarks collection updated successfully.')
+    } catch (e) {
+      cliPrinter.error(`Cannot update the bookmarks collection.\n> ${e.message}.`)
+    }
+  }
   return cliNext()
 })
 
@@ -46,10 +59,12 @@ const parseInput = (input, maxIndex, cliPrinter) => {
     indexes: []
   }
   let params = input.split(' ')
-  if (!BookmarkAPI.isLabelValid(params[0])) {
+  if (params.length < 2) {
+    cliPrinter.warn('Invalid input: expected label and a list of numeric indexes.')
     return
   }
-  if (params.length < 2) {
+  if (!BookmarkAPI.isLabelValid(params[0])) {
+    cliPrinter.warn(`Invalid label for a bookmark set: ${params[0]}.`)
     return
   }
   parsedValues.label = params[0]
@@ -57,13 +72,12 @@ const parseInput = (input, maxIndex, cliPrinter) => {
 
   params.forEach((param) => {
     const index = parseInt(param)
-    if (isNaN(index) || index < 1 || index > maxIndex) {
-      return
-    }
+    if (isNaN(index) || index < 1 || index > maxIndex) return
     parsedValues.indexes.push(index)
   })
 
   if (parsedValues.indexes.length === 0) {
+    cliPrinter.warn('Input has no valid indexes.')
     return
   }
 
