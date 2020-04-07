@@ -43,7 +43,7 @@ module.exports = {
      */
     add: (label, sampleObj) => {
       if (!BookmarksFileInstance.collection.has(label)) {
-        const checkResult = label.match(/[a-zA-Z\-\_0-9]+/g)
+        const checkResult = label.match(/[a-zA-Z\-_0-9]+/g)
         if (checkResult === null || checkResult[0] !== label) {
           throw new Error(`Invalid characters for a new bookmark-set label: '${label}'. (Accepted: 0-9,a-z,A-Z,-,_).`)
         }
