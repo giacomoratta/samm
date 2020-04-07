@@ -34,6 +34,13 @@ module.exports = {
   clean,
 
   BookmarksAPI: {
+
+    /**
+     * Add a sample to a bookmark-set (create the bookmark-set if not exists).
+     * @param {string} label: accepted charset [a-zA-Z\-\_0-9]
+     * @param {SampleInfo} sampleObj
+     * @returns {boolean}
+     */
     add: (label, sampleObj) => {
       if (!BookmarksFileInstance.collection.has(label)) {
         const checkResult = label.match(/[a-zA-Z\-\_0-9]+/g)
@@ -46,28 +53,40 @@ module.exports = {
       return sampleSetObj.add(sampleObj)
     },
 
+    /**
+     * Check the existence of a bookmark-set
+     * @param {string} label
+     * @returns {boolean}
+     */
     has: (label) => {
       return BookmarksFileInstance.collection.has(label)
     },
 
-    remove: (label, sampleObj) => {
-      if (!BookmarksFileInstance.collection.has(label)) return null
-      const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.remove(sampleObj)
-    },
-
-    removeByIndex: (label, index) => {
-      if (!BookmarksFileInstance.collection.has(label)) return null
-      const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.remove(index)
-    },
-
+    /**
+     * Get all the bookmark-set labels
+     * @returns {[<string>]}
+     */
     labels: () => {
       return BookmarksFileInstance.collection.keys
     },
 
     /**
-     * Get a single sample, one sample-set or the sample-set list.
+     * Remove a sample by index or by itself
+     * @param {string} label
+     * @param {SampleInfo|number} sample
+     * @returns {SampleInfo|null}
+     */
+    remove: (label, sample) => {
+      if (!BookmarksFileInstance.collection.has(label)) return null
+      const sampleSetObj = BookmarksFileInstance.collection.get(label)
+      return sampleSetObj.remove(sample)
+    },
+
+    /**
+     * Get a single sample, one bookmark-set or the bookmark-set list:
+     *  -> label    + index    = single sample
+     *  -> label    + no-index = bookmark-set
+     *  -> no-label + no-index = bookmark-set list
      * @param {string} label
      * @param {number} index
      * @returns {SampleInfo|BookmarkSet|null}
