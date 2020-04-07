@@ -3,7 +3,7 @@
  *
  * -c <new-label>: copy bookmark set with the new label
  * -l <new-label>: rename label
- * -r [index]: remove entire label or remove bookmark from a label by index (ask for confirmation)
+ * -r [index...]: remove entire label or remove bookmark from a label by index (ask for confirmation)
  *
  * */
 const { App, Cli } = require('../ui_common')
