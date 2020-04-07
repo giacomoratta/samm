@@ -1,4 +1,5 @@
 const path = require('path')
+const BookmarkModule = require('./bookmark')
 const ConfigModule = require('./config')
 const ExportModule = require('./export')
 const PathQueryModule = require('./path-query')
@@ -20,6 +21,7 @@ const boot = async ({ appRootPath }) => {
 
   if (await fileUtils.ensureDir(AppDataDirectory) !== true) return false
   if (await ConfigModule.boot(path.join(AppDataDirectory, 'config.json')) !== true) return false
+  if (await BookmarkModule.boot(path.join(AppDataDirectory, 'bookmarks.json')) !== true) return false
   if (await PathQueryModule.boot(path.join(AppDataDirectory, 'path_query.json')) !== true) return false
   if (await ProjectModule.boot(path.join(AppDataDirectory, 'project_history.json')) !== true) return false
   if (await SampleModule.boot(path.join(AppDataDirectory, 'samples_index.json')) !== true) return false
@@ -34,6 +36,7 @@ const boot = async ({ appRootPath }) => {
 const clean = async () => {
   log.info('Cleaning application files...')
   await ConfigModule.clean()
+  await BookmarkModule.clean()
   await PathQueryModule.clean()
   await ProjectModule.clean()
   await SampleModule.clean()
