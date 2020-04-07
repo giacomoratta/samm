@@ -62,27 +62,32 @@ module.exports = {
       return sampleSetObj.remove(index)
     },
 
-    get: (label, index) => {
-      if (!BookmarksFileInstance.collection.has(label)) return null
-      const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.get(index)
-    },
-
     labels: () => {
       return BookmarksFileInstance.collection.keys
     },
 
-    getBookmarkSet: (label) => {
+    /**
+     * Get a single sample, one sample-set or the sample-set list.
+     * @param {string} label
+     * @param {number} index
+     * @returns {SampleInfo|BookmarkSet|null}
+     */
+    get: (label, index) => {
       if (BookmarksFileInstance.collection.size === 0) return null
-      if (!label) {
-        const listObj = {}
-        BookmarksFileInstance.collection.forEach((key, sampleSetObj) => {
-          listObj[key] = sampleSetObj
-        })
-      } else {
+      if (typeof label === 'string') {
         if (!BookmarksFileInstance.collection.has(label)) return null
-        return BookmarksFileInstance.collection.get(label)
+        const sampleSetObj = BookmarksFileInstance.collection.get(label)
+
+        if (typeof index === 'number') {
+          return sampleSetObj.get(index) || null
+        }
+        return sampleSetObj || null
       }
+      const listObj = {}
+      BookmarksFileInstance.collection.forEach((key, sampleSetObj) => {
+        listObj[key] = sampleSetObj
+      })
+      return listObj
     }
   }
 }
