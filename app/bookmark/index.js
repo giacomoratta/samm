@@ -41,10 +41,39 @@ module.exports = {
 
   BookmarkAPI: {
 
+    /**
+     * Utility to check a label format before any operation.
+     * @returns {boolean}
+     */
     isLabelValid,
 
+    /**
+     * Check if there is at least a bookmark-set.
+     * @returns {boolean}
+     */
     hasBookmarks () {
       return BookmarksFileInstance.collection.size > 0
+    },
+
+    /**
+     * Get the number of bookmark sets present
+     * @returns {number}
+     */
+    countBookmarkSets () {
+      return BookmarksFileInstance.collection.size
+    },
+
+    /**
+     * Get the total number of bookmarks present
+     * @returns {number}
+     */
+    countBookmarks () {
+      if (BookmarksFileInstance.collection.size === 0) return 0
+      let total = 0
+      BookmarksFileInstance.collection.forEach((bookmarkSet) => {
+        total += bookmarkSet.size
+      })
+      return total
     },
 
     /**
