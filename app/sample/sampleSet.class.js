@@ -16,8 +16,10 @@ function getRandomInt (min, max) {
 }
 
 class SampleSet {
-  constructor ({ validateFn } = {}) {
+  constructor ({ validateFn, itemsClass } = {}) {
     this.validateFn = validateFn
+
+    this.itemsClass = itemsClass || SampleInfo
 
     /**
      * List of SampleInfo objects
@@ -41,7 +43,8 @@ class SampleSet {
    * @returns {Promise<SampleInfo>}
    */
   static async create ({ absolutePath, relRootPath }) {
-    const sampleInfoObj = new SampleInfo()
+    const ItemsClass = this.itemsClass
+    const sampleInfoObj = new ItemsClass()
     await sampleInfoObj.set({ absolutePath, relRootPath })
     return sampleInfoObj
   }
@@ -59,10 +62,11 @@ class SampleSet {
    * Add a SampleInfo object to the set.
    * @param {SampleInfo} sample
    * @returns {boolean}
+   * @todo: as 'set' it should avoid duplicates
    */
   add (sample) {
-    if (!(sample instanceof SampleInfo)) {
-      throw new Error('The sample object must be an instance of SampleInfo!')
+    if (!(sample instanceof this.itemsClass)) {
+      throw new Error(`The sample object must be an instance of ${this.itemsClass.name}`)
     }
     if (this.validateFn && this.validateFn(sample) === false) return false
     this.array.push(sample)
@@ -76,10 +80,10 @@ class SampleSet {
    */
   remove (sample) {
     let sampleIndex = -1
-    if (sample instanceof SampleInfo) {
+    if (sample instanceof this.itemsClass) {
       sampleIndex = this.array.findIndex(item => item.isEqualTo(sample))
     } else if (typeof sample !== 'number') {
-      throw new Error('The sample object must be an integer or an SampleInfo instance.')
+      throw new Error(`The sample object must be an integer or instance of ${this.itemsClass.name}.`)
     } else {
       sampleIndex = sample
     }
@@ -135,13 +139,25 @@ class SampleSet {
     return jsonData || []
   }
 
-  fromJson (jsonData, SampleInfoClass) {
-    if (!SampleInfoClass) SampleInfoClass = SampleInfo
+  fromJson (jsonData) {
+    const ItemsClass = this.itemsClass
     this.array = jsonData.map(jsonItem => {
-      const sample = new SampleInfoClass()
+      const sample = new ItemsClass()
       sample.fromJson(jsonItem)
       return sample
     })
+  }
+
+  isValid () {
+    // todo
+    // compatibility with JsonCollectionFile accepted objects
+    return true
+  }
+
+  isEqualTo () {
+    // todo
+    // compatibility with JsonCollectionFile accepted objects
+    return false
   }
 }
 

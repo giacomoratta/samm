@@ -1,5 +1,5 @@
 const { JsonCollectionFile } = require('../../core/file-butler/jsonCollectionFile.class')
-const { BookmarkSet } = require('./bookmarkSet.class')
+const { SampleSet: BookmarkSet } = require('../sample/sampleSet.class')
 
 class BookmarksFile extends JsonCollectionFile {
   constructor (filePath) {

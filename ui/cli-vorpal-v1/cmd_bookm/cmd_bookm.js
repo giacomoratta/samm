@@ -20,6 +20,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter, cliPr
   const mainLabel = cliInput.getParam('label')
   if ((!mainLabel && cliInput.hasOptions()) || !BookmarkAPI.has(mainLabel)) {
     cliPrinter.warn(`Management operations require an existing label. Invalid label: '${mainLabel || '-'}'.`)
+    return cliNext()
   }
 
   if (cliInput.hasOption('copy')) {

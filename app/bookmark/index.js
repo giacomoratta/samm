@@ -1,5 +1,5 @@
 const { BookmarksFile } = require('./bookmarkFile.class')
-const { BookmarkSet } = require('./bookmarkSet.class')
+const { SampleSet: BookmarkSet } = require('../sample/sampleSet.class')
 const log = require('../logger').createLogger('bookmarks')
 
 let BookmarksFileInstance = null
@@ -39,6 +39,10 @@ module.exports = {
   boot,
   clean,
 
+  /**
+   * N.B. This API will not perform save and load operations implicitly because it might be involved in many
+   *      different operations before a real need of updating the file.
+   */
   BookmarkAPI: {
 
     /**
@@ -59,15 +63,15 @@ module.exports = {
      * Get the number of bookmark sets present
      * @returns {number}
      */
-    countBookmarkSets () {
+    totalSets () {
       return BookmarksFileInstance.collection.size
     },
 
     /**
-     * Get the total number of bookmarks present
+     * Get the total number of bookmarked samples present
      * @returns {number}
      */
-    countBookmarks () {
+    totalSamples () {
       if (BookmarksFileInstance.collection.size === 0) return 0
       let total = 0
       BookmarksFileInstance.collection.forEach((bookmarkSet) => {
@@ -147,6 +151,40 @@ module.exports = {
         listObj[key] = sampleSetObj
       })
       return listObj
+    },
+
+    /**
+     * Duplicate a set or merge into an existing one.
+     * @param {string} sourceLabel
+     * @param {string} destLabel
+     * @returns {boolean}
+     */
+    copySet: (sourceLabel, destLabel) => {
+      const BF = BookmarksFileInstance
+      if (!BF.collection.has(sourceLabel)) return false
+      const sourceSet = BF.collection.get(sourceLabel)
+      if (sourceSet.size === 0) return false
+      const destSet = BF.collection.get(destLabel) || new BookmarkSet()
+      sourceSet.forEach((bookmark) => {
+        // todo: avoid duplicates?
+        destSet.add(bookmark.clone())
+      })
+      return BF.collection.add(sourceLabel, destSet)
+    },
+
+    /**
+     * Rename a bookmark set.
+     * @param {string} oldLabel
+     * @param {string} newLabel
+     * @returns {boolean}
+     */
+    renameSet: (oldLabel, newLabel) => {
+      const BF = BookmarksFileInstance
+      if (!BF.collection.has(oldLabel)) return false
+      if (BF.collection.has(newLabel)) return false
+      const sourceSet = BF.collection.get(oldLabel)
+      BF.collection.add(newLabel, sourceSet)
+      return BF.collection.remove(oldLabel)
     }
   }
 }
