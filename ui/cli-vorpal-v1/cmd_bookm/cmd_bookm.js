@@ -1,22 +1,27 @@
-/**
- * bookm [label]: show entire list (if label, show single label list)
- *
- * -c <new-label>: copy bookmark set with the new label
- * -l <new-label>: rename label
- * -r [index...]: remove entire label or remove bookmark from a label by index (ask for confirmation)
- *
- * */
 const { App, Cli } = require('../ui_common')
 const { BookmarkAPI } = App
 
 const commandName = 'bookm'
 
-Cli.addCommand(commandName)
+Cli.addCommand(commandName, '[label]')
 
 Cli.addCommandHeader(commandName)
-  .description('Text. \n')
+  .description('Show or manage the bookmarks. \n')
+  .option('-c, --copy <new-label>', 'copy the bookmarks in a new label or merge in an existent label.') // ask for confirmation
+  .option('-l, --label <new-label>', 'change the label of a bookmark set') // ask for confirmation)
+  .option('-r, --remove [...index]', 'remove an entire label or some bookmarks (by index)') // ask for confirmation)
 
 Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
+  if (!BookmarkAPI.hasBookmarks()) {
+    cliPrinter.info('No bookmarks present.')
+    return cliNext()
+  }
+
+  const mainLabel = cliInput.getParam('label')
+  if ((!mainLabel && cliInput.hasOptions()) || !BookmarkAPI.has(mainLabel)) {
+    cliPrinter.warn(`Management operations require an existing label. Invalid label: '${mainLabel || '-'}'.`)
+  }
+
   if (cliInput.hasOption('copy')) {
     cliPrinter.info('Copying a set... (to-do)')
     return cliNext()
@@ -31,11 +36,6 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter, cliPr
   }
 
   const allBookmarks = BookmarkAPI.get()
-  if (!allBookmarks) {
-    cliPrinter.info('No bookmarks present.')
-    return cliNext()
-  }
-
   cliPrinter.info('Bookmarks list')
   cliPrinter.newLine()
 

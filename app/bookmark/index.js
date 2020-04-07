@@ -43,6 +43,10 @@ module.exports = {
 
     isLabelValid,
 
+    hasBookmarks () {
+      return BookmarksFileInstance.collection.size > 0
+    },
+
     /**
      * Add a sample to a bookmark-set (create the bookmark-set if not exists).
      * @param {string} label: accepted charset [a-zA-Z\-\_0-9]

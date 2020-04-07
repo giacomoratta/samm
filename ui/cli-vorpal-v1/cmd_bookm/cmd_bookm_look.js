@@ -1,10 +1,3 @@
-/**
- *
- * bookm-look: add bookmarks from latest lookup (prompt, label, index)
- *               (prompt info: show all available labels)
- *
- * */
-
 const { App, Cli } = require('../ui_common')
 const { BookmarkAPI, SampleLookAPI } = App
 
@@ -13,7 +6,7 @@ const commandName = 'bookm-look'
 Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)
-  .description('Text. \n')
+  .description('Add bookmarks from latest lookup. \n')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   const { sampleLook } = SampleLookAPI.latest()
