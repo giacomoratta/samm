@@ -7,11 +7,11 @@ const { App, Cli } = require('../ui_common')
 
 const commandName = 'bookm-export'
 
-Cli.addCommand(`${commandName} [name] [values...]`)
+Cli.addCommand(commandName, '[path]')
 
 Cli.addCommandHeader(commandName)
   .description('Text. \n')
 
-Cli.addCommandBody(commandName, function ({ cliNext }) {
+Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   return cliNext()
 })

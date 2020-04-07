@@ -34,6 +34,7 @@ App.boot({
   }
 
   require('./cmd_config')
+  require('./cmd_bookm')
   require('./cmd_look')
   require('./cmd_project')
   require('./cmd_query')

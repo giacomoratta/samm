@@ -29,28 +29,35 @@ const clean = async () => {
   }
 }
 
+const labelRegexp = /[a-zA-Z\-_0-9]+/g
+const isLabelValid = (label) => {
+  const checkResult = label.match(labelRegexp)
+  return !(checkResult === null || checkResult[0] !== label)
+}
+
 module.exports = {
   boot,
   clean,
 
   BookmarkAPI: {
 
+    isLabelValid,
+
     /**
      * Add a sample to a bookmark-set (create the bookmark-set if not exists).
      * @param {string} label: accepted charset [a-zA-Z\-\_0-9]
-     * @param {SampleInfo} sampleObj
+     * @param {SampleInfo} sampleObj: n.b. clone before insert
      * @returns {boolean}
      */
     add: (label, sampleObj) => {
       if (!BookmarksFileInstance.collection.has(label)) {
-        const checkResult = label.match(/[a-zA-Z\-_0-9]+/g)
-        if (checkResult === null || checkResult[0] !== label) {
+        if (!isLabelValid(label)) {
           throw new Error(`Invalid characters for a new bookmark-set label: '${label}'. (Accepted: 0-9,a-z,A-Z,-,_).`)
         }
         if (BookmarksFileInstance.collection.add(label, new BookmarkSet()) !== true) return false
       }
       const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.add(sampleObj)
+      return sampleSetObj.add(sampleObj) // sampleObj.clone()
     },
 
     /**
@@ -87,8 +94,8 @@ module.exports = {
      *  -> label    + index    = single sample
      *  -> label    + no-index = bookmark-set
      *  -> no-label + no-index = bookmark-set list
-     * @param {string} label
-     * @param {number} index
+     * @param {string} [label]
+     * @param {number} [index]
      * @returns {SampleInfo|BookmarkSet|null}
      */
     get: (label, index) => {

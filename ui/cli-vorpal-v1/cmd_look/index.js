@@ -63,7 +63,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   /* No options, no params */
   const { sampleLook, pathBasedQuery } = SampleLookAPI.latest()
   if (!sampleLook || sampleLook.size === 0) {
-    cliPrinter.warn('No samples found in the latest search!')
+    cliPrinter.warn('No samples found in the latest look!')
   } else {
     printSearchResults(sampleLook, cliPrinter)
     await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
