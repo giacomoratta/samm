@@ -47,6 +47,7 @@ module.exports = {
   boot,
   clean,
 
+  BookmarkAPI: BookmarkModule.BookmarkAPI,
   ConfigAPI: ConfigModule.ConfigAPI,
   ExportAPI: ExportModule.ExportAPI,
   PathQueryAPI: PathQueryModule.PathQueryAPI,

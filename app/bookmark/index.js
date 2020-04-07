@@ -33,7 +33,7 @@ module.exports = {
   boot,
   clean,
 
-  BookmarksAPI: {
+  BookmarkAPI: {
 
     /**
      * Add a sample to a bookmark-set (create the bookmark-set if not exists).
