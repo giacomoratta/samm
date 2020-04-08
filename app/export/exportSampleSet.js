@@ -15,7 +15,7 @@ const exportSampleSet = async function ({
 
   if (overwrite === true && await fileUtils.directoryExists(exportPath) === true) {
     const removeDirResult = await fileUtils.removeDir(exportPath)
-    log.warn({ result: removeDirResult, exportPath }, 'Remove before overwrite')
+    log.warn({ result: removeDirResult, exportPath }, `Removed ${exportPath} before overwriting`)
   }
 
   log.info(`Exporting ${sampleSet.size} samples to ${exportPath}...`)

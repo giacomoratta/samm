@@ -15,19 +15,21 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     return cliNext()
   }
 
-  const paramLabel = cliInput.getParam('label')
+  /* Setting destination path and parent name */
   let destinationPath = cliInput.getOption('path')
   let destinationParentName
-
   if (!destinationPath) {
     destinationPath = ProjectManagerAPI.getCurrentProject()
     if (!destinationPath) {
-      return // no current project!
+      cliPrinter.info('No current project set (use -p option or set a project).')
+      return cliNext()
     }
   } else {
     destinationParentName = 'mpl-bookmarks'
   }
 
+  /* Export a single label */
+  const paramLabel = cliInput.getParam('label')
   if (paramLabel) {
     const bookmarkSet = BookmarkAPI.get(paramLabel)
     if (!bookmarkSet) {
@@ -42,11 +44,18 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
       cliPrompt,
       cliPrinter
     })
-    printExportResults(exportResults, cliPrinter)
+    printExportResults({ exportResults, destinationPath, cliPrinter })
     return cliNext()
   }
 
-  // await prompt ... ask with destinationPath
+  /* Export all bookmarks */
+  if (await askConfirmation({
+    message: `Going to export ${BookmarkAPI.totalSamples()} bookmarked samples to ${destinationPath}`,
+    cliPrinter,
+    cliPrompt
+  }) !== true) {
+    return cliNext()
+  }
 
   const bookmarkSets = BookmarkAPI.get()
   const bookmarkLabels = Object.keys(bookmarkSets)
@@ -70,7 +79,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     exportResults.success = exportResults.success.concat(tmpExpRes.success)
     exportResults.errors = exportResults.errors.concat(tmpExpRes.errors)
   }
-  printExportResults(exportResults, cliPrinter)
+  printExportResults({ exportResults, destinationPath, cliPrinter })
   return cliNext()
 })
 
@@ -89,16 +98,47 @@ const exportBookmarkSet = async ({
     destinationName: `${!destinationParentName ? 'bookmarks_' : 'bookm_'}${bookmarkLabel}`,
     overwrite: false
   })
+  if (!exportPath) return
 
-  // if(askConfirmation === true) await... prompt continue?
+  if (askConfirmation === true && cliPrompt && await askConfirmation({
+    message: `Going to export ${bookmarkSet.size} bookmarked samples to ${exportPath}`,
+    cliPrinter,
+    cliPrompt
+  }) !== true) return
 
-  await ExportAPI.exportSampleSet({
+  return /* await */ ExportAPI.exportSampleSet({
     sampleSet: bookmarkSet,
     exportPath,
     overwrite: false
   })
 }
 
-const printExportResults = (exportResults, cliPrinter) => {
+const askConfirmation = async ({ message, cliPrinter, cliPrompt }) => {
+  let wantToProceed = false
+  await cliPrompt({
+    message: 'Do you want to proceed? (y/n)',
+    showFn: () => {
+      cliPrinter.info(`${message}.\n`)
+    }
+  }, async ({ exit, input }) => {
+    if (exit === true || input !== 'y') {
+      return true
+    }
+    wantToProceed = true
+    return true
+  })
+  return wantToProceed
+}
 
+const printExportResults = ({ exportResults, destinationPath, cliPrinter }) => {
+  if (!exportResults) {
+    cliPrinter.error('Something went wrong during the export process.')
+  } else if (exportResults.failed.length > 0) {
+    cliPrinter.error(`${exportResults.failed.length} bookmarks have not been exported successfully:`)
+    cliPrinter.unorderedList(exportResults.failed)
+    cliPrinter.newLine()
+  } else if (exportResults.success.length > 0) {
+    cliPrinter.error('All bookmarks exported successfully:')
+  }
+  cliPrinter.info(`> Destination path: ${destinationPath}`)
 }

@@ -8,7 +8,7 @@ Cli.addCommand(commandName)
 Cli.addCommandHeader(commandName)
   .description('Add bookmarks from latest lookup. \n')
 
-Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliPrinter, cliPrompt }) {
   const { sampleLook } = SampleLookAPI.latest()
   if (!sampleLook || sampleLook.size === 0) {
     cliPrinter.warn('No samples found in the latest look!')
