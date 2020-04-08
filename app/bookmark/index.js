@@ -115,15 +115,14 @@ module.exports = {
     },
 
     /**
-     * Remove a sample by index or by itself
+     * Remove a bookmark-set
      * @param {string} label
-     * @param {SampleInfo|number} sample
-     * @returns {SampleInfo|null}
+     * @returns {SampleSet|null}
      */
-    remove: (label, sample) => {
-      if (!BookmarksFileInstance.collection.has(label)) return null
-      const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.remove(sample)
+    remove: (label) => {
+      const bookmarkSet = BookmarksFileInstance.collection.get(label)
+      if (BookmarksFileInstance.collection.remove(label) === true) return bookmarkSet
+      else return null
     },
 
     /**
