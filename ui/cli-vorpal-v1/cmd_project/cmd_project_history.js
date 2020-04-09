@@ -26,7 +26,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
       showFn: () => {
         cliPrinter.orderedList(projectHistoryList, (pItem) => {
           const date = new Date(pItem.modifiedAt)
-          return `${pItem.path.length > 36 ? '...' : ''}${pItem.path.substr(-36)}  (${date.toUTCString()})`
+          return `${pItem.path.length > 52 ? '...' : ''}${pItem.path.substr(-52)}  (${date.toUTCString()})`
         })
       }
     }, async ({ exit, input }) => {

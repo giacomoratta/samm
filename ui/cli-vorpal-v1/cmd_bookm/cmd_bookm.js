@@ -68,7 +68,7 @@ const printAllBookmarks = (cliPrinter) => {
 
 const printBookmarkSet = (bookmarkSet, bookmarkLabel, cliPrinter) => {
   cliPrinter.info(`[ ${bookmarkLabel} ]`)
-  cliPrinter.orderedList(bookmarkSet.array, (item) => { return `${item.relPath.length > 36 ? '...' : ''}${item.relPath.substr(-36)}` })
+  cliPrinter.orderedList(bookmarkSet.array, (item) => { return `${item.relPath.length > 52 ? '...' : ''}${item.relPath.substr(-52)}` })
 }
 
 const optCopyHandler = async (mainLabel, cliInput, cliPrinter) => {

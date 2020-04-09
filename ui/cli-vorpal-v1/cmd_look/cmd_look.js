@@ -1,15 +1,16 @@
 const { App, Cli } = require('../ui_common')
-const { ConfigAPI, SampleIndexAPI, SampleSetAPI, PathQueryAPI } = App
+const { ConfigAPI, SampleIndexAPI, SampleLookAPI, PathQueryAPI } = App
 
-const commandName = 'search'
+const commandName = 'look'
 
 Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
-  .description('Search samples by query or show the latest search results. \n')
+  .description('Search samples by query or show the latest sample look; ' +
+    '(related configurations: LookRandomCount, LookRandomSameDirectory) \n')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
 
-Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   if (ConfigAPI.field('SamplesDirectory').unset === true) {
     cliPrinter.warn('No samples directory set (see \'config SamplesDirectory\' and use \'samples-scan\')')
     return cliNext()
@@ -27,11 +28,12 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   const paramQueryString = cliInput.getParam('query')
   if (paramQueryString) {
     cliPrinter.info(`Searching samples with query: ${paramQueryString}`)
-    const { sampleSet } = SampleSetAPI.create({ queryString: paramQueryString })
-    if (!sampleSet || sampleSet.size === 0) {
+    const { sampleLook } = SampleLookAPI.create({ queryString: paramQueryString })
+    if (!sampleLook || sampleLook.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
-      printSearchResults(sampleSet, cliPrinter)
+      printSearchResults(sampleLook, cliPrinter)
+      // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
     }
     return cliNext()
   }
@@ -45,21 +47,22 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
       cliPrinter.warn('Query not found!')
       return cliNext()
     }
-    const { sampleSet } = SampleSetAPI.create({ pathQueryObj })
-    if (!sampleSet || sampleSet.size === 0) {
+    const { sampleLook } = SampleLookAPI.create({ pathQueryObj })
+    if (!sampleLook || sampleLook.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
-      printSearchResults(sampleSet, cliPrinter)
+      printSearchResults(sampleLook, cliPrinter)
+      // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
     }
     return cliNext()
   }
 
-  /* No options, no params */
-  const { sampleSet } = SampleSetAPI.latest()
-  if (!sampleSet || sampleSet.size === 0) {
-    cliPrinter.warn('No samples found in the latest search!')
+  const { sampleLook } = SampleLookAPI.latest()
+  if (!sampleLook || sampleLook.size === 0) {
+    cliPrinter.warn('No samples found in the latest look!')
   } else {
-    printSearchResults(sampleSet, cliPrinter)
+    printSearchResults(sampleLook, cliPrinter)
+    // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
   }
   return cliNext()
 })
