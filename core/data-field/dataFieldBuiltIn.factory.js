@@ -205,7 +205,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
           }
           value = value.trim()
-          if(value.length === 0 || !value.startsWith('${rootPath}')) {
+          if(value.length === 0 || !encodeURI(value).startsWith('${encodeURI(rootPath)}')) {
             ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
           }
           return value;
@@ -226,7 +226,7 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
             ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
           }
           value = value.trim()
-          if(value.length === 0 || value.startsWith('${rootPath}')) {
+          if(value.length === 0 || encodeURI(value).startsWith('${encodeURI(rootPath)}')) {
             ${this.makeError({ type: errorCodeName, actual: 'value', messages })}
           }
           return value;
