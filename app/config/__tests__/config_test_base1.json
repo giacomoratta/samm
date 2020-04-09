@@ -1,6 +1,5 @@
 {
 	"Platform": "linux-5.0.0-37-generic",
-	"SamplesDirectory": "/home/giacomo/Workspace/mpl/app/config/__tests__",
 	"SamplesDirectoryExclusions": [
 		"samplePack1",
 		"samplePack2"
