@@ -1,5 +1,6 @@
 const { App, Cli } = require('../ui_common')
 const { ProjectHistoryAPI, ProjectManagerAPI } = App
+const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'project-history'
 Cli.addCommand(commandName)
@@ -26,7 +27,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
       showFn: () => {
         cliPrinter.orderedList(projectHistoryList, (pItem) => {
           const date = new Date(pItem.modifiedAt)
-          return `${pItem.path.length > 52 ? '...' : ''}${pItem.path.substr(-52)}  (${date.toUTCString()})`
+          return `${pItem.path.length > SAMPLE_PATH_LENGTH ? '...' : ''}${pItem.path.substr(-SAMPLE_PATH_LENGTH)}  (${date.toUTCString()})`
         })
       }
     }, async ({ exit, input }) => {

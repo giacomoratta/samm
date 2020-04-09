@@ -1,5 +1,6 @@
 const { App, Cli } = require('../ui_common')
 const { ConfigAPI, SampleIndexAPI, SampleLookAPI, PathQueryAPI } = App
+const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'look'
 
@@ -72,6 +73,6 @@ const printSearchResults = (sampleSet, cliPrinter) => {
   let index = 1
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    printer.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath.length > 52 ? '...' : ''}${sample.relPath.substr(-52)}`)
+    printer.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath.length > SAMPLE_PATH_LENGTH ? '...' : ''}${sample.relPath.substr(-SAMPLE_PATH_LENGTH)}`)
   })
 }
