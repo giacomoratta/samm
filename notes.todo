@@ -1,37 +1,8 @@
-PRINCIPLES + LONG TERM GOALS
-- decoupling
-- test
-- singleton object
-- no more globals => require everywhere (clearer dependencies, remove globals.js)
-- use await instead of 'sync' functions
-- black-box with STATEFUL API (in order to have as few as possible work in the caller)
-- each file should declare the usage or use process.env at the beginning (for clarity)
+BUG & FIXES
+- show shorter relPath
+- remove json extensions in app-data
 
-
-APP TESTING
-- declare and fill process.env variables
-
-
-SHORT
-- manage test files
-    - remove and generate files when it is needed
-    - look for unix urls and explicit path.sep
-    - be sure test files are git-ignored
-- unix, mac and window docker file for tests
-- start logging on external file
-    - use console immediately and switch to pino
-    - create userdata/logs directory
-        - check and clean at the beginning (in core/logger/index.js)
-    - check logs with cat -tail
-    - use pino-transport
-
-
-MID
-- bookmarks manager (add, remove, list, save)
-
-
-LONG
-
+LONG TERM
 - make NPM packages
 - replace vorpal (not updated) with yarn
 - E2E tests for CLI apps

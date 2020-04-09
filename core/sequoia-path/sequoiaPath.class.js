@@ -206,7 +206,7 @@ class SequoiaPath {
       this.clean()
       return false
     }
-    return !!(await fileUtils.writeJsonFile(filePath, jsonData))
+    return !!(await fileUtils.writeJsonFile(filePath, jsonData, false /* json-not-pretty */))
   }
 
   /**
