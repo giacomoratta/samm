@@ -1,12 +1,12 @@
 const { App, Cli } = require('../ui_common')
 const { SampleIndexAPI, SampleLookAPI, ProjectManagerAPI, ExportAPI } = App
 
-const commandName = 'look-save'
+const commandName = 'look-export'
 
 Cli.addCommand(commandName)
 
 Cli.addCommandHeader(commandName)
-  .description('Save the latest samples look \n')
+  .description('Export the latest samples look in the current project or in a custom directory\n')
   .option('-d, --directory <name>', 'Directory name for the exported samples')
   .option('-o, --overwrite', 'Overwrite the destination directory if exists')
   .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
