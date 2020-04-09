@@ -94,7 +94,9 @@ module.exports = {
         if (BookmarksFileInstance.collection.add(label, new BookmarkSet()) !== true) return false
       }
       const sampleSetObj = BookmarksFileInstance.collection.get(label)
-      return sampleSetObj.add(sampleObj) // sampleObj.clone()
+      const index = sampleSetObj.find(sampleObj)
+      if (index >= 0) return true
+      return sampleSetObj.add(sampleObj)
     },
 
     /**
@@ -187,7 +189,7 @@ module.exports = {
     },
 
     update: async () => {
-      const dataPresence = await BookmarksFileInstance.save()
+      const dataPresence = await BookmarksFileInstance.fileHolder.save()
       log.info({ dataPresence }, 'Bookmark file updated.')
     }
   }

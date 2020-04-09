@@ -36,4 +36,21 @@ describe('SampleSet class', function () {
     expect(TestSampleSet.remove(1)).toEqual(null)
     expect(TestSampleSet.size).toEqual(1)
   })
+
+  it('should find samples', async function () {
+    const TestSampleSet = new SampleSet()
+
+    const tmpSampleInfo1 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file11.txt') })
+    TestSampleSet.add(tmpSampleInfo1)
+
+    const tmpSampleInfo2 = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file18.wav') })
+    TestSampleSet.add(tmpSampleInfo2)
+
+    const tmpSampleInfo2Copy = await SampleSet.create({ absolutePath: path.join(SamplesDirectory, 'directory1', 'file18.wav') })
+    // TestSampleSet.add(tmpSampleInfo1)
+
+    expect(tmpSampleInfo2.isEqualTo(tmpSampleInfo2Copy)).toEqual(true)
+    expect(TestSampleSet.find(tmpSampleInfo2)).toEqual(1)
+    expect(TestSampleSet.find(tmpSampleInfo2Copy)).toEqual(1)
+  })
 })

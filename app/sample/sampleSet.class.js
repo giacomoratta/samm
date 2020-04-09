@@ -40,10 +40,10 @@ class SampleSet {
    * Create a new SampleObject.
    * @param {string} absolutePath
    * @param {string} [relRootPath]
-   * @returns {Promise<SampleInfo>}
+   * @param {T} [ItemsClass]
+   * @returns {Promise<SampleInfo|T>}
    */
-  static async create ({ absolutePath, relRootPath }) {
-    const ItemsClass = this.itemsClass
+  static async create ({ absolutePath, relRootPath, ItemsClass = SampleInfo }) {
     const sampleInfoObj = new ItemsClass()
     await sampleInfoObj.set({ absolutePath, relRootPath })
     return sampleInfoObj
@@ -56,6 +56,15 @@ class SampleSet {
    */
   get (index) {
     return this.array[index]
+  }
+
+  /**
+   * Find sample
+   * @param {SampleInfo} sample
+   * @returns {number}
+   */
+  find (sample) {
+    return this.array.findIndex(item => item.isEqualTo(sample))
   }
 
   /**

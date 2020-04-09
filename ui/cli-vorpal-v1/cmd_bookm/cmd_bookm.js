@@ -7,9 +7,9 @@ Cli.addCommand(commandName, '[label]')
 
 Cli.addCommandHeader(commandName)
   .description('Show or manage the bookmarks. \n')
-  .option('-c, --copy <new-label>', 'copy the bookmarks in a new label or merge in an existent label.') // ask for confirmation
-  .option('-l, --label <new-label>', 'change the label of a bookmark set') // ask for confirmation)
-  .option('-r, --remove [indexes]', 'remove an entire label or some bookmarks by indexes (e.g. \'3,5,7\')') // ask for confirmation)
+  .option('-c, --copy <new-label>', 'copy the bookmarks in a new label or merge in an existent label.')
+  .option('-l, --label <new-label>', 'change the label of a bookmark set')
+  .option('-r, --remove [indexes]', 'remove an entire label or some bookmarks by indexes (e.g. \'3,5,7\')')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   if (!BookmarkAPI.hasBookmarks()) {
@@ -18,7 +18,22 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
   }
 
   const mainLabel = cliInput.getParam('label')
-  if ((!mainLabel && cliInput.hasOptions()) || !BookmarkAPI.has(mainLabel)) {
+
+  if (!cliInput.hasOptions) {
+    if (!mainLabel) {
+      printAllBookmarks(cliPrinter)
+    } else {
+      const bookmarkSet = BookmarkAPI.get(mainLabel)
+      if (!bookmarkSet) {
+        cliPrinter.info(`Bookmark label '${mainLabel} does not exist.`)
+      } else {
+        printBookmarkSet(bookmarkSet, mainLabel, cliPrinter)
+      }
+    }
+    return cliNext()
+  }
+
+  if (!mainLabel || !BookmarkAPI.has(mainLabel)) {
     cliPrinter.warn(`Management operations require an existing label. Invalid label: '${mainLabel || '-'}'.`)
     return cliNext()
   }
@@ -38,21 +53,22 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     return cliNext()
   }
 
+  return cliNext()
+})
+
+const printAllBookmarks = (cliPrinter) => {
   const allBookmarks = BookmarkAPI.get()
   cliPrinter.info('Bookmarks list')
   cliPrinter.newLine()
 
   Object.keys(allBookmarks).forEach((key) => {
-    cliPrinter.info(key)
-    printBookmarkSet(allBookmarks[key], cliPrinter)
+    printBookmarkSet(allBookmarks[key], key, cliPrinter)
   })
+}
 
-  return cliNext()
-})
-
-const printBookmarkSet = (bookmarkSet, cliPrinter) => {
+const printBookmarkSet = (bookmarkSet, bookmarkLabel, cliPrinter) => {
+  cliPrinter.info(`[ ${bookmarkLabel} ]`)
   cliPrinter.orderedList(bookmarkSet.array, (item) => { return item.relPath })
-  cliPrinter.newLine()
 }
 
 const optCopyHandler = async (mainLabel, cliInput, cliPrinter) => {

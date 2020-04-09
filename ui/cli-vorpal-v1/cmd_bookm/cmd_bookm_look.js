@@ -17,9 +17,10 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliPrinter, cliPrompt
 
   const labelsArray = BookmarkAPI.labels()
   let changesFlag = false
+  let parsed = null
 
   await cliPrompt({
-    message: `Add samples to bookmarks: [label] [indexes...${sampleLook.size > 2 ? `<1,${sampleLook.size}>` : '<1>'}]`,
+    message: `Add samples to bookmarks: [label] [indexes...${sampleLook.size > 2 ? `<1-${sampleLook.size}>` : '<1>'}]`,
     showFn: () => {
       printSampleSet(sampleLook, cliPrinter)
       cliPrinter.newLine()
@@ -29,12 +30,12 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliPrinter, cliPrompt
   }, async ({ exit, input }) => {
     if (exit === true) return true
 
-    const parsed = parseInput(input, sampleLook.size, cliPrinter)
+    parsed = parseInput(input, sampleLook.size, cliPrinter)
     if (!parsed) return false
 
     parsed.indexes.forEach((index) => {
       if (BookmarkAPI.add(parsed.label, sampleLook.get(index - 1).clone()) !== true) {
-        cliPrinter.error(`Cannot add the sample #${index} to ${parsed.label}`)
+        cliPrinter.error(`Cannot add the sample ${index} to label '${parsed.label}'.`)
         return
       }
       changesFlag = true
@@ -43,12 +44,16 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliPrinter, cliPrompt
   })
 
   if (changesFlag === true) {
+    cliPrinter.info(`Added samples ${parsed.indexes.join(',')} to label '${parsed.label}'. Updating bookmarks collection...`)
     try {
       await BookmarkAPI.update()
       cliPrinter.info('Bookmarks collection updated successfully.')
     } catch (e) {
-      cliPrinter.error(`Cannot update the bookmarks collection.\n> ${e.message}.`)
+      cliPrinter.error('Cannot update the bookmarks collection.')
+      cliPrinter.info(` > ${e.message}.`)
     }
+  } else {
+    cliPrinter.info('Bookmarks collection has not been changed.')
   }
   return cliNext()
 })
@@ -85,11 +90,11 @@ const parseInput = (input, maxIndex, cliPrinter) => {
 }
 
 const printSampleSet = (sampleSet, cliPrinter) => {
-  // const printer = cliPrinter.child()
   let index = 1
+  cliPrinter.info('Samples found in the latest look:')
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    cliPrinter.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath}`)
+    cliPrinter.info(`  ${(index++).toString().padStart(length, '0')}) ${sample.relPath}`)
   })
 }
 
