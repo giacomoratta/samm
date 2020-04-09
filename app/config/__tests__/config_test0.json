@@ -1,5 +1,4 @@
 {
-	"Platform": "diff-linux-5.0.0-37-generic",
 	"SamplesDirectoryExclusions": [
 		"samplePack1",
 		"samplePack2"

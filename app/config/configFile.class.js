@@ -12,18 +12,6 @@ class ConfigFile extends JsonizedFile {
     this.DFBF = new DataFieldBuiltInFactory()
     this.DFBF.initFactory()
 
-    this.PlatformSignature = `${os.platform()}-${os.release()}`
-
-    this.add(this.DFBF.create({
-      name: 'Platform',
-      schema: {
-        type: 'string',
-        readOnly: true
-      },
-      value: this.PlatformSignature,
-      description: 'Name and version of the current platform in order to avoid to reuse the config file on the wrong system'
-    }))
-
     this.add(this.DFBF.create({
       name: 'SamplesDirectory',
       schema: {
@@ -157,12 +145,7 @@ class ConfigFile extends JsonizedFile {
 
   async load () {
     const generateFile = !(await this.fileHolder.exists())
-    if (await super.load() === true) {
-      if (this.field('Platform').valueRef !== this.PlatformSignature) {
-        await this.reset()
-      }
-      return true
-    }
+    if (await super.load() === true) return true
     if (generateFile === true) return /* await */ this.save()
     return false
   }
