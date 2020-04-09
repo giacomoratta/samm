@@ -1,4 +1,3 @@
-const os = require('os')
 const path = require('path')
 const { JsonizedFile } = require('../../core/jsonized-file')
 const { DataFieldBuiltInFactory } = require('../../core/data-field/dataFieldBuiltIn.factory')

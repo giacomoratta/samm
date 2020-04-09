@@ -1,14 +1,16 @@
 {
   "name": "mpl",
   "version": "0.1.0",
-  "description": "Creativity-oriented manager for music production library",
+  "description": "Creativity-oriented music production library manager",
   "main": "app.js",
   "scripts": {
     "integration": "jest --testPathPattern=.*\\__tests__\\.*\\.integration\\.js",
     "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
     "test-win": "jest --testPathPattern=.*/__tests__/.*.test.js",
     "start": "NODE_ENV=production APP_DATA_DIRNAME=app-data node app.js",
-    "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-app-data node app.js"
+    "start-win": "set NODE_ENV=production&& set APP_DATA_DIRNAME=app-data&& node app.js",
+    "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-app-data node app.js",
+    "dev-win": "set NODE_ENV=development&& set APP_DATA_DIRNAME=test-app-data&& node app.js"
   },
   "author": "",
   "license": "ISC",
