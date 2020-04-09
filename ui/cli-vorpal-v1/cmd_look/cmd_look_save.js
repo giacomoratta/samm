@@ -1,5 +1,5 @@
 const { App, Cli } = require('../ui_common')
-const { ConfigAPI, SampleIndexAPI, SampleLookAPI, ProjectManagerAPI, ExportAPI } = App
+const { SampleIndexAPI, SampleLookAPI, ProjectManagerAPI, ExportAPI } = App
 
 const commandName = 'look-save'
 
