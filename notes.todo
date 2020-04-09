@@ -1,6 +1,4 @@
 BUG & FIXES
-- show shorter relPath
-- remove json extensions in app-data
 
 LONG TERM
 - make NPM packages

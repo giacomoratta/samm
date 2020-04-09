@@ -94,7 +94,7 @@ const printSampleSet = (sampleSet, cliPrinter) => {
   cliPrinter.info('Samples found in the latest look:')
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    cliPrinter.info(`  ${(index++).toString().padStart(length, '0')}) ${sample.relPath}`)
+    cliPrinter.info(`  ${(index++).toString().padStart(length, '0')}) ${sample.relPath.length > 36 ? '...' : ''}${sample.relPath.substr(-36)}`)
   })
 }
 

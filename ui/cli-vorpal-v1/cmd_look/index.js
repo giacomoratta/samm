@@ -76,7 +76,7 @@ const printSearchResults = (sampleSet, cliPrinter) => {
   let index = 1
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    printer.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath}`)
+    printer.info(`${(index++).toString().padStart(length, '0')}) ${sample.relPath.length > 36 ? '...' : ''}${sample.relPath.substr(-36)}`)
   })
 }
 
