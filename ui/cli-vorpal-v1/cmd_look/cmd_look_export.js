@@ -10,7 +10,7 @@ Cli.addCommandHeader(commandName)
   .description('Export the latest samples look in the current project or in a custom directory\n')
   .option('-d, --directory <name>', 'Directory name for the exported samples')
   .option('-o, --overwrite', 'Overwrite the destination directory if exists')
-  .option('-s, --save [custom-path]', 'Save latest lookup to current project directory or custom path')
+  .option('-p, --path <custom-path>', 'Save latest lookup to current project directory or custom path')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
   if (SampleIndexAPI.absent() === true) {
@@ -38,11 +38,11 @@ const printSearchResults = (sampleSet, cliPrinter) => {
 }
 
 const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput, cliPrompt) => {
-  const optSave = cliInput.getOption('save')
-  if (!optSave) return
+  const optPath = cliInput.getOption('path')
+  if (!optPath) return
 
-  let destinationPath = optSave
-  if (optSave === true) {
+  let destinationPath = optPath
+  if (optPath === true) {
     if (!ProjectManagerAPI.getCurrentProject()) {
       cliPrinter.error('No current project set: cannot export samples.')
       return
