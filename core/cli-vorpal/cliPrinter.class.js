@@ -74,7 +74,7 @@ class CliPrinter {
   value (value, message) {
     let text = `${message}: `
     if (_.isArray(value)) {
-      text = `${text}${value.join(',')}`
+      text = `${text}${value.join(', ')}`
     } else if (_.isObject(value)) {
       Object.keys(value).forEach((k) => {
         text = `${text}${NL}${this.indent}  ${k}: ${value[k]}`

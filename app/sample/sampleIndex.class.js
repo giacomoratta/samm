@@ -48,7 +48,7 @@ class SampleIndex extends SequoiaPath {
   async regenerate () {
     if (await this.scan() !== true) {
       ConfigAPI.field('Status').fn.setProp('first-scan-needed', false)
-      ConfigAPI.field('Status').fn.setProp('new-scan-needed', false)
+      ConfigAPI.field('Status').fn.setProp('new-scan-needed', true)
       await ConfigAPI.save()
       log.warn('samples root path is empty')
       return false
@@ -57,6 +57,9 @@ class SampleIndex extends SequoiaPath {
       log.warn('cannot save sample index file')
       return false
     }
+    ConfigAPI.field('Status').fn.setProp('first-scan-needed', false)
+    ConfigAPI.field('Status').fn.setProp('new-scan-needed', false)
+    await ConfigAPI.save()
     return true
   }
 }

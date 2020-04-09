@@ -22,7 +22,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
 
     /* Print single parameter */
     if (!cliInput.getParam('values')) {
-      cliPrinter.info(ConfigAPI.field(paramName).description[0])
+      cliPrinter.info(`${ConfigAPI.field(paramName).description[0]}.`)
       cliPrinter.value(ConfigAPI.field(paramName).valueRef, '> current')
       return cliNext()
     }
@@ -50,12 +50,17 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     } else {
       newConfigValue = cliInput.getParam('values')[0]
     }
-    if (newConfigValue === null || newConfigValue === undefined) return cliNext()
+    if (newConfigValue === null || newConfigValue === undefined) {
+      cliPrinter.info(`Value not changed for ${paramName}: ${newConfigValue}`)
+      return cliNext()
+    }
     try {
       ConfigAPI.field(paramName).value = newConfigValue
+      cliPrinter.info(`New value for ${paramName}: ${newConfigValue}`)
       await ConfigAPI.save()
     } catch (e) {
-      cliPrinter.error(e.message)
+      cliPrinter.error('Cannot change the configuration.')
+      cliPrinter.error(` > ${e.message}`)
     }
     return cliNext()
   }
@@ -65,7 +70,6 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
   return cliNext()
 })
 
-// todo: replace with dataField.fn.bulkAdd and dataField.fn.bulkRemove
 const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
   if (!currentArray) currentArray = []
   if (!newValues) return []
@@ -78,12 +82,13 @@ const BasicArrayFieldEditor = ({ currentArray, newValues, cliInput }) => {
 
 const configDescribeParameters = ({ cliPrinter }) => {
   let currentValue = null
+  cliPrinter.info('CONFIGURATION PARAMETERS')
   ConfigAPI.getFieldsList().forEach((configParam) => {
     cliPrinter.title(configParam)
     const description = ConfigAPI.field(configParam).description
     if (description.length > 0) {
       currentValue = ConfigAPI.field(configParam).value
-      cliPrinter.info(`  ${description[0]}`)
+      cliPrinter.info(`  ${description[0]}.`)
 
       if (currentValue instanceof Array) {
         cliPrinter.info('  > current value:')

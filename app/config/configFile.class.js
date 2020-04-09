@@ -17,7 +17,7 @@ class ConfigFile extends JsonizedFile {
         type: 'absDirPath',
         checkExists: true
       },
-      description: 'Directory with samples to scan and search in'
+      description: 'Directory with samples to scan and search in (absolute path)'
     }))
 
     this.add(this.DFBF.create({
@@ -55,7 +55,7 @@ class ConfigFile extends JsonizedFile {
       //   'samplePack1',
       //   'samplePack2'
       // ],
-      description: 'Directories (paths) which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path'
+      description: 'Directories which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path; add or remove (with -r option) multiple values'
     }))
 
     this.add(this.DFBF.create({
@@ -65,7 +65,7 @@ class ConfigFile extends JsonizedFile {
         items: 'string'
       },
       // value: ['exe', 'DS_Store', 'info'],
-      description: 'The list of extensions which the samples must NOT have'
+      description: 'The list of file extensions to skip during the sample scan; add or remove (with -r option) multiple values'
     }))
 
     this.add(this.DFBF.create({
@@ -75,7 +75,7 @@ class ConfigFile extends JsonizedFile {
         items: 'string'
       },
       // value: ['wav', 'mp3'],
-      description: 'The list of extensions which the samples must have'
+      description: 'The list of file extensions which samples must have; add or remove (with -r option) multiple values'
     }))
 
     this.add(this.DFBF.create({
@@ -85,7 +85,7 @@ class ConfigFile extends JsonizedFile {
         values: ['X', 'I', 'E']
       },
       value: 'X',
-      description: '\'I\' to get files with declared extensions only, \'E\' to exclude file with some extensions, and \'X\' to disable the extension filter'
+      description: 'Policy for sample scan: \'I\' to get files with declared extensions only, \'E\' to exclude file with some extensions, and \'X\' to disable the extension filter'
     }))
 
     this.add(this.DFBF.create({
@@ -93,7 +93,7 @@ class ConfigFile extends JsonizedFile {
       schema: {
         type: 'absDirPath'
       },
-      description: 'Directory where all templates are located; they can be used to start a ready-to-go project instead of an empty one.'
+      description: 'Directory where all templates are located; they can be used to start a ready-to-go project instead of an empty one'
     }))
 
     this.add(this.DFBF.create({
