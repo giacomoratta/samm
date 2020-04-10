@@ -1,5 +1,6 @@
 class SpheroidList {
-  constructor ({ maxSize = 10 }) {
+  constructor ({ maxSize = 10, overwrite = false }) {
+    this._overwrite = overwrite
     this._maxSize = maxSize
     if (maxSize < 1) {
       throw new TypeError('maxSize cannot be less than 1')
@@ -44,7 +45,8 @@ class SpheroidList {
       label = SpheroidList.autoLabel(++this._itemCounter)
     }
     if (this.map.has(label)) {
-      throw new Error(`Duplicated label: ${label}`)
+      if (this._overwrite !== true) throw new Error(`Duplicated label: ${label}`)
+      this.remove(label)
     }
     if (this.size === this.maxSize) this.remove()
     this.array.unshift({ label, value })
