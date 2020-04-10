@@ -4,7 +4,6 @@
   "description": "Creativity-oriented music production library manager",
   "main": "app.js",
   "scripts": {
-    "integration": "jest --testPathPattern=.*\\__tests__\\.*\\.integration\\.js",
     "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
     "test-win": "jest --testPathPattern=.*/__tests__/.*.test.js",
     "start": "NODE_ENV=production APP_DATA_DIRNAME=app-data node app.js",
