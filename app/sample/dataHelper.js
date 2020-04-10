@@ -16,7 +16,12 @@ let LatestSampleSetLabel = null
  * @returns {Object|null} cache entry
  */
 const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  const designatedQueryLabel = queryLabel || PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
+  let designatedQueryLabel = queryLabel
+  if (!designatedQueryLabel) {
+    designatedQueryLabel = PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
+    designatedQueryLabel = `###generated###__${designatedQueryLabel}`
+  }
+
   if (designatedQueryLabel.length === 0) {
     log.warn({ designatedQueryLabel, queryString, queryLabel }, 'Invalid generated query string.')
     return
