@@ -21,6 +21,7 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pa
     designatedQueryLabel = PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
     designatedQueryLabel = `###generated###__${designatedQueryLabel}`
   }
+  log.debug({ queryLabel, queryString, hasPathQueryObj: !!pathQueryObj }, `Designated query label = ${designatedQueryLabel}`)
 
   if (designatedQueryLabel.length === 0) {
     log.warn({ designatedQueryLabel, queryString, queryLabel }, 'Invalid generated query string.')
@@ -53,7 +54,9 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pa
     pathBasedQuery: pathBasedQueryObj,
     sampleLook: null
   }
+  pbqEntry.pathBasedQuery.label = designatedQueryLabel
   DataHelperCache.add(pbqEntry.pathBasedQuery.label, pbqEntry)
+  log.debug(`Add new cache entry with key = ${pbqEntry.pathBasedQuery.label}`)
   LatestSampleSetLabel = pbqEntry.pathBasedQuery.label
   return pbqEntry
 }
