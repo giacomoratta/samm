@@ -154,42 +154,6 @@ class DataFieldBuiltInFactory extends DataFieldFactory {
   }
 
   _definePathFields () {
-    // const checkAbsDirPath = function (value, schema, validator) {
-    //   if (!value) return true
-    //   let dirExists
-    //   if (typeof schema.presence === 'boolean') {
-    //     dirExists = fileUtils.directoryExistsSync(value)
-    //     if (schema.presence === true && dirExists === false) {
-    //       return validator.makeError('dirNotExists', null, value)
-    //     }
-    //     if (schema.presence === false && dirExists === true) {
-    //       return validator.makeError('dirAlreadyExists', null, value)
-    //     }
-    //   }
-    //   if (schema.ensure === true && dirExists !== true && !fileUtils.ensureDirSync(value)) {
-    //     return validator.makeError('dirNotCreated', null, value)
-    //   }
-    //   return true
-    // }
-    //
-    // const checkAbsFilePath = function (value, schema, validator) {
-    //   if (!value) return true
-    //   let fileExists
-    //   if (typeof schema.presence === 'boolean') {
-    //     fileExists = fileUtils.fileExistsSync(value)
-    //     if (schema.presence === true && fileExists === false) {
-    //       return validator.makeError('fileNotExists', null, value)
-    //     }
-    //     if (schema.presence === false && fileExists === true) {
-    //       return validator.makeError('fileAlreadyExists', null, value)
-    //     }
-    //   }
-    //   if (schema.ensure === true && fileExists !== true && !fileUtils.writeFileSync(value, '', 'utf8')) {
-    //     return validator.makeError('fileNotCreated', null, value)
-    //   }
-    //   return true
-    // }
-
     const rootPath = path.parse(process.cwd()).root
 
     const relToAbsPath = function (value, schema) {
