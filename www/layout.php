@@ -19,7 +19,7 @@ $TemplateMgr = new TemplateManager();
         <p>
             MPL (<i>&quot;Music Production Library&quot;</i>) is a command line based software
             which helps your creativity flow. Dive into your wide samples library,
-            make researchs, extract random samples and save them into the current project directory.
+            make researches, extract random samples and save them into the current project directory.
         </p>
     </section>
     <section class="howhelp">
