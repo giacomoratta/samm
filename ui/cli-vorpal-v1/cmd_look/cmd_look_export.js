@@ -37,11 +37,10 @@ const printSearchResults = (sampleSet, cliPrinter) => {
 }
 
 const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput, cliPrompt) => {
-  const optPath = cliInput.getOption('path')
-  if (!optPath) return
-
-  let destinationPath = optPath
-  if (optPath === true) {
+  let destinationPath
+  if (cliInput.hasOption('path')) {
+    destinationPath = cliInput.getOption('path')
+  } else {
     if (!ProjectManagerAPI.getCurrentProject()) {
       cliPrinter.error('No current project set: cannot export samples.')
       return
