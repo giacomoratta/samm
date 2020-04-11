@@ -17,7 +17,7 @@ module.exports = {
     },
     projectInlineInfo: function (project) {
       const date = new Date(project.modifiedAt)
-      return `[${project.dir.length > 48 ? '...' : ''}${project.dir.substr(-48)}]  ${project.base} ${date.toUTCString()}  `
+      return `${project.name}  [${date.toUTCString()}]`
     }
   }
 }
