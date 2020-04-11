@@ -1,6 +1,5 @@
-const { App, Cli } = require('../ui_common')
+const { App, Cli, uiUtils } = require('../ui_common')
 const { ProjectHistoryAPI, ProjectManagerAPI } = App
-const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'project-history'
 Cli.addCommand(commandName)
@@ -25,10 +24,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     await cliPrompt({
       message: 'Select a project',
       showFn: () => {
-        cliPrinter.orderedList(projectHistoryList, (pItem) => {
-          const date = new Date(pItem.modifiedAt)
-          return `${pItem.path.length > SAMPLE_PATH_LENGTH ? '...' : ''}${pItem.path.substr(-SAMPLE_PATH_LENGTH)}  (${date.toUTCString()})`
-        })
+        cliPrinter.orderedList(projectHistoryList, uiUtils.projectInlineInfo)
       }
     }, async ({ exit, input }) => {
       if (exit === true) return true

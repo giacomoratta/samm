@@ -7,7 +7,7 @@ let minLevel = 'debug'
 
 if (process.env.NODE_ENV === 'production') {
   LoggerFactoryClass = FileLogger
-  minLevel = 'info'
+  minLevel = 'debug' // change to info
 }
 
 const initLoggerFactory = () => {

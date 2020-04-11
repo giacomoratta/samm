@@ -1,6 +1,5 @@
-const { App, Cli } = require('../ui_common')
+const { App, Cli, uiUtils } = require('../ui_common')
 const { BookmarkAPI } = App
-const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'bookm'
 
@@ -69,7 +68,7 @@ const printAllBookmarks = (cliPrinter) => {
 
 const printBookmarkSet = (bookmarkSet, bookmarkLabel, cliPrinter) => {
   cliPrinter.info(`[ ${bookmarkLabel} ]`)
-  cliPrinter.orderedList(bookmarkSet.array, (item) => { return `${item.relPath.length > SAMPLE_PATH_LENGTH ? '...' : ''}${item.relPath.substr(-SAMPLE_PATH_LENGTH)}` })
+  cliPrinter.orderedList(bookmarkSet.array, uiUtils.sampleInlineInfo)
 }
 
 const optCopyHandler = async (mainLabel, cliInput, cliPrinter) => {

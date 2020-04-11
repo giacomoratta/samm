@@ -1,6 +1,5 @@
-const { App, Cli } = require('../ui_common')
+const { App, Cli, uiUtils } = require('../ui_common')
 const { BookmarkAPI, SampleLookAPI } = App
-const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'bookm-look'
 
@@ -95,7 +94,7 @@ const printSampleSet = (sampleSet, cliPrinter) => {
   cliPrinter.info('Samples found in the latest look:')
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    cliPrinter.info(`  ${(index++).toString().padStart(length, '0')}) ${sample.relPath.length > SAMPLE_PATH_LENGTH ? '...' : ''}${sample.relPath.substr(-SAMPLE_PATH_LENGTH)}`)
+    cliPrinter.info(`  ${(index++).toString().padStart(length, '0')}) ${uiUtils.sampleInlineInfo(sample)}`)
   })
 }
 

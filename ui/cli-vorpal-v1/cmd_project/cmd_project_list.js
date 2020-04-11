@@ -1,6 +1,5 @@
-const { App, Cli } = require('../ui_common')
+const { App, Cli, uiUtils } = require('../ui_common')
 const { ProjectManagerAPI } = App
-const SAMPLE_PATH_LENGTH = 98
 
 const commandName = 'project-list'
 Cli.addCommand(commandName)
@@ -27,10 +26,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
         message: 'Select a project',
         showFn: () => {
           cliPrinter.info(`Projects in the same directory: ${currentProject.parentPath}`)
-          cliPrinter.orderedList(projectSiblingsData.projects, (pItem) => {
-            const date = new Date(pItem.modifiedAt)
-            return `${pItem.path.length > SAMPLE_PATH_LENGTH ? '...' : ''}${pItem.path.substr(-SAMPLE_PATH_LENGTH)}  (${date.toUTCString()})`
-          })
+          cliPrinter.orderedList(projectSiblingsData.projects, uiUtils.projectInlineInfo)
         }
       }, async ({ exit, input }) => {
         if (exit === true) return true

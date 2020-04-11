@@ -9,5 +9,15 @@ module.exports = {
   log,
   CLI_CMD_OK,
   CLI_CMD_KO,
-  CLI_CMD_ERR_FORMAT
+  CLI_CMD_ERR_FORMAT,
+
+  uiUtils: {
+    sampleInlineInfo: function (sample) {
+      return `${sample.base}  [${sample.dir.length > 64 ? '...' : ''}${sample.dir.substr(-64)}`
+    },
+    projectInlineInfo: function (project) {
+      const date = new Date(project.modifiedAt)
+      return `${project.base} ${date.toUTCString()}  [${project.dir.length > 48 ? '...' : ''}${project.dir.substr(-48)}]`
+    }
+  }
 }
