@@ -13,11 +13,11 @@ module.exports = {
 
   uiUtils: {
     sampleInlineInfo: function (sample) {
-      return `${sample.base}  [${sample.dir.length > 64 ? '...' : ''}${sample.dir.substr(-64)}`
+      return `[${sample.dir.length > 64 ? '...' : ''}${sample.dir.substr(-64)}]  ${sample.base}`
     },
     projectInlineInfo: function (project) {
       const date = new Date(project.modifiedAt)
-      return `${project.base} ${date.toUTCString()}  [${project.dir.length > 48 ? '...' : ''}${project.dir.substr(-48)}]`
+      return `[${project.dir.length > 48 ? '...' : ''}${project.dir.substr(-48)}]  ${project.base} ${date.toUTCString()}  `
     }
   }
 }
