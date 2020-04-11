@@ -22,6 +22,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     cliPrinter.warn('No samples found in the latest look!')
   } else {
     printSearchResults(sampleLook, cliPrinter)
+    cliPrinter.newLine()
     await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
   }
   return cliNext()
@@ -32,7 +33,7 @@ const printSearchResults = (sampleSet, cliPrinter) => {
   let index = 1
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    printer.info(`${(index++).toString().padStart(length, '0')}) ${uiUtils.sampleInlineInfo(sample)}`)
+    printer.info(`  ${(index++).toString().padStart(length, '0')}) ${uiUtils.sampleInlineInfo(sample)}`)
   })
 }
 
