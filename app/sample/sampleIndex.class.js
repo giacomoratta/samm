@@ -19,7 +19,7 @@ class SampleIndex extends SequoiaPath {
 
     if (ExtensionsPolicyForSamples === 'E') {
       options.excludedExtensions = ConfigAPI.field('ExcludedExtensionsForSamples').value || undefined
-    } else if (ConfigAPI.field('ExtensionsPolicyForSamples') === 'I') {
+    } else if (ExtensionsPolicyForSamples === 'I') {
       options.includedExtensions = ConfigAPI.field('IncludedExtensionsForSamples').value || undefined
     }
 

@@ -16,7 +16,7 @@ let LatestSampleSetLabel = null
  * @returns {Object|null} cache entry
  */
 const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  let designatedQueryLabel = queryLabel
+  let designatedQueryLabel = (pathQueryObj && pathQueryObj.label) || queryLabel
   if (!designatedQueryLabel) {
     designatedQueryLabel = PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
     designatedQueryLabel = `###generated###__${designatedQueryLabel}`

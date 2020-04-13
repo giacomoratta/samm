@@ -40,8 +40,8 @@ const processQueryString = function (queryString) {
   queryInfo.queryString = queryInfo._linesOR.join(',')
   if (queryInfo.queryString.length < 2) return null
 
-  queryInfo.functionBody = queryInfo._functionLinesOR.join(' ')
-  queryInfo.checkFn = codeUtils.createFunction('s', queryInfo.functionBody)
+  queryInfo.functionBody = `const s = v.toLowerCase(); ${queryInfo._functionLinesOR.join(' ')}`
+  queryInfo.checkFn = codeUtils.createFunction('v', queryInfo.functionBody)
 
   delete queryInfo._linesOR
   delete queryInfo._functionLinesOR
@@ -93,7 +93,7 @@ class PathBasedQuery {
     clonedPathBasedQuery._label = this._label
     clonedPathBasedQuery._functionBody = this._functionBody
     clonedPathBasedQuery._queryString = this._queryString
-    clonedPathBasedQuery.check = codeUtils.createFunction('s', this._functionBody)
+    clonedPathBasedQuery.check = codeUtils.createFunction('v', this._functionBody)
     return clonedPathBasedQuery
   }
 
@@ -109,7 +109,7 @@ class PathBasedQuery {
     } else {
       this._queryString = jsonData.queryString
       this._functionBody = jsonData.functionBody
-      this.check = codeUtils.createFunction('s', this._functionBody)
+      this.check = codeUtils.createFunction('v', this._functionBody)
     }
     this._label = jsonData.label
     return true

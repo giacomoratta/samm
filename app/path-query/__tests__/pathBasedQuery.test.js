@@ -24,7 +24,7 @@ describe('PathBasedQuery class', function () {
     expect(pathQuery2.check('/drd/file1/dled61sf')).toEqual(false)
 
     expect(pathQuery2.toJson()).toMatchObject({
-      functionBody: 'if ( s.indexOf(\'le61\')>=0 && s.indexOf(\'file1\')>=0 ) return true; if ( s.indexOf(\'file3\')>=0 ) return true; return false;',
+      functionBody: 'const s = v.toLowerCase(); if ( s.indexOf(\'le61\')>=0 && s.indexOf(\'file1\')>=0 ) return true; if ( s.indexOf(\'file3\')>=0 ) return true; return false;',
       label: 'my_label_222',
       queryString: 'le61+file1,file3'
     })
@@ -48,7 +48,7 @@ describe('PathBasedQuery class', function () {
 
   it('should import/export PathBasedQuery as json', function () {
     const jsonPQ = {
-      functionBody: 'if ( s.indexOf(\'le61\')>=0 && s.indexOf(\'file1\')>=0 ) return true; if ( s.indexOf(\'file3\')>=0 ) return true; return false;',
+      functionBody: 'const s = v.toLowerCase(); if ( s.indexOf(\'le61\')>=0 && s.indexOf(\'file1\')>=0 ) return true; if ( s.indexOf(\'file3\')>=0 ) return true; return false;',
       label: 'my_label_222',
       queryString: 'le61+file1,file3'
     }

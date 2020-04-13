@@ -40,7 +40,7 @@ Cli.addCommandBody(commandName, function ({ cliNext, cliInput, cliPrinter }) {
   const optQueryLabel = cliInput.getOption('label')
   if (optQueryLabel) {
     cliPrinter.info(`Searching samples with label: ${optQueryLabel}`)
-    const pathQueryObj = PathQueryAPI.get(optQueryLabel)
+    const pathQueryObj = PathQueryAPI.has(optQueryLabel)
     if (!pathQueryObj) {
       cliPrinter.warn('Query not found!')
       return cliNext()
