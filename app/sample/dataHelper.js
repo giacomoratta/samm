@@ -11,20 +11,19 @@ let LatestSampleSetLabel = null
  * Get or extract a sample set from sample index.
  * @param {SampleIndex} sampleIndex
  * @param {string} [queryString]: string for a path-based query
- * @param {string} [queryLabel]: string for a path-based object label
  * @param {PathBasedQuery} [pathQueryObj]: path query object
  * @returns {Object|null} cache entry
  */
-const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  let designatedQueryLabel = (pathQueryObj && pathQueryObj.label) || queryLabel
+const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, pathQueryObj }) => {
+  let designatedQueryLabel = (pathQueryObj && pathQueryObj.label) || undefined
   if (!designatedQueryLabel) {
     designatedQueryLabel = PathBasedQuery.generateQueryStringLabel((pathQueryObj && pathQueryObj.queryString) || queryString)
     designatedQueryLabel = `###generated###__${designatedQueryLabel}`
   }
-  log.debug({ queryLabel, queryString, hasPathQueryObj: !!pathQueryObj }, `Designated query label = ${designatedQueryLabel}`)
+  log.debug({ queryString, hasPathQueryObj: !!pathQueryObj }, `Designated query label = ${designatedQueryLabel}`)
 
   if (designatedQueryLabel.length === 0) {
-    log.warn({ designatedQueryLabel, queryString, queryLabel }, 'Invalid generated query string.')
+    log.warn({ designatedQueryLabel, queryString }, 'Invalid generated query string.')
     return
   }
 
@@ -35,7 +34,7 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pa
     return pbqEntry
   }
 
-  const pathBasedQueryObj = pathQueryObj || new PathBasedQuery(queryString)
+  const pathBasedQueryObj = (pathQueryObj && pathQueryObj.clone()) || new PathBasedQuery(queryString)
   if (!pathBasedQueryObj.isValid()) {
     log.warn({ queryString }, 'Invalid path based query.')
     return
@@ -54,19 +53,18 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, queryLabel, pa
     pathBasedQuery: pathBasedQueryObj,
     sampleLook: null
   }
-  pbqEntry.pathBasedQuery.label = designatedQueryLabel
-  DataHelperCache.add(pbqEntry.pathBasedQuery.label, pbqEntry)
+  DataHelperCache.add(designatedQueryLabel, pbqEntry)
   log.debug(`Add new cache entry with key = ${pbqEntry.pathBasedQuery.label}`)
   LatestSampleSetLabel = pbqEntry.pathBasedQuery.label
   return pbqEntry
 }
 
-const getSampleSet = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  return _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj }) || {}
+const getSampleSet = ({ sampleIndex, queryString, pathQueryObj }) => {
+  return _getPathBasedQueryCacheEntry({ sampleIndex, queryString, pathQueryObj }) || {}
 }
 
-const getSampleLook = ({ sampleIndex, queryString, queryLabel, pathQueryObj }) => {
-  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, queryLabel, pathQueryObj })
+const getSampleLook = ({ sampleIndex, queryString, pathQueryObj }) => {
+  const pbqEntry = _getPathBasedQueryCacheEntry({ sampleIndex, queryString, pathQueryObj })
   if (!pbqEntry) return {}
   pbqEntry.sampleLook = pbqEntry.sampleSet.random({
     max: ConfigAPI.field('LookRandomCount').value,

@@ -77,7 +77,7 @@ const getExportPath = async function ({
   overwrite = false
 }) {
   /* Add app signature (useful for multiple exports and to avoid confusion in file system) */
-  destinationPath = path.join(destinationPath, destinationParentName)
+  destinationPath = path.join(destinationPath, destinationParentName || 'mpl')
 
   let exportPath = path.join(destinationPath, destinationName)
   if (overwrite === true) {

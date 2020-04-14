@@ -16,6 +16,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   }
 
   /* Setting destination path and parent name */
+  let exportToCustomPath = false
   let destinationPath = cliInput.getOption('path')
   let destinationParentName
   if (!destinationPath) {
@@ -25,6 +26,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
       return cliNext()
     }
   } else {
+    exportToCustomPath = true
     destinationParentName = 'mpl-bookmarks'
   }
 
@@ -37,9 +39,9 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     }
     const exportResults = await exportBookmarkSet({
       destinationPath,
+      destinationName: `${exportToCustomPath ? '' : 'bookm_'}${paramLabel}`,
       destinationParentName,
       bookmarkSet,
-      bookmarkLabel: paramLabel,
       askConfirmation: true,
       cliPrompt,
       cliPrinter
@@ -68,13 +70,14 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   for (let i = 0; i < bookmarkLabels.length; i++) {
     tmpExpRes = await exportBookmarkSet({
       destinationPath,
+      destinationName: `${exportToCustomPath ? '' : 'bookm_'}${bookmarkLabels[i]}`,
       destinationParentName,
       bookmarkSet: bookmarkSets[bookmarkLabels[i]],
-      bookmarkLabel: bookmarkLabels[i],
       askConfirmation: false,
       cliPrompt,
       cliPrinter
     })
+    if (!tmpExpRes) continue
     exportResults.failed = exportResults.failed.concat(tmpExpRes.failed)
     exportResults.success = exportResults.success.concat(tmpExpRes.success)
     exportResults.errors = exportResults.errors.concat(tmpExpRes.errors)
@@ -85,9 +88,9 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
 
 const exportBookmarkSet = async ({
   destinationPath,
+  destinationName,
   destinationParentName,
   bookmarkSet,
-  bookmarkLabel,
   askConfirmation = true,
   cliPrompt,
   cliPrinter
@@ -95,16 +98,19 @@ const exportBookmarkSet = async ({
   const exportPath = await ExportAPI.getExportPath({
     destinationPath,
     destinationParentName,
-    destinationName: `${!destinationParentName ? 'bookmarks_' : 'bookm_'}${bookmarkLabel}`,
+    destinationName,
     overwrite: false
   })
   if (!exportPath) return
 
-  if (askConfirmation === true && cliPrompt && await askConfirmation({
-    message: `Going to export ${bookmarkSet.size} bookmarked samples to ${exportPath}`,
-    cliPrinter,
-    cliPrompt
-  }) !== true) return
+  if (askConfirmation === true) {
+    if (!cliPrompt) return
+    if (await askConfirmation({
+      message: `Going to export ${bookmarkSet.size} bookmarked samples to ${exportPath}`,
+      cliPrinter,
+      cliPrompt
+    }) !== true) return
+  }
 
   return /* await */ ExportAPI.exportSampleSet({
     sampleSet: bookmarkSet,
