@@ -1,13 +1,10 @@
-# Application usage
+# Get started
 
-### Get started
-
+### Essential config
+### First sample scan
 ### Look and export
-
 ### Set and use queries for look
-
 ### Set bookmarks
-
 ### Tune the sample scan
 
 # Reference
