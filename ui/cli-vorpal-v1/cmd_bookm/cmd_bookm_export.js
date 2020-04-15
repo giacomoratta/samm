@@ -20,11 +20,11 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   let destinationPath = cliInput.getOption('path')
   let destinationParentName
   if (!destinationPath) {
-    destinationPath = ProjectManagerAPI.getCurrentProject()
-    if (!destinationPath) {
+    if (!ProjectManagerAPI.getCurrentProject()) {
       cliPrinter.info('No current project set (use -p option or set a project).')
       return cliNext()
     }
+    destinationPath = ProjectManagerAPI.getCurrentProject().path
   } else {
     exportToCustomPath = true
     destinationParentName = 'mpl-bookmarks'
@@ -51,7 +51,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   }
 
   /* Export all bookmarks */
-  if (await askConfirmation({
+  if (await askConfirmationPrompt({
     message: `Going to export ${BookmarkAPI.totalSamples()} bookmarked samples to ${destinationPath}`,
     cliPrinter,
     cliPrompt
@@ -105,7 +105,7 @@ const exportBookmarkSet = async ({
 
   if (askConfirmation === true) {
     if (!cliPrompt) return
-    if (await askConfirmation({
+    if (await askConfirmationPrompt({
       message: `Going to export ${bookmarkSet.size} bookmarked samples to ${exportPath}`,
       cliPrinter,
       cliPrompt
@@ -119,7 +119,7 @@ const exportBookmarkSet = async ({
   })
 }
 
-const askConfirmation = async ({ message, cliPrinter, cliPrompt }) => {
+const askConfirmationPrompt = async ({ message, cliPrinter, cliPrompt }) => {
   let wantToProceed = false
   await cliPrompt({
     message: 'Do you want to proceed? (y/n)',
@@ -144,7 +144,7 @@ const printExportResults = ({ exportResults, destinationPath, cliPrinter }) => {
     cliPrinter.unorderedList(exportResults.failed)
     cliPrinter.newLine()
   } else if (exportResults.success.length > 0) {
-    cliPrinter.error('All bookmarks exported successfully:')
+    cliPrinter.info('All bookmarks exported successfully:')
   }
   cliPrinter.info(`> Destination path: ${destinationPath}`)
 }

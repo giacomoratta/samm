@@ -110,6 +110,15 @@ class SampleSet {
     const randomSampleSet = new SampleSet({
       validateFn: this.validateFn
     })
+
+    /* set too small */
+    if (this.size <= max) {
+      this.array.forEach((sample) => {
+        randomSampleSet.array.push(sample)
+      })
+      return randomSampleSet
+    }
+
     const collectionSize = this.array.length
     max = Math.min(max, collectionSize)
 
@@ -137,7 +146,7 @@ class SampleSet {
         addedDirectories[this.array[randomIndex].dir]++
       }
 
-      randomSampleSet.add(this.array[randomIndex])
+      randomSampleSet.array.push(this.array[randomIndex])
     }
 
     return randomSampleSet
