@@ -76,6 +76,12 @@ const getExportPath = async function ({
   destinationParentName = 'mpl',
   overwrite = false
 }) {
+  log.info({
+    destinationPath,
+    destinationName,
+    destinationParentName,
+    overwrite
+  }, 'Get export path...')
   /* Add app signature (useful for multiple exports and to avoid confusion in file system) */
   destinationPath = path.join(destinationPath, destinationParentName || 'mpl')
 

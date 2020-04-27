@@ -30,7 +30,7 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, pathQueryObj }
   let pbqEntry = DataHelperCache.get(designatedQueryLabel)
   if (pbqEntry) {
     log.debug(`Found a cache entry with label = '${pbqEntry.pathBasedQuery.label}'.`)
-    LatestSampleSetLabel = pbqEntry.pathBasedQuery.label
+    LatestSampleSetLabel = designatedQueryLabel
     return pbqEntry
   }
 
@@ -54,8 +54,8 @@ const _getPathBasedQueryCacheEntry = ({ sampleIndex, queryString, pathQueryObj }
     sampleLook: null
   }
   DataHelperCache.add(designatedQueryLabel, pbqEntry)
-  log.debug(`Add new cache entry with key = ${pbqEntry.pathBasedQuery.label}`)
-  LatestSampleSetLabel = pbqEntry.pathBasedQuery.label
+  log.debug(`Add new cache entry with key = ${designatedQueryLabel}`)
+  LatestSampleSetLabel = designatedQueryLabel
   return pbqEntry
 }
 
