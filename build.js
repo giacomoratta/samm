@@ -1,130 +1,104 @@
+const path = require('path')
+const fsExtra = require('fs-extra')
 const { compile } = require('nexe')
 const packageJson = require('./package.json')
-const _ = require('lodash')
-const Utils = {}
 
-const b$cfg = {
+const options = {
+  appName: 'mpl'
+}
+
+const nexeCommon = {
   version: packageJson.version,
-  build_dir: Utils.File.setAsAbsPath('build'),
+  build_dir: path.join(__dirname, 'releases'),
   compile_options: {
-    input: './app-prod.js',
-    output: null, // './build/y',
+    input: './app-build.js',
+    output: null,
     verbose: true
   },
   platforms: {
-    /*
-        * key: only [a-z\_]
-        * _ will be replaced with . to create a signature
-        */
-    mac_x64: {
-      tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json', true),
+    'mac-x64': {
       compile_options: {
-        target: 'mac-x64-10.13.0'
+        target: 'mac-x64-12.16.2'
       }
     },
-    win_x64: {
-      tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json', true),
+    'win-x64': {
       compile_options: {
-        target: 'windows-x64-10.13.0'
+        target: 'windows-x64-12.16.2'
       }
     },
-    win_x86: {
-      tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json', true),
+    'win-x86': {
       compile_options: {
-        target: 'windows-x86-10.13.0'
+        target: 'windows-x86-12.16.2'
       }
     },
-    linux_x64: {
-      tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json', true),
+    'linux-x64': {
       compile_options: {
-        target: 'linux-x64-10.13.0'
+        target: 'linux-x64-12.16.2'
       }
     },
-    linux_x86: {
-      tqueries_sample: Utils.File.setAsAbsPath('tqueries.sample.json', true),
+    'linux-x86': {
       compile_options: {
-        target: 'linux-x86-10.13.0'
+        target: 'linux-x86-12.16.2'
       }
     }
   }
 
 }
 
-console.log('\n' + 'MPL :: Build :: Start')
+const compileForPlatform = async (platform) => {
+  console.log('\n', 'Building app for', platform)
+  if (!nexeCommon.platforms[platform]) return false
 
-console.log('\n' + 'Create directory for build ::', b$cfg.build_dir)
-Utils.File.ensureDirSync(b$cfg.build_dir)
+  const nexePlatform = nexeCommon.platforms[platform]
+  nexePlatform.signature = `${options.appName}.${nexeCommon.version}.${platform}`
+  nexePlatform.compile_options = { ...nexeCommon.compile_options, ...nexePlatform.compile_options }
+  nexePlatform.build_dir = path.join(nexeCommon.build_dir, nexePlatform.signature)
+  nexePlatform.compile_options.output = path.join(nexePlatform.build_dir, options.appName)
+  console.log(nexePlatform.compile_options)
 
-const compileForPlatform = function (platform) {
-  if (!b$cfg.platforms[platform]) return false
-  const poz = b$cfg.platforms[platform]
+  try {
+    await fsExtra.ensureDir(nexePlatform.build_dir)
+  } catch (e) {
+    console.error(' > error while ensure directory', nexePlatform.build_dir)
+    console.error(e)
+    return false
+  }
 
-  poz.signature = platform.replace(/[_]/g, '.').replace(/[^a-zA-Z0-9.]/g, '')
-  poz.signature = 'mpl.' + b$cfg.version + '.' + poz.signature
-
-  poz.compile_options = _.merge(b$cfg.compile_options, poz.compile_options)
-
-  poz.build_dir = Utils.File.pathJoin(b$cfg.build_dir, poz.signature)
-  poz.compile_options.output = Utils.File.pathJoin(poz.build_dir, 'mpl')
-  poz.tqueries_final = Utils.File.pathJoin(poz.build_dir, 'tqueries.json')
-
-  console.log('\n' + '[' + platform + '] Delete directory for build ::', poz.build_dir)
-  Utils.File.removeDirSync(poz.build_dir)
-
-  console.log('\n' + '[' + platform + '] Create directory for build ::', poz.build_dir)
-  Utils.File.ensureDirSync(poz.build_dir)
-
-  console.log('\n' + '[' + platform + '] Copying sample tquery file ::', poz.tqueries_final)
-  Utils.File.copyFileSync(poz.tqueries_sample, poz.tqueries_final)
-
-  console.log(poz.compile_options)
-
-  return compile(poz.compile_options).then(() => {
-    console.log('\n' + '[' + platform + '] Build complete ::', poz.compile_options.output, '\n')
-    // TODO: create zip
-  }).catch(() => {
-    console.log('\n' + '[' + platform + '] Build failed ::', poz.compile_options.output, '\n')
-  })
+  try {
+    await compile(nexePlatform.compile_options)
+    console.log(` [ ${platform} ] Build completed :: ${nexePlatform.compile_options.output}`)
+  } catch (e) {
+    console.log(` [ ${platform} ] Build failed :: ${nexePlatform.compile_options.output}`)
+    return false
+  }
+  return true
 }
 
 const platformsToBuildFor = [
-  // 'mac_x64',
-  'win_x64'
-  // 'win_x86',
-  // 'linux_x64',
-  // 'linux_x86'
+  // 'mac-x64',
+  // 'win-x64'
+  // 'win-x86',
+  'linux-x64'
+  // 'linux-x86'
 ]
 
-if (platformsToBuildFor.length > 0) {
-  const _recursivePromise = function (a, i) {
-    return compileForPlatform(a[i]).then(() => {
-      if (i >= a.length - 1) {
-        console.log('\n' + 'MPL :: Build :: Finished', '\n\n')
-      } else {
-        return _recursivePromise(a, i + 1)
-      }
-    }).catch((e) => {
-      console.error('\n' + 'MPL :: Build :: Error', e, '\n\n')
-    })
+const compileAllPlatforms = async () => {
+  console.log('MPL :: Build :: Start')
+  try {
+    await fsExtra.ensureDir(nexeCommon.build_dir)
+  } catch (e) {
+    console.error(' > error while ensure directory', nexeCommon.build_dir)
+    console.error(e)
+    return false
   }
-  _recursivePromise(platformsToBuildFor, 0)
+
+  for (let i = 0; i < platformsToBuildFor.length; i++) {
+    await compileForPlatform(platformsToBuildFor[i])
+  }
 }
 
-// Utils.EXIT();
-
-/*
-* compile for mac.x64
-* compile for win.x86
-* compile for win.x64
-* compile for linux.x86
-* compile for linux.x64
-* make zip files and delete original directories
-* */
-//
-// compile({
-//     input: './app-prod.js',
-//     output: './build/y',
-//     verbose:true
-// }).then(() => {
-//     console.log('success')
-// });
+compileAllPlatforms().then(() => {
+  console.log('\n', 'MPL :: Build :: Finished')
+}).catch(e => {
+  console.error('\n', 'MPL :: Build :: Error', e)
+})

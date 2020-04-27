@@ -1,4 +1,3 @@
-
 /* ENV variables */
 // console.log(process.env.NODE_ENV)
 // console.log(process.env.APP_DATA_DIRNAME)
