@@ -23,6 +23,7 @@
 
 
 ### First sample scan
+### Set current project
 ### Look and export
 ### Set and use queries for look
 ### Set bookmarks

@@ -6,8 +6,7 @@ const commandName = 'look'
 Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
-  .description('Search samples by query or show the latest sample look; ' +
-    '(related configurations: LookRandomCount, LookRandomSameDirectory) \n')
+  .description('Search samples by query or show the latest sample look; (related configurations: LookRandomCount, LookRandomSameDirectory) \n')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
