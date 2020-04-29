@@ -1,9 +1,0 @@
-GIF of CLI commands
-https://medium.com/@pczarkowski/how-to-make-an-animated-gif-of-your-terminal-commands-62b08dfb6089
-
-
-APP CHANGES
-- NL before show cli$
-- do not show the sample path (look, project, bookm)
-- option to show the sample path
-- look-export [options] [dirname]

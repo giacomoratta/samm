@@ -5,9 +5,8 @@ const commandName = 'look-export'
 
 Cli.addCommand(commandName)
 
-Cli.addCommandHeader(commandName)
-  .description('Export the latest samples look in the current project or in a custom directory\n')
-  .option('-d, --directory <name>', 'Directory name for the exported samples')
+Cli.addCommandHeader(commandName, '[dirname]')
+  .description('Export the latest samples look in the current project; the optional parameter \'dirname\' is the name of destination directory\n')
   .option('-o, --overwrite', 'Overwrite the destination directory if exists')
   .option('-p, --path <custom-path>', 'Save latest lookup to current project directory or custom path')
 
@@ -54,7 +53,7 @@ const saveSearchResults = async (sampleSet, pathBasedQuery, cliPrinter, cliInput
 
   const exportPath = await ExportAPI.getExportPath({
     destinationPath,
-    destinationName: cliInput.getOption('directory') || destinationName,
+    destinationName: cliInput.getParam('dirname') || destinationName,
     overwrite: !!cliInput.getOption('overwrite')
   })
 

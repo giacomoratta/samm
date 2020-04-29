@@ -7,9 +7,10 @@ Cli.addCommand(commandName, '[query]')
 
 Cli.addCommandHeader(commandName)
   .description('Search samples by query or show the latest sample look; (related configurations: LookRandomCount, LookRandomSameDirectory) \n')
+  .option('-i, --info', 'Show more info')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
 
-Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter, cliPrompt }) {
+Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   if (ConfigAPI.field('SamplesDirectory').unset === true) {
     cliPrinter.warn('No samples directory set (see \'config SamplesDirectory\' and use \'samples-scan\')')
     return cliNext()
@@ -31,7 +32,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     if (!sampleLook || sampleLook.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
-      printSearchResults(sampleLook, cliPrinter)
+      printSearchResults(sampleLook, cliInput, cliPrinter)
       // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
     }
     return cliNext()
@@ -50,7 +51,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     if (!sampleLook || sampleLook.size === 0) {
       cliPrinter.warn('Samples not found!')
     } else {
-      printSearchResults(sampleLook, cliPrinter)
+      printSearchResults(sampleLook, cliInput, cliPrinter)
       // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
     }
     return cliNext()
@@ -60,17 +61,18 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
   if (!sampleLook || sampleLook.size === 0) {
     cliPrinter.warn('No samples found in the latest look!')
   } else {
-    printSearchResults(sampleLook, cliPrinter)
+    printSearchResults(sampleLook, cliInput, cliPrinter)
     // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
   }
   return cliNext()
 })
 
-const printSearchResults = (sampleSet, cliPrinter) => {
+const printSearchResults = (sampleSet, cliInput, cliPrinter) => {
   const printer = cliPrinter.child()
   let index = 1
+  const extendedInfo = cliInput.getOption('info')
   const length = sampleSet.size.toString().length
   sampleSet.forEach((sample) => {
-    printer.info(`${(index++).toString().padStart(length, '0')}) ${uiUtils.sampleInlineInfo(sample)}`)
+    printer.info(`${(index++).toString().padStart(length, '0')}) ${uiUtils.sampleInlineInfo(sample, extendedInfo)}`)
   })
 }

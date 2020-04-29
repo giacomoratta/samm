@@ -12,8 +12,10 @@ module.exports = {
   CLI_CMD_ERR_FORMAT,
 
   uiUtils: {
-    sampleInlineInfo: function (sample) {
-      return `[${sample.dir.length > 64 ? '...' : ''}${sample.dir.substr(-64)}]  ${sample.base}`
+    sampleInlineInfo: function (sample, extendedInfo = false) {
+      if (extendedInfo !== true) return sample.base
+      return `${sample.relPath.length > 96 ? '...' : ''}${sample.relPath.substr(-96)}`
+      // return `[${sample.dir.length > 64 ? '...' : ''}${sample.dir.substr(-64)}]  ${sample.base}`
     },
     projectInlineInfo: function (project) {
       const date = new Date(project.modifiedAt)

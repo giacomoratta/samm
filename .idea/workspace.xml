@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e1a09e82-105c-4681-99c9-fa3d4d2886c8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" beforeDir="false" afterPath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,8 @@
       <workItem from="1587113065935" duration="1718000" />
       <workItem from="1588016243630" duration="2864000" />
       <workItem from="1588021102809" duration="82000" />
-      <workItem from="1588067205839" duration="336000" />
+      <workItem from="1588067205839" duration="1992000" />
+      <workItem from="1588188992905" duration="389000" />
     </task>
     <servers />
   </component>
@@ -93,10 +95,10 @@
       <screen x="70" y="27" width="1850" height="1052" />
     </state>
     <state x="593" y="213" width="800" height="690" key="#ESLint/70.27.1850.1052@70.27.1850.1052" timestamp="1586539978892" />
-    <state x="707" y="350" width="572" height="404" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1587041251174">
+    <state x="707" y="344" width="608" height="433" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588067707693">
       <screen x="70" y="27" width="1850" height="1052" />
     </state>
-    <state x="707" y="350" width="572" height="404" key="#com.intellij.fileTypes.FileTypeChooser/70.27.1850.1052@70.27.1850.1052" timestamp="1587041251174" />
+    <state x="707" y="344" width="608" height="433" key="#com.intellij.fileTypes.FileTypeChooser/70.27.1850.1052@70.27.1850.1052" timestamp="1588067707693" />
     <state width="1827" height="275" key="GridCell.Tab.0.bottom" timestamp="1588019158166">
       <screen x="70" y="27" width="1850" height="1052" />
     </state>

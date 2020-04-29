@@ -21,7 +21,10 @@ const printWarnings = () => {
   })
 }
 
-Cli.on('show', printWarnings)
+Cli.on('show', function () {
+  printWarnings()
+  Cli.printer.newLine()
+})
 Cli.on('afterCommand', printWarnings)
 
 App.boot({
