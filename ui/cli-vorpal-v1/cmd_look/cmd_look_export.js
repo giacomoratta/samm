@@ -3,9 +3,9 @@ const { SampleIndexAPI, SampleLookAPI, ProjectManagerAPI, ExportAPI } = App
 
 const commandName = 'look-export'
 
-Cli.addCommand(commandName)
+Cli.addCommand(commandName, '[dirname]')
 
-Cli.addCommandHeader(commandName, '[dirname]')
+Cli.addCommandHeader(commandName)
   .description('Export the latest samples look in the current project; the optional parameter \'dirname\' is the name of destination directory\n')
   .option('-o, --overwrite', 'Overwrite the destination directory if exists')
   .option('-p, --path <custom-path>', 'Save latest lookup to current project directory or custom path')
