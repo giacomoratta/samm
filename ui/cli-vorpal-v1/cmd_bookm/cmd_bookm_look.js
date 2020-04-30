@@ -103,5 +103,5 @@ const printBookmarksLabels = (labelsArray, cliPrinter) => {
     cliPrinter.info('Available labels: no labels.')
     return
   }
-  cliPrinter.info(`Available labels: ${labelsArray.join(',')}.`)
+  cliPrinter.info(`Available labels: ${labelsArray.join(', ')}.`)
 }
