@@ -1,8 +1,10 @@
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
+const childProcess = require('child_process')
 const stream = require('stream')
 const pino = require('pino')
+const pinoTeeReq = require.resolve('pino-tee')
 
 class FileLogger {
   constructor ({ logsDirPath, minLevel = 10, maxFiles = 10 }) {
@@ -20,7 +22,27 @@ class FileLogger {
       // prettyPrint: { colorize: true },
       level: minLevel,
       base: {}
-    }, fs.createWriteStream(this.mainLogFile, { flags: 'a+' }))
+    }, this.logThrough)
+
+    console.log(pinoTeeReq)
+    console.log(process.execPath)
+    console.log(process.cwd())
+    console.log(process.env)
+
+    // Log to multiple files using a separate process
+    this.childProcess = childProcess.spawn(process.execPath, [
+      pinoTeeReq,
+      'debug', this.mainLogFile
+      // 'info', `${logPath}/info.log`,
+      // 'warn', `${logPath}/warn.log`,
+      // 'error', `${logPath}/error.log`,
+      // 'fatal', `${logPath}/fatal.log`
+    ], {
+      cwd: process.cwd(),
+      env: process.env
+    })
+
+    this.logThrough.pipe(this.childProcess.stdin)
   }
 
   _generateFileName () {
