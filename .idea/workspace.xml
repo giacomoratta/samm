@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e1a09e82-105c-4681-99c9-fa3d4d2886c8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" beforeDir="false" afterPath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +82,8 @@
       <workItem from="1588016243630" duration="2864000" />
       <workItem from="1588021102809" duration="82000" />
       <workItem from="1588067205839" duration="1992000" />
-      <workItem from="1588188992905" duration="389000" />
+      <workItem from="1588188992905" duration="2339000" />
+      <workItem from="1588250778814" duration="1317000" />
     </task>
     <servers />
   </component>

@@ -70,7 +70,7 @@ const printAllBookmarks = (cliInput, cliPrinter) => {
 const printBookmarkSet = (bookmarkSet, bookmarkLabel, cliInput, cliPrinter) => {
   cliPrinter.info(`[ ${bookmarkLabel} ]`)
   const extendedInfo = cliInput.getOption('info')
-  cliPrinter.orderedList(bookmarkSet.array, function (sample) { uiUtils.sampleInlineInfo(sample, extendedInfo) })
+  cliPrinter.orderedList(bookmarkSet.array, function (sample) { return uiUtils.sampleInlineInfo(sample, extendedInfo) })
 }
 
 const optCopyHandler = async (mainLabel, cliInput, cliPrinter) => {
