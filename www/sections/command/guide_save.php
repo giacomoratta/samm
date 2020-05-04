@@ -41,7 +41,7 @@
                     </p>
                     <section class="text">
                         <p>
-                            By default, if the destination directory already exists, MPL appends a numeric suffix.
+                            By default, if the destination directory already exists, SAMM appends a numeric suffix.
                             If the existent directory is not necessary anymore can be overwritten with this command.
                         </p>
                     </section>

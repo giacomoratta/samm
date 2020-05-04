@@ -20,10 +20,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1a09e82-105c-4681-99c9-fa3d4d2886c8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/DEVELOPING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/export/exportSampleSet.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/export/exportSampleSet.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/build.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/logger/fileLogger.class.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/logger/fileLogger.class.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/logger/fileLogger.old.class.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/releases/mpl.0.1.0.linux-x64/mpl" beforeDir="false" afterPath="$PROJECT_DIR$/releases/mpl.0.1.0.linux-x64/mpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" beforeDir="false" afterPath="$PROJECT_DIR$/ui/cli-vorpal-v1/ui_start.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/layout.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/layout.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/sections/command/guide_dir.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/sections/command/guide_dir.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/sections/command/guide_lookup.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/sections/command/guide_lookup.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/sections/command/guide_save.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/sections/command/guide_save.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/sections/email_form.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/sections/email_form.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/sections/header_download.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/sections/header_download.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/template.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/template.class.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +140,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -159,10 +173,10 @@
       <screen x="70" y="27" width="1850" height="1052" />
     </state>
     <state width="1827" height="275" key="GridCell.Tab.0.right/70.27.1850.1052@70.27.1850.1052" timestamp="1588275668495" />
-    <state x="617" y="270" width="922" height="632" key="find.popup" timestamp="1588275572335">
+    <state x="617" y="270" width="922" height="632" key="find.popup" timestamp="1588601883355">
       <screen x="70" y="27" width="1850" height="1052" />
     </state>
-    <state x="617" y="270" width="922" height="632" key="find.popup/70.27.1850.1052@70.27.1850.1052" timestamp="1588275572335" />
+    <state x="617" y="270" width="922" height="632" key="find.popup/70.27.1850.1052@70.27.1850.1052" timestamp="1588601883355" />
     <state x="723" y="436" width="540" height="232" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1588019133771">
       <screen x="70" y="27" width="1850" height="1052" />
     </state>

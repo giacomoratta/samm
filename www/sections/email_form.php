@@ -31,7 +31,7 @@
                         <p>
                             <label>Email</label>
                             <input name="email_address" type="text" />
-                            <span class="info">(we will only use this email address for important communications about MPL)</span>
+                            <span class="info">(we will only use this email address for important communications about SAMM)</span>
                         </p>
                         <p>
                             <input type="button" value="Request copy" />

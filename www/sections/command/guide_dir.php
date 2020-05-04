@@ -6,7 +6,7 @@
                     mpl$ dir &lt;action&gt;
                 </p>
                 <p>
-                    Utilities to dive and work with the MPL directories (e.g. Samples, Project, etc.).
+                    Utilities to dive and work with the SAMM directories (e.g. Samples, Project, etc.).
                     By default, it access the samples directory and each files inside it.
                 </p>
 

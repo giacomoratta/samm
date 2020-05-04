@@ -13,7 +13,7 @@
                 </p>
                 <p>
                     <strong>How the matching works.</strong>
-                    MPL looks for a matching between the specified query (and its single words) and the relative path
+                    SAMM looks for a matching between the specified query (and its single words) and the relative path
                     of each samples inside the collection. The relative path starts from the
                     <?php $TemplateMgr->printCfgParamLink('SamplesDirectory','samples directory'); ?>.
                 </p>

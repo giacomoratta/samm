@@ -2,7 +2,7 @@
 
 class TemplateManager {
 
-    public $mpl_save_directory = '/mpl';
+    public $mpl_save_directory = '/samm';
 
     public function __construct(){
 

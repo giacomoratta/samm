@@ -1,9 +1,8 @@
-.idea
+.idea/*
 package-lock.json
 
 # Logs
 logs
-logs-mpl
 *.log
 npm-debug.log*
 yarn-debug.log*

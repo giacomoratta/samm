@@ -44,7 +44,7 @@ App.boot({
   require('./cmd_samples')
   require('./cmd_search')
 
-  Cli.show('mpl')
+  Cli.show('samm')
 }).catch((e) => {
   log.error(e)
   console.error(`Unexpected error: ${e.message}.  (see logs for more details)`)

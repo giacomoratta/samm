@@ -14,10 +14,10 @@ $TemplateMgr = new TemplateManager();
 <body>
 
 <header>
-    <h1>MPL: a creativity-oriented samples manager</h1>
+    <h1>SAMM: a creativity-oriented samples manager</h1>
     <section class="whatis">
         <p>
-            MPL (<i>&quot;Music Production Library&quot;</i>) is a command line based software
+            SAMM is a command line based software
             which helps your creativity flow. Dive into your wide samples library,
             make researches, extract random samples and save them into the current project directory.
         </p>
@@ -39,15 +39,15 @@ $TemplateMgr = new TemplateManager();
 <section class="central_container">
 
     <section class="ideasbehind">
-        <h2>What MPL can do for you</h2>
+        <h2>What SAMM can do for you</h2>
         <section class="text">
             <p>
-                <strong>Save your creativity flow!</strong> MPL avoid wasting your time dealing with hundred of samples
-                inside many nested directories. With MPL you just ask!
+                <strong>Save your creativity flow!</strong> SAMM avoid wasting your time dealing with hundred of samples
+                inside many nested directories. With SAMM you just ask!
             </p>
             <p>
-                <strong>Improve your creativity with randomness!</strong> MPL does not care about how you organize your samples.
-                MPL selects samples randomly based on detailed queries. Sometime you will <strong>find old-but-gold samples</strong>
+                <strong>Improve your creativity with randomness!</strong> SAMM does not care about how you organize your samples.
+                SAMM selects samples randomly based on detailed queries. Sometime you will <strong>find old-but-gold samples</strong>
                 again or <strong>some good unwanted samples</strong> which for some reasons matched the query.
             </p>
             <p>
@@ -93,8 +93,8 @@ $TemplateMgr = new TemplateManager();
 
         <h4>Ready!</h4>
         <section class="text">
-            <p>now you are ready to work with MPL</p>
-            <p>open your DAW and use MPL to find samples</p>
+            <p>now you are ready to work with SAMM</p>
+            <p>open your DAW and use SAMM to find samples</p>
         </section>
 
         <h4>Lookup query</h4>
@@ -118,7 +118,7 @@ $TemplateMgr = new TemplateManager();
         <section class="text">
             <p>Did you configure the directory of your project you are working to?</p>
             <p>configure set project /abc/ndns/</p>
-            <p>save - that's it - it saves in /yourproject/mpl/rockbass the samples found in your latest lookup</p>
+            <p>save - that's it - it saves in /yourproject/samm/rockbass the samples found in your latest lookup</p>
             <p>save -d customname</p>
         </section>
 

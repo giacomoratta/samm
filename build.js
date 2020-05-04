@@ -4,7 +4,7 @@ const { compile } = require('nexe')
 const packageJson = require('./package.json')
 
 const options = {
-  appName: 'mpl'
+  appName: 'samm'
 }
 
 const nexeCommon = {
@@ -75,15 +75,15 @@ const compileForPlatform = async (platform) => {
 }
 
 const platformsToBuildFor = [
-  // 'mac-x64',
-  'win-x64'
-  // 'win-x86',
-  // 'linux-x64'
-  // 'linux-x86'
+  'mac-x64',
+  'win-x64',
+  'win-x86',
+  'linux-x64',
+  'linux-x86'
 ]
 
 const compileAllPlatforms = async () => {
-  console.log('MPL :: Build :: Start')
+  console.log('SAMM :: Build :: Start')
   try {
     await fsExtra.ensureDir(nexeCommon.build_dir)
   } catch (e) {
@@ -92,13 +92,26 @@ const compileAllPlatforms = async () => {
     return false
   }
 
-  for (let i = 0; i < platformsToBuildFor.length; i++) {
-    await compileForPlatform(platformsToBuildFor[i])
+  let platformsArray = null
+  if (process.argv[2] === 'all') {
+    platformsArray = platformsToBuildFor
+  } else {
+    if (platformsToBuildFor.indexOf(process.argv[2]) === -1) {
+      throw new Error(`Invalid platform: ${process.argv[2]}`)
+    }
+    platformsArray = [process.argv[2]]
+  }
+
+  for (let i = 0; i < platformsArray.length; i++) {
+    await compileForPlatform(platformsArray[i])
   }
 }
 
+console.log(process.argv)
+
 compileAllPlatforms().then(() => {
-  console.log('\n', 'MPL :: Build :: Finished')
+  console.log('\nSAMM :: Build :: Finished', '\n')
 }).catch(e => {
-  console.error('\n', 'MPL :: Build :: Error', e)
+  console.error('\nSAMM :: Build :: Error', e.message)
+  console.error(e, '\n')
 })
