@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e1a09e82-105c-4681-99c9-fa3d4d2886c8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/logger/fileLogger.old.class.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/build.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/logger/fileLogger.class.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/logger/fileLogger.class.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/logger/fileLogger.old.class.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,11 +39,11 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/core/logger" />
@@ -32,7 +52,7 @@
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.selected.package.eslint" value="" />
-    <property name="node.js.selected.package.standard" value="$PROJECT_DIR$/node_modules/standard" />
+    <property name="node.js.selected.package.standard" value="L:\Workspace\mpl\node_modules\standard" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
@@ -49,6 +69,9 @@
     <configuration name="example_file.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/core/logger/__tests__/example_file.js" working-dir="$PROJECT_DIR$/core/logger/__tests__">
       <method v="2" />
     </configuration>
+    <configuration name="fileLogger.class.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/core/logger/fileLogger.class.js" working-dir="$PROJECT_DIR$/core/logger">
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -62,6 +85,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.example_file.js" />
+        <item itemvalue="Node.js.fileLogger.class.js" />
         <item itemvalue="npm.build" />
         <item itemvalue="Node.js.build.js" />
       </list>
@@ -92,11 +116,23 @@
       <workItem from="1588188992905" duration="2339000" />
       <workItem from="1588250778814" duration="2268000" />
       <workItem from="1588261533300" duration="5375000" />
+      <workItem from="1588572961310" duration="1988000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="593" y="213" width="800" height="690" key="#ESLint" timestamp="1586539978892">

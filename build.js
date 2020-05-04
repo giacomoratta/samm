@@ -76,9 +76,9 @@ const compileForPlatform = async (platform) => {
 
 const platformsToBuildFor = [
   // 'mac-x64',
-  // 'win-x64'
+  'win-x64'
   // 'win-x86',
-  'linux-x64'
+  // 'linux-x64'
   // 'linux-x86'
 ]
 

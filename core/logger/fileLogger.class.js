@@ -6,14 +6,14 @@ const pino = require('pino')
 
 class FileLogger {
   constructor ({ logsDirPath, minLevel = 10, maxFiles = 10 }) {
-    this.mainLogFile = logsDirPath ? path.join(logsDirPath, `${this._generateFileName()}.log`) : null // todo: add date to filename
-    logsDirPath && fsExtra.ensureDir(logsDirPath)
-
-    logsDirPath && this._removeOldLogFiles({ logsDirPath, maxFiles })
-    this._init({ minLevel })
+    this.mainLogFile = logsDirPath ? path.join(logsDirPath, `${this._generateFileName()}.log`) : null
+    this._init({ logsDirPath, minLevel, maxFiles })
   }
 
-  _init ({ minLevel }) {
+  _init ({ logsDirPath, minLevel, maxFiles }) {
+    logsDirPath && fsExtra.ensureDirSync(logsDirPath)
+    logsDirPath && this._removeOldLogFiles({ logsDirPath, maxFiles })
+    fsExtra.writeJsonSync(this.mainLogFile, {})
     this.logThrough = new stream.PassThrough()
     this.log = pino({
       // name: 'project',
