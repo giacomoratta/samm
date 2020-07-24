@@ -31,6 +31,11 @@ In order to run easily:
 
 
 # Get started
+
+### The basics
+This section is for who has never used a command line interface. 
+I will provide here some basic commands...
+
 ### Essential config
 ### First sample scan
 ### Set current project
