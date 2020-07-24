@@ -7,10 +7,10 @@
     "build": "node build.js",
     "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
     "test-win": "jest --testPathPattern=.*/__tests__/.*.test.js",
-    "start": "NODE_ENV=production APP_DATA_DIRNAME=app-data node app.js",
-    "start-win": "set NODE_ENV=production&& set APP_DATA_DIRNAME=app-data&& node app.js",
-    "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-app-data node app.js",
-    "dev-win": "set NODE_ENV=development&& set APP_DATA_DIRNAME=test-app-data&& node app.js"
+    "start": "NODE_ENV=production APP_DATA_DIRNAME=samm-data node app.js",
+    "start-win": "set NODE_ENV=production&& set APP_DATA_DIRNAME=samm-data&& node app.js",
+    "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-samm-data node app.js",
+    "dev-win": "set NODE_ENV=development&& set APP_DATA_DIRNAME=test-samm-data&& node app.js"
   },
   "author": "",
   "license": "ISC",

@@ -11,10 +11,10 @@ yarn-error.log*
 # Project generated files
 temp/
 userdata/
-app-data/
-test-app-data/
+samm-data/
+test-samm-data/
 build/
-test-app-data/config.json
+test-samm-data/config.json
 
 # Runtime data
 pids

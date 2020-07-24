@@ -14,7 +14,7 @@ const log = require('./logger').createLogger('app')
  * @returns {Promise<boolean>}: false means 'severe error', so app must be closed
  */
 const boot = async ({ appRootPath }) => {
-  const AppDataDirectory = path.join(appRootPath, process.env.APP_DATA_DIRNAME || 'app-data')
+  const AppDataDirectory = path.join(appRootPath, process.env.APP_DATA_DIRNAME || 'samm-data')
 
   log.info('Booting the application...')
   log.info(`App data directory: ${AppDataDirectory}`)

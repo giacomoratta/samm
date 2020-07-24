@@ -1,6 +1,6 @@
 const path = require('path')
 const { FileLogger, BasicLogger } = require('../core/logger')
-const logsDirPath = path.join(process.env.APP_ABSPATH || process.cwd(), process.env.APP_DATA_DIRNAME || 'app-data', 'logs')
+const logsDirPath = path.join(process.env.APP_ABSPATH || process.cwd(), process.env.APP_DATA_DIRNAME || 'samm-data', 'logs')
 
 let LoggerFactoryClass = BasicLogger
 let minLevel = 'debug'

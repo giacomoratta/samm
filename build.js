@@ -7,6 +7,16 @@ const options = {
   appName: 'samm'
 }
 
+const platformsToBuildFor = [
+  'mac-x64',
+  'win-x64',
+  // 'win-x86',
+  'linux-x64',
+  // 'linux-x86'
+]
+
+/* Do not edit below */
+
 const nexeCommon = {
   version: packageJson.version,
   build_dir: path.join(__dirname, 'releases'),
@@ -73,14 +83,6 @@ const compileForPlatform = async (platform) => {
   }
   return true
 }
-
-const platformsToBuildFor = [
-  'mac-x64',
-  'win-x64',
-  'win-x86',
-  'linux-x64',
-  'linux-x86'
-]
 
 const compileAllPlatforms = async () => {
   console.log('SAMM :: Build :: Start')
