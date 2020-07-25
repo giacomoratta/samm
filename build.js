@@ -95,7 +95,9 @@ const zip = (pathFrom, pathTo) => {
     const archive = archiver('zip')
     output.on('close', resolve)
     archive.pipe(output)
-    archive.directory(pathFrom, path.parse(pathFrom).base)
+    const baseDir = path.parse(pathFrom).base
+    archive.directory(pathFrom, baseDir)
+    archive.file('README.md', { name: path.join(baseDir, 'guide.html') })
     archive.finalize()
   })
 }

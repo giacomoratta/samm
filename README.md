@@ -29,7 +29,7 @@
 
 <section id="get-started">
 <h2>Get started</h2>
-<li>Simple steps you need to start using SAMM in few minutes; to do more see <a href="#reference">all commands reference</a>.</li>
+Simple steps you need to start using SAMM in few minutes; to do more see <a href="#reference">all commands reference</a>.
 
 <h4>Essential config</h4>
 <h4>First sample scan</h4>
