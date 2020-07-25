@@ -1,4 +1,6 @@
 .idea/*
+.idea
+releases
 package-lock.json
 
 # Logs
