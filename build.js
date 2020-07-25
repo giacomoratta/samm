@@ -1,17 +1,20 @@
 const path = require('path')
+const fs = require('fs')
 const fsExtra = require('fs-extra')
 const { compile } = require('nexe')
+const archiver = require('archiver')
 const packageJson = require('./package.json')
 
 const options = {
-  appName: 'samm'
+  appName: 'samm',
+  releasesDir: path.join(__dirname, 'releases')
 }
 
 const platformsToBuildFor = [
   'mac-x64',
   'win-x64',
   // 'win-x86',
-  'linux-x64',
+  'linux-x64'
   // 'linux-x86'
 ]
 
@@ -19,7 +22,7 @@ const platformsToBuildFor = [
 
 const nexeCommon = {
   version: packageJson.version,
-  build_dir: path.join(__dirname, 'releases'),
+  build_dir: options.releasesDir,
   compile_options: {
     input: './app-build.js',
     output: null,
@@ -76,12 +79,25 @@ const compileForPlatform = async (platform) => {
 
   try {
     await compile(nexePlatform.compile_options)
+    await zip(path.join(nexePlatform.build_dir), path.join(options.releasesDir, `${nexePlatform.signature}.zip`))
     console.log(` [ ${platform} ] Build completed :: ${nexePlatform.compile_options.output}`)
   } catch (e) {
+    console.error(` [ ${platform} ] Error while building:`, e.message)
     console.log(` [ ${platform} ] Build failed :: ${nexePlatform.compile_options.output}`)
     return false
   }
   return true
+}
+
+const zip = (pathFrom, pathTo) => {
+  return new Promise((resolve, reject) => {
+    const output = fs.createWriteStream(pathTo)
+    const archive = archiver('zip')
+    output.on('close', resolve)
+    archive.pipe(output)
+    archive.directory(pathFrom, path.parse(pathFrom).base)
+    archive.finalize()
+  })
 }
 
 const compileAllPlatforms = async () => {
@@ -99,7 +115,7 @@ const compileAllPlatforms = async () => {
     platformsArray = platformsToBuildFor
   } else {
     if (platformsToBuildFor.indexOf(process.argv[2]) === -1) {
-      throw new Error(`Invalid platform: ${process.argv[2]}`)
+      throw new Error(`Invalid platform: ${process.argv[2]}; accepted: all, ${platformsToBuildFor.join(', ')}.`)
     }
     platformsArray = [process.argv[2]]
   }
