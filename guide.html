@@ -1,3 +1,54 @@
+<style>
+    body {
+        font-family: Serif;
+        font-size: 1em;
+        margin: 0;
+        padding: 2em 1em;
+        line-height: 1.6em;
+    }
+
+    blockquote {
+        font-style: italic;
+        font-size: 1.1em;
+        background-color: #EEEEEE;
+        padding: 0.8em 1.6em;
+    }
+
+    p {
+        margin: 0 0 0.2em 0;
+    }
+
+    table {
+        font-size: 0.95em;
+        width: 99%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #CCCCCC;
+        vertical-align: top;
+        padding: 0.4em 0.6em;
+    }
+
+    code {
+        background-color: #DDDDDD;
+        font-family: "Courier New", Courier, sans-serif;
+        font-size: 0.7em;
+        padding: 0.15em 0.7em;
+        border-radius: 0.3em;
+        display: inline-block;
+        line-height: 1.3em;
+    }
+
+    section {
+        margin-bottom: 3em;
+    }
+
+</style>
+
+<body>
+
 <section id="whatis">
 <p>
     SAMM is a command line based software which helps and preserve your creativity flow. Dive into your wide samples library, make researches, extract random samples and save them into the current project directory.
@@ -77,29 +128,93 @@ After the <a href="#download-and-install">preliminary steps</a>, you should be a
 <section id="reference">
 <h2>Commands reference</h2>
 
-<h4>config</h4>
-<table>
- <thead>
-    <td></td>
- </thead>
-</table>
-<p>
-    <strong>SamplesDirectory</strong>: directory with samples to scan and search in (absolute path). <br/>
-    <code>config SamplesDirectory "/home/user123/my-samples/"</code>
-</p>
-<p>
-    <strong>LookRandomCount</strong>:  maximum number of random samples selected after a search. <br/>
-    <code>config LookRandomCount 15</code>
-</p>
-<p>
-    <strong>LookRandomSameDirectory</strong>: mMaximum number of samples from the same directory, to avoid too many samples from the same family. <br/>
-    <code>config LookRandomSameDirectory 2</code>
-</p>
+    <h4>config</h4>
+    <p>Configure the application by setting the following options.</p>
+    <p>Usage: <code>config [options] [name] [values...]</code></p>
+    <p>
+        Options:<br/>
+        <code>-r, --remove  Remove a key or a value from a complex parameter (e.g. list, key-value map)</code><br/>&nbsp;
+    </p>
+    <table>
+        <tr>
+            <th>Parameters</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>SamplesDirectory</code></td>
+            <td>
+                <p>directory with samples to scan and search in (absolute path)</p>
+                <p><code>config SamplesDirectory "/home/user123/my-samples/"</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>LookRandomCount</code></td>
+            <td>
+                <p>maximum number of random samples selected after a search.</p>
+                <p><code>config LookRandomCount 15</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>LookRandomSameDirectory</code></td>
+            <td>
+                <p>Maximum number of samples from the same directory, to avoid too many samples from the same 'sample pack'.</p>
+                <p><code>config LookRandomSameDirectory 2</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>SamplesDirectoryExclusions</code></td>
+            <td>
+                <p>Directories which must be skipped during the scan process of samples directory; these paths must be internal to SamplesDirectory path; add or remove (with -r option) multiple values.</p>
+                <p><code>config SamplesDirectoryExclusions /music1/abc /music2/qwerty</code></p>
+                <p><code>config SamplesDirectoryExclusions /now/its/good -r</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>ExcludedExtensionsForSamples</code></td>
+            <td>
+                <p>The list of file extensions to skip during the sample scan; add or remove (with -r option) multiple values.</p>
+                <p><code>config ExcludedExtensionsForSamples .exe .txt</code></p>
+                <p><code>config ExcludedExtensionsForSamples .aiff .mpx -r</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>IncludedExtensionsForSamples</code></td>
+            <td>
+                <p>The list of file extensions which samples must have; add or remove (with -r option) multiple values.</p>
+                <p><code>config IncludedExtensionsForSamples .wav .mid</code></p>
+                <p><code>config IncludedExtensionsForSamples .mp3 -r</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td><code>ExtensionsPolicyForSamples</code></td>
+            <td>
+                <p>
+                    Policy for sample scan:
+                    <ul>
+                        <li>'I' to get files with declared extensions only (it will use IncludedExtensionsForSamples)</li>
+                        <li>'E' to exclude file with some extensions (it will use ExcludedExtensionsForSamples)</li>
+                        <li>'X' to disable the extension filter, so take all extensions.</li>
+                    </ul>
+                </p>
+                <p><code>config IncludedExtensionsForSamples .wav .mid</code></p>
+                <p><code>config IncludedExtensionsForSamples .mp3 -r</code></p>
+            </td>
+        </tr>
+    </table>
 
-<h4>bookm</h4>
-<h4>bookm-export</h4>
-<h4>bookm-look</h4>
-<h4>look</h4>
+    <h4>bookm</h4>
+    <p>All samples can be saved in the bookmarks under a label. The bookmark manager will help in any operation.</p>
+    <p></p>
+
+    <h4>bookm-export</h4>
+
+    <h4>bookm-look</h4>
+
+    <h4>help</h4>
+    <p>Run the command <code>help</code> to get a complete list of the commands.</p>
+    <p>Also, add the option <code>--help</code> to each command in order to have a more in-depth look on the command functionalities and options; e.g. <code>bookm --help</code>.</p>
+
+    <h4>look</h4>
 <h4>look-export</h4>
 <h4>project</h4>
 <h4>project-history</h4>
@@ -158,3 +273,5 @@ The following steps will show how to install this software in order to be run in
     <li>Path with spaces: always wrap it in double quotes otherwise only the first part will be considered; e.g. <code>"C://Program Data//samm.0.1.0.win-x64"</code>.</li>
 </ol>
 </section>
+
+</body>
