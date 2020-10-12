@@ -133,39 +133,180 @@ After the <a href="#download-and-install">preliminary steps</a>, you should be a
 
 <h3><code>bookm [options] [label]</code></h3>
 <p>Show or manage the bookmarks.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-c, --copy &lt;new-label&gt;</code></td>
+    <td>copy the bookmarks in a new label or merge in an existent label.</td>
+ </tr>
+ <tr>
+    <td><code>-i, --info</code></td>
+    <td>show more info</td>
+ </tr>
+ <tr>
+    <td><code>-l, --label &lt;new-label&gt;</code></td>
+    <td>change the label of a bookmark set</td>
+ </tr>
+ <tr>
+    <td><code>-r, --remove [indexes]</code></td>
+    <td>remove an entire label or some bookmarks by indexes (e.g. '3,5,7')</td>
+ </tr>
+</table>
 
 <h3><code>bookm-export [options] [label]</code></h3>
 <p>Export all bookmarks to current project or to a custom path.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-p, --path</code></td>
+    <td>custom destination path.</td>
+ </tr>
+</table>
 
 <h3><code>bookm-look</code></h3>
 <p>Add bookmarks from latest lookup.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+</table>
 
 <h3><code>look [options] [query]</code></h3>
 <p>Search samples by query or show the latest sample look; (related configurations: LookRandomCount, LookRandomSameDirectory).</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-i, --info</code></td>
+    <td>Show more info</td>
+ </tr>
+ <tr>
+    <td><code>-l, --label &lt;label&gt;</code></td>
+    <td>Use a query label (see 'query' command)</td>
+ </tr>
+</table>
 
 <h3><code>look-export [options] [dirname]</code></h3>
 <p>Export the latest samples look in the current project; the optional parameter 'dirname' is the name of destination directory.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-o, --overwrite</code></td>
+    <td>overwrite the destination directory if exists</td>
+ </tr>
+ <tr>
+    <td><code>-p, --path &lt;custom-path&gt;</code></td>
+    <td>save latest lookup to current project directory or custom path</td>
+ </tr>
+</table>
 
 <h3><code>project [path]</code></h3>
 <p>Shows some information about the current project or set current project from its absolute path.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+</table>
 
 <h3><code>project-history [options]</code></h3>
 <p>Show all project history or set the current project from one of them.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-d, --date</code></td>
+    <td>order by date of latest change</td>
+ </tr>
+ <tr>
+    <td><code>-n, --name</code></td>
+    <td>order by name</td>
+ </tr>
+</table>
+
 
 <h3><code>project-list [options]</code></h3>
 <p>Show all projects in the same parent directory or set the current project from of them.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-d, --date</code></td>
+    <td>order by date of latest change</td>
+ </tr>
+</table>
 
 <h3><code>project-template</code></h3>
 <p>Show all templates or create a new project from one of them.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+</table>
 
 <h3><code>query [options] [label] [query]</code></h3>
 <p>Manage queries for sample, for matching sample directories and files. In order to add, get or remove a query, use the 2 params label and query.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-c, --copy &lt;label&gt;</code></td>
+    <td>duplicate a query with the specified label</td>
+ </tr>
+ <tr>
+    <td><code>-l, --label &lt;label&gt;</code></td>
+    <td>change the label with the specified label</td>
+ </tr>
+ <tr>
+    <td><code>-r, --remove</code></td>
+    <td>remove a query</td>
+ </tr>
+</table>
 
 <h3><code>samples-scan [options]</code></h3>
 <p>Perform a full scan of the samples directory and create the index; if the index is already present the scan does not start, in order to avoid resource wasting.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-f, --force</code></td>
+    <td>force the rescan</td>
+ </tr>
+</table>
                                        
 <h3><code>search [options] [query]</code></h3>
 <p>Search samples by query or show the latest search results.</p>
+<table>
+ <tr>
+    <td><code>--help</code></td>
+    <td>output usage information</td>
+ </tr>
+ <tr>
+    <td><code>-l, --label &lt;label&gt;</code></td>
+    <td>use a query label (see 'query' command)</td>
+ </tr>
+</table>
 
 </section>
 
