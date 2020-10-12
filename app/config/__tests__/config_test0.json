@@ -1,0 +1,22 @@
+{
+	"SamplesDirectoryExclusions": [
+		"samplePack1",
+		"samplePack2"
+	],
+	"LookRandomCount": 21,
+	"LookRandomSameDirectory": 3,
+	"ExcludedExtensionsForSamples": [
+		"exe",
+		"DS_Store",
+		"info"
+	],
+	"IncludedExtensionsForSamples": [
+		"wav",
+		"mp3"
+	],
+	"ExtensionsPolicyForSamples": "E",
+	"Status": {
+		"first-scan-needed": false,
+		"new-scan-needed": true
+	}
+}

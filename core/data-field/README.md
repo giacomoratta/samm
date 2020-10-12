@@ -1,0 +1,7 @@
+- readOnly schema attr
+- custom fn
+- validate fn reserved keyword (added to factory validator)
+- clean fn reserved keyword (used in reset)
+- builtin fields
+- builtin fn for standard fields
+- examples? look to builtin.factory.js

@@ -1,0 +1,136 @@
+const { JsonizedFileError } = require('./jsonizedFileError.class')
+const { JsonFileButler } = require('../file-butler')
+
+class JsonizedFile {
+  constructor ({ filePath, prettyJson = false, sortedFields = false, cloneFrom }) {
+    this.options = { }
+    this.options.prettyJson = prettyJson
+    this.options.sortedFields = sortedFields
+    this.fields = {}
+    this.beforeLoadFn = null
+
+    this.fileHolder = new JsonFileButler({
+      filePath: filePath,
+      fileType: (this.options.prettyJson ? 'json' : 'json-compact'),
+      cloneFrom,
+      loadFn: (data) => {
+        if (!data) return null
+        if (this.beforeLoadFn) data = this.beforeLoadFn(data)
+        return this.fromJson(data)
+      },
+      saveFn: () => {
+        return this.toJson()
+      }
+    })
+
+    this._fieldNameCompareFn = function (a, b) {
+      a = a.toLowerCase()
+      b = b.toLowerCase()
+      return a.localeCompare(b)
+    }
+  }
+
+  add (dataField) {
+    if (this.fields[dataField.name]) {
+      throw new JsonizedFileError(`Field ${dataField.name} already exists. Remove it first`)
+    }
+    this.fields[dataField.name] = dataField
+    return true
+  }
+
+  has (name) {
+    return (this.fields[name] !== null && this.fields[name] !== undefined)
+  }
+
+  field (name) {
+    return this.fields[name]
+  }
+
+  get length () {
+    return Object.keys(this.fields).length
+  }
+
+  list ({ writableOnly = false } = {}) {
+    let fieldsList = []
+    if (writableOnly === true) {
+      Object.keys(this.fields).forEach((k) => {
+        if (this.fields[k].schema.readOnly === true) return
+        fieldsList.push(k)
+      })
+    } else {
+      fieldsList = Object.keys(this.fields)
+    }
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
+    return fieldsList
+  }
+
+  remove (name) {
+    if (!this.fields[name]) return false
+    delete this.fields[name]
+    return true
+  }
+
+  toJson () {
+    const finalObject = {}
+    const fieldsList = Object.keys(this.fields)
+    if (this.options.sortedFields === true) fieldsList.sort(this._fieldNameCompareFn)
+    fieldsList.forEach((k) => {
+      finalObject[k] = this.fields[k].valueRef
+      if (finalObject[k] === null) delete finalObject[k]
+    })
+    return finalObject
+  }
+
+  fromJson (data) {
+    Object.keys(data).forEach((k) => {
+      if (!this.fields[k]) return
+      try {
+        this.fields[k].valueRef = data[k]
+      } catch (e) {
+        this.fields[k].unset = true
+        throw e
+      }
+    })
+    return data
+  }
+
+  get jsonData () {
+    return this.fileHolder.data
+  }
+
+  get empty () {
+    return this.fileHolder.empty
+  }
+
+  async load () {
+    try {
+      return await this.fileHolder.load()
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
+  }
+
+  async save () {
+    try {
+      return await this.fileHolder.save()
+    } catch (e) {
+      throw new JsonizedFileError(e.message)
+    }
+  }
+
+  async reset (hard = false) {
+    await this.fileHolder.delete()
+    Object.keys(this.fields).forEach((k) => {
+      this.fields[k].reset()
+    })
+    hard !== true && await this.save()
+  }
+
+  async clean () {
+    await this.fileHolder.delete()
+  }
+}
+
+module.exports = {
+  JsonizedFile
+}
