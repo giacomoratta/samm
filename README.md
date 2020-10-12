@@ -60,7 +60,7 @@ After the <a href="#download-and-install">preliminary steps</a>, you should be a
     <li><code>look kick,kick+dark,kc+raw</code> = all samples inside a full path which contains the words 'kick', OR 'kick' and 'dark', OR 'kc' AND 'raw'.</li>
     <li><code>look bass+moog,bass+303</code> = all samples inside a full path which contains the words 'bass' AND 'moog', OR 'bass' AND '303'.</li>
 </ul>
-<p><a href="#appendix-c---how-queries-works">See Appendix B, for more details about queries</a></p>
+<p><a href="#appendix-b---how-queries-works">See Appendix B, for more details about queries</a></p>
 
 <h4>6. Switch the project</h4>
 <p>If you want to switch to another project in the same directory (e.g. /home/user123/music-projects/), run <code>project-list</code></p>
@@ -77,45 +77,104 @@ After the <a href="#download-and-install">preliminary steps</a>, you should be a
 <section id="reference">
 <h2>Commands reference</h2>
 
-<h4>config</h4>
-<table>
- <thead>
-    <td></td>
- </thead>
-</table>
-<p>
-    <strong>SamplesDirectory</strong>: directory with samples to scan and search in (absolute path). <br/>
-    <code>config SamplesDirectory "/home/user123/my-samples/"</code>
-</p>
-<p>
-    <strong>LookRandomCount</strong>:  maximum number of random samples selected after a search. <br/>
-    <code>config LookRandomCount 15</code>
-</p>
-<p>
-    <strong>LookRandomSameDirectory</strong>: mMaximum number of samples from the same directory, to avoid too many samples from the same family. <br/>
-    <code>config LookRandomSameDirectory 2</code>
-</p>
+<h3><code>config [options] [name] [values...]</code></h3>
+<p>Get or set the value of a configuration parameter.</p>
 
-<h4>bookm</h4>
-<h4>bookm-export</h4>
-<h4>bookm-look</h4>
-<h4>look</h4>
-<h4>look-export</h4>
-<h4>project</h4>
-<h4>project-history</h4>
-<h4>project-list</h4>
-<h4>project-template</h4>
-<h4>query</h4>
-<h4>sample-scan</h4>
-<h4>search</h4>
+<table>
+ <tr>
+    <td><strong>SamplesDirectory</strong></td>
+    <td>directory with samples to scan and search in (absolute path). <br/>
+        <code>config SamplesDirectory "C:\all samples\"</code></td>
+ </tr>
+ <tr>
+    <td><strong>LookRandomCount</strong></td>
+    <td>maximum number of random samples selected after a search. <br/>
+        <code>config LookRandomCount 15</code></td>
+ </tr>
+ <tr>
+    <td><strong>LookRandomSameDirectory</strong></td>
+    <td>maximum number of samples from the same directory, to avoid too many samples from the same family. <br/>
+        <code>config LookRandomSameDirectory 2</code></td>
+ </tr>
+ <tr>
+    <td><strong>SamplesDirectoryExclusions</strong></td>
+    <td>wirectories which must be skipped during the scan process of samples directory; these paths are relative to SamplesDirectory path; add or remove (with -r option) multiple values. <br/>
+        <code>config SamplesDirectoryExclusions /manuals /samplesABC/legacy</code> <br>
+        <code>config SamplesDirectoryExclusions -r /manuals</code>
+    </td>
+ </tr>
+ <tr>
+    <td><strong>ExcludedExtensionsForSamples</strong></td>
+    <td>the list of file extensions to skip during the sample scan; add or remove (with -r option) multiple values. <br/>
+        <code>config ExcludedExtensionsForSamples exe txt</code> <br>
+        <code>config ExcludedExtensionsForSamples -r exe</code>
+    </td>
+ </tr>
+ <tr>
+    <td><strong>IncludedExtensionsForSamples</strong></td>
+    <td>the list of file extensions which samples must have; add or remove (with -r option) multiple values. <br/>
+        <code>config IncludedExtensionsForSamples wav mp3</code> <br>
+        <code>config IncludedExtensionsForSamples -r wav</code>
+    </td>
+ </tr>
+ <tr>
+    <td><strong>ExtensionsPolicyForSamples</strong></td>
+    <td>policy for sample scan: 'I' to get files with declared extensions only, 'E' to exclude file with some extensions, and 'X' to disable the extension filter. <br/>
+        <code>config ExtensionsPolicyForSamples I</code>
+    </td>
+ </tr>
+ <tr>
+    <td><strong>TemplatesDirectory</strong></td>
+    <td>directory where all templates are located; they can be used to start a ready-to-go project instead of an empty one. <br/>
+        <code>config TemplatesDirectory "C:\my templates\"</code>
+    </td>
+ </tr>
+</table>
+
+<h3><code>bookm [options] [label]</code></h3>
+<p>Show or manage the bookmarks.</p>
+
+<h3><code>bookm-export [options] [label]</code></h3>
+<p>Export all bookmarks to current project or to a custom path.</p>
+
+<h3><code>bookm-look</code></h3>
+<p>Add bookmarks from latest lookup.</p>
+
+<h3><code>look [options] [query]</code></h3>
+<p>Search samples by query or show the latest sample look; (related configurations: LookRandomCount, LookRandomSameDirectory).</p>
+
+<h3><code>look-export [options] [dirname]</code></h3>
+<p>Export the latest samples look in the current project; the optional parameter 'dirname' is the name of destination directory.</p>
+
+<h3><code>project [path]</code></h3>
+<p>Shows some information about the current project or set current project from its absolute path.</p>
+
+<h3><code>project-history [options]</code></h3>
+<p>Show all project history or set the current project from one of them.</p>
+
+<h3><code>project-list [options]</code></h3>
+<p>Show all projects in the same parent directory or set the current project from of them.</p>
+
+<h3><code>project-template</code></h3>
+<p>Show all templates or create a new project from one of them.</p>
+
+<h3><code>query [options] [label] [query]</code></h3>
+<p>Manage queries for sample, for matching sample directories and files. In order to add, get or remove a query, use the 2 params label and query.</p>
+
+<h3><code>samples-scan [options]</code></h3>
+<p>Perform a full scan of the samples directory and create the index; if the index is already present the scan does not start, in order to avoid resource wasting.</p>
+                                       
+<h3><code>search [options] [query]</code></h3>
+<p>Search samples by query or show the latest search results.</p>
+
 </section>
 
 
 <section id="appendix-a">
 <h2>Appendix A - How to add a path to PATH environment variable</h2>
-The following steps will show how to install this software in order to be run in your terminal with the simple command <code>samm</code>.
+<p>The following steps will show how to install this software in order to be run in your terminal with the simple command <code>samm</code>. In other words, at the end of these steps, you will be able to open a terminal, type "samm" and start the software.</p>
 
-<h4>Windows</h4>
+<h3>Windows</h3>
 <ol>
     <li>Copy the directory <code>samm.0.1.0.win-x64</code> in your software or documents directory.</li>
     <li>Get the absolute path like <code>C://Programs//samm.0.1.0.win-x64</code>.</li>
@@ -128,7 +187,7 @@ The following steps will show how to install this software in order to be run in
     <li>Close your terminal and open again: you should be able to run the command <code>samm</code>.</li>
 </ol>
 
-<h4>Mac</h4>
+<h3>Mac</h3>
 <ol>
     <li>Copy the directory <code>samm.0.1.0.mac-x64</code> in your software or documents directory.</li>
     <li>Get the absolute path like <code>/home/user123/software/samm.0.1.0.mac-x64</code>.</li>
@@ -138,7 +197,7 @@ The following steps will show how to install this software in order to be run in
     <li>Close your terminal and open again: you should be able to run the command <code>samm</code>.</li>
 </ol>
 
-<h4>Linux</h4>
+<h3>Linux</h3>
 <ol>
     <li>Copy the directory <code>samm.0.1.0.linux-x64</code> in your software or documents directory.</li>
     <li>Get the absolute path like <code>/home/user123/software/samm.0.1.0.linux-x64</code>.</li>
@@ -151,10 +210,11 @@ The following steps will show how to install this software in order to be run in
 </section>
 
 
-<section id="appendix-c---how-queries-works">
-<h4>Appendix B - How queries works</h4>
-<p>This section is for who has never used a command line interface.</p>
-<ol>
-    <li>Path with spaces: always wrap it in double quotes otherwise only the first part will be considered; e.g. <code>"C://Program Data//samm.0.1.0.win-x64"</code>.</li>
-</ol>
+<section id="appendix-b---how-queries-works">
+<h2>Appendix B - How queries works</h2>
+<p>The queries used by this software are really simple: a combination of AND/OR conditions, where AND is "+" (plus), and OR is "," (comma).</p>
+<p><strong>How queries are matched?</strong> A query will match a sample if the sample file or it whole path has some of the words stated in the query (of course, if the path matches the query conditions AND/OR). This way, we can <strong>keep the sample-pack as it is!</strong></p>
+<p><strong>Example #1</strong>. Search for a raw kick, so "kick" AND "raw": <code>kick+raw</code>.</p>
+<p><strong>Example #2</strong>. Search for a "guitar" OR "string": <code>guitar,string</code>.</p>
+<p><strong>Example #3</strong>. Search for a raw kick OR deep tom: "kick+raw,deep+tom".</p>
 </section>
