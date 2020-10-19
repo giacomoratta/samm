@@ -1,7 +1,7 @@
 const path = require('path')
-const { fileUtils } = require('../file.utils')
+const { fileUtils } = require('../index')
 
-describe('Utils.File.singleton', function () {
+describe('file.utils', function () {
   it('should create standard cross-os absolute paths', function () {
     const pathFile11Std = fileUtils.setAsAbsPath(path.join('file_utils_test_dir', 'directory1', 'file11.txt'), true)
     const pathFile11Local = fileUtils.setAsAbsPath(path.join('.', 'file_utils_test_dir', 'directory1', 'file11.txt'), true)

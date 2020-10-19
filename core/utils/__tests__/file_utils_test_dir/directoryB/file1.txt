@@ -1,3 +1,0 @@
-sample file
-row2
-row333 333 333

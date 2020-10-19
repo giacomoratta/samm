@@ -1,4 +1,4 @@
-const { PathInfo } = require('../../core/path-info')
+const { PathInfo } = require('path-info-stats')
 
 class SampleInfo extends PathInfo {
   // constructor () {

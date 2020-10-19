@@ -1,7 +1,7 @@
 const path = require('path')
 const { fileUtils } = require('../../core/utils/file.utils')
 
-const { PathInfo } = require('../../core/path-info')
+const { PathInfo } = require('path-info-stats')
 const { ProjectError } = require('./project.error')
 
 class Project {

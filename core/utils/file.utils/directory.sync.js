@@ -1,4 +1,4 @@
-const { _ } = require('../lodash.extended')
+const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
 const fsExtra = require('fs-extra')
@@ -12,22 +12,6 @@ libUtils.isAbsoluteParentDirSync = (pathString, checkExists) => {
   if (checkExists !== true) return true
   const psDirname = path.dirname(pathString)
   return libUtils.directoryExistsSync(psDirname)
-}
-
-libUtils.checkAndSetDuplicatedDirectoryNameSync = (pathString, renameFn) => {
-  if (!_.isFunction(renameFn)) {
-    renameFn = function (pStr, index) {
-      return libUtils.pathChangeDirname(pStr, function (oldName) {
-        return oldName + '_' + index
-      })
-    }
-  }
-  return _.noDuplicatedValues(null, pathString, (v, cv, i /*, a */) => {
-    if (!fs.existsSync(cv)) return true // found a free value
-    cv = renameFn(v, i)
-    // console.log('checkAndSetDuplicatedDirectoryNameSync ... changing '+v+' to '+cv)
-    return cv
-  })
 }
 
 libUtils.checkAndSetPathSync = (pathString, callback) => {

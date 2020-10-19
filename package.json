@@ -5,21 +5,22 @@
   "main": "app.js",
   "scripts": {
     "build": "node build.js",
-    "test": "jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
-    "test-win": "jest --testPathPattern=.*/__tests__/.*.test.js",
+    "test": "standard && jest --testPathPattern=.*\\__tests__\\.*\\.test\\.js",
+    "test-win": "standard && jest --testPathPattern=.*/__tests__/.*.test.js",
     "start": "NODE_ENV=production APP_DATA_DIRNAME=samm-data node app.js",
     "start-win": "set NODE_ENV=production&& set APP_DATA_DIRNAME=samm-data&& node app.js",
     "dev": "NODE_ENV=development APP_DATA_DIRNAME=test-samm-data node app.js",
     "dev-win": "set NODE_ENV=development&& set APP_DATA_DIRNAME=test-samm-data&& node app.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "archiver": "^3.1.1",
     "fastest-validator": "^1.1.0",
     "fs-extra": "^9.0.0",
     "iconv-lite": "^0.5.1",
     "lodash": "^4.17.15",
+    "path-info-stats": "^1.0.5",
     "pino": "^6.0.0",
     "pino-pretty": "^4.0.0",
     "pino-tee": "^0.3.0",
@@ -38,14 +39,8 @@
     ]
   },
   "standard": {
-    "globals": [
-      "describe",
-      "expect",
-      "it",
-      "beforeEach",
-      "beforeAll",
-      "afterEach",
-      "afterAll"
+    "env": [
+      "jest"
     ]
   }
 }

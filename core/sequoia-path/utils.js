@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const fileUtils = require('./file.utils')
-const { PathInfo } = require('../path-info/pathInfo.class')
+const { PathInfo } = require('path-info-stats')
 const { SequoiaPathError } = require('./sequoiaPathError.class')
 
 const getDefaultOptions = function () {
