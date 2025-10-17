@@ -1,0 +1,6 @@
+ensureDir -> throws error
+removeDir -> throws error
+copyDirectory -> throws error
+readDirectory -> throws error, returns only []
+
+readJsonFile -> throws error, simplified

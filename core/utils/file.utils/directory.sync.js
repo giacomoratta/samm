@@ -106,16 +106,17 @@ libUtils.readDirectorySync = (pathString, preProcessItemsFn, itemFn) => {
   return items
 }
 
-libUtils.uniqueDirectoryNameSync = ({ parentPath, directoryName }) => {
-  let newDestinationPath = path.join(parentPath, directoryName)
-  const parsedDir = path.parse(newDestinationPath)
-  let i = 1
-  while (libUtils.directoryExistsSync(newDestinationPath) === true && i < 1000) {
-    newDestinationPath = path.join(parsedDir.dir, `${parsedDir.base}_${i}`)
+libUtils.uniqueDirectoryNameSync = (parentPath, directoryName, attempts = 1000) => {
+  let testDestinationPath = path.join(parentPath, directoryName)
+  let i = Math.min(1, attempts)
+  let uniqueDirName = directoryName
+  while (libUtils.directoryExistsSync(testDestinationPath) === true && (i === -1 || i < attempts)) {
+    uniqueDirName = `${directoryName}_${i}`
+    testDestinationPath = path.join(parentPath, uniqueDirName)
     i++
   }
-  if (i >= 1000) return null
-  return newDestinationPath
+  if (i >= attempts && attempts !== -1) return null
+  return uniqueDirName
 }
 
 libUtils.removeDirSync = (pathString) => {

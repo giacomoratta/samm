@@ -59,20 +59,11 @@ describe('file.utils', function () {
       fileName: 'my_file.txt'
     })).toEqual(path.join(parentPath, 'my_file_4.txt'))
 
-    expect(fileUtils.uniqueDirectoryNameSync({
-      parentPath,
-      directoryName: 'directoryB'
-    })).toEqual(path.join(parentPath, 'directoryB_1'))
+    expect(fileUtils.uniqueDirectoryNameSync(parentPath, 'directoryB')).toEqual('directoryB_1')
 
-    expect(fileUtils.uniqueDirectoryNameSync({
-      parentPath,
-      directoryName: 'directoryC'
-    })).toEqual(path.join(parentPath, 'directoryC'))
+    expect(fileUtils.uniqueDirectoryNameSync(parentPath, 'directoryC')).toEqual('directoryC')
 
-    expect(fileUtils.uniqueDirectoryNameSync({
-      parentPath,
-      directoryName: 'directoryA'
-    })).toEqual(path.join(parentPath, 'directoryA_4'))
+    expect(fileUtils.uniqueDirectoryNameSync(parentPath, 'directoryA')).toEqual('directoryA_4')
   })
 
   it('should manage json files with special characters', async function () {

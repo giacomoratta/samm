@@ -70,7 +70,7 @@ libUtils.readDirectory = async (pathString, preProcessItemsFn, itemFn) => {
       if (err || !items) {
         resolve(null)
       }
-      if (preProcessItemsFn) preProcessItemsFn(items)
+      if (preProcessItemsFn) await preProcessItemsFn(items)
       for (let i = 0; i < items.length; i++) {
         await itemFn(items[i], i, items)
       }
@@ -79,16 +79,17 @@ libUtils.readDirectory = async (pathString, preProcessItemsFn, itemFn) => {
   })
 }
 
-libUtils.uniqueDirectoryName = async ({ parentPath, directoryName }) => {
-  let newDestinationPath = path.join(parentPath, directoryName)
-  const parsedDir = path.parse(newDestinationPath)
-  let i = 1
-  while (await libUtils.directoryExists(newDestinationPath) === true && i < 1000) {
-    newDestinationPath = path.join(parsedDir.dir, `${parsedDir.base}_${i}`)
+libUtils.uniqueDirectoryName = async (parentPath, directoryName, attempts = 1000) => {
+  let testDestinationPath = path.join(parentPath, directoryName)
+  let i = Math.min(1, attempts)
+  let uniqueDirName
+  while (await libUtils.directoryExists(testDestinationPath) === true && (i === -1 || i < attempts)) {
+    uniqueDirName = `${directoryName}_${i}`
+    testDestinationPath = path.join(parentPath, uniqueDirName)
     i++
   }
-  if (i >= 1000) return null
-  return newDestinationPath
+  if (i >= attempts && attempts !== -1) return null
+  return uniqueDirName
 }
 
 module.exports = libUtils

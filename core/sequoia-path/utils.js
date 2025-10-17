@@ -74,6 +74,7 @@ const prepareExtensionsRegex = function (extensionsList) {
 
 const walkAction = async function (relRootPath, absolutePath, options) {
   if (options.excludedPaths && options.excludedPaths.some((e) => e.test(absolutePath))) return null
+  if (absolutePath.indexOf('/.') >= 0) return null
 
   const pInfo = new options.ObjectClass()
   await pInfo.set({ absolutePath, relRootPath })
@@ -143,7 +144,7 @@ const readDirectory = async function (pathString, preProcessItemsFn, itemFn) {
       if (err || !items) {
         resolve(null)
       }
-      preProcessItemsFn(items)
+      await preProcessItemsFn(items)
       for (let i = 0; i < items.length; i++) {
         await itemFn(items[i], i, items)
       }

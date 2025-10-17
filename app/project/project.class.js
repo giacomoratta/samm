@@ -119,7 +119,7 @@ class Project {
     })
 
     if (projects.length > 0 || orderBy !== 'name') {
-      orderBy === 'modifiedAt' && projects.sort((a, b) => { /* DESC */
+      orderBy === 'modifiedAt' && projects.sort((b, a) => { /* DESC */
         if (a.modifiedAt > b.modifiedAt) return -1
         if (a.modifiedAt < b.modifiedAt) return 1
         return 0

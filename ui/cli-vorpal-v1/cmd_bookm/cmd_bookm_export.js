@@ -27,7 +27,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter,
     destinationPath = ProjectManagerAPI.getCurrentProject().path
   } else {
     exportToCustomPath = true
-    destinationParentName = 'mpl-bookmarks'
+    destinationParentName = 'samm-bookmarks'
   }
 
   /* Export a single label */

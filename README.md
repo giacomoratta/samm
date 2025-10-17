@@ -10,7 +10,7 @@
 <h2>Principles</h2>
 <ol>
     <li><strong>Save your creativity flow.</strong> SAMM avoid you wasting your time dealing with hundred of samples inside many nested directories. Just ask.</li>
-    <li><strong>Improve your creativity with randomness.</strong> SAMM does not care about how you organize your samples. MPL selects samples randomly based on simple human-readable queries. (It will be funny to find some <i>old-but-good</i> samples or weird samples which you would have never chosen).</li>
+    <li><strong>Improve your creativity with randomness.</strong> SAMM does not care about how you organize your samples. SAMM selects samples randomly based on simple human-readable queries. (It will be funny to find some <i>old-but-good</i> samples or weird samples which you would have never chosen).</li>
     <li><strong>Easy, fast and light interface to avoid CPU and RAM wastefulness</strong>. Don't be afraid about the command line and let's save CPU and RAM for the DAW.</li>
 </ol>
 </section>

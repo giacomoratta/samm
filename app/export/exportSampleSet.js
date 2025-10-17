@@ -85,19 +85,19 @@ const getExportPath = async function ({
   /* Add app signature (useful for multiple exports and to avoid confusion in file system) */
   destinationPath = path.join(destinationPath, destinationParentName || 'samm')
 
-  let exportPath = path.join(destinationPath, destinationName)
+  const exportPath = path.join(destinationPath, destinationName)
   if (overwrite === true) {
     log.warn({ overwrite, exportPath }, 'Export path will be overwritten')
     return exportPath
   }
 
-  exportPath = fileUtils.uniqueDirectoryNameSync({ parentPath: destinationPath, directoryName: destinationName })
-  if (!exportPath) {
+  const uniqueDirName = fileUtils.uniqueDirectoryNameSync(destinationPath, destinationName)
+  if (!uniqueDirName) {
     log.error({ destinationPath, destinationName }, 'Cannot find a unique directory name as destination path')
     return
   }
 
-  return exportPath
+  return path.join(destinationPath, uniqueDirName)
 }
 
 module.exports = {
