@@ -3,4 +3,3 @@ BUG & FIXES
 LONG TERM
 - make NPM packages
 - replace vorpal (not updated) with yarn
-- E2E tests for CLI apps
