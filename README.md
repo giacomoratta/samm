@@ -1,6 +1,6 @@
 ## What is
 
-SAMM is a command line based software which helps and preserve your creativity flow. Dive into your wide samples library, make researches, extract random samples and save them into the current project directory.
+SAMM (Samples Archive Matching Module) is a command line based software which helps and preserve your creativity flow. Dive into your wide samples library, make researches, extract random samples and save them into the current project directory.
 
 > In a couple of minutes... ask for samples, import in your project directory, use them!
 

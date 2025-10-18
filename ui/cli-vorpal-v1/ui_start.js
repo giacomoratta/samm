@@ -1,5 +1,14 @@
+const figlet = require('figlet')
 const { Cli, App, log } = require('./ui_common')
 const { ConfigAPI } = App
+
+const printBigTitle = async () => {
+  const text = await figlet.text('samm', {
+    font: 'Graffiti'
+  })
+  console.log(text)
+  console.log('Samples Archive Matching Module 1.0.0', '\n')
+}
 
 const ConfigStatusMessages = () => {
   const statusFlags = ConfigAPI.field('Status').value
@@ -44,7 +53,9 @@ App.boot({
   require('./cmd_samples')
   require('./cmd_search')
 
-  Cli.show('samm')
+  printBigTitle().then(() => {
+    Cli.show('samm')
+  })
 }).catch((e) => {
   log.error(e)
   console.error(`Unexpected error: ${e.message}.  (see logs for more details)`)

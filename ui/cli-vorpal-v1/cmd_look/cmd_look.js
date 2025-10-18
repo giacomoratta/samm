@@ -1,4 +1,5 @@
 const { App, Cli, uiUtils } = require('../ui_common')
+const { saveSearchResults } = require('./saveSearchResults')
 const { ConfigAPI, SampleIndexAPI, SampleLookAPI, PathQueryAPI } = App
 
 const commandName = 'look'
@@ -9,6 +10,7 @@ Cli.addCommandHeader(commandName)
   .description('Search samples by query or show the latest sample look; (related configurations: LookRandomCount, LookRandomSameDirectory) \n')
   .option('-i, --info', 'Show more info')
   .option('-l, --label <label>', 'Use a query label (see \'query\' command)')
+  .option('-e, --export <dirname>', 'Immediately export the samples without asking for confirmation')
 
 Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter }) {
   if (ConfigAPI.field('SamplesDirectory').unset === true) {
@@ -24,6 +26,21 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     return cliNext()
   }
 
+  const exportSearchResults = async () => {
+    const optExportDirName = cliInput.getOption('export')
+    if (optExportDirName) {
+      cliPrinter.newLine()
+      const finalName = optExportDirName.replace(/[^a-zA-Z0-9-_]/g, '')
+      if (finalName.length < 2) {
+        cliPrinter.error(`The directory name for the export is too short: ${finalName}.`)
+        return
+      }
+      const { sampleLook, pathBasedQuery } = SampleLookAPI.latest()
+      pathBasedQuery.label = finalName
+      await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, undefined)
+    }
+  }
+
   /* PARAM: query */
   const paramQueryString = cliInput.getParam('query')
   if (paramQueryString) {
@@ -33,7 +50,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
       cliPrinter.warn('Samples not found!')
     } else {
       printSearchResults(sampleLook, cliInput, cliPrinter)
-      // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
+      await exportSearchResults()
     }
     return cliNext()
   }
@@ -52,7 +69,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
       cliPrinter.warn('Samples not found!')
     } else {
       printSearchResults(sampleLook, cliInput, cliPrinter)
-      // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
+      await exportSearchResults()
     }
     return cliNext()
   }
@@ -62,7 +79,7 @@ Cli.addCommandBody(commandName, async function ({ cliNext, cliInput, cliPrinter 
     cliPrinter.warn('No samples found in the latest look!')
   } else {
     printSearchResults(sampleLook, cliInput, cliPrinter)
-    // await saveSearchResults(sampleLook, pathBasedQuery, cliPrinter, cliInput, cliPrompt)
+    await exportSearchResults()
   }
   return cliNext()
 })
