@@ -32,7 +32,7 @@
   "devDependencies": {
     "jest": "^25.2.4",
     "nexe": "^3.3.2",
-    "standard": "^14.3.1"
+    "standard": "^17.1.2"
   },
   "jest": {
     "testPathIgnorePatterns": [
